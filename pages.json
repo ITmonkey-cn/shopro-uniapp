@@ -1,0 +1,464 @@
+{
+	"pages": [{
+			"path": "pages/index/index",
+			"name": "home",
+			"title": "首页",
+			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
+			"style": {
+				"navigationBarTitleText": "Shopro开源商城",
+				"navigationBarTextStyle": "white",
+				// "enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			},
+			"meta": {
+				"auth": false,  //需要登录
+				"async": true,  //是否同步
+				"title": "首页", //标题
+				"group": "商城"  //分组
+			}
+		},
+		{
+			"path": "pages/index/category",
+			"name": "category",
+			"style": {
+				"navigationBarTitleText": "分类"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/index/cart",
+			"name": "cart",
+			"style": {
+				"navigationBarTitleText": "购物车"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/index/user",
+			"name": "user",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/coupons/index",
+			"style": {
+				"navigationBarTitleText": "优惠券"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/coupons/detail",
+			"style": {
+				"navigationBarTitleText": "优惠劵详情",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/goods/list",
+			"style": {
+				"navigationBarTitleText": "商品列表",
+				"navigationStyle": "custom"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/goods/comment-list",
+			"style": {
+				"navigationBarTitleText": "商品评价"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/goods/detail",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/goods/goods-poster",
+			"style": {
+				"navigationBarTitleText": "商品海报"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/money/index",
+			"style": {
+				"navigationBarTitleText": "我的钱包",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/money/bank",
+			"style": {
+				"navigationBarTitleText": "绑定银行卡"
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/money/log",
+			"style": {
+				"navigationBarTitleText": "钱包明细"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/order/confirm",
+			"style": {
+				"navigationBarTitleText": "确认订单"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/order/list",
+			"name": "orderList",
+			"style": {
+				"navigationBarTitleText": "订单列表"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/order/add-comment",
+			"style": {
+				"navigationBarTitleText": "发表评论"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/order/express",
+			"name": "orderList",
+			"style": {
+				"navigationBarTitleText": "物流信息"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/order/refund",
+			"style": {
+				"navigationBarTitleText": "退款"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/pay/index",
+			"style": {
+				"navigationBarTitleText": "支付方式"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/pay/success",
+			"style": {
+				"navigationBarTitleText": "支付结果"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/user/set",
+			"style": {
+				"navigationBarTitleText": "系统设置"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/public/richtext",
+			"style": {
+				"navigationBarTitleText": "" //公共富文本
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/public/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/public/forgot",
+			"style": {
+				"navigationBarTitleText": "找回密码",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/public/login",
+			"name": "login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/public/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		}, {
+			"path": "pages/score/index",
+			"style": {
+				"navigationBarTitleText": "积分",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/score/score-shop",
+			"style": {
+				"navigationBarTitleText": "积分商城"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/score/detail",
+			"style": {
+				"navigationBarTitleText": "积分详情"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/sign/index",
+			"style": {
+				"navigationBarTitleText": "签到中心"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/address/edit",
+			"style": {
+				"navigationBarTitleText": "编辑地址"
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/address/list",
+			"style": {
+				"navigationBarTitleText": "收货地址"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/edit-password",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/favorite",
+			"style": {
+				"navigationBarTitleText": "收藏"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/info",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/edit-phone",
+			"style": {
+				"navigationBarTitleText": "修改手机号"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/public/problems",
+			"style": {
+				"navigationBarTitleText": "常见问题"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/user/poster",
+			"style": {
+				"navigationBarTitleText": "邀请好友"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/log",
+			"style": {
+				"navigationBarTitleText": "浏览足迹"
+			},
+			"meta": {
+				"auth": true
+			}
+		}
+	],
+	// 分包加载,tabbar页不能在分包目录内。
+	"subPackages": [{
+		"root": "pges/home", //分包目录
+		"pages": [
+			//{}分包路由,去掉根路径
+		]
+	}],
+	// 默认导航栏样式
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "Shopro开源商城",
+		"navigationBarBackgroundColor": "#fff",
+		"backgroundColor": "#fff",
+		"navigationStyle": "default" //默认是default，即带有原生导航栏。custom,取消导航栏。
+	},
+	// 默认底部导航栏
+	"tabBar": {
+		"color": "#333",
+		"selectedColor": "#a8700d",
+		"backgroundColor": "#ffffff",
+		"borderStyle": "black",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/imgs/tabbar/tab_home.png",
+				"selectedIconPath": "/static/imgs/tabbar/tab_home_sel.png"
+			},
+			{
+				"pagePath": "pages/index/category",
+				"text": "分类",
+				"iconPath": "static/imgs/tabbar/tab_type.png",
+				"selectedIconPath": "static/imgs/tabbar/tab_type_sel.png"
+			},
+			{
+				"pagePath": "pages/index/cart",
+				"text": "购物车",
+				"iconPath": "static/imgs/tabbar/tab_cart.png",
+				"selectedIconPath": "static/imgs/tabbar/tab_cart_sel.png"
+			},
+			{
+				"pagePath": "pages/index/user",
+				"text": "我的",
+				"iconPath": "static/imgs/tabbar/tab_my.png",
+				"selectedIconPath": "static/imgs/tabbar/tab_my_sel.png"
+			}
+		]
+	}
+}

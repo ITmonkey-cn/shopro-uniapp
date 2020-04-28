@@ -1,0 +1,304 @@
+/*utils 工具*/
+/* 颜色 */
+.bg-red {
+	background-color: $color-red !important;
+}
+
+.bg-purple {
+	background-color: $color-purple !important;
+}
+
+.bg-orange {
+	background-color: $color-orange !important;
+}
+
+.bg-blue {
+	background-color: $color-blue !important;
+}
+
+.color-red {
+	color: $color-red !important;
+}
+
+.color-purple {
+	color: $color-purple !important;
+}
+
+.color-orange {
+	color: $color-orange !important;
+}
+
+.color-blue {
+	color: $color-blue !important;
+}
+
+.text-black {
+	color: #000;
+}
+
+.text-dark {
+	color: #333;
+}
+
+.text-deep {
+	color: #555;
+}
+
+.text-weak {
+	color: #b3b3b3;
+}
+
+.text-white {
+	color: #fff;
+}
+
+/*字体*/
+.f10 {
+	font-size: 10px;
+}
+
+.f12 {
+	font-size: 12px;
+}
+
+.f14 {
+	font-size: 14px;
+}
+
+.f15 {
+	font-size: 15px;
+}
+
+.f17 {
+	font-size: 17px;
+}
+
+.f20 {
+	font-size: 20px;
+}
+
+.f24 {
+	font-size: 24px;
+}
+
+/* 文字对齐*/
+.tl {
+	text-align: left;
+}
+
+.tc {
+	text-align: center;
+}
+
+.tr {
+	text-align: right;
+}
+
+/*浮动与清除浮动*/
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+
+/*#ifdef H5*/
+.fix {
+	zoom: 1;
+}
+
+.fix:after {
+	display: table;
+	content: '';
+	clear: both;
+}
+/*#endif*/
+
+/*显示*/
+.dn {
+	display: none;
+}
+
+.di {
+	display: inline;
+}
+
+.db {
+	display: block;
+}
+
+.dib {
+	display: inline-block;
+}
+
+.dt {
+	display: table;
+}
+/*#ifdef H5*/
+div.dib {
+	display: inline;
+	zoom: 1;
+}
+/*#endif*/
+
+.vm {
+	vertical-align: middle;
+}
+
+.vib {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/*定位*/
+.pr {
+	position: relative;
+}
+
+.pa {
+	position: absolute;
+}
+
+.pf {
+	position: fixed;
+}
+
+/*盒子模型*/
+.ml4 {
+	margin-left: 4px;
+}
+
+.mr4 {
+	margin-right: 4px;
+}
+
+.mt4 {
+	margin-top: 4px;
+}
+
+.mb4 {
+	margin-bottom: 4px;
+}
+
+.ml8 {
+	margin-left: 8px;
+}
+
+.mr8 {
+	margin-right: 8px;
+}
+
+.mt8 {
+	margin-top: 8px;
+}
+
+.mb8 {
+	margin-bottom: 8px;
+}
+
+.ml12 {
+	margin-left: 12px;
+}
+
+.mr12 {
+	margin-right: 12px;
+}
+
+.mt12 {
+	margin-top: 12px;
+}
+
+.mb12 {
+	margin-bottom: 12px;
+}
+
+.ml16 {
+	margin-left: 16px;
+}
+
+.mr16 {
+	margin-right: 16px;
+}
+
+.mt16 {
+	margin-top: 16px;
+}
+
+.mb16 {
+	margin-bottom: 16px;
+}
+
+.ml20 {
+	margin-left: 20px;
+}
+
+.mr20 {
+	margin-right: 20px;
+}
+
+.mt20 {
+	margin-top: 20px;
+}
+
+.mb20 {
+	margin-bottom: 20px;
+}
+
+.ml24 {
+	margin-left: 24px;
+}
+
+.mr24 {
+	margin-right: 24px;
+}
+
+.mt24 {
+	margin-top: 24px;
+}
+
+.mb24 {
+	margin-bottom: 24px;
+}
+
+.ml10 {
+	margin-left: 10px;
+}
+
+.mr10 {
+	margin-right: 10px;
+}
+
+.mt10 {
+	margin-top: 10px;
+}
+
+.mb10 {
+	margin-bottom: 10px;
+}
+
+.ml15 {
+	margin-left: 15px;
+}
+
+.mr15 {
+	margin-right: 15px;
+}
+
+.mt15 {
+	margin-top: 15px;
+}
+
+.mb15 {
+	margin-bottom: 15px;
+}
+
+/*按钮禁用*/
+.disabled {
+	outline: 0 none;
+	cursor: default !important;
+	opacity: 0.4;
+	filter: alpha(opacity=40);
+	-ms-pointer-events: none;
+	pointer-events: none;
+}

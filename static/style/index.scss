@@ -1,0 +1,121 @@
+@import '/_variables.scss';
+@import './_reset.scss';
+@import './_utils.scss';
+@import './_mixin.scss';
+@import './theme.scss';
+
+page {
+	-webkit-overflow-scrolling: touch; //ios滑动不流畅
+	height: 100%;
+	background: #f6f6f6;
+	width: 100%;
+	font-size: 30upx;
+	font-family: NotoSansHans-Bold;
+	color: #333;
+	overflow-x: hidden;
+}
+.pad {
+	padding: 0 30upx;
+}
+// 格式化页面
+.page_box {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow-x: hidden;
+}
+.scroll-box {
+	flex: 1;
+	height: 100%;
+	position: relative;
+}
+.content_box {
+	flex: 1;
+	overflow-y: auto;
+}
+/*单行文本溢出省略号*/
+.one-t {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	transition: all linear 0.2s;
+}
+/*多行文本溢出省略号*/
+.more-t {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	transition: all linear 0.2s;
+}
+
+/* ==================
+          flex布局(colorui里面也有相关基础样式)
+ ==================== */
+/* x水平排列*/
+.x-f {
+	display: flex;
+	align-items: center;
+}
+/*x两端且水平居中*/
+.x-bc {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+/*x平分且水平居中*/
+.x-ac {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+/*x水平靠上对齐*/
+.x-start {
+	display: flex;
+	align-items: flex-start;
+}
+/*x水平靠下对齐*/
+.x-end {
+	display: flex;
+	align-items: flex-end;
+}
+/*上下左右居中*/
+.x-c {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+/*y竖直靠左*/
+.y-start {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+/*y竖直靠右*/
+.y-end {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+/*y竖直居中*/
+.y-f {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+// y竖直两端
+.y-b {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+/*y竖直两端居中*/
+.y-bc {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
