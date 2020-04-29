@@ -61,6 +61,7 @@ export default {
 		// 切换tab
 		selTab(cur) {
 			this.tabCur = cur;
+			this.liveList = [];
 			this.getLiveList();
 		},
 		// 加载更多
