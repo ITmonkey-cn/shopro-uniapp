@@ -84,6 +84,9 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast('提交成功');
+					setTimeout(()=>{
+						that.$router.back()
+					},300)
 				}
 			});
 		},

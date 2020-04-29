@@ -291,7 +291,7 @@ export default {
 								// #ifndef MP-WEIXIN
 								{
 									type: 'qrcode',
-									text: '星品科技',
+									text: `${that.shareInfo.path}`,
 									size: bgObj.width * 0.16,
 									dx: bgObj.width * 0.948 - bgObj.width * 0.18,
 									dy: bgObj.height - bgObj.width * 0.052 - bgObj.width * 0.16

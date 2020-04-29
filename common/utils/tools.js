@@ -68,6 +68,9 @@ export default {
 	// 图片处理-上传图片
 	uploadImage(api, url) {
 		let config_url = API_URL;
+		uni.showLoading({
+			title: '上传中'
+		});
 		return new Promise((resolve, reject) => {
 			uni.uploadFile({
 				url: config_url + api,
@@ -76,12 +79,14 @@ export default {
 				success: res => {
 					res = JSON.parse(res.data);
 					if (res.code === 1) {
+						uni.hideLoading()
 						uni.showToast({
 							title: '上传成功',
 							icon: 'none'
 						});
 						resolve(res.data)
 					} else {
+						uni.hideLoading()
 						uni.showModal({
 							title: '上传失败',
 							content: res.msg
