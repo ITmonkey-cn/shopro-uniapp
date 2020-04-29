@@ -100,20 +100,26 @@ export default {
 <style lang="scss">
 @import 'static/colorui/main.css';
 @import 'static/colorui/icon.css';
-@import 'static/style/index.scss';
 @import 'static/font/shopro-icon.css';
+
+// 其他scss集成在uni.scss,(变量,class,minix)
 
 @font-face {
 	font-family: miso;
 	src: url('https://api.7wpp.com/miso.ttf') format('truetype');
 }
-
-.color {
-	color: $color-red;
-}
-
 .miso-font {
 	font-family: 'miso';
 	line-height: 30 rpx;
+}
+page {
+	-webkit-overflow-scrolling: touch; //ios滑动不流畅
+	height: 100%;
+	background: #f6f6f6;
+	width: 100%;
+	font-size: 30upx;
+	font-family: NotoSansHans-Bold;
+	color: #333;
+	overflow-x: hidden;
 }
 </style>

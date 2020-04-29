@@ -18,6 +18,15 @@ export default {
 		method: 'POST',
 		// desc: '上传',
 	},
+	
+	/** 直播 ↓ **/
+	live: {
+		url: 'live',
+		auth: false,
+		method: 'GET',
+		// desc: '直播列表',
+	},
+	
 	/** 微信Jssdk ↓ **/
 	wechat: {
 		jssdk: {

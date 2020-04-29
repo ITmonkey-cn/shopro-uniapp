@@ -11,10 +11,10 @@
 				"navigationStyle": "custom"
 			},
 			"meta": {
-				"auth": false,  //需要登录
-				"async": true,  //是否同步
+				"auth": false, //需要登录
+				"async": true, //是否同步
 				"title": "首页", //标题
-				"group": "商城"  //分组
+				"group": "商城" //分组
 			}
 		},
 		{
@@ -45,6 +45,16 @@
 			"style": {
 				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/live/live-list",
+			"style": {
+				"navigationBarTitleText": "直播"
 
 			},
 			"meta": {
