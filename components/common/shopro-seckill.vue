@@ -178,7 +178,7 @@ export default {
 		padding-bottom: 20rpx;
 
 		.title {
-			font-size: 36rpx;
+			font-size: 32rpx;
 			font-weight: bold;
 		}
 

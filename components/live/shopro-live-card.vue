@@ -3,8 +3,8 @@
 		<view class="live-content" @tap="goRoom" :style="{ width: wh + 'rpx' }">
 			<image class="item-cover" :src="detail.share_img" mode="aspectFill"></image>
 			<view class="item-status">
-				<image class="status-img" :src="liveStatus[detail.live_status]" mode=""></image>
-				<text class="status-text">{{ detail.live_status_name }}</text>
+				<image class="status-img" :src="liveStatus[detail.live_status].img" mode=""></image>
+				<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
 			</view>
 			<view class="item-title" :style="{ width: wh + 'rpx' }">{{ detail.name }}</view>
 			<!-- 	<image v-if="detail.live_status == 101" class="like-img" src="/static/imgs/live/zan.gif" mode=""></image> -->
@@ -12,10 +12,10 @@
 		<view class="live-bottom" :style="{ width: wh + 'rpx' }">
 			<view class="live-info">
 				<view class="info-box">
-					<image class="info-avatar" :src="detail.anchor_img" mode=""></image>
+					<!-- 	<image class="info-avatar" :src="detail.anchor_img" mode=""></image> -->
 					<view class="info-name">{{ detail.anchor_name }}</view>
 				</view>
-			<!-- 	<text class="views">15W观看</text> -->
+				<!-- 	<text class="views">15W观看</text> -->
 			</view>
 			<slot name="liveGoods">
 				<view class="live-goods" v-if="detail.goods.length">
@@ -33,29 +33,94 @@
 </template>
 
 <script>
+// #ifdef MP-WEIXIN
+let livePlayer = requirePlugin('live-player-plugin');
+//  #endif
+let timer = null;
 export default {
 	components: {},
 	data() {
 		return {
 			liveStatus: {
-				'101': '/static/imgs/live/live.png',
-				'102': '/static/imgs/live/prevue.png',
-				'103': '/static/imgs/live/playback.png',
-				'107': '/static/imgs/live/past.png'
+				'101': {
+					img: '/static/imgs/live/live.png',
+					title: '直播中'
+				},
+				'102': {
+					img: '/static/imgs/live/prevue.png',
+					title: '未开始'
+				},
+				'103': {
+					img: '/static/imgs/live/playback.png',
+					title: '已结束'
+				},
+				'104': {
+					img: '/static/imgs/live/104.png',
+					title: '禁播'
+				},
+				'105': {
+					img: '/static/imgs/live/105.png',
+					title: '暂停中'
+				},
+				'106': {
+					img: '/static/imgs/live/106.png',
+					title: '异常'
+				},
+				'107': {
+					img: '/static/imgs/live/past.png',
+					title: '已过期'
+				}
 			}
 		};
 	},
 	props: {
-		detail: {},
-		wh: 344
+		detail: {
+			type: Object,
+			default: null
+		},
+		wh: {
+			type: Number,
+			default: 345
+		}
 	},
+
 	computed: {},
+	created() {
+		this.getLiveStatus();
+	},
+	mounted() {
+		let that = this;
+		timer = setInterval(() => {
+			that.getLiveStatus();
+		}, 60000);
+	},
 	methods: {
-		goRoom(live) {
+		goRoom() {
 			let that = this;
 			wx.navigateTo({
 				url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${that.detail.room_id}`
 			});
+		},
+		// 轮询liveStatus
+		getLiveStatus() {
+			let that = this;
+			let date = '';
+			if (that.detail.live_status == 102) {
+				date = that.$tools.dateFormat('mm-dd HH:MM', new Date(that.detail.starttime * 1000)).replace('-', '/');
+				that.liveStatus['102'].title = '预告 ' + date;
+			}
+			livePlayer
+				.getLiveStatus({ room_id: that.detail.room_id })
+				.then(res => {
+					// 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
+					that.detail.live_status = res.liveStatus;
+
+					console.log('get live status', that.detail.room_id, res.liveStatus);
+					console.log('detail', that.detail.room_id, that.detail.live_status);
+				})
+				.catch(err => {
+					console.log('get live status', err);
+				});
 		}
 	}
 };
@@ -64,7 +129,7 @@ export default {
 <style lang="scss">
 .sp-live-card {
 	width: 344rpx;
-	box-shadow: 0px 0px 20rpx 4rpx rgba(199, 199, 199, 0.22);
+	box-shadow: 0px 0px 10rpx 4rpx rgba(199, 199, 199, 0.22);
 	border-radius: 20rpx;
 	height: 100%;
 	overflow: auto;
@@ -90,8 +155,8 @@ export default {
 		border-radius: 20rpx;
 		@include flex($justify: center, $align: center);
 		.status-img {
-			width: 38rpx;
-			height: 38rpx;
+			width: 40rpx;
+			height: 40rpx;
 		}
 		.status-text {
 			font-size: 22rpx;
@@ -156,7 +221,7 @@ export default {
 		}
 	}
 	.live-goods {
-		@include flex($justify: between, $align: center);
+		@include flex($align: center);
 		margin-top: 20rpx;
 		&__item {
 			position: relative;
@@ -165,6 +230,10 @@ export default {
 			border: 1rpx solid rgba(238, 238, 238, 1);
 			border-radius: 10rpx;
 			overflow: hidden;
+			margin-right: 8rpx;
+			&:nth-child(3n) {
+				margin-right: 0;
+			}
 		}
 		&__img {
 			background: #eee;

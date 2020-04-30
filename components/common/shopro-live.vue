@@ -9,28 +9,31 @@
 		</view>
 		<view class="content-one" v-if="detail.style == 1">
 			<view class="content-one__item" v-for="live in liveList" :key="live.id" @tap="goRoom(live)">
-				<image class="item-cover" :src="live.share_img" mode="aspectFill"></image>
+				<image class="item-cover" :src="live.share_img" mode="widthFix"></image>
 				<view class="item-status">
-					<image class="status-img" :src="liveStatus[live.live_status]" mode=""></image>
-					<text class="status-text">{{ live.live_status_name }}</text>
+					<image class="status-img" :src="liveStatus[live.live_status].img" mode=""></image>
+					<text class="status-text">{{ liveStatus[live.live_status].title }}</text>
 				</view>
 				<view class="item-title">{{ live.name }}</view>
 				<!-- <image v-if="live.live_status == 101" class="like-img" src="/static/imgs/live/zan.gif" mode=""></image> -->
 			</view>
 		</view>
 		<view class="content-two" v-if="detail.style == 2">
-			<block v-for="live in liveList" :key="live.id">
+			<view class="content-two__item" v-for="live in liveList" :key="live.id">
 				<shopro-live-card :detail="live" :wh="320">
 					<block slot="liveGoods"><text></text></block>
 				</shopro-live-card>
-			</block>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
 import shoproLiveCard from '@/components/live/shopro-live-card.vue';
+// #ifdef MP-WEIXIN
 let livePlayer = requirePlugin('live-player-plugin');
+//  #endif
+let timer = null;
 export default {
 	components: {
 		shoproLiveCard
@@ -39,10 +42,34 @@ export default {
 		return {
 			liveList: [],
 			liveStatus: {
-				'101': '/static/imgs/live/live.png',
-				'102': '/static/imgs/live/prevue.png',
-				'103': '/static/imgs/live/playback.png',
-				'107': '/static/imgs/live/past.png'
+				'101': {
+					img: '/static/imgs/live/live.png',
+					title: '直播中'
+				},
+				'102': {
+					img: '/static/imgs/live/prevue.png',
+					title: '未开始'
+				},
+				'103': {
+					img: '/static/imgs/live/playback.png',
+					title: '已结束'
+				},
+				'104': {
+					img: '/static/imgs/live/104.png',
+					title: '禁播'
+				},
+				'105': {
+					img: '/static/imgs/live/105.png',
+					title: '暂停中'
+				},
+				'106': {
+					img: '/static/imgs/live/106.png',
+					title: '异常'
+				},
+				'107': {
+					img: '/static/imgs/live/past.png',
+					title: '已过期1111'
+				}
 			}
 		};
 	},
@@ -52,17 +79,17 @@ export default {
 	created() {
 		this.getLiveList();
 	},
+	mounted() {
+		let that = this;
+		timer = setInterval(() => {
+			that.getLiveStatus();
+		}, 60000);
+	},
+	destroyed() {
+		timer = null;
+	},
 	computed: {},
 	methods: {
-		// livePlayer.getLiveStatus({ room_id: roomId })
-		//        .then(res => {
-		//        // 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-		//            const liveStatus = res.liveStatus
-		//            console.log('get live status', liveStatus)
-		//        })
-		//        .catch(err => {
-		//            console.log('get live status', err)
-		//        }),
 		// 直播列表
 		getLiveList() {
 			let that = this;
@@ -72,7 +99,30 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.liveList = res.data;
+					that.getLiveStatus();
 				}
+			});
+		},
+		// 轮询liveStatus
+		getLiveStatus() {
+			let that = this;
+			that.liveList.forEach((live, index) => {
+				let date = '';
+				if (live.live_status == 102) {
+					date = that.$tools.dateFormat('mm-dd HH:MM', new Date(live.starttime * 1000)).replace('-', '/');
+					that.liveStatus['102'] = '预告 ' + date;
+				}
+				livePlayer
+					.getLiveStatus({ room_id: live.room_id })
+					.then(res => {
+						// 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
+						let status = res.liveStatus;
+						live.live_status = status;
+						console.log('get live status', live.room_id, res.liveStatus);
+					})
+					.catch(err => {
+						console.log('get live status', err);
+					});
 			});
 		},
 		goRoom(live) {
@@ -93,9 +143,9 @@ export default {
 	.head {
 		@include flex($justify: between, $align: center);
 		&-title {
-			font-size: 30rpx;
-			font-family: PingFang SC;
+			font-size: 32rpx;
 			font-weight: bold;
+			font-family: PingFang SC;
 			color: rgba(51, 51, 51, 1);
 		}
 		&-more {
@@ -163,10 +213,19 @@ export default {
 	// 双图直播
 	.content-two {
 		width: 100%;
-		-moz-column-count: 2;
-		-webkit-column-count: 2;
-		column-count: 2;
-		padding-top: 20rpx;
+		// -moz-column-count: 2;
+		// -webkit-column-count: 2;
+		// column-count: 2;
+		// padding-top: 20rpx;
+		display: flex;
+		flex-wrap: wrap;
+		&__item {
+			margin-right: 30rpx;
+			margin-top: 20rpx;
+			&:nth-child(2n) {
+				margin-right: 0;
+			}
+		}
 	}
 }
 </style>

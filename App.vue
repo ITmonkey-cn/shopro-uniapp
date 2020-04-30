@@ -104,14 +104,6 @@ export default {
 
 // 其他scss集成在uni.scss,(变量,class,minix)
 
-@font-face {
-	font-family: miso;
-	src: url('https://api.7wpp.com/miso.ttf') format('truetype');
-}
-.miso-font {
-	font-family: 'miso';
-	line-height: 30 rpx;
-}
 page {
 	-webkit-overflow-scrolling: touch; //ios滑动不流畅
 	height: 100%;

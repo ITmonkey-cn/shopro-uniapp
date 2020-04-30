@@ -11,7 +11,7 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="list-box">
-					<block v-for="live in liveList"><shopro-live-card :detail="live"></shopro-live-card></block>
+					<block v-for="live in liveList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></block>
 				</view>
 				<view v-if="liveList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
@@ -57,6 +57,7 @@ export default {
 	onLoad() {
 		this.getLiveList();
 	},
+	onHide() {},
 	methods: {
 		// 切换tab
 		selTab(cur) {
@@ -128,12 +129,12 @@ export default {
 }
 // 瀑布流 list
 .scroll-box {
-	padding: 20rpx;
 	.list-box {
 		width: 100%;
 		-moz-column-count: 2;
 		-webkit-column-count: 2;
 		column-count: 2;
+		padding: 25rpx;
 	}
 }
 </style>
