@@ -1,7 +1,7 @@
 <template>
 	<view class="page_box">
 		<view class="head_box">
-			<view class="add-address-box flex-sub x-f" v-if="!address" @tap="jump('/pages/user/address/list', { from: 'order' })">
+			<view class="add-address-box flex-sub x-f" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
 				<image class="address-bg" src="/static/imgs/address_line.png" mode=""></image>
 				<view class="box-bg x-bc flex-sub pad">
 					<text class="select-notice">请选择默认地址</text>
@@ -60,13 +60,13 @@
 			<view class=" x-bc item-list">
 				<view class="item-title">商品金额</view>
 				<view class="x-f">
-					<text class="price">￥{{ orderPre.goods_amount }}</text>
+					<text class="price">￥{{ orderPre.goods_amount || '0.00' }}</text>
 				</view>
 			</view>
 			<view class="price-box x-bc item-list">
 				<view class="item-title">运费</view>
 				<view class="x-f">
-					<text class="price">￥{{ orderPre.dispatch_amount }}</text>
+					<text class="price">￥{{ orderPre.dispatch_amount || '0.00' }}</text>
 				</view>
 			</view>
 			<view class="remark-box">
@@ -81,7 +81,7 @@
 			<text class="num">共1件</text>
 			<view class="all-money">
 				<text>合计：</text>
-				<text class="price">￥{{ orderPre.total_fee }}</text>
+				<text class="price">￥{{ orderPre.total_fee || '0.00' }}</text>
 			</view>
 			<button class="cu-btn sub-btn" @tap="subOrder" :disabled="isSubOrder">
 				<text v-if="isSubOrder" class="cuIcon-loading2 cuIconfont-spin"></text>
@@ -90,6 +90,8 @@
 		</view>
 		<!-- pricker -->
 		<shopro-picker-modal v-if="pickerData.couponList" @changeCoupon="changeCoupon" v-model="showPicker" :pickerData="pickerData"></shopro-picker-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
@@ -194,7 +196,7 @@ export default {
 							url: `/pages/pay/index?id=${sn}`
 						});
 					}
-				}else{
+				} else {
 					that.isSubOrder = false;
 				}
 			});

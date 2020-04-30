@@ -226,7 +226,6 @@ export default {
 	methods: {
 		...mapActions(['getUserInfo', 'getOrderNum']),
 		// 小程序获取用户信息
-		getuserinfo(e) {},
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,

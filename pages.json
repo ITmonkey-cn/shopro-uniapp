@@ -11,10 +11,10 @@
 				"navigationStyle": "custom"
 			},
 			"meta": {
-				"auth": false,  //需要登录
-				"async": true,  //是否同步
+				"auth": false, //需要登录
+				"async": true, //是否同步
 				"title": "首页", //标题
-				"group": "商城"  //分组
+				"group": "商城" //分组
 			}
 		},
 		{
@@ -45,6 +45,16 @@
 			"style": {
 				"navigationBarTitleText": "我的",
 				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/live/live-list",
+			"style": {
+				"navigationBarTitleText": "直播"
 
 			},
 			"meta": {
@@ -224,16 +234,7 @@
 				"auth": false
 			}
 		},
-		{
-			"path": "pages/user/set",
-			"style": {
-				"navigationBarTitleText": "系统设置"
 
-			},
-			"meta": {
-				"auth": true
-			}
-		},
 		{
 			"path": "pages/public/richtext",
 			"style": {
@@ -345,6 +346,14 @@
 			}
 		},
 		{
+			"path": "pages/user/set",
+			"style": {
+				"navigationBarTitleText": "系统设置"
+			},
+			"meta": {
+				"auth": true
+			}
+		}, {
 			"path": "pages/user/edit-password",
 			"style": {
 				"navigationBarTitleText": "修改密码"
@@ -416,7 +425,7 @@
 	],
 	// 分包加载,tabbar页不能在分包目录内。
 	"subPackages": [{
-		"root": "pges/home", //分包目录
+		"root": "pges/user", //分包目录
 		"pages": [
 			//{}分包路由,去掉根路径
 		]

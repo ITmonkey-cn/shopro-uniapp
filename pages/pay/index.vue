@@ -72,7 +72,7 @@ export default {
 			uni.setStorageSync('openid', options.openid);
 		}
 		// #ifdef H5
-		if (uni.getStorageSync('platform') === 'wxOfficialAccount' && uni.getSystemInfoSync().platform === 'ios' && !uni.getStorageSync('payReload') ) {
+		if (uni.getStorageSync('platform') === 'wxOfficialAccount' && uni.getSystemInfoSync().platform === 'ios' && !uni.getStorageSync('payReload')) {
 			//检测到IOS支付路径问题
 			uni.setStorageSync('payReload', true);
 			window.location.reload();

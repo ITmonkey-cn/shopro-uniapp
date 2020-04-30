@@ -19,6 +19,9 @@
 						<shopro-adv v-if="item.type === 'adv'" :detail="item.content"></shopro-adv>
 						<shopro-coupons v-if="item.type === 'coupons'" :detail="item.content"></shopro-coupons>
 						<shopro-seckill v-if="item.type === 'seckill'" :detail="item.content"></shopro-seckill>
+						<!-- #ifdef MP-WEIXIN -->
+						<shopro-live v-if="item.type === 'live'" :detail="item.content"></shopro-live>
+						<!-- #endif -->
 					</block>
 				</scroll-view>
 			</view>
@@ -40,6 +43,8 @@ import shoproSkeletons from '@/components/shopro-skeletons.vue';
 import shoproCoupons from '@/components/common/shopro-coupons.vue';
 import shoproSeckill from '@/components/common/shopro-seckill.vue';
 import shoproGroup from '@/components/common/shopro-group.vue';
+import shoproLive from '@/components/common/shopro-live.vue';
+
 import { mapMutations, mapActions, mapState } from 'vuex';
 import store from '@/common/store';
 
@@ -54,7 +59,8 @@ export default {
 		shoproSkeletons,
 		shoproCoupons,
 		shoproSeckill,
-		shoproGroup
+		shoproGroup,
+		shoproLive
 	},
 	data() {
 		return {
