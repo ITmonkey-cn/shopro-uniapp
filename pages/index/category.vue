@@ -100,6 +100,7 @@ export default {
 	.list-active {
 		background: #fff;
 		color: #333333 !important;
+		font-weight: bold!important;
 	}
 
 	.line-active {

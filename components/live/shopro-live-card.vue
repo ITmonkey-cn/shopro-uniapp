@@ -34,7 +34,11 @@
 
 <script>
 // #ifdef MP-WEIXIN
-let livePlayer = requirePlugin('live-player-plugin');
+import { HAS_LIVE } from '@/env';
+let livePlayer = null;
+if (HAS_LIVE) {
+	livePlayer = requirePlugin('live-player-plugin');
+}
 //  #endif
 let timer = null;
 export default {
@@ -94,6 +98,9 @@ export default {
 			that.getLiveStatus();
 		}, 60000);
 	},
+	beforeDestroy() {
+		timer = null;
+	},
 	methods: {
 		goRoom() {
 			let that = this;
@@ -103,24 +110,26 @@ export default {
 		},
 		// 轮询liveStatus
 		getLiveStatus() {
-			let that = this;
-			let date = '';
-			if (that.detail.live_status == 102) {
-				date = that.$tools.dateFormat('mm-dd HH:MM', new Date(that.detail.starttime * 1000)).replace('-', '/');
-				that.liveStatus['102'].title = '预告 ' + date;
-			}
-			livePlayer
-				.getLiveStatus({ room_id: that.detail.room_id })
-				.then(res => {
-					// 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-					that.detail.live_status = res.liveStatus;
+			if (HAS_LIVE) {
+				let that = this;
+				let date = '';
+				if (that.detail.live_status == 102) {
+					date = that.$tools.dateFormat('mm-dd HH:MM', new Date(that.detail.starttime * 1000)).replace('-', '/');
+					that.liveStatus['102'].title = '预告 ' + date;
+				}
+				livePlayer
+					.getLiveStatus({ room_id: that.detail.room_id })
+					.then(res => {
+						// 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
+						that.detail.live_status = res.liveStatus;
 
-					console.log('get live status', that.detail.room_id, res.liveStatus);
-					console.log('detail', that.detail.room_id, that.detail.live_status);
-				})
-				.catch(err => {
-					console.log('get live status', err);
-				});
+						console.log('get live status', that.detail.room_id, res.liveStatus);
+						console.log('detail', that.detail.room_id, that.detail.live_status);
+					})
+					.catch(err => {
+						console.log('get live status', err);
+					});
+			}
 		}
 	}
 };

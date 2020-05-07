@@ -20,7 +20,7 @@
 						<shopro-coupons v-if="item.type === 'coupons'" :detail="item.content"></shopro-coupons>
 						<shopro-seckill v-if="item.type === 'seckill'" :detail="item.content"></shopro-seckill>
 						<!-- #ifdef MP-WEIXIN -->
-						<shopro-live v-if="item.type === 'live'" :detail="item.content"></shopro-live>
+						<shopro-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></shopro-live>
 						<!-- #endif -->
 					</block>
 				</scroll-view>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { HAS_LIVE } from '@/env';
 import shoproSearch from '@/components/common/shopro-search.vue';
 import shoproBanner from '@/components/common/shopro-banner.vue';
 import shoproGoodsGroup from '@/components/common/shopro-goods-group.vue';
@@ -64,7 +65,8 @@ export default {
 	},
 	data() {
 		return {
-			bgcolor: ''
+			bgcolor: '',
+			HAS_LIVE:HAS_LIVE
 		};
 	},
 	computed: {

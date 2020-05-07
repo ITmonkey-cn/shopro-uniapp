@@ -312,6 +312,7 @@ export default {
 				width: 40rpx;
 				height: 40rpx;
 				margin-right: 6rpx;
+				border-radius: 50%;
 			}
 
 			.tag-title {
