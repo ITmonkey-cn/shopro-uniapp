@@ -9,28 +9,28 @@
 			<radio-group @change="selPay" class="pay-box" v-if="payment">
 				<label class="x-bc pay-item" v-if="payment.includes('wechat')">
 					<view class="x-f">
-						<image class="pay-img" src="/static/imgs/wx_pay.png" mode=""></image>
+						<image class="pay-img" src="http://shopro.7wpp.com/imgs/wx_pay.png" mode=""></image>
 						<text>微信支付</text>
 					</view>
 					<radio value="wechat" :class="{ checked: payType === 'wechat' }" class=" pay-radio orange" :checked="payType === 'wechat'"></radio>
 				</label>
 				<label class="x-bc pay-item" v-if="payment.includes('alipay')">
 					<view class="x-f">
-						<image class="pay-img" src="/static/imgs/ali_pay.png" mode=""></image>
+						<image class="pay-img" src="http://shopro.7wpp.com/imgs/ali_pay.png" mode=""></image>
 						<text>支付宝支付</text>
 					</view>
 					<radio value="alipay" :class="{ checked: payType === 'alipay' }" class="pay-radio orange" :checked="payType === 'alipay'"></radio>
 				</label>
 				<label class="x-bc pay-item" v-if="payment.includes('iospay') && !isAndroid">
 					<view class="x-f">
-						<image class="pay-img" src="/static/imgs/apple_pay.png" mode=""></image>
+						<image class="pay-img" src="http://shopro.7wpp.com/imgs/apple_pay.png" mode=""></image>
 						<text>ApplePay</text>
 					</view>
 					<radio value="iospay" :class="{ checked: payType === 'iospay' }" class="pay-radio orange" :checked="payType === 'iospay'"></radio>
 				</label>
 				<label class="x-bc pay-item" v-if="payment.includes('wallet')">
 					<view class="x-f">
-						<image class="pay-img" src="/static/imgs/wallet_pay.png" mode=""></image>
+						<image class="pay-img" src="http://shopro.7wpp.com/imgs/wallet_pay.png" mode=""></image>
 						<text>余额支付</text>
 					</view>
 					<radio value="wallet" :class="{ checked: payType === 'wallet' }" class="pay-radio orange" :checked="payType === 'wallet'"></radio>

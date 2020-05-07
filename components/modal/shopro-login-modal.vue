@@ -2,7 +2,7 @@
 	<view class="cu-modal " :class="[{ show: showModal }, modalType]" cathctouchmove @tap="hideModal">
 		<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
 			<view class="modal-box">
-				<image class="head-bg" src="/static/imgs/nologin_bg.png" mode=""></image>
+				<image class="head-bg" src="http://shopro.7wpp.com/imgs/nologin_bg.png" mode=""></image>
 				<view class="detail">
 					<view class="title1">您还没有登录</view>
 					<view class="title2">登录即刻开启品质生活</view>

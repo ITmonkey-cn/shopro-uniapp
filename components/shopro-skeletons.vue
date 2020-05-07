@@ -1,7 +1,7 @@
 <template>
 	<view class="skeletons_box">
 		<image class="img" :src="skeletonsDot[type]" mode="widthFix"></image>
-		<image class="loading" src="/static/imgs/logo.gif" mode=""></image>
+		<image class="loading" src="/static/imgs/logo/logo.gif" mode=""></image>
 	</view>
 </template>
 

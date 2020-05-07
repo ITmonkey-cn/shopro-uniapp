@@ -4,7 +4,7 @@
 		<view class="content_box">
 			<view class="detail-head">
 				<view class="state-box x-f">
-					<image class="state-img" src="/static/imgs/order_state1.png" mode=""></image>
+					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
 					<text>{{ orderDetail.status_name }}</text>
 				</view>
 				<view class="address-box">

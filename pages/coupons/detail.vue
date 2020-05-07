@@ -10,7 +10,7 @@
 			<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top :scroll-into-view="scrollId" @scroll="onScroll">
 				<view class="coupon-box">
 					<view class="top y-f">
-						<view class="img-box x-c"><image class="coupon-img" src="/static/imgs/coupon.png" mode=""></image></view>
+						<view class="img-box x-c"><image class="coupon-img" src="http://shopro.7wpp.com/imgs/coupon.png" mode=""></image></view>
 						<view class="title">{{ couponDetail.amount }}元优惠券</view>
 						<view class="tip">满{{ couponDetail.enough }}元可用</view>
 						<button class="cu-btn use-btn" @tap="goScroll">{{state===2?'已使用':'立即使用'}}</button>

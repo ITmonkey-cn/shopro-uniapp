@@ -4,7 +4,7 @@
 		<view class="shop-title more-t">{{ scoreData.title }}</view>
 		<view class="num-box x-bc">
 			<view class="beans-box x-f">
-				<image class="bean-img" src="/static/imgs/score.png" mode=""></image>
+				<image class="bean-img" src="http://shopro.7wpp.com/imgs/score.png" mode=""></image>
 				{{ scoreData.price }}
 			</view>
 			<view class="end-cash">已兑换{{scoreData.sales}}件</view>

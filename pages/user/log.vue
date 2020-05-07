@@ -45,7 +45,7 @@ export default {
 			routerTo: this.$Router,
 			selList: [],
 			emptyData: {
-				img: '/static/imgs/empty_goods.jpg',
+				img: '/static/imgs/empty/empty_goods.jpg',
 				tip: '暂无浏览记录',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'

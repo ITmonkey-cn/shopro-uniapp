@@ -16,7 +16,7 @@
 					<!-- 价格 -->
 					<view class="price-card">
 						<view class="x-f">
-							<image class="score-img" src="/static/imgs/score.png" mode=""></image>
+							<image class="score-img" src="http://shopro.7wpp.com/imgs/score.png" mode=""></image>
 							<text class="price">{{ goodsInfo.price }}</text>
 						</view>
 						<view class="x-bc price-bottom-box">
@@ -69,7 +69,7 @@
 			<view class="foot_box x-f" v-if="!showSku && !showServe">
 				<view class="left x-f">
 					<view class="tools-item y-f" @tap="goHome">
-						<image class="tool-img" src="/static/imgs/tabbar/tab_home_sel.png" mode=""></image>
+						<image class="tool-img" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
 						<text class="tool-title">首页</text>
 					</view>
 				</view>

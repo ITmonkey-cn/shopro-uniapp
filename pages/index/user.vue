@@ -4,7 +4,7 @@
 		<button v-if="auth" open-type="getUserInfo" @getuserinfo="getuserinfo" class="login-box"></button>
 		<!-- #endif -->
 		<view class="head_box">
-			<image class="user-bg" src="/static/imgs/user/user_bg.png" mode=""></image>
+			<image class="user-bg" src="http://shopro.7wpp.com/imgs/user/user_bg.png" mode=""></image>
 			<view class="head-wrap pad">
 				<view class="titleNav ">
 					<view class="status-bar"></view>
@@ -99,99 +99,99 @@ export default {
 				{
 					id: 1,
 					title: '待付款',
-					img: '/static/imgs/user/tab11.png',
+					img: 'http://shopro.7wpp.com/imgs/user/tab11.png',
 					type: 'nopay'
 				},
 				{
 					id: 2,
 					title: '待发货',
-					img: '/static/imgs/user/tab22.png',
+					img: 'http://shopro.7wpp.com/imgs/user/tab22.png',
 					type: 'nosend'
 				},
 				{
 					id: 3,
 					title: '待收货',
-					img: '/static/imgs/user/tab33.png',
+					img: 'http://shopro.7wpp.com/imgs/user/tab33.png',
 					type: 'noget'
 				},
 				{
 					id: 4,
 					title: '待评价',
-					img: '/static/imgs/user/tab44.png',
+					img: 'http://shopro.7wpp.com/imgs/user/tab44.png',
 					type: 'nocomment'
 				},
 				{
 					id: 5,
 					title: '退换货',
-					img: '/static/imgs/user/tab55.png',
+					img: 'http://shopro.7wpp.com/imgs/user/tab55.png',
 					type: 'aftersale'
 				}
 			],
 			toolsNav: [
 				{
 					title: '商品收藏',
-					img: '/static/imgs/user/list1.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list1.png',
 					url: '/pages/user/favorite'
 				},
 				{
 					title: '积分余额',
-					img: '/static/imgs/user/list2.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list2.png',
 					url: '/pages/score/index'
 				},
 				{
 					title: '我的钱包',
-					img: '/static/imgs/user/list3.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list3.png',
 					url: '/pages/money/index'
 				},
 				{
 					title: '优惠券',
-					img: '/static/imgs/user/list4.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list4.png',
 					url: '/pages/coupons/index'
 				},
 				// {
 				// 	title: '我的拼团',
-				// 	img: '/static/imgs/user/list5.png',
+				// 	img: 'http://shopro.7wpp.com/imgs/user/list5.png',
 				// 	url: '/pages/user/my-scrabble/index'
 				// },
 				// {
 				// 	title: '联系客服',
-				// 	img: '/static/imgs/user/list6.png',
+				// 	img: 'http://shopro.7wpp.com/imgs/user/list6.png',
 				// 	url: ''
 				// },
 				{
 					title: '常见问题',
-					img: '/static/imgs/user/list7.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list7.png',
 					url: '/pages/public/problems'
 				},
 
 				// {
 				// 	title: '业绩明细',
-				// 	img: '/static/imgs/user/list9.png',
+				// 	img: 'http://shopro.7wpp.com/imgs/user/list9.png',
 				// 	url: '/pages/user/performance'
 				// },
 				// {
 				// 	title: '余额互转',
-				// 	img: '/static/imgs/user/list10.png',
+				// 	img: 'http://shopro.7wpp.com/imgs/user/list10.png',
 				// 	url: '/pages/money/turn'
 				// },
 				{
 					title: '邀请好友',
-					img: '/static/imgs/user/list11.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list11.png',
 					url: '/pages/user/poster'
 				},
 				{
 					title: '积分商城',
-					img: '/static/imgs/user/list12.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list12.png',
 					url: '/pages/score/score-shop'
 				},
 				{
 					title: '浏览足迹',
-					img: '/static/imgs/user/user_log.png',
+					img: 'http://shopro.7wpp.com/imgs/user/user_log.png',
 					url: '/pages/user/log'
 				},
 				{
 					title: '系统设置',
-					img: '/static/imgs/user/list8.png',
+					img: 'http://shopro.7wpp.com/imgs/user/list8.png',
 					url: '/pages/user/set'
 				}
 			],

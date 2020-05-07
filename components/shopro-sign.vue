@@ -7,7 +7,7 @@
 				<text class="resign-card-num">2</text>
 			</view>
 			<view class="invite-box x-bc">
-				<image class="invite-tag" src="/static/imgs/sign_tag.png" mode=""></image>
+				<image class="invite-tag" src="http://shopro.7wpp.com/imgs/sign_tag.png" mode=""></image>
 				<text class="invite-notice">每邀请一个好友即可获得一张补签卡</text>
 				<button class="cu-btn invite-btn">去邀请</button>
 			</view>

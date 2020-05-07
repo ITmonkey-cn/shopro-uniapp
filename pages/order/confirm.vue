@@ -2,14 +2,14 @@
 	<view class="page_box">
 		<view class="head_box">
 			<view class="add-address-box flex-sub x-f" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
-				<image class="address-bg" src="/static/imgs/address_line.png" mode=""></image>
+				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
 				<view class="box-bg x-bc flex-sub pad">
 					<text class="select-notice">请选择默认地址</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
 			<view class="address-list" v-else @tap="jump('/pages/user/address/list', { from: 'order' })">
-				<image class="address-bg" src="/static/imgs/address_line.png" mode=""></image>
+				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
 				<view class="top x-f">
 					<text class="name">{{ address.consignee }}</text>
 					<text class="phone">{{ address.phone }}</text>
