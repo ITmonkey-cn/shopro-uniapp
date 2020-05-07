@@ -67,15 +67,15 @@
 			<view class="detail-foot_box  x-f" v-if="!showSku && !showServe">
 				<view class="left x-f">
 					<view class="tools-item y-f" @tap="goHome">
-						<image class="tool-img" src="/static/imgs/tabbar/tab_home_sel.png" mode=""></image>
+						<image class="tool-img" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
 						<text class="tool-title">首页</text>
 					</view>
 					<view class="tools-item y-f" @tap="onFavorite(goodsInfo.id)">
-						<image class="tool-img" :src="Boolean(goodsInfo.favorite) ? '/static/imgs/favorite_end.png' : '/static/imgs/favorite.png'" mode=""></image>
+						<image class="tool-img" :src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'" mode=""></image>
 						<text class="tool-title">收藏</text>
 					</view>
 					<view class="tools-item y-f" @tap="onShare">
-						<image class="tool-img" src="/static/imgs/share.png" mode=""></image>
+						<image class="tool-img" src="http://shopro.7wpp.com/imgs/share.png" mode=""></image>
 						<text class="tool-title">分享</text>
 					</view>
 				</view>
@@ -393,7 +393,7 @@ export default {
 	margin-bottom: 20rpx;
 	background: #fff;
 	padding-bottom: 30rpx ;
-
+	background: #fff;
 	.rich-box {
 		font-size: 0;
 		image {
@@ -402,14 +402,14 @@ export default {
 	}
 
 	.goods-size {
+		padding-top: 30rpx;
 		.table-box {
 			width: 710rpx;
-			margin: 20rpx auto;
+			margin:auto;
 			background: rgba(255, 255, 255, 1);
 			border: 1rpx solid rgba(223, 223, 223, 1);
 
 			.t-tr {
-				height: 68rpx;
 				border-bottom: 1rpx solid rgba(223, 223, 223, 1);
 
 				&:last-child {
@@ -420,7 +420,7 @@ export default {
 					font-size: 26rpx;
 					color: #999;
 					flex: 1;
-					padding-left: 30rpx;
+					padding: 15rpx 20rpx;
 					height: 100%;
 					border-right: 1rpx solid rgba(223, 223, 223, 1);
 				}
@@ -428,14 +428,15 @@ export default {
 				.t-detail {
 					font-size: 26rpx;
 					flex: 4;
-					padding-left: 30rpx;
+					padding: 15rpx 20rpx;
+					height: 100%;
 				}
 			}
 		}
 	}
 
 	.goods-comment {
-		min-height: 300rpx;
+		padding-top: 30rpx;
 		.more-box {
 			height: 100rpx;
 			background: #fff;

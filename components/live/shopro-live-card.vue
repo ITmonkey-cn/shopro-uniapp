@@ -7,7 +7,7 @@
 				<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
 			</view>
 			<view class="item-title" :style="{ width: wh + 'rpx' }">{{ detail.name }}</view>
-			<!-- 	<image v-if="detail.live_status == 101" class="like-img" src="/static/imgs/live/zan.gif" mode=""></image> -->
+			<!-- 	<image v-if="detail.live_status == 101" class="like-img" src="http://shopro.7wpp.com/imgs/live/zan.gif" mode=""></image> -->
 		</view>
 		<view class="live-bottom" :style="{ width: wh + 'rpx' }">
 			<view class="live-info">
@@ -47,31 +47,31 @@ export default {
 		return {
 			liveStatus: {
 				'101': {
-					img: '/static/imgs/live/live.png',
+					img: 'http://shopro.7wpp.com/imgs/live/live.png',
 					title: '直播中'
 				},
 				'102': {
-					img: '/static/imgs/live/prevue.png',
+					img: 'http://shopro.7wpp.com/imgs/live/prevue.png',
 					title: '未开始'
 				},
 				'103': {
-					img: '/static/imgs/live/playback.png',
+					img: 'http://shopro.7wpp.com/imgs/live/playback.png',
 					title: '已结束'
 				},
 				'104': {
-					img: '/static/imgs/live/104.png',
+					img: 'http://shopro.7wpp.com/imgs/live/104.png',
 					title: '禁播'
 				},
 				'105': {
-					img: '/static/imgs/live/105.png',
+					img: 'http://shopro.7wpp.com/imgs/live/105.png',
 					title: '暂停中'
 				},
 				'106': {
-					img: '/static/imgs/live/106.png',
+					img: 'http://shopro.7wpp.com/imgs/live/106.png',
 					title: '异常'
 				},
 				'107': {
-					img: '/static/imgs/live/past.png',
+					img: 'http://shopro.7wpp.com/imgs/live/past.png',
 					title: '已过期'
 				}
 			}

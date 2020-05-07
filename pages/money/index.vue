@@ -50,7 +50,7 @@
 			<block slot="modalContent">
 				<view class="modal-box">
 					<view class="modal-head">
-						<image class="modal-head-img" src="/static/imgs/modal_bg.png" mode=""></image>
+						<image class="modal-head-img" src="http://shopro.7wpp.com/imgs/modal_bg.png" mode=""></image>
 						<text class="modal-head-title">提现金额</text>
 					</view>
 					<input class="inp" type="number" @input="onInput" v-model="money" placeholder="在此输入提现金额" placeholder-class="pl-inp" />

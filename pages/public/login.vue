@@ -41,19 +41,19 @@
 			<view class="third-party y-f">
 				<!-- #ifdef H5 -->
 				<button class="cu-btn wx-logo-box y-f" @tap="wxLogin">
-					<image class="auto-login" src="/static/imgs/auto_login.png" mode=""></image>
+					<image class="auto-login" src="http://shopro.7wpp.com/imgs/auto_login.png" mode=""></image>
 					<view class="">微信一键登录</view>
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef MP-WEIXIN -->
 				<button class="cu-btn wx-logo-box y-f" open-type="getUserInfo" @getuserinfo="wxLogin('wxMiniProgram')">
-					<image class="auto-login" src="/static/imgs/auto_login.png" mode=""></image>
+					<image class="auto-login" src="http://shopro.7wpp.com/imgs/auto_login.png" mode=""></image>
 					<view class="">微信一键登录</view>
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
 				<button class="cu-btn wx-logo-box y-f" @tap="wxLogin">
-					<image class="auto-login" src="/static/imgs/auto_login.png" mode=""></image>
+					<image class="auto-login" src="http://shopro.7wpp.com/imgs/auto_login.png" mode=""></image>
 					<view class="">微信一键登录</view>
 				</button>
 				<!-- #endif -->

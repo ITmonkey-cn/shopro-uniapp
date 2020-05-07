@@ -48,7 +48,7 @@ export default {
 			routerTo: this.$Router,
 			selList: [],
 			emptyData: {
-				img: '/static/imgs/empty_goods.jpg',
+				img: '/static/imgs/empty/empty_goods.jpg',
 				tip: '暂无收藏商品，赶紧去收藏好货吧~'
 			},
 			favoriteList: [],

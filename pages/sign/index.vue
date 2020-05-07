@@ -10,7 +10,7 @@
 							<text class="resign-card-num">2</text>
 						</view>
 						<view class="invite-box x-bc">
-							<image class="invite-tag" src="/static/imgs/sign_tag.png" mode=""></image>
+							<image class="invite-tag" src="http://shopro.7wpp.com/imgs/sign_tag.png" mode=""></image>
 							<text class="invite-notice">每邀请一个好友即可获得一张补签卡</text>
 							<button class="cu-btn invite-btn">去邀请</button>
 						</view>
@@ -81,8 +81,8 @@
 			<block slot="modalContent">
 				<view class="sign-modal-box">
 					<view class="modal-head y-f">
-						<image class="modal-bg" src="/static/imgs/modal/sign_modal_bg.jpg" mode=""></image>
-						<image class="sign-tag" src="/static/imgs/modal/sign_modal_succeed.png" mode=""></image>
+						<image class="modal-bg" src="http://shopro.7wpp.com/imgs/modal/sign_modal_bg.jpg" mode=""></image>
+						<image class="sign-tag" src="http://shopro.7wpp.com/imgs/modal/sign_modal_succeed.png" mode=""></image>
 						<view class="sign-num-box">
 							已连续打卡
 							<text class="sign-num">{{ cuntinueDays }}</text>

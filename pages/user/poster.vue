@@ -1,28 +1,28 @@
 <template>
 	<view class="content">
-		<image class="bg_img" src="/static/imgs/poster/invite_poster.png" mode=""></image>
+		<image class="bg_img" src="http://shopro.7wpp.com/imgs/poster/invite_poster.png" mode=""></image>
 		<view class="poster-box y-f">
 			<image :src="poster.finalPath" mode="widthFix" class="posterImage"></image>
 			<view class="share-box" v-if="poster.finalPath">
 				<view class="share-list-box x-f">
 					<!-- #ifdef MP-WEIXIN -->
 					<button class="share-btn share-item y-f" open-type="share">
-						<image class="share-img" src="/static/imgs/share_wx.png" mode=""></image>
+						<image class="share-img" src="http://shopro.7wpp.com/imgs/share_wx.png" mode=""></image>
 						<text class="share-title">微信好友</text>
 					</button>
 					<!-- #endif -->
 					<!-- #ifndef MP-WEIXIN -->
 					<view class="share-item y-f" @tap="share">
-						<image class="share-img" src="/static/imgs/share_wx.png" mode=""></image>
+						<image class="share-img" src="http://shopro.7wpp.com/imgs/share_wx.png" mode=""></image>
 						<text class="share-title">微信好友</text>
 					</view>
 					<!-- #endif -->
 					<view class="share-item y-f" @tap="saveImage">
-						<image class="share-img" src="/static/imgs/share_poster.png" mode=""></image>
+						<image class="share-img" src="http://shopro.7wpp.com/imgs/share_poster.png" mode=""></image>
 						<text class="share-title">保存图片</text>
 					</view>
 					<view class="share-item y-f" @tap="copyLink">
-						<image class="share-img" src="/static/imgs/share_link.png" mode=""></image>
+						<image class="share-img" src="http://shopro.7wpp.com/imgs/share_link.png" mode=""></image>
 						<text class="share-title">复制链接</text>
 					</view>
 				</view>
