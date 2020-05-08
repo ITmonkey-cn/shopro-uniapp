@@ -216,16 +216,15 @@ export default {
 			}
 		}
 	},
-	onLoad() {},
-	onShow() {
-		// this.getUserInfo();
-		this.$store.commit('CART_NUM', this.cartNum);
-		this.getOrderNum();
+	onLoad() {
 		this.getUserInfo();
+	},
+	onShow() {
+		this.$store.commit('CART_NUM');
+		this.getOrderNum();
 	},
 	methods: {
 		...mapActions(['getUserInfo', 'getOrderNum']),
-		// 小程序获取用户信息
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,

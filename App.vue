@@ -75,25 +75,17 @@ export default {
 	onLaunch: async function(options) {
 		this.init(options)
 			.then(res => {
-				// this.getShareInfo();
 				this.autoLogin(res[1].data);
 				this.getRoutes();
-				// this.getUserInfo();
 			})
 			.catch(err => {
 				console.log(err);
 			});
 	},
 	onShow: function() {
-		// console.log('App Show');
-		let cartNum = store.state.cart.cartNum;
-		this.$store.commit('CART_NUM', cartNum);
-		// let theme = uni.getStorageSync('themeKey');
-		// this.$store.commit('SET_THEME', theme);
+		this.$store.commit('CART_NUM');
 	},
-	onHide: function() {
-		// console.log('App Hide');
-	}
+	onHide: function() {}
 };
 </script>
 

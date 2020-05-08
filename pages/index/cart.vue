@@ -19,10 +19,10 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<checkbox-group class="block" v-if="cartList.length" @change="onSel">
+			<checkbox-group class="block" v-if="cartList.length" @change="changeSel">
 				<view class="collect-list x-start" v-for="(g, index) in cartList" :key="index">
-					<view class="x-c" style="height: 200rpx;">
-						<checkbox :value="index.toString()" :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
+					<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
+						<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
 					</view>
 					<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'">
 						<block slot="goodsBottom">
@@ -41,11 +41,11 @@
 				<label class="check-all x-f" @tap="onAllSel">
 					<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
 					<text>全选</text>
-					<text>（{{ selList.length }}）</text>
+					<text>（{{ totalCount.totalNum }}）</text>
 				</label>
 				<view class="x-f">
-					<view class="price" v-if="!isTool && allMoney">￥{{ allMoney }}</view>
-					<button class="cu-btn pay-btn" :disabled="!Boolean(selList.length)" v-show="!isTool" @tap="onPay">结算</button>
+					<view class="price" v-if="!isTool">￥{{ totalCount.totalPrice.toFixed(2) }}</view>
+					<button class="cu-btn pay-btn" :disabled="!isSel" v-show="!isTool" @tap="onPay">结算</button>
 					<button class="cu-btn del-btn" v-show="isTool" @tap="goodsDelete">删除</button>
 				</view>
 			</view>
@@ -57,7 +57,7 @@
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
 import uniNumberBox from '@/components/uni-number-box.vue';
 import shoproEmpty from '@/components/shopro-empty.vue';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 let timer = null;
 export default {
 	components: {
@@ -68,7 +68,6 @@ export default {
 	data() {
 		return {
 			isTool: false,
-			allSel: false,
 			selList: [],
 			emptyData: {
 				img: '/static/imgs/empty/emptyCart.png',
@@ -77,43 +76,22 @@ export default {
 		};
 	},
 	computed: {
-		cartList: {
-			get() {
-				return this.$store.state.cart.cartList;
-			},
-			set(newVal) {
-				return newVal;
-			}
-		},
-		allMoney() {
-			let price = 0;
-			this.cartList.forEach(p => {
-				if (p.checked) {
-					price += +p.sku_price.price * p.goods_num;
-				}
-			});
-			return price.toFixed(2);
-		}
+		...mapState({
+			cartList: ({ cart }) => cart.cartList,
+			allSel: ({ cart }) => cart.allSelected
+		}),
+		...mapGetters(['totalCount', 'isSel'])
 	},
 	onLoad() {
-		this.init();
-	},
-	onShow() {},
-	onHide() {
-		this.allSel = false;
-		this.isTool = false;
 		this.getCartList();
 	},
 	methods: {
-		...mapActions(['addCartGoods', 'getCartList']),
-		// INIT
-		init() {
-			return Promise.all([this.getCartList()]);
-		},
+		...mapActions(['getCartList', 'changeCartList']),
+		// 更改商品数
 		onChangeNum(e, g, index) {
 			if (g.goods_num !== e) {
-				this.asyncCart([g.id], e, 'change');
 				this.$set(this.cartList[index], 'goods_num', +e);
+				this.changeCartList({ ids: [g.id], goodsNum: e, art: 'change' });
 			}
 		},
 		// 路由跳转
@@ -123,81 +101,55 @@ export default {
 				query: parmas
 			});
 		},
-		onSel(e) {
-			let { cartList } = this;
-			let values = e.detail.value;
-			cartList.forEach((i, index) => {
-				if (values.includes(index.toString())) {
-					this.$set(i, 'checked', true);
-				} else {
-					this.$set(i, 'checked', false);
-				}
-			});
-			this.selList = values;
-			if (this.selList.length < cartList.length) {
-				this.allSel = false;
-			} else {
-				this.allSel = true;
-			}
+		// 单选
+		onSel(index, flag) {
+			let that = this;
+			that.$store.commit('selectItem', { index, flag });
 		},
+		// 功能切换
 		onSet() {
 			this.isTool = !this.isTool;
 		},
+		// 选择
+		changeSel(e) {
+			this.selList = e.detail.value;
+		},
+		// 全选
 		onAllSel() {
-			this.allSel = !this.allSel;
-			this.selList = [];
-			this.cartList.forEach((i, index) => {
-				if (this.allSel) {
-					this.$set(i, 'checked', true);
-					this.selList.push(index);
-				} else {
-					this.$set(i, 'checked', false);
-					this.selList = [];
-				}
-			});
+			let that = this;
+			that.$store.commit('changeAllSellect'); //按钮切换全选。
+			that.$store.commit('getAllSellectCartList', that.allSel); //列表全选
 		},
 		// 结算
 		onPay() {
 			let that = this;
-			if (this.selList.length !== 0) {
+			let { cartList } = this;
+			if (this.isSel) {
 				let confirmcartList = [];
-				this.selList.forEach(c => {
-					confirmcartList.push({
-						goods_id: this.cartList[c].goods_id,
-						goods_num: this.cartList[c].goods_num,
-						sku_price_id: this.cartList[c].sku_price_id,
-						goods_price: this.cartList[c].sku_price.price
-					});
+				this.cartList.forEach(item => {
+					if (item.checked) {
+						confirmcartList.push({
+							goods_id: item.goods_id,
+							goods_num: item.goods_num,
+							sku_price_id: item.sku_price_id,
+							goods_price: item.sku_price.price
+						});
+					}
 				});
 				that.jump('/pages/order/confirm', { goodsList: JSON.stringify(confirmcartList), from: 'cart' });
 			}
 		},
-		asyncCart(cartIdsArray, value, act = 'change') {
-			this.$api('cart.edit', {
-				cart_list: cartIdsArray,
-				value: value || null,
-				act: act
-			}).then(res => {
-				if (act === 'delete' && res.code === 1) {
-					if (this.allSel) {
-						this.$store.commit('CART_LIST', []);
-					} else {
-						this.selList.forEach(index => {
-							this.cartList.splice(index, 1);
-						});
-					}
-					this.getCartList();
-				}
-			});
-		},
 		// 删除
 		goodsDelete() {
 			let that = this;
+			let { cartList } = this;
 			let selectedIdsArray = [];
-			this.selList.forEach(index => {
-				selectedIdsArray.push(that.cartList[index].id);
+			cartList.map(item => {
+				if (item.checked) {
+					selectedIdsArray.push(item.id);
+				}
 			});
-			this.asyncCart(selectedIdsArray, null, 'delete');
+			this.changeCartList({ ids: selectedIdsArray, art: 'delete' });
 		}
 	}
 };
