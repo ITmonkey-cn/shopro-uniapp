@@ -19,7 +19,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<checkbox-group class="block" v-if="cartList.length" @change="changeSel">
+			<checkbox-group class="block" v-if="cartList.length">
 				<view class="collect-list x-start" v-for="(g, index) in cartList" :key="index">
 					<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
 						<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
@@ -68,7 +68,6 @@ export default {
 	data() {
 		return {
 			isTool: false,
-			selList: [],
 			emptyData: {
 				img: '/static/imgs/empty/emptyCart.png',
 				tip: '购物车空空如也,快去逛逛吧~'
@@ -109,10 +108,6 @@ export default {
 		// 功能切换
 		onSet() {
 			this.isTool = !this.isTool;
-		},
-		// 选择
-		changeSel(e) {
-			this.selList = e.detail.value;
 		},
 		// 全选
 		onAllSel() {

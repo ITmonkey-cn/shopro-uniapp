@@ -62,13 +62,16 @@ const actions = {
 			}).then(res => {
 				if (param.art === 'delete' && res.code === 1) {
 					let newCartData = []
-					state.allSelected ?
-						store.commit('CART_LIST', []) :
+					if (state.allSelected) {
+						store.commit('CART_LIST', []);
+						commit('CART_NUM');
+					} else {
 						newCartData = state.cartList.filter(item => {
 							if (!item.checked) {
 								return item
 							}
 						});
+					}
 					commit('CART_LIST', newCartData);
 					dispatch('getCartList')
 				}
