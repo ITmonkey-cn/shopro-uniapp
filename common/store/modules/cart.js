@@ -8,7 +8,7 @@ import {
 const state = {
 	cartList: [],
 	allSelected: false,
-	cartNum: uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : '', //购物车,涉及到刷新数据丢失，所以存了本地,
+	cartNum: uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : 0, //购物车,涉及到刷新数据丢失，所以存了本地,
 }
 
 const actions = {
@@ -61,19 +61,8 @@ const actions = {
 				act: param.art
 			}).then(res => {
 				if (param.art === 'delete' && res.code === 1) {
-					let newCartData = []
-					if (state.allSelected) {
-						store.commit('CART_LIST', []);
-						commit('CART_NUM');
-					} else {
-						newCartData = state.cartList.filter(item => {
-							if (!item.checked) {
-								return item
-							}
-						});
-					}
-					commit('CART_LIST', newCartData);
-					dispatch('getCartList')
+					dispatch('getCartList');
+					commit('CART_NUM');
 				}
 
 			}).catch(e => {
@@ -88,13 +77,13 @@ const mutations = {
 	[CART_LIST](state, data) {
 		state.cartList = data
 	},
-	// cart数量
+	// cart数量角标更新。
 	[CART_NUM](state) {
-		let carNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : state.cartNum
-		if (carNum) {
+		let cartNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : state.cartNum;
+		if (cartNum) {
 			uni.setTabBarBadge({
 				index: 2,
-				text: carNum + ''
+				text: cartNum + ''
 			})
 		} else {
 			uni.removeTabBarBadge({
