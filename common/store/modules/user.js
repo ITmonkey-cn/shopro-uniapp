@@ -21,9 +21,9 @@ const actions = {
 	}) {
 		return new Promise((resolve, reject) => {
 			api('user.info').then(res => {
+				store.dispatch('getCartList')
 				commit('USER_INFO', res.data);
 				uni.setStorageSync('userInfo', res.data);
-				store.dispatch('getCartList');
 				store.dispatch('getOrderNum');
 				commit('LOGIN_TIP', false);
 				//添加推广记录
@@ -31,18 +31,18 @@ const actions = {
 				let url = uni.getStorageSync('url');
 				let shareParams = {};
 				// if(share_id && res.data.id >share_id) {
-				if(share_id) {
+				if (share_id) {
 					shareParams.share_id = share_id;
 					shareParams.url = url;
 					api('share.add', shareParams).then(res => {
-						if(res.code === 1) {
+						if (res.code === 1) {
 							uni.removeStorageSync('share_id');
 							uni.removeStorageSync('url');
 						}
 					})
 				}
 				resolve(res)
-				
+
 			}).catch(e => {
 				console.log(e)
 				reject(e)
@@ -77,9 +77,10 @@ const mutations = {
 	[OUT_LOGIN](state, data) {
 		uni.removeStorageSync('token');
 		uni.removeStorageSync('userInfo');
+		uni.removeStorageSync('cartNum');
 		store.commit('USER_INFO', {});
 		store.commit('CART_LIST', []);
-		store.commit('CART_NUM', '0');
+		store.commit('CART_NUM');
 		store.commit('ORDER_NUMBER', 0);
 		router.replace('/pages/public/login');
 	},

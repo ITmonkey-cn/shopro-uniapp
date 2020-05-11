@@ -1,12 +1,14 @@
 // 初始化数据模块
 import api from '@/common/request/index'
+import store from '@/common/store'
 import {
 	INIT_DATA,
-	PAGE_ROUTES
+	PAGE_ROUTES,
+	CART_NUM
 } from '../types.js'
 const state = {
 	initData: {},
-	routes:[]
+	routes: []
 }
 
 const actions = {
@@ -16,7 +18,7 @@ const actions = {
 		let params = {}
 		uni.setStorageSync('mode', 'product');
 
-		if(options.query.preview_id) {
+		if (options.query.preview_id) {
 			uni.setStorageSync('mode', 'preview');
 			params.preview_id = options.query.preview_id;
 		}
@@ -34,8 +36,8 @@ const actions = {
 		commit
 	}) {
 		return new Promise((resolve, reject) => {
-			api('dev.asyncLink',{
-				data:ROUTES
+			api('dev.asyncLink', {
+				data: ROUTES
 			}).then(res => {
 				commit('PAGE_ROUTES', res.data);
 				resolve(res)

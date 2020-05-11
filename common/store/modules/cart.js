@@ -7,27 +7,32 @@ import {
 } from '../types.js'
 const state = {
 	cartList: [],
-	cartNum: uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : '', //购物车,涉及到刷新数据丢失，所以存了本地,
+	allSelected: false,
+	cartNum: uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : 0, //购物车,涉及到刷新数据丢失，所以存了本地,
 }
 
 const actions = {
-	// 购物车数据
+	// 购物车数据（查）
 	getCartList({
 		commit,
 		state
 	}) {
 		return new Promise((resolve, reject) => {
 			http('cart.index').then(res => {
-				commit('CART_LIST', res.data);
-				let num = res.data.length + '';
-				uni.setStorageSync('cartNum', num);
-				commit('CART_NUM', num);
+				let cartData = res.data;
+				cartData.map(item => {
+					item.checked = false;
+				})
+				uni.setStorageSync('cartNum', cartData.length);
+				commit('CART_LIST', cartData);
+				commit('checkCartList');
+				commit('CART_NUM');
 			}).catch(e => {
 				reject(e)
 			})
 		})
 	},
-	// 添加到购物车
+	// 添加到购物车（增）
 	addCartGoods({
 		commit
 	}, data) {
@@ -43,21 +48,42 @@ const actions = {
 			})
 		})
 	},
+	// 修改购物车商品数量（改）|| 删除购物车商品（删）
+	changeCartList({
+		commit,
+		state,
+		dispatch
+	}, param) {
+		return new Promise((resolve, reject) => {
+			http('cart.edit', {
+				cart_list: param.ids,
+				value: param.goodsNum || null,
+				act: param.art
+			}).then(res => {
+				if (param.art === 'delete' && res.code === 1) {
+					dispatch('getCartList');
+					commit('CART_NUM');
+				}
 
+			}).catch(e => {
+				reject(e)
+			})
+		})
+	},
 }
 
 const mutations = {
-	// cart数据
+	// cart数据获取变动。
 	[CART_LIST](state, data) {
 		state.cartList = data
 	},
-	// cart数量
-	[CART_NUM](state, data) {
-		state.cartNum = data;
-		if (+data) {
+	// cart数量角标更新。
+	[CART_NUM](state) {
+		let cartNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : state.cartNum;
+		if (cartNum) {
 			uni.setTabBarBadge({
 				index: 2,
-				text: data + ''
+				text: cartNum + ''
 			})
 		} else {
 			uni.removeTabBarBadge({
@@ -65,11 +91,64 @@ const mutations = {
 			})
 		}
 	},
+	// 切换全选。
+	changeAllSellect(state) {
+		state.allSelected = !state.allSelected;
+	},
+	// 全选设置
+	getAllSellectCartList(state, flag) {
+		state.cartList.map(item => {
+			item.checked = flag
+		})
+	},
+	// 单选设置
+	selectItem(
+		state, {
+			index,
+			flag
+		}) {
+		state.cartList[index].checked = !flag;
+		store.commit('checkCartList')
 
+	},
+	// 全选检测
+	checkCartList(state) {
+		let all = true;
+		state.cartList.map(item => {
+			if (!item.checked) {
+				all = false
+			}
+		})
+		state.allSelected = all;
+	}
 }
 
 const getters = {
-
+	// 购物车数量和总价
+	totalCount: state => {
+		let totalNum = 0;
+		let totalPrice = 0;
+		state.cartList.filter(item => {
+			if (item.checked) {
+				totalNum += 1;
+				totalPrice += item.goods_num * item.sku_price.price;
+			}
+		})
+		return {
+			totalNum,
+			totalPrice
+		}
+	},
+	// 是否选择了商品
+	isSel: state => {
+		let isSel = false;
+		state.cartList.map(item => {
+			if (item.checked) {
+				isSel = true
+			}
+		})
+		return isSel
+	}
 }
 
 export default {
