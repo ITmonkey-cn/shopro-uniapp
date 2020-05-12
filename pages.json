@@ -166,6 +166,17 @@
 			}
 		},
 		{
+			"path": "pages/order/pickup",
+			"style": {
+				"navigationBarTitleText": "", //自提点选择
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
 			"path": "pages/order/detail",
 			"style": {
 				"navigationBarTitleText": "订单详情"

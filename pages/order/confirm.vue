@@ -21,8 +21,8 @@
 						<text class="cuIcon-right"></text>
 					</view>
 					<!-- 快递 -->
-					<view class="express-address" v-if="addressId && expressTypeCur !== 1" @tap="jump('/pages/user/address/list', { from: 'order' })">
-						<view class="top">
+					<view class="express-address" v-if="addressId && expressTypeCur !== 1">
+						<view class="top" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							<text class="tag" v-if="address.is_default == 1">默认</text>
 							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
 							<text class="cuIcon-right address-guide"></text>
@@ -34,8 +34,8 @@
 						<view class="express-content" v-if="expressTypeCur == 2">
 							<view class="time-box">
 								<text class="box-title">配送时间</text>
-								<view class="box-content">
-									<text class="box-text">15:30</text>
+								<view class="box-content" @tap="checkExpressTime('shop')">
+									<text class="box-text">{{checkTime['time'][checkTimeCur]}}</text>
 									<text class="cuIcon-right box-icon"></text>
 								</view>
 							</view>
@@ -51,7 +51,7 @@
 					</view>
 					<!-- 自提 -->
 					<view class="oneself-address" v-if="addressId && expressTypeCur == 1">
-						<view class="oneself-top">
+						<view class="oneself-top" @tap="$Router.push('/pages/order/pickup')">
 							<view class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</view>
 							<view class="address-location">
 								<image class="location-img" src="/static/imgs/order/address_loaction.png" mode=""></image>
@@ -62,7 +62,7 @@
 						<view class="oneself-content">
 							<view class="time-box">
 								<text class="box-title">自提时间</text>
-								<view class="box-content">
+								<view class="box-content" @tap="checkExpressTime('oneself')">
 									<text class="box-text">15:30</text>
 									<text class="cuIcon-right box-icon"></text>
 								</view>
@@ -155,8 +155,8 @@
 			<block slot="modalContent">
 				<view class="checkTime-box page_box">
 					<view class="checkTime-head">
-						选择自提时间
-						<text class="cuIcon-roundclosefill"></text>
+						选择{{ checkType }}时间
+						<text class="cuIcon-roundclosefill" @tap="showCheckTime = false"></text>
 					</view>
 					<view class="checkTime-content content_box">
 						<view class="checkTime-content__left">
@@ -170,10 +170,10 @@
 								{{ day }}
 							</view>
 						</view>
-						<scroll-view class="checkTime-content__right scroll-box" :scroll-into-view="'c'+checkTimeId" scroll-y scroll-with-animation > 
+						<scroll-view class="checkTime-content__right scroll-box" :scroll-into-view="'c' + checkTimeId" scroll-y scroll-with-animation>
 							<view
 								class="right-item"
-								:id="'c'+time"
+								:id="'c' + time.split(':')[0]"
 								@tap="check('time', index)"
 								:class="{ 'item--active': checkTimeCur == index }"
 								v-for="(time, index) in checkTime.time"
@@ -183,7 +183,7 @@
 							</view>
 						</scroll-view>
 					</view>
-					<view class=" checkTime-foot x-c"><button class="cu-btn save-btn">保存并使用</button></view>
+					<view class=" checkTime-foot x-c"><button class="cu-btn save-btn" @tap="showCheckTime = false">保存并使用</button></view>
 				</view>
 			</block>
 		</shopro-modal>
@@ -204,7 +204,7 @@ export default {
 		return {
 			showPicker: false,
 			isSubOrder: false,
-			showCheckTime: true, //配送时间弹窗。
+			showCheckTime: false, //配送时间弹窗。
 			pickerData: {
 				title: '选择优惠券',
 				couponList: []
@@ -242,13 +242,14 @@ export default {
 			],
 			isProtocol: true, //自提协议。
 			selfPhone: 15625892568, //编辑手机号
+			checkType: '自提',
 			checkTime: {
 				//选择配送时间数据
 				day: ['今天（周五）', '明天（周六）'],
 				time: ['15:30', '15:50', '16:10', '16:30', '16:50', ' 17:10']
 			},
 			checkTimeCur: 0, //默认选中。
-			checkTimeId:'c1',
+			checkTimeId: 'c1',
 			checkDayCur: 0
 		};
 	},
@@ -393,10 +394,23 @@ export default {
 			this.isProtocol = !this.isProtocol;
 		},
 		// 选择配送时间
+		checkExpressTime(type) {
+			switch (type) {
+				case 'shop':
+					this.checkType = '配送';
+					break;
+				case 'oneself':
+					this.checkType = '自提';
+					break;
+				default:
+					this.checkType = '自提';
+			}
+			this.showCheckTime = !this.showCheckTime;
+		},
 		check(type, index) {
 			if (type == 'time') {
 				this.checkTimeCur = index;
-				this.checkTimeId = this.checkTime['time'][index];
+				this.checkTimeId = this.checkTime['time'][index].split(':')[[0]];
 			}
 			if (type == 'day') {
 				this.checkDayCur = index;
