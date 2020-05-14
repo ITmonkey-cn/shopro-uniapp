@@ -349,100 +349,100 @@
 			"meta": {
 				"auth": false
 			}
-		},
-		{
-			"path": "pages/user/poster",
-			"style": {
-				"navigationBarTitleText": "邀请好友"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/log",
-			"style": {
-				"navigationBarTitleText": "浏览足迹"
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/address/edit",
-			"style": {
-				"navigationBarTitleText": "编辑地址"
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/address/list",
-			"style": {
-				"navigationBarTitleText": "收货地址"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/set",
-			"style": {
-				"navigationBarTitleText": "系统设置"
-			},
-			"meta": {
-				"auth": true
-			}
-		}, {
-			"path": "pages/user/edit-password",
-			"style": {
-				"navigationBarTitleText": "修改密码"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/favorite",
-			"style": {
-				"navigationBarTitleText": "收藏"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/info",
-			"style": {
-				"navigationBarTitleText": "个人信息"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/edit-phone",
-			"style": {
-				"navigationBarTitleText": "修改手机号"
-
-			},
-			"meta": {
-				"auth": true
-			}
 		}
+
 	],
 	// 分包加载,tabbar页不能在分包目录内。
 	"subPackages": [{
-		"root": "pges/user", //分包目录
+		"root": "pages/user", //分包目录
 		"pages": [
 			//{}分包路由,去掉根路径
+			{
+				"path": "poster",
+				"style": {
+					"navigationBarTitleText": "邀请好友"
 
+				},
+				"meta": {
+					"auth": true
+				}
+			},
+			{
+				"path": "log",
+				"style": {
+					"navigationBarTitleText": "浏览足迹"
+				},
+				"meta": {
+					"auth": true
+				}
+			},
+			{
+				"path": "address/edit",
+				"style": {
+					"navigationBarTitleText": "编辑地址"
+				},
+				"meta": {
+					"auth": true
+				}
+			},
+			{
+				"path": "address/list",
+				"style": {
+					"navigationBarTitleText": "收货地址"
+
+				},
+				"meta": {
+					"auth": true
+				}
+			},
+			{
+				"path": "set",
+				"style": {
+					"navigationBarTitleText": "系统设置"
+				},
+				"meta": {
+					"auth": true
+				}
+			}, {
+				"path": "edit-password",
+				"style": {
+					"navigationBarTitleText": "修改密码"
+
+				},
+				"meta": {
+					"auth": true
+				}
+			},
+			{
+				"path": "favorite",
+				"style": {
+					"navigationBarTitleText": "收藏"
+
+				},
+				"meta": {
+					"auth": true
+				}
+			},
+			{
+				"path": "info",
+				"style": {
+					"navigationBarTitleText": "个人信息"
+
+				},
+				"meta": {
+					"auth": true
+				}
+			},
+			{
+				"path": "edit-phone",
+				"style": {
+					"navigationBarTitleText": "修改手机号"
+
+				},
+				"meta": {
+					"auth": true
+				}
+			}
 		]
 	}],
 	// 默认导航栏样式

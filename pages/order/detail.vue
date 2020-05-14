@@ -7,15 +7,9 @@
 					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
 					<text>{{ orderDetail.status_name }}</text>
 				</view>
-				<view class="address-box">
-					<view class="name-box">
-						<text class="name">{{ orderDetail.consignee }}</text>
-						<text class="phone">{{ orderDetail.phone }}</text>
-					</view>
-					<view class="address">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
-				</view>
 			</view>
 			<view class="detail-goods">
+				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
 					<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
 					<view class="order-bottom  x-f">
@@ -28,7 +22,9 @@
 							>
 								再次购买
 							</button>
-							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'express'" @tap="checkExpress(orderDetail.id, order.id)">查看物流</button>
+							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'express'" @tap="checkExpress(orderDetail.id, order.id)">
+								查看物流
+							</button>
 							<button @tap.stop="onConfirm(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'get'">
 								确认收货
 							</button>
@@ -56,15 +52,33 @@
 					</view>
 				</view>
 			</view>
+			<!-- 收货信息 -->
 			<view class="notice-box">
-				<view class="notice-item x-f">
-					<text class="title">订单编号：</text>
-					<text class="detail">{{ orderDetail.order_sn }}</text>
-					<button class="cu-btn copy-btn" @tap="onCopy">复制</button>
+				<view class="notice-box__head">收货信息</view>
+				<view class="notice-box__content">
+					<view class="x-f notice-item">
+						<text class="title">收货人：</text>
+						<text class="detail">{{ orderDetail.consignee }} {{ orderDetail.phone }}</text>
+					</view>
+					<view class="x-f notice-item">
+						<text class="title">收货地址：</text>
+						<text class="detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</text>
+					</view>
 				</view>
-				<view class="notice-item x-f">
-					<text class="title">下单时间：</text>
-					<text class="detail">{{ orderDetail.createtime }}</text>
+			</view>
+			<!-- 订单信息 -->
+			<view class="notice-box">
+				<view class="notice-box__head">订单信息</view>
+				<view class="notice-box__content">
+					<view class="notice-item x-f">
+						<text class="title">订单编号：</text>
+						<text class="detail">{{ orderDetail.order_sn }}</text>
+						<button class="cu-btn copy-btn" @tap="onCopy">复制</button>
+					</view>
+					<view class="notice-item x-f">
+						<text class="title">下单时间：</text>
+						<text class="detail">{{ orderDetail.createtime }}</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -206,11 +220,11 @@ export default {
 		},
 		// 待评价
 		onComment(orderId, ordrderItemId) {
-			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId:ordrderItemId });
+			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId: ordrderItemId });
 		},
 		// 查看物流,
-		checkExpress(orderId,ordrderItemId) {
-			this.jump('/pages/order/express', {orderId: orderId, ordrderItemId:ordrderItemId });
+		checkExpress(orderId, ordrderItemId) {
+			this.jump('/pages/order/express', { orderId: orderId, ordrderItemId: ordrderItemId });
 		}
 	}
 };
@@ -219,7 +233,7 @@ export default {
 <style lang="scss">
 .detail-head {
 	background: linear-gradient(0deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 100%) no-repeat;
-	background-size: 100% 180rpx;
+	background-size: 100% 134rpx;
 
 	.state-box {
 		padding: 40rpx;
@@ -232,40 +246,12 @@ export default {
 			margin-right: 40rpx;
 		}
 	}
-
-	.address-box {
-		width: 710rpx;
-		height: 209rpx;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 20rpx;
-		margin: 0 auto;
-		padding: 40rpx 20rpx;
-
-		.name-box {
-			font-size: 30rpx;
-			font-weight: 500;
-			color: rgba(51, 51, 51, 1);
-			line-height: 30rpx;
-
-			.name {
-				margin-right: 30rpx;
-			}
-		}
-
-		.address {
-			font-size: 26rpx;
-			font-weight: 500;
-			color: rgba(153, 153, 153, 1);
-			line-height: 40rpx;
-			margin-top: 30rpx;
-		}
-	}
 }
 
 .detail-goods {
 	padding: 20rpx;
 	background: #fff;
-	margin: 20rpx 0;
+	margin-bottom: 20rpx;
 
 	.order-list {
 		.order-bottom {
@@ -297,29 +283,48 @@ export default {
 		}
 	}
 }
-
+// 收货信息、订单信息。
 .notice-box {
 	background: #fff;
-	padding: 35rpx 25rpx;
-	margin-bottom: 30rpx;
+	margin-bottom: 20rpx;
+	.notice-box__head {
+		font-size: 30rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(51, 51, 51, 1);
+		line-height: 80rpx;
+		border-bottom: 1rpx solid #dfdfdf;
+		padding: 0 25rpx;
+	}
+	.notice-box__content {
+		padding: 25rpx;
+	}
 	.notice-item {
+		margin-bottom: 10rpx;
+		align-items: flex-start;
 		.title {
 			font-size: 28rpx;
 			color: #999;
+			text-align: justify;
+			text-align-last: justify;
+			text-justify: distribute-all-lines;
+			width: 140rpx;
 		}
 
 		.detail {
 			font-size: 28rpx;
 			color: #333;
+			flex: 1;
 		}
 
 		.copy-btn {
 			width: 120rpx;
 			height: 50rpx;
-			border: 1rpx solid rgba(223, 223, 223, 1);
-			border-radius: 25rpx;
+			// border: 1rpx solid rgba(223, 223, 223, 1);
+			// border-radius: 25rpx;
 			padding: 0;
 			background: #fff;
+			color: #b38436;
 			font-size: 26rpx;
 			margin-left: 30rpx;
 		}

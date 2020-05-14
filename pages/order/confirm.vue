@@ -21,7 +21,7 @@
 						<text class="cuIcon-right"></text>
 					</view>
 					<!-- 快递 -->
-					<view class="express-address" v-if=" addressId && expressTypeCur == 0">
+					<view class="express-address" v-if="addressId && expressTypeCur == 0">
 						<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							<text class="tag" v-if="address.is_default == 1">默认</text>
 							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
@@ -40,7 +40,7 @@
 						<view class="express-bottom"></view>
 					</view>
 					<!-- 自提 -->
-					<view class="express-address" v-if="expressTypeCur == 1">
+					<view class="express-address" v-if="addressId && expressTypeCur == 1">
 						<view class="express-top" @tap="jump('/pages/order/pickup', { from: 'order' })">
 							<text class="tag1" v-if="address.is_default == 1">最近</text>
 							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
@@ -78,7 +78,7 @@
 						</view>
 					</view>
 					<!-- 商家 -->
-					<view class="express-address" v-if="expressTypeCur == 2">
+					<view class="express-address" v-if="addressId && expressTypeCur == 2">
 						<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							<text class="tag" v-if="address.is_default == 1">默认</text>
 							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
@@ -89,7 +89,6 @@
 							</view>
 						</view>
 						<view class="express-content">
-							
 							<view class="time-box">
 								<text class="box-title">配送时间</text>
 								<view class="box-content" @tap="checkExpressTime('shop')">
@@ -106,12 +105,10 @@
 								</view>
 							</view>
 						</view>
-						<view class="express-bottom">
-							
-						</view>
+						<view class="express-bottom"></view>
 					</view>
 					<!-- 自动 -->
-					<view class="express-address" v-if="expressTypeCur == 3">
+					<view class="express-address" v-if="addressId && expressTypeCur == 3">
 						<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							<text class="dispatch-notice">订单支付完成后，请在订单详情页查看发货信息</text>
 							<view class="address-location">
@@ -611,12 +608,12 @@ export default {
 					color: rgba(51, 51, 51, 1);
 					line-height: 40rpx;
 				}
-				.dispatch-notice{
-					font-size:28rpx;
-					font-family:PingFang SC;
-					font-weight:500;
-					color:rgba(51,51,51,1);
-					line-height:40rpx;
+				.dispatch-notice {
+					font-size: 28rpx;
+					font-family: PingFang SC;
+					font-weight: 500;
+					color: rgba(51, 51, 51, 1);
+					line-height: 40rpx;
 				}
 				.address-location {
 					@include flex($justify: center, $align: center, $direction: column, $warp: null, $warpAlign: null);

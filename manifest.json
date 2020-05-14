@@ -128,7 +128,7 @@
             "es6" : false,
             "minified" : true,
             "postcss" : true,
-			"checkSiteMap": false // 关闭页面检测
+			"checkSiteMap": false // 关闭页面索引检测
         },
         // "uniStatistics" : {
         //     "enable" : false
@@ -138,9 +138,9 @@
                 "desc" : "你的位置信息将用于小程序位置接口的效果展示" // 高速公路行驶持续后台定位
             }
         },
-        // "optimization": {
-        // 	"subPackages": true
-        // },
+        "optimization": {
+        	"subPackages": true
+        },
         "plugins" : {}
     },
     // "live-player-plugin" : {
