@@ -13,4 +13,3 @@ const ENV_BASE_URL = {
 export const BASE_URL = ENV_BASE_URL[process.env.NODE_ENV || 'development'];   //后台根域名
 export const API_URL = ENV_API_URL[process.env.NODE_ENV || 'development'];	   //后台接口域名
 export const HAS_LIVE = false; 												   //后台是否开通直播权限,根据情况在manifest.json中，开启注释相应组件的引入。
-// export const H5_URL = store.state.init.initData.info.domain;				   //前端H5域名，用于跨端分享链接、支付后跳转和APP的分享链接和商品海报二维码的链接

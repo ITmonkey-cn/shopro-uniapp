@@ -57,7 +57,7 @@
 		data() {
 			return {
 				emptyData: {
-					img: '/static/imgs/empty_goods.jpg',
+					img: 'http://shopro.7wpp.com/imgs/empty_goods.jpg',
 					tip: '暂无该商品，还有更多好货等着你噢~'
 				},
 				goodsList: [],

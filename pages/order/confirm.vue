@@ -21,21 +21,40 @@
 						<text class="cuIcon-right"></text>
 					</view>
 					<!-- 快递 -->
-					<view class="express-address" v-if="addressId && expressTypeCur !== 1">
-						<view class="top" @tap="jump('/pages/user/address/list', { from: 'order' })">
+					<view class="express-address" v-if=" addressId && expressTypeCur == 0">
+						<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							<text class="tag" v-if="address.is_default == 1">默认</text>
 							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
 							<text class="cuIcon-right address-guide"></text>
+							<view class="address-location">
+								<image class="location-img" src="/static/imgs/order/e0.png" mode=""></image>
+								<text class="location-text">物流快递</text>
+							</view>
 						</view>
-						<view class="detail" v-if="expressTypeCur !== 2">
-							<text class="name">{{ address.consignee }}</text>
-							<text class="phone">{{ address.phone }}</text>
+						<view class="express-content">
+							<view class="phone-box1">
+								<text class="name">{{ address.consignee }}</text>
+								<text class="phone">{{ address.phone }}</text>
+							</view>
 						</view>
-						<view class="express-content" v-if="expressTypeCur == 2">
+						<view class="express-bottom"></view>
+					</view>
+					<!-- 自提 -->
+					<view class="express-address" v-if="expressTypeCur == 1">
+						<view class="express-top" @tap="jump('/pages/order/pickup', { from: 'order' })">
+							<text class="tag1" v-if="address.is_default == 1">最近</text>
+							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
+							<text class="cuIcon-right address-guide"></text>
+							<view class="address-location">
+								<image class="location-img" src="/static/imgs/order/e1.png" mode=""></image>
+								<text class="location-text">距您650m</text>
+							</view>
+						</view>
+						<view class="express-content">
 							<view class="time-box">
 								<text class="box-title">配送时间</text>
 								<view class="box-content" @tap="checkExpressTime('shop')">
-									<text class="box-text">{{checkTime['time'][checkTimeCur]}}</text>
+									<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
 									<text class="cuIcon-right box-icon"></text>
 								</view>
 							</view>
@@ -48,35 +67,7 @@
 								</view>
 							</view>
 						</view>
-					</view>
-					<!-- 自提 -->
-					<view class="oneself-address" v-if="addressId && expressTypeCur == 1">
-						<view class="oneself-top" @tap="$Router.push('/pages/order/pickup')">
-							<view class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</view>
-							<view class="address-location">
-								<image class="location-img" src="/static/imgs/order/address_loaction.png" mode=""></image>
-								<text class="location-text">距您650m</text>
-							</view>
-							<text class="cuIcon-right oneself-guide"></text>
-						</view>
-						<view class="oneself-content">
-							<view class="time-box">
-								<text class="box-title">自提时间</text>
-								<view class="box-content" @tap="checkExpressTime('oneself')">
-									<text class="box-text">15:30</text>
-									<text class="cuIcon-right box-icon"></text>
-								</view>
-							</view>
-							<view class="box-line"></view>
-							<view class="phone-box">
-								<text class="box-title">预留电话</text>
-								<view class="box-content x-f">
-									<input class="edit-phone" type="number" v-model="selfPhone" />
-									<text class="cuIcon-write box-icon"></text>
-								</view>
-							</view>
-						</view>
-						<view class="oneself-bottom">
+						<view class="express-bottom">
 							<label class="x-f" @tap="checkProtocol">
 								<checkbox class="round protocol-checkbox orange" :class="{ checked: isProtocol }" :checked="true"></checkbox>
 								<view class="protocol">
@@ -84,6 +75,49 @@
 									<text class="protocol-text" @tap="jump('/pages/public/richtext', { id: 3 })">《到店自提服务协议》</text>
 								</view>
 							</label>
+						</view>
+					</view>
+					<!-- 商家 -->
+					<view class="express-address" v-if="expressTypeCur == 2">
+						<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
+							<text class="tag" v-if="address.is_default == 1">默认</text>
+							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
+							<text class="cuIcon-right address-guide"></text>
+							<view class="address-location">
+								<image class="location-img" src="/static/imgs/order/e2.png" mode=""></image>
+								<text class="location-text">商家配送</text>
+							</view>
+						</view>
+						<view class="express-content">
+							
+							<view class="time-box">
+								<text class="box-title">配送时间</text>
+								<view class="box-content" @tap="checkExpressTime('shop')">
+									<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
+									<text class="cuIcon-right box-icon"></text>
+								</view>
+							</view>
+							<view class="box-line"></view>
+							<view class="phone-box">
+								<text class="box-title">预留电话</text>
+								<view class="box-content x-f">
+									<input class="edit-phone" type="number" v-model="selfPhone" />
+									<text class="cuIcon-write box-icon"></text>
+								</view>
+							</view>
+						</view>
+						<view class="express-bottom">
+							
+						</view>
+					</view>
+					<!-- 自动 -->
+					<view class="express-address" v-if="expressTypeCur == 3">
+						<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
+							<text class="dispatch-notice">订单支付完成后，请在订单详情页查看发货信息</text>
+							<view class="address-location">
+								<image class="location-img" src="/static/imgs/order/e3.png" mode=""></image>
+								<text class="location-text">自动发货</text>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -560,32 +594,35 @@ export default {
 			font-weight: 400;
 			color: rgba(153, 153, 153, 1);
 		}
-		// 自提
-		.oneself-address {
+		// 快递
+		.express-address {
+			position: relative;
 			padding: 30rpx 25rpx;
 			background: url('~@/static/imgs/order/address_bg.png') no-repeat;
 			background-size: 430rpx 300rpx;
 			background-position: top right;
-			.oneself-top {
-				position: relative;
-				@include flex($justify: between, $align: top, $direction: null, $warp: null, $warpAlign: null);
+			.express-top {
+				padding-bottom: 20rpx;
+				width: 450rpx;
 				.address {
-					width: 420rpx;
 					font-size: 28rpx;
 					font-family: PingFang SC;
 					font-weight: 500;
 					color: rgba(51, 51, 51, 1);
 					line-height: 40rpx;
 				}
-				.oneself-guide {
-					line-height: 40rpx;
-					color: #999999;
+				.dispatch-notice{
+					font-size:28rpx;
+					font-family:PingFang SC;
+					font-weight:500;
+					color:rgba(51,51,51,1);
+					line-height:40rpx;
 				}
 				.address-location {
 					@include flex($justify: center, $align: center, $direction: column, $warp: null, $warpAlign: null);
 					position: absolute;
-					right: 30rpx;
-					top: 0;
+					right: 60rpx;
+					top: 30rpx;
 					.location-img {
 						width: 80rpx;
 						height: 90rpx;
@@ -597,8 +634,33 @@ export default {
 						color: rgba(51, 51, 51, 1);
 					}
 				}
+				.tag {
+					background: rgba(233, 191, 113, 0.2);
+					border-radius: 6rpx;
+					padding: 0 16rpx;
+					line-height: 38rpx;
+					color: #a8700d;
+					font-size: 22rpx;
+					margin-right: 20rpx;
+				}
+				.tag1 {
+					background: rgba(53, 190, 105, 0.2);
+					border-radius: 6rpx;
+					padding: 0 16rpx;
+					line-height: 38rpx;
+					color: #1bbc50;
+					font-size: 22rpx;
+					margin-right: 20rpx;
+				}
+				.address-guide {
+					position: absolute;
+					right: 25rpx;
+					top: 40rpx;
+					color: #999999;
+				}
 			}
-			.oneself-content {
+
+			.express-content {
 				margin: 20rpx 0;
 				@include flex($justify: null, $align: center, $direction: null, $warp: null, $warpAlign: null);
 				.box-line {
@@ -606,6 +668,19 @@ export default {
 					height: 61rpx;
 					border-left: 1rpx solid rgba(238, 238, 238, 1);
 					margin: 0 40rpx;
+				}
+				.phone-box1 {
+					.name,
+					.phone {
+						font-size: 26rpx;
+						font-family: PingFang SC;
+						font-weight: 400;
+						color: rgba(102, 102, 102, 1);
+					}
+
+					.phone {
+						margin-left: 20rpx;
+					}
 				}
 				.time-box,
 				.phone-box {
@@ -639,7 +714,7 @@ export default {
 					}
 				}
 			}
-			.oneself-bottom {
+			.express-bottom {
 				.protocol-checkbox {
 					transform: scale(0.7);
 				}
@@ -651,91 +726,6 @@ export default {
 					.protocol-text {
 						color: #6487a4;
 					}
-				}
-			}
-		}
-		// 快递
-		.express-address {
-			position: relative;
-			padding: 30rpx 25rpx;
-			.express-content {
-				margin: 20rpx 0;
-				@include flex($justify: null, $align: center, $direction: null, $warp: null, $warpAlign: null);
-				.box-line {
-					width: 1rpx;
-					height: 61rpx;
-					border-left: 1rpx solid rgba(238, 238, 238, 1);
-					margin: 0 40rpx;
-				}
-				.time-box,
-				.phone-box {
-					.box-title {
-						font-size: 24rpx;
-						font-family: PingFang SC;
-						font-weight: 400;
-						color: #666;
-						padding-bottom: 10rpx;
-					}
-					.box-text {
-						font-size: 24rpx;
-						font-family: PingFang SC;
-						font-weight: 500;
-						color: #333;
-					}
-					.edit-phone {
-						width: 160rpx;
-						font-size: 24rpx;
-						font-family: PingFang SC;
-						font-weight: 500;
-						color: #333;
-					}
-					.box-icon {
-						font-size: 28rpx;
-						color: #999;
-						display: inline-block;
-						width: 40rpx;
-						text-align: center;
-						line-height: 40rpx;
-					}
-				}
-			}
-			.top {
-				padding-bottom: 20rpx;
-				width: 600rpx;
-				.address {
-					font-size: 28rpx;
-					font-family: PingFang SC;
-					font-weight: 500;
-					color: rgba(51, 51, 51, 1);
-					line-height: 40rpx;
-				}
-				.tag {
-					background: rgba(233, 191, 113, 0.2);
-					border-radius: 6rpx;
-					padding: 0 16rpx;
-					line-height: 38rpx;
-					color: #a8700d;
-					font-size: 22rpx;
-					margin-right: 20rpx;
-				}
-				.address-guide {
-					position: absolute;
-					right: 25rpx;
-					top: 38rpx;
-					color: #999999;
-				}
-			}
-			.detail {
-				.name,
-				.phone {
-					font-size: 26rpx;
-					font-family: PingFang SC;
-					font-weight: 400;
-					color: rgba(102, 102, 102, 1);
-				}
-
-				.phone {
-					margin-left: 20rpx;
 				}
 			}
 		}

@@ -436,7 +436,6 @@
 				"auth": true
 			}
 		}
-
 	],
 	// 分包加载,tabbar页不能在分包目录内。
 	"subPackages": [{
