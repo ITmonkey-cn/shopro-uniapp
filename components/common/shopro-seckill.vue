@@ -3,7 +3,7 @@
 	<view class="seckill-goods">
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
-			<view class="group-people x-f" v-if="time.h">
+			<view class="group-people x-f" v-if="time.s">
 				<view class="time-box x-f">
 					<view class="count-text-box">{{ time.d }}</view>
 					天
@@ -14,8 +14,8 @@
 					<view class="count-text-box">{{ time.s }}</view>
 					秒
 				</view>
-			<!-- 	<text class="tip">更多抢购</text> -->
-			<!-- 	<text class="cuIcon-right"></text> -->
+				<text class="tip">更多抢购</text>
+				<text class="cuIcon-right"></text>
 			</view>
 		</view>
 		<view class="goods-box swiper-box x-f">

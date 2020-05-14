@@ -95,6 +95,15 @@
 			}
 		},
 		{
+			"path": "pages/goods/seckill-list",
+			"style": {
+				"navigationBarTitleText": "限时秒杀"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
 			"path": "pages/goods/comment-list",
 			"style": {
 				"navigationBarTitleText": "商品评价"

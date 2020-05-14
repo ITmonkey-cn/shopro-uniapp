@@ -19,7 +19,7 @@
 				</view>
 			</swiper-item>
 		</swiper>
-		<view class="menu-category-dots" v-if="detail.list.length > menu">
+		<view class="menu-category-dots" v-if="detail.list.length > 1">
 			<text :class="categoryCurrent === index ? 'category-dot-active' : 'category-dot'" v-for="(dot, index) in carousel.length" :key="index"></text>
 		</view>
 	</view>
