@@ -37,9 +37,9 @@
 </template>
 
 <script>
-	import shoproFilter from '@/components/filter/shopro-filter.vue';
+	import shoproFilter from './children/shopro-filter.vue';
 	import shoproGoods from '@/components/goods/shopro-goods.vue';
-	import shoproSearch from '@/components/search/shopro-search.vue';
+	import shoproSearch from './children/shopro-search.vue';
 	import shoproEmpty from '@/components/shopro-empty.vue';
 	import {
 		mapMutations,

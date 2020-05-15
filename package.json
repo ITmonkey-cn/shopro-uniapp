@@ -1,7 +1,7 @@
 {
 	"dependencies": {
 		"dev": {
-			"mp-weixin": "cross-env NODE_ENV=development UNI_PLATFORM=mp-weixin vue-cli-service uni-build --watch --minimize"
+			"mp-weixin": "cross-env NODE_ENV=development ZHICHI_ENV=develop UNI_PLATFORM=mp-weixin vue-cli-service uni-build --watch --minimize"
 		},
 		"jweixin-module": "^1.6.0",
 		"miniapp-color-thief": "^1.0.5",

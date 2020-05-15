@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import shoproPicker from '@/components/shopro-picker.vue';
+import shoproPicker from '../children/shopro-picker.vue';
 
 export default {
 	components: {
@@ -76,7 +76,7 @@ export default {
 		this.init();
 		let addressId = this.$Route.query.id;
 		this.addressData.id = this.$Route.query.id;
-		console.log('llll',typeof(this.$Route.query.id));
+		console.log('llll', typeof this.$Route.query.id);
 		console.log('lasdfsa', this.addressData.id);
 		if (this.addressData.id != 0) {
 			this.getAddressInfo();

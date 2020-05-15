@@ -9,7 +9,7 @@ module.exports = {
 				ROUTES: JSON.stringify(tfPages.routes)
 			})
 		],
-		 devtool: "inline-source-map" //消除控制台一直报一个警告：DevTools failed to parse SourceMap
+		devtool: "inline-source-map" //消除控制台一直报一个警告：DevTools failed to parse SourceMap
 	}
 	// css: { // 暂时没用，uni-app,scss的变量入口文件，强制集成到uni.scss。
 	// 	sourceMap: true,

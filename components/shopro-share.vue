@@ -37,7 +37,7 @@
 
 <script>
 import _app from '@/common/utils/QS-SharePoster/app.js';
-import shoproShareGuide from '@/components/modal/shopro-share-guide.vue';
+import shoproShareGuide from '@/pages/user/children/shopro-share-guide.vue';
 export default {
 	components: {
 		shoproShareGuide

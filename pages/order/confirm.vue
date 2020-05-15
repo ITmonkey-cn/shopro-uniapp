@@ -223,7 +223,7 @@
 
 <script>
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
-import shoproPickerModal from '@/components/modal/shopro-picker-modal.vue';
+import shoproPickerModal from './children/shopro-picker-modal.vue';
 import shoproModal from '@/components/modal/shopro-modal.vue';
 export default {
 	components: {

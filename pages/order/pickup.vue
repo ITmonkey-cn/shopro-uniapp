@@ -11,28 +11,20 @@
 			:include-points="includePoints"
 			show-location
 		></map>
-		<div
-			ref="testdiv"
-			class="dragLayer"
-			:style="{ top: topSize + 'rpx' }"
-			:class="moveCard"
-			@touchstart="handleTouchStart"
-			@touchend="handleTouchEnd"
-			@touchmove="handleTouchMove"
-		>
-			<div ref="oilStation" class="oilStation" :style="{ top: topSize + 'rpx' }">
+		<div ref="testdiv" class="dragLayer" :class="moveCard" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
+			<div ref="oilStation" class="oilStation">
 				<div class="oilStation-top">
 					<view class="touch-guide x-c" @tap="onShowCard">
 						<text v-if="!showCard" class="iconfont touch-jintou icon-xiangxia2"></text>
 						<text v-if="showCard" class="iconfont touch-jintou icon-xiangshang21"></text>
 					</view>
-					<div class="search-box">
+					<div class="search-box x-f">
 						<text class="cuIcon-search"></text>
 						<input class="search-inp" placeholder-class="search-pl" placeholder="输入地址寻找周边自提点" type="text" value="" />
 					</div>
 				</div>
 				<scroll-view class="oilStation-bottom" :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
-					<view class="address-item" v-for="a in 8" :key="a">
+					<view class="address-item x-f" v-for="a in 8" :key="a">
 						<view class="address-left">
 							<view class="address-name">龙宇国际店</view>
 							<view class="time-box x-f">
@@ -44,12 +36,14 @@
 								郑东新区运动场东路龙宇国际A座
 							</view>
 						</view>
-						<view class="address-right">
+						<view class="address-right y-f">
 							<radio class="round address-checked orange checked" :checked="true"></radio>
 							<text class="address-distance">{{ distance }}</text>
 						</view>
 					</view>
-					<view class="more"><text class="more-txt">更多自提点敬请期待</text></view>
+					<view class="more x-c">
+						<text class="more-text">更多自提点，敬请期待</text>
+					</view>
 				</scroll-view>
 			</div>
 		</div>
@@ -60,7 +54,7 @@
 // #ifdef APP-NVUE
 const domModule = weex.requireModule('dom');
 // #endif
-var QQMapWX = require('@/common/utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.js');
+var QQMapWX = require('@/common/utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.min.js');
 var qqmapsdk;
 // import Binding from 'weex-bindingx'; //非高版本编译器，需要nmp i  weex-bindingx;
 // const Binding = uni.requireNativePlugin('bindingx'); //从HBuilderX 2.3.4起
@@ -70,6 +64,7 @@ export default {
 			longitude: 108.921672,
 			latitude: 34.250646,
 			mapHeight: 0,
+			topSize: 0,
 			showCard: false,
 			scrollable: false, // 初始化禁止滑动
 			moveCard: 'dragLayer-bottom',
@@ -78,7 +73,7 @@ export default {
 					id: 0,
 					latitude: 39.98406,
 					longitude: 116.30752,
-					iconPath: '/static/imgs/order/address_loaction.png',
+					iconPath: '/static/imgs/order/e1.png',
 					width: 50,
 					height: 55
 				}
@@ -88,9 +83,7 @@ export default {
 			includePoints: [{ longitude: 108.921672, latitude: 34.250646 }, { latitude: 39.98406, longitude: 116.30752 }]
 		};
 	},
-	computed: {
-		
-	},
+	computed: {},
 	onLoad() {
 		let that = this;
 		// 实例化API核心类
@@ -196,7 +189,7 @@ export default {
 			}
 		},
 		scroll(e) {
-			// console.log('scroll', e);
+			// console.log('scroll', '滑动中。。。');
 		},
 		scrolltoupper(e) {
 			// this.isBottom = false;
@@ -207,6 +200,7 @@ export default {
 		// 点击显隐
 		onShowCard() {
 			this.showCard = !this.showCard;
+			console.log(this.moveCard);
 			if (this.showCard) {
 				this.moveCard = 'dragLayer-top';
 				this.scrollable = true;
@@ -295,6 +289,8 @@ export default {
 	border-top-right-radius: 20rpx;
 	bottom: 0;
 	box-shadow: 0px 1rpx 18rpx 0px rgba(83, 83, 83, 0.35);
+	display: flex;
+	height: 100%;
 }
 .dragLayer-bottom {
 	height: 400rpx !important;
@@ -307,7 +303,10 @@ export default {
 .oilStation {
 	width: 690rpx;
 	margin: 0 30rpx;
+	display: flex;
+	flex-direction: column;
 	flex: 1;
+	height: 100%;
 }
 .oilStation-top {
 	justify-content: center;
@@ -355,7 +354,8 @@ export default {
 	align-items: center;
 	flex-direction: row;
 	flex: 1;
-	height: 800rpx;
+	height: 100%;
+	overflow: hidden;
 }
 .address-item {
 	border-bottom-width: 1px;
@@ -414,8 +414,8 @@ export default {
 	align-items: center;
 }
 
-.more-txt {
-	font-size: 22rpx;
+.more-text {
+	font-size: 24rpx;
 	color: #ccc;
 }
 </style>

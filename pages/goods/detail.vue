@@ -28,7 +28,10 @@
 					<!-- 服务 -->
 					<shopro-goods-serve v-model="showServe" :serveList="goodsInfo.service"></shopro-goods-serve>
 					<!-- 优惠券 -->
-					<shopro-goods-coupon v-if="goodsInfo.coupons && goodsInfo.coupons.length &&  goodsInfo.activity_type !== 'seckill'" :couponList="goodsInfo.coupons"></shopro-goods-coupon>
+					<shopro-goods-coupon
+						v-if="goodsInfo.coupons && goodsInfo.coupons.length && goodsInfo.activity_type !== 'seckill'"
+						:couponList="goodsInfo.coupons"
+					></shopro-goods-coupon>
 					<!-- 拼团人 -->
 					<shopro-goods-group v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon'"></shopro-goods-group>
 					<!-- 选项卡 -->
@@ -71,7 +74,11 @@
 						<text class="tool-title">首页</text>
 					</view>
 					<view class="tools-item y-f" @tap="onFavorite(goodsInfo.id)">
-						<image class="tool-img" :src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'" mode=""></image>
+						<image
+							class="tool-img"
+							:src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'"
+							mode=""
+						></image>
 						<text class="tool-title">收藏</text>
 					</view>
 					<view class="tools-item y-f" @tap="onShare">
@@ -111,15 +118,15 @@
 <script>
 import shoproGoodsActivity from '@/components/detail/shopro-goods-activity.vue';
 import shoproGoodsSku from '@/components/detail/shopro-goods-sku.vue';
-import shoproGoodsGroup from '@/components/detail/shopro-goods-group.vue';
+import shoproGoodsGroup from './children/shopro-goods-group.vue';
 import shoproGoodsServe from '@/components/detail/shopro-goods-serve.vue';
-import shoproGoodsCoupon from '@/components/detail/shopro-goods-coupon.vue';
+import shoproGoodsCoupon from './children/shopro-goods-coupon.vue';
 import shoproShare from '@/components/shopro-share.vue';
 import shoproComment from '@/components/shopro-comment.vue';
 import shoproParse from '@/components/parse/parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty.vue';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState } from 'vuex'; 
 export default {
 	components: {
 		shoproGoodsSku,
@@ -171,7 +178,7 @@ export default {
 	computed: {},
 	onLoad() {
 		this.init();
-		this.setShareInfo({url: 'goods-'+this.$Route.query.id});
+		this.setShareInfo({ url: 'goods-' + this.$Route.query.id });
 	},
 	onReady() {},
 	methods: {
@@ -392,7 +399,7 @@ export default {
 	min-height: 300rpx;
 	margin-bottom: 20rpx;
 	background: #fff;
-	padding-bottom: 30rpx ;
+	padding-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
 		font-size: 0;
@@ -405,7 +412,7 @@ export default {
 		padding-top: 30rpx;
 		.table-box {
 			width: 710rpx;
-			margin:auto;
+			margin: auto;
 			background: rgba(255, 255, 255, 1);
 			border: 1rpx solid rgba(223, 223, 223, 1);
 
