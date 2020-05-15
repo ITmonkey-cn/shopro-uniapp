@@ -78,9 +78,12 @@ const mutations = {
 		state.cartList = data
 	},
 	// cart数量角标更新。
-	[CART_NUM](state) {
+	[CART_NUM](state, data) {
 		let cartNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : state.cartNum;
-		if (cartNum) {
+		if (data === '') {
+			cartNum = ''
+		}
+		if (+cartNum) {
 			uni.setTabBarBadge({
 				index: 2,
 				text: cartNum + ''
