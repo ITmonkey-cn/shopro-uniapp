@@ -20,22 +20,15 @@ export default {
 		if (options.scene) {
 			let scene = decodeURIComponent(options.scene);
 			options.url = this.getQueryValue('url', scene);
-
-		     options.share_id = this.getQueryValue('share_id', scene);
-
-			
-
+			options.share_id = this.getQueryValue('share_id', scene);
 		}
 		if (options.share_id) {
-
 			uni.setStorageSync('share_id', options.share_id);
 			if (options.url) {
-
 				let url = options.url;
 				uni.setStorageSync('url', url);
 			}
 			store.dispatch('getUserInfo'); //实时触发获取用户信息，添加推广记录
-
 		}
 		if (options.url) {
 			let url = options.url;
@@ -65,12 +58,12 @@ export default {
 			//设置跨端分享链接 小程序->H5 APP->H5
 			var H5_URL = '';
 			var domain = uni.getStorageSync('sysInfo')['domain'];
-			if(domain) {
+			if (domain) {
 				H5_URL = domain
-			}else{
+			} else {
 				H5_URL = 'https://shopro.7wpp.com'
 			}
-			
+
 			this.shareInfo = {
 				// #ifdef H5
 				title: 'Shopro开源商城',
@@ -141,7 +134,7 @@ export default {
 			return false;
 		}
 	},
-	
+
 
 
 

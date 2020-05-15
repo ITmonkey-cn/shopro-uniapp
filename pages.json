@@ -63,87 +63,6 @@
 			}
 		},
 		// #endif
-		
-		{
-			"path": "pages/money/index",
-			"style": {
-				"navigationBarTitleText": "我的钱包",
-				"navigationStyle": "custom"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/money/bank",
-			"style": {
-				"navigationBarTitleText": "绑定银行卡"
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/money/log",
-			"style": {
-				"navigationBarTitleText": "钱包明细"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/pay/index",
-			"style": {
-				"navigationBarTitleText": "支付方式"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/pay/success",
-			"style": {
-				"navigationBarTitleText": "支付结果"
-
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-
-		{
-			"path": "pages/score/index",
-			"style": {
-				"navigationBarTitleText": "积分",
-				"navigationStyle": "custom"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/score/score-shop",
-			"style": {
-				"navigationBarTitleText": "积分商城"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/score/detail",
-			"style": {
-				"navigationBarTitleText": "积分详情"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
 		{
 			"path": "pages/sign/index",
 			"style": {
@@ -154,18 +73,106 @@
 				"auth": true
 			}
 		}
-
-
 	],
 	// 分包加载,tabbar页不能在分包目录内。
 	"subPackages": [{
-			"root": "pages/coupons", // public分包
-			"pages": [
+			"root": "pages/score",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "积分",
+						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true
+					}
+				},
 				{
+					"path": "score-shop",
+					"style": {
+						"navigationBarTitleText": "积分商城"
+					},
+					"meta": {
+						"auth": false
+					}
+				},
+				{
+					"path": "detail",
+					"style": {
+						"navigationBarTitleText": "积分详情"
+					},
+					"meta": {
+						"auth": false
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/pay", //pay分包
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "支付方式"
+
+					},
+					"meta": {
+						"auth": true
+					}
+				},
+				{
+					"path": "success",
+					"style": {
+						"navigationBarTitleText": "支付结果"
+
+					},
+					"meta": {
+						"auth": false
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/money", //money分包
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "我的钱包",
+						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true
+					}
+				},
+				{
+					"path": "bank",
+					"style": {
+						"navigationBarTitleText": "绑定银行卡"
+					},
+					"meta": {
+						"auth": true
+					}
+				},
+				{
+					"path": "log",
+					"style": {
+						"navigationBarTitleText": "钱包明细"
+
+					},
+					"meta": {
+						"auth": true
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/coupons", // public分包
+			"pages": [{
 					"path": "index",
 					"style": {
 						"navigationBarTitleText": "优惠券"
-				
+
 					},
 					"meta": {
 						"auth": true
@@ -176,7 +183,7 @@
 					"style": {
 						"navigationBarTitleText": "优惠劵详情",
 						"navigationStyle": "custom"
-				
+
 					},
 					"meta": {
 						"auth": true
