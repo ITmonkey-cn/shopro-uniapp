@@ -136,6 +136,12 @@ export default {
 			method: 'GET',
 			// desc: '商品列表',
 		},
+		seckillList: {
+			url: 'goods/seckillList',
+			auth: false,
+			method: 'GET',
+			// desc: '秒杀列表',
+		},
 		activity: {
 			url: 'goods/activity',
 			auth: false,

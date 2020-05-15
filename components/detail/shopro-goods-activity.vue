@@ -57,7 +57,7 @@
 				<view class="express">
 					<view class="x-f">
 						<view class="cu-progress round sm" :class="activityRules.status !== 'end' ? 'seckill-progress' : 'seckilled-progress'">
-							<view class="progress-item" :style="[{ width: loading ? pct : '' }]"></view>
+							<view :class="activityRules.status !== 'end' ? 'progress-item--noend' : 'progress-item--end'" :style="[{ width: loading ? getProgress(detail.sales, detail.stock) : '' }]"></view>
 						</view>
 						<view class="progress-text">仅剩{{ detail.stock }}件</view>
 					</view>
@@ -95,13 +95,19 @@ export default {
 		clearInterval(timer);
 	},
 	computed: {
-		pct() {
-			const { sales, stock } = this.detail;
-			let pctText = (sales / (sales + stock)).toFixed(1) * 100 + '%';
-			return pctText;
-		}
 	},
 	methods: {
+		// 百分比
+		getProgress(sales, stock) {
+			let unit = '';
+			if (stock + sales > 0) {
+				unit = (sales / (sales + stock)).toFixed(1) * 100 + '%';
+			} else {
+				unit = '0%';
+			}
+			console.log(unit)
+			return unit;
+		},
 		// 触发活动规则
 		doActivityRules() {
 			let that = this;
@@ -275,7 +281,10 @@ export default {
 			.cu-progress {
 				width: 100rpx;
 				height: 10rpx;
-				.progress-item {
+				.progress-item--end {
+					background: #7c7c7c;
+				}
+				.progress-item--noend {
 					background: #fff;
 				}
 			}
