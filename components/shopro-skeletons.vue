@@ -44,9 +44,9 @@ export default {
 		transform: translate(-50%, -50%);
 		z-index: 999;
 		&::after {
-			content: ''!important;
+			content: '' !important;
 		}
-		&::before{
+		&::before {
 			background-color: transparent;
 		}
 	}
