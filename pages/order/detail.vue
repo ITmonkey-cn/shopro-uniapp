@@ -53,7 +53,7 @@
 				</view>
 			</view>
 			<!-- 收货信息 -->
-			<view class="notice-box">
+			<view class="notice-box" v-if="false">
 				<view class="notice-box__head">收货信息</view>
 				<view class="notice-box__content">
 					<view class="x-f notice-item">
@@ -66,14 +66,69 @@
 					</view>
 				</view>
 			</view>
+			<!-- 自提信息 -->
+			<view class="notice-box" v-if="false">
+				<view class="notice-box__head">自提信息</view>
+				<view class="notice-box__content">
+					<view class="self-pickup-box x-c"><image class="self-pickup--img" src="/static/imgs/order/send_bg.png" mode="widthFix"></image></view>
+					<view class="x-f notice-item--center">
+						<text class="title">自提码：</text>
+						<text class="detail">123456789</text>
+						<button class="cu-btn copy-btn" @tap="onCopy(123456)">复制</button>
+					</view>
+					<view class="x-f notice-item--center">
+						<text class="title">自提时间：</text>
+						<text class="detail">2020年05月12日 18:30</text>
+					</view>
+					<view class="x-f notice-item">
+						<text class="title">自提地址：</text>
+						<text class="detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</text>
+					</view>
+				</view>
+			</view>
+			<!-- 配送信息 -->
+			<view class="notice-box" v-if="false">
+				<view class="notice-box__head">配送信息</view>
+				<view class="notice-box__content">
+					<view class="x-f notice-item--center">
+						<text class="title">配送时间：</text>
+						<text class="detail">2020年05月12日 18:30</text>
+					</view>
+					<view class="x-f notice-item">
+						<text class="title">配送地址：</text>
+						<text class="detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</text>
+					</view>
+					<view class="x-f notice-item--center">
+						<text class="title">商家电话：</text>
+						<text class="detail">13985269546</text>
+						<button class="cu-btn copy-btn" @tap="$tools.callPhone(13985269546)">拨打</button>
+					</view>
+				</view>
+			</view>
+			<!-- 自动发货 -->
+			<view class="notice-box">
+				<view class="notice-box__head">发货信息</view>
+				<view class="notice-box__content">
+					<view class="x-f notice-item--center">
+						<text class="title">百度网盘：</text>
+						<text class="detail">https://pan.baidu.com/</text>
+						<button class="cu-btn copy-btn" @tap="onCopy('https://pan.baidu.com/')">复制</button>
+					</view>
+					<view class="x-f notice-item--center">
+						<text class="title">提取码：</text>
+						<text class="detail">123456</text>
+						<button class="cu-btn copy-btn" @tap="onCopy(123456)">复制</button>
+					</view>
+				</view>
+			</view>
 			<!-- 订单信息 -->
 			<view class="notice-box">
 				<view class="notice-box__head">订单信息</view>
 				<view class="notice-box__content">
-					<view class="notice-item x-f">
+					<view class="notice-item--center x-f">
 						<text class="title">订单编号：</text>
 						<text class="detail">{{ orderDetail.order_sn }}</text>
-						<button class="cu-btn copy-btn" @tap="onCopy">复制</button>
+						<button class="cu-btn copy-btn" @tap="onCopy(orderDetail.order_sn)">复制</button>
 					</view>
 					<view class="notice-item x-f">
 						<text class="title">下单时间：</text>
@@ -150,10 +205,10 @@ export default {
 			});
 		},
 		// 复制
-		onCopy() {
+		onCopy(code) {
 			let that = this;
 			uni.setClipboardData({
-				data: that.orderDetail.order_sn,
+				data: code,
 				success: function(data) {
 					//#ifdef H5
 					that.$tools.toast('已复制到剪切板');
@@ -298,8 +353,20 @@ export default {
 	}
 	.notice-box__content {
 		padding: 25rpx;
+		.self-pickup-box {
+			width: 100%;
+			.self-pickup--img {
+				width: 200rpx;
+				height: 200rpx;
+				margin: 40rpx 0;
+			}
+		}
 	}
-	.notice-item {
+	.notice-item--center {
+		margin-bottom: 10rpx;
+	}
+	.notice-item,
+	.notice-item--center {
 		margin-bottom: 10rpx;
 		align-items: flex-start;
 		.title {
@@ -316,7 +383,6 @@ export default {
 			color: #333;
 			flex: 1;
 		}
-
 		.copy-btn {
 			width: 120rpx;
 			height: 50rpx;
@@ -328,6 +394,9 @@ export default {
 			font-size: 26rpx;
 			margin-left: 30rpx;
 		}
+	}
+	.notice-item--center {
+		align-items: center;
 	}
 }
 
