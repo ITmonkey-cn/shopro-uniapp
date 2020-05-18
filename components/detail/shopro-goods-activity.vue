@@ -57,9 +57,13 @@
 				<view class="express">
 					<view class="x-f">
 						<view class="cu-progress round sm" :class="activityRules.status !== 'end' ? 'seckill-progress' : 'seckilled-progress'">
-							<view :class="activityRules.status !== 'end' ? 'progress-item--noend' : 'progress-item--end'" :style="[{ width: loading ? getProgress(detail.sales, detail.stock) : '' }]"></view>
+							<view
+								:class="activityRules.status !== 'end' ? 'progress-item--noend' : 'progress-item--end'"
+								:style="[{ width: loading ? getProgress(detail.sales, detail.stock) : '' }]"
+							></view>
 						</view>
-						<view class="progress-text">仅剩{{ detail.stock }}件</view>
+						<view class="progress-text" v-if="detail.stock > 0">仅剩{{ detail.stock }}件</view>
+						<view class="progress-text" v-else>已售罄</view>
 					</view>
 				</view>
 			</view>
@@ -94,8 +98,7 @@ export default {
 	destroyed() {
 		clearInterval(timer);
 	},
-	computed: {
-	},
+	computed: {},
 	methods: {
 		// 百分比
 		getProgress(sales, stock) {
@@ -105,7 +108,6 @@ export default {
 			} else {
 				unit = '0%';
 			}
-			console.log(unit)
 			return unit;
 		},
 		// 触发活动规则

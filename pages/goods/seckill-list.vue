@@ -11,7 +11,7 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item" v-for="item in goodsList" :key="item.id">
-					<shopro-dis-goods :seckillData="item" :status="tabCurrent">
+					<shopro-activity-card :seckillData="item" :status="tabCurrent">
 						<block slot="slodEnd">
 							<view class="x-f">
 								<view class="cu-progress round sm">
@@ -23,8 +23,10 @@
 						<block slot="disBtn">
 							<button class="cu-btn buy-btn" :class="btnType[tabCurrent].color">{{ btnType[tabCurrent].name }}</button>
 						</block>
-					</shopro-dis-goods>
+					</shopro-activity-card>
 				</view>
+				<!-- 空白 -->
+				<view class="empty-box x-c" v-if="!goodsList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
 				<!-- 加载更多 -->
 				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
@@ -34,13 +36,19 @@
 </template>
 
 <script>
-import shoproDisGoods from '@/components/goods/shopro-dis-goods.vue';
+import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shoproEmpty from '@/components/shopro-empty.vue';
 export default {
 	components: {
-		shoproDisGoods
+		shoproActivityCard,
+		shoproEmpty
 	},
 	data() {
 		return {
+			emptyData: {
+				img: '/static/imgs/empty/empty_goods.jpg',
+				tip: '暂无秒杀商品，敬请期待~'
+			},
 			isLoading: false,
 			loadStatus: '', //loading,over
 			lastPage: 0,
@@ -200,5 +208,12 @@ export default {
 		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 		color: rgba(255, 255, 255, 1);
 	}
+}
+// 空白页
+.empty-box {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 </style>

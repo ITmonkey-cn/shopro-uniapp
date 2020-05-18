@@ -1,10 +1,10 @@
 <template>
 	<!-- 限时抢购 -->
-	<view class="seckill-goods">
+	<view class="seckill-goods" v-if="showActivity">
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
-			<view class="group-people x-f" v-if="time.s">
-				<view class="time-box x-f">
+			<view class="group-people x-f" @tap="$Router.push('/pages/goods/seckill-list')">
+				<view class="time-box x-f"  v-if="time.s">
 					<view class="count-text-box">{{ time.d }}</view>
 					天
 					<view class="count-text-box">{{ time.h }}</view>
@@ -14,7 +14,7 @@
 					<view class="count-text-box">{{ time.s }}</view>
 					秒
 				</view>
-				<text class="tip">更多抢购</text>
+				<text class="tip">更多</text>
 				<text class="cuIcon-right"></text>
 			</view>
 		</view>
@@ -45,7 +45,8 @@ export default {
 		return {
 			time: {}, //倒计时
 			goodsList: [],
-			swiperCurrent: 0
+			swiperCurrent: 0,
+			showActivity:true,//是否显示活动。
 		};
 	},
 	props: {
@@ -109,6 +110,8 @@ export default {
 					let endTime = res.data.endtime * 1000;
 					let t = endTime - nowTime;
 					that.countDown(t / 1000);
+				}else{
+					that.showActivity = false;
 				}
 			});
 		}
