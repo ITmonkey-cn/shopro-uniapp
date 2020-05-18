@@ -98,6 +98,7 @@
 <script>
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
 import shoproPickerModal from '@/components/modal/shopro-picker-modal.vue';
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shoproMiniCard,
@@ -141,6 +142,7 @@ export default {
 	},
 	onShow() {},
 	methods: {
+		...mapActions(['getCartList']),
 		init() {
 			return Promise.all([this.getDefaultAddress(), this.getPre(), this.getCoupons()]);
 		},
@@ -181,6 +183,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					let sn = res.data.order_sn;
+					that.getCartList();
 					that.isSubOrder = false;
 					if (res.data.status > 0) {
 						that.$Router.replace({

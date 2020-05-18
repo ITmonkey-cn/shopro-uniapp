@@ -6,7 +6,7 @@
 		</view>
 		<view class="goods-right y-bc">
 			<view class="title one-t">{{ seckillData.title }}</view>
-			<view class="tip">{{ seckillData.subtitle }}</view>
+			<view class="tip one-t">{{ seckillData.subtitle }}</view>
 			<view class="slod-end"><slot name="slodEnd"></slot></view>
 			<view class=" price-box">
 				<view class="miso-font">
@@ -91,6 +91,7 @@ export default {
 		.tip {
 			font-size: 22rpx;
 			color: #a8700d;
+			width: 500rpx;
 		}
 
 		.price-box {
