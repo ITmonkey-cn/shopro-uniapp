@@ -99,10 +99,10 @@ export default {
 			let fromLogin = uni.getStorageSync('fromLogin');
 			if(fromLogin){
 					this.$tools.routerTo(fromLogin.path, fromLogin.query, true);
+					uni.removeStorageSync('fromLogin')
 			}else{
-				this.$Router.pushTab('/pages/index/user')
+				this.$Router.pushTab('/pages/index/index')
 			}
-		
 		},
 		async wxLogin() {
 			let wechat = new Wechat();
@@ -140,7 +140,7 @@ export default {
 		async getCode() {
 			let that = this;
 			that.code.status = true;
-			let countdown = 5;
+			let countdown = 60;
 			that.$api('sms.send', {
 				mobile: that.userPhone,
 				event: 'mobilelogin'

@@ -62,7 +62,7 @@ export default {
 		async getCode() {
 			let that = this;
 			that.code.status = true;
-			let countdown = 5;
+			let countdown = 60;
 			that.$api('sms.send', {
 				mobile: that.phone,
 				event: 'changemobile'

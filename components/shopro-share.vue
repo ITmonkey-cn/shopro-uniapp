@@ -57,7 +57,15 @@ export default {
 		goodsInfo: {}
 	},
 	created() {
-		this.setShareInfo({url: 'goods-'+this.$Route.query.id});
+		let that = this;
+		that.setShareInfo({
+			query: {
+				url: 'goods-'+that.$Route.query.id,
+				},
+			title: that.goodsInfo.title,
+			image: that.goodsInfo.image
+			}
+		);
 	},
 	computed: {
 		showModal: {
@@ -72,10 +80,11 @@ export default {
 	methods: {
 		copySharePath() {
 			let that = this;
-				that.showModal = false;
+			that.showModal = false;
 			console.log(this.shareInfo)
+			
 			uni.setClipboardData({
-				data: this.shareInfo.path,
+				data: this.shareInfo.copyLink,
 				success: function(data) {
 					//#ifdef H5
 					that.$tools.toast('已复制到剪切板');
@@ -99,15 +108,15 @@ export default {
 			let that = this;
 			that.showModal = false;
 			// #ifdef H5
-			this.showModal = false;
-			this.showShareGuide = true;
+			that.showModal = false;
+			that.showShareGuide = true;
 			// #endif
 			// #ifdef APP-PLUS
 			uni.share({
 				provider: 'weixin',
 				scene: 'WXSceneSession',
 				type: 0,
-				href: 'http://shopro.7wpp.com',
+				href: that.shareInfo.path,
 				title: that.shareInfo.title,
 				summary: that.goodsInfo.title,
 				imageUrl: that.goodsInfo.image,
