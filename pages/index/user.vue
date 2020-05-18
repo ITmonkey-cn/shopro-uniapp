@@ -23,6 +23,10 @@
 							<image class="tag-img" :src="userInfo.group.image" mode=""></image>
 							<text class="tag-title">{{ userInfo.group.name }}</text>
 						</view>
+						<view class="grade-tag tag-box x-f">
+							<text class="cuIcon-refresh"></text>
+							<text class="tag-title">更新账户</text>
+						</view>
 					</view>
 					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/user/poster')"><text class="cuIcon-qr_code"></text></button>
 				</view>
@@ -281,7 +285,7 @@ export default {
 	.user-head {
 		padding-top: 50rpx;
 		.info-box {
-			padding: 0 20rpx;
+			// padding: 0 20rpx;
 
 			.head-img {
 				width: 88rpx;
@@ -306,7 +310,11 @@ export default {
 			border-radius: 21rpx;
 			line-height: 38rpx;
 			padding-right: 10rpx;
-
+			margin-left: 10rpx;
+			.cuIcon-refresh{
+				color: #fff;
+				margin: 0 10rpx;
+			}
 			.tag-img {
 				width: 40rpx;
 				height: 40rpx;
