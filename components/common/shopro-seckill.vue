@@ -4,11 +4,16 @@
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
 			<view class="group-people x-f" @tap="$Router.push('/pages/goods/seckill-list')">
-				<view class="time-box x-f"  v-if="time.s">
-					<view class="count-text-box">{{ time.d }}</view>
-					天
-					<view class="count-text-box">{{ time.h }}</view>
-					时
+				<view class="time-box x-f">
+					<view class="x-f" v-if="parseInt(time.d)">
+						<view class="count-text-box">{{ time.d }}</view>
+						天
+					</view>
+					<view class="x-f">
+						<view class="count-text-box">{{ time.h }}</view>
+						时
+					</view>
+
 					<view class="count-text-box">{{ time.m }}</view>
 					分
 					<view class="count-text-box">{{ time.s }}</view>
@@ -46,7 +51,7 @@ export default {
 			time: {}, //倒计时
 			goodsList: [],
 			swiperCurrent: 0,
-			showActivity:true,//是否显示活动。
+			showActivity: true //是否显示活动。
 		};
 	},
 	props: {
@@ -90,6 +95,7 @@ export default {
 			let timer = setInterval(() => {
 				if (t > 0) {
 					_self.time = _self.$tools.format(t);
+					console.log(typeof _self.time.d);
 					t--;
 				} else {
 					clearInterval(timer);
@@ -110,7 +116,7 @@ export default {
 					let endTime = res.data.endtime * 1000;
 					let t = endTime - nowTime;
 					that.countDown(t / 1000);
-				}else{
+				} else {
 					that.showActivity = false;
 				}
 			});
@@ -213,12 +219,14 @@ export default {
 
 			.tip {
 				font-size: 28rpx;
-				padding: 0 20rpx;
+				padding-left: 30rpx;
+				color: #666;
 			}
 
 			.cuIcon-right {
 				font-size: 30rpx;
 				line-height: 28rpx;
+				color: #666;
 			}
 		}
 	}
@@ -226,7 +234,6 @@ export default {
 	.goods-box {
 		.goods-item {
 			margin-right: 30rpx;
-
 			&:nth-child(4n) {
 				margin-right: 0;
 			}

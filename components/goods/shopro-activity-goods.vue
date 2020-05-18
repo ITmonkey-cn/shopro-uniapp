@@ -5,9 +5,9 @@
 			<image class="img" :src="detail.image" mode="widthFix"></image>
 		</view>
 		<view class="price-box">
-			<view class="">
-				<text class="seckill-current one-t">￥{{ detail.price }}</text>
-				<!-- 	<text class="original">￥{{ detail.original_price }}</text> -->
+			<view class="y-f">
+				<text class="seckill-current">￥{{ detail.price }}</text>
+					<text class="original">￥{{ detail.original_price }}</text>
 			</view>
 		</view>
 		<view class="title"><slot name="titleText"></slot></view>
@@ -69,13 +69,12 @@ export default {
 		width: 100%;
 		margin-top: 10rpx;
 		.seckill-current {
-			font-size: 24rpx;
+			font-size: 30rpx;
 			font-weight: 500;
 			color: rgba(225, 33, 43, 1);
-			width: 152rpx;
 		}
 		.original {
-			font-size: 24rpx;
+			font-size: 20rpx;
 			font-weight: 400;
 			text-decoration: line-through;
 			color: rgba(153, 153, 153, 1);
