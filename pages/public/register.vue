@@ -20,7 +20,7 @@
 				</view>
 				<view class="input-item x-c">
 					<text class="inp-title">密&emsp;码</text>
-					<input class="inp" v-model="password"  type="text" placeholder="请输入6-14位密码" placeholder-class="pl" />
+					<input class="inp" password v-model="password"  type="text" placeholder="请输入6-14位密码" placeholder-class="pl" />
 				</view>
 				<view class="tip-box" @tap="onTcp">
 					<label class="x-f">

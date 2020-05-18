@@ -153,7 +153,7 @@ export default {
 		font-weight: 500;
 		color: rgba(255, 255, 255, 1);
 		position: relative;
-
+		border-right: 1rpx solid #fff;
 		.tab-triangle {
 			position: absolute;
 			z-index: 2;

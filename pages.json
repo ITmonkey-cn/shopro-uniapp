@@ -206,7 +206,7 @@
 		},
 		{
 			"path": "pages/order/express",
-			"name": "orderList",
+			"name": "expressList",
 			"style": {
 				"navigationBarTitleText": "物流信息"
 

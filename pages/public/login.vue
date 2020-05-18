@@ -15,7 +15,7 @@
 				</view>
 				<view class="tab-item x-c" @tap="onLoginWay(1)">
 					<text class="tab-title">密码登录</text>
-					<view class="line-box" v-show="loginWay === 1"><text class="triangle"></text></view>
+					<view class="line-box" password v-show="loginWay === 1"><text class="triangle"></text></view>
 				</view>
 			</view>
 			<!-- 表单 -->
@@ -27,8 +27,8 @@
 				</view>
 			</view>
 			<view class="login-box y-f" v-show="loginWay === 1">
-				<view class="input-item x-c"><input class="inp" v-model="userPhone" type="number" placeholder="演示账号:13888888888" placeholder-class="pl" /></view>
-				<view class="input-item x-c"><input class="inp" v-model="userPassword" type="text" placeholder="演示密码:123456" placeholder-class="pl" /></view>
+				<view class="input-item x-c"><input class="inp" v-model="userPhone" type="number" placeholder="请输入账号" placeholder-class="pl" /></view>
+				<view class="input-item x-c"><input class="inp" v-model="userPassword" type="text" placeholder="请输入密码" placeholder-class="pl" /></view>
 			</view>
 			<!-- 登录按钮 -->
 			<view class="x-c y-f">

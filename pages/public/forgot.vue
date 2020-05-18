@@ -26,7 +26,7 @@
 				</view>
 				<view class="input-item x-c">
 					<text class="inp-title">新密码</text>
-					<input class="inp" v-model="userPassword" type="text" placeholder="请设置新密码" placeholder-class="pl" />
+					<input class="inp" password v-model="userPassword" type="text" placeholder="请设置新密码" placeholder-class="pl" />
 				</view>
 			</view>
 			<!-- 登录按钮 -->

@@ -28,37 +28,42 @@
 					<!-- 服务 -->
 					<shopro-goods-serve v-model="showServe" :serveList="goodsInfo.service"></shopro-goods-serve>
 					<!-- 优惠券 -->
-					<shopro-goods-coupon v-if="goodsInfo.coupons && goodsInfo.coupons.length &&  goodsInfo.activity_type !== 'seckill'" :couponList="goodsInfo.coupons"></shopro-goods-coupon>
+					<shopro-goods-coupon
+						v-if="goodsInfo.coupons && goodsInfo.coupons.length && goodsInfo.activity_type !== 'seckill'"
+						:couponList="goodsInfo.coupons"
+					></shopro-goods-coupon>
 					<!-- 拼团人 -->
 					<shopro-goods-group v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon'"></shopro-goods-group>
 					<!-- 选项卡 -->
-					<view class="tab-box x-f">
-						<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
-							<view class="tab-title">{{ tab.title }}</view>
-							<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
-						</view>
-					</view>
-					<view class="tab-detail">
-						<view class="rich-box" v-show="tabCurrent === 'tab0'">
-							<shopro-parse :content="goodsInfo.content"></shopro-parse>
-							<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
-						</view>
-						<view class="goods-size" v-if="tabCurrent === 'tab1'">
-							<view class="table-box" v-if="goodsInfo.params && goodsInfo.params.length">
-								<view class="t-tr x-f" v-for="t in goodsInfo.params" :key="t.title">
-									<view class="t-head x-f">{{ t.title }}</view>
-									<view class="t-detail">{{ t.content }}</view>
-								</view>
+					<view class="sticky-box">
+						<view class="tab-box x-f">
+							<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
+								<view class="tab-title">{{ tab.title }}</view>
+								<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
 							</view>
 						</view>
-						<view class="goods-comment" v-if="tabCurrent === 'tab2'">
-							<block v-for="comment in commentList" :key="comment.id"><shopro-comment :comment="comment"></shopro-comment></block>
-							<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
-							<view class="more-box x-c" v-if="commentList.length">
-								<button class="cu-btn more-btn x-f" @tap="jump('/pages/goods/comment-list', { goodsId: goodsInfo.id })">
-									查看全部
-									<text class="cuIcon-right"></text>
-								</button>
+						<view class="tab-detail">
+							<view class="rich-box" v-show="tabCurrent === 'tab0'">
+								<shopro-parse :content="goodsInfo.content"></shopro-parse>
+								<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
+							</view>
+							<view class="goods-size" v-if="tabCurrent === 'tab1'">
+								<view class="table-box" v-if="goodsInfo.params && goodsInfo.params.length">
+									<view class="t-tr x-f" v-for="t in goodsInfo.params" :key="t.title">
+										<view class="t-head x-f">{{ t.title }}</view>
+										<view class="t-detail">{{ t.content }}</view>
+									</view>
+								</view>
+							</view>
+							<view class="goods-comment" v-if="tabCurrent === 'tab2'">
+								<block v-for="comment in commentList" :key="comment.id"><shopro-comment :comment="comment"></shopro-comment></block>
+								<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+								<view class="more-box x-c" v-if="commentList.length">
+									<button class="cu-btn more-btn x-f" @tap="jump('/pages/goods/comment-list', { goodsId: goodsInfo.id })">
+										查看全部
+										<text class="cuIcon-right"></text>
+									</button>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -71,7 +76,11 @@
 						<text class="tool-title">首页</text>
 					</view>
 					<view class="tools-item y-f" @tap="onFavorite(goodsInfo.id)">
-						<image class="tool-img" :src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'" mode=""></image>
+						<image
+							class="tool-img"
+							:src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'"
+							mode=""
+						></image>
 						<text class="tool-title">收藏</text>
 					</view>
 					<view class="tools-item y-f" @tap="onShare">
@@ -172,9 +181,7 @@ export default {
 	onLoad() {
 		this.init();
 	},
-	onReady() {
-		
-	},
+	onReady() {},
 	methods: {
 		init() {
 			return Promise.all([this.getGoodsDetail()]);
@@ -218,12 +225,11 @@ export default {
 					that.getCommentList();
 					that.setShareInfo({
 						query: {
-							url: 'goods-'+that.$Route.query.id,
-							},
+							url: 'goods-' + that.$Route.query.id
+						},
 						title: that.goodsInfo.title,
 						image: that.goodsInfo.image
-						}
-					);
+					});
 				}
 			});
 		},
@@ -372,7 +378,6 @@ export default {
 	background: #fff;
 	margin-bottom: 1rpx;
 	margin-top: 20rpx;
-
 	.tab-item {
 		flex: 1;
 		height: 100%;
@@ -401,7 +406,7 @@ export default {
 	min-height: 300rpx;
 	margin-bottom: 20rpx;
 	background: #fff;
-	padding-bottom: 30rpx ;
+	padding-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
 		font-size: 0;
@@ -414,7 +419,7 @@ export default {
 		padding-top: 30rpx;
 		.table-box {
 			width: 710rpx;
-			margin:auto;
+			margin: auto;
 			background: rgba(255, 255, 255, 1);
 			border: 1rpx solid rgba(223, 223, 223, 1);
 
