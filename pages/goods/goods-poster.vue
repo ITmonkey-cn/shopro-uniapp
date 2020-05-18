@@ -58,7 +58,7 @@ export default {
 		})
 	},
 	onLoad() {
-		this.setShareInfo({ url: 'goods-' + this.$Route.query.goodsId });
+		let that = this;
 		this.scene =encodeURIComponent(this.shareInfo.path.split('?')[1]);
 		this.getGoodsDetail();
 	},
@@ -78,7 +78,14 @@ export default {
 						that.goodsInfo.title = res.data.title;
 						that.goodsInfo.price = res.data.price;
 						that.goodsInfo.original_price = res.data.original_price;
-						return that.goodsInfo;
+						that.setShareInfo({
+							query: {
+								url: 'goods-'+that.$Route.query.goodsId,
+								},
+							title: that.goodsInfo.title,
+							image: that.goodsInfo.image
+							}
+						);
 					}
 				})
 				.then(res => {
@@ -340,10 +347,10 @@ export default {
 				provider: 'weixin',
 				scene: 'WXSceneSession',
 				type: 0,
-				href: 'http://shopro.7wpp.com',
-				title: 'shopro',
-				summary: '星品科技shopro商城，赶紧跟我一起来体验！',
-				imageUrl: that.goodsInfo.image,
+				href: that.shareInfo.path,
+				title: that.shareInfo.title,
+				summary: that.shareInfo.title,
+				imageUrl: that.shareInfo.image,
 				success: res => {
 					console.log('success:' + JSON.stringify(res));
 				},
@@ -368,7 +375,7 @@ export default {
 		copyLink() {
 			let that = this;
 			uni.setClipboardData({
-				data: that.shareInfo.path,
+				data: that.shareInfo.copyLink,
 				success: () => {
 					//#ifdef H5
 					that.$tools.toast('已复制到剪切板');

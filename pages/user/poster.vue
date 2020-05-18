@@ -215,10 +215,10 @@ export default {
 				provider: 'weixin',
 				scene: 'WXSceneSession',
 				type: 0,
-				href: 'http://shopro.7wpp.com',
-				title: 'shopro',
-				summary: '星品科技shopro商城，赶紧跟我一起来体验！',
-				imageUrl: that.goodsInfo.image,
+				href: that.shareInfo.path,
+				title: that.shareInfo.title,
+				summary: that.shareInfo.title,
+				imageUrl: that.shareInfo.image,
 				success: res => {
 					console.log('success:' + JSON.stringify(res));
 				},
@@ -235,10 +235,10 @@ export default {
 		copyLink() {
 			let that = this;
 			uni.setClipboardData({
-				data: that.shareInfo.path,
+				data: that.shareInfo.copyLink,
 				success: () => {
 					//#ifdef H5
-					that.$tools.toast('已复制到剪切板');
+					that.$tools.toast('已复制到剪贴板');
 					//#endif
 				}
 			});

@@ -171,9 +171,10 @@ export default {
 	computed: {},
 	onLoad() {
 		this.init();
-		this.setShareInfo({url: 'goods-'+this.$Route.query.id});
 	},
-	onReady() {},
+	onReady() {
+		
+	},
 	methods: {
 		init() {
 			return Promise.all([this.getGoodsDetail()]);
@@ -215,6 +216,14 @@ export default {
 				if (res.code === 1) {
 					that.goodsInfo = res.data;
 					that.getCommentList();
+					that.setShareInfo({
+						query: {
+							url: 'goods-'+that.$Route.query.id,
+							},
+						title: that.goodsInfo.title,
+						image: that.goodsInfo.image
+						}
+					);
 				}
 			});
 		},
