@@ -1,73 +1,72 @@
 <template>
 	<block>
 		<view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view>
-		<view class="page_box" v-else>
-			<view class="head_box"></view>
-			<view class="content_box">
-				<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top>
-					<view class="goodes_detail_swiper-box">
-						<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
-							<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
-								<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
-							</swiper-item>
-						</swiper>
-						<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
-					</view>
-					<!-- 价格卡片组 -->
-					<shopro-goods-activity v-if="goodsInfo" :detail="goodsInfo" @change="getActivityRules"></shopro-goods-activity>
-					<view class="goods-title">{{ goodsInfo.title }}</view>
-					<view class="sub-title">{{ goodsInfo.subtitle }}</view>
-					<!-- 规格选择 -->
-					<shopro-goods-sku
-						v-model="showSku"
-						v-if="activityRules.status !== 'waiting'"
-						:goodsInfo="goodsInfo"
-						:buyType="goodsInfo.activity_type == 'seckill' ? 'buy' : buyType"
-						@changeType="changeType"
-					></shopro-goods-sku>
-					<!-- 服务 -->
-					<shopro-goods-serve v-model="showServe" :serveList="goodsInfo.service"></shopro-goods-serve>
-					<!-- 优惠券 -->
-					<shopro-goods-coupon
-						v-if="goodsInfo.coupons && goodsInfo.coupons.length && goodsInfo.activity_type !== 'seckill'"
-						:couponList="goodsInfo.coupons"
-					></shopro-goods-coupon>
-					<!-- 拼团人 -->
-					<shopro-goods-group v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon'"></shopro-goods-group>
-					<!-- 选项卡 -->
-					<view class="sticky-box">
-						<view class="tab-box x-f">
-							<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
-								<view class="tab-title">{{ tab.title }}</view>
-								<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
-							</view>
+		<view class="detail_box" v-else>
+			<view class="detail-content">
+				<!-- <scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top> -->
+				<view class="goodes_detail_swiper-box">
+					<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
+						<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
+							<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
+						</swiper-item>
+					</swiper>
+					<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
+				</view>
+				<!-- 价格卡片组 -->
+				<shopro-goods-activity v-if="goodsInfo" :detail="goodsInfo" @change="getActivityRules"></shopro-goods-activity>
+				<view class="goods-title">{{ goodsInfo.title }}</view>
+				<view class="sub-title">{{ goodsInfo.subtitle }}</view>
+				<!-- 规格选择 -->
+				<shopro-goods-sku
+					v-model="showSku"
+					v-if="activityRules.status !== 'waiting'"
+					:goodsInfo="goodsInfo"
+					:buyType="goodsInfo.activity_type == 'seckill' ? 'buy' : buyType"
+					@changeType="changeType"
+				></shopro-goods-sku>
+				<!-- 服务 -->
+				<shopro-goods-serve v-model="showServe" :serveList="goodsInfo.service"></shopro-goods-serve>
+				<!-- 优惠券 -->
+				<shopro-goods-coupon
+					v-if="goodsInfo.coupons && goodsInfo.coupons.length && goodsInfo.activity_type !== 'seckill'"
+					:couponList="goodsInfo.coupons"
+				></shopro-goods-coupon>
+				<!-- 拼团人 -->
+				<shopro-goods-group v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon'"></shopro-goods-group>
+				<!-- 选项卡 -->
+				<view class="sticky-box">
+					<view class="tab-box x-f">
+						<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
+							<view class="tab-title">{{ tab.title }}</view>
+							<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
 						</view>
-						<view class="tab-detail">
-							<view class="rich-box" v-show="tabCurrent === 'tab0'">
-								<shopro-parse :content="goodsInfo.content"></shopro-parse>
-								<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
-							</view>
-							<view class="goods-size" v-if="tabCurrent === 'tab1'">
-								<view class="table-box" v-if="goodsInfo.params && goodsInfo.params.length">
-									<view class="t-tr x-f" v-for="t in goodsInfo.params" :key="t.title">
-										<view class="t-head x-f">{{ t.title }}</view>
-										<view class="t-detail">{{ t.content }}</view>
-									</view>
-								</view>
-							</view>
-							<view class="goods-comment" v-if="tabCurrent === 'tab2'">
-								<block v-for="comment in commentList" :key="comment.id"><shopro-comment :comment="comment"></shopro-comment></block>
-								<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
-								<view class="more-box x-c" v-if="commentList.length">
-									<button class="cu-btn more-btn x-f" @tap="jump('/pages/goods/comment-list', { goodsId: goodsInfo.id })">
-										查看全部
-										<text class="cuIcon-right"></text>
-									</button>
+					</view>
+					<view class="tab-detail">
+						<view class="rich-box" v-show="tabCurrent === 'tab0'">
+							<shopro-parse :content="goodsInfo.content"></shopro-parse>
+							<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
+						</view>
+						<view class="goods-size" v-if="tabCurrent === 'tab1'">
+							<view class="table-box" v-if="goodsInfo.params && goodsInfo.params.length">
+								<view class="t-tr x-f" v-for="t in goodsInfo.params" :key="t.title">
+									<view class="t-head x-f">{{ t.title }}</view>
+									<view class="t-detail">{{ t.content }}</view>
 								</view>
 							</view>
 						</view>
+						<view class="goods-comment" v-if="tabCurrent === 'tab2'">
+							<block v-for="comment in commentList" :key="comment.id"><shopro-comment :comment="comment"></shopro-comment></block>
+							<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+							<view class="more-box x-c" v-if="commentList.length">
+								<button class="cu-btn more-btn x-f" @tap="jump('/pages/goods/comment-list', { goodsId: goodsInfo.id })">
+									查看全部
+									<text class="cuIcon-right"></text>
+								</button>
+							</view>
+						</view>
 					</view>
-				</scroll-view>
+				</view>
+				<!-- </scroll-view> -->
 			</view>
 			<view class="detail-foot_box  x-f" v-if="!showSku && !showServe">
 				<view class="left x-f">
@@ -302,18 +301,15 @@ export default {
 </script>
 
 <style lang="scss">
-// 悬浮球
-.cart-box {
-	position: fixed;
-	bottom: 200rpx;
-	right: 30rpx;
-	width: 100rpx;
-	height: 100rpx;
-	border-radius: 50%;
-	// background-image: radial-gradient(circle,#F44739,#FF6600,transparent);
-	.card-img {
-		width: 80rpx;
-		height: 80rpx;
+.detail-content {
+	padding-bottom: 100rpx;
+}
+.sticky-box {
+	.tab-box {
+		position: -webkit-sticky;
+		position: sticky;
+		top: 0;
+		z-index: 99;
 	}
 }
 // 商品图片轮播
@@ -376,7 +372,7 @@ export default {
 .tab-box {
 	height: 102rpx;
 	background: #fff;
-	margin-bottom: 1rpx;
+	border-bottom: 1rpx solid rgba(#dfdfdf, 0.8);
 	margin-top: 20rpx;
 	.tab-item {
 		flex: 1;
@@ -508,6 +504,10 @@ export default {
 	height: 100rpx;
 	background: rgba(255, 255, 255, 1);
 	border-top: 1rpx solid rgba(238, 238, 238, 1);
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	z-index: 999;
 
 	.left,
 	.detail-right {

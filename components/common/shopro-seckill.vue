@@ -4,7 +4,7 @@
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
 			<view class="group-people x-f" @tap="$Router.push('/pages/goods/seckill-list')">
-				<view class="time-box x-f">
+				<view class="time-box x-f" v-if="time.s">
 					<view class="x-f" v-if="parseInt(time.d)">
 						<view class="count-text-box">{{ time.d }}</view>
 						天
@@ -24,7 +24,7 @@
 			</view>
 		</view>
 		<view class="goods-box swiper-box x-f">
-			<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
+			<swiper class="carousel" circular @change="swiperChange" :autoplay="true" 	duration="2000">
 				<swiper-item v-for="(goods, index) in goodsList" :key="index" class="carousel-item">
 					<view class="goods-list-box x-f">
 						<block v-for="mgoods in goods" :key="mgoods.id">
@@ -95,7 +95,6 @@ export default {
 			let timer = setInterval(() => {
 				if (t > 0) {
 					_self.time = _self.$tools.format(t);
-					console.log(typeof _self.time.d);
 					t--;
 				} else {
 					clearInterval(timer);
@@ -131,7 +130,7 @@ export default {
 .swiper-box,
 .carousel {
 	width: 750rpx;
-	height: 220upx;
+	height: 240upx;
 	position: relative;
 	border-radius: 20rpx;
 
@@ -233,7 +232,7 @@ export default {
 
 	.goods-box {
 		.goods-item {
-			margin-right: 30rpx;
+			margin-right: 22rpx;
 			&:nth-child(4n) {
 				margin-right: 0;
 			}

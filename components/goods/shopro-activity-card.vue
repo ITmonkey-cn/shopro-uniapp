@@ -10,8 +10,8 @@
 			<view class="slod-end"><slot name="slodEnd"></slot></view>
 			<view class=" price-box">
 				<view class="miso-font">
-					<text class="current">￥{{ seckillData.price }}</text>
-					<text class="original">￥{{ seckillData.original_price }}</text>
+					<view class="current">￥{{ seckillData.price }}</view>
+					<view class="original">￥{{ seckillData.original_price }}</view>
 				</view>
 			</view>
 			<slot name="disBtn"></slot>
