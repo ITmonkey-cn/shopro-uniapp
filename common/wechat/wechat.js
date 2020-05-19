@@ -22,7 +22,6 @@ export default class Wechat {
 		}
 		// #ifdef MP-WEIXIN
 		token = await this.wxMiniProgramLogin();
-		console.log('wechat', token);
 		return token;
 		// #endif
 		// #ifdef H5
@@ -30,7 +29,6 @@ export default class Wechat {
 		// #endif
 		// #ifdef APP-PLUS
 		token = await this.wxOpenPlatformLogin();
-		console.log('wechat', token);
 		return token;
 		// #endif
 	}
@@ -61,21 +59,17 @@ export default class Wechat {
 			uni.login({
 				provider: 'weixin',
 				success: function(loginRes) {
-					console.log(loginRes)
 					if (loginRes.errMsg === "login:ok") {
 						let authResult = loginRes.authResult;
-						console.log(authResult)
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
-								console.log('infoRes', infoRes)
 								if (infoRes.errMsg === "getUserInfo:ok") {
 									let userInfo = infoRes.userInfo;
 									api('user.wxOpenPlatformLogin', {
 										authResult: authResult,
 										userInfo: userInfo
 									}).then(res => {
-										console.log(res);
 										if (res.code === 1) {
 											resolve(res.data.token);
 										}
@@ -102,17 +96,14 @@ export default class Wechat {
 	// #ifdef MP-WEIXIN
 	wxMiniProgramLogin() {
 		let that = this;
-		uni.setStorageSync('fromLogin', router.$Route);
 		return new Promise((resolve, reject) => {
 			uni.login({
 				success: function(info) {
-					console.log('登录信息', info);
 					let code = info.code;
 					api('user.wxMiniProgramLogin', {
 						code: code,
 					}).then(res => {
 						if (res.code === 1) {
-							console.log(res.data.token);
 							resolve(res.data.token);
 						}
 					});

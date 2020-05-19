@@ -1,3 +1,11 @@
+/**
+ * Wechat v1.0.0
+ * @description shopro-wechat 1.0.1 wehcat全局分享组件
+ * @Author llidongtony
+ * @Date 2020-05-18
+ * @Email lidongtony@qq.com
+ */
+
 import store from '@/common/store'
 import api from '@/common/request/index'
 import Router from '@/common/router'
