@@ -400,7 +400,6 @@ export default {
 
 .tab-detail {
 	min-height: 300rpx;
-	margin-bottom: 20rpx;
 	background: #fff;
 	padding-bottom: 30rpx;
 	background: #fff;
