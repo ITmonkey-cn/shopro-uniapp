@@ -24,7 +24,7 @@
 			</view>
 		</view>
 		<view class="goods-box swiper-box x-f">
-			<swiper class="carousel" circular @change="swiperChange" :autoplay="true" 	duration="2000">
+			<swiper class="carousel" circular @change="swiperChange" :autoplay="true" duration="2000">
 				<swiper-item v-for="(goods, index) in goodsList" :key="index" class="carousel-item">
 					<view class="goods-list-box x-f">
 						<block v-for="mgoods in goods" :key="mgoods.id">
@@ -129,7 +129,7 @@ export default {
 
 .swiper-box,
 .carousel {
-	width: 750rpx;
+	width: 700rpx;
 	height: 240upx;
 	position: relative;
 	border-radius: 20rpx;
