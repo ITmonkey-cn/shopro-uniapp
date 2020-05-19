@@ -385,7 +385,7 @@ export default {
 			width: 123rpx;
 			height: 4rpx;
 			left: 50%;
-			bottom: 0;
+			bottom: 20rpx;
 			transform: translateX(-50%);
 			background: transparent;
 			position: absolute;
