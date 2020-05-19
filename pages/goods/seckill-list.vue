@@ -26,9 +26,11 @@
 					</shopro-activity-card>
 				</view>
 				<!-- 空白 -->
-				<view class="empty-box x-c" v-if="!goodsList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+				<view class="empty-box x-c" v-if="!goodsList.length && !isLoading"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
 				<!-- 加载更多 -->
 				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<!-- loading -->
+				<shoproLoad v-model="isLoading"></shoproLoad>
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
