@@ -344,9 +344,8 @@ export default {
 
 .tab-detail {
 	min-height: 400rpx;
-	margin-bottom: 20rpx;
 	background: #fff;
-	padding: 30rpx 0;
+	padding: 30rpx 0 ;
 
 	.rich-box {
 		font-size: 0;

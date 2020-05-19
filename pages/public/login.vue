@@ -28,7 +28,7 @@
 			</view>
 			<view class="login-box y-f" v-show="loginWay === 1">
 				<view class="input-item x-c"><input class="inp" v-model="userPhone" type="number" placeholder="请输入账号" placeholder-class="pl" /></view>
-				<view class="input-item x-c"><input class="inp" v-model="userPassword" type="text" placeholder="请输入密码" placeholder-class="pl" /></view>
+				<view class="input-item x-c"><input class="inp" password v-model="userPassword" type="text" placeholder="请输入密码" placeholder-class="pl" /></view>
 			</view>
 			<!-- 登录按钮 -->
 			<view class="x-c y-f">
