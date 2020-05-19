@@ -2,6 +2,8 @@
 import api from '@/common/request/index'
 import store from '@/common/store'
 import router from '@/common/router.js'
+import tools from '@/common/utils/tools'
+
 import {
 	USER_INFO,
 	LOGIN_TIP,
@@ -15,10 +17,21 @@ const state = {
 }
 
 const actions = {
+	//设置token并返回上次页面
+	setTokenAndBack({ commit }, token) {
+		uni.setStorageSync('token', token);
+		store.dispatch('getUserInfo');
+		let fromLogin = uni.getStorageSync('fromLogin');
+		if (fromLogin) {
+			tools.routerTo(fromLogin.path, fromLogin.query, true);
+			uni.removeStorageSync('fromLogin')
+		} else {
+			//默认跳转首页
+			router.pushTab('/pages/index/index')
+		}
+	},
 	// 用户信息
-	getUserInfo({
-		commit
-	}) {
+	getUserInfo({ commit }) {
 		return new Promise((resolve, reject) => {
 			api('user.info').then(res => {
 				store.dispatch('getCartList')
@@ -50,9 +63,7 @@ const actions = {
 		})
 	},
 	// 订单信息
-	getOrderNum({
-		commit
-	}) {
+	getOrderNum({ commit }) {
 		return new Promise((resolve, reject) => {
 			api('order.statusNum').then(res => {
 				commit('ORDER_NUMBER', res.data);

@@ -87,27 +87,17 @@ export default {
 	},
 	onLoad() {
 		if (this.$Route.query.token) {
-			this.getTokenAndBack(this.$Route.query.token);
+			this.setTokenAndBack(this.$Route.query.token);
 		}
 	},
 	onShow() {},
 	methods: {
-		...mapActions(['getUserInfo']),
-		getTokenAndBack(token) {
-			uni.setStorageSync('token', token);
-			this.getUserInfo();
-			let fromLogin = uni.getStorageSync('fromLogin');
-			if(fromLogin){
-					this.$tools.routerTo(fromLogin.path, fromLogin.query, true);
-					uni.removeStorageSync('fromLogin')
-			}else{
-				this.$Router.pushTab('/pages/index/index')
-			}
-		},
+		...mapActions(['getUserInfo', 'setTokenAndBack']),
+		
 		async wxLogin() {
 			let wechat = new Wechat();
 			let token = await wechat.login();
-			this.getTokenAndBack(token);
+			this.setTokenAndBack(token);
 		},
 		onLoginWay(flag) {
 			this.loginWay = flag;
@@ -120,7 +110,7 @@ export default {
 					code: that.code.value
 				}).then(res => {
 					if (res.code === 1) {
-						that.getTokenAndBack(res.data.userinfo.token);
+						that.setTokenAndBack(res.data.userinfo.token);
 					}
 				});
 			}
@@ -130,7 +120,7 @@ export default {
 					password: that.userPassword
 				}).then(res => {
 					if (res.code === 1) {
-						that.getTokenAndBack(res.data.userinfo.token);
+						that.setTokenAndBack(res.data.userinfo.token);
 					}
 				});
 			}

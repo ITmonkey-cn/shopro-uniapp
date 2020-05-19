@@ -1,9 +1,10 @@
 import store from '@/common/store'
-// #ifdef H5
-import wxsdk from '@/common/wechat/sdk';
-// #endif
 import api from '@/common/request/index'
-import Router from '@/common/router';
+import Router from '@/common/router'
+// #ifdef H5
+import wxsdk from '@/common/wechat/sdk'
+// #endif
+
 export default {
 	data() {
 		return {
@@ -25,7 +26,7 @@ export default {
 		if (options.scene) {
 			let scene = decodeURIComponent(options.scene);
 			options.url = this.getQueryValue('url', scene);
-		    options.share_id = this.getQueryValue('share_id', scene);
+			options.share_id = this.getQueryValue('share_id', scene);
 		}
 		// 2.保存推荐人信息
 		if (options.share_id) {
@@ -51,7 +52,7 @@ export default {
 							}
 						});
 						break;
-						// ... 后续跳转活动判断
+					// ... 后续跳转活动判断
 				}
 			}
 		}
@@ -69,21 +70,21 @@ export default {
 					var defaultShareInfo = e.data;
 					var domain = uni.getStorageSync('sysInfo')['domain'];
 					var platform = uni.getStorageSync('platform');
-					if(domain === '' || defaultShareInfo.title === '' || defaultShareInfo.image === '') {
+					if (domain === '' || defaultShareInfo.title === '' || defaultShareInfo.image === '') {
 						uni.showToast({
 							title: '请设置商城域名和分享信息'
 						})
 					}
 					//设置自定义分享标题
-					if(scene.title != '') {
+					if (scene.title != '') {
 						that.shareInfo.title = scene.title;
-					}else {
+					} else {
 						that.shareInfo.title = defaultShareInfo.title;
 					}
 					//设置分享图片
-					if(scene.image != '') {
+					if (scene.image != '') {
 						that.shareInfo.imageUrl = scene.image;
-					}else {
+					} else {
 						that.shareInfo.imageUrl = defaultShareInfo.image;
 					}
 					//判断用户登录 携带用户信息
@@ -94,10 +95,10 @@ export default {
 					//构造query参数链接
 					that.shareInfo.path = ''
 					let urlQuery = that.setPathQuery(scene.query);
-					if(platform === 'wxMiniProgram') {
+					if (platform === 'wxMiniProgram') {
 						that.shareInfo.path = '/pages/index/index' + urlQuery;
 						that.shareInfo.copyLink = domain + urlQuery;
-					}else{
+					} else {
 						that.shareInfo.path = domain + urlQuery;
 						that.shareInfo.copyLink = domain + urlQuery;
 					}
@@ -142,7 +143,7 @@ export default {
 			return false;
 		}
 	},
-	
+
 	// #ifdef MP-WEIXIN
 
 	onShareAppMessage(res) {

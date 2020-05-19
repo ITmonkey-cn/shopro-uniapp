@@ -98,7 +98,6 @@ export default {
 		},
 
 		register() {
-			
 			let that = this;
 			if (this.isTcp) {
 				this.$api('user.register', {
