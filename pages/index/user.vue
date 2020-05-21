@@ -148,11 +148,11 @@ export default {
 					img: 'http://shopro.7wpp.com/imgs/user/list4.png',
 					url: '/pages/coupons/index'
 				},
-				// {
-				// 	title: '我的拼团',
-				// 	img: 'http://shopro.7wpp.com/imgs/user/list5.png',
-				// 	url: '/pages/user/my-scrabble/index'
-				// },
+				{
+					title: '我的拼团',
+					img: 'http://shopro.7wpp.com/imgs/user/list5.png',
+					url: '/pages/user/group/index'
+				},
 				// {
 				// 	title: '联系客服',
 				// 	img: 'http://shopro.7wpp.com/imgs/user/list6.png',

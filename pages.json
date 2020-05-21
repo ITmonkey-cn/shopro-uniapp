@@ -104,6 +104,15 @@
 			}
 		},
 		{
+			"path": "pages/goods/group-list",
+			"style": {
+				"navigationBarTitleText": "今日必拼"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
 			"path": "pages/goods/comment-list",
 			"style": {
 				"navigationBarTitleText": "商品评价"
@@ -428,6 +437,36 @@
 			"style": {
 				"navigationBarTitleText": "修改手机号"
 
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/group/detail",
+			"style": {
+				"navigationBarTitleText": "拼团详情"
+		
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/group/index",
+			"style": {
+				"navigationBarTitleText": "我的拼团"
+		
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/group/rules",
+			"style": {
+				"navigationBarTitleText": "拼团玩法"
+		
 			},
 			"meta": {
 				"auth": true

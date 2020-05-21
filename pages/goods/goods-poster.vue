@@ -203,9 +203,9 @@ export default {
 									infoCallBack(imageInfo) {
 										return {
 											dWidth: bgObj.width * 0.9,
-											dHeight: bgObj.width * 0.9
+											dHeight: bgObj.width * 0.9,
 											// roundRectSet: { // 圆角矩形
-											// 	r: imageInfo.width * 0.025
+											// 	r: bgObj.width * 0.025
 											// }
 										};
 									}

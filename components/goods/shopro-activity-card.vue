@@ -9,7 +9,7 @@
 			<view class="tip one-t">{{ seckillData.subtitle }}</view>
 			<view class="slod-end"><slot name="slodEnd"></slot></view>
 			<view class=" price-box">
-				<view class="miso-font">
+				<view class="miso-font x-f">
 					<view class="current">￥{{ seckillData.price }}</view>
 					<view class="original">￥{{ seckillData.original_price }}</view>
 				</view>
@@ -102,7 +102,7 @@ export default {
 			}
 
 			.original {
-				font-size: 24rpx;
+				font-size: 22rpx;
 				font-weight: 400;
 				text-decoration: line-through;
 				color: rgba(153, 153, 153, 1);
