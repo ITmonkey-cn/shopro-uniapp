@@ -12,20 +12,17 @@
 			<view class="group-goods">
 				<image class="group-state" :src="state ? '/static/imgs/group_state_succeed.png' : '/static/imgs/group_state_failed.png'" mode=""></image>
 				<view class="goods-content">
-					<shopro-activity-goods>
-						<block slot="tipTag">
-							<view class="tip">
-								<text class="cuIcon-hotfill"></text>
-								<text class="tip-text">已拼589件</text>
+					<shopro-activity-card>
+						<block slot="slodEnd">
+							<view class="x-f">
+								<view class="sell-box">
+									<text class="cuIcon-hotfill"></text>
+									<text class="sell-num">已拼111件</text>
+								</view>
+								<text class="group-num">2人团</text>
 							</view>
 						</block>
-						<block slot="goodsBottom">
-							<view class="price-box">
-								<text class="price">￥299</text>
-								<text class="original-price">￥499</text>
-							</view>
-						</block>
-					</shopro-activity-goods>
+					</shopro-activity-card>
 				</view>
 
 				<view class="btn-box x-f">
@@ -40,11 +37,11 @@
 </template>
 
 <script>
-import shoproActivityGoods from '@/components/goods/shopro-activity-goods.vue';
+import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
 import shoproShare from '@/components/shopro-share.vue';
 export default {
 	components: {
-		shoproActivityGoods,
+		shoproActivityCard,
 		shoproShare
 	},
 	data() {

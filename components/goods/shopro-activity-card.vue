@@ -1,5 +1,5 @@
 <template>
-	<view class="dis-goods x-bc" @tap="jump('/pages/goods/detail', { id: seckillData.id })">
+	<view class="activity-goods-box x-bc" @tap="jump('/pages/goods/detail', { id: seckillData.id })">
 		<view class="img-box">
 			<view class="tag" v-if="isTag">TOP1</view>
 			<image class="img" :src="seckillData.image" mode="widthFix"></image>
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss">
-.dis-goods {
+.activity-goods-box {
 	padding: 40rpx 20rpx;
 	border-bottom: 1rpx solid #dfdfdf;
 	background: #fff;

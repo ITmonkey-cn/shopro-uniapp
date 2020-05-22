@@ -46,7 +46,6 @@ export default {
 
 <style lang="scss">
 .group-wrap {
-	background-size: 100% 335rpx;
 	background: url('~@/static/imgs/group/group_list_bg.png') no-repeat;
 	background-size: 100% 374rpx;
 }
