@@ -27,7 +27,7 @@
 
 				<view class="btn-box x-f">
 					<button class="cu-btn btn" v-if="stateId === 2">申请退款</button>
-					<button class="cu-btn btn" @tap="jump('/pages/user/group/detail')">拼购详情</button>
+					<button class="cu-btn btn" @tap="jump('/pages/order/detail')">拼购详情</button>
 					<button class="cu-btn invite-btn" v-if="stateId === 1" @tap="onInvite">邀请好友</button>
 				</view>
 			</view>

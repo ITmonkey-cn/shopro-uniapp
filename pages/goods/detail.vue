@@ -4,7 +4,10 @@
 		<view class="detail_box" v-else>
 			<view class="detail-content">
 				<!-- <scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top> -->
+				<!-- 详情轮播 -->
 				<view class="goodes_detail_swiper-box">
+					<!-- 拼团滚动提示 -->
+					<shopro-silde-tip></shopro-silde-tip>
 					<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
 						<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
 							<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
@@ -12,6 +15,7 @@
 					</swiper>
 					<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
 				</view>
+				
 				<!-- 价格卡片组 -->
 				<shopro-goods-activity v-if="goodsInfo" :detail="goodsInfo" @change="getActivityRules"></shopro-goods-activity>
 				<view class="goods-title">{{ goodsInfo.title }}</view>
@@ -32,7 +36,7 @@
 					:couponList="goodsInfo.coupons"
 				></shopro-goods-coupon>
 				<!-- 拼团人 -->
-				<shopro-goods-group v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon'"></shopro-goods-group>
+				<shopro-goods-group></shopro-goods-group>
 				<!-- 选项卡 -->
 				<view class="sticky-box">
 					<view class="tab-box x-f">
@@ -103,7 +107,7 @@
 						</button>
 						<button class="cu-btn tool-btn pay-btn y-f">
 							<text class="price">￥111</text>
-							<text class="price-title">发起拼团</text>
+							<text class="price-title">我要拼团</text>
 						</button>
 					</view>
 				</view>
@@ -127,6 +131,7 @@ import shoproComment from '@/components/shopro-comment.vue';
 import shoproParse from '@/components/parse/parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproSildeTip from '@/components/detail/shopro-silde-tip.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
@@ -139,7 +144,8 @@ export default {
 		shoproParse,
 		shoproGoodsCoupon,
 		shoproSkeletons,
-		shoproEmpty
+		shoproEmpty,
+		shoproSildeTip
 	},
 	data() {
 		return {

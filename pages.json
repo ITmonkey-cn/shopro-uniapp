@@ -5,7 +5,7 @@
 			"title": "首页",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
 			"style": {
-				"navigationBarTitleText": "Shopro开源商城",
+				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
 				// "enablePullDownRefresh": true,
 				"navigationStyle": "custom"
@@ -443,7 +443,7 @@
 			}
 		},
 		{
-			"path": "pages/user/group/detail",
+			"path": "pages/user/group/group-share",
 			"style": {
 				"navigationBarTitleText": "拼团详情"
 		
@@ -485,7 +485,7 @@
 	// 默认导航栏样式
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "Shopro开源商城",
+		"navigationBarTitleText": "",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
 		"navigationStyle": "default" //默认是default，即带有原生导航栏。custom,取消导航栏。

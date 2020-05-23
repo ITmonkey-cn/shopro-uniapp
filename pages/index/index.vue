@@ -66,7 +66,7 @@ export default {
 	data() {
 		return {
 			bgcolor: '',
-			HAS_LIVE:HAS_LIVE
+			HAS_LIVE: HAS_LIVE
 		};
 	},
 	computed: {
@@ -88,6 +88,11 @@ export default {
 	},
 	onLoad(options) {
 		this.init();
+	},
+	onReady() {
+		uni.setNavigationBarTitle({
+			title: this.info.name
+		});
 	},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
