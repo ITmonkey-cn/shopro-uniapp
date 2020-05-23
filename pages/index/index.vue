@@ -28,6 +28,8 @@
 			<view class="foot_box"></view>
 			<shopro-popup-modal v-if="popupIndex" :detail="popupIndex"></shopro-popup-modal>
 			<shopro-login-modal></shopro-login-modal>
+			<!-- 强制登录 -->
+			<shopro-force-login :isForceLogin="isForceLogin"></shopro-force-login>
 		</view>
 	</block>
 </template>
@@ -45,7 +47,7 @@ import shoproCoupons from '@/components/common/shopro-coupons.vue';
 import shoproSeckill from '@/components/common/shopro-seckill.vue';
 import shoproGroup from '@/components/common/shopro-group.vue';
 import shoproLive from '@/components/common/shopro-live.vue';
-
+import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 import store from '@/common/store';
 
@@ -61,12 +63,14 @@ export default {
 		shoproCoupons,
 		shoproSeckill,
 		shoproGroup,
-		shoproLive
+		shoproLive,
+		shoproForceLogin
 	},
 	data() {
 		return {
 			bgcolor: '',
-			HAS_LIVE: HAS_LIVE
+			HAS_LIVE: HAS_LIVE,
+			isForceLogin: true //是否强制登录。
 		};
 	},
 	computed: {
@@ -88,11 +92,14 @@ export default {
 	},
 	onLoad(options) {
 		this.init();
+		uni.hideTabBar(); //这个还有控制强制登录开关，都放vuex,在app.vue调用。
 	},
 	onReady() {
+		// #ifndef MP-WEIXIN
 		uni.setNavigationBarTitle({
 			title: this.info.name
 		});
+		// #endif
 	},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
