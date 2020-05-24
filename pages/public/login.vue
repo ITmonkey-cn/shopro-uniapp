@@ -46,7 +46,7 @@
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef MP-WEIXIN -->
-				<button class="cu-btn wx-logo-box y-f" open-type="getUserInfo" @getuserinfo="wxLogin('wxMiniProgram')">
+				<button class="cu-btn wx-logo-box y-f" open-type="getUserInfo" @getuserinfo="getuserinfo">
 					<image class="auto-login" src="http://shopro.7wpp.com/imgs/auto_login.png" mode=""></image>
 					<view class="">微信一键登录</view>
 				</button>
@@ -65,7 +65,7 @@
 <script>
 import Wechat from '@/common/wechat/wechat';
 import { mapMutations, mapActions, mapState } from 'vuex';
-
+import store from '@/common/store';
 export default {
 	data() {
 		return {
@@ -93,11 +93,20 @@ export default {
 	onShow() {},
 	methods: {
 		...mapActions(['getUserInfo', 'setTokenAndBack']),
-		
+		// #ifdef MP-WEIXIN
+		async getuserinfo(e) {
+			var wechat = new Wechat();
+			let token = await wechat.wxMiniProgramLogin(e);
+			store.commit('FORCE_OAUTH', false);
+			this.setTokenAndBack(token)
+		},
+		// #endif
 		async wxLogin() {
 			let wechat = new Wechat();
 			let token = await wechat.login();
-			this.setTokenAndBack(token);
+			if(token !== undefined) {
+				this.setTokenAndBack(token);
+			}
 		},
 		onLoginWay(flag) {
 			this.loginWay = flag;
