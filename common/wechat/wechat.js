@@ -21,8 +21,7 @@ export default class Wechat {
 			uni.setStorageSync('fromLogin', router.$Route);
 		}
 		// #ifdef MP-WEIXIN
-		token = await this.wxMiniProgramLogin();
-		return token;
+		store.commit('FORCE_OAUTH', true);
 		// #endif
 		// #ifdef H5
 		this.wxOfficialAccountLogin();
@@ -94,22 +93,29 @@ export default class Wechat {
 	}
 
 	// #ifdef MP-WEIXIN
-	wxMiniProgramLogin() {
+	wxMiniProgramLogin(e) {
+		
 		let that = this;
+		console.log(e,123);
 		return new Promise((resolve, reject) => {
-			uni.login({
-				success: function(info) {
-					let code = info.code;
-					api('user.wxMiniProgramLogin', {
-						code: code,
-					}).then(res => {
-						if (res.code === 1) {
-							resolve(res.data.token);
-						}
-					});
-
-				}
+			if(e.detail.errMsg === "getUserInfo:ok"){
+				uni.login({
+					success: function(info) {
+						let code = info.code;
+						api('user.wxMiniProgramLogin', {
+							code: code,
+							encryptedData: e.detail.encryptedData,
+							iv: e.detail.iv,
+							signature: e.detail.signature
+						}).then(res => {
+							if (res.code === 1) {
+								resolve(res.data.token);
+							}
+						});
+					}
 			});
+		}
+	
 		});
 	}
 

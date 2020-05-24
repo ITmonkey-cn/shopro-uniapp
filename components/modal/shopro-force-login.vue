@@ -1,31 +1,31 @@
 <template>
-	<view v-if="isForceLogin" class="force-login-wrap">
+	<view v-if="forceOauth" class="force-login-wrap">
 		<image class="logo-bg" src="http://shopro.7wpp.com/imgs/logo_bg.png" mode="aspectFill"></image>
 		<view class="force-login__content y-f">
 			<open-data class="user-avatar" type="userAvatarUrl"></open-data>
 			<open-data class="user-name" type="userNickName"></open-data>
-			<view class="login-notice">为了提供更优质的服务，需要获取您的头像昵称等</view>
+			<view class="login-notice">为了提供更优质的服务，需要获取您的头像昵称</view>
 			<button class="cu-btn author-btn" @getuserinfo="getuserinfo" open-type="getUserInfo">授权并查看</button>
 		</view>
 	</view>
 </template>
 <script>
+import Wechat from "@/common/wechat/wechat";
+import store from '@/common/store';
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
-	components: {},
-	data() {
-		return {};
+	computed: {
+		...mapState({
+			forceOauth: state => state.user.forceOauth
+		})
 	},
-	props: {
-		isForceLogin: {
-			type: Boolean,
-			default: true
-		}
-	},
-	computed: {},
-	onReady() {},
 	methods: {
-		getuserinfo(e) {
-			console.log('授权信息：', e);
+		...mapActions(['setTokenAndBack']),
+		async getuserinfo(e) {
+			var wechat = new Wechat();
+			let token = await wechat.wxMiniProgramLogin(e);
+			store.commit('FORCE_OAUTH', false);
+			this.setTokenAndBack(token)
 		}
 	}
 };

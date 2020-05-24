@@ -13,10 +13,10 @@ export default {
       "setTokenAndBack"
     ]),
     init(options) {
-      return Promise.all([this.getStatusBar(), this.getAppInit(options)]);
+      return Promise.all([this.setAppInfo(), this.getAppInit(options)]);
     },
     // 获取系统栏高度
-    getStatusBar() {
+    setAppInfo() {
       let that = this;
       let platform = "";
       uni.getSystemInfo({
@@ -56,18 +56,18 @@ export default {
     // 自动登录
     async autoLogin(data) {
       let initData = data;
-      let wechat = new Wechat();
-      // #ifdef MP-WEIXIN
-      wechat.checkMiniProgramUpdate();
-      // #endif
-
-      // #ifdef H5
-      uni.setStorageSync("appid", initData.wechat.appid);
-      // #endif
+      var wechat = new Wechat();
       if (initData.wechat.autologin && !uni.getStorageSync("token")) {
         console.log("自动登录状态", initData.wechat.autologin);
-        let token = await wechat.login();
-        this.setTokenAndBack(token);
+		// #ifdef H5
+		uni.setStorageSync("appid", initData.wechat.appid);
+		let token = await wechat.login();
+		this.setTokenAndBack(token);
+		// #endif
+		// #ifdef MP-WEIXIN
+		wechat.checkMiniProgramUpdate();
+		wechat.login();
+		// #endif
       }
     }
   },

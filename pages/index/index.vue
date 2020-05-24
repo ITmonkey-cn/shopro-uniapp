@@ -19,9 +19,9 @@
 						<shopro-adv v-if="item.type === 'adv'" :detail="item.content"></shopro-adv>
 						<shopro-coupons v-if="item.type === 'coupons'" :detail="item.content"></shopro-coupons>
 						<shopro-seckill v-if="item.type === 'seckill'" :detail="item.content"></shopro-seckill>
-						<!-- #ifdef MP-WEIXIN -->
+						 <!-- #ifdef MP-WEIXIN -->
 						<shopro-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></shopro-live>
-						<!-- #endif -->
+						 <!-- #endif -->
 					</block>
 				</scroll-view>
 			</view>
@@ -29,13 +29,14 @@
 			<shopro-popup-modal v-if="popupIndex" :detail="popupIndex"></shopro-popup-modal>
 			<shopro-login-modal></shopro-login-modal>
 			<!-- 强制登录 -->
-			<shopro-force-login :isForceLogin="isForceLogin"></shopro-force-login>
+			 <!-- #ifdef MP-WEIXIN -->
+			<shopro-force-login></shopro-force-login>
+			 <!-- #endif -->
 		</view>
 	</block>
 </template>
 
 <script>
-import { HAS_LIVE } from '@/env';
 import shoproSearch from '@/components/common/shopro-search.vue';
 import shoproBanner from '@/components/common/shopro-banner.vue';
 import shoproGoodsGroup from '@/components/common/shopro-goods-group.vue';
@@ -46,10 +47,13 @@ import shoproSkeletons from '@/components/shopro-skeletons.vue';
 import shoproCoupons from '@/components/common/shopro-coupons.vue';
 import shoproSeckill from '@/components/common/shopro-seckill.vue';
 import shoproGroup from '@/components/common/shopro-group.vue';
-import shoproLive from '@/components/common/shopro-live.vue';
-import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 import store from '@/common/store';
+// #ifdef MP-WEIXIN
+import { HAS_LIVE } from '@/env';
+import shoproLive from '@/components/common/shopro-live.vue';
+import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
+// #endif
 
 export default {
 	components: {
@@ -63,21 +67,25 @@ export default {
 		shoproCoupons,
 		shoproSeckill,
 		shoproGroup,
+		// #ifdef MP-WEIXIN
 		shoproLive,
-		shoproForceLogin
+		shoproForceLogin,
+		// #endif
 	},
 	data() {
 		return {
 			bgcolor: '',
+			// #ifdef MP-WEIXIN
 			HAS_LIVE: HAS_LIVE,
-			isForceLogin: true //是否强制登录。
+			// #endif
 		};
 	},
 	computed: {
 		...mapState({
 			initData: state => state.init.initData,
 			template: state => state.init.initData.template,
-			cartNum: state => state.cart.cartNum
+			cartNum: state => state.cart.cartNum,
+			
 		}),
 		popupIndex() {
 			if (this.initData.popup) {
