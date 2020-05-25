@@ -15,7 +15,7 @@
 					</swiper>
 					<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
 				</view>
-				
+
 				<!-- 价格卡片组 -->
 				<shopro-goods-activity v-if="goodsInfo" :detail="goodsInfo" @change="getActivityRules"></shopro-goods-activity>
 				<view class="goods-title">{{ goodsInfo.title }}</view>
@@ -113,7 +113,7 @@
 				</view>
 			</view>
 			<!-- 弹窗组件 -->
-			<shopro-share v-model="showShare" :goodsId="goodsInfo.id" :shareInfo="shareInfo" :goodsInfo="goodsInfo"></shopro-share>
+			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="'goods'"></shopro-share>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
 		</view>
@@ -309,6 +309,11 @@ export default {
 <style lang="scss">
 .detail-content {
 	padding-bottom: 100rpx;
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		color: transparent;
+	}
 }
 .sticky-box {
 	.tab-box {

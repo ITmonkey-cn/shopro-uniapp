@@ -10,7 +10,7 @@
 	</view>
 </template>
 <script>
-import Wechat from "@/common/wechat/wechat";
+import Wechat from '@/common/wechat/wechat';
 import store from '@/common/store';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
@@ -25,7 +25,7 @@ export default {
 			var wechat = new Wechat();
 			let token = await wechat.wxMiniProgramLogin(e);
 			store.commit('FORCE_OAUTH', false);
-			this.setTokenAndBack(token)
+			this.setTokenAndBack(token);
 		}
 	}
 };

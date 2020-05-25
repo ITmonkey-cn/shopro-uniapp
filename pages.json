@@ -133,16 +133,6 @@
 			}
 		},
 		{
-			"path": "pages/goods/goods-poster",
-			"style": {
-				"navigationBarTitleText": "商品海报"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
 			"path": "pages/money/index",
 			"style": {
 				"navigationBarTitleText": "我的钱包",
@@ -307,7 +297,18 @@
 			"meta": {
 				"auth": false
 			}
-		}, {
+		},
+		{
+			"path": "pages/public/poster/index",
+			"style": {
+				"navigationBarTitleText": "海报"
+		
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
 			"path": "pages/score/index",
 			"style": {
 				"navigationBarTitleText": "积分",
@@ -354,16 +355,6 @@
 			},
 			"meta": {
 				"auth": false
-			}
-		},
-		{
-			"path": "pages/user/poster",
-			"style": {
-				"navigationBarTitleText": "邀请好友"
-
-			},
-			"meta": {
-				"auth": true
 			}
 		},
 		{

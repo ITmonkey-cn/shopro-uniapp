@@ -62,7 +62,7 @@
 					<text class="cuIcon-right"></text>
 				</view> -->
 				<view class="tools-box">
-					<view class="tool-item y-f" @tap="jump(tool.url)" v-for="tool in toolsNav" :key="tool.title">
+					<view class="tool-item y-f" @tap="jump(tool.url,tool.parmas)" v-for="tool in toolsNav" :key="tool.title">
 						<image class="tool-img" :src="tool.img" mode=""></image>
 						<text class="item-title">{{ tool.title }}</text>
 					</view>
@@ -177,7 +177,8 @@ export default {
 				{
 					title: '邀请好友',
 					img: 'http://shopro.7wpp.com/imgs/user/list11.png',
-					url: '/pages/user/poster'
+					url: '/pages/public/poster/index',
+					parmas:{posterType:'invite'}
 				},
 				{
 					title: '积分商城',

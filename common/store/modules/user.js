@@ -24,7 +24,9 @@ const state = {
 
 const actions = {
 	//设置token并返回上次页面
-	setTokenAndBack({ commit }, token) {
+	setTokenAndBack({
+		commit
+	}, token) {
 		uni.setStorageSync('token', token);
 		store.dispatch('getUserInfo');
 		let fromLogin = uni.getStorageSync('fromLogin');
@@ -36,9 +38,11 @@ const actions = {
 			router.pushTab('/pages/index/index')
 		}
 	},
-	
+
 	// 获取用户信息
-	getUserInfo({ commit }) {
+	getUserInfo({
+		commit
+	}) {
 		return new Promise((resolve, reject) => {
 			api('user.info').then(res => {
 				store.dispatch('getCartList')
@@ -70,7 +74,9 @@ const actions = {
 		})
 	},
 	// 订单信息
-	getOrderNum({ commit }) {
+	getOrderNum({
+		commit
+	}) {
 		return new Promise((resolve, reject) => {
 			api('order.statusNum').then(res => {
 				commit('ORDER_NUMBER', res.data);
@@ -95,9 +101,10 @@ const mutations = {
 	// #ifdef MP-WEIXIN
 	[FORCE_OAUTH](state, data) {
 		state.forceOauth = data
+		data ? uni.hideTabBar() : uni.showTabBar();
 	},
 	// #endif
-	
+
 	[OUT_LOGIN](state, data) {
 		uni.removeStorageSync('token');
 		uni.removeStorageSync('userInfo');
@@ -106,6 +113,7 @@ const mutations = {
 		store.commit('CART_LIST', []);
 		store.commit('CART_NUM');
 		store.commit('ORDER_NUMBER', 0);
+		// store.commit('FORCE_OAUTH', true);
 	},
 
 }

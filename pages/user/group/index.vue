@@ -10,7 +10,7 @@
 		</view>
 		<view class="content_box">
 			<view class="group-goods">
-				<image class="group-state" :src="state ? '/static/imgs/group_state_succeed.png' : '/static/imgs/group_state_failed.png'" mode=""></image>
+				<image class="group-state" :src="grouponStatus ? '/static/imgs/group_state_succeed.png' : '/static/imgs/group_state_failed.png'" mode=""></image>
 				<view class="goods-content">
 					<shopro-activity-card>
 						<block slot="slodEnd">
@@ -33,6 +33,8 @@
 			</view>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 分享 -->
+		<shopro-share v-model="showShare" :goodsInfo="grouponInfo" :posterType="'groupon'"></shopro-share>
 	</view>
 </template>
 
@@ -48,7 +50,12 @@ export default {
 		return {
 			showShare: false,
 			stateId: 0,
-			state: false,
+			grouponStatus: false,
+			grouponInfo:{//测试
+				id: 17,
+				title: 'JMsolution韩国粉色玫瑰防晒SPF50户外美白超强隔离JM防晒喷雾',
+				image: 'http://shopro-1253949872.image.myqcloud.com/uploads/20200430/3e61ab01c9280667d36d2e0a38021a66.jpg_2200x2200Q100s50.jpg_.webp.jpg'
+			},
 			groupState: [
 				{
 					id: 0,
@@ -121,7 +128,7 @@ export default {
 	margin-top: 20rpx;
 	position: relative;
 	overflow: hidden;
-	.group-state{
+	.group-state {
 		position: absolute;
 		top: -20rpx;
 		right: -20rpx;

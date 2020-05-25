@@ -1,24 +1,23 @@
 <template>
 	<view class="content">
-		<image class="bg_img" src="http://shopro.7wpp.com/imgs/poster/invite_poster.png" mode=""></image>
-		<view class="poster-box y-f">
+		<view class="poster-box y-f" v-if="poster.finalPath">
 			<image :src="poster.finalPath" mode="widthFix" class="posterImage"></image>
-			<view class="share-box" v-if="poster.finalPath">
+			<view class="share-box">
 				<view class="share-list-box x-f">
 					<!-- #ifdef MP-WEIXIN -->
-					<button class="share-btn share-item y-f" open-type="share">
+					<button class="share-item share-btn y-f" open-type="share">
 						<image class="share-img" src="http://shopro.7wpp.com/imgs/share_wx.png" mode=""></image>
 						<text class="share-title">微信好友</text>
 					</button>
 					<!-- #endif -->
-					<!-- #ifndef MP-WEIXIN -->
+					<!-- #ifndef MP-WEIXIN || H5 -->
 					<view class="share-item y-f" @tap="share">
 						<image class="share-img" src="http://shopro.7wpp.com/imgs/share_wx.png" mode=""></image>
 						<text class="share-title">微信好友</text>
 					</view>
 					<!-- #endif -->
 					<view class="share-item y-f" @tap="saveImage">
-						<image class="share-img" src="http://shopro.7wpp.com/imgs/share_poster.png" mode=""></image>
+						<image class="share-img" src="http://shopro.7wpp.com/imgs/save_img.png" mode=""></image>
 						<text class="share-title">保存图片</text>
 					</view>
 					<view class="share-item y-f" @tap="copyLink">
@@ -29,32 +28,29 @@
 			</view>
 		</view>
 		<view class="hideCanvasView">
-			<canvas class="hideCanvas" canvas-id="invite_poster" :style="{ width: (poster.width || 1) + 'px', height: (poster.height || 1) + 'px' }"></canvas>
+			<canvas class="hideCanvas" canvas-id="goods_poster" :style="{ width: (poster.width || 1) + 'px', height: (poster.height || 1) + 'px' }"></canvas>
 		</view>
-		<!-- 指引 -->
-		<shopro-share-guide v-model="showShareGuide"></shopro-share-guide>
 	</view>
 </template>
 
 <script>
-import _app from '@/common/utils/QS-SharePoster/app.js';
-import { getSharePoster } from '@/common/utils/QS-SharePoster/QS-SharePoster.js';
+import _app from '../QS-SharePoster/app.js';
+import { getSharePoster } from '../QS-SharePoster/QS-SharePoster.js';
 import {BASE_URL} from '@/env.js'
+import shoproShare from '@/common/mixins/shopro-share'
 // #ifdef H5
 import wxsdk from '@/common/wechat/sdk';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
-import shoproShareGuide from '@/components/modal/shopro-share-guide.vue';
 export default {
-	components: {
-		shoproShareGuide
-	},
+	components: {},
+	mixins:['shoproShare'],
 	data() {
 		return {
 			poster: {},
-			qrShow: false,
-			canvasId: 'invite_poster',
-			showShareGuide: false
+			canvasId: 'goods_poster',
+			goodsInfo: {},
+			scene: ''
 		};
 	},
 	computed: {
@@ -63,26 +59,58 @@ export default {
 			shareData: state => state.init.initData.share
 		})
 	},
-	onLoad() {
-		this.setShareInfo();
-		this.scene =encodeURIComponent(this.shareInfo.path.split('?')[1]);
-		this.shareFc();
-		console.log('poster',BASE_URL)
+	props: {
+		mixinShare: {}
+	},
+	created() {
+		let that = this;
+		this.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
+		this.getGoodsDetail();
 	},
 	methods: {
+		getGoodsDetail() {
+			let that = this;
+			uni.showLoading({
+				title: '加载中'
+			});
+			that.$api('goods.detail', {
+				id: that.$Route.query.id
+			})
+				.then(res => {
+					if (res.code === 1) {
+						uni.hideLoading();
+						that.goodsInfo.image = res.data.image;
+						that.goodsInfo.title = res.data.title;
+						that.goodsInfo.price = res.data.price;
+						that.goodsInfo.original_price = res.data.original_price;
+						that.setShareInfo({
+							query: {
+								url: 'goods-'+that.$Route.query.id,
+								},
+							title: that.goodsInfo.title,
+							image: that.goodsInfo.image
+							}
+						);
+					}
+				})
+				.then(res => {
+					that.shareFc();
+				});
+		},
 		async shareFc() {
 			let that = this;
 			try {
 				console.log('准备生成:' + new Date());
 				const d = await getSharePoster({
 					_this: this, //若在组件中使用 必传
-					// type: 'invitePoster',
-					backgroundImage: that.shareData.user_poster_bg, //接口返回的背景图
+					// type: 'goodsPoster',
+					backgroundImage: that.shareData.goods_poster_bg, //接口返回的背景图
 					formData: {
 						//访问接口获取背景图携带自定义数据
 					},
 					posterCanvasId: this.canvasId, //canvasId
 					delayTimeScale: 20, //延时系数
+					drawDelayTime: 500, //draw延时时间
 					/* background: {
 							width: 1080,
 							height: 1920,
@@ -106,20 +134,20 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url:that.userInfo.avatar,
+									url: that.userInfo.avatar,
 									alpha: 1,
-									dx: bgObj.width * 0.5 - (bgObj.width * 0.16) / 2,
-									dy: bgObj.width * 0.16,
+									dx: bgObj.width * 0.06,
+									dy: bgObj.width * 0.06,
 									infoCallBack(imageInfo) {
-										let scale = (bgObj.width * 0.16) / imageInfo.height;
+										let scale = (bgObj.width * 0.1) / imageInfo.height;
 										return {
 											circleSet: {
 												x: (imageInfo.width * scale) / 2,
-												y: (bgObj.width * 0.16) / 2,
-												r: (bgObj.width * 0.16) / 2
+												y: (bgObj.width * 0.1) / 2,
+												r: (bgObj.width * 0.1) / 2
 											}, // 圆形图片 , 若circleSet与roundRectSet一同设置 优先circleSet设置
 											dWidth: imageInfo.width * scale, // 因为设置了圆形图片 所以要乘以2
-											dHeight: bgObj.width * 0.16
+											dHeight: bgObj.width * 0.1
 											/* roundRectSet: { // 圆角矩形
 													r: imageInfo.width * .1
 												} */
@@ -138,12 +166,114 @@ export default {
 									infoCallBack(textLength) {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {
-											dx: bgObj.width * 0.5 - textLength * 0.5,
-											dy: bgObj.width * 0.42
+											dx: bgObj.width * 0.2,
+											dy: bgObj.width * 0.08
 										};
 									},
 									serialNum: 0,
 									id: 'tag1' //自定义标识
+								},
+								{
+									type: 'text', //昵称
+									// fontStyle: 'italic',//倾斜
+									text: '推荐一个好物给你,请查收！',
+									size: fontSize * 0.9,
+									color: 'black',
+									alpha: 1,
+									textAlign: 'middle',
+									textBaseline: 'middle',
+									infoCallBack(textLength) {
+										_app.log('index页面的text的infocallback ，textlength:' + textLength);
+										return {
+											dx: bgObj.width * 0.2,
+											dy: bgObj.width * 0.15
+										};
+									},
+									serialNum: 0,
+									id: 'tag1' //自定义标识
+								},
+								{
+									type: 'image', //商品图片
+									url: that.goodsInfo.image,
+									alpha: 1,
+									drawDelayTime: 500, //draw延时时间
+									dx: bgObj.width * 0.052,
+									dy: bgObj.width * 0.22,
+									infoCallBack(imageInfo) {
+										return {
+											dWidth: bgObj.width * 0.9,
+											dHeight: bgObj.width * 0.9,
+											// roundRectSet: { // 圆角矩形
+											// 	r: bgObj.width * 0.025
+											// }
+										};
+									}
+								},
+								{
+									type: 'text', //标题
+									// fontStyle: 'italic',//倾斜
+									text: that.goodsInfo.title,
+									size: fontSize,
+									color: 'black',
+									alpha: 1,
+									textAlign: 'left',
+									textBaseline: 'middle',
+									fontWeight: 'bold',
+									lineFeed: {
+										//换行
+										maxWidth: bgObj.width * 0.89,
+										lineHeight: bgObj.width * 0.07,
+										lineNum: 2,
+										dx: -1
+									},
+									infoCallBack(textLength) {
+										_app.log('index页面的text的infocallback ，textlength:' + textLength);
+										return {
+											dx: bgObj.width * 0.052,
+											dy: bgObj.width * 1.17
+										};
+									},
+									serialNum: 0
+								},
+								{
+									type: 'text', //价格
+									// fontStyle: 'italic',//倾斜
+									text: `￥${that.goodsInfo.price}`,
+									size: fontSize * 1.1,
+									color: '#E1212B',
+									alpha: 1,
+									textAlign: 'left',
+									textBaseline: 'middle',
+									fontWeight: 'bold',
+									infoCallBack(textLength) {
+										_app.log('index页面的text的infocallback ，textlength:' + textLength);
+										return {
+											dx: bgObj.width * 0.052,
+											dy: bgObj.width * 1.32
+										};
+									},
+									serialNum: 0
+								},
+								{
+									type: 'text', //价格
+									// fontStyle: 'italic',//倾斜
+									text: `￥${that.goodsInfo.original_price}`,
+									size: fontSize * 0.9,
+									color: '#999999',
+									alpha: 1,
+									textAlign: 'left',
+									textBaseline: 'middle',
+									lineThrough: {
+										style: '#999999'
+									},
+									infoCallBack(textLength) {
+										_app.log('index页面的text的infocallback ，textlength:' + textLength);
+										return {
+											dx: bgObj.width * 0.3,
+											dy: bgObj.width * 1.32
+										};
+									},
+									serialNum: 0
 								},
 								// #ifdef MP-WEIXIN
 								{
@@ -151,12 +281,12 @@ export default {
 									url: `${that.$API_URL}wechat/wxacode?scene=${that.scene}`,
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
-									dx: bgObj.width * 0.5 - (bgObj.width * 0.26) / 2,
-									dy: bgObj.width * 0.855,
+									dx: bgObj.width * 0.948 - bgObj.width * 0.2,
+									dy: bgObj.height - bgObj.width * 0.052 - bgObj.width * 0.2,
 									infoCallBack(imageInfo) {
 										return {
-											dWidth: bgObj.width * 0.26,
-											dHeight: bgObj.width * 0.26
+											dWidth: bgObj.width * 0.2,
+											dHeight: bgObj.width * 0.2
 											// roundRectSet: { // 圆角矩形
 											// 	r: imageInfo.width * 0.025
 											// }
@@ -164,13 +294,13 @@ export default {
 									}
 								},
 								// #endif
-								// #ifndef  MP-WEIXIN
+								// #ifndef MP-WEIXIN
 								{
 									type: 'qrcode',
-									text: that.shareInfo.path,
-									size: bgObj.width * 0.26,
-									dx: bgObj.width * 0.5 - (bgObj.width * 0.26) / 2,
-									dy: bgObj.width * 0.855
+									text: `${that.shareInfo.path}`,
+									size: bgObj.width * 0.16,
+									dx: bgObj.width * 0.948 - bgObj.width * 0.18,
+									dy: bgObj.height - bgObj.width * 0.052 - bgObj.width * 0.16
 								}
 								// #endif
 							]);
@@ -184,13 +314,13 @@ export default {
 				// console.log('海报生成成功, 时间:' + new Date() + '， 临时路径: ' + d.poster.tempFilePath);
 				// this.poster.finalPath = d.poster.tempFilePath;
 				this.$set(this.poster, 'finalPath', d.poster.tempFilePath);
-				this.qrShow = true;
 			} catch (e) {
 				_app.hideLoading();
 				_app.showToast(JSON.stringify(e));
 				console.log(JSON.stringify(e));
 			}
 		},
+		// 保存图片
 		saveImage() {
 			let that = this;
 			let platform = uni.getStorageSync('platform');
@@ -208,6 +338,7 @@ export default {
 				});
 			}
 		},
+		// 分享
 		share() {
 			let that = this;
 			// #ifdef APP-PLUS
@@ -227,9 +358,17 @@ export default {
 				}
 			});
 			// #endif
-
 			// #ifdef H5
-			that.showShareGuide = true;
+			wxsdk.share(
+				{
+					title: that.shareInfo.title,
+					path: that.shareInfo.path,
+					imageUrl: that.shareInfo.imageUrl
+				},
+				res => {
+					that.$tools.toast('分享成功');
+				}
+			);
 			// #endif
 		},
 		copyLink() {
@@ -238,34 +377,24 @@ export default {
 				data: that.shareInfo.copyLink,
 				success: () => {
 					//#ifdef H5
-					that.$tools.toast('已复制到剪贴板');
+					that.$tools.toast('已复制到剪切板');
 					//#endif
 				}
 			});
-		},
-		hideQr() {
-			this.qrShow = false;
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-.hideCanvasView {
-	position: relative;
-}
-
-.hideCanvas {
-	position: fixed;
-	top: -99999upx;
-	left: -99999upx;
-	z-index: -99999;
+page {
+	background: #fff;
 }
 
 .content {
 	position: relative;
 	width: 100%;
-	height: 1350rpx;
+	height: 100%;
 
 	.bg_img {
 		width: 100%;
@@ -279,15 +408,40 @@ export default {
 		top: 50rpx;
 
 		.posterImage {
-			width: 660rpx;
+			width: 680rpx;
+			box-shadow: 0px 9rpx 26rpx 6rpx rgba(190, 190, 190, 0.31);
+			border-radius: 35rpx;
+			overflow: hidden;
 		}
 	}
 }
 
+.hideCanvasView {
+	position: relative;
+}
+
+.hideCanvas {
+	position: fixed;
+	top: -99999upx;
+	left: -99999upx;
+	z-index: -99999;
+}
+
 .share-box {
+	background: #fff;
 	width: 750rpx;
-	border-radius: 30rpx;
-	margin-top: 60rpx;
+	border-radius: 30rpx 30rpx 0 0;
+	padding-top: 30rpx;
+	position: relative;
+	margin-top: 40rpx;
+
+	.share-foot {
+		font-size: 24rpx;
+		color: #bfbfbf;
+		height: 80rpx;
+		border-top: 1rpx solid #eee;
+	}
+
 	.share-list-box {
 		.share-btn {
 			background: none;

@@ -19,9 +19,9 @@
 						<shopro-adv v-if="item.type === 'adv'" :detail="item.content"></shopro-adv>
 						<shopro-coupons v-if="item.type === 'coupons'" :detail="item.content"></shopro-coupons>
 						<shopro-seckill v-if="item.type === 'seckill'" :detail="item.content"></shopro-seckill>
-						 <!-- #ifdef MP-WEIXIN -->
+						<!-- #ifdef MP-WEIXIN -->
 						<shopro-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></shopro-live>
-						 <!-- #endif -->
+						<!-- #endif -->
 					</block>
 				</scroll-view>
 			</view>
@@ -29,9 +29,9 @@
 			<shopro-popup-modal v-if="popupIndex" :detail="popupIndex"></shopro-popup-modal>
 			<shopro-login-modal></shopro-login-modal>
 			<!-- 强制登录 -->
-			 <!-- #ifdef MP-WEIXIN -->
+			<!-- #ifdef MP-WEIXIN -->
 			<shopro-force-login></shopro-force-login>
-			 <!-- #endif -->
+			<!-- #endif -->
 		</view>
 	</block>
 </template>
@@ -69,14 +69,14 @@ export default {
 		shoproGroup,
 		// #ifdef MP-WEIXIN
 		shoproLive,
-		shoproForceLogin,
+		shoproForceLogin
 		// #endif
 	},
 	data() {
 		return {
 			bgcolor: '',
 			// #ifdef MP-WEIXIN
-			HAS_LIVE: HAS_LIVE,
+			HAS_LIVE: HAS_LIVE
 			// #endif
 		};
 	},
@@ -85,7 +85,7 @@ export default {
 			initData: state => state.init.initData,
 			template: state => state.init.initData.template,
 			cartNum: state => state.cart.cartNum,
-			
+			forceOauth: state => state.user.forceOauth
 		}),
 		popupIndex() {
 			if (this.initData.popup) {
@@ -99,10 +99,6 @@ export default {
 		}
 	},
 	onLoad(options) {
-		this.init();
-		uni.hideTabBar(); //这个还有控制强制登录开关，都放vuex,在app.vue调用。
-	},
-	onReady() {
 		// #ifndef MP-WEIXIN
 		uni.setNavigationBarTitle({
 			title: this.info.name
