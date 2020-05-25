@@ -1,8 +1,5 @@
 <template>
 	<view class="user-box">
-		<!-- #ifdef MP-WEIXIN -->
-		<button v-if="auth" open-type="getUserInfo" @getuserinfo="getuserinfo" class="login-box"></button>
-		<!-- #endif -->
 		<view class="head_box">
 			<image class="user-bg" src="http://shopro.7wpp.com/imgs/user/user_bg.png" mode=""></image>
 			<view class="head-wrap pad">
@@ -13,9 +10,14 @@
 				<view class="user-head x-bc">
 					<view class="x-f">
 						<!-- 微信小程序 -->
-						<view class="info-box" @tap="jump('/pages/user/info')">
+						<view class="info-box" @tap="$tools.routerTo('/pages/user/info')">
 							<view class="x-f">
-								<image class="head-img" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode=""></image>
+								<view class="head-img-wrap">
+									<image class="head-img" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode="aspectFill"></image>
+									<button class="cu-btn refresh-btn x-c" @tap.stop="onRefresh">
+										<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
+									</button>
+								</view>
 								<text class="user-name one-t">{{ userInfo.nickname || '请登录~' }}</text>
 							</view>
 						</view>
@@ -23,55 +25,31 @@
 							<image class="tag-img" :src="userInfo.group.image" mode=""></image>
 							<text class="tag-title">{{ userInfo.group.name }}</text>
 						</view>
-						<view class="grade-tag tag-box x-f">
-							<text class="cuIcon-refresh"></text>
-							<text class="tag-title">更新账户</text>
-						</view>
 					</view>
-					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/user/poster')"><text class="cuIcon-qr_code"></text></button>
-				</view>
-				<view class="wallet x-f" v-if="userInfo.avatar">
-					<view class="money" @tap="jump('/pages/money/index')">
-						<text class="tag-title">余额 {{ userInfo.money }}</text>
-					</view>
-					<view class="score" @tap="jump('/pages/score/index')">
-						<text class="tag-title">积分 {{ userInfo.score }}</text>
-					</view>
+					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="$tools.routerTo('/pages/user/poster')"><text class="cuIcon-qr_code"></text></button>
 				</view>
 			</view>
 		</view>
 		<view class="content_box">
-			<scroll-view class="scroll-box" scroll-y="true">
-				<view class="order-head x-bc">
-					<text class="order-head-title">我的订单</text>
-					<view class="x-f all-order" @tap="jump('/pages/order/list', { type: 'all' })">
-						<text>全部订单</text>
-						<text class="cuIcon-right"></text>
+			<view class="notice-box x-bc pad" @tap="$tools.routerTo('/pages/public/msg/index')">
+				<view class="notice-detail one-t">点击绑定手机号，确保账户安全</view>
+				<button class="bindPhone cu-btn">去绑定</button>
+			</view>
+			<view class="order-box x-f">
+				<view class="order-item y-f" @tap="$tools.routerTo('/pages/order/list', { type: order.type })" v-for="order in orderNav" :key="order.id">
+					<view class="y-f item-box">
+						<image class="order-img" :src="order.img" mode=""></image>
+						<text class="item-title">{{ order.title }}</text>
+						<view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view>
 					</view>
 				</view>
-				<view class="order-box x-f">
-					<view class="order-item y-f" @tap="jump('/pages/order/list', { type: order.type })" v-for="order in orderNav" :key="order.id">
-						<view class="y-f item-box">
-							<image class="order-img" :src="order.img" mode=""></image>
-							<text class="item-title">{{ order.title }}</text>
-							<view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view>
-						</view>
-					</view>
+			</view>
+			<view class="tools-box">
+				<view class="tool-item y-f" @tap="$tools.routerTo(tool.url, tool.parmas)" v-for="tool in toolsNav" :key="tool.title">
+					<image class="tool-img" :src="tool.img" mode=""></image>
+					<text class="item-title">{{ tool.title }}</text>
 				</view>
-				<!-- <view class="notice-box x-bc pad" @tap="jump('/pages/public/msg/index')">
-					<view class="x-f">
-						<view class="type-title">公告</view>
-						<view class="notice-detail one-t">温馨提示，您有一张优惠券过期！</view>
-					</view>
-					<text class="cuIcon-right"></text>
-				</view> -->
-				<view class="tools-box">
-					<view class="tool-item y-f" @tap="jump(tool.url,tool.parmas)" v-for="tool in toolsNav" :key="tool.title">
-						<image class="tool-img" :src="tool.img" mode=""></image>
-						<text class="item-title">{{ tool.title }}</text>
-					</view>
-				</view>
-			</scroll-view>
+			</view>
 		</view>
 		<view class="foot_box">
 			<view class="copyright y-f" v-if="info">
@@ -96,9 +74,7 @@ export default {
 	},
 	data() {
 		return {
-			StatusBar: this.StatusBar,
-			CustomBar: this.CustomBar,
-			platform: uni.getStorageSync('platform'), //系统平台
+			isRefresh: false, //更新。
 			orderNav: [
 				{
 					id: 1,
@@ -182,7 +158,7 @@ export default {
 					title: '邀请好友',
 					img: 'http://shopro.7wpp.com/imgs/user/list11.png',
 					url: '/pages/public/poster/index',
-					parmas:{posterType:'invite'}
+					parmas: { posterType: 'invite' }
 				},
 				{
 					title: '积分商城',
@@ -199,8 +175,7 @@ export default {
 					img: 'http://shopro.7wpp.com/imgs/user/list8.png',
 					url: '/pages/user/set'
 				}
-			],
-			auth: false
+			]
 		};
 	},
 	computed: {
@@ -230,11 +205,13 @@ export default {
 	},
 	methods: {
 		...mapActions(['getUserInfo', 'getOrderNum']),
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
+		// 更新信息
+		onRefresh() {
+			const that = this;
+			that.isRefresh = true;
+			setTimeout(() => {
+				that.isRefresh = false;
+			}, 200);
 		}
 	}
 };
@@ -258,6 +235,7 @@ export default {
 	height: 320rpx;
 	.user-bg {
 		width: 100%;
+		height: 320rpx;
 	}
 	.head-wrap {
 		position: absolute;
@@ -287,10 +265,31 @@ export default {
 		padding-top: 50rpx;
 		.info-box {
 			// padding: 0 20rpx;
-
+			.head-img-wrap {
+				position: relative;
+				.refresh-btn {
+					position: absolute;
+					padding: 0;
+					background: none;
+					width: 34rpx;
+					height: 34rpx;
+					border-radius: 50%;
+					background: #c9912c;
+					top: 0;
+					right: 20rpx;
+					.cuIcon-refresh {
+						color: #fff;
+						font-size: 24rpx;
+					}
+					.refresh-rotate {
+						transform: rotate(360deg);
+						transition: all 0.2s;
+					}
+				}
+			}
 			.head-img {
-				width: 88rpx;
-				height: 88rpx;
+				width: 94rpx;
+				height: 94rpx;
 				border-radius: 50%;
 				background: #ccc;
 				margin-right: 25rpx;
@@ -312,7 +311,7 @@ export default {
 			line-height: 38rpx;
 			padding-right: 10rpx;
 			margin-left: 10rpx;
-			.cuIcon-refresh{
+			.cuIcon-refresh {
 				color: #fff;
 				margin: 0 10rpx;
 			}
@@ -347,26 +346,12 @@ export default {
 	}
 }
 
-.order-head {
-	height: 100rpx;
-	background: #fff;
-	padding: 0 20rpx;
-
-	.order-head-title {
-		font-size: 30rpx;
-		font-weight: bold;
-	}
-
-	.all-order {
-		font-size: 26rpx;
-		color: #999;
-	}
-}
-
+// 订单卡片
 .order-box {
 	height: 150rpx;
 	background: #fff;
 	border-bottom: 1rpx solid rgba(#dcdcdc, 0.6);
+	margin-bottom: 20rpx;
 
 	.order-item {
 		flex: 1;
@@ -392,31 +377,28 @@ export default {
 }
 
 .notice-box {
-	height: 75rpx;
-	margin-bottom: 20rpx;
-	background: #fff;
-
-	.type-title {
-		font-size: 22rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(168, 112, 13, 1);
-		line-height: 38rpx;
-		border: 1rpx solid rgba(168, 112, 13, 1);
-		border-radius: 6rpx;
-		width: 70rpx;
-		text-align: center;
-		margin-right: 20rpx;
-	}
+	width: 750rpx;
+	height: 70rpx;
+	background: rgba(253, 239, 216, 1);
+	padding: 0 35rpx;
 
 	.notice-detail {
-		width: 550rpx;
-		font-size: 22rpx;
+		font-size: 24rpx;
+		font-family: PingFang SC;
+		font-weight: 400;
+		color: rgba(204, 149, 59, 1);
 	}
 
-	.cuIcon-right {
-		font-size: 28rpx;
-		color: rgba(153, 153, 153, 1);
+	.bindPhone {
+		width: 135rpx;
+		height: 52rpx;
+		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
+		border-radius: 26rpx;
+		padding: 0;
+		font-size: 26rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(255, 255, 255, 1);
 	}
 }
 
