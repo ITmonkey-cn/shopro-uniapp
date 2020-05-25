@@ -5,7 +5,7 @@
 			"title": "首页",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
 			"style": {
-				"navigationBarTitleText": "Shopro开源商城",
+				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
 				// "enablePullDownRefresh": true,
 				"navigationStyle": "custom"
@@ -104,6 +104,15 @@
 			}
 		},
 		{
+			"path": "pages/goods/group-list",
+			"style": {
+				"navigationBarTitleText": "今日必拼"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
 			"path": "pages/goods/comment-list",
 			"style": {
 				"navigationBarTitleText": "商品评价"
@@ -121,16 +130,6 @@
 			},
 			"meta": {
 				"auth": false
-			}
-		},
-		{
-			"path": "pages/goods/goods-poster",
-			"style": {
-				"navigationBarTitleText": "商品海报"
-
-			},
-			"meta": {
-				"auth": true
 			}
 		},
 		{
@@ -206,7 +205,7 @@
 		},
 		{
 			"path": "pages/order/express",
-			"name": "orderList",
+			"name": "expressList",
 			"style": {
 				"navigationBarTitleText": "物流信息"
 
@@ -298,7 +297,18 @@
 			"meta": {
 				"auth": false
 			}
-		}, {
+		},
+		{
+			"path": "pages/public/poster/index",
+			"style": {
+				"navigationBarTitleText": "海报"
+		
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
 			"path": "pages/score/index",
 			"style": {
 				"navigationBarTitleText": "积分",
@@ -345,16 +355,6 @@
 			},
 			"meta": {
 				"auth": false
-			}
-		},
-		{
-			"path": "pages/user/poster",
-			"style": {
-				"navigationBarTitleText": "邀请好友"
-
-			},
-			"meta": {
-				"auth": true
 			}
 		},
 		{
@@ -432,6 +432,36 @@
 			"meta": {
 				"auth": true
 			}
+		},
+		{
+			"path": "pages/user/group/group-share",
+			"style": {
+				"navigationBarTitleText": "拼团详情"
+		
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/group/index",
+			"style": {
+				"navigationBarTitleText": "我的拼团"
+		
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/group/rules",
+			"style": {
+				"navigationBarTitleText": "拼团玩法"
+		
+			},
+			"meta": {
+				"auth": true
+			}
 		}
 
 	],
@@ -446,7 +476,7 @@
 	// 默认导航栏样式
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "Shopro开源商城",
+		"navigationBarTitleText": "",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
 		"navigationStyle": "default" //默认是default，即带有原生导航栏。custom,取消导航栏。

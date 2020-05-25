@@ -66,6 +66,7 @@ export default {
 		// 退出登录
 		outLogin() {
 			this.$store.commit('OUT_LOGIN');
+			this.$Router.replace('/pages/public/login');
 		},
 		// 当前版本
 		onVersion() {

@@ -79,7 +79,7 @@ const mutations = {
 	},
 	// cart数量角标更新。
 	[CART_NUM](state, data) {
-		let cartNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : state.cartNum;
+		let cartNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : 0;
 		if (data === '') {
 			cartNum = ''
 		}

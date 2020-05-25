@@ -1,17 +1,17 @@
 <template>
-	<view class="dis-goods x-bc" @tap="jump('/pages/goods/detail', { id: seckillData.id })">
+	<view class="activity-goods-box x-bc" @tap="jump('/pages/goods/detail', { id: seckillData.id })">
 		<view class="img-box">
 			<view class="tag" v-if="isTag">TOP1</view>
 			<image class="img" :src="seckillData.image" mode="widthFix"></image>
 		</view>
 		<view class="goods-right y-bc">
 			<view class="title one-t">{{ seckillData.title }}</view>
-			<view class="tip">{{ seckillData.subtitle }}</view>
+			<view class="tip one-t">{{ seckillData.subtitle }}</view>
 			<view class="slod-end"><slot name="slodEnd"></slot></view>
 			<view class=" price-box">
-				<view class="miso-font">
-					<text class="current">￥{{ seckillData.price }}</text>
-					<text class="original">￥{{ seckillData.original_price }}</text>
+				<view class="miso-font x-f">
+					<view class="current">￥{{ seckillData.price }}</view>
+					<view class="original">￥{{ seckillData.original_price }}</view>
 				</view>
 			</view>
 			<slot name="disBtn"></slot>
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss">
-.dis-goods {
+.activity-goods-box {
 	padding: 40rpx 20rpx;
 	border-bottom: 1rpx solid #dfdfdf;
 	background: #fff;
@@ -91,6 +91,7 @@ export default {
 		.tip {
 			font-size: 22rpx;
 			color: #a8700d;
+			width: 500rpx;
 		}
 
 		.price-box {
@@ -101,7 +102,7 @@ export default {
 			}
 
 			.original {
-				font-size: 24rpx;
+				font-size: 22rpx;
 				font-weight: 400;
 				text-decoration: line-through;
 				color: rgba(153, 153, 153, 1);

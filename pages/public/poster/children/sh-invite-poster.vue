@@ -37,18 +37,20 @@
 </template>
 
 <script>
-import _app from '@/common/utils/QS-SharePoster/app.js';
-import { getSharePoster } from '@/common/utils/QS-SharePoster/QS-SharePoster.js';
-import {BASE_URL} from '@/env.js'
+import _app from '../QS-SharePoster/app.js';
+import { getSharePoster } from '../QS-SharePoster/QS-SharePoster.js';
+import { BASE_URL } from '@/env.js';
 // #ifdef H5
 import wxsdk from '@/common/wechat/sdk';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
 import shoproShareGuide from '@/components/modal/shopro-share-guide.vue';
+import shoproShare from '@/common/mixins/shopro-share';
 export default {
 	components: {
 		shoproShareGuide
 	},
+	mixins: ['shoproShare'],
 	data() {
 		return {
 			poster: {},
@@ -57,17 +59,17 @@ export default {
 			showShareGuide: false
 		};
 	},
+	props: {},
 	computed: {
 		...mapState({
 			userInfo: state => state.user.userInfo,
 			shareData: state => state.init.initData.share
 		})
 	},
-	onLoad() {
+	created() {
 		this.setShareInfo();
-		this.scene =encodeURIComponent(this.shareInfo.path.split('?')[1]);
+		this.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
 		this.shareFc();
-		console.log('poster',BASE_URL)
 	},
 	methods: {
 		async shareFc() {
@@ -106,7 +108,7 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url:that.userInfo.avatar,
+									url: that.userInfo.avatar,
 									alpha: 1,
 									dx: bgObj.width * 0.5 - (bgObj.width * 0.16) / 2,
 									dy: bgObj.width * 0.16,
@@ -215,10 +217,10 @@ export default {
 				provider: 'weixin',
 				scene: 'WXSceneSession',
 				type: 0,
-				href: 'http://shopro.7wpp.com',
-				title: 'shopro',
-				summary: '星品科技shopro商城，赶紧跟我一起来体验！',
-				imageUrl: that.goodsInfo.image,
+				href: that.shareInfo.path,
+				title: that.shareInfo.title,
+				summary: that.shareInfo.title,
+				imageUrl: that.shareInfo.image,
 				success: res => {
 					console.log('success:' + JSON.stringify(res));
 				},
@@ -235,10 +237,10 @@ export default {
 		copyLink() {
 			let that = this;
 			uni.setClipboardData({
-				data: that.shareInfo.path,
+				data: that.shareInfo.copyLink,
 				success: () => {
 					//#ifdef H5
-					that.$tools.toast('已复制到剪切板');
+					that.$tools.toast('已复制到剪贴板');
 					//#endif
 				}
 			});

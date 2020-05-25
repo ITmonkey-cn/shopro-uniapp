@@ -16,7 +16,7 @@
 							<text class="share-title">微信好友</text>
 						</view>
 						<!-- #endif -->
-						<view class="share-item y-f" @tap="sharePoster('/pages/goods/goods-poster', { goodsId: goodsId })">
+						<view class="share-item y-f" @tap="sharePoster('/pages/public/poster/index', { id: goodsInfo.id, posterType: posterType })">
 							<image class="share-img" src="http://shopro.7wpp.com/imgs/share_poster.png" mode=""></image>
 							<text class="share-title">分享海报</text>
 						</view>
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import _app from '@/common/utils/QS-SharePoster/app.js';
 import shoproShareGuide from '@/components/modal/shopro-share-guide.vue';
 export default {
 	components: {
@@ -53,11 +52,18 @@ export default {
 			type: String,
 			default: ''
 		},
-		goodsId: 0,
-		goodsInfo: {}
+		posterType: '', //海报类别
+		goodsInfo: {} //商品信息
 	},
 	created() {
-		this.setShareInfo({url: 'goods-'+this.$Route.query.id});
+		let that = this;
+		that.setShareInfo({
+			query: {
+				url: 'goods-' + that.$Route.query.id
+			},
+			title: that.goodsInfo.title,
+			image: that.goodsInfo.image
+		});
 	},
 	computed: {
 		showModal: {
@@ -72,10 +78,11 @@ export default {
 	methods: {
 		copySharePath() {
 			let that = this;
-				that.showModal = false;
-			console.log(this.shareInfo)
+			that.showModal = false;
+			console.log(this.shareInfo);
+
 			uni.setClipboardData({
-				data: this.shareInfo.path,
+				data: this.shareInfo.copyLink,
 				success: function(data) {
 					//#ifdef H5
 					that.$tools.toast('已复制到剪切板');
@@ -86,6 +93,7 @@ export default {
 			});
 		},
 		sharePoster(path, query) {
+			let that = this;
 			this.showModal = false;
 			this.$Router.push({
 				path: path,
@@ -99,15 +107,15 @@ export default {
 			let that = this;
 			that.showModal = false;
 			// #ifdef H5
-			this.showModal = false;
-			this.showShareGuide = true;
+			that.showModal = false;
+			that.showShareGuide = true;
 			// #endif
 			// #ifdef APP-PLUS
 			uni.share({
 				provider: 'weixin',
 				scene: 'WXSceneSession',
 				type: 0,
-				href: 'http://shopro.7wpp.com',
+				href: that.shareInfo.path,
 				title: that.shareInfo.title,
 				summary: that.goodsInfo.title,
 				imageUrl: that.goodsInfo.image,

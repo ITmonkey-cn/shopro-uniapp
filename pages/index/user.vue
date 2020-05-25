@@ -66,7 +66,7 @@
 					<text class="cuIcon-right"></text>
 				</view> -->
 				<view class="tools-box">
-					<view class="tool-item y-f" @tap="jump(tool.url)" v-for="tool in toolsNav" :key="tool.title">
+					<view class="tool-item y-f" @tap="jump(tool.url,tool.parmas)" v-for="tool in toolsNav" :key="tool.title">
 						<image class="tool-img" :src="tool.img" mode=""></image>
 						<text class="item-title">{{ tool.title }}</text>
 					</view>
@@ -152,11 +152,11 @@ export default {
 					img: 'http://shopro.7wpp.com/imgs/user/list4.png',
 					url: '/pages/coupons/index'
 				},
-				// {
-				// 	title: '我的拼团',
-				// 	img: 'http://shopro.7wpp.com/imgs/user/list5.png',
-				// 	url: '/pages/user/my-scrabble/index'
-				// },
+				{
+					title: '我的拼团',
+					img: 'http://shopro.7wpp.com/imgs/user/list5.png',
+					url: '/pages/user/group/index'
+				},
 				// {
 				// 	title: '联系客服',
 				// 	img: 'http://shopro.7wpp.com/imgs/user/list6.png',
@@ -181,7 +181,8 @@ export default {
 				{
 					title: '邀请好友',
 					img: 'http://shopro.7wpp.com/imgs/user/list11.png',
-					url: '/pages/user/poster'
+					url: '/pages/public/poster/index',
+					parmas:{posterType:'invite'}
 				},
 				{
 					title: '积分商城',

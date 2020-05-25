@@ -8,6 +8,7 @@
  */
 import api from '@/common/request/index'
 import store from '@/common/store'
+import router from '@/common/router'
 import {
 	API_URL
 } from '@/env'
@@ -16,53 +17,40 @@ export default class Wechat {
 
 	async login() {
 		let token = '';
+		if(router.$Route.path.indexOf('public/login') == -1) {
+			uni.setStorageSync('fromLogin', router.$Route);
+		}
 		// #ifdef MP-WEIXIN
-		token = await this.wxMiniProgramLogin();
-		console.log('wechat', token);
-		return token;
+		store.commit('FORCE_OAUTH', true);
 		// #endif
-
 		// #ifdef H5
 		this.wxOfficialAccountLogin();
 		// #endif
-
 		// #ifdef APP-PLUS
 		token = await this.wxOpenPlatformLogin();
-		console.log('wechat', token);
 		return token;
 		// #endif
-
 	}
 	// #ifdef H5
+	
 	wxOfficialAccountLogin() {
-		let loginStr = 'public/login';
 		let oUrl = window.location.href;
-		//首次进入 没有登录 保存
-		uni.setStorageSync('oUrl', oUrl);
-
 		window.location = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + store.state.init.initData.wechat.appid +
 			`&redirect_uri=${API_URL}user/wxOfficialAccountLogin&response_type=code&scope=snsapi_userinfo&state=` +
 			oUrl;
-
 		throw 'stop';
-
-
 	}
 	//临时登录获取OpenId 不入库不绑定用户
+	
 	wxOfficialAccountBaseLogin() {
-		// let loginStr = 'public/login';
 		let oUrl = window.location.href;
 		//首次进入 没有登录 保存
-		uni.setStorageSync('oUrl', oUrl);
-
 		window.location = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + store.state.init.initData.wechat.appid +
 			`&redirect_uri=${API_URL}user/wxOfficialAccountBaseLogin&response_type=code&scope=snsapi_base&state=` +
 			oUrl;
-
 		throw 'stop';
 	}
 	// #endif
-
 
 	wxOpenPlatformLogin() {
 		let that = this;
@@ -70,21 +58,17 @@ export default class Wechat {
 			uni.login({
 				provider: 'weixin',
 				success: function(loginRes) {
-					console.log(loginRes)
 					if (loginRes.errMsg === "login:ok") {
 						let authResult = loginRes.authResult;
-						console.log(authResult)
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function(infoRes) {
-								console.log('infoRes', infoRes)
 								if (infoRes.errMsg === "getUserInfo:ok") {
 									let userInfo = infoRes.userInfo;
 									api('user.wxOpenPlatformLogin', {
 										authResult: authResult,
 										userInfo: userInfo
 									}).then(res => {
-										console.log(res);
 										if (res.code === 1) {
 											resolve(res.data.token);
 										}
@@ -109,28 +93,31 @@ export default class Wechat {
 	}
 
 	// #ifdef MP-WEIXIN
-	wxMiniProgramLogin() {
+	wxMiniProgramLogin(e) {
+		
 		let that = this;
+		console.log(e,123);
 		return new Promise((resolve, reject) => {
-			uni.login({
-				success: function(info) {
-					console.log('登录信息', info);
-					let code = info.code;
-					api('user.wxMiniProgramLogin', {
-						code: code,
-						invite_id: uni.getStorageSync('inviterId')
-					}).then(res => {
-						if (res.code === 1) {
-							console.log(res.data.token);
-							resolve(res.data.token);
-						}
-					});
-
-				}
+			if(e.detail.errMsg === "getUserInfo:ok"){
+				uni.login({
+					success: function(info) {
+						let code = info.code;
+						api('user.wxMiniProgramLogin', {
+							code: code,
+							encryptedData: e.detail.encryptedData,
+							iv: e.detail.iv,
+							signature: e.detail.signature
+						}).then(res => {
+							if (res.code === 1) {
+								resolve(res.data.token);
+							}
+						});
+					}
 			});
+		}
+	
 		});
 	}
-
 
 	checkMiniProgramUpdate() {
 		let updateManager = uni.getUpdateManager();
@@ -150,7 +137,6 @@ export default class Wechat {
 				}
 			});
 		});
-
 		updateManager.onUpdateFailed(function(res) {
 			// 新的版本下载失败
 		});

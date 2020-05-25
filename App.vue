@@ -6,18 +6,17 @@ import store from '@/common/store';
 
 export default {
 	methods: {
-		...mapActions(['getAppInit', 'getRoutes', 'getUserInfo']),
+		...mapActions(['getAppInit', 'getRoutes', 'getUserInfo', 'setTokenAndBack']),
 		init(options) {
-			return Promise.all([this.getStatusBar(), this.getAppInit(options)]);
+			return Promise.all([this.setAppInfo(), this.getAppInit(options)]);
 		},
 		// 获取系统栏高度
-		getStatusBar() {
+		setAppInfo() {
 			let that = this;
 			let platform = '';
 			uni.getSystemInfo({
 				success: function(e) {
 					Vue.prototype.StatusBar = e.statusBarHeight;
-
 					// #ifdef H5
 					Vue.prototype.CustomBar = e.statusBarHeight + 45;
 					if (that.$wxsdk.isWechat()) {
@@ -51,24 +50,18 @@ export default {
 		// 自动登录
 		async autoLogin(data) {
 			let initData = data;
-			let wechat = new Wechat();
-			// #ifdef MP-WEIXIN
-			wechat.checkMiniProgramUpdate();
-			// #endif
-
-			// #ifdef H5
-			uni.setStorageSync('appid', initData.wechat.appid);
-			// #endif
+			var wechat = new Wechat();
 			if (initData.wechat.autologin && !uni.getStorageSync('token')) {
 				console.log('自动登录状态', initData.wechat.autologin);
+				// #ifdef H5
+				uni.setStorageSync('appid', initData.wechat.appid);
 				let token = await wechat.login();
-				console.log('ah', token);
-				this.$Router.push({
-					path: '/pages/public/login',
-					query: {
-						token: token
-					}
-				});
+				this.setTokenAndBack(token);
+				// #endif
+				// #ifdef MP-WEIXIN
+				wechat.checkMiniProgramUpdate();
+				wechat.login();
+				// #endif
 			}
 		}
 	},
@@ -105,5 +98,10 @@ page {
 	font-family: NotoSansHans-Bold;
 	color: #333;
 	overflow-x: hidden;
+}
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	color: transparent;
 }
 </style>

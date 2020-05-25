@@ -2,30 +2,54 @@
 import api from '@/common/request/index'
 import store from '@/common/store'
 import router from '@/common/router.js'
+import tools from '@/common/utils/tools'
+
 import {
 	USER_INFO,
 	LOGIN_TIP,
 	ORDER_NUMBER,
-	OUT_LOGIN
+	OUT_LOGIN,
+	// #ifdef MP-WEIXIN
+	FORCE_OAUTH,
+	// #endif
 } from '../types.js'
 const state = {
 	userInfo: uni.getStorageSync('userInfo') ? uni.getStorageSync('userInfo') : {},
 	showLoginTip: false,
-	orderNum: {}
+	orderNum: {},
+	// #ifdef MP-WEIXIN
+	forceOauth: false
+	// #endif
 }
 
 const actions = {
-	// 用户信息
+	//设置token并返回上次页面
+	setTokenAndBack({
+		commit
+	}, token) {
+		uni.setStorageSync('token', token);
+		store.dispatch('getUserInfo');
+		let fromLogin = uni.getStorageSync('fromLogin');
+		if (fromLogin) {
+			tools.routerTo(fromLogin.path, fromLogin.query, true);
+			uni.removeStorageSync('fromLogin')
+		} else {
+			//默认跳转首页
+			router.pushTab('/pages/index/index')
+		}
+	},
+
+	// 获取用户信息
 	getUserInfo({
 		commit
 	}) {
 		return new Promise((resolve, reject) => {
 			api('user.info').then(res => {
 				store.dispatch('getCartList')
+				commit('LOGIN_TIP', false);
 				commit('USER_INFO', res.data);
 				uni.setStorageSync('userInfo', res.data);
 				store.dispatch('getOrderNum');
-				commit('LOGIN_TIP', false);
 				//添加推广记录
 				let share_id = uni.getStorageSync('share_id');
 				let url = uni.getStorageSync('url');
@@ -74,6 +98,13 @@ const mutations = {
 	[ORDER_NUMBER](state, data) {
 		state.orderNum = data
 	},
+	// #ifdef MP-WEIXIN
+	[FORCE_OAUTH](state, data) {
+		state.forceOauth = data
+		data ? uni.hideTabBar() : uni.showTabBar();
+	},
+	// #endif
+
 	[OUT_LOGIN](state, data) {
 		uni.removeStorageSync('token');
 		uni.removeStorageSync('userInfo');
@@ -82,7 +113,7 @@ const mutations = {
 		store.commit('CART_LIST', []);
 		store.commit('CART_NUM');
 		store.commit('ORDER_NUMBER', 0);
-		router.replace('/pages/public/login');
+		// store.commit('FORCE_OAUTH', true);
 	},
 
 }

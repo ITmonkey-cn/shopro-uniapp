@@ -1,8 +1,8 @@
 <template>
 	<view class="cu-load load-modal" v-if="loadModal">
 		<!-- <view class="cuIcon-emojifill text-orange"></view> -->
-		<image src="/static/imgs//logo/logo.gif" mode="aspectFit"></image>
-		<view class="gray-text">加载中...</view>
+		<image class="load-img" src="/static/imgs//logo/logo.gif" mode="aspectFit"></image>
+		<view class="locad-text">加载中...</view>
 	</view>
 </template>
 
@@ -10,8 +10,7 @@
 export default {
 	components: {},
 	data() {
-		return {
-		};
+		return {};
 	},
 	props: {
 		value: {}
@@ -30,4 +29,19 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.cu-load.load-modal {
+	box-shadow: none;
+	background: none;
+	&:after {
+		content: none;
+	}
+	.locad-text {
+		color: #666;
+	}
+	.load-img {
+		width: 80rpx;
+		height: 80rpx;
+	}
+}
+</style>

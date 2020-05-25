@@ -3,7 +3,7 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<view class="y-f money-box">
-				<text class="time">{{ timeText }}</text>
+				<text class="time" v-if="isPast">{{ timeText }}</text>
 				<view class="money">{{ orderDetail.total_fee }}</view>
 			</view>
 			<radio-group @change="selPay" class="pay-box" v-if="payment">
@@ -57,6 +57,7 @@ export default {
 			options: {},
 			orderDetail: {},
 			timeText: '',
+			isPast:true,//是否显示订单倒计时。
 			isAndroid: uni.getStorageSync('isAndroid')
 		};
 	},
@@ -97,7 +98,7 @@ export default {
 		// 倒计时
 		countDown() {
 			let that = this;
-			let t = parseInt(that.orderDetail.createtime * 1000 + 900000) - parseInt(new Date().getTime());
+			let t = parseInt(that.orderDetail.ext_arr.expired_time * 1000) - parseInt(new Date().getTime());
 			t = t / 1000;
 			let timer = setInterval(() => {
 				if (t > 0) {
@@ -106,7 +107,7 @@ export default {
 					t--;
 				} else {
 					clearInterval(timer);
-					that.timeText = '订单已过期！！';
+					that.timeText = '订单已过期!';
 				}
 			}, 1000);
 		},
@@ -123,7 +124,11 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
-					that.countDown();
+					if(res.data.ext_arr !== null){
+						that.countDown();
+					}else{
+						that.isPast = false;
+					}
 				}
 			});
 		}

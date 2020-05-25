@@ -1,37 +1,44 @@
 <template>
 	<block>
 		<view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view>
-		<view class="page_box" v-else>
-			<view class="head_box"></view>
-			<view class="content_box">
-				<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top>
-					<view class="goodes_detail_swiper-box">
-						<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
-							<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
-								<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
-							</swiper-item>
-						</swiper>
-						<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
-					</view>
-					<!-- 价格卡片组 -->
-					<shopro-goods-activity v-if="goodsInfo" :detail="goodsInfo" @change="getActivityRules"></shopro-goods-activity>
-					<view class="goods-title">{{ goodsInfo.title }}</view>
-					<view class="sub-title">{{ goodsInfo.subtitle }}</view>
-					<!-- 规格选择 -->
-					<shopro-goods-sku
-						v-model="showSku"
-						v-if="activityRules.status !== 'waiting'"
-						:goodsInfo="goodsInfo"
-						:buyType="goodsInfo.activity_type == 'seckill' ? 'buy' : buyType"
-						@changeType="changeType"
-					></shopro-goods-sku>
-					<!-- 服务 -->
-					<shopro-goods-serve v-model="showServe" :serveList="goodsInfo.service"></shopro-goods-serve>
-					<!-- 优惠券 -->
-					<shopro-goods-coupon v-if="goodsInfo.coupons && goodsInfo.coupons.length &&  goodsInfo.activity_type !== 'seckill'" :couponList="goodsInfo.coupons"></shopro-goods-coupon>
-					<!-- 拼团人 -->
-					<shopro-goods-group v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon'"></shopro-goods-group>
-					<!-- 选项卡 -->
+		<view class="detail_box" v-else>
+			<view class="detail-content">
+				<!-- <scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top> -->
+				<!-- 详情轮播 -->
+				<view class="goodes_detail_swiper-box">
+					<!-- 拼团滚动提示 -->
+					<shopro-silde-tip></shopro-silde-tip>
+					<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
+						<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
+							<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
+						</swiper-item>
+					</swiper>
+					<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
+				</view>
+
+				<!-- 价格卡片组 -->
+				<shopro-goods-activity v-if="goodsInfo" :detail="goodsInfo" @change="getActivityRules"></shopro-goods-activity>
+				<view class="goods-title">{{ goodsInfo.title }}</view>
+				<view class="sub-title">{{ goodsInfo.subtitle }}</view>
+				<!-- 规格选择 -->
+				<shopro-goods-sku
+					v-model="showSku"
+					v-if="activityRules.status !== 'waiting'"
+					:goodsInfo="goodsInfo"
+					:buyType="goodsInfo.activity_type == 'seckill' ? 'buy' : buyType"
+					@changeType="changeType"
+				></shopro-goods-sku>
+				<!-- 服务 -->
+				<shopro-goods-serve v-model="showServe" :serveList="goodsInfo.service"></shopro-goods-serve>
+				<!-- 优惠券 -->
+				<shopro-goods-coupon
+					v-if="goodsInfo.coupons && goodsInfo.coupons.length && goodsInfo.activity_type !== 'seckill'"
+					:couponList="goodsInfo.coupons"
+				></shopro-goods-coupon>
+				<!-- 拼团人 -->
+				<shopro-goods-group></shopro-goods-group>
+				<!-- 选项卡 -->
+				<view class="sticky-box">
 					<view class="tab-box x-f">
 						<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
 							<view class="tab-title">{{ tab.title }}</view>
@@ -62,7 +69,8 @@
 							</view>
 						</view>
 					</view>
-				</scroll-view>
+				</view>
+				<!-- </scroll-view> -->
 			</view>
 			<view class="detail-foot_box  x-f" v-if="!showSku && !showServe">
 				<view class="left x-f">
@@ -71,7 +79,11 @@
 						<text class="tool-title">首页</text>
 					</view>
 					<view class="tools-item y-f" @tap="onFavorite(goodsInfo.id)">
-						<image class="tool-img" :src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'" mode=""></image>
+						<image
+							class="tool-img"
+							:src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'"
+							mode=""
+						></image>
 						<text class="tool-title">收藏</text>
 					</view>
 					<view class="tools-item y-f" @tap="onShare">
@@ -95,13 +107,13 @@
 						</button>
 						<button class="cu-btn tool-btn pay-btn y-f">
 							<text class="price">￥111</text>
-							<text class="price-title">发起拼团</text>
+							<text class="price-title">我要拼团</text>
 						</button>
 					</view>
 				</view>
 			</view>
 			<!-- 弹窗组件 -->
-			<shopro-share v-model="showShare" :goodsId="goodsInfo.id" :shareInfo="shareInfo" :goodsInfo="goodsInfo"></shopro-share>
+			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="'goods'"></shopro-share>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
 		</view>
@@ -119,6 +131,7 @@ import shoproComment from '@/components/shopro-comment.vue';
 import shoproParse from '@/components/parse/parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproSildeTip from '@/components/detail/shopro-silde-tip.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
@@ -131,7 +144,8 @@ export default {
 		shoproParse,
 		shoproGoodsCoupon,
 		shoproSkeletons,
-		shoproEmpty
+		shoproEmpty,
+		shoproSildeTip
 	},
 	data() {
 		return {
@@ -171,7 +185,6 @@ export default {
 	computed: {},
 	onLoad() {
 		this.init();
-		this.setShareInfo({url: 'goods-'+this.$Route.query.id});
 	},
 	onReady() {},
 	methods: {
@@ -215,6 +228,13 @@ export default {
 				if (res.code === 1) {
 					that.goodsInfo = res.data;
 					that.getCommentList();
+					that.setShareInfo({
+						query: {
+							url: 'goods-' + that.$Route.query.id
+						},
+						title: that.goodsInfo.title,
+						image: that.goodsInfo.image
+					});
 				}
 			});
 		},
@@ -287,18 +307,20 @@ export default {
 </script>
 
 <style lang="scss">
-// 悬浮球
-.cart-box {
-	position: fixed;
-	bottom: 200rpx;
-	right: 30rpx;
-	width: 100rpx;
-	height: 100rpx;
-	border-radius: 50%;
-	// background-image: radial-gradient(circle,#F44739,#FF6600,transparent);
-	.card-img {
-		width: 80rpx;
-		height: 80rpx;
+.detail-content {
+	padding-bottom: 100rpx;
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		color: transparent;
+	}
+}
+.sticky-box {
+	.tab-box {
+		position: -webkit-sticky;
+		position: sticky;
+		top: 0;
+		z-index: 99;
 	}
 }
 // 商品图片轮播
@@ -361,9 +383,8 @@ export default {
 .tab-box {
 	height: 102rpx;
 	background: #fff;
-	margin-bottom: 1rpx;
+	border-bottom: 1rpx solid rgba(#dfdfdf, 0.8);
 	margin-top: 20rpx;
-
 	.tab-item {
 		flex: 1;
 		height: 100%;
@@ -375,7 +396,7 @@ export default {
 			width: 123rpx;
 			height: 4rpx;
 			left: 50%;
-			bottom: 0;
+			bottom: 20rpx;
 			transform: translateX(-50%);
 			background: transparent;
 			position: absolute;
@@ -390,9 +411,8 @@ export default {
 
 .tab-detail {
 	min-height: 300rpx;
-	margin-bottom: 20rpx;
 	background: #fff;
-	padding-bottom: 30rpx ;
+	padding-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
 		font-size: 0;
@@ -405,7 +425,7 @@ export default {
 		padding-top: 30rpx;
 		.table-box {
 			width: 710rpx;
-			margin:auto;
+			margin: auto;
 			background: rgba(255, 255, 255, 1);
 			border: 1rpx solid rgba(223, 223, 223, 1);
 
@@ -494,6 +514,10 @@ export default {
 	height: 100rpx;
 	background: rgba(255, 255, 255, 1);
 	border-top: 1rpx solid rgba(238, 238, 238, 1);
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	z-index: 999;
 
 	.left,
 	.detail-right {

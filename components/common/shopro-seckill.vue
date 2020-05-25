@@ -1,25 +1,30 @@
 <template>
 	<!-- 限时抢购 -->
-	<view class="seckill-goods">
+	<view class="seckill-goods" v-if="showActivity">
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
-			<view class="group-people x-f" v-if="time.s">
-				<view class="time-box x-f">
-					<view class="count-text-box">{{ time.d }}</view>
-					天
-					<view class="count-text-box">{{ time.h }}</view>
-					时
+			<view class="group-people x-f" @tap="$Router.push('/pages/goods/seckill-list')">
+				<view class="time-box x-f" v-if="time.s">
+					<view class="x-f" v-if="parseInt(time.d)">
+						<view class="count-text-box">{{ time.d }}</view>
+						天
+					</view>
+					<view class="x-f">
+						<view class="count-text-box">{{ time.h }}</view>
+						时
+					</view>
+
 					<view class="count-text-box">{{ time.m }}</view>
 					分
 					<view class="count-text-box">{{ time.s }}</view>
 					秒
 				</view>
-				<text class="tip">更多抢购</text>
+				<text class="tip">更多</text>
 				<text class="cuIcon-right"></text>
 			</view>
 		</view>
 		<view class="goods-box swiper-box x-f">
-			<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
+			<swiper class="carousel" circular @change="swiperChange" :autoplay="true" duration="2000">
 				<swiper-item v-for="(goods, index) in goodsList" :key="index" class="carousel-item">
 					<view class="goods-list-box x-f">
 						<block v-for="mgoods in goods" :key="mgoods.id">
@@ -45,7 +50,8 @@ export default {
 		return {
 			time: {}, //倒计时
 			goodsList: [],
-			swiperCurrent: 0
+			swiperCurrent: 0,
+			showActivity: true //是否显示活动。
 		};
 	},
 	props: {
@@ -109,6 +115,8 @@ export default {
 					let endTime = res.data.endtime * 1000;
 					let t = endTime - nowTime;
 					that.countDown(t / 1000);
+				} else {
+					that.showActivity = false;
 				}
 			});
 		}
@@ -121,8 +129,8 @@ export default {
 
 .swiper-box,
 .carousel {
-	width: 750rpx;
-	height: 220upx;
+	width: 700rpx;
+	height: 240upx;
 	position: relative;
 	border-radius: 20rpx;
 
@@ -210,20 +218,21 @@ export default {
 
 			.tip {
 				font-size: 28rpx;
-				padding: 0 20rpx;
+				padding-left: 30rpx;
+				color: #666;
 			}
 
 			.cuIcon-right {
 				font-size: 30rpx;
 				line-height: 28rpx;
+				color: #666;
 			}
 		}
 	}
 
 	.goods-box {
 		.goods-item {
-			margin-right: 30rpx;
-
+			margin-right: 22rpx;
 			&:nth-child(4n) {
 				margin-right: 0;
 			}

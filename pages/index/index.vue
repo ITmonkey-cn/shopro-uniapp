@@ -28,12 +28,15 @@
 			<view class="foot_box"></view>
 			<shopro-popup-modal v-if="popupIndex" :detail="popupIndex"></shopro-popup-modal>
 			<shopro-login-modal></shopro-login-modal>
+			<!-- 强制登录 -->
+			<!-- #ifdef MP-WEIXIN -->
+			<shopro-force-login></shopro-force-login>
+			<!-- #endif -->
 		</view>
 	</block>
 </template>
 
 <script>
-import { HAS_LIVE } from '@/env';
 import shoproSearch from '@/components/common/shopro-search.vue';
 import shoproBanner from '@/components/common/shopro-banner.vue';
 import shoproGoodsGroup from '@/components/common/shopro-goods-group.vue';
@@ -44,10 +47,13 @@ import shoproSkeletons from '@/components/shopro-skeletons.vue';
 import shoproCoupons from '@/components/common/shopro-coupons.vue';
 import shoproSeckill from '@/components/common/shopro-seckill.vue';
 import shoproGroup from '@/components/common/shopro-group.vue';
-import shoproLive from '@/components/common/shopro-live.vue';
-
 import { mapMutations, mapActions, mapState } from 'vuex';
 import store from '@/common/store';
+// #ifdef MP-WEIXIN
+import { HAS_LIVE } from '@/env';
+import shoproLive from '@/components/common/shopro-live.vue';
+import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
+// #endif
 
 export default {
 	components: {
@@ -61,19 +67,25 @@ export default {
 		shoproCoupons,
 		shoproSeckill,
 		shoproGroup,
-		shoproLive
+		// #ifdef MP-WEIXIN
+		shoproLive,
+		shoproForceLogin
+		// #endif
 	},
 	data() {
 		return {
 			bgcolor: '',
-			HAS_LIVE:HAS_LIVE
+			// #ifdef MP-WEIXIN
+			HAS_LIVE: HAS_LIVE
+			// #endif
 		};
 	},
 	computed: {
 		...mapState({
 			initData: state => state.init.initData,
 			template: state => state.init.initData.template,
-			cartNum: state => state.cart.cartNum
+			cartNum: state => state.cart.cartNum,
+			forceOauth: state => state.user.forceOauth
 		}),
 		popupIndex() {
 			if (this.initData.popup) {
@@ -87,7 +99,11 @@ export default {
 		}
 	},
 	onLoad(options) {
-		this.init();
+		// #ifndef MP-WEIXIN
+		uni.setNavigationBarTitle({
+			title: this.info.name
+		});
+		// #endif
 	},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);

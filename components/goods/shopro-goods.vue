@@ -64,7 +64,6 @@ export default {
 	.img-box {
 		width: 345rpx;
 		height: 345rpx;
-		/* border-radius: 20rpx 20rpx 0px 0px; */
 		overflow: hidden;
 		position: relative;
 
@@ -84,7 +83,8 @@ export default {
 		}
 
 		.img {
-			width: 100%;
+			width: 345rpx;
+			height: 345rpx;
 			background-color: #ccc;
 		}
 	}

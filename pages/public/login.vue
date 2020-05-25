@@ -15,7 +15,7 @@
 				</view>
 				<view class="tab-item x-c" @tap="onLoginWay(1)">
 					<text class="tab-title">密码登录</text>
-					<view class="line-box" v-show="loginWay === 1"><text class="triangle"></text></view>
+					<view class="line-box" password v-show="loginWay === 1"><text class="triangle"></text></view>
 				</view>
 			</view>
 			<!-- 表单 -->
@@ -27,8 +27,8 @@
 				</view>
 			</view>
 			<view class="login-box y-f" v-show="loginWay === 1">
-				<view class="input-item x-c"><input class="inp" v-model="userPhone" type="number" placeholder="演示账号:13888888888" placeholder-class="pl" /></view>
-				<view class="input-item x-c"><input class="inp" v-model="userPassword" type="text" placeholder="演示密码:123456" placeholder-class="pl" /></view>
+				<view class="input-item x-c"><input class="inp" v-model="userPhone" type="number" placeholder="请输入账号" placeholder-class="pl" /></view>
+				<view class="input-item x-c"><input class="inp" password v-model="userPassword" type="text" placeholder="请输入密码" placeholder-class="pl" /></view>
 			</view>
 			<!-- 登录按钮 -->
 			<view class="x-c y-f">
@@ -46,7 +46,7 @@
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef MP-WEIXIN -->
-				<button class="cu-btn wx-logo-box y-f" open-type="getUserInfo" @getuserinfo="wxLogin('wxMiniProgram')">
+				<button class="cu-btn wx-logo-box y-f" open-type="getUserInfo" @getuserinfo="getuserinfo">
 					<image class="auto-login" src="http://shopro.7wpp.com/imgs/auto_login.png" mode=""></image>
 					<view class="">微信一键登录</view>
 				</button>
@@ -65,7 +65,7 @@
 <script>
 import Wechat from '@/common/wechat/wechat';
 import { mapMutations, mapActions, mapState } from 'vuex';
-
+import store from '@/common/store';
 export default {
 	data() {
 		return {
@@ -87,27 +87,26 @@ export default {
 	},
 	onLoad() {
 		if (this.$Route.query.token) {
-			this.getTokenAndBack(this.$Route.query.token);
+			this.setTokenAndBack(this.$Route.query.token);
 		}
 	},
 	onShow() {},
 	methods: {
-		...mapActions(['getUserInfo']),
-		getTokenAndBack(token) {
-			uni.setStorageSync('token', token);
-			this.getUserInfo();
-			let fromLogin = uni.getStorageSync('fromLogin');
-			if(fromLogin){
-					this.$tools.routerTo(fromLogin.path, fromLogin.query, true);
-			}else{
-				this.$Router.pushTab('/pages/index/user')
-			}
-		
+		...mapActions(['getUserInfo', 'setTokenAndBack']),
+		// #ifdef MP-WEIXIN
+		async getuserinfo(e) {
+			var wechat = new Wechat();
+			let token = await wechat.wxMiniProgramLogin(e);
+			store.commit('FORCE_OAUTH', false);
+			this.setTokenAndBack(token)
 		},
+		// #endif
 		async wxLogin() {
 			let wechat = new Wechat();
 			let token = await wechat.login();
-			this.getTokenAndBack(token);
+			if(token !== undefined) {
+				this.setTokenAndBack(token);
+			}
 		},
 		onLoginWay(flag) {
 			this.loginWay = flag;
@@ -120,7 +119,7 @@ export default {
 					code: that.code.value
 				}).then(res => {
 					if (res.code === 1) {
-						that.getTokenAndBack(res.data.userinfo.token);
+						that.setTokenAndBack(res.data.userinfo.token);
 					}
 				});
 			}
@@ -130,7 +129,7 @@ export default {
 					password: that.userPassword
 				}).then(res => {
 					if (res.code === 1) {
-						that.getTokenAndBack(res.data.userinfo.token);
+						that.setTokenAndBack(res.data.userinfo.token);
 					}
 				});
 			}
@@ -140,7 +139,7 @@ export default {
 		async getCode() {
 			let that = this;
 			that.code.status = true;
-			let countdown = 5;
+			let countdown = 60;
 			that.$api('sms.send', {
 				mobile: that.userPhone,
 				event: 'mobilelogin'

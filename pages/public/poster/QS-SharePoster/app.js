@@ -38,6 +38,9 @@ let _app = {
 					case 'goodsPoster':
 						image = '/static/imgs/poster/goods_poster.png';
 						break;
+					case 'grouponPoster':
+						image = '/static/imgs/poster/groupon_poster.jpg';
+						break;
 					default:
 						image = '';
 						break;
