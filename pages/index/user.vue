@@ -10,7 +10,7 @@
 				<view class="user-head x-bc">
 					<view class="x-f">
 						<!-- 微信小程序 -->
-						<view class="info-box" @tap="$tools.routerTo('/pages/user/info')">
+						<view class="info-box" @tap="jump('/pages/user/info')">
 							<view class="x-f">
 								<view class="head-img-wrap">
 									<image class="head-img" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode="aspectFill"></image>
@@ -26,55 +26,100 @@
 							<text class="tag-title">{{ userInfo.group.name }}</text>
 						</view>
 					</view>
-					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="$tools.routerTo('/pages/user/poster')"><text class="cuIcon-qr_code"></text></button>
+					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/user/poster')"><text class="cuIcon-qr_code"></text></button>
 				</view>
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="notice-box x-bc pad" @tap="$tools.routerTo('/pages/public/msg/index')">
+			<!-- 绑定手机 -->
+			<view class="notice-box x-bc pad" @tap="jump('/pages/user/edit-phone', { fromType: 'bind' })">
 				<view class="notice-detail one-t">点击绑定手机号，确保账户安全</view>
 				<button class="bindPhone cu-btn">去绑定</button>
 			</view>
-			<view class="order-box x-f">
-				<view class="order-item y-f" @tap="$tools.routerTo('/pages/order/list', { type: order.type })" v-for="order in orderNav" :key="order.id">
+			<!-- 订单卡片 -->
+			<view class="order-wrap x-f">
+				<view class="order-box x-f">
+					<view class="order-item y-f" @tap="jump('/pages/order/list', { type: order.type })" v-for="order in orderNav" :key="order.id">
+						<view class="y-f item-box">
+							<image class="order-img" :src="order.img" mode=""></image>
+							<text class="item-title">{{ order.title }}</text>
+							<view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view>
+						</view>
+					</view>
+				</view>
+				<view class="order-item y-f all-order" @tap="jump('/pages/order/list', { type: 'all' })">
+					<image class="cut-off--line" src="/static/imgs/user/cut_off_line.png" mode=""></image>
 					<view class="y-f item-box">
-						<image class="order-img" :src="order.img" mode=""></image>
-						<text class="item-title">{{ order.title }}</text>
-						<view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view>
+						<image class="order-img" src="/static/imgs/user/all_order.png" mode="aspectFill"></image>
+						<text class="item-title">全部订单</text>
+						<!-- <view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view> -->
 					</view>
 				</view>
 			</view>
+
+			<!-- 钱包卡片 -->
+			<view class="wallet-box x-f">
+				<view class="x-f wallet-left">
+					<view class="wallet-item y-f" @tap="jump('/pages/money/index')">
+						<text class="wallet-item__detail item-balance">{{ userInfo.money }}</text>
+						<text class="wallet-item__title">账户余额</text>
+					</view>
+					<view class="wallet-item y-f" @tap="jump('/pages/score/index')">
+						<text class="wallet-item__detail item-score">{{ userInfo.score }}</text>
+						<text class="wallet-item__title">积分</text>
+					</view>
+					<view class="wallet-item y-f" @tap="jump('/pages/coupons/index')">
+						<text class="wallet-item__detail item-coupon">23</text>
+						<text class="wallet-item__title">优惠券</text>
+					</view>
+				</view>
+
+				<view class="wallet-item y-f wallet-right">
+					<image class="cut-off--line" src="/static/imgs/user/cut_off_line.png" mode=""></image>
+					<image class="wallet-img" src="/static/imgs/user/wallet.png" mode="aspectFill"></image>
+					<text class="wallet-item__title">我的钱包</text>
+				</view>
+			</view>
+			<!-- 功能卡片 -->
 			<view class="tools-box">
-				<view class="tool-item y-f" @tap="$tools.routerTo(tool.url, tool.parmas)" v-for="tool in toolsNav" :key="tool.title">
+				<view class="tool-item y-f" @tap="jump(tool.url, tool.parmas)" v-for="tool in toolsNav" :key="tool.title">
 					<image class="tool-img" :src="tool.img" mode=""></image>
 					<text class="item-title">{{ tool.title }}</text>
 				</view>
 			</view>
 		</view>
+		<!-- 版本号 -->
 		<view class="foot_box">
 			<view class="copyright y-f" v-if="info">
 				<view class="code1">{{ info.copyright[0] }}</view>
 				<view class="code2">{{ info.copyright[1] }} {{ info.version }}</view>
 			</view>
 		</view>
+		<!-- 广告弹窗 -->
 		<shopro-popup-modal v-if="popupUser" :detail="popupUser"></shopro-popup-modal>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
+		<!-- 关注公众号 -->
+		<shopro-follow-wechat v-model="showFollowWechat"></shopro-follow-wechat>
 	</view>
 </template>
 
 <script>
 import shoproGoods from '@/components/goods/shopro-goods.vue';
 import shoproPopupModal from '@/components/modal/shopro-popup-modal.vue';
+import shoproFollowWechat from '@/components/modal/shopro-follow-wechat.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shoproGoods,
-		shoproPopupModal
+		shoproPopupModal,
+		shoproFollowWechat
 	},
 	data() {
 		return {
-			isRefresh: false, //更新。
+			isRefresh: false, //更新
+			showFollowWechat: false, //绑定公众号
+			orderScrollLeft: 0, //订单卡片滑动。
 			orderNav: [
 				{
 					id: 1,
@@ -82,12 +127,12 @@ export default {
 					img: 'http://shopro.7wpp.com/imgs/user/tab11.png',
 					type: 'nopay'
 				},
-				{
-					id: 2,
-					title: '待发货',
-					img: 'http://shopro.7wpp.com/imgs/user/tab22.png',
-					type: 'nosend'
-				},
+				// {
+				// 	id: 2,
+				// 	title: '待发货',
+				// 	img: 'http://shopro.7wpp.com/imgs/user/tab22.png',
+				// 	type: 'nosend'
+				// },
 				{
 					id: 3,
 					title: '待收货',
@@ -114,51 +159,21 @@ export default {
 					url: '/pages/user/favorite'
 				},
 				{
-					title: '积分余额',
-					img: 'http://shopro.7wpp.com/imgs/user/list2.png',
-					url: '/pages/score/index'
+					title: '浏览足迹',
+					img: 'http://shopro.7wpp.com/imgs/user/user_log.png',
+					url: '/pages/user/log'
 				},
-				{
-					title: '我的钱包',
-					img: 'http://shopro.7wpp.com/imgs/user/list3.png',
-					url: '/pages/money/index'
-				},
-				{
-					title: '优惠券',
-					img: 'http://shopro.7wpp.com/imgs/user/list4.png',
-					url: '/pages/coupons/index'
-				},
-				{
-					title: '我的拼团',
-					img: 'http://shopro.7wpp.com/imgs/user/list5.png',
-					url: '/pages/user/group/index'
-				},
-				// {
-				// 	title: '联系客服',
-				// 	img: 'http://shopro.7wpp.com/imgs/user/list6.png',
-				// 	url: ''
-				// },
+
 				{
 					title: '常见问题',
 					img: 'http://shopro.7wpp.com/imgs/user/list7.png',
 					url: '/pages/public/problems'
 				},
-
-				// {
-				// 	title: '业绩明细',
-				// 	img: 'http://shopro.7wpp.com/imgs/user/list9.png',
-				// 	url: '/pages/user/performance'
-				// },
-				// {
-				// 	title: '余额互转',
-				// 	img: 'http://shopro.7wpp.com/imgs/user/list10.png',
-				// 	url: '/pages/money/turn'
-				// },
 				{
 					title: '邀请好友',
 					img: 'http://shopro.7wpp.com/imgs/user/list11.png',
 					url: '/pages/public/poster/index',
-					parmas: { posterType: 'invite' }
+					parmas: { posterType: 'userInvite' }
 				},
 				{
 					title: '积分商城',
@@ -166,9 +181,9 @@ export default {
 					url: '/pages/score/score-shop'
 				},
 				{
-					title: '浏览足迹',
-					img: 'http://shopro.7wpp.com/imgs/user/user_log.png',
-					url: '/pages/user/log'
+					title: '我的拼团',
+					img: 'http://shopro.7wpp.com/imgs/user/list5.png',
+					url: '/pages/activity/groupon/my-groupon'
 				},
 				{
 					title: '系统设置',
@@ -205,6 +220,12 @@ export default {
 	},
 	methods: {
 		...mapActions(['getUserInfo', 'getOrderNum']),
+		jump(path, query) {
+			this.$Router.push({
+				path: path,
+				query: query
+			});
+		},
 		// 更新信息
 		onRefresh() {
 			const that = this;
@@ -347,18 +368,29 @@ export default {
 }
 
 // 订单卡片
-.order-box {
-	height: 150rpx;
+.order-wrap {
+	height: 180rpx;
 	background: #fff;
-	border-bottom: 1rpx solid rgba(#dcdcdc, 0.6);
 	margin-bottom: 20rpx;
-
+	.order-box {
+		flex: 4;
+	}
+	.all-order {
+		position: relative;
+		.cut-off--line {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			right: (750rpx/5) - 15rpx;
+			width: 30rpx;
+			height: 136rpx;
+		}
+	}
 	.order-item {
 		flex: 1;
 		.item-box {
 			position: relative;
 		}
-
 		.order-img {
 			width: 46rpx;
 			height: 46rpx;
@@ -375,7 +407,7 @@ export default {
 		}
 	}
 }
-
+// 绑定微信公众号
 .notice-box {
 	width: 750rpx;
 	height: 70rpx;
@@ -402,6 +434,59 @@ export default {
 	}
 }
 
+// 钱包卡片
+.wallet-box {
+	background: #fff;
+	height: 180rpx;
+	margin-bottom: 20rpx;
+	position: relative;
+	.wallet-left {
+		flex: 4;
+	}
+	.wallet-right {
+		position: relative;
+		.cut-off--line {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			right: (750rpx/5) - 15rpx;
+			width: 30rpx;
+			height: 136rpx;
+		}
+	}
+	.wallet-item {
+		flex: 1;
+		.wallet-img {
+			width: 46rpx;
+			height: 46rpx;
+		}
+		.wallet-item__detail {
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(168, 112, 13, 1);
+		}
+		.wallet-item__title {
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(153, 153, 153, 1);
+			margin-top: 20rpx;
+		}
+		.item-balance::after {
+			content: '元';
+			font-size: 16rpx;
+		}
+		.item-score::after {
+			content: '个';
+			font-size: 14rpx;
+		}
+		.item-coupon::after {
+			content: '张';
+			font-size: 16rpx;
+		}
+	}
+}
 .tools-box {
 	background: #fff;
 	display: flex;

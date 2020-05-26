@@ -103,8 +103,9 @@
 				"auth": false
 			}
 		},
+		// 活动------start
 		{
-			"path": "pages/goods/group-list",
+			"path": "pages/activity/groupon/list",
 			"style": {
 				"navigationBarTitleText": "今日必拼"
 			},
@@ -112,6 +113,37 @@
 				"auth": false
 			}
 		},
+		{
+			"path": "pages/activity/groupon/detail",
+			"style": {
+				"navigationBarTitleText": "拼团详情"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/activity/groupon/my-groupon",
+			"style": {
+				"navigationBarTitleText": "我的拼团"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/activity/groupon/rules",
+			"style": {
+				"navigationBarTitleText": "拼购玩法攻略"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		// 活动------end
 		{
 			"path": "pages/goods/comment-list",
 			"style": {
@@ -302,7 +334,7 @@
 			"path": "pages/public/poster/index",
 			"style": {
 				"navigationBarTitleText": "海报"
-		
+
 			},
 			"meta": {
 				"auth": false
@@ -428,36 +460,6 @@
 			"style": {
 				"navigationBarTitleText": "修改手机号"
 
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/group/group-share",
-			"style": {
-				"navigationBarTitleText": "拼团详情"
-		
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/group/index",
-			"style": {
-				"navigationBarTitleText": "我的拼团"
-		
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/user/group/rules",
-			"style": {
-				"navigationBarTitleText": "拼团玩法"
-		
 			},
 			"meta": {
 				"auth": true

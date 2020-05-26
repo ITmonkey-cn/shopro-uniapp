@@ -94,17 +94,16 @@ export default {
 		},
 		info() {
 			if (this.initData.info) {
+				// #ifndef MP-WEIXIN
+				uni.setNavigationBarTitle({
+					title: this.initData.info.name
+				});
+				// #endif
 				return this.initData.info;
 			}
 		}
 	},
-	onLoad(options) {
-		// #ifndef MP-WEIXIN
-		uni.setNavigationBarTitle({
-			title: this.info.name
-		});
-		// #endif
-	},
+	onLoad(options) {},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
 	},
