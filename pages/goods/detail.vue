@@ -7,7 +7,7 @@
 				<!-- 详情轮播 -->
 				<view class="goodes_detail_swiper-box">
 					<!-- 拼团滚动提示 -->
-					<shopro-silde-tip></shopro-silde-tip>
+					<shopro-silde-tip v-if="false"></shopro-silde-tip>
 					<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
 						<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
 							<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
@@ -36,7 +36,7 @@
 					:couponList="goodsInfo.coupons"
 				></shopro-goods-coupon>
 				<!-- 拼团人 -->
-				<shopro-goods-group></shopro-goods-group>
+				<shopro-goods-groupon></shopro-goods-groupon>
 				<!-- 选项卡 -->
 				<view class="sticky-box">
 					<view class="tab-box x-f">
@@ -123,7 +123,6 @@
 <script>
 import shoproGoodsActivity from '@/components/detail/shopro-goods-activity.vue';
 import shoproGoodsSku from '@/components/detail/shopro-goods-sku.vue';
-import shoproGoodsGroup from '@/components/detail/shopro-goods-group.vue';
 import shoproGoodsServe from '@/components/detail/shopro-goods-serve.vue';
 import shoproGoodsCoupon from '@/components/detail/shopro-goods-coupon.vue';
 import shoproShare from '@/components/shopro-share.vue';
@@ -132,11 +131,12 @@ import shoproParse from '@/components/parse/parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty.vue';
 import shoproSildeTip from '@/components/detail/shopro-silde-tip.vue';
+import shoproGoodsGroupon from '@/components/detail/shopro-goods-groupon.vue'
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shoproGoodsSku,
-		shoproGoodsGroup,
+		shoproGoodsGroupon,
 		shoproGoodsServe,
 		shoproShare,
 		shoproComment,

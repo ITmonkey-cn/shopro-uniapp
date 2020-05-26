@@ -188,7 +188,7 @@ export default {
 		// 立即购买
 		onPay(id) {
 			uni.navigateTo({
-				url: `/pages/pay/index?id=${id}`
+				url: `/pages/order/payment/method?id=${id}`
 			});
 		},
 		// 待评价

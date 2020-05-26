@@ -187,7 +187,7 @@ export default {
 					that.isSubOrder = false;
 					if (res.data.status > 0) {
 						that.$Router.replace({
-							path: '/pages/pay/success',
+							path: '/pages/order/payment/result',
 							query: {
 								orderSn: sn,
 								type: '',
@@ -196,7 +196,7 @@ export default {
 						});
 					} else {
 						uni.redirectTo({
-							url: `/pages/pay/index?id=${sn}`
+							url: `/pages/order/payment/method?id=${sn}`
 						});
 					}
 				} else {

@@ -196,12 +196,12 @@ export default {
 									url: that.goodsInfo.image,
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
-									dx: bgObj.width * 0.07,
-									dy: bgObj.width * 0.23,
+									dx: bgObj.width * 0.054,
+									dy: bgObj.width * 0.20,
 									infoCallBack(imageInfo) {
 										return {
-											dWidth: bgObj.width * 0.86,
-											dHeight: bgObj.width * 0.86
+											dWidth: bgObj.width * 0.9,
+											dHeight: bgObj.width * 0.9
 											// roundRectSet: { // 圆角矩形
 											// 	r: bgObj.width * 0.025
 											// }
@@ -220,7 +220,7 @@ export default {
 									// fontWeight: 'bold',
 									lineFeed: {
 										//换行
-										maxWidth: bgObj.width * 0.86,
+										maxWidth: bgObj.width * 0.91,
 										lineHeight: bgObj.width * 0.06,
 										lineNum: 2,
 										dx: -1
@@ -228,8 +228,8 @@ export default {
 									infoCallBack(textLength) {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {
-											dx: bgObj.width * 0.07,
-											dy: bgObj.width * 1.15
+											dx: bgObj.width * 0.06,
+											dy: bgObj.width * 1.18
 										};
 									},
 									serialNum: 0
@@ -247,8 +247,8 @@ export default {
 									infoCallBack(textLength) {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {
-											dx: bgObj.width * 0.07,
-											dy: bgObj.width * 1.28
+											dx: bgObj.width * 0.06,
+											dy: bgObj.width * 1.34
 										};
 									},
 									serialNum: 0
@@ -269,8 +269,30 @@ export default {
 									infoCallBack(textLength) {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {
-											dx: bgObj.width * 0.24,
-											dy: bgObj.width * 1.28
+										dx: bgObj.width * 0.24,
+										dy: bgObj.width * 1.34
+										};
+									},
+									serialNum: 0
+								},
+								{
+									type: 'text', //几人团
+									// fontStyle: 'italic',//倾斜
+									text: `10人团`,
+									size: fontSize * 0.8,
+									color: '#fff',
+									alpha: 1,
+									textAlign: 'right',
+									// textBaseline: 'middle',
+									// fontWeight: 'bold',
+									// lineThrough: {
+									// 	style: '#999999'
+									// },
+									infoCallBack(textLength) {
+										_app.log('index页面的text的infocallback ，textlength:' + textLength);
+										return {
+											dx: bgObj.width * 0.94,
+											dy: bgObj.width * 1.33
 										};
 									},
 									serialNum: 0
@@ -281,12 +303,12 @@ export default {
 									url: `${that.$API_URL}wechat/wxacode?scene=${that.scene}`,
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
-									dx: bgObj.width * 0.948 - bgObj.width * 0.2,
-									dy: bgObj.height - bgObj.width * 0.08 - bgObj.width * 0.2,
+									dx: bgObj.width- bgObj.width * 0.2,
+									dy: bgObj.height - bgObj.width * 0.18,
 									infoCallBack(imageInfo) {
 										return {
-											dWidth: bgObj.width * 0.2,
-											dHeight: bgObj.width * 0.2
+											dWidth: bgObj.width * 0.14,
+											dHeight: bgObj.width * 0.14
 											// roundRectSet: { // 圆角矩形
 											// 	r: imageInfo.width * 0.025
 											// }
@@ -298,9 +320,9 @@ export default {
 								{
 									type: 'qrcode',
 									text: `${that.shareInfo.path}`,
-									size: bgObj.width * 0.16,
-									dx: bgObj.width * 0.948 - bgObj.width * 0.18,
-									dy: bgObj.height - bgObj.width * 0.08 - bgObj.width * 0.2
+									size: bgObj.width * 0.14,
+									dx: bgObj.width- bgObj.width * 0.2,
+									dy: bgObj.height - bgObj.width * 0.18,
 								}
 								// #endif
 							]);
@@ -387,9 +409,6 @@ export default {
 </script>
 
 <style lang="scss">
-page {
-	background: #fbf7f6;
-}
 
 .content {
 	position: relative;
@@ -406,8 +425,9 @@ page {
 		left: 50%;
 		transform: translateX(-50%);
 		.posterImage {
-			width: 750rpx;
+			width: 690rpx;
 			overflow: hidden;
+			border-radius: 30rpx;
 		}
 	}
 }

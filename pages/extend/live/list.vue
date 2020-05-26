@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import shoproLiveCard from '@/components/live/shopro-live-card.vue';
+import shoproLiveCard from '@/components/shopro-live-card/shopro-live-card.vue';
 export default {
 	components: {
 		shoproLiveCard

@@ -51,39 +51,7 @@
 				"auth": false
 			}
 		},
-		// #ifdef MP-WEIXIN
-		{
-			"path": "pages/live/live-list",
-			"style": {
-				"navigationBarTitleText": "直播"
-
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		// #endif
-		{
-			"path": "pages/coupons/index",
-			"style": {
-				"navigationBarTitleText": "优惠券"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/coupons/detail",
-			"style": {
-				"navigationBarTitleText": "优惠劵详情",
-				"navigationStyle": "custom"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
+		// 商品goods------start
 		{
 			"path": "pages/goods/list",
 			"style": {
@@ -95,19 +63,41 @@
 			}
 		},
 		{
-			"path": "pages/goods/seckill-list",
+			"path": "pages/goods/comment-list",
 			"style": {
-				"navigationBarTitleText": "限时秒杀"
+				"navigationBarTitleText": "商品评价"
+
 			},
 			"meta": {
 				"auth": false
 			}
 		},
-		// 活动------start
+		{
+			"path": "pages/goods/detail",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		// 商品goods------end
+
+		// 活动activity------start
 		{
 			"path": "pages/activity/groupon/list",
 			"style": {
 				"navigationBarTitleText": "今日必拼"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/activity/seckill-list",
+			"style": {
+				"navigationBarTitleText": "限时秒杀"
 			},
 			"meta": {
 				"auth": false
@@ -143,31 +133,52 @@
 				"auth": true
 			}
 		},
-		// 活动------end
 		{
-			"path": "pages/goods/comment-list",
+			"path": "pages/activity/score/list",
 			"style": {
-				"navigationBarTitleText": "商品评价"
-
+				"navigationBarTitleText": "积分商城"
 			},
 			"meta": {
 				"auth": false
 			}
 		},
 		{
-			"path": "pages/goods/detail",
+			"path": "pages/activity/score/detail",
 			"style": {
-				"navigationBarTitleText": "商品详情"
+				"navigationBarTitleText": "积分详情"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		// 活动activity------end
+		// 扩展extend ------start
+		// #ifdef MP-WEIXIN
+		{
+			"path": "pages/extend/live/list",
+			"style": {
+				"navigationBarTitleText": "直播"
 
 			},
 			"meta": {
 				"auth": false
 			}
 		},
+		// #endif
 		{
-			"path": "pages/money/index",
+			"path": "pages/extend/coupon/list",
 			"style": {
-				"navigationBarTitleText": "我的钱包",
+				"navigationBarTitleText": "优惠券"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/extend/coupon/detail",
+			"style": {
+				"navigationBarTitleText": "优惠劵详情",
 				"navigationStyle": "custom"
 
 			},
@@ -176,24 +187,18 @@
 			}
 		},
 		{
-			"path": "pages/money/bank",
+			"path": "pages/extend/sign/index",
 			"style": {
-				"navigationBarTitleText": "绑定银行卡"
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/money/log",
-			"style": {
-				"navigationBarTitleText": "钱包明细"
+				"navigationBarTitleText": "签到中心"
 
 			},
 			"meta": {
 				"auth": true
 			}
 		},
+		// 扩展extend------end
+
+		// 订单order------start
 		{
 			"path": "pages/order/confirm",
 			"style": {
@@ -257,7 +262,7 @@
 			}
 		},
 		{
-			"path": "pages/pay/index",
+			"path": "pages/order/payment/method",
 			"style": {
 				"navigationBarTitleText": "支付方式"
 
@@ -267,7 +272,7 @@
 			}
 		},
 		{
-			"path": "pages/pay/success",
+			"path": "pages/order/payment/result",
 			"style": {
 				"navigationBarTitleText": "支付结果"
 
@@ -276,7 +281,8 @@
 				"auth": false
 			}
 		},
-
+		// 订单order------end
+		// 公共public ------ start
 		{
 			"path": "pages/public/richtext",
 			"style": {
@@ -298,7 +304,7 @@
 			}
 		},
 		{
-			"path": "pages/public/forgot",
+			"path": "pages/public/login/forgot",
 			"style": {
 				"navigationBarTitleText": "找回密码",
 				"navigationStyle": "custom"
@@ -309,7 +315,7 @@
 			}
 		},
 		{
-			"path": "pages/public/login",
+			"path": "pages/public/login/index",
 			"name": "login",
 			"style": {
 				"navigationBarTitleText": "登录",
@@ -320,7 +326,7 @@
 			}
 		},
 		{
-			"path": "pages/public/register",
+			"path": "pages/public/login/register",
 			"style": {
 				"navigationBarTitleText": "注册",
 				"navigationStyle": "custom"
@@ -341,46 +347,7 @@
 			}
 		},
 		{
-			"path": "pages/score/index",
-			"style": {
-				"navigationBarTitleText": "积分",
-				"navigationStyle": "custom"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/score/score-shop",
-			"style": {
-				"navigationBarTitleText": "积分商城"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/score/detail",
-			"style": {
-				"navigationBarTitleText": "积分详情"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/sign/index",
-			"style": {
-				"navigationBarTitleText": "签到中心"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/public/problems",
+			"path": "pages/public/faq",
 			"style": {
 				"navigationBarTitleText": "常见问题"
 
@@ -389,6 +356,9 @@
 				"auth": false
 			}
 		},
+		// 公共public ------ end
+
+		// 我的user ------start
 		{
 			"path": "pages/user/log",
 			"style": {
@@ -464,7 +434,49 @@
 			"meta": {
 				"auth": true
 			}
+		},
+		{
+			"path": "pages/user/wallet/index",
+			"style": {
+				"navigationBarTitleText": "我的钱包",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/wallet/bind-bank",
+			"style": {
+				"navigationBarTitleText": "绑定银行卡"
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/wallet/log",
+			"style": {
+				"navigationBarTitleText": "钱包明细"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/wallet/score-balance",
+			"style": {
+				"navigationBarTitleText": "积分",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true
+			}
 		}
+		// 我的user ------ end
 
 	],
 	// 分包加载,tabbar页不能在分包目录内。

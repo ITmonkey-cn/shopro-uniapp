@@ -3,7 +3,7 @@
 	<view class="seckill-goods" v-if="showActivity">
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
-			<view class="group-people x-f" @tap="$Router.push('/pages/goods/seckill-list')">
+			<view class="group-people x-f" @tap="$Router.push('/pages/activity/seckill-list')">
 				<view class="time-box x-f" v-if="time.s">
 					<view class="x-f" v-if="parseInt(time.d)">
 						<view class="count-text-box">{{ time.d }}</view>

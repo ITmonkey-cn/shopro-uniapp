@@ -6,34 +6,36 @@
 		<view class="head-box"><cu-custom :isBack="true"></cu-custom></view>
 		<view class="wrapper">
 			<!-- logo -->
-			<view class="x-c"><image class="logo" v-if="initData.info" :src="sysInfo.logo" mode="widthFix"></image></view>
-			<view class="x-c">
-				<view class="tab-item x-c">
-					<text class="tab-title">忘记密码</text>
-					<view class="line-box"><text class="triangle"></text></view>
-				</view>
-			</view>
+			<view class="x-c"><image class="logo" :src="sysInfo.logo" mode="widthFix"></image></view>
 			<!-- 表单 -->
 			<view class="login-box y-f">
 				<view class="input-item x-c">
 					<text class="inp-title">手机号</text>
-					<input class="inp" v-model="userPhone" type="number" placeholder="请输入手机号" placeholder-class="pl" />
+					<input class="inp" v-model="mobile" type="number" placeholder="请输入手机号" placeholder-class="pl" />
 				</view>
 				<view class="input-item x-c">
 					<text class="inp-title">验证码</text>
-					<input class="inp" v-model="code.value" type="text" placeholder="请输入验证码" placeholder-class="pl" />
+					<input class="inp" v-model="code.value" type="number" placeholder="请输入验证码" placeholder-class="pl" />
 					<button class="cu-btn code-btn" :disabled="code.status" @tap="getCode">{{ code.text }}</button>
 				</view>
 				<view class="input-item x-c">
-					<text class="inp-title">新密码</text>
-					<input class="inp" password v-model="userPassword" type="text" placeholder="请设置新密码" placeholder-class="pl" />
+					<text class="inp-title">密&emsp;码</text>
+					<input class="inp" password v-model="password"  type="text" placeholder="请输入6-14位密码" placeholder-class="pl" />
+				</view>
+				<view class="tip-box" @tap="onTcp">
+					<label class="x-f">
+						<radio class="tcp-radio brown" :class="{ checked: isTcp }" :checked="isTcp"></radio>
+						<view class="">
+							我已阅读并遵守
+							<text class="tcp" @tap="jump('/pages/public/richtext', { id: 1 })">《用户协议》</text>
+							与
+							<text class="tcp" @tap="jump('/pages/public/richtext', { id: 2 })">《隐私协议》</text>
+						</view>
+					</label>
 				</view>
 			</view>
 			<!-- 登录按钮 -->
-			<view class="x-c y-f">
-				<button class="cu-btn login-btn" @tap="restPassword">确认</button>
-				<button class="cu-btn tip-btn" @tap="jump('/pages/public/login')">返回登录</button>
-			</view>
+			<view class="x-c y-f"><button class="cu-btn login-btn" @tap="register">立即注册</button></view>
 		</view>
 	</view>
 </template>
@@ -44,14 +46,15 @@ import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	data() {
 		return {
+			mobile: '',
 			code: {
 				text: '获取验证码',
 				status: false,
 				value: ''
 			},
-			userPhone: '',
-			userPassword: '',
-			sysInfo: uni.getStorageSync('sysInfo')
+			password: '',
+			isTcp: false, //协议
+			sysInfo:uni.getStorageSync('sysInfo')
 		};
 	},
 	computed: {
@@ -61,35 +64,19 @@ export default {
 	},
 	onLoad() {},
 	methods: {
-		// 路由跳转
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,
 				query: parmas
 			});
 		},
-		// 重置密码
-		restPassword() {
-			let that = this;
-			that.$api('user.resetpwd', {
-				mobile: that.userPhone,
-				newpassword: that.userPassword,
-				captcha: that.code.value
-			}).then(res => {
-				if (res.code === 1) {
-					that.$tools.toast('重置密码成功');
-					that.$Router.back();
-				}
-			});
-		},
-		// 获取短信
 		async getCode() {
 			let that = this;
 			that.code.status = true;
 			let countdown = 60;
 			that.$api('sms.send', {
-				mobile: that.userPhone,
-				event: 'resetpwd'
+				mobile: that.mobile,
+				event: 'register'
 			}).then(res => {
 				if (res.code === 1) {
 					that.code.text = countdown + '秒';
@@ -101,14 +88,42 @@ export default {
 						} else {
 							clearInterval(timer);
 							that.code.text = '获取验证码';
-							that.$set(that.code, 'status', false);
-							console.log('status', that.code.status);
+							that.code.status = false;
 						}
 					}, 1000);
 				} else {
-					that.$set(that.code, 'status', false);
+					that.code.status = false;
 				}
 			});
+		},
+
+		register() {
+			let that = this;
+			if (this.isTcp) {
+				this.$api('user.register', {
+					mobile: this.mobile,
+					code: this.code.value,
+					password: this.password
+				}).then(res => {
+					if (res.code === 1) {
+						uni.showToast({
+							title: res.msg || '注册成功,请前往登录',
+							icon: 'success',
+							duration: 1000,
+							mask: true,
+							success: function() {
+								that.$Router.back();
+							}
+						});
+					}
+				});
+			} else {
+				this.$tools.toast('请先同意协议！');
+			}
+		},
+
+		onTcp() {
+			this.isTcp = !this.isTcp;
 		}
 	}
 };
@@ -140,41 +155,6 @@ export default {
 		width: 640rpx;
 		height: 300rpx;
 	}
-	// 标题
-	.tab-item {
-		flex: 1;
-		height: 80rpx;
-		position: relative;
-		margin-top: 80rpx;
-		.tab-title {
-			font-size: 32rpx;
-			font-weight: bold;
-			color: #845708;
-		}
-
-		.line-box {
-			position: absolute;
-			width: 300rpx;
-			height: 4rpx;
-			background: rgba(233, 181, 98, 1);
-			bottom: 0;
-			left: 50%;
-			transform: translateX(-50%);
-
-			.triangle {
-				position: absolute;
-				bottom: 0;
-				left: 50%;
-				transform: translateX(-50%);
-				disply: block;
-				width: 0;
-				height: 0;
-				border-width: 10rpx;
-				border-style: solid;
-				border-color: transparent transparent #e9b562 transparent;
-			}
-		}
-	}
 }
 
 .wrapper {
@@ -188,7 +168,8 @@ export default {
 
 	// 输入
 	.login-box {
-		margin-top: 80rpx;
+		margin-top: 140rpx;
+
 		.input-item {
 			height: 108rpx;
 			border-bottom: 1rpx solid rgba(#d0b17b, 0.3);
@@ -234,13 +215,20 @@ export default {
 		color: #fff;
 	}
 
-	.tip-btn {
-		font-size: 26rpx;
-		font-family: PingFang SC;
+	.tip-box {
+		width: 630rpx;
+		line-height: 108rpx;
+		font-size: 24rpx;
 		font-weight: 400;
-		text-decoration: underline;
 		color: rgba(200, 150, 61, 1);
-		background: none;
+
+		.tcp-radio {
+			transform: scale(0.5);
+		}
+
+		.tcp {
+			text-decoration: underline;
+		}
 	}
 }
 </style>

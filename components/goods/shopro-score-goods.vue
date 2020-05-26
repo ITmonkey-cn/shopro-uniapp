@@ -1,5 +1,5 @@
 <template>
-	<view class="shop-list y-f" @tap="jump('/pages/score/detail', { scoreId: scoreData.id })">
+	<view class="shop-list y-f" @tap="jump('/pages/activity/score/detail', { scoreId: scoreData.id })">
 		<view class="image-box"><image class="shop-img" :src="scoreData.image" mode="aspectFill"></image></view>
 		<view class="shop-title more-t">{{ scoreData.title }}</view>
 		<view class="num-box x-bc">

@@ -60,15 +60,15 @@
 			<!-- 钱包卡片 -->
 			<view class="wallet-box x-f">
 				<view class="x-f wallet-left">
-					<view class="wallet-item y-f" @tap="jump('/pages/money/index')">
+					<view class="wallet-item y-f" @tap="jump('/pages/user/wallet/index')">
 						<text class="wallet-item__detail item-balance">{{ userInfo.money }}</text>
 						<text class="wallet-item__title">账户余额</text>
 					</view>
-					<view class="wallet-item y-f" @tap="jump('/pages/score/index')">
+					<view class="wallet-item y-f" @tap="jump('/pages/user/wallet/score-balance')">
 						<text class="wallet-item__detail item-score">{{ userInfo.score }}</text>
 						<text class="wallet-item__title">积分</text>
 					</view>
-					<view class="wallet-item y-f" @tap="jump('/pages/coupons/index')">
+					<view class="wallet-item y-f" @tap="jump('/pages/extend/coupon/list')">
 						<text class="wallet-item__detail item-coupon">23</text>
 						<text class="wallet-item__title">优惠券</text>
 					</view>
@@ -167,7 +167,7 @@ export default {
 				{
 					title: '常见问题',
 					img: 'http://shopro.7wpp.com/imgs/user/list7.png',
-					url: '/pages/public/problems'
+					url: '/pages/public/faq'
 				},
 				{
 					title: '邀请好友',
@@ -178,7 +178,7 @@ export default {
 				{
 					title: '积分商城',
 					img: 'http://shopro.7wpp.com/imgs/user/list12.png',
-					url: '/pages/score/score-shop'
+					url: '/pages/activity/score/list'
 				},
 				{
 					title: '我的拼团',

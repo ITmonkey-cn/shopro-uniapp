@@ -2,7 +2,7 @@
 	<view class="live-el">
 		<view class="head">
 			<text class="head-title">{{ detail.name }}</text>
-			<view class="head-more" @tap="$Router.push('/pages/live/live-list')">
+			<view class="head-more" @tap="$Router.push('/pages/extend/live/list')">
 				<text>更多</text>
 				<text class="cuIcon-right"></text>
 			</view>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import shoproLiveCard from '@/components/live/shopro-live-card.vue';
+import shoproLiveCard from '@/components/shopro-live-card/shopro-live-card.vue';
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
 let livePlayer = null;

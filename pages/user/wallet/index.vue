@@ -16,14 +16,14 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="resale-list x-bc" @tap="jump('/pages/money/bank')">
+			<view class="resale-list x-bc" @tap="jump('/pages/user/wallet/bind-bank')">
 				<view class="x-f">
 					<text class=" cuicon cuIcon-vipcard"></text>
 					<text>绑定银行卡</text>
 				</view>
 				<text class="cuIcon-right"></text>
 			</view>
-			<view class="resale-list x-bc" @tap="jump('/pages/money/log')">
+			<view class="resale-list x-bc" @tap="jump('/pages/user/wallet/log')">
 				<view class="x-f">
 					<text class=" cuicon cuIcon-baby"></text>
 					<text>钱包明细</text>

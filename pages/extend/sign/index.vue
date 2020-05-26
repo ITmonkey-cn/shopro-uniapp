@@ -1,83 +1,117 @@
 <template>
-	<view class="">
-		<!-- 补卡邀请 -->
-		<!-- <view class="resign-box">
-			<view class="title-box x-f">
-				<text class="resign-title">我的补签卡数：</text>
-				<text class="resign-card-num">2</text>
-			</view>
-			<view class="invite-box x-bc">
-				<image class="invite-tag" src="http://shopro.7wpp.com/imgs/sign_tag.png" mode=""></image>
-				<text class="invite-notice">每邀请一个好友即可获得一张补签卡</text>
-				<button class="cu-btn invite-btn">去邀请</button>
-			</view>
-		</view> -->
-		<!-- 打卡日历页面 -->
-		<view class="calendar">
-			<view class="sign-everyday x-bc pad">
-				<text class="sign-everyday-title">每日签到</text>
-				<view class="sign-num-box">
-					已连续签到
-					<text class="sign-num">{{ cuntinueDays }}</text>
-					天
-				</view>
-			</view>
-			<view class="bar x-c">
-				<!-- 年月 -->
-				<view class="previous" @click="handleCalendar(0)">
-					<button class="cu-btn bar-btn"><text class="cuIcon-back"></text></button>
-				</view>
-				<view class="date">{{ cur_year || '--' }} 年 {{ cur_month || '--' }} 月</view>
-				<view class="next" @click="handleCalendar(1)">
-					<button class="cu-btn bar-btn"><text class="cuIcon-right"></text></button>
-				</view>
-			</view>
-			<!-- 显示星期 -->
-			<view class="week x-f">
-				<view class="week-item x-c" v-for="(item, index) in weeks_ch" :key="index">{{ item }}</view>
-			</view>
-			<!-- 日历表 -->
-			<view class="myDateTable">
-				<view v-for="(item, j) in days" :key="j" class="dateCell x-c">
-					<view v-if="item.date == undefined || item.date == null" class="cell"><text :decode="true">&nbsp;&nbsp;</text></view>
-					<view v-else>
-						<!-- 已签到日期 -->
-						<view v-if="item.is_sign" class="cell is-sign">
-							<text>{{ item.day }}</text>
+	<view class="page_box">
+		<view class="head_box"></view>
+		<view class="content_box">
+			<view class="">
+				<!-- 补卡邀请 -->
+				<!-- <view class="resign-box">
+						<view class="title-box x-f">
+							<text class="resign-title">我的补签卡数：</text>
+							<text class="resign-card-num">2</text>
 						</view>
-						<!-- 漏签 -->
-						<view
-							class="cell forget-sign"
-							v-else-if="cur_year < toYear || (cur_year == toYear && cur_month < toMonth) || (cur_year == toYear && cur_month == toMonth && item.date < today)"
-						>
-							<!-- 小程序不兼容这个 v-else-if="(new Date(cur_year+'-'+cur_month+'-'+item.date))<(new Date())"> -->
-							<text>{{ item.day }}</text>
+						<view class="invite-box x-bc">
+							<image class="invite-tag" src="http://shopro.7wpp.com/imgs/sign_tag.png" mode=""></image>
+							<text class="invite-notice">每邀请一个好友即可获得一张补签卡</text>
+							<button class="cu-btn invite-btn">去邀请</button>
 						</view>
-						<!-- 今日未签到-->
-						<!-- <view @click="clickSignUp(item.date, 1)" class="cell whiteColor bgBlue" v-else-if="item.date == today && cur_month == toMonth && cur_year == toYear">
-							<text>签到</text>
-						</view> -->
-						<!-- 当前日期之后 -->
-						<view class="cell" v-else>
-							<text>{{ item.day }}</text>
+					</view> -->
+				<!-- 打卡日历页面 -->
+				<view class="calendar">
+					<view class="sign-everyday x-bc pad">
+						<text class="sign-everyday-title">每日签到</text>
+						<view class="sign-num-box">
+							已连续签到
+							<text class="sign-num">{{ cuntinueDays }}</text>
+							天
+						</view>
+					</view>
+					<view class="bar x-c">
+						<!-- 年月 -->
+						<view class="previous" @click="handleCalendar(0)">
+							<button class="cu-btn bar-btn"><text class="cuIcon-back"></text></button>
+						</view>
+						<view class="date">{{ cur_year || '--' }} 年 {{ cur_month || '--' }} 月</view>
+						<view class="next" @click="handleCalendar(1)">
+							<button class="cu-btn bar-btn"><text class="cuIcon-right"></text></button>
+						</view>
+					</view>
+					<!-- 显示星期 -->
+					<view class="week x-f">
+						<view class="week-item x-c" v-for="(item, index) in weeks_ch" :key="index">{{ item }}</view>
+					</view>
+					<!-- 日历表 -->
+					<view class="myDateTable">
+						<view v-for="(item, j) in days" :key="j" class="dateCell x-c">
+							<view v-if="item.date == undefined || item.date == null" class="cell"><text :decode="true">&nbsp;&nbsp;</text></view>
+							<view v-else>
+								<!-- 已签到日期 -->
+								<view v-if="item.is_sign" class="cell is-sign">
+									<text>{{ item.day }}</text>
+								</view>
+								<!-- 漏签 -->
+								<view
+									class="cell forget-sign"
+									v-else-if="
+										cur_year < toYear || (cur_year == toYear && cur_month < toMonth) || (cur_year == toYear && cur_month == toMonth && item.date < today)
+									"
+								>
+									<!-- 小程序不兼容这个 v-else-if="(new Date(cur_year+'-'+cur_month+'-'+item.date))<(new Date())"> -->
+									<text>{{ item.day }}</text>
+								</view>
+								<!-- 今日未签到-->
+								<!-- <view @click="clickSignUp(item.date, 1)" class="cell whiteColor bgBlue" v-else-if="item.date == today && cur_month == toMonth && cur_year == toYear">
+										<text>签到</text>
+									</view> -->
+								<!-- 当前日期之后 -->
+								<view class="cell" v-else>
+									<text>{{ item.day }}</text>
+								</view>
+							</view>
+						</view>
+						<!-- 签到按钮 -->
+						<view class="x-c sign-box">
+							<button :disabled="isPresentMonth || isSign" @tap="onSign" class="cu-btn sign-btn">{{ isSign ? '已签到' : '签到' }}</button>
 						</view>
 					</view>
 				</view>
-				<!-- 签到按钮 -->
-				<view class="x-c sign-box">
-					<button :disabled="isPresentMonth || isSign" @tap="onSign" class="cu-btn sign-btn">{{ isSign ? '已签到' : '签到' }}</button>
-				</view>
 			</view>
 		</view>
+		<view class="foot_box"></view>
+		<shopro-modal v-model="showSign">
+			<block slot="modalContent">
+				<view class="sign-modal-box">
+					<view class="modal-head y-f">
+						<image class="modal-bg" src="http://shopro.7wpp.com/imgs/modal/sign_modal_bg.jpg" mode=""></image>
+						<image class="sign-tag" src="http://shopro.7wpp.com/imgs/modal/sign_modal_succeed.png" mode=""></image>
+						<view class="sign-num-box">
+							已连续打卡
+							<text class="sign-num">{{ cuntinueDays }}</text>
+							天
+						</view>
+					</view>
+					<view class="modal-content y-f">
+						<text class="sign-success">签到成功</text>
+						<text class="sign-score">恭喜您获得{{ score }}积分</text>
+					</view>
+					<view class="modal-bottom"><button class="cu-btn confirem-btn" @tap="onConfirem">确认</button></view>
+				</view>
+			</block>
+		</shopro-modal>
 	</view>
 </template>
 
 <script>
+import shoproModal from '@/components/modal/shopro-modal.vue';
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
+	components: {
+		shoproModal
+	},
 	data() {
 		return {
 			days: [],
 			cuntinueDays: 0,
+			score: '',
 			cur_year: 0, //当前选的年
 			cur_month: 0, //当前选的月
 			cur_day: 0, //当前选择的天
@@ -86,17 +120,22 @@ export default {
 			toYear: parseInt(new Date().getFullYear()), //本年
 			weeks_ch: ['日', '一', '二', '三', '四', '五', '六'],
 			isPresentMonth: false,
-			isSign: false
+			isSign: false,
+			showSign: false
 		};
 	},
-	props: {},
-	mounted() {
+	computed: {},
+	onLoad() {
 		this.cur_year = this.toYear;
 		this.cur_month = this.toMonth;
 		this.cur_day = this.today;
 		this.getSignList();
 	},
 	methods: {
+		...mapActions(['getUserInfo']),
+		onConfirem() {
+			this.showSign = false;
+		},
 		// 当前签到记录
 		getSignList() {
 			let that = this;
@@ -108,7 +147,7 @@ export default {
 			}).then(res => {
 				if (res.code == 1) {
 					let emptyDays = that.calculateEmptyGrids();
-					that.cuntinueDays = res.data.cuntinue_days;
+					that.cuntinueDays = that.cuntinueDays === 0 ? res.data.cuntinue_days : that.cuntinueDays;
 					that.days = [...emptyDays, ...res.data.days];
 					that.selSign();
 				}
@@ -153,12 +192,9 @@ export default {
 			}).then(res => {
 				if (res.code == 1) {
 					that.getSignList();
-					let obj = {
-						today: today,
-						cuntinueDays: that.cuntinueDays,
-						score: res.data.score
-					};
-					that.$emit('clickChange', obj);
+					that.score = res.data.score;
+					that.getUserInfo()
+					that.showSign = true;
 				}
 			});
 		},
@@ -348,6 +384,81 @@ export default {
 		font-size: 28rpx;
 		font-weight: 500;
 		color: rgba(255, 255, 255, 0.9);
+	}
+}
+
+.sign-modal-box {
+	width: 520rpx;
+	background: #fff;
+	border-radius: 20rpx;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	position: absolute;
+	overflow: hidden;
+
+	.modal-head {
+		height: 320rpx;
+		// background:linear-gradient(177deg,rgba(233,180,97,1) 0%,rgba(238,204,137,1) 100%);
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		.modal-bg {
+			width: 100%;
+			height: 100%;
+		}
+		.sign-tag {
+			width: 70rpx;
+			height: 70rpx;
+			// background: #ccc;
+			position: absolute;
+			top: 50rpx;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		.sign-num-box {
+			font-size: 30rpx;
+			color: #fff;
+			position: absolute;
+			top: 150rpx;
+			left: 50%;
+			transform: translateX(-50%);
+			.sign-num {
+				font-size: 36rpx;
+				font-weight: 600;
+				padding: 0 10rpx;
+			}
+		}
+	}
+	.modal-content {
+		padding: 30rpx 0;
+		.sign-success {
+			font-size: 34rpx;
+			font-family: PingFang SC;
+			font-weight: bold;
+			color: rgba(227, 173, 91, 1);
+		}
+		.sign-score {
+			font-size: 26rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(153, 153, 153, 1);
+			padding-top: 16rpx;
+		}
+	}
+	.modal-bottom {
+		padding-bottom: 47rpx;
+		.confirem-btn {
+			width: 300rpx;
+			height: 70rpx;
+			background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
+			border-radius: 35rpx;
+			padding: 0;
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.9);
+		}
 	}
 }
 </style>

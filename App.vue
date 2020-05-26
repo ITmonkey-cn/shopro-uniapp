@@ -102,6 +102,7 @@ page {
 ::-webkit-scrollbar {
 	width: 0;
 	height: 0;
-	background-color: transparent;
+	color: transparent;
+	display: none;
 }
 </style>

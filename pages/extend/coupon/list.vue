@@ -9,7 +9,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="coupon-list" @tap="jump('/pages/coupons/detail',{couponId:c.id,state:stateCurrent})" v-for="c in couponList" :key="c.id">
+			<view class="coupon-list" @tap="jump('/pages/extend/coupon/detail',{couponId:c.id,state:stateCurrent})" v-for="c in couponList" :key="c.id">
 				<shoprp-coupon :state="stateCurrent" :coupon="c"></shoprp-coupon>
 			</view>
 		</view>
