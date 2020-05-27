@@ -1,5 +1,5 @@
 <template>
-	<view class="goods-box" v-if="detail" @tap="jump('/pages/goods/detail', { id: detail.id })">
+	<view class="goods-box" v-if="detail" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 		<view class="img-box">
 			<view class="tag" v-if="isTag && detail.activity">{{ tagText[detail.activity.type] }}</view>
 			<image class="img" :src="detail.image" lazy-load mode="aspectFill"></image>

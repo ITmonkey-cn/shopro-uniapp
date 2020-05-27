@@ -2,17 +2,21 @@
 	<view class="page_box">
 		<view class="head_box">
 			<view class="goods-card">
-				<shopro-activity-card>
-					<block slot="tipTag">
-						<view class="tip">
-							<text class="cuIcon-hotfill"></text>
-							<text class="tip-text">已拼589件</text>
-						</view>
-					</block>
-					<block slot="goodsBottom">
-						<view class="price-box">
-							<text class="price">￥299</text>
-							<text class="original-price">￥499</text>
+				<shopro-activity-card
+					:cardId="grouponDetail.id"
+					:title="grouponDetail.goods.title"
+					:subtitle="grouponDetail.goods.subtitle"
+					:img="grouponDetail.goods.image"
+					:price="grouponDetail.goods.price"
+					:originalPrice="grouponDetail.goods.original_price"
+				>
+					<block slot="sell">
+						<view class="x-f">
+							<view class="sell-box">
+								<text class="cuIcon-hotfill"></text>
+								<text class="sell-num">已拼{{ grouponDetail.goods.sales }}件</text>
+							</view>
+							<text class="group-num">{{ grouponDetail.num }}人团</text>
 						</view>
 					</block>
 				</shopro-activity-card>
@@ -20,18 +24,25 @@
 		</view>
 		<view class="content_box">
 			<view class="y-bc group-box">
-				<view class="tip-box x-f" v-if="false">
+				<!-- 拼团成功 -->
+				<view class="tip-box x-f" v-if="grouponDetail.status === 'finish'">
 					<text class="cuIcon-roundcheckfill"></text>
-					<text>恭喜您拼购成功！已有1人跟团购买</text>
+					<text>恭喜您拼团成功！</text>
 				</view>
-				<view class="title-box x-f">
+				<!--  拼团失败-->
+				<view class="tip-box x-f" v-if="grouponDetail.status === 'invalid'">
+					<text class="cuIcon-roundclosefill"></text>
+					<text>拼团失败！</text>
+				</view>
+				<!-- 拼团中 -->
+				<view class="title-box x-f" v-if="grouponDetail.status === 'ing'">
 					<view class="title-text">
 						待成团，还差
-						<text class="group-num">1</text>
+						<text class="group-num">{{ grouponDetail.num - grouponDetail.current_num }}</text>
 						人拼团成功
 					</view>
 					<view class="count-down x-f">
-						<text class="count-down-tip">还剩</text>
+						<text class="count-down-tip">倒计时</text>
 						<view class="time-box x-f">
 							<view class="count-text">{{ time.h || '00' }}</view>
 							:
@@ -48,11 +59,12 @@
 					</view>
 				</view>
 				<view class="btn-box x-c">
-					<button class="cu-btn btn1">邀请好友参团</button>
-					<button class="cu-btn btn2" v-if="false">查看订单</button>
+					<button class="cu-btn btn1" v-if="grouponDetail.status === 'ing'" @tap="onInvite">邀请好友参团</button>
+					<button class="cu-btn btn2" v-if="grouponDetail.status === 'finish'">查看订单</button>
+					<button class="cu-btn btn1" v-if="grouponDetail.status === 'invalid'">我要开团</button>
 				</view>
 			</view>
-			<view class="detail-item x-bc" @tap="$Router.push('/pages/user/group/rules')">
+			<view class="detail-item x-bc">
 				<text class="title">拼团玩法</text>
 				<view class="x-f">
 					<view class="description one-t">好友参团·人满发货·不满退款</view>
@@ -61,39 +73,61 @@
 			</view>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 邀请好友 -->
+			<shopro-share v-model="showShare" :goodsInfo="grouponDetail.goods" :posterType="'groupon'"></shopro-share>
 	</view>
 </template>
 
 <script>
 import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shoproShare from '@/components/shopro-share.vue';
 export default {
 	components: {
-		shoproActivityCard
+		shoproActivityCard,
+		shoproShare
 	},
 	data() {
 		return {
 			time: 0,
-			routerTo: this.$Router
+			grouponDetail: {},
+			showShare:false
 		};
 	},
 	computed: {},
 	onLoad() {
 		this.countDown();
+		this.getGrouponDetail();
 	},
 	methods: {
-		countDown() {
+		// 倒计时
+		countDown(t) {
 			let _self = this;
-			// let t = this.activityData.endtime * 1000 - new Date().getTime();
-			let t = 10000;
 			let timer = setInterval(() => {
 				if (t > 0) {
-					_self.time = _self.$tools.format(t);
+					_self.time = _self.$tools.formatToHours(t);
 					t--;
 				} else {
 					clearInterval(timer);
 					_self.time = '倒计时结束';
 				}
 			}, 1000);
+		},
+		// 拼团详情
+		getGrouponDetail() {
+			let that = this;
+			that.$api('goods.grouponDetail', {
+				id: that.$Route.query.grouponId
+			}).then(res => {
+				that.grouponDetail = res.data;
+				let newTime = new Date().getTime();
+				let endTime = res.data.expiretime * 1000;
+				let t = endTime - newTime;
+				that.countDown(t / 1000);
+			});
+		},
+		// 邀请
+		onInvite(){
+			this.showShare = true;
 		}
 	}
 };
@@ -107,6 +141,30 @@ export default {
 	.goods-card {
 		background-color: #fff;
 		border-radius: 20rpx;
+		.group-num {
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(153, 153, 153, 1);
+			margin-left: 30rpx;
+		}
+		.sell-box {
+			line-height: 32rpx;
+			background: rgba(255, 224, 226, 0.3);
+			border-radius: 16rpx;
+			padding: 0 10rpx;
+
+			.cuIcon-hotfill {
+				color: #e1212b;
+				font-size: 26rpx;
+				margin-right: 10rpx;
+			}
+
+			.sell-num {
+				font-size: 20rpx;
+				color: #f7979c;
+			}
+		}
 		/deep/.activity-goods-box {
 			border-bottom: none;
 			background: none;
@@ -128,9 +186,14 @@ export default {
 	height: 370rpx;
 	.tip-box {
 		font-size: 28rpx;
-
+		font-weight: bold;
 		.cuIcon-roundcheckfill {
-			color: #ecbe60;
+			color: #42b111;
+			font-size: 34rpx;
+			margin-right: 20rpx;
+		}
+		.cuIcon-roundclosefill {
+			color: #d81e06;
 			font-size: 34rpx;
 			margin-right: 20rpx;
 		}

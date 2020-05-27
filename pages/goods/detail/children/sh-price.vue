@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 正常商品 -->
-		<view class="normal-price-box" v-if="detail.activity === null">
+		<view class="normal-price-box" v-if="type !== 'score' && !detail.activity">
 			<view class="">
 				<text class="unit">￥</text>
 				<text class="price">{{ detail.price }}</text>
@@ -16,20 +16,33 @@
 				<view class="express"></view>
 			</view>
 		</view>
+		<!-- 积分商品 -->
+		<view class="score-price-card" v-if="type === 'score'">
+			<view class="x-f">
+				<image class="score-img" src="http://shopro.7wpp.com/imgs/score.png" mode=""></image>
+				<text class="price">{{ detail.price }}</text>
+			</view>
+			<view class="x-bc price-bottom-box">
+				<view class="x-f">
+					<view class="original-price">价值：￥{{ detail.original_price }}</view>
+					<text class="line"></text>
+					<view class="sold">已兑换：{{ detail.sales }}件</view>
+				</view>
+			</view>
+		</view>
 		<!-- 团购商品 -->
 		<view class="groupon-price-box" v-if="detail.activity && detail.activity.type === 'groupon'">
 			<view class="">
 				<text class="unit">￥</text>
-				<text class="price">111.00</text>
-				<text class="notice">2人团</text>
+				<text class="price">{{detail.price}}</text>
+				<text class="notice">{{detail.activity.rules.team_num}}人团</text>
 			</view>
 			<view class="x-bc price-bottom-box">
 				<view class="x-f">
-					<view class="original-price">原价：￥200</view>
+					<view class="original-price">原价：￥{{detail.original_price}}</view>
 					<text class="line"></text>
-					<view class="sold">已售：1.2万件</view>
+					<view class="sold">已售：{{detail.sales}}件</view>
 				</view>
-				<view class="express">2人团 · 已拼256件</view>
 			</view>
 		</view>
 		<!-- 秒杀商品 -->
@@ -88,7 +101,8 @@ export default {
 		};
 	},
 	props: {
-		detail: Object
+		detail: Object,
+		type: ''
 	},
 	created() {
 		if (this.detail.activity && this.detail.activity.type) {
@@ -155,9 +169,6 @@ export default {
 </script>
 
 <style lang="scss">
-[v-cloak] {
-	display: none;
-}
 // 正常商品
 .normal-price-box {
 	padding: 20rpx;
@@ -199,7 +210,7 @@ export default {
 // 团购商品
 .groupon-price-box {
 	padding: 20rpx;
-		background: url('http://shopro.7wpp.com/imgs/group_price_bg.png') no-repeat;
+	background: url('http://shopro.7wpp.com/imgs/group_price_bg.png') no-repeat;
 	background-size: 100% 100%;
 	.unit,
 	.notice {
@@ -225,6 +236,44 @@ export default {
 		font-weight: 500;
 		padding-top: 10rpx;
 
+		.line {
+			margin: 0 20rpx;
+			display: inline-block;
+			width: 3rpx;
+			height: 24rpx;
+			background-color: #fff;
+		}
+	}
+}
+// 积分商品价格卡片
+.score-price-card {
+	padding: 20rpx;
+	background: url('http://shopro.7wpp.com/imgs/detail/671e3bc4581f0b35791f382e4b5c2a8.png') no-repeat;
+	background-size: 100% 100%;
+	width: 750rpx;
+	.notice {
+		font-size: 24rpx;
+		color: #fff;
+	}
+	.score-img {
+		width: 36rpx;
+		height: 36rpx;
+	}
+	.price {
+		font-size: 36rpx;
+		color: #fff;
+		font-weight: bold;
+		margin: 0 10rpx;
+	}
+
+	.price-bottom-box {
+		font-size: 24rpx;
+		color: #fff;
+		font-weight: 500;
+		padding-top: 10rpx;
+		.original-price {
+			text-decoration: line-through;
+		}
 		.line {
 			margin: 0 20rpx;
 			display: inline-block;

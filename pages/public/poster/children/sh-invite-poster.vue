@@ -66,7 +66,7 @@ export default {
 			shareData: state => state.init.initData.share
 		})
 	},
-	created() {
+	onReady() {
 		this.setShareInfo();
 		this.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
 		this.shareFc();

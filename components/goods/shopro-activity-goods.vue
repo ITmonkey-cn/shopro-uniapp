@@ -1,5 +1,5 @@
 <template>
-	<view class="min-goods" @tap="jump('/pages/goods/detail', { id: detail.id })">
+	<view class="min-goods" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 		<view class="img-box">
 			<view class="tag" v-if="isTag">2人团</view>
 			<image class="img" :src="detail.image" mode="widthFix"></image>

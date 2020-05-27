@@ -1,6 +1,6 @@
 {
 	"pages": [{
-			"path": "pages/index/index",
+			"path": "pages/tabbar/home/index",
 			"name": "home",
 			"title": "首页",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
@@ -18,7 +18,7 @@
 			}
 		},
 		{
-			"path": "pages/index/category",
+			"path": "pages/tabbar/category/index",
 			"name": "category",
 			"style": {
 				"navigationBarTitleText": "分类"
@@ -29,7 +29,7 @@
 			}
 		},
 		{
-			"path": "pages/index/cart",
+			"path": "pages/tabbar/cart/index",
 			"name": "cart",
 			"style": {
 				"navigationBarTitleText": "购物车"
@@ -40,7 +40,7 @@
 			}
 		},
 		{
-			"path": "pages/index/user",
+			"path": "pages/tabbar/user/index",
 			"name": "user",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -73,7 +73,7 @@
 			}
 		},
 		{
-			"path": "pages/goods/detail",
+			"path": "pages/goods/detail/index",
 			"style": {
 				"navigationBarTitleText": "商品详情"
 
@@ -133,24 +133,6 @@
 				"auth": true
 			}
 		},
-		{
-			"path": "pages/activity/score/list",
-			"style": {
-				"navigationBarTitleText": "积分商城"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/activity/score/detail",
-			"style": {
-				"navigationBarTitleText": "积分详情"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
 		// 活动activity------end
 		// 扩展extend ------start
 		// #ifdef MP-WEIXIN
@@ -194,6 +176,15 @@
 			},
 			"meta": {
 				"auth": true
+			}
+		},
+		{
+			"path": "pages/extend/score/list",
+			"style": {
+				"navigationBarTitleText": "积分商城"
+			},
+			"meta": {
+				"auth": false
 			}
 		},
 		// 扩展extend------end
@@ -502,25 +493,25 @@
 		"backgroundColor": "#ffffff",
 		"borderStyle": "black",
 		"list": [{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/tabbar/home/index",
 				"text": "首页",
 				"iconPath": "static/imgs/tabbar/tab_home.png",
 				"selectedIconPath": "/static/imgs/tabbar/tab_home_sel.png"
 			},
 			{
-				"pagePath": "pages/index/category",
+				"pagePath": "pages/tabbar/category/index",
 				"text": "分类",
 				"iconPath": "static/imgs/tabbar/tab_type.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_type_sel.png"
 			},
 			{
-				"pagePath": "pages/index/cart",
+				"pagePath": "pages/tabbar/cart/index",
 				"text": "购物车",
 				"iconPath": "static/imgs/tabbar/tab_cart.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_cart_sel.png"
 			},
 			{
-				"pagePath": "pages/index/user",
+				"pagePath": "pages/tabbar/user/index",
 				"text": "我的",
 				"iconPath": "static/imgs/tabbar/tab_my.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_my_sel.png"

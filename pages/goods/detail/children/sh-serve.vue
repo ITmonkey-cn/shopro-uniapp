@@ -1,5 +1,5 @@
 <template>
-	<view class="" v-if="serveList.length > 0">
+	<view class="" v-if="serveList">
 		<view class="x-bc serve-box" @tap="onServe">
 			<view class="x-f">
 				<text class="title">服务</text>

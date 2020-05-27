@@ -10,7 +10,7 @@
 		</view>
 		<view class="content_box">
 			<view class="coupon-list" @tap="jump('/pages/extend/coupon/detail',{couponId:c.id,state:stateCurrent})" v-for="c in couponList" :key="c.id">
-				<shoprp-coupon :state="stateCurrent" :coupon="c"></shoprp-coupon>
+				<shoprp-coupon :state="stateCurrent" :couponData="c"></shoprp-coupon>
 			</view>
 		</view>
 		<view class="foot_box"></view>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import shoprpCoupon from '@/components/coupon/shopro-coupon.vue';
+import shoprpCoupon from '@/components/shopro-coupon/shopro-coupon.vue';
 export default {
 	components: {
 		shoprpCoupon

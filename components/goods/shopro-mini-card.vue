@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<view class="goods-box x-start" v-if="!type" @tap="jump('/pages/goods/detail', { id: detail.id })">
+		<view class="goods-box x-start" v-if="!type" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 			<image class="goods-img" :src="detail.image" mode="aspectFill"></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
@@ -11,7 +11,7 @@
 				</slot>
 			</view>
 		</view>
-		<view class="goods-box x-start" v-if="type === 'sku'" @tap="jump('/pages/goods/detail', { id: detail.id })">
+		<view class="goods-box x-start" v-if="type === 'sku'" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 			<image class="goods-img" :src="sku.image ? sku.image : detail.image" mode=""></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
@@ -22,7 +22,7 @@
 				</slot>
 			</view>
 		</view>
-		<view class="goods-box x-start" v-if="type === 'favorite'" @tap="jump('/pages/goods/detail', { id: detail.goods.id })">
+		<view class="goods-box x-start" v-if="type === 'favorite'" @tap="jump('/pages/goods/detail/index', { id: detail.goods.id })">
 			<image class="goods-img" :src="detail.goods.image" mode=""></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.goods.title }}</view>

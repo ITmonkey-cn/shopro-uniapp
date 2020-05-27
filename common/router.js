@@ -24,7 +24,7 @@ router.beforeEach((to, from, next) => {
 		store.commit('LOGIN_TIP', true)
 		// 跳转方式控制
 		switch (to.path) {
-			case '/pages/index/index':
+			case '/pages/tabbar/home/index':
 				next({
 					name: 'home',
 					params: {
@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
 					NAVTYPE: 'pushTab'
 				});
 				break;
-			case '/pages/index/category':
+			case '/pages/tabbar/category/index':
 				next({
 					name: 'category',
 					params: {
@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
 					NAVTYPE: 'pushTab'
 				});
 				break;
-			case '/pages/index/cart':
+			case '/pages/tabbar/cart/index':
 				next({
 					name: 'cart',
 					params: {
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
 					NAVTYPE: 'pushTab'
 				});
 				break;
-			case '/pages/index/user':
+			case '/pages/tabbar/user/index':
 				next({
 					name: 'user',
 					params: {

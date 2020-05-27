@@ -1,22 +1,22 @@
 <template>
-	<view class="" v-if="coupon">
+	<view class="" v-if="couponData">
 		<!-- 未领取，已领取 -->
 		<view class="coupon-wrap" v-if="state !== 3">
 			<view class="coupon-item x-bc">
 				<view class="coupon-left y-start ">
 					<view class="sum-box">
 						<text class="unit">￥</text>
-						<text class="miso-font sum">{{ coupon.amount }}</text>
-						<text class="sub">{{ coupon.name }}</text>
+						<text class="miso-font sum">{{ couponData.amount }}</text>
+						<text class="sub">{{ couponData.name }}</text>
 					</view>
-					<view class="notice">满{{ coupon.enough }}元可用</view>
-					<view class="notice">有效期：{{ tools.timestamp(coupon.usetime.start) }} 至 {{ tools.timestamp(coupon.usetime.end) }}</view>
+					<view class="notice">满{{ couponData.enough }}元可用</view>
+					<view class="notice">有效期：{{ tools.timestamp(couponData.usetime.start) }} 至 {{ tools.timestamp(couponData.usetime.end) }}</view>
 				</view>
 				<view class="coupon-right y-f">
 					<button class="cu-btn get-btn" v-if="state === 0" @tap.stop="getCoupon">立即领取</button>
 					<button class="cu-btn get-btn" v-if="state === 1">去使用</button>
 					<button class="cu-btn get-btn" v-if="state === 2">查看详情</button>
-					<view class="surplus-num" v-if="state === 0">仅剩{{ coupon.stock }}张</view>
+					<view class="surplus-num" v-if="state === 0">仅剩{{ couponData.stock }}张</view>
 				</view>
 			</view>
 		</view>
@@ -26,10 +26,10 @@
 				<view class="coupon-left y-start ">
 					<view class="sum-box">
 						<text class="unit">￥</text>
-						<text class="miso-font sum">{{ coupon.amount }}</text>
-						<text class="sub">{{ coupon.name }}</text>
+						<text class="miso-font sum">{{ couponData.amount }}</text>
+						<text class="sub">{{ couponData.name }}</text>
 					</view>
-					<view class="notice">有效期：{{ tools.timestamp(coupon.usetime.start) }} 至 {{ tools.timestamp(coupon.usetime.end) }}</view>
+					<view class="notice">有效期：{{ tools.timestamp(couponData.usetime.start) }} 至 {{ tools.timestamp(couponData.usetime.end) }}</view>
 				</view>
 				<view class="coupon-right y-f">
 					<button class="cu-btn get-btn">已失效</button>
@@ -49,19 +49,19 @@ export default {
 		};
 	},
 	props: {
-		state: {},
-		coupon: {}
+		state: {}, //0:立即领取，1：去使用，2：查看详情，3：已失效。
+		couponData: {}
 	},
 	computed: {},
 	methods: {
 		getCoupon() {
 			let that = this;
 			that.$api('coupons.get', {
-				id: that.coupon.id
+				id: that.couponData.id
 			}).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast(res.msg);
-					that.coupon.stock -= 1;
+					that.couponData.stock -= 1;
 				}
 			});
 		}

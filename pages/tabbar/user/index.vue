@@ -32,7 +32,7 @@
 		</view>
 		<view class="content_box">
 			<!-- 绑定手机 -->
-			<view class="notice-box x-bc pad" @tap="jump('/pages/user/edit-phone', { fromType: 'bind' })">
+			<view class="notice-box x-bc pad" v-if="!userInfo.mobile" @tap="jump('/pages/user/edit-phone', { fromType: 'bind' })">
 				<view class="notice-detail one-t">点击绑定手机号，确保账户安全</view>
 				<button class="bindPhone cu-btn">去绑定</button>
 			</view>
@@ -61,11 +61,11 @@
 			<view class="wallet-box x-f">
 				<view class="x-f wallet-left">
 					<view class="wallet-item y-f" @tap="jump('/pages/user/wallet/index')">
-						<text class="wallet-item__detail item-balance">{{ userInfo.money }}</text>
+						<text class="wallet-item__detail item-balance">{{ userInfo.money|| '0' }}</text>
 						<text class="wallet-item__title">账户余额</text>
 					</view>
 					<view class="wallet-item y-f" @tap="jump('/pages/user/wallet/score-balance')">
-						<text class="wallet-item__detail item-score">{{ userInfo.score }}</text>
+						<text class="wallet-item__detail item-score">{{ userInfo.score ||  '0' }}</text>
 						<text class="wallet-item__title">积分</text>
 					</view>
 					<view class="wallet-item y-f" @tap="jump('/pages/extend/coupon/list')">
@@ -178,7 +178,7 @@ export default {
 				{
 					title: '积分商城',
 					img: 'http://shopro.7wpp.com/imgs/user/list12.png',
-					url: '/pages/activity/score/list'
+					url: '/pages/extend/score/list'
 				},
 				{
 					title: '我的拼团',

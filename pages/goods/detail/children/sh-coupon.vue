@@ -1,9 +1,9 @@
 <template>
-	<!-- 产品分类导航 -->
+	<!-- 详情优惠券轮播 -->
 	<view class="category-box">
 		<swiper class="swiper-box" @change="onSwiper" circular :autoplay="false" :interval="3000" :duration="1000">
 			<swiper-item v-for="(c, index) in couponList" :key="c.id">
-				<view class="tab-list x-c"><shopro-coupon :coupon="c" :state="0"></shopro-coupon></view>
+				<view class="tab-list x-c"><shopro-coupon :couponData="c" :state="0"></shopro-coupon></view>
 			</swiper-item>
 		</swiper>
 		<view class="category-dots">
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import shoproCoupon from '@/components/coupon/shopro-coupon.vue';
+import shoproCoupon from '@/components/shopro-coupon/shopro-coupon.vue';
 export default {
 	components: {
 		shoproCoupon

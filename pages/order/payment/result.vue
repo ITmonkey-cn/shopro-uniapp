@@ -5,7 +5,7 @@
 			<text class="notice">{{ Boolean(pay) ? '支付成功' : '支付失败' }}</text>
 			<text class="pay-money" v-if="Boolean(pay) && orderDetail.total_fee">{{ orderDetail.total_fee }}</text>
 			<view class="btn-box flex justify-between">
-				<button class="cu-btn base-btn" v-if="Boolean(pay)" @tap="routerTo.pushTab('/pages/index/index')">返回首页</button>
+				<button class="cu-btn base-btn" v-if="Boolean(pay)" @tap="routerTo.pushTab('/pages/tabbar/home/index')">返回首页</button>
 				<button class="cu-btn base-btn" @tap="onOrder">查看订单</button>
 				<button class="again-pay cu-btn" v-if="!Boolean(pay)" @tap="onPay">重新支付</button>
 			</view>

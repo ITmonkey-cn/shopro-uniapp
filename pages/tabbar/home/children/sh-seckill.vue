@@ -98,7 +98,7 @@ export default {
 					t--;
 				} else {
 					clearInterval(timer);
-					_self.time = '倒计时结束';
+					_self.time = '秒杀结束';
 				}
 			}, 1000);
 		},

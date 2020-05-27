@@ -1,25 +1,32 @@
 <template>
 	<view class="page_box">
 		<view class="content_box">
-			<scroll-view scroll-y="true" class="scroll-box" enable-back-to-top scroll-with-animation>
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box" enable-back-to-top scroll-with-animation>
 				<view class="group-wrap">
 					<view class="group-head x-bc">
 						<text class="group-head__title">爆款推荐</text>
 						<text class="group-head__notice">省钱省心限时拼</text>
 					</view>
 					<view class="group-box">
-						<view class="goods-item" v-for="item in 11" :key="item">
-							<shopro-activity-card :isTag="true">
-								<block slot="slodEnd">
+						<view class="goods-item" v-for="groupon in grouponList" :key="groupon.id">
+							<shopro-activity-card
+								:id="groupon.id"
+								:title="groupon.title"
+								:subtitle="groupon.subtitle"
+								:img="groupon.image"
+								:price="groupon.price"
+								:originalPrice="groupon.original_price"
+							>
+								<block slot="sell">
 									<view class="x-f">
 										<view class="sell-box">
 											<text class="cuIcon-hotfill"></text>
-											<text class="sell-num">已拼111件</text>
+											<text class="sell-num">已拼{{groupon.sales}}件</text>
 										</view>
-										<text class="group-num">2人团</text>
+										<text class="group-num">{{groupon.activity.rules.team_num || 0}}人团</text>
 									</view>
 								</block>
-								<block slot="disBtn"><button class="cu-btn buy-btn">马上拼</button></block>
+								<block slot="btn"><button class="cu-btn buy-btn">马上拼</button></block>
 							</shopro-activity-card>
 						</view>
 					</view>
@@ -36,11 +43,45 @@ export default {
 		shoproActivityCard
 	},
 	data() {
-		return {};
+		return {
+			isLoading: false,
+			loadStatus: '', //loading,over
+			lastPage: 0,
+			currentPage: 1,
+			grouponList: []
+		};
 	},
-	onLoad() {},
+	onLoad() {
+		this.getGrouponList();
+	},
 	computed: {},
-	methods: {}
+	methods: {
+		// 加载更多
+		loadMore() {
+			if (this.currentPage < this.lastPage) {
+				this.currentPage += 1;
+				this.getGrouponList();
+			}
+		},
+		// 拼团列表
+		getGrouponList() {
+			let that = this;
+			that.isLoading = true;
+			that.loadStatus = 'loading';
+			that.$api('goods.grouponList').then(res => {
+				if (res.code === 1) {
+					that.isLoading = false;
+					that.grouponList = [...that.grouponList, ...res.data.data];
+					that.lastPage = res.data.last_page;
+					if (that.currentPage < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
+				}
+			});
+		}
+	}
 };
 </script>
 
@@ -90,8 +131,8 @@ export default {
 			bottom: -10rpx;
 			width: 160rpx;
 			height: 60rpx;
-			background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-			box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
+			background: linear-gradient(90deg, rgba(254, 131, 42, 1), rgba(255, 102, 0, 1));
+			box-shadow: 0px 7rpx 6rpx 0px rgba(255, 104, 4, 0.22);
 			border-radius: 30rpx;
 			font-size: 28rpx;
 			font-family: PingFang SC;

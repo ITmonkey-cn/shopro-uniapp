@@ -20,7 +20,7 @@
 					<view class="goods-bottom  x-f">
 						<view class="btn-box" v-for="(btn, index) in goods.btns" :key="btn">
 							<button
-								@tap.stop="jump('/pages/goods/detail', { id: goods.goods_id })"
+								@tap.stop="jump('/pages/goods/detail/index', { id: goods.goods_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === goods.btns.length }"
 								v-if="btn === 'buy_again'"

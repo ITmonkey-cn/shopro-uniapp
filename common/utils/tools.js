@@ -7,7 +7,7 @@ export default {
 	 * 跳转再封装，不支持复杂传参。
 	 */
 	routerTo(path, params = {}, isLogin) {
-		if (path.indexOf('/pages/index/') !== -1) {
+		if (path.indexOf('/pages/tabbar/') !== -1) {
 			router.pushTab({
 				path: path
 			})

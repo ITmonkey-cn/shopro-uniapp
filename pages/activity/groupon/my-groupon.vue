@@ -9,32 +9,46 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="group-goods">
-				<image class="group-state" :src="grouponStatus ? '/static/imgs/group_state_succeed.png' : '/static/imgs/group_state_failed.png'" mode=""></image>
-				<view class="goods-content">
-					<shopro-activity-card>
-						<block slot="slodEnd">
-							<view class="x-f">
-								<view class="sell-box">
-									<text class="cuIcon-hotfill"></text>
-									<text class="sell-num">已拼111件</text>
-								</view>
-								<text class="group-num">2人团</text>
-							</view>
-						</block>
-					</shopro-activity-card>
-				</view>
-
-				<view class="btn-box x-f">
-					<button class="cu-btn btn" v-if="stateId === 2">申请退款</button>
-					<button class="cu-btn btn" @tap="jump('/pages/activity/groupon/detail')">拼购详情</button>
-					<button class="cu-btn invite-btn" v-if="stateId === 1" @tap="onInvite">邀请好友</button>
-				</view>
-			</view>
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+				<block v-for="groupon in myGrouponList" :key="groupon.id">
+					<view class="group-card">
+						<image class="group-state" :src="grouponStatus ? '/static/imgs/group_state_succeed.png' : '/static/imgs/group_state_failed.png'" mode=""></image>
+						<view class="goods-content">
+							<shopro-activity-card
+								:cardId="groupon.goods.id"
+								:title="groupon.goods.title"
+								:subtitle="groupon.goods.subtitle"
+								:img="groupon.goods.image"
+								:price="groupon.goods.price"
+								:originalPrice="groupon.goods.original_price"
+							>
+								<block slot="sell">
+									<view class="x-f">
+										<view class="sell-box">
+											<text class="cuIcon-hotfill"></text>
+											<text class="sell-num">已拼{{ groupon.goods.sales }}件</text>
+										</view>
+										<text class="group-num">{{ groupon.groupon.num }}人团</text>
+									</view>
+								</block>
+							</shopro-activity-card>
+						</view>
+						<view class="btn-box x-f">
+							<button class="cu-btn btn" v-if="stateId === 'finish'">申请退款</button>
+							<button class="cu-btn btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: groupon.id })">拼团详情</button>
+							<button class="cu-btn invite-btn" v-if="stateId === 'ing'" @tap="onInvite(groupon.goods)">邀请好友</button>
+						</view>
+					</view>
+				</block>
+				<!-- 加载更多 -->
+				<view v-if="myGrouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<!-- loading -->
+				<shoproLoad v-model="isLoading"></shoproLoad>
+			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
 		<!-- 分享 -->
-		<shopro-share v-model="showShare" :goodsInfo="grouponInfo" :posterType="'groupon'"></shopro-share>
+		<shopro-share v-model="showShare" :goodsInfo="shareGoodsInfo" :posterType="'groupon'"></shopro-share>
 	</view>
 </template>
 
@@ -48,38 +62,44 @@ export default {
 	},
 	data() {
 		return {
+			isLoading: false,
+			loadStatus: '', //loading,over
+			lastPage: 0,
+			currentPage: 1,
 			showShare: false,
-			stateId: 0,
+			stateId: 'all',
 			grouponStatus: false,
-			grouponInfo:{//测试
-				id: 17,
-				title: 'JMsolution韩国粉色玫瑰防晒SPF50户外美白超强隔离JM防晒喷雾',
-				image: 'http://shopro-1253949872.image.myqcloud.com/uploads/20200430/3e61ab01c9280667d36d2e0a38021a66.jpg_2200x2200Q100s50.jpg_.webp.jpg'
-			},
+			myGrouponList: [], //我的拼团列表。
+			shareGoodsInfo: {}, //分享海报信息。
 			groupState: [
 				{
-					id: 0,
+					id: 'all', //0
 					title: '全部'
 				},
 				{
-					id: 1,
+					id: 'ing', //1
 					title: '进行中'
 				},
 				{
-					id: 2,
+					id: 'finish', //2
 					title: '成功'
 				},
 				{
-					id: 3,
+					id: 'invalid', //3
 					title: '失败'
 				}
 			]
 		};
 	},
 	computed: {},
+	onLoad() {
+		this.getMyGroupon();
+	},
 	methods: {
 		onNav(id) {
 			this.stateId = id;
+			this.myGrouponList = [];
+			this.getMyGroupon();
 		},
 		jump(path, parmas) {
 			this.$Router.push({
@@ -87,8 +107,36 @@ export default {
 				query: parmas
 			});
 		},
-		onInvite() {
+		onInvite(data) {
+			this.shareGoodsInfo = data;
 			this.showShare = true;
+		},
+		// 加载更多
+		loadMore() {
+			if (this.currentPage < this.lastPage) {
+				this.currentPage += 1;
+				this.getMyGroupon();
+			}
+		},
+		// 我的拼团
+		getMyGroupon() {
+			let that = this;
+			that.isLoading = true;
+			that.loadStatus = 'loading';
+			that.$api('goods.myGroupon', {
+				type: that.stateId
+			}).then(res => {
+				if (res.code === 1) {
+					that.isLoading = false;
+					that.myGrouponList = [...that.myGrouponList, ...res.data.data];
+					that.lastPage = res.data.last_page;
+					if (that.currentPage < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
+				}
+			});
 		}
 	}
 };
@@ -122,8 +170,8 @@ export default {
 	}
 }
 
-// ƴ����Ʒ
-.group-goods {
+// 拼团卡片
+.group-card {
 	background: #fff;
 	margin-top: 20rpx;
 	position: relative;
@@ -137,15 +185,21 @@ export default {
 	}
 
 	.goods-content {
-		padding: 30rpx 20rpx;
+		padding: 0 20rpx;
 		position: relative;
 		z-index: 3;
-		.tip {
+		.group-num {
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(153, 153, 153, 1);
+			margin-left: 30rpx;
+		}
+		.sell-box {
 			line-height: 32rpx;
 			background: rgba(255, 224, 226, 0.3);
 			border-radius: 16rpx;
 			padding: 0 10rpx;
-			margin-top: 30rpx;
 
 			.cuIcon-hotfill {
 				color: #e1212b;
@@ -153,7 +207,7 @@ export default {
 				margin-right: 10rpx;
 			}
 
-			.tip-text {
+			.sell-num {
 				font-size: 20rpx;
 				color: #f7979c;
 			}

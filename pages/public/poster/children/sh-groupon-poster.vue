@@ -74,7 +74,7 @@ export default {
 				title: '加载中'
 			});
 			that.$api('goods.detail', {
-				id: 17 //that.$Route.query.id
+				id: that.$Route.query.id
 			})
 				.then(res => {
 					if (res.code === 1) {
@@ -83,6 +83,8 @@ export default {
 						that.goodsInfo.title = res.data.title;
 						that.goodsInfo.price = res.data.price;
 						that.goodsInfo.original_price = res.data.original_price;
+						that.goodsInfo.teamNum = res.data.activity.rules.team_num;
+						that.goodsInfo.grouponPrice = res.data.groupon_price;
 						that.setShareInfo({
 							query: {
 								url: 'goods-' + that.$Route.query.id
@@ -197,7 +199,7 @@ export default {
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
 									dx: bgObj.width * 0.054,
-									dy: bgObj.width * 0.20,
+									dy: bgObj.width * 0.2,
 									infoCallBack(imageInfo) {
 										return {
 											dWidth: bgObj.width * 0.9,
@@ -256,7 +258,7 @@ export default {
 								{
 									type: 'text', //价格
 									// fontStyle: 'italic',//倾斜
-									text: `${that.goodsInfo.price}`,
+									text: `${that.goodsInfo.grouponPrice}`,
 									size: fontSize * 1.1,
 									color: '#E1212B',
 									alpha: 1,
@@ -269,8 +271,8 @@ export default {
 									infoCallBack(textLength) {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {
-										dx: bgObj.width * 0.24,
-										dy: bgObj.width * 1.34
+											dx: bgObj.width * 0.24,
+											dy: bgObj.width * 1.34
 										};
 									},
 									serialNum: 0
@@ -278,7 +280,7 @@ export default {
 								{
 									type: 'text', //几人团
 									// fontStyle: 'italic',//倾斜
-									text: `10人团`,
+									text: `${that.goodsInfo.teamNum}人团`,
 									size: fontSize * 0.8,
 									color: '#fff',
 									alpha: 1,
@@ -303,7 +305,7 @@ export default {
 									url: `${that.$API_URL}wechat/wxacode?scene=${that.scene}`,
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
-									dx: bgObj.width- bgObj.width * 0.2,
+									dx: bgObj.width - bgObj.width * 0.2,
 									dy: bgObj.height - bgObj.width * 0.18,
 									infoCallBack(imageInfo) {
 										return {
@@ -321,8 +323,8 @@ export default {
 									type: 'qrcode',
 									text: `${that.shareInfo.path}`,
 									size: bgObj.width * 0.14,
-									dx: bgObj.width- bgObj.width * 0.2,
-									dy: bgObj.height - bgObj.width * 0.18,
+									dx: bgObj.width - bgObj.width * 0.2,
+									dy: bgObj.height - bgObj.width * 0.18
 								}
 								// #endif
 							]);
@@ -409,7 +411,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .content {
 	position: relative;
 	width: 100%;

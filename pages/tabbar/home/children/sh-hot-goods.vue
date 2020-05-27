@@ -35,6 +35,7 @@ export default {
 			this.listParams.goods_ids = this.detail.ids;
 			this.getGoodsList();
 		}
+	
 	},
 	computed: {},
 	methods: {

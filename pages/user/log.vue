@@ -47,7 +47,7 @@ export default {
 			emptyData: {
 				img: '/static/imgs/empty/empty_goods.jpg',
 				tip: '暂无浏览记录',
-				path: '/pages/index/index',
+				path: '/pages/tabbar/home/index',
 				pathText: '去首页逛逛'
 			},
 			browseList: [],
@@ -99,7 +99,7 @@ export default {
 			});
 			console.log(this.selList);
 		},
-		// 收藏列表
+		// 历史记录
 		getbrowseList() {
 			let that = this;
 			that.loadStatus = 'loading';

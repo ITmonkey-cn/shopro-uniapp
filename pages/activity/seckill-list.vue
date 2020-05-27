@@ -11,8 +11,15 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item" v-for="item in goodsList" :key="item.id">
-					<shopro-activity-card :seckillData="item" :status="tabCurrent">
-						<block slot="slodEnd">
+					<shopro-activity-card 
+					:id="item.id"
+					:title="item.title" 
+					:subtitle="item.subtitle" 
+					:img="item.image" 
+					:price="item.price" 
+					:originalPirce="item.original_price"
+					>
+						<block slot="sell">
 							<view class="x-f">
 								<view class="cu-progress round sm">
 									<view class="progress--color" :style="[{ width: loading ? getProgress(item.sales, item.stock) : '' }]"></view>
@@ -20,7 +27,7 @@
 								<view class="progress-text">已抢{{ getProgress(item.sales, item.stock) }}</view>
 							</view>
 						</block>
-						<block slot="disBtn">
+						<block slot="btn">
 							<button class="cu-btn buy-btn" :class="btnType[tabCurrent].color">{{ btnType[tabCurrent].name }}</button>
 						</block>
 					</shopro-activity-card>
