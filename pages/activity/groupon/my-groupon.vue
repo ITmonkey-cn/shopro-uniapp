@@ -12,7 +12,7 @@
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<block v-for="groupon in myGrouponList" :key="groupon.id">
 					<view class="group-card">
-						<image class="group-state" :src="grouponStatus ? '/static/imgs/group_state_succeed.png' : '/static/imgs/group_state_failed.png'" mode=""></image>
+						<image v-if="stateId !== 'ing'" class="group-state" :src="grouponStatus[groupon.groupon.status]" mode=""></image>
 						<view class="goods-content">
 							<shopro-activity-card
 								:cardId="groupon.goods.id"
@@ -68,7 +68,11 @@ export default {
 			currentPage: 1,
 			showShare: false,
 			stateId: 'all',
-			grouponStatus: false,
+			grouponStatus: {
+				finish: 'http://shopro.7wpp.com/imgs/group_state_succeed.png',
+				'finish-fictitious': 'http://shopro.7wpp.com/imgs/group_state_succeed.png',
+				invalid: 'http://shopro.7wpp.com/imgs/group_state_failed.png'
+			},
 			myGrouponList: [], //我的拼团列表。
 			shareGoodsInfo: {}, //分享海报信息。
 			groupState: [
@@ -178,6 +182,7 @@ export default {
 	overflow: hidden;
 	.group-state {
 		position: absolute;
+		z-index: 2;
 		top: -20rpx;
 		right: -20rpx;
 		width: 126rpx;
@@ -188,6 +193,9 @@ export default {
 		padding: 0 20rpx;
 		position: relative;
 		z-index: 3;
+		/deep/.activity-goods-box {
+			background: none;
+		}
 		.group-num {
 			font-size: 24rpx;
 			font-family: PingFang SC;

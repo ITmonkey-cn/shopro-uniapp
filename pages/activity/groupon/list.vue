@@ -8,29 +8,38 @@
 						<text class="group-head__notice">省钱省心限时拼</text>
 					</view>
 					<view class="group-box">
-						<view class="goods-item" v-for="groupon in grouponList" :key="groupon.id">
+						<view class="goods-item" v-for="(groupon, index) in grouponList" :key="groupon.id">
 							<shopro-activity-card
-								:id="groupon.id"
+								:cardId="groupon.id"
 								:title="groupon.title"
 								:subtitle="groupon.subtitle"
 								:img="groupon.image"
-								:price="groupon.price"
+								:price="groupon.groupon_price"
 								:originalPrice="groupon.original_price"
 							>
+								<block slot="tag">
+									<view class="tag" v-if="index < 3">TOP{{ index + 1 }}</view>
+								</block>
 								<block slot="sell">
 									<view class="x-f">
 										<view class="sell-box">
 											<text class="cuIcon-hotfill"></text>
-											<text class="sell-num">已拼{{groupon.sales}}件</text>
+											<text class="sell-num">已拼{{ groupon.sales }}件</text>
 										</view>
-										<text class="group-num">{{groupon.activity.rules.team_num || 0}}人团</text>
+										<text class="group-num">{{ groupon.activity.rules.team_num || 0 }}人团</text>
 									</view>
 								</block>
-								<block slot="btn"><button class="cu-btn buy-btn">马上拼</button></block>
+								<block slot="btn"><button class="cu-btn buy-btn" @tap.stop="jump('/pages/goods/detail/index', { id: groupon.id })">马上拼</button></block>
 							</shopro-activity-card>
 						</view>
 					</view>
 				</view>
+				<!-- 空白 -->
+				<shopro-empty v-if="!grouponList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
+				<!-- 加载更多 -->
+				<view v-if="grouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<!-- loading -->
+				<shoproLoad v-model="isLoading"></shoproLoad>
 			</scroll-view>
 		</view>
 	</view>
@@ -44,7 +53,13 @@ export default {
 	},
 	data() {
 		return {
-			isLoading: false,
+			emptyData: {
+				img: '/static/imgs/empty/empty_goods.png',
+				tip: '还没有拼团商品噢，去首页看看吧~',
+				path: '/pages/tabbar/home/index',
+				pathText: '去首页逛逛'
+			},
+			isLoading: true,
 			loadStatus: '', //loading,over
 			lastPage: 0,
 			currentPage: 1,
@@ -56,6 +71,13 @@ export default {
 	},
 	computed: {},
 	methods: {
+		// 路由跳转
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 		// 加载更多
 		loadMore() {
 			if (this.currentPage < this.lastPage) {
@@ -72,6 +94,7 @@ export default {
 				if (res.code === 1) {
 					that.isLoading = false;
 					that.grouponList = [...that.grouponList, ...res.data.data];
+					// that.grouponList=[];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
 						that.loadStatus = '';
@@ -109,13 +132,29 @@ export default {
 
 .group-box {
 	width: 710rpx;
-	background: rgba(255, 255, 255, 1);
+	background: linear-gradient(#fff, #f5f5f5);
 	border-radius: 20rpx;
 	margin: 0 auto;
+	min-height: 1000rpx;
 	.goods-item {
 		border-radius: 20rpx;
 		overflow: hidden;
 		position: relative;
+		margin-bottom: 20rpx;
+		.tag {
+			position: absolute;
+			left: 0;
+			top: 10rpx;
+			z-index: 2;
+			line-height: 35rpx;
+			background: linear-gradient(132deg, rgba(255, 153, 93, 1), rgba(255, 99, 97, 1));
+			border-radius: 0px 18rpx 18rpx 0px;
+			padding: 0 10rpx;
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: bold;
+			color: rgba(255, 255, 255, 0.8);
+		}
 		/deep/.goods-right {
 			width: 460rpx;
 			.title {

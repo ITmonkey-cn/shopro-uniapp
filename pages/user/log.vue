@@ -11,10 +11,11 @@
 						<checkbox v-if="isSel" :value="f.goods_id.toString()" :checked="f.checked" :class="{ checked: f.checked }" class="goods-radio round orange"></checkbox>
 						<shopro-mini-card :detail="f" :type="'favorite'"></shopro-mini-card>
 					</view>
-					<view class="cu-load text-gray" :class="loadStatus"></view>
 				</checkbox-group>
 				<!-- 缺省页 -->
-				<view class="empty-box x-c" v-if="!browseList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+				<shopro-empty v-if="!browseList.length" :emptyData="emptyData"></shopro-empty>
+				<!-- 更多 -->
+				<view v-if="browseList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
 		</view>
 		<view class="foot_box ">
@@ -31,7 +32,7 @@
 
 <script>
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 
 export default {
 	components: {
@@ -200,14 +201,5 @@ export default {
 		padding: 0;
 		color: rgba(#fff, 0.9);
 	}
-}
-// 缺省页
-.empty-box {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 10;
 }
 </style>

@@ -22,6 +22,7 @@
 							<view class="x-bc goods-bottom">
 								<view class="price-box x-f">
 									<view v-if="goodsType === 'score'">{{ currentSkuPrice.price_text || goodsInfo.price }}</view>
+									<view v-else-if="grouponBuyType==='groupon'">￥{{ currentSkuPrice.groupon_price || goodsInfo.price }}</view>
 									<view v-else>￥{{ currentSkuPrice.price || goodsInfo.price }}</view>
 								</view>
 								<text class="stock">库存{{ currentSkuPrice.stock || goodsInfo.stock }}件</text>
@@ -97,6 +98,14 @@ export default {
 		goodsType: {
 			type: String,
 			default: 'goods'
+		},
+		grouponBuyType: {
+			type: String,
+			default: 'alone'
+		},
+		grouponId: {
+			type: Number,
+			default: 0
 		}
 	},
 	created() {
@@ -323,7 +332,13 @@ export default {
 			if (this.confirmSku()) {
 				let confirmGoodsList = [];
 				confirmGoodsList.push(that.confirmGoodsInfo);
-				that.jump('/pages/order/confirm', { goodsList: JSON.stringify(confirmGoodsList), from: 'goods', orderType: that.goodsType });
+				that.jump('/pages/order/confirm', {
+					goodsList: JSON.stringify(confirmGoodsList),
+					from: 'goods',
+					orderType: that.goodsType,
+					grouponBuyType: that.grouponBuyType,
+					grouponId: that.grouponId
+				});
 			}
 		},
 		// 确定

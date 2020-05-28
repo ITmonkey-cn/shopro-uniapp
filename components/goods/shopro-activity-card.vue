@@ -21,6 +21,7 @@
 
 <script>
 export default {
+	name: 'shoproActivityCard',
 	components: {},
 	data() {
 		return {};
@@ -55,21 +56,6 @@ export default {
 		height: 200rpx;
 		overflow: hidden;
 		position: relative;
-
-		.tag {
-			position: absolute;
-			left: 0;
-			top: 10rpx;
-			z-index: 2;
-			line-height: 35rpx;
-			background: linear-gradient(132deg, rgba(255, 153, 93, 1), rgba(255, 99, 97, 1));
-			border-radius: 0px 18rpx 18rpx 0px;
-			padding: 0 10rpx;
-			font-size: 24rpx;
-			font-family: PingFang SC;
-			font-weight: bold;
-			color: rgba(255, 255, 255, 0.8);
-		}
 
 		.img {
 			width: 200rpx;

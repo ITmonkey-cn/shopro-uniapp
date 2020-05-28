@@ -1,7 +1,7 @@
 <template>
 	<view class="min-goods" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 		<view class="img-box">
-			<view class="tag" v-if="isTag">2人团</view>
+			<view class="tag" v-if="detail.activity_type === 'groupon'">{{detail.activity.rules.team_num}}人团</view>
 			<image class="img" :src="detail.image" mode="widthFix"></image>
 		</view>
 		<view class="price-box">
@@ -21,10 +21,6 @@ export default {
 		return {};
 	},
 	props: {
-		isTag: {
-			type: [Boolean, String],
-			default: false
-		},
 		detail: Object
 	},
 	computed: {},

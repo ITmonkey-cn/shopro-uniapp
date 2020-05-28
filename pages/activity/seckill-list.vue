@@ -12,12 +12,12 @@
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item" v-for="item in goodsList" :key="item.id">
 					<shopro-activity-card 
-					:id="item.id"
+					:cardId="item.id"
 					:title="item.title" 
 					:subtitle="item.subtitle" 
 					:img="item.image" 
 					:price="item.price" 
-					:originalPirce="item.original_price"
+					:originalPrice="item.original_price"
 					>
 						<block slot="sell">
 							<view class="x-f">
@@ -33,7 +33,7 @@
 					</shopro-activity-card>
 				</view>
 				<!-- 空白 -->
-				<view class="empty-box x-c" v-if="!goodsList.length && !isLoading"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 				<!-- 加载更多 -->
 				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
@@ -46,7 +46,7 @@
 
 <script>
 import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
 		shoproActivityCard,
@@ -58,7 +58,7 @@ export default {
 				img: '/static/imgs/empty/empty_goods.jpg',
 				tip: '暂无秒杀商品，敬请期待~'
 			},
-			isLoading: false,
+			isLoading: true,
 			loadStatus: '', //loading,over
 			lastPage: 0,
 			currentPage: 1,
@@ -217,12 +217,5 @@ export default {
 		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 		color: rgba(255, 255, 255, 1);
 	}
-}
-// 空白页
-.empty-box {
-	position: fixed;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
 }
 </style>

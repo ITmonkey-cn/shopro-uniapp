@@ -5,9 +5,16 @@
 			<text class="notice">{{ Boolean(pay) ? '支付成功' : '支付失败' }}</text>
 			<text class="pay-money" v-if="Boolean(pay) && orderDetail.total_fee">{{ orderDetail.total_fee }}</text>
 			<view class="btn-box flex justify-between">
-				<button class="cu-btn base-btn" v-if="Boolean(pay)" @tap="routerTo.pushTab('/pages/tabbar/home/index')">返回首页</button>
+				<button
+					class="cu-btn base-btn"
+					v-if="pay && orderDetail.activity_type === 'groupon' && orderDetail.ext_arr.groupon_id > 0"
+					@tap="jump('/pages/activity/groupon/detail', { grouponId: orderDetail.ext_arr.groupon_id })"
+				>
+					拼团详情
+				</button>
+				<button class="cu-btn base-btn" v-else @tap="routerTo.pushTab('/pages/tabbar/home/index')">返回首页</button>
 				<button class="cu-btn base-btn" @tap="onOrder">查看订单</button>
-				<button class="again-pay cu-btn" v-if="!Boolean(pay)" @tap="onPay">重新支付</button>
+				<button class="again-pay cu-btn" v-if="!pay" @tap="onPay">重新支付</button>
 			</view>
 		</view>
 		<view class="hot-box" v-if="false">
@@ -44,12 +51,17 @@ export default {
 	},
 	methods: {
 		...mapActions(['getCartList']),
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 		// 查看订单
 		onOrder() {
-			let orderSn = this.$Route.query.orderSn;
 			this.$Router.replace({
 				path: '/pages/order/detail',
-				query: { id: orderSn }
+				query: { id: this.orderDetail.id }
 			});
 		},
 		// 支付信息

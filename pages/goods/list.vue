@@ -33,7 +33,7 @@
 import shoproFilter from '@/components/filter/shopro-filter.vue';
 import shoproGoods from '@/components/goods/shopro-goods.vue';
 import shoproSearch from '@/components/search/shopro-search.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 let timer = null;
 export default {
@@ -56,7 +56,7 @@ export default {
 				keywords: '',
 				page: 1
 			},
-			isLoading: false,
+			isLoading: true,//loading和空白页。
 			loadStatus: '', //loading,over
 			lastPage: 0
 		};

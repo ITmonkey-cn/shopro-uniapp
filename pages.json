@@ -123,16 +123,6 @@
 				"auth": true
 			}
 		},
-		{
-			"path": "pages/activity/groupon/rules",
-			"style": {
-				"navigationBarTitleText": "拼购玩法攻略"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
 		// 活动activity------end
 		// 扩展extend ------start
 		// #ifdef MP-WEIXIN

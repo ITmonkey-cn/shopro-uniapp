@@ -28,7 +28,7 @@
 						<!-- 秒杀 -->
 						<sh-seckill v-if="item.type === 'seckill'" :detail="item.content"></sh-seckill>
 						<!-- 拼团 -->
-						<sh-groupon v-if="false"></sh-groupon>
+						<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
 						<!-- 直播 -->
 						<!-- #ifdef MP-WEIXIN -->
 						<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>

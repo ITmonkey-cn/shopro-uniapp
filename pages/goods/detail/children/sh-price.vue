@@ -41,7 +41,7 @@
 				<view class="x-f">
 					<view class="original-price">原价：￥{{detail.original_price}}</view>
 					<text class="line"></text>
-					<view class="sold">已售：{{detail.sales}}件</view>
+					<view class="sold">已拼：{{detail.sales}}件</view>
 				</view>
 			</view>
 		</view>

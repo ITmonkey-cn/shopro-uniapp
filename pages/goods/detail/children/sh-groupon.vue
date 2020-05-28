@@ -1,24 +1,35 @@
 <template>
 	<view class="group-people">
-		<view class="into-title x-bc">
-			<text>已有1150人参与活动</text>
-			<text class="cuIcon-right" @tap="onMoreGrouponTeam"></text>
-		</view>
-		<view class="into-item x-bc" v-for="(g, index) in grouponTeamList" :key="g.id" v-if="index < 2">
-			<view class="x-f">
-				<image class="into-img" :src="g.leader.user_avatar" mode="aspectFill"></image>
-				<text class="into-name">{{ g.leader.user_nickname }}</text>
+		<block v-if="grouponTeamList.length">
+			<view class="into-title x-bc">
+				<text>已有1150人参与活动</text>
+				<text class="cuIcon-right" @tap="onMoreGrouponTeam"></text>
 			</view>
-			<view class="x-f">
-				<view class="y-end">
-					<view class="num">
-						还差
-						<text class="num-color">{{ g.num - g.current_num }}人</text>
-						成团
-					</view>
-					<view class="time" v-if="g.time">剩余时间{{ g.time.h }}:{{ g.time.m }}:{{ g.time.s }}</view>
+			<view class="into-item x-bc" v-for="(g, index) in grouponTeamList" :key="g.id" v-if="index < 2">
+				<view class="x-f">
+					<image class="into-img" :src="g.leader.user_avatar" mode="aspectFill"></image>
+					<text class="into-name">{{ g.leader.user_nickname }}</text>
 				</view>
-				<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: g.id })">去参团</button>
+				<view class="x-f">
+					<view class="y-end">
+						<view class="num">
+							还差
+							<text class="num-color">{{ g.num - g.current_num }}人</text>
+							成团
+						</view>
+						<view class="time" v-if="g.expiretime && g.time">剩余时间{{ g.time.h }}:{{ g.time.m }}:{{ g.time.s }}</view>
+					</view>
+					<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: g.id })">去参团</button>
+				</view>
+			</view>
+		</block>
+
+		<!-- 拼团玩法 -->
+		<view v-if="grouponData.activity.richtext_id + 0" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: grouponData.activity.richtext_id })">
+			<text class="title">玩法</text>
+			<view class="x-f">
+				<view class="description one-t">开团/参团·邀请好友·人满发货（不满退款）</view>
+				<text class="cuIcon-right"></text>
 			</view>
 		</view>
 		<!-- 弹窗 -->
@@ -43,7 +54,7 @@
 										<text class="num-color">{{ g.num - g.current_num }}人</text>
 										成团
 									</view>
-									<view class="time" v-if="g.time">剩余时间{{ g.time.h }}:{{ g.time.m }}:{{ g.time.s }}</view>
+									<view class="time" v-if="g.expiretime && g.time">剩余时间{{ g.time.h }}:{{ g.time.m }}:{{ g.time.s }}</view>
 								</view>
 								<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: g.id })">去参团</button>
 							</view>
@@ -57,6 +68,7 @@
 </template>
 
 <script>
+let timer;
 export default {
 	components: {},
 	data() {
@@ -68,13 +80,23 @@ export default {
 	props: {
 		grouponData: {}
 	},
-	computed: {
-		timeArr() {
-			let that = this;
-		}
+	computed: {},
+	beforeDestroy() {
+		timer = null;
 	},
 	created() {
 		this.getGrouponItem();
+		let that = this;
+
+		timer = setInterval(() => {
+			that.grouponTeamList.forEach((item, index) => {
+				let nowTime = new Date().getTime();
+				let endTime = item.expiretime * 1000;
+				let t = (endTime - nowTime) / 1000;
+				let time = that.$tools.formatToHours(t);
+				that.$set(that.grouponTeamList[index], 'time', time);
+			});
+		}, 1000);
 	},
 	methods: {
 		hideModal() {
@@ -90,7 +112,7 @@ export default {
 			this.showModal = true;
 		},
 		// 拼购人
-		async getGrouponItem() {
+		getGrouponItem() {
 			let that = this;
 			that.$api('goods.grouponItem', {
 				goods_id: that.grouponData.id,
@@ -98,16 +120,6 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.grouponTeamList = res.data;
-					let nowTime = new Date().getTime();
-					let timer = setInterval(() => {
-						that.grouponTeamList.forEach(item => {
-							let endTime = item.expiretime * 1000;
-							let t = (endTime - nowTime) / 1000;
-							let time = that.$tools.formatToHours(t);
-							item.time = time;
-						});
-					}, 1000);
-					console.log(that.grouponTeamList);
 				}
 			});
 		}
@@ -116,6 +128,23 @@ export default {
 </script>
 
 <style lang="scss">
+// 拼团玩法
+.groupon-play {
+	height: 94rpx;
+	border-top: 1rpx solid rgba(#dfdfdf, 0.5);
+	background: #fff;
+	.title {
+		font-size: 28rpx;
+		color: #999;
+	}
+	.description {
+		font-size: 28rpx;
+		text-align: right;
+	}
+	.cuIcon-right {
+		margin-left: 20rpx;
+	}
+}
 // 弹窗
 .modal-box {
 	width: 750rpx;

@@ -20,7 +20,7 @@
 				<view class="goods-title">{{ goodsInfo.title }}</view>
 				<view class="sub-title">{{ goodsInfo.subtitle }}</view>
 				<!-- 规格选择 -->
-				<view class="sku-box" @tap="showSku = true" v-if="activityRules.status !== 'waiting'">
+				<view class="sku-box" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && goodsInfo.activity && goodsInfo.activity.type !== 'groupon'">
 					<view class="x-bc">
 						<view class="x-f">
 							<text class="title">规格</text>
@@ -33,6 +33,7 @@
 					v-model="showSku"
 					:goodsInfo="goodsInfo"
 					:buyType="goodsInfo.activity_type == 'seckill' || detailType === 'score' ? 'buy' : buyType"
+					:grouponBuyType="grouponBuyType"
 					@changeType="changeType"
 					@getSkuText="getSkuText"
 				></shopro-sku>
@@ -44,7 +45,10 @@
 					:couponList="goodsInfo.coupons"
 				></sh-coupon>
 				<!-- 拼团人-->
-				<sh-groupon v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon' && detailType !== 'score'" :grouponData="goodsInfo"></sh-groupon>
+				<sh-groupon
+					v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon' && goodsInfo.activity.rules.team_card === '1' && detailType !== 'score'"
+					:grouponData="goodsInfo"
+				></sh-groupon>
 				<!-- 选项卡 -->
 				<view class="sticky-box">
 					<view class="tab-box x-f">
@@ -68,7 +72,7 @@
 						</view>
 						<view class="goods-comment" v-if="tabCurrent === 'tab2'">
 							<block v-for="comment in commentList" :key="comment.id"><shopro-comment :comment="comment"></shopro-comment></block>
-							<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+							<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :isFixed="false" :emptyData="emptyData"></shopro-empty></view>
 							<view class="more-box x-c" v-if="commentList.length">
 								<button class="cu-btn more-btn x-f" @tap="jump('/pages/goods/comment-list', { goodsId: goodsInfo.id })">
 									查看全部
@@ -117,18 +121,24 @@
 						<button class="cu-btn tool-btn pay-btn" @tap="goPay">立即购买</button>
 					</view>
 					<view class="detail-btn-box x-ac" v-if="goodsInfo.activity && goodsInfo.activity.type === 'seckill'">
-						<button class="cu-btn  seckill-btn" v-if="activityRules.status !== 'end'" @tap="goSeckill">立即秒杀</button>
-						<button class="cu-btn  seckilled-btn" v-else>已结束</button>
+						<button class="cu-btn  seckill-btn" v-if="activityRules.status === 'ing'" @tap="goSeckill">立即秒杀</button>
+						<button class="cu-btn  seckilled-btn" v-if="activityRules.status == 'waiting'">暂未开始</button>
+						<button class="cu-btn  seckilled-btn" v-if="activityRules.status == 'end'">已结束</button>
 					</view>
+					<!-- 拼团foot -->
 					<view class="detail-btn-box x-ac" v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon'">
-						<button class="cu-btn tool-btn add-btn y-f">
-							<text class="price">￥{{ goodsInfo.price }}</text>
-							<text class="price-title">单独购买</text>
-						</button>
-						<button class="cu-btn tool-btn groupon-btn y-f">
-							<text class="price">￥{{ goodsInfo.groupon_price }}</text>
-							<text class="price-title">我要开团</text>
-						</button>
+						<button class="cu-btn  seckilled-btn" v-if="activityRules.status == 'waiting'">暂未开始</button>
+						<button class="cu-btn  seckilled-btn" v-if="activityRules.status == 'end'">已结束</button>
+						<view class="x-f" v-if="activityRules.status == 'ing'">
+							<button class="cu-btn tool-btn add-btn y-f" @tap="payGroupon" v-if="goodsInfo.activity.rules.is_alone === '1'">
+								<text class="price">￥{{ goodsInfo.price }}</text>
+								<text class="price-title">单独购买</text>
+							</button>
+							<button class="cu-btn tool-btn groupon-btn y-f" :style="goodsInfo.activity.rules.is_alone === '0'?'width:400rpx':''" @tap="payGroupon('groupon')">
+								<text class="price">￥{{ goodsInfo.groupon_price }}</text>
+								<text class="price-title">我要开团</text>
+							</button>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -151,7 +161,7 @@ import shoproShare from '@/components/shopro-share.vue';
 import shoproComment from '@/components/shopro-comment.vue';
 import shoproParse from '@/components/parse/parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
@@ -173,6 +183,7 @@ export default {
 			detailType: '',
 			showShare: false,
 			buyType: 'sku',
+			grouponBuyType: 'alone', //拼团购买方式。
 			showSku: false,
 			showServe: false,
 			tools: this.$tools,
@@ -318,6 +329,19 @@ export default {
 				this.$store.commit('LOGIN_TIP', true);
 			}
 		},
+		// 拼团购买
+		payGroupon(type) {
+			if (Boolean(uni.getStorageSync('token'))) {
+				if (type === 'groupon') {
+					this.grouponBuyType = 'groupon';
+				}
+				this.buyType = 'buy';
+				this.showSku = true;
+			} else {
+				this.$store.commit('LOGIN_TIP', true);
+			}
+		},
+		// 立即秒杀。
 		goSeckill() {
 			if (Boolean(uni.getStorageSync('token'))) {
 				if (this.activityRules.status !== 'waiting') {

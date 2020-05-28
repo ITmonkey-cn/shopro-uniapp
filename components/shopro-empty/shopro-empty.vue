@@ -1,9 +1,9 @@
 <template>
-	<view class="shopro-empty y-f">
+	<view class="y-f" :class="{ 'shopro-empty': isFixed }">
 		<image class="empty-img" :src="emptyData.img" mode="aspectFill"></image>
 		<view class="empty-text">{{ emptyData.tip }}</view>
 		<view class="btn-box" v-if="emptyData.path">
-			<button class="cu-btn empty-btn" @tap="routerTo">{{ emptyData.pathText }}</button>
+			<button class="cu-btn empty-btn" @tap="tools.routerTo(emptyData.path)">{{ emptyData.pathText }}</button>
 		</view>
 	</view>
 </template>
@@ -12,32 +12,36 @@
 export default {
 	components: {},
 	data() {
-		return {};
+		return {
+			tools: this.$tools
+		};
 	},
 	props: {
-		emptyData: {}
+		emptyData: {
+			// img:空白页图片
+			// tip:空白页提示语
+			// path:空白页跳转路径
+			// pathText:跳转按钮文本。
+		},
+		isFixed: {
+			//是否开启绝对定位。
+			type: Boolean,
+			default: true
+		}
 	},
 	computed: {},
-	methods: {
-		routerTo() {
-			let path = this.emptyData.path;
-			if (this.emptyData.path.indexOf('/pages/index') === 0) {
-				this.$Router.pushTab({
-					path: path
-				});
-			} else {
-			
-				this.$Router.push({
-					path: path,
-					query: parmas
-				});
-			}
-		}
-	}
+	methods: {}
 };
 </script>
 
 <style lang="scss">
+.shopro-empty {
+	position: fixed;
+	z-index: 11;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
 .empty-img {
 	width: 540rpx;
 	height: 290rpx;

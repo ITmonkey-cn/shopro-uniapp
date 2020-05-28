@@ -118,6 +118,8 @@ export default {
 			addressId: 0,
 			from: '',
 			orderType: '',
+			grouponBuyType: 'alone',
+			grouponId: 0,
 			goodsList: [],
 			remark: '',
 			orderPre: {},
@@ -138,6 +140,9 @@ export default {
 		this.goodsList = JSON.parse(this.$Route.query.goodsList);
 		this.from = this.$Route.query.from;
 		this.orderType = this.$Route.query.orderType;
+		this.grouponBuyType = this.$Route.query.grouponBuyType;
+		this.grouponId = this.$Route.query.grouponId;
+		console.log(this.grouponId);
 		await this.init();
 	},
 	onShow() {},
@@ -161,7 +166,9 @@ export default {
 				address_id: that.addressId,
 				coupons_id: that.couponId,
 				dispatch_type: 'express',
-				order_type: that.orderType
+				order_type: that.orderType,
+				buy_type: that.grouponBuyType,
+				groupon_id: that.grouponId
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderPre = res.data;
@@ -179,7 +186,9 @@ export default {
 				coupons_id: that.couponId,
 				remark: that.remark,
 				dispatch_type: 'express',
-				order_type: that.orderType
+				order_type: that.orderType,
+				buy_type: that.grouponBuyType,
+				groupon_id: that.grouponId
 			}).then(res => {
 				if (res.code === 1) {
 					let sn = res.data.order_sn;
@@ -196,7 +205,7 @@ export default {
 						});
 					} else {
 						uni.redirectTo({
-							url: `/pages/order/payment/method?id=${sn}`
+							url: `/pages/order/payment/method?orderSn=${sn}`
 						});
 					}
 				} else {

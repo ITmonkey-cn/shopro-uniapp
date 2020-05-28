@@ -1,13 +1,13 @@
 <template>
 	<view class="page_box">
 		<view class="head_box">
-			<view class="goods-card">
+			<view class="goods-card" v-if="grouponDetail.id">
 				<shopro-activity-card
 					:cardId="grouponDetail.id"
 					:title="grouponDetail.goods.title"
 					:subtitle="grouponDetail.goods.subtitle"
 					:img="grouponDetail.goods.image"
-					:price="grouponDetail.goods.price"
+					:price="grouponDetail.goods.groupon_price"
 					:originalPrice="grouponDetail.goods.original_price"
 				>
 					<block slot="sell">
@@ -25,14 +25,27 @@
 		<view class="content_box">
 			<view class="y-bc group-box">
 				<!-- 拼团成功 -->
-				<view class="tip-box x-f" v-if="grouponDetail.status === 'finish'">
-					<text class="cuIcon-roundcheckfill"></text>
-					<text>恭喜您拼团成功！</text>
+				<view v-if="grouponDetail.status === 'finish' || grouponDetail.status === 'finish-fictitious'">
+					<view class="tip-box x-f" v-if="grouponDetail.my">
+						<text class="cuIcon-roundcheckfill"></text>
+						<text>恭喜您~拼团成功！</text>
+					</view>
+					<view class="tip-box x-f" v-else>
+						<text class="cuIcon-roundclosefill"></text>
+						<text>对不起~您来晚了，该团已满</text>
+					</view>
 				</view>
+
 				<!--  拼团失败-->
-				<view class="tip-box x-f" v-if="grouponDetail.status === 'invalid'">
-					<text class="cuIcon-roundclosefill"></text>
-					<text>拼团失败！</text>
+				<view v-if="grouponDetail.status === 'invalid'">
+					<view class="tip-box x-f" v-if="grouponDetail.my">
+						<text class="cuIcon-roundclosefill"></text>
+						<text>对不起~拼团已过期！已全额退款</text>
+					</view>
+					<view class="tip-box x-f" v-else>
+						<text class="cuIcon-roundclosefill"></text>
+						<text>对不起~拼团已过期！您来晚了~</text>
+					</view>
 				</view>
 				<!-- 拼团中 -->
 				<view class="title-box x-f" v-if="grouponDetail.status === 'ing'">
@@ -53,52 +66,74 @@
 					</view>
 				</view>
 				<view class="group-people x-f">
-					<view class="img-box">
-						<view class="tag">团长</view>
-						<image class="avatar" src="/static/imgs/base_avatar.png" mode=""></image>
+					<view class="img-box" v-for="(team, index) in grouponDetail.groupon_log" :key="team.id">
+						<view class="tag" v-if="index == 0">团长</view>
+						<image class="avatar" :src="team.user_avatar" mode="aspectFill"></image>
 					</view>
 				</view>
 				<view class="btn-box x-c">
-					<button class="cu-btn btn1" v-if="grouponDetail.status === 'ing'" @tap="onInvite">邀请好友参团</button>
-					<button class="cu-btn btn2" v-if="grouponDetail.status === 'finish'">查看订单</button>
-					<button class="cu-btn btn1" v-if="grouponDetail.status === 'invalid'">我要开团</button>
+					<!-- 拼团中 -->
+					<view v-if="grouponDetail.status === 'ing'">
+						<button class="cu-btn btn1" v-if="grouponDetail.my" @tap="onInvite">邀请好友参团</button>
+						<button class="cu-btn btn1" v-else @tap="onJoin">立即参团</button>
+					</view>
+					<!-- 拼团成功/失败-->
+					<view v-if="grouponDetail.status === 'finish' || grouponDetail.status === 'finish-fictitious' || grouponDetail.status === 'invalid'">
+						<button class="cu-btn btn2" v-if="grouponDetail.my" @tap.stop="jump('/pages/order/detail', { id: grouponDetail.my.order_id })">查看订单</button>
+						<button class="cu-btn btn1" v-else @tap="jump('/pages/goods/detail/index', { id: grouponDetail.goods.id })">我要开团</button>
+					</view>
 				</view>
 			</view>
-			<view class="detail-item x-bc">
-				<text class="title">拼团玩法</text>
+			<view
+				v-if="grouponDetail.goods && grouponDetail.goods.activity.richtext_id"
+				class="groupon-play x-bc"
+				@tap="jump('/pages/public/richtext', { id: grouponDetail.goods.activity.richtext_id })"
+			>
+				<text class="title">玩法</text>
 				<view class="x-f">
-					<view class="description one-t">好友参团·人满发货·不满退款</view>
+					<view class="description one-t">开团/参团·邀请好友·人满发货（不满退款）</view>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
 		</view>
 		<view class="foot_box"></view>
 		<!-- 邀请好友 -->
-			<shopro-share v-model="showShare" :goodsInfo="grouponDetail.goods" :posterType="'groupon'"></shopro-share>
+		<shopro-share v-model="showShare" v-if="grouponDetail.goods" :goodsInfo="grouponDetail.goods" :posterType="'groupon'"></shopro-share>
+		<!-- sku -->
+		<shopro-sku v-model="showSku" v-if="grouponDetail.goods" :goodsInfo="grouponDetail.goods" :buyType="'buy'" :grouponBuyType="'groupon'"></shopro-sku>
 	</view>
 </template>
 
 <script>
 import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
 import shoproShare from '@/components/shopro-share.vue';
+import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
 export default {
 	components: {
 		shoproActivityCard,
-		shoproShare
+		shoproShare,
+		shoproSku
 	},
 	data() {
 		return {
 			time: 0,
 			grouponDetail: {},
-			showShare:false
+			showShare: false,
+			showSku: false
 		};
 	},
 	computed: {},
 	onLoad() {
-		this.countDown();
 		this.getGrouponDetail();
 	},
 	methods: {
+		// 路由跳转
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 		// 倒计时
 		countDown(t) {
 			let _self = this;
@@ -126,8 +161,12 @@ export default {
 			});
 		},
 		// 邀请
-		onInvite(){
+		onInvite() {
 			this.showShare = true;
+		},
+		// 立即参团
+		onJoin() {
+			this.showSku = true;
 		}
 	}
 };
@@ -275,17 +314,16 @@ export default {
 		}
 	}
 }
-.detail-item {
+.groupon-play {
 	height: 94rpx;
 	border-top: 1rpx solid rgba(#dfdfdf, 0.5);
 	padding: 0 20rpx;
 	background: #fff;
 	.title {
 		font-size: 28rpx;
+		color: #999;
 	}
 	.description {
-		width: 450rpx;
-		color: #999;
 		font-size: 28rpx;
 		text-align: right;
 	}

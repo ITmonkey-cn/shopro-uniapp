@@ -36,6 +36,11 @@
 				<view class="notice-detail one-t">点击绑定手机号，确保账户安全</view>
 				<button class="bindPhone cu-btn">去绑定</button>
 			</view>
+			<!-- 绑定微信 -->
+			<view class="notice-box x-bc pad" v-if="false" @tap="jump('/pages/user/edit-phone', { fromType: 'bind' })">
+				<view class="notice-detail one-t">绑定微信用户！</view>
+				<button class="bindPhone cu-btn">去绑定</button>
+			</view>
 			<!-- 订单卡片 -->
 			<view class="order-wrap x-f">
 				<view class="order-box x-f">
@@ -61,15 +66,15 @@
 			<view class="wallet-box x-f">
 				<view class="x-f wallet-left">
 					<view class="wallet-item y-f" @tap="jump('/pages/user/wallet/index')">
-						<text class="wallet-item__detail item-balance">{{ userInfo.money|| '0' }}</text>
+						<text class="wallet-item__detail item-balance">{{ userInfo.money || '0' }}</text>
 						<text class="wallet-item__title">账户余额</text>
 					</view>
 					<view class="wallet-item y-f" @tap="jump('/pages/user/wallet/score-balance')">
-						<text class="wallet-item__detail item-score">{{ userInfo.score ||  '0' }}</text>
+						<text class="wallet-item__detail item-score">{{ userInfo.score || '0' }}</text>
 						<text class="wallet-item__title">积分</text>
 					</view>
 					<view class="wallet-item y-f" @tap="jump('/pages/extend/coupon/list')">
-						<text class="wallet-item__detail item-coupon">23</text>
+						<text class="wallet-item__detail item-coupon">{{ userInfo.coupons_num || '0' }}</text>
 						<text class="wallet-item__title">优惠券</text>
 					</view>
 				</view>
