@@ -59,6 +59,10 @@
 					</view>
 				</view>
 			</view>
+			<!-- 空白页 -->
+			<shopro-empty v-if="!orderList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
+			<!-- load -->
+			<shoproLoad v-model="isLoading"></shoproLoad>
 		</view>
 		<view class="foot_box"></view>
 	</view>
@@ -73,9 +77,13 @@ export default {
 	data() {
 		return {
 			routerTo: this.$Router,
+			isLoading: true,
 			orderType: 'all',
 			orderList: [],
-
+			emptyData: {
+				img: '/static/imgs/empty/empty_groupon.png',
+				tip: '暂无商品，还有更多好货等着你噢~'
+			},
 			orderState: [
 				{
 					id: 0,
@@ -134,10 +142,12 @@ export default {
 		},
 		getOrderList() {
 			let that = this;
+			that.isLoading = true;
 			that.$api('order.index', {
 				type: that.orderType
 			}).then(res => {
 				if (res.code === 1) {
+					that.isLoading = false;
 					that.orderList = res.data.data;
 				}
 			});

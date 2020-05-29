@@ -18,7 +18,8 @@
 				<view class="goods-list x-f">
 					<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods :detail="goods"></shopro-goods></view>
 				</view>
-				<view class="empty-box x-c" v-if="!goodsList.length && !isLoading"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+				<!-- 空白页 -->
+				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 				<!-- 加载更多 -->
 				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- load -->
