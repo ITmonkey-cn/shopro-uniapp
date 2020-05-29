@@ -67,9 +67,15 @@ export default {
 		})
 	},
 	created() {
-		this.setShareInfo();
-		this.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
-		this.shareFc();
+		let that = this;
+		that.setShareInfo();
+		if (that.shareInfo) {
+			setTimeout(function() {
+				console.log(that.shareInfo);
+				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
+				that.shareFc();
+			}, 500);
+		}
 	},
 	methods: {
 		async shareFc() {
