@@ -51,7 +51,7 @@ export default {
 			this.showModal = false;
 			uni.setStorageSync('fromLogin', this.$Route);
 			this.$Router.push({
-				path: '/pages/public/login/index'
+				path: '/pages/public/login'
 			});
 		}
 	}

@@ -2,7 +2,7 @@
 	<view class="live-el">
 		<view class="head">
 			<text class="head-title">{{ detail.name }}</text>
-			<view class="head-more" @tap="$Router.push('/pages/extend/live/list')">
+			<view class="head-more" @tap="$Router.push('/pages/app/live/list')">
 				<text>更多</text>
 				<text class="cuIcon-right"></text>
 			</view>

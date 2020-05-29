@@ -4,7 +4,7 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" class="scroll-box" enable-back-to-top scroll-with-animation>
 				<view class="goods-box">
-					<view class="goods-list" v-if="goods" v-for="goods in scoreList" :key="goods.id"><shopro-score-goods :scoreData="goods"></shopro-score-goods></view>
+					<view class="goods-list" v-if="goods" v-for="goods in scoreList" :key="goods.id"><sh-score-goods :scoreData="goods"></sh-score-goods></view>
 				</view>
 			</scroll-view>
 		</view>
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import shoproScoreGoods from '@/components/goods/shopro-score-goods.vue';
+import shScoreGoods from './children/sh-score-goods.vue';
 export default {
 	components: {
-		shoproScoreGoods
+		shScoreGoods
 	},
 	data() {
 		return {

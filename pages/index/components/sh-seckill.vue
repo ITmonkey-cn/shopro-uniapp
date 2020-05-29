@@ -3,7 +3,7 @@
 	<view class="seckill-goods" v-if="showActivity">
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
-			<view class="group-people x-f" @tap="$Router.push('/pages/activity/seckill-list')">
+			<view class="group-people x-f" @tap="$Router.push('/pages/activity/seckill/list')">
 				<view class="time-box x-f" v-if="time.s">
 					<view class="x-f" v-if="parseInt(time.d)">
 						<view class="count-text-box">{{ time.d }}</view>
@@ -28,7 +28,7 @@
 				<swiper-item v-for="(goods, index) in goodsList" :key="index" class="carousel-item">
 					<view class="goods-list-box x-f">
 						<block v-for="mgoods in goods" :key="mgoods.id">
-							<shopro-activity-goods :detail="mgoods" class="goods-item"><!-- <block slot="titleText">立减￥8.5</block> --></shopro-activity-goods>
+							<sh-activity-goods :detail="mgoods" class="goods-item"><!-- <block slot="titleText">立减￥8.5</block> --></sh-activity-goods>
 						</block>
 					</view>
 				</swiper-item>
@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import shoproActivityGoods from '@/components/goods/shopro-activity-goods.vue';
+import shActivityGoods from './sh-activity-goods.vue';
 export default {
 	components: {
-		shoproActivityGoods
+		shActivityGoods
 	},
 	data() {
 		return {

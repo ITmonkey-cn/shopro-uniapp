@@ -191,21 +191,21 @@ export default {
 				groupon_id: that.grouponId
 			}).then(res => {
 				if (res.code === 1) {
-					let sn = res.data.order_sn;
+					let orderId = res.data.id;
 					that.getCartList();
 					that.isSubOrder = false;
 					if (res.data.status > 0) {
 						that.$Router.replace({
 							path: '/pages/order/payment/result',
 							query: {
-								orderSn: sn,
+								id: orderId,
 								type: '',
 								pay: 1
 							}
 						});
 					} else {
 						uni.redirectTo({
-							url: `/pages/order/payment/method?orderSn=${sn}`
+							url: `/pages/order/payment/method?orderId=${orderId}`
 						});
 					}
 				} else {

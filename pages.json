@@ -1,6 +1,13 @@
 {
+	// "easycom": { //TODO暂时不要开启。
+	// 	"autoscan": true,
+	// 	"custom": {
+	// 		"shopro-(.*)": "@/components/shopro-$1/shopro-$1.vue", 
+	// 		"uni-(.*)": "@/components/uni-$1/uni-$1.vue" 
+	// 	}
+	// },
 	"pages": [{
-			"path": "pages/tabbar/home/index",
+			"path": "pages/index/index",
 			"name": "home",
 			"title": "首页",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
@@ -18,29 +25,35 @@
 			}
 		},
 		{
-			"path": "pages/tabbar/category/index",
+			"path": "pages/index/category",
 			"name": "category",
 			"style": {
 				"navigationBarTitleText": "分类"
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "分类", //标题
+				"group": "商城" //分组
 			}
 		},
 		{
-			"path": "pages/tabbar/cart/index",
+			"path": "pages/index/cart",
 			"name": "cart",
 			"style": {
 				"navigationBarTitleText": "购物车"
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "购物车", //标题
+				"group": "商城" //分组
 			}
 		},
 		{
-			"path": "pages/tabbar/user/index",
+			"path": "pages/index/user",
 			"name": "user",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -48,7 +61,10 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "我的", //标题
+				"group": "用户" //分组
 			}
 		},
 		// 商品goods------start
@@ -59,7 +75,10 @@
 				"navigationStyle": "custom"
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "商品列表", //标题
+				"group": "商城" //分组
 			}
 		},
 		{
@@ -91,16 +110,22 @@
 				"navigationBarTitleText": "今日必拼"
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "今日必拼", //标题
+				"group": "商城" //分组
 			}
 		},
 		{
-			"path": "pages/activity/seckill-list",
+			"path": "pages/activity/seckill/list",
 			"style": {
 				"navigationBarTitleText": "限时秒杀"
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "限时秒杀", //标题
+				"group": "商城" //分组
 			}
 		},
 		{
@@ -120,16 +145,22 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "我的拼团", //标题
+				"group": "商城" //分组
 			}
 		},
 		// 活动activity------end
-		// 扩展extend ------start
+		// 扩展app ------start
 		// #ifdef MP-WEIXIN
 		{
-			"path": "pages/extend/live/list",
+			"path": "pages/app/live/list",
 			"style": {
-				"navigationBarTitleText": "直播"
+				"navigationBarTitleText": "直播",
+				"async": true, //是否同步
+				"title": "直播列表", //标题
+				"group": "应用" //分组
 
 			},
 			"meta": {
@@ -138,17 +169,20 @@
 		},
 		// #endif
 		{
-			"path": "pages/extend/coupon/list",
+			"path": "pages/app/coupon/list",
 			"style": {
 				"navigationBarTitleText": "优惠券"
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "优惠劵列表", //标题
+				"group": "商城" //分组
 			}
 		},
 		{
-			"path": "pages/extend/coupon/detail",
+			"path": "pages/app/coupon/detail",
 			"style": {
 				"navigationBarTitleText": "优惠劵详情",
 				"navigationStyle": "custom"
@@ -159,22 +193,15 @@
 			}
 		},
 		{
-			"path": "pages/extend/sign/index",
-			"style": {
-				"navigationBarTitleText": "签到中心"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/extend/score/list",
+			"path": "pages/app/score/list",
 			"style": {
 				"navigationBarTitleText": "积分商城"
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "积分商城", //标题
+				"group": "商城" //分组
 			}
 		},
 		// 扩展extend------end
@@ -208,7 +235,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "我的订单", //标题
+				"group": "用户" //分组
 			}
 		},
 		{
@@ -285,7 +315,7 @@
 			}
 		},
 		{
-			"path": "pages/public/login/forgot",
+			"path": "pages/public/forgot",
 			"style": {
 				"navigationBarTitleText": "找回密码",
 				"navigationStyle": "custom"
@@ -296,7 +326,7 @@
 			}
 		},
 		{
-			"path": "pages/public/login/index",
+			"path": "pages/public/login",
 			"name": "login",
 			"style": {
 				"navigationBarTitleText": "登录",
@@ -307,7 +337,7 @@
 			}
 		},
 		{
-			"path": "pages/public/login/register",
+			"path": "pages/public/register",
 			"style": {
 				"navigationBarTitleText": "注册",
 				"navigationStyle": "custom"
@@ -334,7 +364,10 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true, //是否同步
+				"title": "常见问题", //标题
+				"group": "商城" //分组
 			}
 		},
 		// 公共public ------ end
@@ -346,7 +379,23 @@
 				"navigationBarTitleText": "浏览足迹"
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "浏览足迹", //标题
+				"group": "用户" //分组
+			}
+		},
+		{
+			"path": "pages/user/sign/index",
+			"style": {
+				"navigationBarTitleText": "签到中心"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true, //是否同步
+				"title": "签到中心", //标题
+				"group": "用户" //分组
 			}
 		},
 		{
@@ -365,7 +414,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "收货地址", //标题
+				"group": "用户" //分组
 			}
 		},
 		{
@@ -393,7 +445,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "我的收藏", //标题
+				"group": "用户" //分组
 			}
 		},
 		{
@@ -424,7 +479,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "我的钱包", //标题
+				"group": "用户" //分组
 			}
 		},
 		{
@@ -454,7 +512,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true, //是否同步
+				"title": "我的积分", //标题
+				"group": "用户" //分组
 			}
 		}
 		// 我的user ------ end
@@ -483,25 +544,25 @@
 		"backgroundColor": "#ffffff",
 		"borderStyle": "black",
 		"list": [{
-				"pagePath": "pages/tabbar/home/index",
+				"pagePath": "pages/index/index",
 				"text": "首页",
 				"iconPath": "static/imgs/tabbar/tab_home.png",
 				"selectedIconPath": "/static/imgs/tabbar/tab_home_sel.png"
 			},
 			{
-				"pagePath": "pages/tabbar/category/index",
+				"pagePath": "pages/index/category",
 				"text": "分类",
 				"iconPath": "static/imgs/tabbar/tab_type.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_type_sel.png"
 			},
 			{
-				"pagePath": "pages/tabbar/cart/index",
+				"pagePath": "pages/index/cart",
 				"text": "购物车",
 				"iconPath": "static/imgs/tabbar/tab_cart.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_cart_sel.png"
 			},
 			{
-				"pagePath": "pages/tabbar/user/index",
+				"pagePath": "pages/index/user",
 				"text": "我的",
 				"iconPath": "static/imgs/tabbar/tab_my.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_my_sel.png"

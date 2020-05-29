@@ -11,7 +11,7 @@
 					</block>
 				</cu-custom>
 			</view>
-			<view class="filter-item"><shopro-filter @change="onFilter"></shopro-filter></view>
+			<view class="filter-item"><sh-filter @change="onFilter"></sh-filter></view>
 		</view>
 		<view class="content-box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
@@ -30,23 +30,21 @@
 </template>
 
 <script>
-import shoproFilter from '@/components/filter/shopro-filter.vue';
+import shFilter from './children/sh-filter.vue';
 import shoproGoods from '@/components/goods/shopro-goods.vue';
-import shoproSearch from '@/components/search/shopro-search.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 let timer = null;
 export default {
 	components: {
-		shoproFilter,
+		shFilter,
 		shoproGoods,
-		shoproSearch,
 		shoproEmpty
 	},
 	data() {
 		return {
 			emptyData: {
-				img: '/static/imgs/empty/empty_goods.jpg',
+				img: '/static/imgs/empty/empty_goods.png',
 				tip: '暂无该商品，还有更多好货等着你噢~'
 			},
 			goodsList: [],
@@ -56,7 +54,7 @@ export default {
 				keywords: '',
 				page: 1
 			},
-			isLoading: true,//loading和空白页。
+			isLoading: true, //loading和空白页。
 			loadStatus: '', //loading,over
 			lastPage: 0
 		};

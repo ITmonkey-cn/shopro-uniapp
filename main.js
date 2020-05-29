@@ -11,7 +11,7 @@ import {
 
 
 import shoproLoginModal from '@/components/modal/shopro-login-modal.vue';
-import shoproLoad from '@/components/shopro-load.vue';
+import shoproLoad from '@/components/shopro-load/shopro-load.vue';
 import shoproShare from '@/common/mixins/shopro-share'
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 

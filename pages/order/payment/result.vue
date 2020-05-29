@@ -1,18 +1,22 @@
 <template>
 	<view class="success-page">
-		<view class="success-box flex flex-direction align-center">
-			<image class="pay-img" :src="Boolean(pay) ? 'http://shopro.7wpp.com/imgs/pay_success.png' : 'http://shopro.7wpp.com/imgs/pay_fail.png'" mode=""></image>
-			<text class="notice">{{ Boolean(pay) ? '支付成功' : '支付失败' }}</text>
-			<text class="pay-money" v-if="Boolean(pay) && orderDetail.total_fee">{{ orderDetail.total_fee }}</text>
+		<view class="success-box flex flex-direction align-center" v-if="orderDetail.total_fee">
+			<image class="pay-img" :src="pay ? 'http://shopro.7wpp.com/imgs/pay_success.png' : 'http://shopro.7wpp.com/imgs/pay_fail.png'" mode=""></image>
+			<text class="notice">{{ pay ? '支付成功' : '支付失败' }}</text>
+			<text class="pay-money" v-if="pay && orderDetail.total_fee">￥{{ orderDetail.total_fee }}</text>
 			<view class="btn-box flex justify-between">
-				<button
-					class="cu-btn base-btn"
-					v-if="pay && orderDetail.activity_type === 'groupon' && orderDetail.ext_arr.groupon_id > 0"
-					@tap="jump('/pages/activity/groupon/detail', { grouponId: orderDetail.ext_arr.groupon_id })"
-				>
-					拼团详情
-				</button>
-				<button class="cu-btn base-btn" v-else @tap="routerTo.pushTab('/pages/tabbar/home/index')">返回首页</button>
+				<block v-if="pay && orderDetail.activity_type === 'groupon' && orderDetail.ext_arr.buy_type === 'groupon'">
+					<button
+						class="cu-btn base-btn"
+						v-if="orderDetail.ext_arr.groupon_id > 0"
+						@tap="jump('/pages/activity/groupon/detail', { grouponId: orderDetail.ext_arr.groupon_id })"
+					>
+						拼团详情
+					</button>
+					<button class="cu-btn base-btn" v-else @tap="jump('/pages/activity/groupon/my-groupon')">我的拼团</button>
+				</block>
+
+				<button class="cu-btn base-btn" v-else @tap="routerTo.pushTab('/pages/index/index')">返回首页</button>
 				<button class="cu-btn base-btn" @tap="onOrder">查看订单</button>
 				<button class="again-pay cu-btn" v-if="!pay" @tap="onPay">重新支付</button>
 			</view>
@@ -106,10 +110,6 @@ export default {
 		color: #e1212b;
 		font-weight: 600;
 		margin-top: 20rpx;
-		&::before {
-			content: '￥';
-			font-size: 30rpx;
-		}
 	}
 	.btn-box {
 		margin-top: 30rpx;

@@ -3,11 +3,11 @@
 		<view class="head_box">
 			<view class="goods-card" v-if="grouponDetail.id">
 				<shopro-activity-card
-					:cardId="grouponDetail.id"
+					:cardId="grouponDetail.goods_id"
 					:title="grouponDetail.goods.title"
 					:subtitle="grouponDetail.goods.subtitle"
 					:img="grouponDetail.goods.image"
-					:price="grouponDetail.goods.groupon_price"
+					:price="grouponDetail.goods.groupon_price || grouponDetail.goods.price"
 					:originalPrice="grouponDetail.goods.original_price"
 				>
 					<block slot="sell">
@@ -68,7 +68,10 @@
 				<view class="group-people x-f">
 					<view class="img-box" v-for="(team, index) in grouponDetail.groupon_log" :key="team.id">
 						<view class="tag" v-if="index == 0">团长</view>
-						<image class="avatar" :src="team.user_avatar" mode="aspectFill"></image>
+						<image class="avatar" :class="{'leader':index==0}" :src="team.user_avatar" mode="aspectFill"></image>
+					</view>
+					<view class="img-box" v-for="base in (grouponDetail.num - grouponDetail.current_num)">
+						<image class="avatar" src="/static/imgs/groupon/base_groupon.png" mode="aspectFill"></image>
 					</view>
 				</view>
 				<view class="btn-box x-c">
@@ -85,7 +88,7 @@
 				</view>
 			</view>
 			<view
-				v-if="grouponDetail.goods && grouponDetail.goods.activity.richtext_id"
+				v-if="grouponDetail.goods && grouponDetail.goods.activity && grouponDetail.goods.activity.richtext_id"
 				class="groupon-play x-bc"
 				@tap="jump('/pages/public/richtext', { id: grouponDetail.goods.activity.richtext_id })"
 			>
@@ -100,13 +103,20 @@
 		<!-- 邀请好友 -->
 		<shopro-share v-model="showShare" v-if="grouponDetail.goods" :goodsInfo="grouponDetail.goods" :posterType="'groupon'"></shopro-share>
 		<!-- sku -->
-		<shopro-sku v-model="showSku" v-if="grouponDetail.goods" :goodsInfo="grouponDetail.goods" :buyType="'buy'" :grouponBuyType="'groupon'"></shopro-sku>
+		<shopro-sku
+			v-model="showSku"
+			v-if="grouponDetail.goods"
+			:grouponId="grouponDetail.id"
+			:goodsInfo="grouponDetail.goods"
+			:buyType="'buy'"
+			:grouponBuyType="'groupon'"
+		></shopro-sku>
 	</view>
 </template>
 
 <script>
 import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
-import shoproShare from '@/components/shopro-share.vue';
+import shoproShare from '@/components/shopro-share/shopro-share.vue';
 import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
 export default {
 	components: {
@@ -273,19 +283,24 @@ export default {
 				position: absolute;
 				line-height: 36rpx;
 				background: linear-gradient(132deg, rgba(243, 223, 177, 1), rgba(243, 223, 177, 1), rgba(236, 190, 96, 1));
-				border-radius: 18rpx;
+				border-radius: 14rpx;
 				padding: 0 10rpx;
 				white-space: nowrap;
 				font-size: 24rpx;
 				color: #784f06;
 				z-index: 2;
-				top: -10rpx;
+				top: -20rpx;
+				left: 50%;
+				transform: translateX(-50%);
 			}
 			.avatar {
-				width: 80rpx;
-				height: 80rpx;
+				width: 86rpx;
+				height: 86rpx;
 				border-radius: 50%;
 				background: #ccc;
+			}
+			.leader{
+				border:4rpx solid rgba(237,195,108,1);
 			}
 		}
 	}

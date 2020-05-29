@@ -34,9 +34,8 @@
 							</shopro-activity-card>
 						</view>
 						<view class="btn-box x-f">
-							<button class="cu-btn btn" v-if="stateId === 'finish'">申请退款</button>
-							<button class="cu-btn btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: groupon.id })">拼团详情</button>
-							<button class="cu-btn invite-btn" v-if="stateId === 'ing'" @tap="onInvite(groupon.goods)">邀请好友</button>
+							<button class="cu-btn btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: groupon.groupon_id })">拼团详情</button>
+							<button class="cu-btn invite-btn" v-if="groupon.groupon.status === 'ing'" @tap="onInvite(groupon.goods)">邀请好友</button>
 						</view>
 					</view>
 				</block>
@@ -54,7 +53,7 @@
 
 <script>
 import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
-import shoproShare from '@/components/shopro-share.vue';
+import shoproShare from '@/components/shopro-share/shopro-share.vue';
 export default {
 	components: {
 		shoproActivityCard,

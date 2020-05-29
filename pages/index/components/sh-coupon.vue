@@ -3,7 +3,7 @@
 	<view class="coupon-category-box">
 		<swiper class="coupon-swiper-box" @change="onSwiper" circular :autoplay="true" :interval="5000" :duration="2000">
 			<swiper-item class="swiper-item" v-for="(c, index) in couponList" :key="c.id">
-				<view class="tab-list x-c" @tap="jump('/pages/extend/coupon/detail', { couponId: c.id })"><shopro-coupon :couponData="c" :state="0"></shopro-coupon></view>
+				<view class="tab-list x-c" @tap="jump('/pages/app/coupon/detail', { couponId: c.id })"><shopro-coupon :couponData="c" :state="0"></shopro-coupon></view>
 			</swiper-item>
 		</swiper>
 	</view>

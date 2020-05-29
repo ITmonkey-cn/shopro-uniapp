@@ -104,7 +104,7 @@ export default {
 					that.shareInfo.path = ''
 					let urlQuery = that.setPathQuery(scene.query);
 					if (platform === 'wxMiniProgram') {
-						that.shareInfo.path = '/pages/tabbar/home/index' + urlQuery;
+						that.shareInfo.path = '/pages/index/index' + urlQuery;
 						that.shareInfo.copyLink = domain + urlQuery;
 					} else {
 						that.shareInfo.path = domain + urlQuery;

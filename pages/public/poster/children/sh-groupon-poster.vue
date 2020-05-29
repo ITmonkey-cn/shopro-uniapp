@@ -162,8 +162,8 @@ export default {
 									size: fontSize,
 									color: '#fff',
 									alpha: 1,
-									textAlign: 'middle',
-									textBaseline: 'middle',
+									// textAlign: 'middle',
+									// textBaseline: 'middle',
 									infoCallBack(textLength) {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {
@@ -181,8 +181,8 @@ export default {
 									size: fontSize * 0.9,
 									color: '#fff',
 									alpha: 1,
-									textAlign: 'middle',
-									textBaseline: 'middle',
+									// textAlign: 'middle',
+									// textBaseline: 'middle',
 									infoCallBack(textLength) {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {

@@ -26,7 +26,7 @@ export default {
 		// 回到首页
 		goHome() {
 			uni.switchTab({
-				url: '/pages/tabbar/home/index'
+				url: '/pages/index/index'
 			});
 		},
 		// 去支付

@@ -37,13 +37,13 @@
 				</view>
 				<text class="cuIcon-right"></text>
 			</view> -->
-			<view class="resale-list x-bc" @tap="jump('/pages/user/poster')">
+			<!-- <view class="resale-list x-bc" @tap="jump('/pages/user/poster')">
 				<view class="x-f">
 					<text class=" cuicon cuIcon-present"></text>
 					<text>邀请好友</text>
 				</view>
 				<text class="cuIcon-right"></text>
-			</view>
+			</view> -->
 		</view>
 		<view class="foot_box"></view>
 		<shopro-modal v-model="showModal" style="z-index: 88;">

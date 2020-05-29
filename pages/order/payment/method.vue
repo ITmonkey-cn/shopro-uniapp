@@ -120,7 +120,7 @@ export default {
 		getOrderDetail() {
 			let that = this;
 			that.$api('order.detail', {
-				order_sn: that.options.orderSn
+				id: that.options.orderId
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;

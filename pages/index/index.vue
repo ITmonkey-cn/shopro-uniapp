@@ -50,19 +50,19 @@
 </template>
 
 <script>
-import shSearch from './children/sh-search.vue';
-import shBanner from './children/sh-banner.vue';
-import shHotGoods from './children/sh-hot-goods.vue';
-import shMenu from './children/sh-menu.vue';
-import shAdv from './children/sh-adv.vue';
-import shCoupon from './children/sh-coupon.vue';
-import shSeckill from './children/sh-seckill.vue';
-import shGroupon from './children/sh-groupon.vue';
+import shSearch from './components/sh-search.vue';
+import shBanner from './components/sh-banner.vue';
+import shHotGoods from './components/sh-hot-goods.vue';
+import shMenu from './components/sh-menu.vue';
+import shAdv from './components/sh-adv.vue';
+import shCoupon from './components/sh-coupon.vue';
+import shSeckill from './components/sh-seckill.vue';
+import shGroupon from './components/sh-groupon.vue';
 import shoproPopupModal from '@/components/modal/shopro-popup-modal.vue';
-import shoproSkeletons from '@/components/shopro-skeletons.vue';
+import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
-import shLive from './children/sh-live.vue';
+import shLive from './components/sh-live.vue';
 import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
@@ -105,18 +105,21 @@ export default {
 		},
 		info() {
 			if (this.initData.info) {
-				// #ifndef MP-WEIXIN
-				uni.setNavigationBarTitle({
-					title: this.initData.info.name
-				});
-				// #endif
 				return this.initData.info;
 			}
 		}
 	},
 	onLoad(options) {},
+	mounted() {},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
+		// #ifndef MP-WEIXIN
+		if (this.initData.info) {
+			uni.setNavigationBarTitle({
+				title: this.initData.info.name
+			});
+		}
+		// #endif
 	},
 	methods: {
 		...mapMutations(['CART_NUM']),

@@ -14,7 +14,7 @@
 				<swiper-item v-for="(goods, index) in goodsList" :key="index" class="carousel-item">
 					<view class="goods-list-box x-f">
 						<block v-for="mgoods in goods" :key="mgoods.id">
-							<shopro-activity-goods :detail="mgoods" class="goods-item"><!-- <block slot="titleText">立减￥8.5</block> --></shopro-activity-goods>
+							<sh-activity-goods :detail="mgoods" class="goods-item"><!-- <block slot="titleText">立减￥8.5</block> --></sh-activity-goods>
 						</block>
 					</view>
 				</swiper-item>
@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import shoproActivityGoods from '@/components/goods/shopro-activity-goods.vue';
+import shActivityGoods from './sh-activity-goods.vue';
 export default {
 	name:'shGroupon',
 	components: {
-		shoproActivityGoods
+		shActivityGoods
 	},
 	data() {
 		return {
@@ -81,7 +81,6 @@ export default {
 				if (res.code === 1) {
 					let arr = that.sortData(res.data.goods.data, 4);
 					that.goodsList = arr;
-					console.log(that.goodsList);
 				}
 			});
 		}

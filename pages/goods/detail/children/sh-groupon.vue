@@ -2,7 +2,7 @@
 	<view class="group-people">
 		<block v-if="grouponTeamList.length">
 			<view class="into-title x-bc">
-				<text>已有1150人参与活动</text>
+				<text>已有{{grouponData.sales}}人参与活动</text>
 				<text class="cuIcon-right" @tap="onMoreGrouponTeam"></text>
 			</view>
 			<view class="into-item x-bc" v-for="(g, index) in grouponTeamList" :key="g.id" v-if="index < 2">
@@ -26,11 +26,11 @@
 
 		<!-- 拼团玩法 -->
 		<view v-if="grouponData.activity.richtext_id + 0" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: grouponData.activity.richtext_id })">
-			<text class="title">玩法</text>
 			<view class="x-f">
+				<text class="title">玩法</text>
 				<view class="description one-t">开团/参团·邀请好友·人满发货（不满退款）</view>
-				<text class="cuIcon-right"></text>
 			</view>
+			<text class="cuIcon-right"></text>
 		</view>
 		<!-- 弹窗 -->
 		<view class="cu-modal bottom-modal" :class="{ show: showModal }" @tap="hideModal">
@@ -131,7 +131,6 @@ export default {
 // 拼团玩法
 .groupon-play {
 	height: 94rpx;
-	border-top: 1rpx solid rgba(#dfdfdf, 0.5);
 	background: #fff;
 	.title {
 		font-size: 28rpx;
@@ -139,7 +138,7 @@ export default {
 	}
 	.description {
 		font-size: 28rpx;
-		text-align: right;
+		margin-left: 30rpx;
 	}
 	.cuIcon-right {
 		margin-left: 20rpx;

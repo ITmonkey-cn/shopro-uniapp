@@ -208,7 +208,6 @@ export default {
 		},
 		// 订单详情
 		getOrderDetail() {
-			console.log('detial', this.$Route.query.id);
 			let that = this;
 			that.$api('order.detail', {
 				id: that.$Route.query.id

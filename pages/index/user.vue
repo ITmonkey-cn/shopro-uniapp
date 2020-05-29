@@ -26,7 +26,9 @@
 							<text class="tag-title">{{ userInfo.group.name }}</text>
 						</view>
 					</view>
-					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/user/poster')"><text class="cuIcon-qr_code"></text></button>
+					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/public/poster/index', { posterType: 'userInvite' })">
+						<text class="cuIcon-qr_code"></text>
+					</button>
 				</view>
 			</view>
 		</view>
@@ -73,13 +75,12 @@
 						<text class="wallet-item__detail item-score">{{ userInfo.score || '0' }}</text>
 						<text class="wallet-item__title">积分</text>
 					</view>
-					<view class="wallet-item y-f" @tap="jump('/pages/extend/coupon/list')">
+					<view class="wallet-item y-f" @tap="jump('/pages/app/coupon/list')">
 						<text class="wallet-item__detail item-coupon">{{ userInfo.coupons_num || '0' }}</text>
 						<text class="wallet-item__title">优惠券</text>
 					</view>
 				</view>
-
-				<view class="wallet-item y-f wallet-right">
+				<view class="wallet-item y-f wallet-right" @tap="jump('/pages/user/wallet/index')">
 					<image class="cut-off--line" src="/static/imgs/user/cut_off_line.png" mode=""></image>
 					<image class="wallet-img" src="/static/imgs/user/wallet.png" mode="aspectFill"></image>
 					<text class="wallet-item__title">我的钱包</text>
@@ -105,20 +106,20 @@
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 关注公众号 -->
-		<shopro-follow-wechat v-model="showFollowWechat"></shopro-follow-wechat>
+		<sh-follow-wechat v-model="showFollowWechat"></sh-follow-wechat>
 	</view>
 </template>
 
 <script>
 import shoproGoods from '@/components/goods/shopro-goods.vue';
 import shoproPopupModal from '@/components/modal/shopro-popup-modal.vue';
-import shoproFollowWechat from '@/components/modal/shopro-follow-wechat.vue';
+import shFollowWechat from './user/children/sh-follow-wechat.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
+		shFollowWechat,
 		shoproGoods,
-		shoproPopupModal,
-		shoproFollowWechat
+		shoproPopupModal
 	},
 	data() {
 		return {
@@ -183,7 +184,7 @@ export default {
 				{
 					title: '积分商城',
 					img: 'http://shopro.7wpp.com/imgs/user/list12.png',
-					url: '/pages/extend/score/list'
+					url: '/pages/app/score/list'
 				},
 				{
 					title: '我的拼团',
@@ -481,14 +482,17 @@ export default {
 		.item-balance::after {
 			content: '元';
 			font-size: 16rpx;
+			margin-left: 4rpx;
 		}
 		.item-score::after {
 			content: '个';
 			font-size: 14rpx;
+			margin-left: 4rpx;
 		}
 		.item-coupon::after {
 			content: '张';
 			font-size: 16rpx;
+			margin-left: 4rpx;
 		}
 	}
 }

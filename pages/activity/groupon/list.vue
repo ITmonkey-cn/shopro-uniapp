@@ -56,7 +56,7 @@ export default {
 			emptyData: {
 				img: '/static/imgs/empty/empty_goods.png',
 				tip: '还没有拼团商品噢，去首页看看吧~',
-				path: '/pages/tabbar/home/index',
+				path: '/pages/index/index',
 				pathText: '去首页逛逛'
 			},
 			isLoading: true,

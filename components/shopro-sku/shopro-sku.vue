@@ -15,14 +15,14 @@
 				<view class="shop-modal page_box">
 					<text class="cuIcon-roundclosefill" @tap="hideModal"></text>
 					<!-- 商品信息 -->
-					<view class="top x-f head_box">
+					<view class="top x-f modal-head__box">
 						<image class="shop-img" :src="currentSkuPrice.image ? currentSkuPrice.image : goodsInfo.image" mode="aspectFill"></image>
 						<view class="y-bc goods-box">
 							<view class="goods-title more-t">{{ goodsInfo.title }}</view>
 							<view class="x-bc goods-bottom">
 								<view class="price-box x-f">
 									<view v-if="goodsType === 'score'">{{ currentSkuPrice.price_text || goodsInfo.price }}</view>
-									<view v-else-if="grouponBuyType==='groupon'">￥{{ currentSkuPrice.groupon_price || goodsInfo.price }}</view>
+									<view v-else-if="grouponBuyType === 'groupon'">￥{{ currentSkuPrice.groupon_price || goodsInfo.price }}</view>
 									<view v-else>￥{{ currentSkuPrice.price || goodsInfo.price }}</view>
 								</view>
 								<text class="stock">库存{{ currentSkuPrice.stock || goodsInfo.stock }}件</text>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import uniNumberBox from '@/components/uni-number-box.vue';
+import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
@@ -104,6 +104,7 @@ export default {
 			default: 'alone'
 		},
 		grouponId: {
+			//参加拼团的时候，传入当前团id;
 			type: Number,
 			default: 0
 		}
@@ -475,7 +476,9 @@ export default {
 			font-weight: 400;
 			margin-bottom: 20upx;
 		}
-
+		.tag-box {
+			flex-wrap: wrap;
+		}
 		.tag {
 			line-height: 62rpx;
 			background: rgba(#ddd, 0.8);

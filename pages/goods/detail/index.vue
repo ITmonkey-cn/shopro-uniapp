@@ -20,7 +20,7 @@
 				<view class="goods-title">{{ goodsInfo.title }}</view>
 				<view class="sub-title">{{ goodsInfo.subtitle }}</view>
 				<!-- 规格选择 -->
-				<view class="sku-box" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && goodsInfo.activity && goodsInfo.activity.type !== 'groupon'">
+				<view class="sku-box" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon')">
 					<view class="x-bc">
 						<view class="x-f">
 							<text class="title">规格</text>
@@ -34,6 +34,7 @@
 					:goodsInfo="goodsInfo"
 					:buyType="goodsInfo.activity_type == 'seckill' || detailType === 'score' ? 'buy' : buyType"
 					:grouponBuyType="grouponBuyType"
+					:goodsType="detailType === 'score' ? 'score' : 'goods'"
 					@changeType="changeType"
 					@getSkuText="getSkuText"
 				></shopro-sku>
@@ -71,7 +72,7 @@
 							</view>
 						</view>
 						<view class="goods-comment" v-if="tabCurrent === 'tab2'">
-							<block v-for="comment in commentList" :key="comment.id"><shopro-comment :comment="comment"></shopro-comment></block>
+							<block v-for="comment in commentList" :key="comment.id"><sh-comment :comment="comment"></sh-comment></block>
 							<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :isFixed="false" :emptyData="emptyData"></shopro-empty></view>
 							<view class="more-box x-c" v-if="commentList.length">
 								<button class="cu-btn more-btn x-f" @tap="jump('/pages/goods/comment-list', { goodsId: goodsInfo.id })">
@@ -134,7 +135,7 @@
 								<text class="price">￥{{ goodsInfo.price }}</text>
 								<text class="price-title">单独购买</text>
 							</button>
-							<button class="cu-btn tool-btn groupon-btn y-f" :style="goodsInfo.activity.rules.is_alone === '0'?'width:400rpx':''" @tap="payGroupon('groupon')">
+							<button class="cu-btn tool-btn groupon-btn y-f" :style="goodsInfo.activity.rules.is_alone === '0' ? 'width:400rpx' : ''" @tap="payGroupon('groupon')">
 								<text class="price">￥{{ goodsInfo.groupon_price }}</text>
 								<text class="price-title">我要开团</text>
 							</button>
@@ -143,7 +144,7 @@
 				</view>
 			</view>
 			<!-- 分享组件 -->
-			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="'goods'"></shopro-share>
+			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="goodsInfo.activity_type === 'groupon' ? 'groupon' : 'goods'"></shopro-share>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
 		</view>
@@ -156,11 +157,11 @@ import shServe from './children/sh-serve.vue';
 import shGroupon from './children/sh-groupon.vue';
 import shGrouponTip from './children/sh-groupon-tip.vue';
 import shCoupon from './children/sh-coupon.vue';
+import shComment from '../children/sh-comment.vue';
 import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
-import shoproShare from '@/components/shopro-share.vue';
-import shoproComment from '@/components/shopro-comment.vue';
+import shoproShare from '@/components/shopro-share/shopro-share.vue';
 import shoproParse from '@/components/parse/parse.vue';
-import shoproSkeletons from '@/components/shopro-skeletons.vue';
+import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
@@ -172,7 +173,7 @@ export default {
 		shGrouponTip,
 		shoproSku,
 		shoproShare,
-		shoproComment,
+		shComment,
 		shoproParse,
 		shoproSkeletons,
 		shoproEmpty
@@ -234,6 +235,13 @@ export default {
 				this.activityRules = JSON.parse(e);
 			}
 		},
+		// 检测
+		checkActivity(data, type) {
+			if (data) {
+				return !data.includes(type);
+			}
+			return true;
+		},
 		// 路由跳转
 		jump(path, parmas) {
 			this.showShare = false;
@@ -245,7 +253,7 @@ export default {
 		// 回到首页
 		goHome() {
 			uni.switchTab({
-				url: '/pages/tabbar/home/index'
+				url: '/pages/index/index'
 			});
 		},
 		// 轮播图切换

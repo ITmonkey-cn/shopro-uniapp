@@ -34,8 +34,8 @@
 			<view class="x-c y-f">
 				<button class="cu-btn login-btn" @tap="toLogin">登录</button>
 				<view class="x-bc tip-box">
-					<button class="cu-btn tip-btn" @tap="jump('/pages/public/login/register')">立即注册</button>
-					<view class="" v-show="loginWay === 1"><button class="cu-btn tip-btn" @tap="jump('/pages/public/login/forgot')">忘记密码</button></view>
+					<button class="cu-btn tip-btn" @tap="jump('/pages/public/register')">立即注册</button>
+					<view class="" v-show="loginWay === 1"><button class="cu-btn tip-btn" @tap="jump('/pages/public/forgot')">忘记密码</button></view>
 				</view>
 			</view>
 			<view class="third-party y-f">

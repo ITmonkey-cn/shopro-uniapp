@@ -32,7 +32,7 @@
 			<!-- 登录按钮 -->
 			<view class="x-c y-f">
 				<button class="cu-btn login-btn" @tap="restPassword">确认</button>
-				<button class="cu-btn tip-btn" @tap="jump('/pages/public/login/index')">返回登录</button>
+				<button class="cu-btn tip-btn" @tap="jump('/pages/public/login')">返回登录</button>
 			</view>
 		</view>
 	</view>
