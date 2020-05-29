@@ -19,7 +19,7 @@
 
 <script>
 import shoproComment from '@/components/shopro-comment.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
 		shoproComment,

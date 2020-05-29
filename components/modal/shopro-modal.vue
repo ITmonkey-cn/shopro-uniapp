@@ -37,21 +37,4 @@ export default {
 </script>
 
 <style lang="scss">
-.modal-img {
-	width: 610rpx;
-}
-
-.img-box {
-	position: relative;
-
-	.cuIcon-roundclose {
-		position: absolute;
-		left: 50%;
-		transform: translate(-50%);
-		bottom: -80rpx;
-		color: #fff;
-		font-size: 60rpx;
-		z-index: 99;
-	}
-}
 </style>

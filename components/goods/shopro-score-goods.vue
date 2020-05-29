@@ -1,5 +1,5 @@
 <template>
-	<view class="shop-list y-f" @tap="jump('/pages/score/detail', { scoreId: scoreData.id })">
+	<view class="shop-list y-f" @tap="jump('/pages/goods/detail/index', { id: scoreData.id, type: 'score' })">
 		<view class="image-box"><image class="shop-img" :src="scoreData.image" mode="aspectFill"></image></view>
 		<view class="shop-title more-t">{{ scoreData.title }}</view>
 		<view class="num-box x-bc">
@@ -7,7 +7,7 @@
 				<image class="bean-img" src="http://shopro.7wpp.com/imgs/score.png" mode=""></image>
 				{{ scoreData.price }}
 			</view>
-			<view class="end-cash">已兑换{{scoreData.sales}}件</view>
+			<view class="end-cash">已兑换{{ scoreData.sales }}件</view>
 		</view>
 	</view>
 </template>

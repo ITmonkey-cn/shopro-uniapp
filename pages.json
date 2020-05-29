@@ -1,6 +1,6 @@
 {
 	"pages": [{
-			"path": "pages/index/index",
+			"path": "pages/tabbar/home/index",
 			"name": "home",
 			"title": "首页",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
@@ -18,7 +18,7 @@
 			}
 		},
 		{
-			"path": "pages/index/category",
+			"path": "pages/tabbar/category/index",
 			"name": "category",
 			"style": {
 				"navigationBarTitleText": "分类"
@@ -29,7 +29,7 @@
 			}
 		},
 		{
-			"path": "pages/index/cart",
+			"path": "pages/tabbar/cart/index",
 			"name": "cart",
 			"style": {
 				"navigationBarTitleText": "购物车"
@@ -40,7 +40,7 @@
 			}
 		},
 		{
-			"path": "pages/index/user",
+			"path": "pages/tabbar/user/index",
 			"name": "user",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -51,62 +51,12 @@
 				"auth": false
 			}
 		},
-		// #ifdef MP-WEIXIN
-		{
-			"path": "pages/live/live-list",
-			"style": {
-				"navigationBarTitleText": "直播"
-
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		// #endif
-		{
-			"path": "pages/coupons/index",
-			"style": {
-				"navigationBarTitleText": "优惠券"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/coupons/detail",
-			"style": {
-				"navigationBarTitleText": "优惠劵详情",
-				"navigationStyle": "custom"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
+		// 商品goods------start
 		{
 			"path": "pages/goods/list",
 			"style": {
 				"navigationBarTitleText": "商品列表",
 				"navigationStyle": "custom"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/goods/seckill-list",
-			"style": {
-				"navigationBarTitleText": "限时秒杀"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/goods/group-list",
-			"style": {
-				"navigationBarTitleText": "今日必拼"
 			},
 			"meta": {
 				"auth": false
@@ -123,7 +73,7 @@
 			}
 		},
 		{
-			"path": "pages/goods/detail",
+			"path": "pages/goods/detail/index",
 			"style": {
 				"navigationBarTitleText": "商品详情"
 
@@ -132,10 +82,75 @@
 				"auth": false
 			}
 		},
+		// 商品goods------end
+
+		// 活动activity------start
 		{
-			"path": "pages/money/index",
+			"path": "pages/activity/groupon/list",
 			"style": {
-				"navigationBarTitleText": "我的钱包",
+				"navigationBarTitleText": "今日必拼"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/activity/seckill-list",
+			"style": {
+				"navigationBarTitleText": "限时秒杀"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		{
+			"path": "pages/activity/groupon/detail",
+			"style": {
+				"navigationBarTitleText": "拼团详情"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/activity/groupon/my-groupon",
+			"style": {
+				"navigationBarTitleText": "我的拼团"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		// 活动activity------end
+		// 扩展extend ------start
+		// #ifdef MP-WEIXIN
+		{
+			"path": "pages/extend/live/list",
+			"style": {
+				"navigationBarTitleText": "直播"
+
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		// #endif
+		{
+			"path": "pages/extend/coupon/list",
+			"style": {
+				"navigationBarTitleText": "优惠券"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/extend/coupon/detail",
+			"style": {
+				"navigationBarTitleText": "优惠劵详情",
 				"navigationStyle": "custom"
 
 			},
@@ -144,24 +159,27 @@
 			}
 		},
 		{
-			"path": "pages/money/bank",
+			"path": "pages/extend/sign/index",
 			"style": {
-				"navigationBarTitleText": "绑定银行卡"
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/money/log",
-			"style": {
-				"navigationBarTitleText": "钱包明细"
+				"navigationBarTitleText": "签到中心"
 
 			},
 			"meta": {
 				"auth": true
 			}
 		},
+		{
+			"path": "pages/extend/score/list",
+			"style": {
+				"navigationBarTitleText": "积分商城"
+			},
+			"meta": {
+				"auth": false
+			}
+		},
+		// 扩展extend------end
+
+		// 订单order------start
 		{
 			"path": "pages/order/confirm",
 			"style": {
@@ -225,7 +243,7 @@
 			}
 		},
 		{
-			"path": "pages/pay/index",
+			"path": "pages/order/payment/method",
 			"style": {
 				"navigationBarTitleText": "支付方式"
 
@@ -235,7 +253,7 @@
 			}
 		},
 		{
-			"path": "pages/pay/success",
+			"path": "pages/order/payment/result",
 			"style": {
 				"navigationBarTitleText": "支付结果"
 
@@ -244,7 +262,8 @@
 				"auth": false
 			}
 		},
-
+		// 订单order------end
+		// 公共public ------ start
 		{
 			"path": "pages/public/richtext",
 			"style": {
@@ -266,7 +285,7 @@
 			}
 		},
 		{
-			"path": "pages/public/forgot",
+			"path": "pages/public/login/forgot",
 			"style": {
 				"navigationBarTitleText": "找回密码",
 				"navigationStyle": "custom"
@@ -277,7 +296,7 @@
 			}
 		},
 		{
-			"path": "pages/public/login",
+			"path": "pages/public/login/index",
 			"name": "login",
 			"style": {
 				"navigationBarTitleText": "登录",
@@ -288,7 +307,7 @@
 			}
 		},
 		{
-			"path": "pages/public/register",
+			"path": "pages/public/login/register",
 			"style": {
 				"navigationBarTitleText": "注册",
 				"navigationStyle": "custom"
@@ -302,17 +321,6 @@
 			"path": "pages/public/poster/index",
 			"style": {
 				"navigationBarTitleText": "海报"
-		
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/score/index",
-			"style": {
-				"navigationBarTitleText": "积分",
-				"navigationStyle": "custom"
 
 			},
 			"meta": {
@@ -320,35 +328,7 @@
 			}
 		},
 		{
-			"path": "pages/score/score-shop",
-			"style": {
-				"navigationBarTitleText": "积分商城"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/score/detail",
-			"style": {
-				"navigationBarTitleText": "积分详情"
-			},
-			"meta": {
-				"auth": false
-			}
-		},
-		{
-			"path": "pages/sign/index",
-			"style": {
-				"navigationBarTitleText": "签到中心"
-
-			},
-			"meta": {
-				"auth": true
-			}
-		},
-		{
-			"path": "pages/public/problems",
+			"path": "pages/public/faq",
 			"style": {
 				"navigationBarTitleText": "常见问题"
 
@@ -357,6 +337,9 @@
 				"auth": false
 			}
 		},
+		// 公共public ------ end
+
+		// 我的user ------start
 		{
 			"path": "pages/user/log",
 			"style": {
@@ -434,35 +417,47 @@
 			}
 		},
 		{
-			"path": "pages/user/group/group-share",
+			"path": "pages/user/wallet/index",
 			"style": {
-				"navigationBarTitleText": "拼团详情"
-		
+				"navigationBarTitleText": "我的钱包",
+				"navigationStyle": "custom"
+
 			},
 			"meta": {
 				"auth": true
 			}
 		},
 		{
-			"path": "pages/user/group/index",
+			"path": "pages/user/wallet/bind-bank",
 			"style": {
-				"navigationBarTitleText": "我的拼团"
-		
+				"navigationBarTitleText": "绑定银行卡"
 			},
 			"meta": {
 				"auth": true
 			}
 		},
 		{
-			"path": "pages/user/group/rules",
+			"path": "pages/user/wallet/log",
 			"style": {
-				"navigationBarTitleText": "拼团玩法"
-		
+				"navigationBarTitleText": "钱包明细"
+
+			},
+			"meta": {
+				"auth": true
+			}
+		},
+		{
+			"path": "pages/user/wallet/score-balance",
+			"style": {
+				"navigationBarTitleText": "积分",
+				"navigationStyle": "custom"
+
 			},
 			"meta": {
 				"auth": true
 			}
 		}
+		// 我的user ------ end
 
 	],
 	// 分包加载,tabbar页不能在分包目录内。
@@ -488,25 +483,25 @@
 		"backgroundColor": "#ffffff",
 		"borderStyle": "black",
 		"list": [{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/tabbar/home/index",
 				"text": "首页",
 				"iconPath": "static/imgs/tabbar/tab_home.png",
 				"selectedIconPath": "/static/imgs/tabbar/tab_home_sel.png"
 			},
 			{
-				"pagePath": "pages/index/category",
+				"pagePath": "pages/tabbar/category/index",
 				"text": "分类",
 				"iconPath": "static/imgs/tabbar/tab_type.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_type_sel.png"
 			},
 			{
-				"pagePath": "pages/index/cart",
+				"pagePath": "pages/tabbar/cart/index",
 				"text": "购物车",
 				"iconPath": "static/imgs/tabbar/tab_cart.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_cart_sel.png"
 			},
 			{
-				"pagePath": "pages/index/user",
+				"pagePath": "pages/tabbar/user/index",
 				"text": "我的",
 				"iconPath": "static/imgs/tabbar/tab_my.png",
 				"selectedIconPath": "static/imgs/tabbar/tab_my_sel.png"

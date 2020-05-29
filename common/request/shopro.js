@@ -18,7 +18,7 @@ export default {
 		method: 'POST',
 		// desc: '上传',
 	},
-	
+
 	/** 直播 ↓ **/
 	live: {
 		url: 'live',
@@ -26,7 +26,7 @@ export default {
 		method: 'GET',
 		// desc: '直播列表',
 	},
-	
+
 	/** 微信Jssdk ↓ **/
 	wechat: {
 		jssdk: {
@@ -148,6 +148,30 @@ export default {
 			method: 'GET',
 			// desc: '活动商品',
 		},
+		myGroupon: {
+			url: 'activity_groupon/myGroupon',
+			auth: true,
+			method: 'GET',
+			// desc: '我的拼团',
+		},
+		grouponDetail: {
+			url: 'activity_groupon/detail',
+			auth: true,
+			method: 'GET',
+			// desc: '拼团详情',
+		},
+		grouponItem: {
+			url: 'activity_groupon/index',
+			auth: false,
+			method: 'GET',
+			// desc: '拼购列表',
+		},
+		grouponList: {
+			url: 'goods/grouponList',
+			auth: false,
+			method: 'GET',
+			// desc: '拼团商品列表',
+		},
 		detail: {
 			url: 'goods/detail',
 			auth: false,
@@ -259,7 +283,7 @@ export default {
 			// desc: '忘记密码',
 		},
 	},
-	
+
 	/** 分享 ↓ **/
 	share: {
 		add: {
@@ -319,7 +343,7 @@ export default {
 			// desc: '发送短信',
 		},
 	},
-	
+
 	/** 常见问题 ↓ **/
 	faq: {
 		list: {

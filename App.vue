@@ -103,5 +103,6 @@ page {
 	width: 0;
 	height: 0;
 	color: transparent;
+	display: none;
 }
 </style>

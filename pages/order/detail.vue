@@ -15,7 +15,7 @@
 					<view class="order-bottom  x-f">
 						<view class="btn-box" v-for="(btn, index) in order.btns" :key="btn">
 							<button
-								@tap="jump('/pages/goods/detail', { id: order.goods_id })"
+								@tap="jump('/pages/goods/detail/index', { id: order.goods_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'buy_again'"
@@ -44,41 +44,19 @@
 							>
 								申请退款
 							</button>
+							<button
+								@tap.stop="onRefund(orderDetail.id, order.id)"
+								class="cu-btn btn1"
+								:class="{ btn2: index + 1 === order.btns.length }"
+								v-if="btn === 'reapply_refund'"
+							>
+								重新申请退款
+							</button>
 							<button @tap.stop="onComment(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'comment'">
 								待评价
 							</button>
 							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'after_detail'">售后详情</button>
 						</view>
-					</view>
-				</view>
-			</view>
-			<!-- 拼团信息 -->
-			<view class="y-bc group-box">
-				<view class="tip-box x-f" v-if="false">
-					<text class="cuIcon-roundcheckfill"></text>
-					<text>恭喜您拼购成功！已有1人跟团购买</text>
-				</view>
-				<view class="title-box x-f">
-					<view class="title-text">
-						待成团，还差
-						<text class="group-num">1</text>
-						人拼团成功
-					</view>
-					<view class="count-down x-f">
-						<text class="count-down-tip">还剩</text>
-						<view class="time-box x-f">
-							<view class="count-text">{{ time.h || '00' }}</view>
-							:
-							<view class="count-text">{{ time.m || '00' }}</view>
-							:
-							<view class="count-text">{{ time.s || '00' }}</view>
-						</view>
-					</view>
-				</view>
-				<view class="group-people x-f">
-					<view class="img-box">
-						<view class="tag">团长</view>
-						<image class="avatar" src="/static/imgs/base_avatar.png" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -172,9 +150,14 @@
 				<text class="money-title">共{{ allNum }}件商品 合计:</text>
 				<text class="all-price">￥{{ orderDetail.total_fee }}</text>
 			</view>
-			<view class="btn-box x-f" v-if="orderDetail.btns && orderDetail.btns.length">
-				<button @tap.stop="onCancel(orderDetail.id)" class="cu-btn obtn1">取消订单</button>
-				<button @tap.stop="onPay(orderDetail.order_sn)" class="cu-btn obtn2">付款</button>
+			<view class="btn-box x-f">
+				<view class="" v-for="btn in orderDetail.btns" :key="btn">
+					<button v-if="btn === 'cancel'" @tap.stop="onCancel(orderDetail.id)" class="cu-btn obtn1">取消订单</button>
+					<button v-if="btn === 'pay'" @tap.stop="onPay(orderDetail.order_sn)" class="cu-btn obtn2">付款</button>
+					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { grouponId: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
+						拼团详情
+					</button>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -203,7 +186,6 @@ export default {
 		this.getOrderDetail();
 	},
 	onLoad() {
-		this.countDown();
 	},
 	computed: {
 		allNum() {
@@ -218,21 +200,6 @@ export default {
 		}
 	},
 	methods: {
-		// 倒计时
-		countDown() {
-			let _self = this;
-			// let t = this.activityData.endtime * 1000 - new Date().getTime();
-			let t = 10000;
-			let timer = setInterval(() => {
-				if (t > 0) {
-					_self.time = _self.$tools.format(t);
-					t--;
-				} else {
-					clearInterval(timer);
-					_self.time = '倒计时结束';
-				}
-			}, 1000);
-		},
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,
@@ -244,7 +211,7 @@ export default {
 			console.log('detial', this.$Route.query.id);
 			let that = this;
 			that.$api('order.detail', {
-				order_sn: that.$Route.query.id
+				id: that.$Route.query.id
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
@@ -319,7 +286,7 @@ export default {
 		// 立即购买
 		onPay(id) {
 			uni.navigateTo({
-				url: `/pages/pay/index?id=${id}`
+				url: `/pages/order/payment/method?id=${id}`
 			});
 		},
 		// 待评价

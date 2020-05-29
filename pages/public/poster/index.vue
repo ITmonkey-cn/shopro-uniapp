@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<sh-invite-poster v-if="posterType === 'invite'"></sh-invite-poster>
+		<sh-invite-poster v-if="posterType === 'userInvite'"></sh-invite-poster>
 		<sh-goods-poster v-if="posterType === 'goods'"></sh-goods-poster>
 		<sh-groupon-poster v-if="posterType === 'groupon'"></sh-groupon-poster>
 	</view>
@@ -27,7 +27,7 @@ export default {
 		console.log('poset.index',options.posterType)
 		this.posterType = options.posterType;
 		switch (options.posterType) {
-			case 'invite':
+			case 'userInvite':
 				uni.setNavigationBarTitle({
 					title: '邀请好友'
 				});

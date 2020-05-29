@@ -9,7 +9,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="order-list" v-for="order in orderList" :key="order.id" @tap.stop="jump('/pages/order/detail', { id: order.order_sn })">
+			<view class="order-list" v-for="order in orderList" :key="order.id" @tap.stop="jump('/pages/order/detail', { id: order.id })">
 				<view class="order-head x-bc">
 					<text class="no">订单编号：{{ order.order_sn }}</text>
 					<text class="state">{{ order.status_name }}</text>
@@ -20,7 +20,7 @@
 					<view class="goods-bottom  x-f">
 						<view class="btn-box" v-for="(btn, index) in goods.btns" :key="btn">
 							<button
-								@tap.stop="jump('/pages/goods/detail', { id: goods.goods_id })"
+								@tap.stop="jump('/pages/goods/detail/index', { id: goods.goods_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === goods.btns.length }"
 								v-if="btn === 'buy_again'"
@@ -36,6 +36,9 @@
 							<button @tap.stop="onAftersale(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'aftersale'">
 								申请售后
 							</button>
+							<button v-if="btn === 'reapply_refund'" @tap.stop="onRefund(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }">
+								重新申请退款
+							</button>
 							<button @tap.stop="onRefund(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'apply_refund'">
 								申请退款
 							</button>
@@ -46,10 +49,13 @@
 						</view>
 					</view>
 				</view>
-				<view class="order-bottom x-f " v-if="order.btns.length">
-					<view class="btn-box">
-						<button @tap.stop="onCancel(order.id)" class="cu-btn obtn1">取消订单</button>
-						<button @tap.stop="onPay(order.order_sn)" class="cu-btn obtn2">立即支付</button>
+				<view class="order-bottom x-f">
+					<view class="btn-box" v-for="orderBtn in order.btns" :key="orderBtn">
+						<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id)" class="cu-btn obtn1">取消订单</button>
+						<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.order_sn)" class="cu-btn obtn2">立即支付</button>
+						<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { grouponId: order.ext_arr.groupon_id })" class="cu-btn obtn2">
+							拼团详情
+						</button>
 					</view>
 				</view>
 			</view>
@@ -188,16 +194,16 @@ export default {
 		// 立即购买
 		onPay(id) {
 			uni.navigateTo({
-				url: `/pages/pay/index?id=${id}`
+				url: `/pages/order/payment/method?id=${id}`
 			});
 		},
 		// 待评价
 		onComment(orderId, ordrderItemId) {
-			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId:ordrderItemId });
+			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId: ordrderItemId });
 		},
 		// 查看物流,
-		checkExpress(orderId,ordrderItemId) {
-			this.jump('/pages/order/express', {orderId: orderId, ordrderItemId:ordrderItemId });
+		checkExpress(orderId, ordrderItemId) {
+			this.jump('/pages/order/express', { orderId: orderId, ordrderItemId: ordrderItemId });
 		}
 	}
 };
@@ -278,9 +284,10 @@ export default {
 			color: #a8700d;
 		}
 	}
-
-	.order-content {
-		padding: 20rpx;
+	.goods-order {
+		border-bottom: 1px solid rgba(223, 223, 223, 0.5);
+		padding: 20rpx 20rpx 0;
+		margin-bottom: 20rpx;
 	}
 
 	.goods-bottom {

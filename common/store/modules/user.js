@@ -35,7 +35,7 @@ const actions = {
 			uni.removeStorageSync('fromLogin')
 		} else {
 			//默认跳转首页
-			router.pushTab('/pages/index/index')
+			router.pushTab('/pages/tabbar/home/index')
 		}
 	},
 

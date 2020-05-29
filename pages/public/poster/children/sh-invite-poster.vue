@@ -75,9 +75,7 @@ export default {
 				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
 				that.shareFc();
 			},500)
-		
 		}
-	
 	},
 	methods: {
 		async shareFc() {

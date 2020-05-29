@@ -1,36 +1,38 @@
 <template>
-	<view class="activity-goods-box x-bc" @tap="jump('/pages/goods/detail', { id: seckillData.id })">
+	<view class="activity-goods-box x-bc" @tap="jump('/pages/goods/detail/index', { id: cardId })">
 		<view class="img-box">
-			<view class="tag" v-if="isTag">TOP1</view>
-			<image class="img" :src="seckillData.image" mode="widthFix"></image>
+			<slot name="tag"></slot>
+			<image class="img" :src="img" mode="aspectFill"></image>
 		</view>
 		<view class="goods-right y-bc">
-			<view class="title one-t">{{ seckillData.title }}</view>
-			<view class="tip one-t">{{ seckillData.subtitle }}</view>
-			<view class="slod-end"><slot name="slodEnd"></slot></view>
+			<view class="title one-t">{{ title }}</view>
+			<view class="tip one-t">{{ subtitle }}</view>
+			<view class="slod-end"><slot name="sell"></slot></view>
 			<view class=" price-box">
-				<view class="miso-font x-f">
-					<view class="current">￥{{ seckillData.price }}</view>
-					<view class="original">￥{{ seckillData.original_price }}</view>
+				<view class="x-f">
+					<view class="current">￥{{ price }}</view>
+					<view class="original">￥{{ originalPrice }}</view>
 				</view>
 			</view>
-			<slot name="disBtn"></slot>
+			<slot name="btn"></slot>
 		</view>
 	</view>
 </template>
 
 <script>
 export default {
+	name: 'shoproActivityCard',
 	components: {},
 	data() {
 		return {};
 	},
 	props: {
-		isTag: {
-			type: [Boolean, String],
-			default: false
-		},
-		seckillData: {}
+		cardId: 0,
+		img: '',
+		title: '',
+		subtitle: '',
+		price: '',
+		originalPrice: ''
 	},
 	computed: {},
 	created() {},
@@ -46,7 +48,6 @@ export default {
 <style lang="scss">
 .activity-goods-box {
 	padding: 40rpx 20rpx;
-	border-bottom: 1rpx solid #dfdfdf;
 	background: #fff;
 
 	.img-box {
@@ -56,36 +57,22 @@ export default {
 		overflow: hidden;
 		position: relative;
 
-		.tag {
-			position: absolute;
-			left: 0;
-			top: 10rpx;
-			z-index: 2;
-			line-height: 35rpx;
-			background: linear-gradient(132deg, rgba(255, 153, 93, 1), rgba(255, 99, 97, 1));
-			border-radius: 0px 18rpx 18rpx 0px;
-			padding: 0 10rpx;
-			font-size: 24rpx;
-			font-family: PingFang SC;
-			font-weight: bold;
-			color: rgba(255, 255, 255, 0.8);
-		}
-
 		.img {
-			width: 100%;
+			width: 200rpx;
+			height: 200rpx;
 			background-color: #ccc;
 		}
 	}
 
 	.goods-right {
-		width: 500rpx;
+		width: 450rpx;
 		min-height: 200rpx;
 		align-items: flex-start;
 		position: relative;
 		.title {
 			font-size: 28rpx;
 			line-height: 28rpx;
-			width: 500rpx;
+			width: 450rpx;
 		}
 
 		.tip {

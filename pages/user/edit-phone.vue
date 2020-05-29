@@ -37,7 +37,20 @@ export default {
 		};
 	},
 	computed: {},
-	onLoad() {},
+	onLoad() {
+		const fromType = this.$Route.query.fromType;
+		switch (fromType) {
+			case 'bind':
+				uni.setNavigationBarTitle({
+					title: '绑定手机号'
+				});
+				break;
+			default:
+				uni.setNavigationBarTitle({
+					title: '修改手机号'
+				});
+		}
+	},
 	methods: {
 		...mapActions(['getUserInfo']),
 		//修改手机号
@@ -51,9 +64,8 @@ export default {
 					that.$tools.toast('修改手机号成功');
 					that.getUserInfo();
 					setTimeout(() => {
-					that.$Router.replace('pages/user/info');
+						that.$Router.replace('pages/user/info');
 					}, 1000);
-					
 				}
 			});
 		},

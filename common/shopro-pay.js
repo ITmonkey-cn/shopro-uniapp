@@ -136,7 +136,7 @@ export default class ShoproPay {
 			console.log('choose', res)
 			if (res.errMsg == "chooseWXPay:ok") {
 				Router.replace({
-					path: '/pages/pay/success',
+					path: '/pages/order/payment/result',
 					query: {
 						orderSn: that.order.order_sn,
 						type: that.payment,
@@ -148,7 +148,7 @@ export default class ShoproPay {
 				
 			}else{
 					Router.replace({
-						path: '/pages/pay/success',
+						path: '/pages/order/payment/result',
 						query: {
 							orderSn: that.order.order_sn,
 							type: that.payment,
@@ -190,7 +190,7 @@ export default class ShoproPay {
 			paySign: payData.paySign,
 			success: function(res) {
 				Router.replace({
-					path: '/pages/pay/success',
+					path: '/pages/order/payment/result',
 					query: {
 						orderSn: that.order.order_sn,
 						type: that.payment,
@@ -202,7 +202,7 @@ export default class ShoproPay {
 				console.log('err', err)
 				if (err.errMsg !== "requestPayment:fail cancel") {
 					Router.replace({
-						path: '/pages/pay/success',
+						path: '/pages/order/payment/result',
 						query: {
 							orderSn: that.order.order_sn,
 							type: that.payment,
@@ -220,7 +220,7 @@ export default class ShoproPay {
 		let result = await this.prepay();
 		if (result.code === 1) {
 			Router.replace({
-				path: '/pages/pay/success',
+				path: '/pages/order/payment/result',
 				query: {
 					orderSn: that.order.order_sn,
 					type: that.payment,
