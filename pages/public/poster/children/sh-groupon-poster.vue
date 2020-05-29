@@ -294,7 +294,7 @@ export default {
 										_app.log('index页面的text的infocallback ，textlength:' + textLength);
 										return {
 											dx: bgObj.width * 0.94,
-											dy: bgObj.width * 1.33
+											dy: bgObj.width * 1.325
 										};
 									},
 									serialNum: 0

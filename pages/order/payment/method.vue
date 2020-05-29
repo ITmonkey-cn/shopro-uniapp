@@ -2,7 +2,7 @@
 	<view class="page_box">
 		<view class="head_box"></view>
 		<view class="content_box">
-			<view class="y-f money-box">
+			<view class="y-f money-box" v-if="orderDetail.total_fee">
 				<text class="time" v-if="isPast">{{ timeText }}</text>
 				<view class="money">{{ orderDetail.total_fee }}</view>
 			</view>
@@ -57,7 +57,7 @@ export default {
 			options: {},
 			orderDetail: {},
 			timeText: '',
-			isPast:true,//是否显示订单倒计时。
+			isPast: true, //是否显示订单倒计时。
 			isAndroid: uni.getStorageSync('isAndroid')
 		};
 	},
@@ -124,9 +124,9 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
-					if(res.data.ext_arr !== null){
+					if (res.data.ext_arr !== null) {
 						that.countDown();
-					}else{
+					} else {
 						that.isPast = false;
 					}
 				}
