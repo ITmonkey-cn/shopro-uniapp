@@ -13,6 +13,11 @@
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
 					<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
 					<view class="order-bottom  x-f">
+						<!-- 退款原因 -->
+						<view class="refund_msg" v-if="order.refund_msg">
+							<text class="refund-title">退款原因：</text>
+							{{ order.refund_msg }}
+						</view>
 						<view class="btn-box" v-for="(btn, index) in order.btns" :key="btn">
 							<button
 								@tap="jump('/pages/goods/detail/index', { id: order.goods_id })"
@@ -50,7 +55,7 @@
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'reapply_refund'"
 							>
-								重新申请退款
+								重新退款
 							</button>
 							<button @tap.stop="onComment(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'comment'">
 								待评价
@@ -185,8 +190,7 @@ export default {
 	onShow() {
 		this.getOrderDetail();
 	},
-	onLoad() {
-	},
+	onLoad() {},
 	computed: {
 		allNum() {
 			if (this.orderDetail.item) {
@@ -324,6 +328,12 @@ export default {
 	margin-bottom: 20rpx;
 
 	.order-list {
+		.refund_msg {
+			font-size: 28rpx;
+			color: #999;
+			flex: 1;
+			text-align: left;
+		}
 		.order-bottom {
 			background: #fff;
 			padding-bottom: 20rpx;

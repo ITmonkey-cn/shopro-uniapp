@@ -37,7 +37,7 @@
 								申请售后
 							</button>
 							<button v-if="btn === 'reapply_refund'" @tap.stop="onRefund(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }">
-								重新申请退款
+								重新退款
 							</button>
 							<button @tap.stop="onRefund(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'apply_refund'">
 								申请退款
@@ -49,7 +49,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="order-bottom x-f">
+				<view class="order-bottom x-f" v-if="order.btns.length">
 					<view class="btn-box" v-for="orderBtn in order.btns" :key="orderBtn">
 						<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id)" class="cu-btn obtn1">取消订单</button>
 						<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.id)" class="cu-btn obtn2">立即支付</button>

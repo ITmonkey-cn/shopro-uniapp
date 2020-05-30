@@ -81,7 +81,7 @@
 					<!-- 拼团成功/失败-->
 					<view v-if="grouponDetail.status === 'finish' || grouponDetail.status === 'finish-fictitious' || grouponDetail.status === 'invalid'">
 						<button class="cu-btn btn2" v-if="grouponDetail.my" @tap.stop="jump('/pages/order/detail', { id: grouponDetail.my.order_id })">查看订单</button>
-						<button class="cu-btn btn1" v-else @tap="jump('/pages/goods/detail/index', { id: grouponDetail.goods.id })">我要开团</button>
+						<button class="cu-btn btn1" v-else @tap="jump('/pages/goods/detail/index', { id: grouponDetail.goods_id })">我要开团</button>
 					</view>
 				</view>
 			</view>

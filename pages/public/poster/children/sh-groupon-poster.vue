@@ -63,23 +63,21 @@ export default {
 	created() {
 		let that = this;
 		that.goodsInfo = that.$Route.query;
-		console.log('1111',that.$Route.query.image)
 		that.goodsInfo.image = encodeURIComponent(that.$Route.query.image);
-		console.log('2222',that.$Route.query.image)
-		// that.setShareInfo({
-		// 	query: {
-		// 		url: 'groupon-' + that.$Route.query.id
-		// 	},
-		// 	title: that.goodsInfo.title,
-		// 	image: that.goodsInfo.image
-		// });
-		// if (that.shareInfo) {
-		// 	setTimeout(function() {
-		// 		console.log(that.shareInfo);
-		// 		that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
-		// 		that.shareFc();
-		// 	}, 500);
-		// }
+		that.setShareInfo({
+			query: {
+				url: 'groupon-' + that.$Route.query.id
+			},
+			title: that.goodsInfo.title,
+			image: that.goodsInfo.image
+		});
+		if (that.shareInfo) {
+			setTimeout(function() {
+				console.log(that.shareInfo);
+				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
+				that.shareFc();
+			}, 500);
+		}
 	},
 	methods: {
 		async shareFc() {
