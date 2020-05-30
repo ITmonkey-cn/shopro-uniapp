@@ -10,15 +10,20 @@
 				<view class="user-head x-bc">
 					<view class="x-f">
 						<!-- 微信小程序 -->
-						<view class="info-box" @tap="jump('/pages/user/info')">
+						<view class="info-box">
 							<view class="x-f">
 								<view class="head-img-wrap">
-									<image class="head-img" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode="aspectFill"></image>
-									<button v-if="platform !== 'H5'" class="cu-btn refresh-btn x-c" @tap.stop="onRefresh">
-										<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
-									</button>
+									<image class="head-img" @tap.stop="jump('/pages/user/info')" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode="aspectFill"></image>
+									<block v-if="platform !== 'H5'">
+										<button class="cu-btn refresh-btn x-c" @tap.stop="onRefresh">
+											<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
+										</button>
+										<button v-if="platform === 'wxMiniProgram'" open-type="getUserInfo" @getuserinfo="getuserinfo" class="cu-btn refresh-btn x-c">
+											<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
+										</button>
+									</block>
 								</view>
-								<text class="user-name one-t">{{ userInfo.nickname || '请登录~' }}</text>
+								<text @tap.stop="jump('/pages/user/info')" class="user-name one-t">{{ userInfo.nickname || '请登录~' }}</text>
 							</view>
 						</view>
 						<view class="grade-tag tag-box x-f" v-if="userInfo.group">
@@ -239,6 +244,9 @@ export default {
 			setTimeout(() => {
 				that.isRefresh = false;
 			}, 200);
+		},
+		getuserinfo(e) {
+			console.log('getuserinfo',e)
 		}
 	}
 };

@@ -106,7 +106,7 @@
 						that.$tools.toast('修改信息成功');
 						that.getUserInfo();
 						setTimeout(() => {
-							that.$router.back()
+							that.$Router.back()
 						}, 1000);
 
 					}

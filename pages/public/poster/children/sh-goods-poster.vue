@@ -64,6 +64,7 @@ export default {
 		let that = this;
 		that.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
 		that.goodsInfo = that.$Route.query;
+		that.goodsInfo.image = encodeURIComponent(that.$Route.query.image)
 		that.shareFc();
 		that.setShareInfo({
 			query: {
