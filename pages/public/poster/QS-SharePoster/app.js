@@ -1,5 +1,5 @@
 let log = console.log; // 如果在项目的APP.vue文件中的onlaunch中设置 console.log = ()=> {} 则在此也不会有打印信息
-// log = () => {}; // 打开注释则该插件不会打印任何信息
+log = () => {}; // 打开注释则该插件不会打印任何信息
 let _app = {
 	//交互控制
 	log(t) {

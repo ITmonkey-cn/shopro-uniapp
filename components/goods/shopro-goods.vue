@@ -72,8 +72,8 @@ export default {
 			left: 0;
 			top: 0;
 			z-index: 2;
-			width: 60rpx;
-			height: 30rpx;
+			width: 80rpx;
+			height: 40rpx;
 		}
 
 		.img {

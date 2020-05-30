@@ -58,7 +58,7 @@ export default {
 	data() {
 		return {
 			showShareGuide: false,
-			shareData: {},//组装海报分享信息
+			shareData: {} //组装海报分享信息
 		};
 	},
 	props: {
@@ -87,6 +87,7 @@ export default {
 			that.shareData.id = that.goodsInfo.id;
 		} else {
 			that.shareData = that.goodsInfo;
+			that.shareData.image = that.goodsInfo.image;
 		}
 		that.setShareInfo({
 			query: {
