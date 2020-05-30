@@ -161,7 +161,7 @@ export default {
 		getGrouponDetail() {
 			let that = this;
 			that.$api('goods.grouponDetail', {
-				id: that.$Route.query.grouponId
+				id: that.$Route.query.id
 			}).then(res => {
 				that.grouponDetail = res.data;
 				let newTime = new Date().getTime();

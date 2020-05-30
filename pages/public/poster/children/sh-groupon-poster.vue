@@ -64,8 +64,21 @@ export default {
 	},
 	created() {
 		let that = this;
-		this.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
 		this.getGoodsDetail();
+		that.setShareInfo({
+			query: {
+				url: 'groupon-' + that.$Route.query.id
+			},
+			title: that.goodsInfo.title,
+			image: that.goodsInfo.image
+		});
+		if (that.shareInfo) {
+			setTimeout(function() {
+				console.log(that.shareInfo);
+				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
+				that.shareFc();
+			}, 500);
+		}
 	},
 	methods: {
 		getGoodsDetail() {
