@@ -38,6 +38,8 @@
 						</view>
 					</view>
 				</block>
+				<!-- 空白页 -->
+				<shopro-empty v-if="!myGrouponList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 				<!-- 加载更多 -->
 				<view v-if="myGrouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
@@ -52,14 +54,20 @@
 import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
 export default {
 	components: {
-		shoproActivityCard,
+		shoproActivityCard
 	},
 	data() {
 		return {
-			isLoading: false,
+			isLoading: true,
 			loadStatus: '', //loading,over
 			lastPage: 0,
 			currentPage: 1,
+			emptyData: {
+				img: '/static/imgs/empty/empty_groupon.png',
+				tip: '您还没有拼团，还有更多拼团好货等着你噢~',
+				path: '/pages/index/index',
+				pathText: '去首页逛逛'
+			},
 			showShare: false,
 			stateId: 'all',
 			grouponStatus: {
