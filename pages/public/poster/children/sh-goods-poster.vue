@@ -65,14 +65,14 @@ export default {
 		that.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
 		that.goodsInfo = that.$Route.query;
 		that.goodsInfo.image = encodeURIComponent(that.$Route.query.image)
-		that.shareFc();
-		that.setShareInfo({
-			query: {
-				url: 'goods-' + that.$Route.query.id
-			},
-			title: that.$Route.query.title,
-			image:that.$Route.query.image
-		});
+		// that.shareFc();
+		// that.setShareInfo({
+		// 	query: {
+		// 		url: 'goods-' + that.$Route.query.id
+		// 	},
+		// 	title: that.$Route.query.title,
+		// 	image:that.$Route.query.image
+		// });
 	},
 	methods: {
 		async shareFc() {

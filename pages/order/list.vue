@@ -306,13 +306,12 @@ export default {
 		justify-content: flex-end;
 		.btn-box {
 			.btn1 {
-				width: 160rpx;
 				height: 60rpx;
 				border: 1rpx solid rgba(223, 223, 223, 1);
 				border-radius: 30rpx;
 				font-size: 26rpx;
 				background: #fff;
-				padding: 0;
+				padding: 0 20rpx;
 				margin-right: 20rpx;
 			}
 			.btn2 {
