@@ -22,7 +22,7 @@ export default {
 				path: '',     //转发链接  小程序转发只有页面链接和参数,其他全部带域名
 				imageUrl: '', //分享图片
 				copyLink: ''  //复制链接地址  复制的链接都是WAP版链接地址
-			},
+			}
 		}
 	},
 	onLoad(options) {

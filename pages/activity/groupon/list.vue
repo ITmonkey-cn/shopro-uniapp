@@ -90,7 +90,9 @@ export default {
 			let that = this;
 			that.isLoading = true;
 			that.loadStatus = 'loading';
-			that.$api('goods.grouponList').then(res => {
+			that.$api('goods.grouponList',{
+				page:that.currentPage
+			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
 					that.grouponList = [...that.grouponList, ...res.data.data];

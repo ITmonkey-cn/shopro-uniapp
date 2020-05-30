@@ -131,7 +131,8 @@ export default {
 			that.isLoading = true;
 			that.loadStatus = 'loading';
 			that.$api('goods.seckillList', {
-				type: that.tabCurrent
+				type: that.tabCurrent,
+				page:that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;

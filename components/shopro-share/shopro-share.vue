@@ -16,7 +16,21 @@
 							<text class="share-title">微信好友</text>
 						</view>
 						<!-- #endif -->
-						<view class="share-item y-f" @tap="sharePoster('/pages/public/poster/index', { id: goodsInfo.id, posterType: posterType })">
+						<view
+							class="share-item y-f"
+							@tap="
+								sharePoster('/pages/public/poster/index', {
+									id: goodsInfo.id,
+									image: goodsInfo.image,
+									title: goodsInfo.title,
+									price: goodsInfo.price,
+									original_price: goodsInfo.original_price,
+									teamNum: goodsInfo.activity_type === 'groupon' ? goodsInfo.activity.rules.team_num : '',
+									grouponPrice: goodsInfo.activity_type === 'groupon' ? goodsInfo.groupon_price : '',
+									posterType: posterType
+								})
+							"
+						>
 							<image class="share-img" src="http://shopro.7wpp.com/imgs/share_poster.png" mode=""></image>
 							<text class="share-title">分享海报</text>
 						</view>

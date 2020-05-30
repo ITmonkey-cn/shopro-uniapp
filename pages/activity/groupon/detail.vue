@@ -68,11 +68,9 @@
 				<view class="group-people x-f">
 					<view class="img-box" v-for="(team, index) in grouponDetail.groupon_log" :key="team.id">
 						<view class="tag" v-if="index == 0">团长</view>
-						<image class="avatar" :class="{'leader':index==0}" :src="team.user_avatar" mode="aspectFill"></image>
+						<image class="avatar" :class="{ leader: index == 0 }" :src="team.user_avatar" mode="aspectFill"></image>
 					</view>
-					<view class="img-box" v-for="base in (grouponDetail.num - grouponDetail.current_num)">
-						<image class="avatar" src="/static/imgs/groupon/base_groupon.png" mode="aspectFill"></image>
-					</view>
+					<view class="img-box" v-for="base in surplusNum" :key="base"><image class="avatar" src="/static/imgs/groupon/base_groupon.png" mode="aspectFill"></image></view>
 				</view>
 				<view class="btn-box x-c">
 					<!-- 拼团中 -->
@@ -94,7 +92,7 @@
 			>
 				<text class="title">玩法</text>
 				<view class="x-f">
-					<view class="description one-t">开团/参团·邀请好友·人满发货（不满退款）</view>
+					<view class="description one-t">{{ grouponDetail.goods.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -129,7 +127,8 @@ export default {
 			time: 0,
 			grouponDetail: {},
 			showShare: false,
-			showSku: false
+			showSku: false,
+			surplusNum: 0 //剩余拼团人数、
 		};
 	},
 	computed: {},
@@ -161,9 +160,10 @@ export default {
 		getGrouponDetail() {
 			let that = this;
 			that.$api('goods.grouponDetail', {
-				id: that.$Route.query.grouponId
+				id: that.$Route.query.id
 			}).then(res => {
 				that.grouponDetail = res.data;
+				that.surplusNum = res.data.num - res.data.current_num;
 				let newTime = new Date().getTime();
 				let endTime = res.data.expiretime * 1000;
 				let t = endTime - newTime;
@@ -299,8 +299,8 @@ export default {
 				border-radius: 50%;
 				background: #ccc;
 			}
-			.leader{
-				border:4rpx solid rgba(237,195,108,1);
+			.leader {
+				border: 4rpx solid rgba(237, 195, 108, 1);
 			}
 		}
 	}

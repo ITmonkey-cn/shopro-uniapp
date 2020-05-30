@@ -2,7 +2,7 @@
 	<view class="group-people">
 		<block v-if="grouponTeamList.length">
 			<view class="into-title x-bc">
-				<text>已有{{grouponData.sales}}人参与活动</text>
+				<text>已有{{ grouponData.sales }}人参与活动</text>
 				<text class="cuIcon-right" @tap="onMoreGrouponTeam"></text>
 			</view>
 			<view class="into-item x-bc" v-for="(g, index) in grouponTeamList" :key="g.id" v-if="index < 2">
@@ -19,7 +19,7 @@
 						</view>
 						<view class="time" v-if="g.expiretime && g.time">剩余时间{{ g.time.h }}:{{ g.time.m }}:{{ g.time.s }}</view>
 					</view>
-					<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: g.id })">去参团</button>
+					<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { id: g.id })">去参团</button>
 				</view>
 			</view>
 		</block>
@@ -28,7 +28,7 @@
 		<view v-if="grouponData.activity.richtext_id + 0" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: grouponData.activity.richtext_id })">
 			<view class="x-f">
 				<text class="title">玩法</text>
-				<view class="description one-t">开团/参团·邀请好友·人满发货（不满退款）</view>
+				<view class="description one-t">{{ grouponData.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
 			</view>
 			<text class="cuIcon-right"></text>
 		</view>

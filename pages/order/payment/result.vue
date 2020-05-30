@@ -9,7 +9,7 @@
 					<button
 						class="cu-btn base-btn"
 						v-if="orderDetail.ext_arr.groupon_id > 0"
-						@tap="jump('/pages/activity/groupon/detail', { grouponId: orderDetail.ext_arr.groupon_id })"
+						@tap="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })"
 					>
 						拼团详情
 					</button>

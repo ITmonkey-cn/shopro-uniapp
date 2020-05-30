@@ -154,7 +154,7 @@
 				<view class="" v-for="btn in orderDetail.btns" :key="btn">
 					<button v-if="btn === 'cancel'" @tap.stop="onCancel(orderDetail.id)" class="cu-btn obtn1">取消订单</button>
 					<button v-if="btn === 'pay'" @tap.stop="onPay(orderDetail.order_sn)" class="cu-btn obtn2">付款</button>
-					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { grouponId: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
+					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
 						拼团详情
 					</button>
 				</view>

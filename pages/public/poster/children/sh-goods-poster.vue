@@ -36,15 +36,15 @@
 <script>
 import _app from '../QS-SharePoster/app.js';
 import { getSharePoster } from '../QS-SharePoster/QS-SharePoster.js';
-import {BASE_URL} from '@/env.js'
-import shoproShare from '@/common/mixins/shopro-share'
+import { BASE_URL } from '@/env.js';
+import shoproShare from '@/common/mixins/shopro-share';
 // #ifdef H5
 import wxsdk from '@/common/wechat/sdk';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},
-	mixins:['shoproShare'],
+	mixins: ['shoproShare'],
 	data() {
 		return {
 			poster: {},
@@ -59,44 +59,21 @@ export default {
 			shareData: state => state.init.initData.share
 		})
 	},
-	props: {
-		mixinShare: {}
-	},
+	props: {},
 	created() {
 		let that = this;
-		this.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
-		this.getGoodsDetail();
+		that.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
+		that.goodsInfo = that.$Route.query;
+		that.shareFc();
+		that.setShareInfo({
+			query: {
+				url: 'goods-' + that.$Route.query.id
+			},
+			title: that.$Route.query.title,
+			image:that.$Route.query.image
+		});
 	},
 	methods: {
-		getGoodsDetail() {
-			let that = this;
-			uni.showLoading({
-				title: '加载中'
-			});
-			that.$api('goods.detail', {
-				id: that.$Route.query.id
-			})
-				.then(res => {
-					if (res.code === 1) {
-						uni.hideLoading();
-						that.goodsInfo.image = res.data.image;
-						that.goodsInfo.title = res.data.title;
-						that.goodsInfo.price = res.data.price;
-						that.goodsInfo.original_price = res.data.original_price;
-						that.setShareInfo({
-							query: {
-								url: 'goods-'+that.$Route.query.id,
-								},
-							title: that.goodsInfo.title,
-							image: that.goodsInfo.image
-							}
-						);
-					}
-				})
-				.then(res => {
-					that.shareFc();
-				});
-		},
 		async shareFc() {
 			let that = this;
 			try {
@@ -202,7 +179,7 @@ export default {
 									infoCallBack(imageInfo) {
 										return {
 											dWidth: bgObj.width * 0.9,
-											dHeight: bgObj.width * 0.9,
+											dHeight: bgObj.width * 0.9
 											// roundRectSet: { // 圆角矩形
 											// 	r: bgObj.width * 0.025
 											// }
