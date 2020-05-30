@@ -14,7 +14,7 @@
 							<view class="x-f">
 								<view class="head-img-wrap">
 									<image class="head-img" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode="aspectFill"></image>
-									<button v-if="platform!=='H5'" class="cu-btn refresh-btn x-c" @tap.stop="onRefresh">
+									<button v-if="platform !== 'H5'" class="cu-btn refresh-btn x-c" @tap.stop="onRefresh">
 										<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
 									</button>
 								</view>
@@ -123,7 +123,7 @@ export default {
 	},
 	data() {
 		return {
-			platform:uni.getStorageSync('platform'),//当前平台。
+			platform: uni.getStorageSync('platform'), //当前平台。
 			isRefresh: false, //更新
 			showFollowWechat: false, //绑定公众号
 			orderScrollLeft: 0, //订单卡片滑动。
@@ -218,11 +218,10 @@ export default {
 			}
 		}
 	},
-	onLoad() {
-		this.getUserInfo();
-	},
+	onLoad() {},
 	onShow() {
 		this.$store.commit('CART_NUM');
+		this.getUserInfo();
 		this.getOrderNum();
 	},
 	methods: {

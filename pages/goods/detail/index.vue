@@ -144,7 +144,7 @@
 				</view>
 			</view>
 			<!-- 分享组件 -->
-			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="goodsInfo.activity_type === 'groupon' ? 'groupon' : 'goods'"></shopro-share>
+			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="'goods'"></shopro-share>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
 		</view>

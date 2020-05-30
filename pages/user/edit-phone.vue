@@ -7,15 +7,15 @@
 					<input class="item-input flex-sub" type="number" v-model="phone" placeholder="请输入要绑定的新手机号" placeholder-class="pl-input" />
 				</view>
 			</label>
-			<label>
-				<view class="form-item flex align-center justify-between">
+			<view class="form-item flex align-center justify-between">
+				<label>
 					<view class="x-f">
 						<view class="item-title">验证码:</view>
 						<input class="item-input flex-sub" type="text" v-model="code.value" placeholder="请输入验证码" placeholder-class="pl-input" />
 					</view>
-					<button class="cu-btn code-btn" :disabled="code.status" @tap="getCode">{{ code.text }}</button>
-				</view>
-			</label>
+				</label>
+				<button class="cu-btn code-btn" :disabled="code.status" @tap.stop="getCode">{{ code.text }}</button>
+			</view>
 		</view>
 
 		<view class="btn-box flex align-center justify-center"><button class="cu-btn confirem-btn" @tap="editChangemobile">提交</button></view>
@@ -71,7 +71,7 @@ export default {
 		},
 
 		// 获取短信
-		async getCode() {
+		getCode() {
 			let that = this;
 			that.code.status = true;
 			let countdown = 60;
@@ -108,6 +108,7 @@ export default {
 		height: 96rpx;
 		border-bottom: 1rpx solid rgba(#dfdfdf, 0.9);
 		padding: 0 25rpx;
+		position: relative;
 		.item-title {
 			color: #333;
 			font-size: 28rpx;
@@ -117,6 +118,7 @@ export default {
 			font-size: 28rpx;
 			color: #333;
 			padding-left: 20rpx;
+			width: 300rpx;
 		}
 		.pl-input {
 			color: #999;
@@ -125,6 +127,11 @@ export default {
 			background: none;
 			font-size: 28rpx;
 			color: #a8700d;
+			position: absolute;
+			top: 50%;
+			padding: 0;
+			transform: translateY(-50%);
+			right: 30rpx;
 		}
 	}
 }

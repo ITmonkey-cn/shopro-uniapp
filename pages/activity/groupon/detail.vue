@@ -99,7 +99,7 @@
 		</view>
 		<view class="foot_box"></view>
 		<!-- 邀请好友 -->
-		<shopro-share v-model="showShare" v-if="grouponDetail.goods" :goodsInfo="grouponDetail.goods" :posterType="'groupon'"></shopro-share>
+		<shopro-share v-model="showShare" v-if="grouponDetail.goods" :goodsInfo="grouponDetail" :posterType="'groupon'"></shopro-share>
 		<!-- sku -->
 		<shopro-sku
 			v-model="showSku"

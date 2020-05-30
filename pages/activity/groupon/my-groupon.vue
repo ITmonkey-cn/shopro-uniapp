@@ -34,8 +34,7 @@
 							</shopro-activity-card>
 						</view>
 						<view class="btn-box x-f">
-							<button class="cu-btn btn" @tap="jump('/pages/activity/groupon/detail', { id: groupon.groupon_id })">拼团详情</button>
-							<button class="cu-btn invite-btn" v-if="groupon.groupon.status === 'ing'" @tap="onInvite(groupon.goods)">邀请好友</button>
+							<button class="cu-btn invite-btn" @tap="jump('/pages/activity/groupon/detail', { id: groupon.groupon_id })">拼团详情</button>
 						</view>
 					</view>
 				</block>
@@ -46,18 +45,14 @@
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
-		<!-- 分享 -->
-		<shopro-share v-model="showShare" :goodsInfo="shareGoodsInfo" :posterType="'groupon'"></shopro-share>
 	</view>
 </template>
 
 <script>
 import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
-import shoproShare from '@/components/shopro-share/shopro-share.vue';
 export default {
 	components: {
 		shoproActivityCard,
-		shoproShare
 	},
 	data() {
 		return {
@@ -111,8 +106,8 @@ export default {
 			});
 		},
 		onInvite(data) {
-			this.shareGoodsInfo = data;
 			this.showShare = true;
+			this.shareGoodsInfo = data;
 		},
 		// 加载更多
 		loadMore() {
@@ -128,7 +123,7 @@ export default {
 			that.loadStatus = 'loading';
 			that.$api('goods.myGroupon', {
 				type: that.stateId,
-				page:that.currentPage
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;

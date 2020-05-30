@@ -20,13 +20,13 @@
 							class="share-item y-f"
 							@tap="
 								sharePoster('/pages/public/poster/index', {
-									id: goodsInfo.id,
-									image: goodsInfo.image,
-									title: goodsInfo.title,
-									price: goodsInfo.price,
-									original_price: goodsInfo.original_price,
-									teamNum: goodsInfo.activity_type === 'groupon' ? goodsInfo.activity.rules.team_num : '',
-									grouponPrice: goodsInfo.activity_type === 'groupon' ? goodsInfo.groupon_price : '',
+									id: shareData.id,
+									image: shareData.image,
+									title: shareData.title,
+									price: shareData.price,
+									original_price: shareData.original_price,
+									teamNum: shareData.activity_type === 'groupon' ? shareData.activity.rules.team_num : '',
+									grouponPrice: shareData.activity_type === 'groupon' ? shareData.groupon_price : '',
 									posterType: posterType
 								})
 							"
@@ -57,7 +57,8 @@ export default {
 	},
 	data() {
 		return {
-			showShareGuide: false
+			showShareGuide: false,
+			shareData: {},//组装海报分享信息
 		};
 	},
 	props: {
@@ -69,17 +70,6 @@ export default {
 		posterType: '', //海报类别
 		goodsInfo: {} //商品信息
 	},
-	created() {
-		let that = this;
-		console.log(that.posterType,'pp');
-		that.setShareInfo({
-			query: {
-				url: that.posterType + '-' + that.$Route.query.id
-			},
-			title: that.goodsInfo.title,
-			image: that.goodsInfo.image
-		});
-	},
 	computed: {
 		showModal: {
 			get() {
@@ -90,6 +80,23 @@ export default {
 			}
 		}
 	},
+	created() {
+		let that = this;
+		if (that.posterType === 'groupon') {
+			that.shareData = that.goodsInfo.goods;
+			that.shareData.id = that.goodsInfo.id;
+		} else {
+			that.shareData = that.goodsInfo;
+		}
+		that.setShareInfo({
+			query: {
+				url: that.posterType + '-' + that.shareData.id
+			},
+			title: that.shareData.title,
+			image: that.shareData.image
+		});
+	},
+
 	methods: {
 		copySharePath() {
 			let that = this;
@@ -132,8 +139,8 @@ export default {
 				type: 0,
 				href: that.shareInfo.path,
 				title: that.shareInfo.title,
-				summary: that.goodsInfo.title,
-				imageUrl: that.goodsInfo.image,
+				summary: that.shareData.title,
+				imageUrl: that.shareData.image,
 				success: res => {
 					console.log('success:' + JSON.stringify(res));
 				},
