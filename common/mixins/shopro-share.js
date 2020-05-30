@@ -18,10 +18,10 @@ export default {
 		return {
 			//设置默认的分享参数
 			shareInfo: {
-				title: '',    //分享标题
-				path: '',     //转发链接  小程序转发只有页面链接和参数,其他全部带域名
+				title: '', //分享标题
+				path: '', //转发链接  小程序转发只有页面链接和参数,其他全部带域名
 				imageUrl: '', //分享图片
-				copyLink: ''  //复制链接地址  复制的链接都是WAP版链接地址
+				copyLink: '' //复制链接地址  复制的链接都是WAP版链接地址
 			}
 		}
 	},
@@ -60,16 +60,25 @@ export default {
 							}
 						});
 						break;
-					// ... 后续跳转活动判断
+					case 'groupon':
+						this.$Router.push({
+							path: '/pages/activity/groupon/detail',
+							query: {
+								id: url[1]
+							}
+						});
+						break;
+
+						// ... 后续跳转活动判断
 				}
 			}
 		}
 	},
 	methods: {
 		setShareInfo(scene = {
-			title: '',  //自定义分享标题
-			image: '',  //自定义分享图片
-			query: {}   //自定义分享参数
+			title: '', //自定义分享标题
+			image: '', //自定义分享图片
+			query: {}  //自定义分享参数
 		}) {
 			let that = this;
 			uni.getStorage({
