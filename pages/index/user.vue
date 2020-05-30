@@ -15,10 +15,10 @@
 								<view class="head-img-wrap">
 									<image class="head-img" @tap.stop="jump('/pages/user/info')" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode="aspectFill"></image>
 									<block v-if="platform !== 'H5'">
-										<button class="cu-btn refresh-btn x-c" @tap.stop="onRefresh">
+										<button v-if="platform === 'wxMiniProgram'" open-type="getUserInfo" @getuserinfo="refreshWechatUser" class="cu-btn refresh-btn x-c">
 											<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
 										</button>
-										<button v-if="platform === 'wxMiniProgram'" open-type="getUserInfo" @getuserinfo="getuserinfo" class="cu-btn refresh-btn x-c">
+										<button v-if="platform === 'wxOfficialAccount'" @tap="refreshWechatUser" class="cu-btn refresh-btn x-c">
 											<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
 										</button>
 									</block>
@@ -112,10 +112,18 @@
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 关注公众号 -->
 		<sh-follow-wechat v-model="showFollowWechat"></sh-follow-wechat>
+		<!-- 强制登录 -->
+		<!-- #ifdef MP-WEIXIN -->
+		<shopro-force-login></shopro-force-login>
+		<!-- #endif -->
 	</view>
 </template>
 
 <script>
+// #ifdef MP-WEIXIN
+import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
+// #endif
+import Wechat from '@/common/wechat/wechat';
 import shoproGoods from '@/components/goods/shopro-goods.vue';
 import shoproPopupModal from '@/components/modal/shopro-popup-modal.vue';
 import shFollowWechat from './user/children/sh-follow-wechat.vue';
@@ -124,7 +132,10 @@ export default {
 	components: {
 		shFollowWechat,
 		shoproGoods,
-		shoproPopupModal
+		shoproPopupModal,
+		// #ifdef MP-WEIXIN
+		shoproForceLogin
+		// #endif
 	},
 	data() {
 		return {
@@ -210,7 +221,8 @@ export default {
 			initData: state => state.init.initData, //初始化数据
 			userInfo: state => state.user.userInfo,
 			orderNum: state => state.user.orderNum,
-			cartNum: state => state.cart.cartNum
+			cartNum: state => state.cart.cartNum,
+			forceOauth: state => state.user.forceOauth
 		}),
 		info() {
 			if (this.initData) {
@@ -245,8 +257,15 @@ export default {
 				that.isRefresh = false;
 			}, 200);
 		},
-		getuserinfo(e) {
-			console.log('getuserinfo',e)
+		refreshWechatUser(e) {
+			this.onRefresh();
+			if (this.platform === 'wxOfficialAccount') {
+				let wechat = new Wechat();
+				wechat.login();
+			} else if (this.platform === 'wxMiniProgram') {
+				this.$store.commit('FORCE_OAUTH', true);
+			}
+			// console.log('getuserinfo', e);
 		}
 	}
 };
