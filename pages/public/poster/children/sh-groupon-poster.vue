@@ -62,16 +62,21 @@ export default {
 	props: {},
 	created() {
 		let that = this;
-		that.scene = encodeURIComponent(this.shareInfo.path.split('?')[1]);
 		that.goodsInfo = that.$Route.query;
-		that.shareFc();
 		that.setShareInfo({
 			query: {
-				url: 'goods-' + that.$Route.query.id
+				url: 'groupon-' + that.$Route.query.id
 			},
-			title: that.$Route.query.title,
-			image: that.$Route.query.image
+			title: that.goodsInfo.title,
+			image: that.goodsInfo.image
 		});
+		if (that.shareInfo) {
+			setTimeout(function() {
+				console.log(that.shareInfo);
+				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
+				that.shareFc();
+			}, 500);
+		}
 	},
 	methods: {
 		async shareFc() {

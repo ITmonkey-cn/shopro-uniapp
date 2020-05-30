@@ -71,9 +71,10 @@ export default {
 	},
 	created() {
 		let that = this;
+		console.log(that.posterType,'pp');
 		that.setShareInfo({
 			query: {
-				url: 'goods-' + that.$Route.query.id
+				url: that.posterType + '-' + that.$Route.query.id
 			},
 			title: that.goodsInfo.title,
 			image: that.goodsInfo.image
