@@ -26,7 +26,7 @@
 							<text class="tag-title">{{ userInfo.group.name }}</text>
 						</view>
 					</view>
-					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/public/poster/index', { posterType: 'userInvite' })">
+					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/public/poster/index', { posterType: 'user' })">
 						<text class="cuIcon-qr_code"></text>
 					</button>
 				</view>
@@ -180,7 +180,7 @@ export default {
 					title: '邀请好友',
 					img: 'http://shopro.7wpp.com/imgs/user/list11.png',
 					url: '/pages/public/poster/index',
-					parmas: { posterType: 'userInvite' }
+					parmas: { posterType: 'user' }
 				},
 				{
 					title: '积分商城',
