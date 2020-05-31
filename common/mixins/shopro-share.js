@@ -74,6 +74,7 @@ export default {
 			}
 		}
 	},
+	
 	methods: {
 		setShareInfo(scene = {
 			title: '', //自定义分享标题

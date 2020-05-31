@@ -71,10 +71,10 @@ export default {
 		that.setShareInfo();
 		if (that.shareInfo) {
 			setTimeout(function() {
-				console.log(that.shareInfo);
+				that.$emit('getShareInfo', that.shareInfo);
 				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
 				that.shareFc();
-			}, 500);
+			}, 100);
 		}
 	},
 	methods: {

@@ -103,7 +103,6 @@ export default {
 					this.$set(i, 'checked', false);
 				}
 			});
-			console.log(this.selList);
 		},
 		// 加载更多
 		loadMore() {

@@ -63,7 +63,6 @@
 				}).then(res => {
 					if (res.code === 1) {
 						that.walletList = [...that.walletList, ...res.data.data];
-						console.log(that.walletList)
 						that.lastPage = res.data.last_page;
 						if (that.currentPage < res.data.last_page) {
 							that.loadStatus = '';

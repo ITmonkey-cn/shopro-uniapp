@@ -80,8 +80,6 @@ export default {
 					this.$set(i, 'checked', false);
 				}
 			});
-			console.log(this.selList);
-			console.log(this.browseList);
 		},
 		onSet() {
 			this.isSel = !this.isSel;
@@ -98,7 +96,6 @@ export default {
 					this.$set(i, 'checked', false);
 				}
 			});
-			console.log(this.selList);
 		},
 		// 历史记录
 		getbrowseList() {

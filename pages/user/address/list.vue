@@ -50,9 +50,6 @@ export default {
 			let currPage = pages[pages.length - 1];
 			let prevPage = pages[pages.length - 2]; //上一个页面
 			// #endif
-
-			console.log('list', address);
-			console.log('list2', prevPage);
 			prevPage.address = address;
 
 			uni.navigateBack({

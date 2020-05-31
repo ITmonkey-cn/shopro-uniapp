@@ -63,7 +63,7 @@ export default {
 	created() {
 		let that = this;
 		that.goodsInfo = that.$Route.query;
-		that.goodsInfo.image = encodeURIComponent(that.$Route.query.image);
+		that.goodsInfo.image = decodeURIComponent(that.$Route.query.image);
 		that.setShareInfo({
 			query: {
 				url: 'groupon-' + that.$Route.query.id
@@ -73,10 +73,10 @@ export default {
 		});
 		if (that.shareInfo) {
 			setTimeout(function() {
-				console.log(that.shareInfo);
+				that.$emit('getShareInfo', that.shareInfo);
 				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
 				that.shareFc();
-			}, 500);
+			}, 100);
 		}
 	},
 	methods: {

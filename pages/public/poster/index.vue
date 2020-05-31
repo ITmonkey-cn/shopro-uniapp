@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<sh-invite-poster v-if="posterType === 'user'"></sh-invite-poster>
-		<sh-goods-poster v-if="posterType === 'goods'"></sh-goods-poster>
-		<sh-groupon-poster v-if="posterType === 'groupon'"></sh-groupon-poster>
+		<sh-invite-poster v-if="posterType === 'user'" @getShareInfo="getShareInfo"></sh-invite-poster>
+		<sh-goods-poster v-if="posterType === 'goods'" @getShareInfo="getShareInfo"></sh-goods-poster>
+		<sh-groupon-poster v-if="posterType === 'groupon'" @getShareInfo="getShareInfo"></sh-groupon-poster>
 	</view>
 </template>
 
@@ -24,7 +24,6 @@ export default {
 	},
 	computed: {},
 	onLoad(options) {
-		console.log('poset.index',options.posterType)
 		this.posterType = options.posterType;
 		switch (options.posterType) {
 			case 'user':
@@ -48,7 +47,11 @@ export default {
 				});
 		}
 	},
-	methods: {}
+	methods: {
+		getShareInfo(e) {
+			this.shareInfo = e;
+		}
+	}
 };
 </script>
 

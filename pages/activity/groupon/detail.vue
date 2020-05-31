@@ -168,6 +168,13 @@ export default {
 				let endTime = res.data.expiretime * 1000;
 				let t = endTime - newTime;
 				that.countDown(t / 1000);
+				that.setShareInfo({
+					query: {
+						url: 'groupon-' + that.$Route.query.id
+					},
+					title: that.grouponDetail.goods.title,
+					image: that.grouponDetail.goods.image
+				});
 			});
 		},
 		// 邀请

@@ -94,9 +94,7 @@ export default class Wechat {
 
 	// #ifdef MP-WEIXIN
 	wxMiniProgramLogin(e) {
-		
 		let that = this;
-		console.log(e,123);
 		return new Promise((resolve, reject) => {
 			if(e.detail.errMsg === "getUserInfo:ok"){
 				uni.login({

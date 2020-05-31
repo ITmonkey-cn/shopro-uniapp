@@ -102,8 +102,6 @@ export default {
 		copySharePath() {
 			let that = this;
 			that.showModal = false;
-			console.log(this.shareInfo);
-
 			uni.setClipboardData({
 				data: this.shareInfo.copyLink,
 				success: function(data) {

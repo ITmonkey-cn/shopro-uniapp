@@ -102,7 +102,6 @@ export default {
 							clearInterval(timer);
 							that.code.text = '获取验证码';
 							that.$set(that.code, 'status', false);
-							console.log('status', that.code.status);
 						}
 					}, 1000);
 				} else {
