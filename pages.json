@@ -2,8 +2,8 @@
 	// "easycom": { //TODO暂时不要开启。
 	// 	"autoscan": true,
 	// 	"custom": {
-	// 		"shopro-(.*)": "@/components/shopro-$1/shopro-$1.vue", 
-	// 		"uni-(.*)": "@/components/uni-$1/uni-$1.vue" 
+	// 		"shopro-(.*)": "@/components/shopro-$1/shopro-$1.vue",
+	// 		"uni-(.*)": "@/components/uni-$1/uni-$1.vue"
 	// 	}
 	// },
 	"pages": [{
@@ -14,7 +14,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
-				// "enablePullDownRefresh": true,
+//				 "enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			},
 			"meta": {
@@ -33,9 +33,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "分类", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "分类",
+				"group": "商城"
 			}
 		},
 		{
@@ -47,9 +47,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "购物车", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "购物车",
+				"group": "商城"
 			}
 		},
 		{
@@ -62,9 +62,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "我的", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "我的",
+				"group": "用户"
 			}
 		},
 		// 商品goods------start
@@ -76,9 +76,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "商品列表", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "商品列表",
+				"group": "商城"
 			}
 		},
 		{
@@ -88,17 +88,20 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": false
 			}
 		},
 		{
 			"path": "pages/goods/detail/index",
 			"style": {
 				"navigationBarTitleText": "商品详情"
-
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "商品详情",
+				"group": "商城"
 			}
 		},
 		// 商品goods------end
@@ -111,9 +114,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "今日必拼", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "今日必拼",
+				"group": "活动"
 			}
 		},
 		{
@@ -123,9 +126,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "限时秒杀", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "限时秒杀",
+				"group": "活动"
 			}
 		},
 		{
@@ -135,20 +138,20 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
 			"path": "pages/activity/groupon/my-groupon",
 			"style": {
 				"navigationBarTitleText": "我的拼团"
-
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "我的拼团", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "我的拼团",
+				"group": "活动"
 			}
 		},
 		// 活动activity------end
@@ -157,14 +160,13 @@
 		{
 			"path": "pages/app/live/list",
 			"style": {
-				"navigationBarTitleText": "直播",
-				"async": true, //是否同步
-				"title": "直播列表", //标题
-				"group": "应用" //分组
-
+				"navigationBarTitleText": "直播"
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "直播列表",
+				"group": "应用"
 			}
 		},
 		// #endif
@@ -176,9 +178,9 @@
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "优惠劵列表", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "优惠劵中心",
+				"group": "优惠券"
 			}
 		},
 		{
@@ -189,7 +191,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "优惠劵详情",
+				"group": "优惠券"
 			}
 		},
 		{
@@ -199,9 +204,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "积分商城", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "积分商城",
+				"group": "应用"
 			}
 		},
 		// 扩展extend------end
@@ -214,7 +219,8 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
@@ -224,7 +230,8 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
@@ -236,9 +243,9 @@
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "我的订单", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "我的订单",
+				"group": "用户"
 			}
 		},
 		{
@@ -248,7 +255,8 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
@@ -259,7 +267,8 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
@@ -269,7 +278,8 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
@@ -279,7 +289,8 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
@@ -289,7 +300,8 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": false
 			}
 		},
 		// 订单order------end
@@ -301,7 +313,10 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "富文本",
+				"group": "通用"
 			}
 		},
 		{
@@ -311,7 +326,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "意见反馈",
+				"group": "商城"
 			}
 		},
 		{
@@ -319,10 +337,12 @@
 			"style": {
 				"navigationBarTitleText": "找回密码",
 				"navigationStyle": "custom"
-
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "找回密码",
+				"group": "用户"
 			}
 		},
 		{
@@ -333,7 +353,10 @@
 				"navigationStyle": "custom"
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "登录",
+				"group": "用户"
 			}
 		},
 		{
@@ -341,10 +364,12 @@
 			"style": {
 				"navigationBarTitleText": "注册",
 				"navigationStyle": "custom"
-
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "注册",
+				"group": "用户"
 			}
 		},
 		{
@@ -354,7 +379,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "海报",
+				"group": "通用"
 			}
 		},
 		{
@@ -365,9 +393,9 @@
 			},
 			"meta": {
 				"auth": false,
-				"async": true, //是否同步
-				"title": "常见问题", //标题
-				"group": "商城" //分组
+				"async": true,
+				"title": "常见问题",
+				"group": "通用"
 			}
 		},
 		// 公共public ------ end
@@ -380,9 +408,9 @@
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "浏览足迹", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "浏览足迹",
+				"group": "用户"
 			}
 		},
 		{
@@ -393,9 +421,9 @@
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "签到中心", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "签到中心",
+				"group": "通用"
 			}
 		},
 		{
@@ -404,7 +432,8 @@
 				"navigationBarTitleText": "编辑地址"
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": false
 			}
 		},
 		{
@@ -415,9 +444,9 @@
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "收货地址", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "收货地址",
+				"group": "用户"
 			}
 		},
 		{
@@ -426,49 +455,58 @@
 				"navigationBarTitleText": "系统设置"
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "系统设置",
+				"group": "通用"
 			}
 		}, {
 			"path": "pages/user/edit-password",
 			"style": {
 				"navigationBarTitleText": "修改密码"
-
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "修改密码",
+				"group": "用户"
+
 			}
 		},
 		{
 			"path": "pages/user/favorite",
 			"style": {
 				"navigationBarTitleText": "收藏"
-
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "我的收藏", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "我的收藏",
+				"group": "用户"
 			}
 		},
 		{
 			"path": "pages/user/info",
 			"style": {
 				"navigationBarTitleText": "个人信息"
-
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "个人信息",
+				"group": "用户"
 			}
 		},
 		{
 			"path": "pages/user/edit-phone",
 			"style": {
 				"navigationBarTitleText": "修改手机号"
-
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "修改手机号",
+				"group": "用户"
 			}
 		},
 		{
@@ -480,9 +518,9 @@
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "我的钱包", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "我的钱包",
+				"group": "用户"
 			}
 		},
 		{
@@ -491,7 +529,11 @@
 				"navigationBarTitleText": "绑定银行卡"
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "绑定银行卡",
+				"group": "用户"
+
 			}
 		},
 		{
@@ -501,7 +543,10 @@
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "钱包明细",
+				"group": "用户"
 			}
 		},
 		{
@@ -513,22 +558,14 @@
 			},
 			"meta": {
 				"auth": true,
-				"async": true, //是否同步
-				"title": "我的积分", //标题
-				"group": "用户" //分组
+				"async": true,
+				"title": "我的积分",
+				"group": "用户"
 			}
 		}
 		// 我的user ------ end
 
 	],
-	// 分包加载,tabbar页不能在分包目录内。
-	"subPackages": [{
-		"root": "pges/user", //分包目录
-		"pages": [
-			//{}分包路由,去掉根路径
-
-		]
-	}],
 	// 默认导航栏样式
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
