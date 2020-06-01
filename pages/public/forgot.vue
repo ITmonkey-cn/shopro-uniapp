@@ -26,7 +26,7 @@
 				</view>
 				<view class="input-item x-c">
 					<text class="inp-title">新密码</text>
-					<input class="inp" v-model="userPassword" type="text" placeholder="请设置新密码" placeholder-class="pl" />
+					<input class="inp" password v-model="userPassword" type="text" placeholder="请设置新密码" placeholder-class="pl" />
 				</view>
 			</view>
 			<!-- 登录按钮 -->
@@ -86,7 +86,7 @@ export default {
 		async getCode() {
 			let that = this;
 			that.code.status = true;
-			let countdown = 5;
+			let countdown = 60;
 			that.$api('sms.send', {
 				mobile: that.userPhone,
 				event: 'resetpwd'
@@ -102,7 +102,6 @@ export default {
 							clearInterval(timer);
 							that.code.text = '获取验证码';
 							that.$set(that.code, 'status', false);
-							console.log('status', that.code.status);
 						}
 					}, 1000);
 				} else {

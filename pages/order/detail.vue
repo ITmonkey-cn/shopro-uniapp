@@ -13,9 +13,14 @@
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
 					<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
 					<view class="order-bottom  x-f">
+						<!-- 退款原因 -->
+						<view class="refund_msg" v-if="order.refund_msg">
+							<text class="refund-title">退款原因：</text>
+							{{ order.refund_msg }}
+						</view>
 						<view class="btn-box" v-for="(btn, index) in order.btns" :key="btn">
 							<button
-								@tap="jump('/pages/goods/detail', { id: order.goods_id })"
+								@tap="jump('/pages/goods/detail/index', { id: order.goods_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'buy_again'"
@@ -44,6 +49,14 @@
 							>
 								申请退款
 							</button>
+							<button
+								@tap.stop="onRefund(orderDetail.id, order.id)"
+								class="cu-btn btn1"
+								:class="{ btn2: index + 1 === order.btns.length }"
+								v-if="btn === 'reapply_refund'"
+							>
+								重新退款
+							</button>
 							<button @tap.stop="onComment(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'comment'">
 								待评价
 							</button>
@@ -53,7 +66,7 @@
 				</view>
 			</view>
 			<!-- 收货信息 -->
-			<view class="notice-box" v-if="false">
+			<view class="notice-box" v-if="true">
 				<view class="notice-box__head">收货信息</view>
 				<view class="notice-box__content">
 					<view class="x-f notice-item">
@@ -106,7 +119,7 @@
 				</view>
 			</view>
 			<!-- 自动发货 -->
-			<view class="notice-box">
+			<view class="notice-box" v-if="false">
 				<view class="notice-box__head">发货信息</view>
 				<view class="notice-box__content">
 					<view class="x-f notice-item--center">
@@ -142,9 +155,14 @@
 				<text class="money-title">共{{ allNum }}件商品 合计:</text>
 				<text class="all-price">￥{{ orderDetail.total_fee }}</text>
 			</view>
-			<view class="btn-box x-f" v-if="orderDetail.btns && orderDetail.btns.length">
-				<button @tap.stop="onCancel(orderDetail.id)" class="cu-btn obtn1">取消订单</button>
-				<button @tap.stop="onPay(orderDetail.order_sn)" class="cu-btn obtn2">付款</button>
+			<view class="btn-box x-f">
+				<view class="" v-for="btn in orderDetail.btns" :key="btn">
+					<button v-if="btn === 'cancel'" @tap.stop="onCancel(orderDetail.id)" class="cu-btn obtn1">取消订单</button>
+					<button v-if="btn === 'pay'" @tap.stop="onPay(orderDetail.order_sn)" class="cu-btn obtn2">付款</button>
+					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
+						拼团详情
+					</button>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -158,6 +176,7 @@ export default {
 	},
 	data() {
 		return {
+			time: 0,
 			orderDetail: {},
 			orderStatus: {
 				'-2': '已关闭',
@@ -171,6 +190,7 @@ export default {
 	onShow() {
 		this.getOrderDetail();
 	},
+	onLoad() {},
 	computed: {
 		allNum() {
 			if (this.orderDetail.item) {
@@ -192,10 +212,9 @@ export default {
 		},
 		// 订单详情
 		getOrderDetail() {
-			console.log('detial', this.$Route.query.id);
 			let that = this;
 			that.$api('order.detail', {
-				order_sn: that.$Route.query.id
+				id: that.$Route.query.id
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
@@ -270,7 +289,7 @@ export default {
 		// 立即购买
 		onPay(id) {
 			uni.navigateTo({
-				url: `/pages/pay/index?id=${id}`
+				url: `/pages/order/payment/method?id=${id}`
 			});
 		},
 		// 待评价
@@ -291,7 +310,7 @@ export default {
 	background-size: 100% 134rpx;
 
 	.state-box {
-		padding: 40rpx;
+		padding: 30rpx 40rpx;
 		color: rgba(#fff, 0.9);
 
 		.state-img {
@@ -309,6 +328,12 @@ export default {
 	margin-bottom: 20rpx;
 
 	.order-list {
+		.refund_msg {
+			font-size: 28rpx;
+			color: #999;
+			flex: 1;
+			text-align: left;
+		}
 		.order-bottom {
 			background: #fff;
 			padding-bottom: 20rpx;
@@ -338,6 +363,75 @@ export default {
 		}
 	}
 }
+// 拼团项目
+.group-box {
+	background: #fff;
+	padding: 40rpx 0;
+	height: 250rpx;
+	margin-bottom: 20rpx;
+	.tip-box {
+		font-size: 28rpx;
+
+		.cuIcon-roundcheckfill {
+			color: #ecbe60;
+			font-size: 34rpx;
+			margin-right: 20rpx;
+		}
+	}
+	.title-box {
+		font-size: 26rpx;
+		font-weight: bold;
+		color: #333;
+		.group-num {
+			color: #f8002c;
+		}
+		.count-down-tip {
+			font-size: 24rpx;
+			padding-left: 10rpx;
+		}
+		.time-box {
+			font-size: 18rpx;
+			.count-text {
+				display: inline-block;
+				background-color: #383a46;
+				color: #fff;
+				font-size: 18rpx;
+				border-radius: 2rpx;
+				padding: 0 5rpx;
+				height: 28rpx;
+				text-align: center;
+				line-height: 28rpx;
+				margin: 0 6rpx;
+			}
+		}
+	}
+
+	.group-people {
+		.img-box {
+			position: relative;
+			margin-right: 20rpx;
+			.tag {
+				position: absolute;
+				line-height: 36rpx;
+				background: linear-gradient(132deg, rgba(243, 223, 177, 1), rgba(243, 223, 177, 1), rgba(236, 190, 96, 1));
+				border-radius: 18rpx;
+				padding: 0 10rpx;
+				white-space: nowrap;
+				font-size: 24rpx;
+				color: #784f06;
+				z-index: 2;
+				top: -10rpx;
+			}
+			.avatar {
+				width: 80rpx;
+				height: 80rpx;
+				border-radius: 50%;
+				background: #ccc;
+			}
+		}
+	}
+}
+
 // 收货信息、订单信息。
 .notice-box {
 	background: #fff;

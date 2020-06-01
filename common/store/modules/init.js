@@ -26,6 +26,7 @@ const actions = {
 			api('init', params).then(res => {
 				commit('INIT_DATA', res.data);
 				uni.setStorageSync('sysInfo', res.data.info);
+				uni.setStorageSync('shareInfo', res.data.share);
 				resolve(res)
 			}).catch(e => {
 				reject(e)

@@ -1,13 +1,20 @@
 {
+	// "easycom": { //TODO暂时不要开启。
+	// 	"autoscan": true,
+	// 	"custom": {
+	// 		"shopro-(.*)": "@/components/shopro-$1/shopro-$1.vue",
+	// 		"uni-(.*)": "@/components/uni-$1/uni-$1.vue"
+	// 	}
+	// },
 	"pages": [{
 			"path": "pages/index/index",
 			"name": "home",
 			"title": "首页",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
 			"style": {
-				"navigationBarTitleText": "Shopro开源商城",
+				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
-				// "enablePullDownRefresh": true,
+//				 "enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			},
 			"meta": {
@@ -25,7 +32,10 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "分类",
+				"group": "商城"
 			}
 		},
 		{
@@ -36,7 +46,10 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "购物车",
+				"group": "商城"
 			}
 		},
 		{
@@ -48,435 +61,515 @@
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": true,
+				"title": "我的",
+				"group": "用户"
 			}
 		},
-		// #ifdef MP-WEIXIN
+		// 商品goods------start
 		{
-			"path": "pages/live/live-list",
+			"path": "pages/goods/list",
 			"style": {
-				"navigationBarTitleText": "直播"
+				"navigationBarTitleText": "商品列表",
+				"navigationStyle": "custom"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "商品列表",
+				"group": "商城"
+			}
+		},
+		{
+			"path": "pages/goods/comment-list",
+			"style": {
+				"navigationBarTitleText": "商品评价"
 
 			},
 			"meta": {
-				"auth": false
+				"auth": false,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/goods/detail/index",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "商品详情",
+				"group": "商城"
+			}
+		},
+		// 商品goods------end
+
+		// 活动activity------start
+		{
+			"path": "pages/activity/groupon/list",
+			"style": {
+				"navigationBarTitleText": "今日必拼"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "今日必拼",
+				"group": "活动"
+			}
+		},
+		{
+			"path": "pages/activity/seckill/list",
+			"style": {
+				"navigationBarTitleText": "限时秒杀"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "限时秒杀",
+				"group": "活动"
+			}
+		},
+		{
+			"path": "pages/activity/groupon/detail",
+			"style": {
+				"navigationBarTitleText": "拼团详情"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/activity/groupon/my-groupon",
+			"style": {
+				"navigationBarTitleText": "我的拼团"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "我的拼团",
+				"group": "活动"
+			}
+		},
+		// 活动activity------end
+		// 扩展app ------start
+		// #ifdef MP-WEIXIN
+		{
+			"path": "pages/app/live/list",
+			"style": {
+				"navigationBarTitleText": "直播"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "直播列表",
+				"group": "应用"
 			}
 		},
 		// #endif
 		{
-			"path": "pages/sign/index",
+			"path": "pages/app/coupon/list",
+			"style": {
+				"navigationBarTitleText": "优惠券"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "优惠劵中心",
+				"group": "优惠券"
+			}
+		},
+		{
+			"path": "pages/app/coupon/detail",
+			"style": {
+				"navigationBarTitleText": "优惠劵详情",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "优惠劵详情",
+				"group": "优惠券"
+			}
+		},
+		{
+			"path": "pages/app/score/list",
+			"style": {
+				"navigationBarTitleText": "积分商城"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "积分商城",
+				"group": "应用"
+			}
+		},
+		// 扩展extend------end
+
+		// 订单order------start
+		{
+			"path": "pages/order/confirm",
+			"style": {
+				"navigationBarTitleText": "确认订单"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/order/list",
+			"name": "orderList",
+			"style": {
+				"navigationBarTitleText": "订单列表"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "我的订单",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/order/add-comment",
+			"style": {
+				"navigationBarTitleText": "发表评论"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/order/express",
+			"name": "expressList",
+			"style": {
+				"navigationBarTitleText": "物流信息"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/order/refund",
+			"style": {
+				"navigationBarTitleText": "退款"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/order/payment/method",
+			"style": {
+				"navigationBarTitleText": "支付方式"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/order/payment/result",
+			"style": {
+				"navigationBarTitleText": "支付结果"
+
+			},
+			"meta": {
+				"auth": false,
+				"async": false
+			}
+		},
+		// 订单order------end
+		// 公共public ------ start
+		{
+			"path": "pages/public/richtext",
+			"style": {
+				"navigationBarTitleText": "" //公共富文本
+
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "富文本",
+				"group": "通用"
+			}
+		},
+		{
+			"path": "pages/public/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "意见反馈",
+				"group": "商城"
+			}
+		},
+		{
+			"path": "pages/public/forgot",
+			"style": {
+				"navigationBarTitleText": "找回密码",
+				"navigationStyle": "custom"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "找回密码",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/public/login",
+			"name": "login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "登录",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/public/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"navigationStyle": "custom"
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "注册",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/public/poster/index",
+			"style": {
+				"navigationBarTitleText": "海报"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "海报",
+				"group": "通用"
+			}
+		},
+		{
+			"path": "pages/public/faq",
+			"style": {
+				"navigationBarTitleText": "常见问题"
+
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "常见问题",
+				"group": "通用"
+			}
+		},
+		// 公共public ------ end
+
+		// 我的user ------start
+		{
+			"path": "pages/user/log",
+			"style": {
+				"navigationBarTitleText": "浏览足迹"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "浏览足迹",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/user/sign/index",
 			"style": {
 				"navigationBarTitleText": "签到中心"
 
 			},
 			"meta": {
-				"auth": true
+				"auth": true,
+				"async": true,
+				"title": "签到中心",
+				"group": "通用"
+			}
+		},
+		{
+			"path": "pages/user/address/edit",
+			"style": {
+				"navigationBarTitleText": "编辑地址"
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/user/address/list",
+			"style": {
+				"navigationBarTitleText": "收货地址"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "收货地址",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/user/set",
+			"style": {
+				"navigationBarTitleText": "系统设置"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "系统设置",
+				"group": "通用"
+			}
+		}, {
+			"path": "pages/user/edit-password",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "修改密码",
+				"group": "用户"
+
+			}
+		},
+		{
+			"path": "pages/user/favorite",
+			"style": {
+				"navigationBarTitleText": "收藏"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "我的收藏",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/user/info",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "个人信息",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/user/edit-phone",
+			"style": {
+				"navigationBarTitleText": "修改手机号"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "修改手机号",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/user/wallet/index",
+			"style": {
+				"navigationBarTitleText": "我的钱包",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "我的钱包",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/user/wallet/bind-bank",
+			"style": {
+				"navigationBarTitleText": "绑定银行卡"
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "绑定银行卡",
+				"group": "用户"
+
+			}
+		},
+		{
+			"path": "pages/user/wallet/log",
+			"style": {
+				"navigationBarTitleText": "钱包明细"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "钱包明细",
+				"group": "用户"
+			}
+		},
+		{
+			"path": "pages/user/wallet/score-balance",
+			"style": {
+				"navigationBarTitleText": "积分",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": true,
+				"title": "我的积分",
+				"group": "用户"
 			}
 		}
-	],
-	// 分包加载,tabbar页不能在分包目录内。
-	"subPackages": [{
-			"root": "pages/score",
-			"pages": [{
-					"path": "index",
-					"style": {
-						"navigationBarTitleText": "积分",
-						"navigationStyle": "custom"
+		// 我的user ------ end
 
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "score-shop",
-					"style": {
-						"navigationBarTitleText": "积分商城"
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "detail",
-					"style": {
-						"navigationBarTitleText": "积分详情"
-					},
-					"meta": {
-						"auth": false
-					}
-				}
-			]
-		},
-		{
-			"root": "pages/pay", //pay分包
-			"pages": [{
-					"path": "index",
-					"style": {
-						"navigationBarTitleText": "支付方式"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "success",
-					"style": {
-						"navigationBarTitleText": "支付结果"
-
-					},
-					"meta": {
-						"auth": false
-					}
-				}
-			]
-		},
-		{
-			"root": "pages/money", //money分包
-			"pages": [{
-					"path": "index",
-					"style": {
-						"navigationBarTitleText": "我的钱包",
-						"navigationStyle": "custom"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "bank",
-					"style": {
-						"navigationBarTitleText": "绑定银行卡"
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "log",
-					"style": {
-						"navigationBarTitleText": "钱包明细"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				}
-			]
-		},
-		{
-			"root": "pages/coupons", // public分包
-			"pages": [{
-					"path": "index",
-					"style": {
-						"navigationBarTitleText": "优惠券"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "detail",
-					"style": {
-						"navigationBarTitleText": "优惠劵详情",
-						"navigationStyle": "custom"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				}
-			]
-		},
-		{
-			"root": "pages/public", // public分包
-			"pages": [{
-					"path": "richtext",
-					"style": {
-						"navigationBarTitleText": "" //公共富文本
-
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "feedback",
-					"style": {
-						"navigationBarTitleText": "意见反馈"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "forgot",
-					"style": {
-						"navigationBarTitleText": "找回密码",
-						"navigationStyle": "custom"
-
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "login",
-					"name": "login",
-					"style": {
-						"navigationBarTitleText": "登录",
-						"navigationStyle": "custom"
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "register",
-					"style": {
-						"navigationBarTitleText": "注册",
-						"navigationStyle": "custom"
-
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "problems",
-					"style": {
-						"navigationBarTitleText": "常见问题"
-
-					},
-					"meta": {
-						"auth": false
-					}
-				}
-			]
-		},
-		{
-			"root": "pages/goods", // 订单分包
-			"pages": [{
-					"path": "list",
-					"style": {
-						"navigationBarTitleText": "商品列表",
-						"navigationStyle": "custom"
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "comment-list",
-					"style": {
-						"navigationBarTitleText": "商品评价"
-
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "detail",
-					"style": {
-						"navigationBarTitleText": "商品详情"
-
-					},
-					"meta": {
-						"auth": false
-					}
-				},
-				{
-					"path": "goods-poster",
-					"style": {
-						"navigationBarTitleText": "商品海报"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				}
-			]
-		},
-		{
-			"root": "pages/order", // 订单分包
-			"pages": [{
-					"path": "confirm",
-					"style": {
-						"navigationBarTitleText": "确认订单",
-						"navigationStyle": "custom"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "pickup",
-					"style": {
-						"navigationBarTitleText": "", //自提点选择
-						"navigationStyle": "custom"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "detail",
-					"style": {
-						"navigationBarTitleText": "订单详情"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "list",
-					"name": "orderList",
-					"style": {
-						"navigationBarTitleText": "订单列表"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "add-comment",
-					"style": {
-						"navigationBarTitleText": "发表评论"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "express",
-					"name": "orderList",
-					"style": {
-						"navigationBarTitleText": "物流信息"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "refund",
-					"style": {
-						"navigationBarTitleText": "退款"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				}
-			]
-		},
-		{
-			"root": "pages/user", //分包目录,user
-			"pages": [
-				//{}分包路由,去掉根路径
-				{
-					"path": "poster",
-					"style": {
-						"navigationBarTitleText": "邀请好友"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "log",
-					"style": {
-						"navigationBarTitleText": "浏览足迹"
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "address/edit",
-					"style": {
-						"navigationBarTitleText": "编辑地址"
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "address/list",
-					"style": {
-						"navigationBarTitleText": "收货地址"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "set",
-					"style": {
-						"navigationBarTitleText": "系统设置"
-					},
-					"meta": {
-						"auth": true
-					}
-				}, {
-					"path": "edit-password",
-					"style": {
-						"navigationBarTitleText": "修改密码"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "favorite",
-					"style": {
-						"navigationBarTitleText": "收藏"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "info",
-					"style": {
-						"navigationBarTitleText": "个人信息"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				},
-				{
-					"path": "edit-phone",
-					"style": {
-						"navigationBarTitleText": "修改手机号"
-
-					},
-					"meta": {
-						"auth": true
-					}
-				}
-			]
-		}
 	],
 	// 默认导航栏样式
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "Shopro开源商城",
+		"navigationBarTitleText": "",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
 		"navigationStyle": "default" //默认是default，即带有原生导航栏。custom,取消导航栏。

@@ -17,7 +17,8 @@
 					</view>
 				</checkbox-group>
 				<!-- 缺省页 -->
-				<view class="empty-box x-c" v-if="!favoriteList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+				<shopro-empty  v-if="!favoriteList.length" :emptyData="emptyData"></shopro-empty>
+				<!-- 更多 -->
 				<view v-if="favoriteList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
 		</view>
@@ -35,7 +36,7 @@
 
 <script>
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
 		shoproMiniCard,
@@ -48,7 +49,7 @@ export default {
 			routerTo: this.$Router,
 			selList: [],
 			emptyData: {
-				img: '/static/imgs/empty/empty_goods.jpg',
+				img: '/static/imgs/empty/empty_goods.png',
 				tip: '暂无收藏商品，赶紧去收藏好货吧~'
 			},
 			favoriteList: [],
@@ -102,7 +103,6 @@ export default {
 					this.$set(i, 'checked', false);
 				}
 			});
-			console.log(this.selList);
 		},
 		// 加载更多
 		loadMore() {
@@ -208,14 +208,5 @@ export default {
 		padding: 0;
 		color: rgba(#fff, 0.9);
 	}
-}
-// 缺省页
-.empty-box {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 10;
 }
 </style>

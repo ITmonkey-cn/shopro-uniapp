@@ -6,7 +6,7 @@
 			<view class="form-item">
 				<view class="star-box x-f">
 					<view class="star-title">描述相符</view>
-					<view class=""><shopro-star @changeStar="changeStar" :maxStar="5"></shopro-star></view>
+					<view class=""><sh-star @changeStar="changeStar" :maxStar="5"></sh-star></view>
 				</view>
 				<view class="area-box">
 					<textarea class="inp-area" v-model="message" placeholder="宝贝满足你的期待吗？说说你的使用心得，分享给想买的他们吧~" placeholder-class="pl-style" />
@@ -26,11 +26,11 @@
 
 <script>
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
-import shoproStar from './children/shopro-star.vue';
+import shStar from './children/sh-star.vue';
 export default {
 	components: {
 		shoproMiniCard,
-		shoproStar
+		shStar
 	},
 	data() {
 		return {
@@ -38,7 +38,7 @@ export default {
 			uploadImgList: [],
 			star: 1,
 			message: '',
-			goodsDetail: {}
+			goodsDetail:{}
 		};
 	},
 	computed: {},
@@ -54,7 +54,7 @@ export default {
 				order_item_id: that.$Route.query.ordrderItemId
 			}).then(res => {
 				if (res.code === 1) {
-					that.goodsDetail = res.data[0];
+					that.goodsDetail = res.data[0]
 				}
 			});
 		},
@@ -70,7 +70,8 @@ export default {
 						that.imgList.push(res.full_url);
 						that.uploadImgList.push(res.url);
 					});
-				});
+				})
+				
 			});
 		},
 		DelImg(index) {
@@ -97,7 +98,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast('评论发表成功');
-					that.$Router.back();
+					that.$Router.back()
 				}
 			});
 		}

@@ -20,7 +20,7 @@
 				</view>
 				<view class="input-item x-c">
 					<text class="inp-title">密&emsp;码</text>
-					<input class="inp" v-model="password"  type="text" placeholder="请输入6-14位密码" placeholder-class="pl" />
+					<input class="inp" password v-model="password"  type="text" placeholder="请输入6-14位密码" placeholder-class="pl" />
 				</view>
 				<view class="tip-box" @tap="onTcp">
 					<label class="x-f">
@@ -73,7 +73,7 @@ export default {
 		async getCode() {
 			let that = this;
 			that.code.status = true;
-			let countdown = 5;
+			let countdown = 60;
 			that.$api('sms.send', {
 				mobile: that.mobile,
 				event: 'register'
@@ -98,7 +98,6 @@ export default {
 		},
 
 		register() {
-			
 			let that = this;
 			if (this.isTcp) {
 				this.$api('user.register', {

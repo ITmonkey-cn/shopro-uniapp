@@ -11,3 +11,7 @@ export const CART_LIST = 'CART_LIST' //购物车商品
 export const CART_NUM = 'CART_NUM' //购物车商品数
 
 export const LOGIN_TIP = 'LOGIN_TIP' //登录提示
+
+// #ifdef MP-WEIXIN
+export const FORCE_OAUTH = 'FORCE_OAUTH' // 小程序强制登录弹窗
+// #endif
