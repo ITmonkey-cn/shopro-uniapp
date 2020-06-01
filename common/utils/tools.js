@@ -106,7 +106,7 @@ export default {
 			indicator: 'default',
 			loop: true,
 			fail(err) {
-				console.log('previewImage出错', err)
+				console.log('previewImage出错', urls, err)
 			},
 		})
 	},
@@ -119,7 +119,7 @@ export default {
 					resolve(image)
 				},
 				fail(err) {
-					console.log('getImageInfo出错', err)
+					console.log('getImageInfo出错', src, err)
 				},
 			})
 		}).catch(e => {

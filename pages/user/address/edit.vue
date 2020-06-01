@@ -43,16 +43,16 @@
 			<button class="cu-btn save-btn" @tap="editAddress">保存收货地址</button>
 		</view>
 		<view v-else class="foot_box "><button class="cu-btn add-btn" @tap="editAddress">保存收货地址</button></view>
-		<shopro-picker ref="shoproCityPicker" :pickerValueDefault="cityPickerValueDefault" @onCancel="onCancel" @onConfirm="onConfirm"></shopro-picker>
+		<sh-picker ref="shoproCityPicker" :pickerValueDefault="cityPickerValueDefault" @onCancel="onCancel" @onConfirm="onConfirm"></sh-picker>
 	</view>
 </template>
 
 <script>
-import shoproPicker from '@/components/shopro-picker.vue';
+import shPicker from './children/shopro-picker.vue';
 
 export default {
 	components: {
-		shoproPicker
+		shPicker
 	},
 	data() {
 		return {
@@ -76,8 +76,7 @@ export default {
 		this.init();
 		let addressId = this.$Route.query.id;
 		this.addressData.id = this.$Route.query.id;
-		console.log('llll',typeof(this.$Route.query.id));
-		console.log('lasdfsa', this.addressData.id);
+
 		if (this.addressData.id != 0) {
 			this.getAddressInfo();
 		}

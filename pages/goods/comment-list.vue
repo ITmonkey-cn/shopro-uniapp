@@ -8,7 +8,7 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="comment-list">
-					<block v-for="comment in commentList" :key="comment.id"><shopro-comment :comment="comment"></shopro-comment></block>
+					<block v-for="comment in commentList" :key="comment.id"><sh-comment :comment="comment"></sh-comment></block>
 				</view>
 				<view class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import shoproComment from '@/components/shopro-comment.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shComment from './children/sh-comment.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
-		shoproComment,
+		shComment,
 		shoproEmpty
 	},
 	data() {

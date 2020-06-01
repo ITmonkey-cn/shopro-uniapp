@@ -98,6 +98,7 @@
 <script>
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
 import shoproPickerModal from '@/components/modal/shopro-picker-modal.vue';
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shoproMiniCard,
@@ -117,6 +118,8 @@ export default {
 			addressId: 0,
 			from: '',
 			orderType: '',
+			grouponBuyType: 'alone',
+			grouponId: 0,
 			goodsList: [],
 			remark: '',
 			orderPre: {},
@@ -137,10 +140,14 @@ export default {
 		this.goodsList = JSON.parse(this.$Route.query.goodsList);
 		this.from = this.$Route.query.from;
 		this.orderType = this.$Route.query.orderType;
+		this.grouponBuyType = this.$Route.query.grouponBuyType;
+		this.grouponId = this.$Route.query.grouponId;
+		console.log(this.grouponId);
 		await this.init();
 	},
 	onShow() {},
 	methods: {
+		...mapActions(['getCartList']),
 		init() {
 			return Promise.all([this.getDefaultAddress(), this.getPre(), this.getCoupons()]);
 		},
@@ -159,7 +166,9 @@ export default {
 				address_id: that.addressId,
 				coupons_id: that.couponId,
 				dispatch_type: 'express',
-				order_type: that.orderType
+				order_type: that.orderType,
+				buy_type: that.grouponBuyType,
+				groupon_id: that.grouponId
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderPre = res.data;
@@ -177,23 +186,26 @@ export default {
 				coupons_id: that.couponId,
 				remark: that.remark,
 				dispatch_type: 'express',
-				order_type: that.orderType
+				order_type: that.orderType,
+				buy_type: that.grouponBuyType,
+				groupon_id: that.grouponId
 			}).then(res => {
 				if (res.code === 1) {
-					let sn = res.data.order_sn;
+					let orderId = res.data.id;
+					that.getCartList();
 					that.isSubOrder = false;
 					if (res.data.status > 0) {
 						that.$Router.replace({
-							path: '/pages/pay/success',
+							path: '/pages/order/payment/result',
 							query: {
-								orderSn: sn,
+								id: orderId,
 								type: '',
 								pay: 1
 							}
 						});
 					} else {
 						uni.redirectTo({
-							url: `/pages/pay/index?id=${sn}`
+							url: `/pages/order/payment/method?orderId=${orderId}`
 						});
 					}
 				} else {

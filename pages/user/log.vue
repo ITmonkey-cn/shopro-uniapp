@@ -11,10 +11,11 @@
 						<checkbox v-if="isSel" :value="f.goods_id.toString()" :checked="f.checked" :class="{ checked: f.checked }" class="goods-radio round orange"></checkbox>
 						<shopro-mini-card :detail="f" :type="'favorite'"></shopro-mini-card>
 					</view>
-					<view class="cu-load text-gray" :class="loadStatus"></view>
 				</checkbox-group>
 				<!-- 缺省页 -->
-				<view class="empty-box x-c" v-if="!browseList.length"><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+				<shopro-empty v-if="!browseList.length" :emptyData="emptyData"></shopro-empty>
+				<!-- 更多 -->
+				<view v-if="browseList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
 		</view>
 		<view class="foot_box ">
@@ -31,7 +32,7 @@
 
 <script>
 import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
-import shoproEmpty from '@/components/shopro-empty.vue';
+import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 
 export default {
 	components: {
@@ -45,7 +46,7 @@ export default {
 			routerTo: this.$Router,
 			selList: [],
 			emptyData: {
-				img: '/static/imgs/empty/empty_goods.jpg',
+				img: '/static/imgs/empty/empty_goods.png',
 				tip: '暂无浏览记录',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'
@@ -79,8 +80,6 @@ export default {
 					this.$set(i, 'checked', false);
 				}
 			});
-			console.log(this.selList);
-			console.log(this.browseList);
 		},
 		onSet() {
 			this.isSel = !this.isSel;
@@ -97,9 +96,8 @@ export default {
 					this.$set(i, 'checked', false);
 				}
 			});
-			console.log(this.selList);
 		},
-		// 收藏列表
+		// 历史记录
 		getbrowseList() {
 			let that = this;
 			that.loadStatus = 'loading';
@@ -136,6 +134,7 @@ export default {
 		},
 		// 加载更多
 		loadMore() {
+			console.log('bottom')
 			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
 				this.getbrowseList();
@@ -200,14 +199,5 @@ export default {
 		padding: 0;
 		color: rgba(#fff, 0.9);
 	}
-}
-// 缺省页
-.empty-box {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 10;
 }
 </style>

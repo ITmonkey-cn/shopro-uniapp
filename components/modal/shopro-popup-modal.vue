@@ -1,5 +1,5 @@
 <template>
-	<view class="">
+	<view>
 		<view v-for="(p,index) in detail" :key="index">
 			<view class="cu-modal" :class="{'show':popupCurrent === index && showModal}" cathctouchmove
 			 @tap="hideModal">

@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<view class="goods-box x-start" v-if="!type" @tap="jump('/pages/goods/detail', { id: detail.id })">
+		<view class="goods-box x-start" v-if="!type" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 			<image class="goods-img" :src="detail.image" mode="aspectFill"></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
@@ -11,7 +11,7 @@
 				</slot>
 			</view>
 		</view>
-		<view class="goods-box x-start" v-if="type === 'sku'" @tap="jump('/pages/goods/detail', { id: detail.id })">
+		<view class="goods-box x-start" v-if="type === 'sku'" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 			<image class="goods-img" :src="sku.image ? sku.image : detail.image" mode=""></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
@@ -22,7 +22,7 @@
 				</slot>
 			</view>
 		</view>
-		<view class="goods-box x-start" v-if="type === 'favorite'" @tap="jump('/pages/goods/detail', { id: detail.goods.id })">
+		<view class="goods-box x-start" v-if="type === 'favorite'" @tap="jump('/pages/goods/detail/index', { id: detail.goods.id })">
 			<image class="goods-img" :src="detail.goods.image" mode=""></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.goods.title }}</view>
@@ -34,6 +34,7 @@
 			</view>
 		</view>
 		<view class="goods-box x-start" v-if="type === 'order'">
+			<image v-if="detail.activity_type" class="order-goods__tag" :src="orderStatus[detail.activity_type]" mode=""></image>
 			<image class="goods-img" :src="detail.goods_image" mode=""></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.goods_title }}</view>
@@ -52,7 +53,11 @@ export default {
 	components: {},
 	data() {
 		return {
-			routerTo: this.$Router
+			routerTo: this.$Router,
+			orderStatus:{
+				'seckill':'/static/imgs/seckill_tag.png',
+				'groupon':'/static/imgs/groupon_tag.png'
+			}
 		};
 	},
 	props: {
@@ -97,13 +102,21 @@ export default {
 	}
 }
 .goods-box {
+	position: relative;
 	.goods-img {
 		width: 200rpx;
 		height: 200rpx;
 		background-color: #ccc;
 		margin-right: 25rpx;
 	}
-
+.order-goods__tag{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 3;
+	width: 60rpx;
+	height: 30rpx;
+}
 	.goods-title {
 		font-size: 28rpx;
 		font-family: PingFang SC;

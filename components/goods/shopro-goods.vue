@@ -1,7 +1,7 @@
 <template>
-	<view class="goods-box" v-if="detail" @tap="jump('/pages/goods/detail', { id: detail.id })">
+	<view class="goods-box" v-if="detail" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
 		<view class="img-box">
-			<view class="tag" v-if="isTag && detail.activity">{{ tagText[detail.activity.type] }}</view>
+			<image v-if="isTag && detail.activity" class="tag-img" :src="tagPath[detail.activity.type]" mode=""></image>
 			<image class="img" :src="detail.image" lazy-load mode="aspectFill"></image>
 		</view>
 		<view class="tip one-t">{{ detail.subtitle }}</view>
@@ -24,9 +24,9 @@ export default {
 	components: {},
 	data() {
 		return {
-			tagText: {
-				groupon: '拼团',
-				seckill: '秒杀'
+			tagPath: {
+				groupon: '/static/imgs/groupon_tag.png',
+				seckill: '/static/imgs/seckill_tag.png'
 			}
 		};
 	},
@@ -64,27 +64,21 @@ export default {
 	.img-box {
 		width: 345rpx;
 		height: 345rpx;
-		/* border-radius: 20rpx 20rpx 0px 0px; */
 		overflow: hidden;
 		position: relative;
 
-		.tag {
+		.tag-img {
 			position: absolute;
 			left: 0;
-			top: 20rpx;
+			top: 0;
 			z-index: 2;
-			line-height: 35rpx;
-			background: linear-gradient(132deg, rgba(243, 223, 177, 1), rgba(243, 223, 177, 1), rgba(236, 190, 96, 1));
-			border-radius: 0px 18rpx 18rpx 0px;
-			padding: 0 10rpx;
-			font-size: 24rpx;
-			font-family: PingFang SC;
-			font-weight: bold;
-			color: rgba(120, 79, 6, 1);
+			width: 80rpx;
+			height: 40rpx;
 		}
 
 		.img {
-			width: 100%;
+			width: 345rpx;
+			height: 345rpx;
 			background-color: #ccc;
 		}
 	}
