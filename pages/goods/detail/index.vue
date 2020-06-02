@@ -342,6 +342,8 @@ export default {
 			if (Boolean(uni.getStorageSync('token'))) {
 				if (type === 'groupon') {
 					this.grouponBuyType = 'groupon';
+				}else{
+					this.grouponBuyType = 'alone';
 				}
 				this.buyType = 'buy';
 				this.showSku = true;
