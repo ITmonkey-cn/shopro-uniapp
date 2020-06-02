@@ -39,7 +39,7 @@
 		</view>
 		<view class="content_box">
 			<!-- 绑定手机 -->
-			<view class="notice-box x-bc pad" v-if="!userInfo.mobile" @tap="jump('/pages/user/edit-phone', { fromType: 'bind' })">
+			<view class="notice-box x-bc pad" v-if="!userInfo.mobile && userInfo.nickname" @tap="jump('/pages/user/edit-phone', { fromType: 'bind' })">
 				<view class="notice-detail one-t">点击绑定手机号，确保账户安全</view>
 				<button class="bindPhone cu-btn">去绑定</button>
 			</view>
