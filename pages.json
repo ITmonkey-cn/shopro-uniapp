@@ -14,7 +14,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
-//				 "enablePullDownRefresh": true,
+				//				 "enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			},
 			"meta": {
@@ -215,7 +215,19 @@
 		{
 			"path": "pages/order/confirm",
 			"style": {
-				"navigationBarTitleText": "确认订单"
+				"navigationBarTitleText": "确认订单",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": true,
+				"async": false
+			}
+		},
+		{
+			"path": "pages/order/business",
+			"style": {
+				"navigationBarTitleText": "选择自提点"
 
 			},
 			"meta": {

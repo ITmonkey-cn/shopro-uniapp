@@ -22,7 +22,7 @@
 			</view>
 			<view class="area-box x-f">
 				<label class="x-f x-start">
-					<view class="area-item"><text class="item-title">详细地址：</text></view>
+					<view class="area-item"><view class="item-title">详细地址：</view></view>
 					<textarea
 						auto-height
 						class="area-inp"
@@ -182,17 +182,19 @@ export default {
 	}
 }
 .area-box {
-	min-height: 120rpx;
 	padding-bottom: 60rpx;
 	background: #fff;
 	padding: 30rpx 25rpx;
 	.item-title {
 		font-size: 28rpx;
 		white-space: nowrap;
+		line-height: 30rpx;
 	}
 	.area-inp {
 		color: #999;
 		font-size: 28rpx;
+		line-height: 30rpx;
+		padding-right: 30rpx;
 	}
 }
 .default-box {
