@@ -225,7 +225,7 @@
 			}
 		},
 		{
-			"path": "pages/order/business",
+			"path": "pages/order/business-address",
 			"style": {
 				"navigationBarTitleText": "选择自提点"
 

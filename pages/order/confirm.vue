@@ -41,7 +41,7 @@
 					</view>
 					<!-- 自提 -->
 					<view class="express-address" v-if="addressId && expressTypeCur == 1">
-						<view class="express-top" @tap="jump('/pages/order/pickup', { from: 'order' })">
+						<view class="express-top" @tap="jump('/pages/order/business-address', { from: 'order' })">
 							<text class="tag1" v-if="address.is_default == 1">最近</text>
 							<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
 							<text class="cuIcon-right address-guide"></text>
