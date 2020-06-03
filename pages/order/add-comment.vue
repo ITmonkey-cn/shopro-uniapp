@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 import shStar from './children/sh-star.vue';
 export default {
 	components: {

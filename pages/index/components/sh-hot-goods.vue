@@ -3,16 +3,16 @@
 	<view class="hot-goods">
 		<view class="title x-c"><image class="title-img" :src="detail.image" mode=""></image></view>
 		<view class="goods-list x-f">
-			<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods :detail="goods" :isTag="true"></shopro-goods></view>
+			<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
 		</view>
 	</view>
 </template>
 
 <script>
-import shoproGoods from '@/components/goods/shopro-goods.vue';
+import shoproGoodsCard from '@/components/shopro-goods-card/shopro-goods-card.vue';
 export default {
 	components: {
-		shoproGoods
+		shoproGoodsCard
 	},
 	data() {
 		return {

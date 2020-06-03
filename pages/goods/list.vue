@@ -16,7 +16,7 @@
 		<view class="content-box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-list x-f">
-					<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods :detail="goods"></shopro-goods></view>
+					<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods"></shopro-goods-card></view>
 				</view>
 				<!-- 空白页 -->
 				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
@@ -32,14 +32,14 @@
 
 <script>
 import shFilter from './children/sh-filter.vue';
-import shoproGoods from '@/components/goods/shopro-goods.vue';
+import shoproGoodsCard from '@/components/shopro-goods-card/shopro-goods-card.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 let timer = null;
 export default {
 	components: {
 		shFilter,
-		shoproGoods,
+		shoproGoodsCard,
 		shoproEmpty
 	},
 	data() {

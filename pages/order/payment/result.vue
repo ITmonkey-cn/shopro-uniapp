@@ -6,11 +6,7 @@
 			<text class="pay-money" v-if="pay && orderDetail.total_fee">￥{{ orderDetail.total_fee }}</text>
 			<view class="btn-box flex justify-between">
 				<block v-if="pay && orderDetail.activity_type === 'groupon' && orderDetail.ext_arr.buy_type === 'groupon'">
-					<button
-						class="cu-btn base-btn"
-						v-if="orderDetail.ext_arr.groupon_id > 0"
-						@tap="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })"
-					>
+					<button class="cu-btn base-btn" v-if="orderDetail.ext_arr.groupon_id > 0" @tap="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })">
 						拼团详情
 					</button>
 					<button class="cu-btn base-btn" v-else @tap="jump('/pages/activity/groupon/my-groupon')">我的拼团</button>
@@ -21,23 +17,14 @@
 				<button class="again-pay cu-btn" v-if="!pay" @tap="onPay">重新支付</button>
 			</view>
 		</view>
-		<view class="hot-box" v-if="false">
-			<view class="hot-title flex align-center">为你推荐</view>
-			<view class="hot-wrap">
-				<block v-for="n in 6" :key="n"><shopro-goods></shopro-goods></block>
-			</view>
-		</view>
 	</view>
 </template>
 
 <script>
-import shoproGoods from '@/components/goods/shopro-goods.vue';
 import ShoproPay from '@/common/shopro-pay';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
-	components: {
-		shoproGoods
-	},
+	components: {},
 	data() {
 		return {
 			routerTo: this.$Router,

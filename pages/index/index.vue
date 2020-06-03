@@ -38,12 +38,12 @@
 			</view>
 			<view class="foot_box"></view>
 			<!-- 连续弹窗提醒 -->
-			<shopro-popup-modal v-if="popupIndex" :detail="popupIndex"></shopro-popup-modal>
+			<shopro-notice-modal v-if="popupIndex" :detail="popupIndex"></shopro-notice-modal>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
 			<!-- 强制登录 -->
 			<!-- #ifdef MP-WEIXIN -->
-			<shopro-force-login></shopro-force-login>
+			<sh-force-login></sh-force-login>
 			<!-- #endif -->
 		</view>
 	</block>
@@ -58,12 +58,12 @@ import shAdv from './components/sh-adv.vue';
 import shCoupon from './components/sh-coupon.vue';
 import shSeckill from './components/sh-seckill.vue';
 import shGroupon from './components/sh-groupon.vue';
-import shoproPopupModal from '@/components/modal/shopro-popup-modal.vue';
+import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
 import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
 import shLive from './components/sh-live.vue';
-import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
+import shForceLogin from './components/sh-force-login.vue';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
@@ -76,11 +76,11 @@ export default {
 		shCoupon,
 		shSeckill,
 		shGroupon,
-		shoproPopupModal,
+		shoproNoticeModal,
 		shoproSkeletons,
 		// #ifdef MP-WEIXIN
 		shLive,
-		shoproForceLogin
+		shForceLogin
 		// #endif
 	},
 	data() {

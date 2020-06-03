@@ -44,7 +44,7 @@ import { BASE_URL } from '@/env.js';
 import wxsdk from '@/common/wechat/sdk';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
-import shoproShareGuide from '@/components/modal/shopro-share-guide.vue';
+import shoproShareGuide from '@/components/shopro-share-guide/shopro-share-guide.vue';
 import shoproShare from '@/common/mixins/shopro-share';
 export default {
 	components: {

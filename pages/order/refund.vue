@@ -66,8 +66,8 @@
 </template>
 
 <script>
-	import shoproMiniCard from '@/components/goods/shopro-mini-card.vue'
-	import shoproModal from '@/components/modal/shopro-modal.vue'
+	import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue'
+	import shoproModal from '@/components/shopro-modal/shopro-modal.vue'
 	export default {
 		components: {
 			shoproMiniCard,

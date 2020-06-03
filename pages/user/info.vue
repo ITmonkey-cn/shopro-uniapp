@@ -35,7 +35,7 @@
 </template>
 
 <script>
-	import shoproModal from '@/components/modal/shopro-modal';
+	import shoproModal from '@/components/shopro-modal/shopro-modal.vue';
 	import {
 		mapMutations,
 		mapActions,

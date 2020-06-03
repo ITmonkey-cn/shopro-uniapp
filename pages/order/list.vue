@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 export default {
 	components: {
 		shoproMiniCard

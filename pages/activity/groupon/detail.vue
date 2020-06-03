@@ -2,7 +2,7 @@
 	<view class="page_box">
 		<view class="head_box">
 			<view class="goods-card" v-if="grouponDetail.id">
-				<shopro-activity-card
+				<sh-activity-card
 					:cardId="grouponDetail.goods_id"
 					:title="grouponDetail.goods.title"
 					:subtitle="grouponDetail.goods.subtitle"
@@ -19,7 +19,7 @@
 							<text class="group-num">{{ grouponDetail.num }}人团</text>
 						</view>
 					</block>
-				</shopro-activity-card>
+				</sh-activity-card>
 			</view>
 		</view>
 		<view class="content_box">
@@ -113,13 +113,12 @@
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
-import shoproShare from '@/components/shopro-share/shopro-share.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
+
 import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
 export default {
 	components: {
-		shoproActivityCard,
-		shoproShare,
+		shActivityCard,
 		shoproSku
 	},
 	data() {

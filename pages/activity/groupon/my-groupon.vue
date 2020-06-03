@@ -14,7 +14,7 @@
 					<view class="group-card">
 						<image v-if="stateId !== 'ing'" class="group-state" :src="grouponStatus[groupon.groupon.status]" mode=""></image>
 						<view class="goods-content">
-							<shopro-activity-card
+							<sh-activity-card
 								:cardId="groupon.goods.id"
 								:title="groupon.goods.title"
 								:subtitle="groupon.goods.subtitle"
@@ -31,7 +31,7 @@
 										<text class="group-num">{{ groupon.groupon.num }}人团</text>
 									</view>
 								</block>
-							</shopro-activity-card>
+							</sh-activity-card>
 						</view>
 						<view class="btn-box x-f">
 							<button class="cu-btn invite-btn" @tap="jump('/pages/activity/groupon/detail', { id: groupon.groupon_id })">拼团详情</button>
@@ -51,10 +51,10 @@
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
 export default {
 	components: {
-		shoproActivityCard
+		shActivityCard
 	},
 	data() {
 		return {

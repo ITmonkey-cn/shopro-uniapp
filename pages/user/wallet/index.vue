@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import shoproModal from '@/components/modal/shopro-modal';
+import shoproModal from '@/components/shopro-modal/shopro-modal.vue';
 import { mapState, mapActions } from 'vuex';
 export default {
 	components: {

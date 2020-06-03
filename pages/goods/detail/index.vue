@@ -60,7 +60,7 @@
 					</view>
 					<view class="tab-detail">
 						<view class="rich-box" v-show="tabCurrent === 'tab0'">
-							<shopro-parse :content="goodsInfo.content"></shopro-parse>
+							<uni-parse :content="goodsInfo.content"></uni-parse>
 							<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
 						</view>
 						<view class="goods-size" v-if="tabCurrent === 'tab1'">
@@ -159,22 +159,19 @@ import shGrouponTip from './children/sh-groupon-tip.vue';
 import shCoupon from './children/sh-coupon.vue';
 import shComment from '../children/sh-comment.vue';
 import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
-import shoproShare from '@/components/shopro-share/shopro-share.vue';
-import shoproParse from '@/components/parse/parse.vue';
+import uniParse from '@/components/uni-parse/uni-parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
-		shPrice,
+		uniParse,
 		shServe,
 		shGroupon,
 		shCoupon,
 		shGrouponTip,
 		shoproSku,
-		shoproShare,
 		shComment,
-		shoproParse,
 		shoproSkeletons,
 		shoproEmpty
 	},
@@ -342,7 +339,7 @@ export default {
 			if (Boolean(uni.getStorageSync('token'))) {
 				if (type === 'groupon') {
 					this.grouponBuyType = 'groupon';
-				}else{
+				} else {
 					this.grouponBuyType = 'alone';
 				}
 				this.buyType = 'buy';

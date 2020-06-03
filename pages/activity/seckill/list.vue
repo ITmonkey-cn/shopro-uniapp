@@ -11,7 +11,7 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item" v-for="item in goodsList" :key="item.id">
-					<shopro-activity-card 
+					<sh-activity-card 
 					:cardId="item.id"
 					:title="item.title" 
 					:subtitle="item.subtitle" 
@@ -30,7 +30,7 @@
 						<block slot="btn">
 							<button class="cu-btn buy-btn" :class="btnType[tabCurrent].color">{{ btnType[tabCurrent].name }}</button>
 						</block>
-					</shopro-activity-card>
+					</sh-activity-card>
 				</view>
 				<!-- 空白 -->
 				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
@@ -45,11 +45,11 @@
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
-		shoproActivityCard,
+		shActivityCard,
 		shoproEmpty
 	},
 	data() {

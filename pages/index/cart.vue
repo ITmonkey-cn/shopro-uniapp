@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';

@@ -107,34 +107,32 @@
 			</view>
 		</view>
 		<!-- 广告弹窗 -->
-		<shopro-popup-modal v-if="popupUser" :detail="popupUser"></shopro-popup-modal>
+		<shopro-notice-modal v-if="popupUser" :detail="popupUser"></shopro-notice-modal>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 关注公众号 -->
 		<sh-follow-wechat v-model="showFollowWechat"></sh-follow-wechat>
 		<!-- 强制登录 -->
 		<!-- #ifdef MP-WEIXIN -->
-		<shopro-force-login></shopro-force-login>
+		<sh-force-login></sh-force-login>
 		<!-- #endif -->
 	</view>
 </template>
 
 <script>
 // #ifdef MP-WEIXIN
-import shoproForceLogin from '@/components/modal/shopro-force-login.vue';
+import shForceLogin from './components/sh-force-login.vue';
 // #endif
 import Wechat from '@/common/wechat/wechat';
-import shoproGoods from '@/components/goods/shopro-goods.vue';
-import shoproPopupModal from '@/components/modal/shopro-popup-modal.vue';
+import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
 import shFollowWechat from './user/children/sh-follow-wechat.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shFollowWechat,
-		shoproGoods,
-		shoproPopupModal,
+		shoproNoticeModal,
 		// #ifdef MP-WEIXIN
-		shoproForceLogin
+		shForceLogin
 		// #endif
 	},
 	data() {

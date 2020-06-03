@@ -129,9 +129,9 @@
 		// "uniStatistics" : {
 		//     "enable" : false// mp-wixn无效
 		// },
-		// "optimization": {
-		// 	"subPackages": true
-		// },
+		"optimization": {
+			"subPackages": true //开启小程序分包优化。
+		},
 		"plugins": {
 			// "live-player-plugin" : {
 			//     //只有后台开通小程序直播功能权限，才可以打开，不然报错，程序无法运行。

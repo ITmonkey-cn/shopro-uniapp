@@ -89,20 +89,20 @@
 			</button>
 		</view>
 		<!-- pricker -->
-		<shopro-picker-modal v-if="pickerData.couponList" @changeCoupon="changeCoupon" v-model="showPicker" :pickerData="pickerData"></shopro-picker-modal>
+		<sh-picker-modal v-if="pickerData.couponList" @changeCoupon="changeCoupon" v-model="showPicker" :pickerData="pickerData"></sh-picker-modal>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
-import shoproPickerModal from '@/components/modal/shopro-picker-modal.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
+import shPickerModal from './children/sh-picker-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shoproMiniCard,
-		shoproPickerModal
+		shPickerModal
 	},
 	data() {
 		return {

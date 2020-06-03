@@ -1,16 +1,16 @@
 <template>
 	<view class="page_box">
 		<view class="head_box"></view>
-		<view class="content_box"><shopro-parse :content="richText.content"></shopro-parse></view>
+		<view class="content_box"><uni-parse :content="richText.content"></uni-parse></view>
 		<view class="foot_box"></view>
 	</view>
 </template>
 
 <script>
-import shoproParse from '@/components/parse/parse.vue';
+import uniParse from '@/components/uni-parse/uni-parse.vue';
 export default {
 	components: {
-		shoproParse
+		uniParse
 	},
 	data() {
 		return {

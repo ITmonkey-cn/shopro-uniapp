@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import shoproModal from '@/components/modal/shopro-modal.vue';
+import shoproModal from '@/components/shopro-modal/shopro-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {

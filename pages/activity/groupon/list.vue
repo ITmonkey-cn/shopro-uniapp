@@ -9,7 +9,7 @@
 					</view>
 					<view class="group-box">
 						<view class="goods-item" v-for="(groupon, index) in grouponList" :key="groupon.id">
-							<shopro-activity-card
+							<sh-activity-card
 								:cardId="groupon.id"
 								:title="groupon.title"
 								:subtitle="groupon.subtitle"
@@ -30,7 +30,7 @@
 									</view>
 								</block>
 								<block slot="btn"><button class="cu-btn buy-btn" @tap.stop="jump('/pages/goods/detail/index', { id: groupon.id })">马上拼</button></block>
-							</shopro-activity-card>
+							</sh-activity-card>
 						</view>
 					</view>
 				</view>
@@ -46,10 +46,10 @@
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
 export default {
 	components: {
-		shoproActivityCard
+		shActivityCard
 	},
 	data() {
 		return {
