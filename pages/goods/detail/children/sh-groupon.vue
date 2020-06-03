@@ -56,7 +56,7 @@
 									</view>
 									<view class="time" v-if="g.expiretime && g.time">剩余时间{{ g.time.h }}:{{ g.time.m }}:{{ g.time.s }}</view>
 								</view>
-								<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { grouponId: g.id })">去参团</button>
+								<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { id: g.id })">去参团</button>
 							</view>
 						</view>
 					</view>
