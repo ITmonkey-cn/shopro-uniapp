@@ -35,6 +35,10 @@
 								<text class="cuIcon-location address-icon"></text>
 								郑东新区运动场东路龙宇国际A座
 							</view>
+							<view class="address-phone x-f">
+								<text class="cuIcon-phone address-icon"></text>
+								12345678911
+							</view>
 						</view>
 						<view class="address-right y-f">
 							<radio class="round address-checked orange checked" :checked="true"></radio>
@@ -208,7 +212,7 @@ export default {
 	height: 100%;
 }
 .dragLayer-bottom {
-	height: 400rpx !important;
+	height: 450rpx !important;
 	transition: all ease-in-out 0.2s;
 }
 .dragLayer-top {
@@ -276,7 +280,7 @@ export default {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #eef1f4;
-	padding: 35rpx 0;
+	padding: 35rpx 0 15rpx;
 	width: 690rpx;
 	justify-content: space-between;
 	align-items: center;
@@ -289,7 +293,7 @@ export default {
 	color: rgba(51, 51, 51, 1);
 	margin-bottom: 30rpx;
 }
-.time-box {
+.time-box,.address-detail,.address-phone {
 	flex-direction: row;
 	align-items: center;
 	font-size: 24rpx;
@@ -297,16 +301,6 @@ export default {
 	font-weight: 400;
 	color: rgba(102, 102, 102, 1);
 	margin-bottom: 20rpx;
-}
-.address-detail {
-	flex-direction: row;
-	align-items: flex-start;
-	font-size: 24rpx;
-	font-family: PingFang SC;
-	font-weight: 400;
-	color: rgba(102, 102, 102, 1);
-	width: 400rpx;
-	line-height: 30rpx;
 }
 .address-icon {
 	color: #bdbdbd;

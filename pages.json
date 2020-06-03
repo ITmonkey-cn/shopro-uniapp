@@ -228,7 +228,7 @@
 			"path": "pages/order/business-address",
 			"style": {
 				"navigationBarTitleText": "选择自提点",
-					"navigationStyle": "custom"
+				"navigationStyle": "custom"
 
 			},
 			"meta": {
@@ -276,7 +276,8 @@
 			"path": "pages/order/express",
 			"name": "expressList",
 			"style": {
-				"navigationBarTitleText": "物流信息"
+				"navigationBarTitleText": "物流信息",
+				"navigationStyle": "custom"
 
 			},
 			"meta": {

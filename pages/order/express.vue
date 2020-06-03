@@ -1,69 +1,301 @@
 <template>
-	<view class="page_box">
-		<view class="head_box"></view>
-		<view class="content_box">
-			<view class="goods x-f">
-				<image class="goods-img" :src="goodsDetail.goods_image" mode="widthFix"></image>
-				<view class="y-start detail">
-					<view class="state-text">
-						物流状态：
-						<text class="state">{{ goodsDetail.status_name }}</text>
+	<view class="map-box">
+		<text class="cuIcon-back" @tap="$Router.back()"></text>
+		<map
+			id="map"
+			:style="{ width: '750rpx', height: mapHeight + 'px' }"
+			:latitude="latitude"
+			:longitude="longitude"
+			:markers="markers"
+			:polyline="polyline"
+			:include-points="includePoints"
+			show-location
+		></map>
+		<div class="dragLayer" :class="moveCard" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
+			<div class="oilStation">
+				<div class="oilStation-top">
+					<view class="x-bc express-card__head">
+						<view class="x-f">
+							<view class="img-box">
+								<image src="/static/imgs/order/send_bg.png" mode=""></image>
+								<view class="shop-tag">2件商品</view>
+							</view>
+							<text class="express-status">已签收</text>
+						</view>
+						<view class="express-phone__box y-f">
+							<text class="cuIcon-phone"></text>
+							<text class="express-phone__text">物流电话</text>
+						</view>
 					</view>
-					<view class="code">物流单号：{{ goodsDetail.express_no }}</view>
-					<view class="">物流公司：{{ goodsDetail.express_name }}</view>
-				</view>
-			</view>
-		</view>
-		<view class="foot_box"></view>
+					<view class="express-sn x-f">
+						<text>天天快递 7489953692363</text>
+						<text class="cuIcon-copy"></text>
+					</view>
+				</div>
+				<scroll-view class="oilStation-bottom" :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
+
+					<view class="more x-c"><text class="more-text">更多自提点，敬请期待</text></view>
+				</scroll-view>
+			</div>
+		</div>
 	</view>
 </template>
 
 <script>
 export default {
-	components: {},
 	data() {
 		return {
-			goodsDetail: {}
+			longitude: 108.921672,
+			latitude: 34.250646,
+			mapHeight: 0,
+			topSize: 0,
+			showCard: false,
+			scrollable: false, // 初始化禁止滑动
+			moveCard: 'dragLayer-bottom',
+			markers: [
+				{
+					id: 0,
+					latitude: 39.98406,
+					longitude: 116.30752,
+					iconPath: '/static/imgs/order/e1.png',
+					width: 50,
+					height: 55
+				}
+			],
+			polyline: [],
+			distance: 0,
+			includePoints: [{ longitude: 108.921672, latitude: 34.250646 }, { latitude: 39.98406, longitude: 116.30752 }]
 		};
 	},
-	onLoad() {
-		this.getOrderItemDetail()
-	},
 	computed: {},
+	onLoad() {},
+	onReady() {
+		let that = this;
+		this.editHeight();
+	},
+	onShow() {},
 	methods: {
-		getOrderItemDetail() {
+		// 设置地图，卡片高度。
+		editHeight() {
 			let that = this;
-			that.$api('order.itemDetail', {
-				id:that.$Route.query.orderId,
-				order_item_id:that.$Route.query.ordrderItemId
-			}).then(res => {
-				if(res.code === 1){
-					that.goodsDetail = res.data[0];
+			uni.getSystemInfo({
+				success: res => {
+					let view = uni
+						.createSelectorQuery()
+						.in(this)
+						.select('.dragLayer');
+					view.fields(
+						{
+							size: true,
+							scrollOffset: true
+						},
+						data => {
+							that.mapHeight = res.screenHeight; //- data.height;
+						}
+					).exec();
 				}
 			});
+		},
+		// 获取角度
+		getAngle(angx, angy) {
+			return (Math.atan2(angy, angx) * 180) / Math.PI;
+		},
+		// 根据起点终点返回方向 1向上 2向下 3向左 4向右 0未滑动
+		getDirection(startx, starty, endx, endy) {
+			var angx = endx - startx;
+			var angy = endy - starty;
+			var result = 0;
+			//如果滑动距离太短
+			if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
+				return result;
+			}
+			var angle = this.getAngle(angx, angy);
+			if (angle >= -135 && angle <= -45) {
+				result = 1;
+			} else if (angle > 45 && angle < 135) {
+				result = 2;
+			} else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
+				result = 3;
+			} else if (angle >= -45 && angle <= 45) {
+				result = 4;
+			}
+			return result;
+		},
+		// 手势滑动开始
+		handleTouchStart(e) {
+			this.startx = e.changedTouches[0].pageX;
+			this.starty = e.changedTouches[0].pageY;
+		},
+		handleTouchMove(e) {},
+		// 手势滑动结束
+		handleTouchEnd(e) {
+			var endx, endy;
+			endx = e.changedTouches[0].pageX;
+			endy = e.changedTouches[0].pageY;
+			var direction = this.getDirection(this.startx, this.starty, endx, endy);
+			switch (direction) {
+				// 未滑动！
+				case 0:
+					break;
+				// 向上滑动
+				case 1:
+					this.showCard = true;
+					this.moveCard = 'dragLayer-top';
+					this.scrollable = true;
+					break;
+				// 向下滑动
+				case 2:
+					break;
+				// 向左
+				case 3:
+					break;
+				// 向右
+				case 4:
+					break;
+				default:
+			}
+		},
+		scroll(e) {},
+		scrolltoupper(e) {},
+		scrolltolower(e) {},
+		// 点击显隐
+		onShowCard() {
+			this.showCard = !this.showCard;
+			console.log(this.moveCard);
+			if (this.showCard) {
+				this.moveCard = 'dragLayer-top';
+				this.scrollable = true;
+			} else {
+				this.moveCard = 'dragLayer-bottom';
+				this.scrollable = false;
+			}
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-.goods {
-	margin-bottom: 20rpx;
+.cuIcon-back {
+	position: fixed;
+	top: 50rpx;
+	left: 30rpx;
+	width: 70rpx;
+	line-height: 70rpx;
+	font-size: 40rpx;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.2);
+	z-index: 10;
+	border-radius: 50%;
+}
+/* 浮层 */
+.dragLayer {
+	width: 750rpx;
+	/* height: auto; */
+	position: fixed;
+	// background-color: #fff;
+	border-top-left-radius: 20rpx;
+	border-top-right-radius: 20rpx;
+	bottom: 0;
+	// box-shadow: 0px 1rpx 18rpx 0px rgba(83, 83, 83, 0.35);
+	display: flex;
+	height: 100%;
+}
+.dragLayer-bottom {
+	height: 450rpx !important;
+	transition: all ease-in-out 0.2s;
+}
+.dragLayer-top {
+	height: 800rpx !important;
+	transition: all ease-in-out 0.2s;
+}
+.oilStation {
+	width: 690rpx;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	height: 100%;
+}
+/* 物流卡片 */
+.oilStation-top {
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 	background: #fff;
-	padding: 25rpx 40rpx;
-	.goods-img {
-		width: 140rpx;
-		height: 140rpx;
-		background: #ccc;
-		margin-right: 20rpx;
+	margin: 20rpx;
+	background: rgba(255, 255, 255, 1);
+	box-shadow: 0 1rpx 18rpx 0 rgba(184, 184, 184, 0.55);
+	border-radius: 20rpx;
+	.express-card__head {
+		padding: 20rpx;
 	}
-	.detail {
-		height: 140rpx;
-		font-size: 28rpx;
-		justify-content: space-between;
-		.state {
-			color: #e9b664;
+	.img-box {
+		position: relative;
+		width: 129rpx;
+		height: 129rpx;
+		border-radius: 20rpx;
+		overflow: hidden;
+		background: #0081ff;
+	}
+	.shop-tag {
+		position: absolute;
+		width: 129rpx;
+		height: 30rpx;
+		background: rgba(0, 0, 0, 0.6);
+		font-size: 18rpx;
+		font-family: PingFang SC;
+		font-weight: 400;
+		color: rgba(255, 255, 255, 1);
+		text-align: center;
+		bottom: 0;
+		z-index: 5;
+	}
+	.express-status {
+		font-size: 30rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(51, 51, 51, 1);
+		margin-left: 20rpx;
+	}
+	.express-phone__box {
+		.cuIcon-phone {
+			color: #fa8391;
+			font-size: 60rpx;
+		}
+		.express-phone__text {
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(51, 51, 51, 1);
+			line-height: 36rpx;
+		}
+	}
+	.express-sn {
+		width: 100%;
+		height: 65rpx;
+		background: rgba(250, 251, 255, 1);
+		border-radius: 0 0 20rpx 20rpx;
+		font-size: 24rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(102, 102, 102, 1);
+		padding: 0 30rpx;
+		.cuIcon-copy{
+			margin-left: 20rpx;
+			
 		}
 	}
 }
+.oilStation-bottom {
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: row;
+	height: 100%;
+	overflow: hidden;
+	background: #fff;
+	width: 710rpx;
+	margin: 0 20rpx 20rpx;
+	border-radius: 20rpx;
+	box-shadow:0 1rpx 18rpx 0 rgba(184,184,184,0.55);
+}
+
 </style>
