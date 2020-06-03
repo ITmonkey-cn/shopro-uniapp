@@ -109,7 +109,7 @@
 					</view>
 					<!-- 自动 -->
 					<view class="express-address" v-if="addressId && expressTypeCur == 3">
-						<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
+						<view class="express-top">
 							<text class="dispatch-notice">订单支付完成后，请在订单详情页查看发货信息</text>
 							<view class="address-location">
 								<image class="location-img" src="/static/imgs/order/e3.png" mode=""></image>

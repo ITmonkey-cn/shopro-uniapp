@@ -3,7 +3,7 @@
 		<text class="cuIcon-back" @tap="$Router.back()"></text>
 		<map
 			id="map"
-			:style="{ width: '750rpx', height: mapHeight + 'rpx' }"
+			:style="{ width: '750rpx', height: mapHeight + 'px' }"
 			:latitude="latitude"
 			:longitude="longitude"
 			:markers="markers"
@@ -41,9 +41,7 @@
 							<text class="address-distance">{{ distance }}</text>
 						</view>
 					</view>
-					<view class="more x-c">
-						<text class="more-text">更多自提点，敬请期待</text>
-					</view>
+					<view class="more x-c"><text class="more-text">更多自提点，敬请期待</text></view>
 				</scroll-view>
 			</div>
 		</div>
@@ -51,13 +49,6 @@
 </template>
 
 <script>
-// #ifdef APP-NVUE
-const domModule = weex.requireModule('dom');
-// #endif
-var QQMapWX = require('@/common/utils/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.min.js');
-var qqmapsdk;
-// import Binding from 'weex-bindingx'; //非高版本编译器，需要nmp i  weex-bindingx;
-// const Binding = uni.requireNativePlugin('bindingx'); //从HBuilderX 2.3.4起
 export default {
 	data() {
 		return {
@@ -84,16 +75,9 @@ export default {
 		};
 	},
 	computed: {},
-	onLoad() {
-		let that = this;
-		// 实例化API核心类
-		qqmapsdk = new QQMapWX({
-			key: 'ZW4BZ-A5YRD-54D4A-PCT5M-YJBHO-LTBBX'
-		});
-	},
+	onLoad() {},
 	onReady() {
 		let that = this;
-		this.drawPolyline();
 		this.editHeight();
 	},
 	onShow() {},
@@ -103,7 +87,6 @@ export default {
 			let that = this;
 			uni.getSystemInfo({
 				success: res => {
-					let ratio = 750 / res.screenWidth;
 					let view = uni
 						.createSelectorQuery()
 						.in(this)
@@ -114,8 +97,7 @@ export default {
 							scrollOffset: true
 						},
 						data => {
-							that.topSize = (res.screenHeight - data.height) * ratio;
-							that.mapHeight = that.topSize + 60;
+							that.mapHeight = res.screenHeight - data.height;
 						}
 					).exec();
 				}
@@ -164,20 +146,12 @@ export default {
 					break;
 				// 向上滑动
 				case 1:
-					// console.log('11111', this.isTop);
-					// this.moveCard = 'dragLayer-top';
 					this.showCard = true;
 					this.moveCard = 'dragLayer-top';
 					this.scrollable = true;
 					break;
 				// 向下滑动
 				case 2:
-					// if (this.isTop) {
-					// 	console.log('2222', this.isTop);
-					// 	this.moveCard = 'dragLayer-bottom';
-					// 	this.isTop = false;
-					// 	this.scrollable = false;
-					// }
 					break;
 				// 向左
 				case 3:
@@ -188,15 +162,9 @@ export default {
 				default:
 			}
 		},
-		scroll(e) {
-			// console.log('scroll', '滑动中。。。');
-		},
-		scrolltoupper(e) {
-			// this.isBottom = false;
-		},
-		scrolltolower(e) {
-			// this.isBottom = false;
-		},
+		scroll(e) {},
+		scrolltoupper(e) {},
+		scrolltolower(e) {},
 		// 点击显隐
 		onShowCard() {
 			this.showCard = !this.showCard;
@@ -208,59 +176,6 @@ export default {
 				this.moveCard = 'dragLayer-bottom';
 				this.scrollable = false;
 			}
-		},
-		// 路径
-		drawPolyline() {
-			var _this = this;
-			//调用距离计算接口
-			qqmapsdk.direction({
-				mode: 'driving', //可选值：'driving'（驾车）、'walking'（步行）、'bicycling'（骑行），不填默认：'driving',可不填
-				//from参数不填默认当前地址
-				from: '', //e.detail.value.start,
-				to: {
-					latitude: 39.98406,
-					longitude: 116.30752
-				}, //e.detail.value.dest,
-				success: function(res) {
-					var ret = res;
-					var coors = ret.result.routes[0].polyline,
-						pl = [];
-					//坐标解压（返回的点串坐标，通过前向差分进行压缩）
-					var kr = 1000000;
-					for (var i = 2; i < coors.length; i++) {
-						coors[i] = Number(coors[i - 2]) + Number(coors[i]) / kr;
-					}
-					//将解压后的坐标放入点串数组pl中
-					for (var i = 0; i < coors.length; i += 2) {
-						pl.push({ latitude: coors[i], longitude: coors[i + 1] });
-					}
-					console.log(pl);
-					//设置polyline属性，将路线显示出来,将解压坐标第一个数据作为起点
-					let dis = ret.result.routes[0].distance; //距离终点距离
-					if (dis < 1000) {
-						_this.distance = dis;
-					} else {
-						_this.distance = parseInt(dis / 1000) + 'km';
-					}
-					_this.includePoints = pl; //视图包含坐标
-					// _this.markers =
-					_this.latitude = pl[0].latitude;
-					_this.longitude = pl[0].longitude;
-					_this.polyline = [
-						{
-							points: pl,
-							color: '#22AC38',
-							width: 4
-						}
-					];
-				},
-				fail: function(error) {
-					console.error(error);
-				},
-				complete: function(res) {
-					console.log(res);
-				}
-			});
 		}
 	}
 };
