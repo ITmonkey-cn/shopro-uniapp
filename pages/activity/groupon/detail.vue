@@ -54,7 +54,7 @@
 						<text class="group-num">{{ grouponDetail.num - grouponDetail.current_num }}</text>
 						人拼团成功
 					</view>
-					<view class="count-down x-f">
+					<view class="count-down x-f" v-if="time">
 						<text class="count-down-tip">倒计时</text>
 						<view class="time-box x-f">
 							<view class="count-text">{{ time.h || '00' }}</view>
@@ -70,7 +70,7 @@
 						<view class="tag" v-if="index == 0">团长</view>
 						<image class="avatar" :class="{ leader: index == 0 }" :src="team.user_avatar" mode="aspectFill"></image>
 					</view>
-					<view class="img-box" v-for="base in surplusNum"><image class="avatar" src="/static/imgs/groupon/base_groupon.png" mode="aspectFill"></image></view>
+					<view class="img-box" v-for="base in surplusNum" :key="base"><image class="avatar" src="/static/imgs/groupon/base_groupon.png" mode="aspectFill"></image></view>
 				</view>
 				<view class="btn-box x-c">
 					<!-- 拼团中 -->
@@ -85,14 +85,10 @@
 					</view>
 				</view>
 			</view>
-			<view
-				v-if="grouponDetail.goods && grouponDetail.goods.activity && grouponDetail.goods.activity.richtext_id"
-				class="groupon-play x-bc"
-				@tap="jump('/pages/public/richtext', { id: grouponDetail.goods.activity.richtext_id })"
-			>
+			<view v-if="parseInt(activity.richtext_id)" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
 				<text class="title">玩法</text>
 				<view class="x-f">
-					<view class="description one-t">{{ grouponDetail.goods.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
+					<view class="description one-t">{{ activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -128,6 +124,7 @@ export default {
 			grouponDetail: {},
 			showShare: false,
 			showSku: false,
+			activity: {},
 			surplusNum: 0 //剩余拼团人数、
 		};
 	},
@@ -152,7 +149,7 @@ export default {
 					t--;
 				} else {
 					clearInterval(timer);
-					_self.time = '倒计时结束';
+					_self.time = false;
 				}
 			}, 1000);
 		},
@@ -163,6 +160,7 @@ export default {
 				id: that.$Route.query.id
 			}).then(res => {
 				that.grouponDetail = res.data;
+				that.activity = res.data.goods.activity;
 				that.surplusNum = res.data.num - res.data.current_num;
 				let newTime = new Date().getTime();
 				let endTime = res.data.expiretime * 1000;

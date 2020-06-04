@@ -39,7 +39,26 @@ export default {
 
 
 	},
+	/**
+	 * fn：检测图片协议，主要用于检测海报图片协议。
+	 * param(imgPath): 图片地址。
+	 */
 
+	checkImgHttp(imgPath) {
+		let newPath = '';
+		if (imgPath.indexOf('data:image/svg+xml') !== -1) {
+			newPath = '/static/imgs/base_avatar.png'
+		} else {
+			console.log('poster1', imgPath)
+			let pathArr = imgPath.split('://');
+			// #ifdef H5
+			let ishttps = 'https:' == window.location.protocol ? true : false;
+			ishttps ? (pathArr[0] = 'https') : (pathArr[0] = 'http');
+			// #endif
+			newPath = pathArr.join('://');
+		}
+		return newPath;
+	},
 	// 打电话
 	callPhone(phoneNumber = '') {
 		let num = phoneNumber.toString()

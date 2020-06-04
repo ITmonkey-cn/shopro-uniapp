@@ -109,7 +109,7 @@ export default {
 			}
 		}
 	},
-	onLoad(options) {},
+	onLoad() {},
 	mounted() {},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);

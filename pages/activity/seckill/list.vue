@@ -11,13 +11,13 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item" v-for="item in goodsList" :key="item.id">
-					<shopro-activity-card 
-					:cardId="item.id"
-					:title="item.title" 
-					:subtitle="item.subtitle" 
-					:img="item.image" 
-					:price="item.price" 
-					:originalPrice="item.original_price"
+					<shopro-activity-card
+						:cardId="item.id"
+						:title="item.title"
+						:subtitle="item.subtitle"
+						:img="item.image"
+						:price="item.price"
+						:originalPrice="item.original_price"
 					>
 						<block slot="sell">
 							<view class="x-f">
@@ -112,7 +112,8 @@ export default {
 		getProgress(sales, stock) {
 			let unit = '';
 			if (stock + sales > 0) {
-				unit = (sales / (sales + stock)).toFixed(1) * 100 + '%';
+				let num = (sales / (sales + stock)) * 100;
+				unit = num.toFixed(2) + '%';
 			} else {
 				unit = '0%';
 			}
@@ -132,7 +133,7 @@ export default {
 			that.loadStatus = 'loading';
 			that.$api('goods.seckillList', {
 				type: that.tabCurrent,
-				page:that.currentPage
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
