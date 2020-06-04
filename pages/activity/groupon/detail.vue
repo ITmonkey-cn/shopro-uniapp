@@ -54,7 +54,7 @@
 						<text class="group-num">{{ grouponDetail.num - grouponDetail.current_num }}</text>
 						人拼团成功
 					</view>
-					<view class="count-down x-f">
+					<view class="count-down x-f" v-if="time">
 						<text class="count-down-tip">倒计时</text>
 						<view class="time-box x-f">
 							<view class="count-text">{{ time.h || '00' }}</view>
@@ -152,7 +152,7 @@ export default {
 					t--;
 				} else {
 					clearInterval(timer);
-					_self.time = '倒计时结束';
+					_self.time = false;
 				}
 			}, 1000);
 		},

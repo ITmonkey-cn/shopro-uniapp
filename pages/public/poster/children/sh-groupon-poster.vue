@@ -240,7 +240,7 @@ export default {
 								{
 									type: 'text', //价格
 									// fontStyle: 'italic',//倾斜
-									text: `${that.goodsInfo.grouponPrice}`,
+									text: `${that.goodsInfo.price}`,
 									size: fontSize * 1.1,
 									color: '#E1212B',
 									alpha: 1,

@@ -56,7 +56,7 @@
 									</view>
 									<view class="time" v-if="g.expiretime && g.time">剩余时间{{ g.time.h }}:{{ g.time.m }}:{{ g.time.s }}</view>
 								</view>
-								<button class="cu-btn join-btn" @tap="jump('/pages/activity/groupon/detail', { id: g.id })">去参团</button>
+								<button class="cu-btn join-btn" @tap="joinTeam('/pages/activity/groupon/detail', { id: g.id })">去参团</button>
 							</view>
 						</view>
 					</view>
@@ -103,6 +103,13 @@ export default {
 			this.showModal = false;
 		},
 		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
+		joinTeam(path, parmas) {
+			this.showModal = false;
 			this.$Router.push({
 				path: path,
 				query: parmas
