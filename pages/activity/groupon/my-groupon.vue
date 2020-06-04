@@ -12,7 +12,6 @@
 			<scroll-view
 				scroll-y="true"
 				refresher-enabled="true"
-				refresher-threshold="100"
 				@refresherrefresh="onRefresherrefresh"
 				:refresher-triggered="isTriggered"
 				@scrolltolower="loadMore"
