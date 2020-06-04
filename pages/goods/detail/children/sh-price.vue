@@ -34,14 +34,21 @@
 		<view class="groupon-price-box" v-if="detail.activity && detail.activity.type === 'groupon'">
 			<view class="">
 				<text class="unit">￥</text>
-				<text class="price">{{detail.price}}</text>
-				<text class="notice">{{detail.activity.rules.team_num}}人团</text>
+				<text class="price">{{ detail.price }}</text>
+				<text class="notice">{{ detail.activity.rules.team_num }}人团</text>
 			</view>
 			<view class="x-bc price-bottom-box">
 				<view class="x-f">
-					<view class="original-price">原价：￥{{detail.original_price}}</view>
+					<view class="original-price">原价：￥{{ detail.original_price }}</view>
 					<text class="line"></text>
-					<view class="sold">已拼：{{detail.sales}}件</view>
+					<view class="sold">已拼：{{ detail.sales }}件</view>
+				</view>
+				<view class="count-down" v-show="activityRules.status === 'waiting'">
+					距开始 {{ activityRules.countDownTime.h || '00' }} : {{ activityRules.countDownTime.m || '00' }} : {{ activityRules.countDownTime.s || '00' }}
+				</view>
+				<view class="count-down" v-show="activityRules.status === 'end'">已结束</view>
+				<view class="count-down" v-show="activityRules.status === 'ing'">
+					距结束 {{ activityRules.countDownTime.h || '00' }} : {{ activityRules.countDownTime.m || '00' }} : {{ activityRules.countDownTime.s || '00' }}
 				</view>
 			</view>
 		</view>
@@ -118,7 +125,7 @@ export default {
 		getProgress(sales, stock) {
 			let unit = '';
 			if (stock + sales > 0) {
-				unit = (sales / (sales + stock)).toFixed(1) * 100 + '%';
+				unit = (sales / (sales + stock)).toFixed(3) * 100 + '%';
 			} else {
 				unit = '0%';
 			}
@@ -242,6 +249,10 @@ export default {
 			width: 3rpx;
 			height: 24rpx;
 			background-color: #fff;
+		}
+		.count-down {
+			font-size: 24rpx;
+			color: rgba(#fff, 0.9);
 		}
 	}
 }

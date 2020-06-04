@@ -112,7 +112,7 @@ export default {
 		getProgress(sales, stock) {
 			let unit = '';
 			if (stock + sales > 0) {
-				unit = (sales / (sales + stock)).toFixed(1) * 100 + '%';
+				unit = (sales / (sales + stock)).toFixed(3) * 100 + '%';
 			} else {
 				unit = '0%';
 			}

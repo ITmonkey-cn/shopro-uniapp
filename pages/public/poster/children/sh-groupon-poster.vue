@@ -117,7 +117,7 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url: that.userInfo.avatar,
+									url: that.$tools.checkImgHttp(that.userInfo.avatar),
 									alpha: 1,
 									dx: bgObj.width * 0.06,
 									dy: bgObj.width * 0.06,
@@ -177,7 +177,7 @@ export default {
 								},
 								{
 									type: 'image', //商品图片
-									url: that.goodsInfo.image,
+									url: that.$tools.checkImgHttp(that.goodsInfo.image),
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
 									dx: bgObj.width * 0.054,
