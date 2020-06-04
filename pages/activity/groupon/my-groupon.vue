@@ -9,7 +9,16 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+			<scroll-view
+				scroll-y="true"
+				refresher-enabled="true"
+				refresher-threshold="100"
+				@refresherrefresh="onRefresherrefresh"
+				:refresher-triggered="isTriggered"
+				@scrolltolower="loadMore"
+				refresher-background="#f5f5f5"
+				class="scroll-box"
+			>
 				<block v-for="groupon in myGrouponList" :key="groupon.id">
 					<view class="group-card">
 						<image v-if="stateId !== 'ing'" class="group-state" :src="grouponStatus[groupon.groupon.status]" mode=""></image>
@@ -59,6 +68,7 @@ export default {
 	data() {
 		return {
 			isLoading: true,
+			isTriggered: false, //下拉刷新状态，是否被触发。
 			loadStatus: '', //loading,over
 			lastPage: 0,
 			currentPage: 1,
@@ -101,6 +111,7 @@ export default {
 	onLoad() {
 		this.getMyGroupon();
 	},
+
 	methods: {
 		onNav(id) {
 			this.stateId = id;
@@ -124,10 +135,18 @@ export default {
 				this.getMyGroupon();
 			}
 		},
+		// 触发刷新
+		onRefresherrefresh() {
+			if (this._freshing) return;
+			this.myGrouponList = [];
+			this.getMyGroupon();
+		},
 		// 我的拼团
 		getMyGroupon() {
 			let that = this;
 			that.isLoading = true;
+			this.isTriggered = true;
+			this._freshing = true;
 			that.loadStatus = 'loading';
 			that.$api('goods.myGroupon', {
 				type: that.stateId,
@@ -135,6 +154,8 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
+					this.isTriggered = false;
+					this._freshing = false;
 					that.myGrouponList = [...that.myGrouponList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {

@@ -1,13 +1,7 @@
 <template>
 	<view class="page_box">
 		<view class="content_box">
-			<scroll-view
-				class="scroll-box"
-				scroll-y
-				enable-back-to-top
-				scroll-with-animation
-				@scrolltolower="loadMore"
-			>
+			<scroll-view class="scroll-box" scroll-y enable-back-to-top scroll-with-animation @scrolltolower="loadMore">
 				<view class="group-wrap">
 					<view class="group-head x-bc">
 						<text class="group-head__title">爆款推荐</text>
@@ -74,10 +68,8 @@ export default {
 	},
 	onLoad() {
 		this.getGrouponList();
-		this._freshing = false;
-		setTimeout(() => {
-			this.triggered = true;
-		}, 1000);
+	},
+	onPullDownRefresh() {
 	},
 	computed: {},
 	methods: {
