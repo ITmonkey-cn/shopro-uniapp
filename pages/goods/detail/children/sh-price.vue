@@ -34,7 +34,7 @@
 		<view class="groupon-price-box" v-if="detail.activity && detail.activity.type === 'groupon'">
 			<view class="">
 				<text class="unit">￥</text>
-				<text class="price">{{ detail.price }}</text>
+				<text class="price">{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</text>
 				<text class="notice">{{ detail.activity.rules.team_num }}人团</text>
 			</view>
 			<view class="x-bc price-bottom-box">

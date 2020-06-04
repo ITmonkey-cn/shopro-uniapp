@@ -39,7 +39,11 @@ export default {
 
 
 	},
-	// 检测图片协议
+	/**
+	 * fn：检测图片协议，主要用于检测海报图片协议。
+	 * param(imgPath): 图片地址。
+	 */
+
 	checkImgHttp(imgPath) {
 		let newPath = '';
 		if (imgPath.indexOf('data:image/svg+xml') !== -1) {
