@@ -25,7 +25,7 @@
 		</block>
 
 		<!-- 拼团玩法 -->
-		<view v-if="grouponData.activity.richtext_id + 0" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: grouponData.activity.richtext_id })">
+		<view v-if="parseInt(grouponData.activity.richtext_id)" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: grouponData.activity.richtext_id })">
 			<view class="x-f">
 				<text class="title">玩法</text>
 				<view class="description one-t">{{ grouponData.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>

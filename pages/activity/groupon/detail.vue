@@ -86,7 +86,7 @@
 				</view>
 			</view>
 			<view
-				v-if="grouponDetail.goods && grouponDetail.goods.activity && grouponDetail.goods.activity.richtext_id"
+				v-if="grouponDetail.goods && grouponDetail.goods.activity && parseInt(grouponDetail.goods.activity.richtext_id)"
 				class="groupon-play x-bc"
 				@tap="jump('/pages/public/richtext', { id: grouponDetail.goods.activity.richtext_id })"
 			>

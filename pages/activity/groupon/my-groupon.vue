@@ -64,7 +64,7 @@ export default {
 			currentPage: 1,
 			emptyData: {
 				img: '/static/imgs/empty/empty_groupon.png',
-				tip: '您还没有拼团，还有更多拼团好货等着你噢~',
+				tip: '您还没有此类拼团商品，还有更多拼团好货等着你噢~',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'
 			},

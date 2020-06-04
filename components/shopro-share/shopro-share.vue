@@ -23,7 +23,7 @@
 									id: shareData.id,
 									image: shareData.image,
 									title: shareData.title,
-									price: shareData.price,
+									price: posterType === 'groupon' ? shareData.groupon_price : shareData.price,
 									original_price: shareData.original_price,
 									teamNum: posterType === 'groupon' ? goodsInfo.num : 0,
 									posterType: posterType

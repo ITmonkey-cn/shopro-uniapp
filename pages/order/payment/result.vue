@@ -57,7 +57,7 @@ export default {
 				query: parmas
 			});
 		},
-		replace() {
+		replace(path, parmas) {
 			this.$Router.replace({
 				path: path,
 				query: parmas
