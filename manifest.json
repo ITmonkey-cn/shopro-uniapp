@@ -141,7 +141,7 @@
     // }
     "h5" : {
         "title" : "Shopro",
-        "domain" : "shopro.7wpp.com",
+        "domain" : "fastadmin.smallnews.top",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true
@@ -187,4 +187,3 @@
         "enable" : false
     }
 }
-
