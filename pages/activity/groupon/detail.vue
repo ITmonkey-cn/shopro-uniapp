@@ -85,7 +85,7 @@
 					</view>
 				</view>
 			</view>
-			<view v-if="parseInt(activity.richtext_id)" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
+			<view v-if="activity && activity.richtext_id" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
 				<text class="title">玩法</text>
 				<view class="x-f">
 					<view class="description one-t">{{ activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
@@ -161,6 +161,9 @@ export default {
 			}).then(res => {
 				that.grouponDetail = res.data;
 				that.activity = res.data.goods.activity;
+				if (that.activity) {
+					that.activity.richtext_id = parseInt(that.activity.richtext_id);
+				}
 				that.surplusNum = res.data.num - res.data.current_num;
 				let newTime = new Date().getTime();
 				let endTime = res.data.expiretime * 1000;
