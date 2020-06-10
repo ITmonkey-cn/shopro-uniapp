@@ -22,7 +22,9 @@
 							<view class="x-bc goods-bottom">
 								<view class="price-box x-f">
 									<view v-if="goodsType === 'score'">{{ currentSkuPrice.price_text || goodsInfo.price }}</view>
-									<view v-else-if="grouponBuyType === 'groupon'">￥{{ currentSkuPrice.groupon_price || goodsInfo.price }}</view>
+									<view v-else-if="grouponBuyType === 'groupon'">
+										￥{{ currentSkuPrice.groupon_price || (goodsInfo.activity_type === 'groupon' ? goodsInfo.groupon_price : goodsInfo.price) }}
+									</view>
 									<view v-else>￥{{ currentSkuPrice.price || goodsInfo.price }}</view>
 								</view>
 								<text class="stock">库存{{ currentSkuPrice.stock || goodsInfo.stock }}件</text>

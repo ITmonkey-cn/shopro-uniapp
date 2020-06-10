@@ -6,7 +6,7 @@
 		</view>
 		<view class="price-box">
 			<view class="y-f">
-				<text class="seckill-current">￥{{ detail.price }}</text>
+				<text class="seckill-current">￥{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</text>
 					<text class="original">￥{{ detail.original_price }}</text>
 			</view>
 		</view>
