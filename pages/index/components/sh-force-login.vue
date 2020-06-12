@@ -1,4 +1,5 @@
 <template>
+	<!-- #ifdef MP-WEIXIN -->
 	<view v-if="forceOauth" class="force-login-wrap">
 		<image class="logo-bg" src="http://shopro.7wpp.com/imgs/logo_bg.png" mode="aspectFill"></image>
 		<view class="force-login__content y-f">
@@ -8,6 +9,7 @@
 			<button class="cu-btn author-btn" @getuserinfo="getuserinfo" open-type="getUserInfo">授权并查看</button>
 		</view>
 	</view>
+	<!-- #endif -->
 </template>
 <script>
 import Wechat from '@/common/wechat/wechat';

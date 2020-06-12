@@ -106,6 +106,7 @@
 				<view class="code2">{{ info.copyright[1] }} {{ info.version }}</view>
 			</view>
 		</view>
+		<shopro-tabbar></shopro-tabbar>
 		<!-- 广告弹窗 -->
 		<shopro-notice-modal v-if="popupUser" :detail="popupUser"></shopro-notice-modal>
 		<!-- 登录提示 -->

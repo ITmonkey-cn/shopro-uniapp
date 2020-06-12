@@ -50,6 +50,7 @@
 				</view>
 			</view>
 		</view>
+		<shopro-tabbar></shopro-tabbar>
 	</view>
 </template>
 

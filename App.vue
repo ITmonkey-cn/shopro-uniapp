@@ -66,6 +66,8 @@ export default {
 		}
 	},
 	onLaunch: async function(options) {
+		// 自定义底部导航，控制显示隐藏。
+		store.state.tabbar.isCustomTabbar ? uni.hideTabBar() : uni.showTabBar();
 		this.init(options)
 			.then(res => {
 				this.autoLogin(res[1].data);

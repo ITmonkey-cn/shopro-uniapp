@@ -32,6 +32,7 @@
 			</view>
 		</view>
 		<view class="foot_box"></view>
+		<shopro-tabbar></shopro-tabbar>
 	</view>
 </template>
 

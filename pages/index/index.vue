@@ -45,6 +45,7 @@
 			<!-- #ifdef MP-WEIXIN -->
 			<sh-force-login></sh-force-login>
 			<!-- #endif -->
+			<shopro-tabbar></shopro-tabbar>
 		</view>
 	</block>
 </template>

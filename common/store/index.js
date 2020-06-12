@@ -7,13 +7,15 @@ import init from './modules/init.js'
 import user from './modules/user.js'
 import cart from './modules/cart.js'
 import theme from './modules/theme.js'
+import tabbar from './modules/tabbar.js'
 
 const store = new Vuex.Store({
 	modules: {
 		init,
 		user,
 		cart,
-		theme
+		theme,
+		tabbar
 	}
 })
 

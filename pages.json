@@ -607,6 +607,7 @@
 	},
 	// 默认底部导航栏
 	"tabBar": {
+		"custom": true,
 		"color": "#333",
 		"selectedColor": "#a8700d",
 		"backgroundColor": "#ffffff",
@@ -636,5 +637,8 @@
 				"selectedIconPath": "static/imgs/tabbar/tab_my_sel.png"
 			}
 		]
-	}
+
+	},
+	"usingComponents": {}
+
 }
