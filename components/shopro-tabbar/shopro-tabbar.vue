@@ -1,5 +1,5 @@
 <template>
-	<view class="tabbar-wrap" v-if="isCustomTabbar">
+	<view class="shopro-tabbar-wrap" v-if="isCustomTabbar">
 		<view class="tabbar-box" :style="{ background: backgroundColor }">
 			<view class="tabbar-item" v-for="(tab, index) in tabBarList" :key="tab.text" @tap="switchTabbar(tab, index)">
 				<image class="tabbar-icon" :src="tabCurrent == index ? tab.selectedIconPath : tab.iconPath" mode="aspectFill"></image>
@@ -40,10 +40,11 @@ export default {
 </script>
 
 <style lang="scss">
-.tabbar-wrap {
+.shopro-tabbar-wrap {
 	height: 100rpx;
 	position: relative;
 	width: 100%;
+	z-index: 6;
 	.tabbar-box {
 		position: fixed;
 		display: flex;
@@ -52,6 +53,7 @@ export default {
 		height: 100rpx;
 		border-top: 1rpx solid #ccc;
 		z-index: 998;
+		bottom: 0;
 		.tabbar-item {
 			height: 100%;
 			display: flex;

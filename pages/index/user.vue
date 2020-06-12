@@ -264,7 +264,6 @@ export default {
 			} else if (this.platform === 'wxMiniProgram') {
 				this.$store.commit('FORCE_OAUTH', true);
 			}
-			// console.log('getuserinfo', e);
 		}
 	}
 };
@@ -552,8 +551,8 @@ export default {
 
 .foot_box {
 	margin-top: 200rpx;
-	padding-bottom: var(--window-bottom);
-	margin-bottom: 50rpx;
+	padding-bottom: calc(var(--window-bottom) + 30px);
+	margin-bottom: 100rpx;
 }
 .copyright {
 	color: #999;

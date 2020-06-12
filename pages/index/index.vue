@@ -1,53 +1,53 @@
 <template>
-	<block>
-		<shopro-skeletons :type="'index'" v-if="!initData.template"></shopro-skeletons>
-		<view class="page_box" v-else>
-			<!-- 导航栏 -->
-			<view class="head_box" :style="{ background: bgcolor }" :class="{ active: bgcolor }">
-				<cu-custom :isBack="true" v-if="template">
-					<block slot="backText">
-						<text class="nav-title">{{ info.name || '商城' }}</text>
-					</block>
-				</cu-custom>
-			</view>
-			<view class="content_box" style="margin-top: -4rpx;">
-				<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top>
-					<block v-for="(item, index) in template" :key="index">
-						<!-- 搜索 -->
-						<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
-						<!-- 轮播 -->
-						<sh-banner v-if="item.type === 'banner'" :detail="item.content" @getbgcolor="getbgcolor"></sh-banner>
-						<!-- 菜单 -->
-						<sh-menu v-if="item.type === 'menu'" :detail="item.content" :menu="item.content.style" :imgW="94"></sh-menu>
-						<!-- 推荐商品 -->
-						<sh-hot-goods v-if="item.type === 'goods-list' || item.type === 'goods-group'" :detail="item.content"></sh-hot-goods>
-						<!-- 广告魔方 -->
-						<sh-adv v-if="item.type === 'adv'" :detail="item.content"></sh-adv>
-						<!-- 优惠券 -->
-						<sh-coupon v-if="item.type === 'coupons'" :detail="item.content"></sh-coupon>
-						<!-- 秒杀 -->
-						<sh-seckill v-if="item.type === 'seckill'" :detail="item.content"></sh-seckill>
-						<!-- 拼团 -->
-						<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
-						<!-- 直播 -->
-						<!-- #ifdef MP-WEIXIN -->
-						<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>
-						<!-- #endif -->
-					</block>
-				</scroll-view>
-			</view>
-			<view class="foot_box"></view>
-			<!-- 连续弹窗提醒 -->
-			<shopro-notice-modal v-if="popupIndex" :detail="popupIndex"></shopro-notice-modal>
-			<!-- 登录提示 -->
-			<shopro-login-modal></shopro-login-modal>
-			<!-- 强制登录 -->
-			<!-- #ifdef MP-WEIXIN -->
-			<sh-force-login></sh-force-login>
-			<!-- #endif -->
-			<shopro-tabbar></shopro-tabbar>
+	<view class="page_box selector">
+		<!-- 导航栏 -->
+		<view class="head_box " :style="{ background: bgcolor }" :class="{ active: bgcolor }">
+			<cu-custom :isBack="true" v-if="template">
+				<block slot="backText">
+					<text class="nav-title shopro-selector-rect">{{ info.name || '商城' }}</text>
+				</block>
+			</cu-custom>
 		</view>
-	</block>
+		<view class="content_box " style="margin-top: -4rpx;">
+			<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top>
+				<block v-for="(item, index) in template" :key="index">
+					<!-- 搜索 -->
+					<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
+					<!-- 轮播 -->
+					<sh-banner v-if="item.type === 'banner'" :detail="item.content" @getbgcolor="getbgcolor"></sh-banner>
+					<!-- 菜单 -->
+					<sh-menu v-if="item.type === 'menu'" :detail="item.content" :menu="item.content.style" :imgW="94"></sh-menu>
+					<!-- 推荐商品 -->
+					<sh-hot-goods v-if="item.type === 'goods-list' || item.type === 'goods-group'" :detail="item.content"></sh-hot-goods>
+					<!-- 广告魔方 -->
+					<sh-adv v-if="item.type === 'adv'" :detail="item.content"></sh-adv>
+					<!-- 优惠券 -->
+					<sh-coupon v-if="item.type === 'coupons'" :detail="item.content"></sh-coupon>
+					<!-- 秒杀 -->
+					<sh-seckill v-if="item.type === 'seckill'" :detail="item.content"></sh-seckill>
+					<!-- 拼团 -->
+					<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
+					<!-- 直播 -->
+					<!-- #ifdef MP-WEIXIN -->
+					<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>
+					<!-- #endif -->
+				</block>
+			</scroll-view>
+		</view>
+		<view class="foot_box"></view>
+		<!-- 骨架屏 -->
+		<shopro-skeleton v-if="true"></shopro-skeleton>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal v-if="popupIndex" :detail="popupIndex"></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
+		<!-- 强制登录 -->
+		<!-- #ifdef MP-WEIXIN -->
+		<sh-force-login></sh-force-login>
+		<!-- #endif -->
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+	</view>
 </template>
 
 <script>

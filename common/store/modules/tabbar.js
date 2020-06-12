@@ -5,7 +5,7 @@ import {
 
 } from '../types.js'
 const state = {
-	isCustomTabbar: true,
+	isCustomTabbar: false, //是否开启自定义导航。
 	tabCurrent: 0,
 	color: '#333',
 	selectedColor: '#a8700d',

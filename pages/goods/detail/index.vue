@@ -505,7 +505,7 @@ export default {
 	padding-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
-		font-size: 0;
+		// font-size: 0; // 解决图片间隙问题。如果详情有文字，注释掉。
 		image {
 			margin-top: -1rpx; //富文本的图片之间的间隙，一般是空格造成，父级用size:0,可以解决，不行就hack一下
 		}
