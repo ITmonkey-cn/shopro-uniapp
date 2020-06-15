@@ -5,8 +5,8 @@
 				<image class="avatar" :src="comment.user.avatar" mode="aspectFill"></image>
 				<view class="user-name">{{ comment.user.nickname }}</view>
 				<view class="x-f star-box">
-					<text class="cuIcon-favorfill star-active" v-for="(s,index) in comment.level" ></text>
-					<text class="cuIcon-favorfill" v-for="(z,idx) in 5 - comment.level" ></text>
+					<text class="cuIcon-favorfill star-active" v-for="(s,index) in (comment.level) " :key="s" ></text>
+					<text class="cuIcon-favorfill" v-for="(z,idx) in 5 - (comment.level)" :key="z"></text>
 				</view>
 			</view>
 			<text class="time">{{ tools.timestamp(comment.createtime) }}</text>

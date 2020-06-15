@@ -1,5 +1,5 @@
 <template>
-	<view class="adv-box">
+	<view class="adv-box shopro-selector-rect">
 		<!-- 模板1-->
 		<view class="x-f" v-if="detail.style == 1">
 			<image style="width:710rpx;height: 220rpx;" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>

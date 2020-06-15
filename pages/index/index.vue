@@ -1,5 +1,5 @@
 <template>
-	<view class="page_box selector">
+	<view class="page_box shopro-selector">
 		<!-- 导航栏 -->
 		<view class="head_box " :style="{ background: bgcolor }" :class="{ active: bgcolor }">
 			<cu-custom :isBack="true" v-if="template">
@@ -36,7 +36,7 @@
 		</view>
 		<view class="foot_box"></view>
 		<!-- 骨架屏 -->
-		<shopro-skeleton v-if="true"></shopro-skeleton>
+		<shopro-skeleton v-if="!template"></shopro-skeleton>
 		<!-- 连续弹窗提醒 -->
 		<shopro-notice-modal v-if="popupIndex" :detail="popupIndex"></shopro-notice-modal>
 		<!-- 登录提示 -->

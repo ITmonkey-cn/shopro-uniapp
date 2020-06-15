@@ -13,8 +13,8 @@
 			<swiper-item class="menu-swiper-item" v-for="(itemList, index) in carousel" :key="index" :style="detail.list.length <= menu ? `height:200rpx` : `height:340rpx`">
 				<view class="menu-tab-box">
 					<view class="tab-list y-f" :style="{ width: 690 / menu + 'rpx' }" v-for="item in itemList" :key="item.name" @tap="routerTo(item.path)">
-						<image class="tab-img" :style="{ width: imgW + 'rpx', height: imgW + 'rpx' }" :src="item.image"></image>
-						<text>{{ item.name }}</text>
+						<image class="tab-img shopro-selector-circular" :style="{ width: imgW + 'rpx', height: imgW + 'rpx' }" :src="item.image"></image>
+						<text class="shopro-selector-rect">{{ item.name }}</text>
 					</view>
 				</view>
 			</swiper-item>

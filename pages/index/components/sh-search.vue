@@ -1,6 +1,6 @@
 <template>
 	<view class="search x-c" :style="{ 'background-color': bgcolor }" :class="{ active: bgcolor }">
-		<view class="search-box x-c" @tap="jump('/pages/goods/list', { keywords: detail.content })">
+		<view class="search-box x-c shopro-selector-rect" @tap="jump('/pages/goods/list', { keywords: detail.content })">
 			<text class="cuIcon-search"></text>
 			<text class="search-val">{{ detail.content || '暂无数据' }}</text>
 		</view>

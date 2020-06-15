@@ -24,10 +24,13 @@ export default {
 			skeletonWidth: 375,
 			skeletonHeight: 800,
 			skeletonElements: [],
+			skeletonReact: [],
 			showSkeleton: true
 		};
 	},
 	/*
+	 *组件嵌套太深不行
+	 * 
 	 * selector：最外层骨架屏包裹元素类名
 	 * skeletonBgColor：包裹元素背景色
 	 * elementBgColor：渲染元素背景色
@@ -48,7 +51,7 @@ export default {
 		},
 		elementBgColor: {
 			type: String,
-			default: '#DDB26E'
+			default: '#F3F3F1'
 		},
 		skeletonType: {
 			type: Array,
@@ -67,12 +70,9 @@ export default {
 		this.skeletonHeight = res.windowHeight + 'px';
 	},
 	mounted() {
-		// this.$nextTick(() => {
-		// 	this.nodesRef(`.${this.selector}`).then(res => {
-		// 		this.skeletonHeight = res[0].height + res[0].top + 'px';
-		// 	});
-		this.selectorQuery();
-		// });
+		setTimeout(() => {
+			this.selectorQuery();
+		},500);
 	},
 
 	methods: {
@@ -91,7 +91,12 @@ export default {
 			for (let item of skeletonType) {
 				let className = `.${item}`;
 				if (~'rect_circular_fillet'.indexOf(item)) {
+					// #ifdef MP-WEIXIN
+					className = `.${this.selector} >>> .${this.selector}-${item}`;
+					// #endif
+					// #ifndef MP-WEIXIN
 					className = `.${this.selector}-${item}`;
+					// #endif
 				}
 				await this.nodesRef(className).then(res => {
 					res.map(d => {

@@ -1,6 +1,6 @@
 <template>
 	<view class="min-goods" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
-		<view class="img-box">
+		<view class="img-box" >
 			<view class="tag" v-if="detail.activity_type === 'groupon'">{{detail.activity.rules.team_num}}人团</view>
 			<image class="img" :src="detail.image" mode="widthFix"></image>
 		</view>

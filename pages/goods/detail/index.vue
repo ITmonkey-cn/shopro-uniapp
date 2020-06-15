@@ -167,6 +167,7 @@ export default {
 	components: {
 		uniParse,
 		shServe,
+		shPrice,
 		shGroupon,
 		shCoupon,
 		shGrouponTip,
