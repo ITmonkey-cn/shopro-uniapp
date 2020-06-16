@@ -1,7 +1,7 @@
 <template>
 	<block>
-		<view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view>
-		<view class="detail_box" v-else>
+		<!-- <view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view> -->
+		<view class="detail_box shopro-selector" v-if="goodsInfo.price">
 			<view class="detail-content">
 				<view class="goodes_detail_swiper-box">
 					<!-- 拼团滚动提示 -->
@@ -9,7 +9,7 @@
 					<!-- 详情轮播 -->
 					<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
 						<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
-							<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
+							<image class="swiper-image shopro-selector-rect" :src="img" mode="aspectFill" lazy-load></image>
 						</swiper-item>
 					</swiper>
 					<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
@@ -17,10 +17,14 @@
 
 				<!-- 价格卡片组 -->
 				<sh-price v-if="goodsInfo" :detail="goodsInfo" :type="detailType" @change="getActivityRules"></sh-price>
-				<view class="goods-title">{{ goodsInfo.title }}</view>
-				<view class="sub-title">{{ goodsInfo.subtitle }}</view>
+				<view class="goods-title ">
+					<text class="shopro-selector-rect">{{ goodsInfo.title }}</text>
+				</view>
+				<view class="sub-title ">
+					<text class="shopro-selector-rect">{{ goodsInfo.subtitle }}</text>
+				</view>
 				<!-- 规格选择 -->
-				<view class="sku-box" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon')">
+				<view class="sku-box shopro-selector-rect" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon')">
 					<view class="x-bc">
 						<view class="x-f">
 							<text class="title">规格</text>
@@ -147,6 +151,8 @@
 			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="'goods'"></shopro-share>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
+			<!-- 骨架屏 -->
+			<shopro-skeleton :showSkeleton="false"></shopro-skeleton>
 		</view>
 	</block>
 </template>

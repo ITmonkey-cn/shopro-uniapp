@@ -59,9 +59,7 @@ const actions = {}
 const mutations = {
 	// tabbar切换
 	switchTabbar(state, index) {
-		console.log(1111, index)
 		state.tabCurrent = index;
-		console.log(22222, state.tabCurrent)
 	}
 }
 

@@ -14,7 +14,7 @@
 			<view class="filter-item"><sh-filter @change="onFilter"></sh-filter></view>
 		</view>
 		<view class="content-box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+			<scroll-view scroll-y @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-list x-f">
 					<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods"></shopro-goods-card></view>
 				</view>

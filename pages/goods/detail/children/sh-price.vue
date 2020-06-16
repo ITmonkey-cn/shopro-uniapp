@@ -2,13 +2,13 @@
 	<view>
 		<!-- 正常商品 -->
 		<view class="normal-price-box" v-if="type !== 'score' && !detail.activity">
-			<view class="">
+			<view class="shopro-selector-rect">
 				<text class="unit">￥</text>
 				<text class="price">{{ detail.price }}</text>
 				<text class="notice">优惠价</text>
 			</view>
 			<view class="x-bc price-bottom-box">
-				<view class="x-f">
+				<view class="x-f shopro-selector-rect">
 					<view class="original-price">原价：￥{{ detail.original_price }}</view>
 					<text class="line"></text>
 					<view class="sold">已售：{{ detail.sales }}件</view>

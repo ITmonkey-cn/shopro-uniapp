@@ -1,5 +1,5 @@
 <template>
-	<view class="shopro-skeleton-box" :style="{ width: skeletonWidth, height: skeletonHeight, backgroundColor: skeletonBgColor }">
+	<view v-if="showSkeleton" class="shopro-skeleton-box" :style="{ width: skeletonWidth, height: skeletonHeight, backgroundColor: skeletonBgColor }">
 		<view
 			class="shopro-skeleton__type"
 			v-for="(item, index) in skeletonElements"
@@ -23,14 +23,12 @@ export default {
 		return {
 			skeletonWidth: 375,
 			skeletonHeight: 800,
-			skeletonElements: [],
-			skeletonReact: [],
-			showSkeleton: true
+			skeletonElements: []
 		};
 	},
 	/*
 	 *组件嵌套太深不行
-	 * 
+	 *
 	 * selector：最外层骨架屏包裹元素类名
 	 * skeletonBgColor：包裹元素背景色
 	 * elementBgColor：渲染元素背景色
@@ -41,6 +39,10 @@ export default {
 	 */
 
 	props: {
+		showSkeleton: {
+			type: Boolean,
+			default: false
+		},
 		selector: {
 			type: String,
 			default: 'shopro-selector'
@@ -72,7 +74,7 @@ export default {
 	mounted() {
 		setTimeout(() => {
 			this.selectorQuery();
-		},500);
+		}, 500);
 	},
 
 	methods: {

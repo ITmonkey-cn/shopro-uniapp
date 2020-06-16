@@ -36,7 +36,7 @@
 		</view>
 		<view class="foot_box"></view>
 		<!-- 骨架屏 -->
-		<shopro-skeleton v-if="!template"></shopro-skeleton>
+		<shopro-skeleton :showSkeleton="false"></shopro-skeleton>
 		<!-- 连续弹窗提醒 -->
 		<shopro-notice-modal v-if="popupIndex" :detail="popupIndex"></shopro-notice-modal>
 		<!-- 登录提示 -->

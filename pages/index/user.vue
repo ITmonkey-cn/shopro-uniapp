@@ -1,6 +1,9 @@
 <template>
 	<view class="user-box">
-		<view class="head_box">
+		<view class="head-box">
+			<view :class="scrollTop < 50 ? 'transtion-head' : 'transtion-head--active'">
+				<cu-custom><text slot="content">我的</text></cu-custom>
+			</view>
 			<image class="user-bg" src="http://shopro.7wpp.com/imgs/user/user_bg.png" mode=""></image>
 			<view class="head-wrap pad">
 				<view class="titleNav ">
@@ -37,7 +40,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="content_box">
+		<view class="content-box">
 			<!-- 绑定手机 -->
 			<view class="notice-box x-bc pad" v-if="!userInfo.mobile && userInfo.nickname" @tap="jump('/pages/user/edit-phone', { fromType: 'bind' })">
 				<view class="notice-detail one-t">点击绑定手机号，确保账户安全</view>
@@ -92,12 +95,7 @@
 				</view>
 			</view>
 			<!-- 功能卡片 -->
-			<view class="tools-box">
-				<view class="tool-item y-f" @tap="jump(tool.url, tool.parmas)" v-for="tool in toolsNav" :key="tool.title">
-					<image class="tool-img" :src="tool.img" mode=""></image>
-					<text class="item-title">{{ tool.title }}</text>
-				</view>
-			</view>
+			<sh-user-menu></sh-user-menu>
 		</view>
 		<!-- 版本号 -->
 		<view class="foot_box">
@@ -126,10 +124,12 @@ import shForceLogin from './components/sh-force-login.vue';
 // #endif
 import Wechat from '@/common/wechat/wechat';
 import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
-import shFollowWechat from './user/children/sh-follow-wechat.vue';
+import shFollowWechat from './components/sh-follow-wechat.vue';
+import shUserMenu from './components/sh-user-menu.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
+		shUserMenu,
 		shFollowWechat,
 		shoproNoticeModal,
 		// #ifdef MP-WEIXIN
@@ -142,6 +142,7 @@ export default {
 			isRefresh: false, //更新
 			showFollowWechat: false, //绑定公众号
 			orderScrollLeft: 0, //订单卡片滑动。
+			scrollTop: 0, //页面滚动距离
 			orderNav: [
 				{
 					id: 1,
@@ -235,6 +236,9 @@ export default {
 		}
 	},
 	onLoad() {},
+	onPageScroll(e) {
+		this.scrollTop = e.scrollTop;
+	},
 	onShow() {
 		this.$store.commit('CART_NUM');
 		this.getUserInfo();
@@ -272,6 +276,7 @@ export default {
 <style lang="scss">
 .user-box {
 	overflow-x: hidden;
+	position: relative;
 }
 // 微信登录蒙层
 .login-box {
@@ -282,7 +287,29 @@ export default {
 	background: none;
 }
 
-.head_box {
+// 顶部
+.transtion-head {
+	height: 120rpx;
+	background: #fff;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 99;
+	transition: all 0.2s linear;
+	transform: translateY(-120rpx);
+}
+.transtion-head--active {
+	height: 120rpx;
+	background: #fff;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 99;
+	transition: all 0.2s linear;
+	transform: translateY(0rpx);
+}
+
+.head-box {
 	position: relative;
 	height: 320rpx;
 	.user-bg {
@@ -521,38 +548,10 @@ export default {
 		}
 	}
 }
-.tools-box {
-	background: #fff;
-	display: flex;
-	flex-wrap: wrap;
-	padding-bottom: 40rpx;
-	margin-bottom: 20rpx;
-
-	.tool-item {
-		width: (750rpx/4);
-		padding-top: 40rpx;
-
-		.tool-img {
-			width: 44rpx;
-			height: 44rpx;
-			// background: #ccc;
-		}
-
-		.item-title {
-			font-size: 24rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: rgba(153, 153, 153, 1);
-			line-height: 24rpx;
-			padding-top: 30rpx;
-		}
-	}
-}
-
 .foot_box {
-	margin-top: 200rpx;
+	padding-top: 200rpx;
 	padding-bottom: calc(var(--window-bottom) + 30px);
-	margin-bottom: 100rpx;
+	margin-bottom: 50rpx;
 }
 .copyright {
 	color: #999;

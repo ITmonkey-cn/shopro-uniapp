@@ -1,6 +1,6 @@
 <template>
 	<!-- 详情优惠券轮播 -->
-	<view class="category-box">
+	<view class="category-box shopro-selector-rect">
 		<swiper class="swiper-box" @change="onSwiper" circular :autoplay="false" :interval="3000" :duration="1000">
 			<swiper-item v-for="(c, index) in couponList" :key="c.id">
 				<view class="tab-list x-c"><shopro-coupon :couponData="c" :state="0"></shopro-coupon></view>

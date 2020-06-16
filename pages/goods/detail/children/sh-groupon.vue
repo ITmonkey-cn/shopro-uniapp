@@ -1,5 +1,5 @@
 <template>
-	<view class="group-people">
+	<view class="group-people shopro-selector-rect">
 		<block v-if="grouponTeamList.length">
 			<view class="into-title x-bc">
 				<text>已有{{ grouponData.sales }}人参与活动</text>
