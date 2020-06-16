@@ -12,6 +12,7 @@
 <script>
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
+		name:"shoproTabbar",
 	components: {},
 	data() {
 		return {};

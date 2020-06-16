@@ -39,7 +39,7 @@
 				<!-- 加载更多 -->
 				<view v-if="grouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
-				<shoproLoad v-model="isLoading"></shoproLoad>
+				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
 		</view>
 	</view>

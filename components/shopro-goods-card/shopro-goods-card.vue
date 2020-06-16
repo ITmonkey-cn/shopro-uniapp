@@ -21,6 +21,7 @@
 
 <script>
 export default {
+		name:"shoproGoodsCard",
 	components: {},
 	data() {
 		return {

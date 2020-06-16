@@ -19,6 +19,7 @@
 <script>
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
+		name:"shoproLoginModal",
 	components: {},
 	data() {
 		return {};

@@ -50,13 +50,14 @@
 
 <script>
 export default {
+	name: 'shoproMiniCard',
 	components: {},
 	data() {
 		return {
 			routerTo: this.$Router,
-			orderStatus:{
-				'seckill':'/static/imgs/seckill_tag.png',
-				'groupon':'/static/imgs/groupon_tag.png'
+			orderStatus: {
+				seckill: '/static/imgs/seckill_tag.png',
+				groupon: '/static/imgs/groupon_tag.png'
 			}
 		};
 	},
@@ -109,14 +110,14 @@ export default {
 		background-color: #ccc;
 		margin-right: 25rpx;
 	}
-.order-goods__tag{
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 3;
-	width: 60rpx;
-	height: 30rpx;
-}
+	.order-goods__tag {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 3;
+		width: 60rpx;
+		height: 30rpx;
+	}
 	.goods-title {
 		font-size: 28rpx;
 		font-family: PingFang SC;

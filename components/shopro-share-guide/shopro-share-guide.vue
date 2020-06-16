@@ -6,6 +6,7 @@
 
 <script>
 export default {
+		name:"shoproShareGuide",
 	components: {},
 	data() {
 		return {};

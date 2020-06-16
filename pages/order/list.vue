@@ -62,7 +62,7 @@
 			<!-- 空白页 -->
 			<shopro-empty v-if="!orderList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 			<!-- load -->
-			<shoproLoad v-model="isLoading"></shoproLoad>
+			<shopro-load v-model="isLoading"></shopro-load>
 		</view>
 		<view class="foot_box"></view>
 	</view>

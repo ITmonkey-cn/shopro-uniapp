@@ -7,6 +7,7 @@
 
 <script>
 export default {
+		name:"shoproSkeletons",
 	components: {},
 	data() {
 		return {

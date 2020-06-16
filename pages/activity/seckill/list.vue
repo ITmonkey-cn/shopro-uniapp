@@ -37,7 +37,7 @@
 				<!-- 加载更多 -->
 				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
-				<shoproLoad v-model="isLoading"></shoproLoad>
+				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>

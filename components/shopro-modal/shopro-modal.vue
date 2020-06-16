@@ -6,6 +6,7 @@
 
 <script>
 export default {
+	name: 'shoproModal',
 	components: {},
 	data() {
 		return {};
@@ -36,5 +37,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

@@ -16,7 +16,7 @@ import wxParseTemplate from './components/wxParseTemplate0';
 
 	
 	export default {
-		name: 'wxParse',
+		name: 'uniParse',
 		props: {
 			// user-select:none;
 			userSelect: {

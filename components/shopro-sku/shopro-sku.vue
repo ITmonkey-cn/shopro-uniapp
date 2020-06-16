@@ -75,6 +75,7 @@
 import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
+		name:"shoproSku",
 	components: {
 		uniNumberBox
 	},

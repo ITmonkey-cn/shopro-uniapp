@@ -99,7 +99,6 @@ page {
 	font-size: 30upx;
 	font-family: NotoSansHans-Bold;
 	color: #333;
-	overflow-x: hidden;
 }
 ::-webkit-scrollbar {
 	width: 0;

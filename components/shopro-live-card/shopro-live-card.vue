@@ -42,6 +42,7 @@ if (HAS_LIVE) {
 //  #endif
 let timer = null;
 export default {
+	name: 'shoproLiveCard',
 	components: {},
 	data() {
 		return {
