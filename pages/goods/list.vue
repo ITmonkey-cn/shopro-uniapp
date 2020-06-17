@@ -24,6 +24,10 @@
 			<!-- load -->
 			<shopro-load v-model="isLoading"></shopro-load>
 		</view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-follow-wechat></shopro-follow-wechat>
 	</view>
 </template>
 
@@ -60,7 +64,6 @@ export default {
 	computed: {},
 	// 触底加载更多
 	onReachBottom() {
-		console.log('11111111111111');
 		if (this.listParams.page < this.lastPage) {
 			this.listParams.page += 1;
 			this.getGoodsList();

@@ -14,6 +14,10 @@
 			<view class="detail" v-if="item.checked">{{ item.content }}</view>
 		</view>
 		<view v-if="faqList.length" class="cu-load text-gray" :class="loadStatus"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-follow-wechat></shopro-follow-wechat>
 	</view>
 </template>
 

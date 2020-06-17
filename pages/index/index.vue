@@ -10,7 +10,7 @@
 		</view>
 		<view class="content_box " style="margin-top: -4rpx;">
 			<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top>
-				<block v-for="(item, index) in template" :key="index">
+				<block v-if="template.length" v-for="(item, index) in template" :key="index">
 					<!-- 搜索 -->
 					<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
 					<!-- 轮播 -->
@@ -27,6 +27,8 @@
 					<sh-seckill v-if="item.type === 'seckill'" :detail="item.content"></sh-seckill>
 					<!-- 拼团 -->
 					<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
+					<!-- 富文本 -->
+					<sh-richtext v-if="item.type === 'rich-text'" :detail="item.content"></sh-richtext>
 					<!-- 直播 -->
 					<!-- #ifdef MP-WEIXIN -->
 					<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>
@@ -47,6 +49,8 @@
 		<!-- #endif -->
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-follow-wechat></shopro-follow-wechat>
 	</view>
 </template>
 
@@ -59,6 +63,7 @@ import shAdv from './components/sh-adv.vue';
 import shCoupon from './components/sh-coupon.vue';
 import shSeckill from './components/sh-seckill.vue';
 import shGroupon from './components/sh-groupon.vue';
+import shRichtext from './components/sh-richtext.vue';
 import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
 import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 // #ifdef MP-WEIXIN
@@ -77,6 +82,7 @@ export default {
 		shCoupon,
 		shSeckill,
 		shGroupon,
+		shRichtext,
 		shoproNoticeModal,
 		shoproSkeletons,
 		// #ifdef MP-WEIXIN
@@ -95,7 +101,7 @@ export default {
 	computed: {
 		...mapState({
 			initData: state => state.init.initData,
-			template: state => state.init.initData.template,
+			template: state => state.init.templateData.home,
 			cartNum: state => state.cart.cartNum,
 			forceOauth: state => state.user.forceOauth
 		}),
@@ -110,7 +116,10 @@ export default {
 			}
 		}
 	},
-	onLoad(options) {},
+	onLoad() {
+		console.log(this.$route),
+		console.log(this.template)
+	},
 	mounted() {},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);

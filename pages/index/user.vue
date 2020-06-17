@@ -2,7 +2,7 @@
 	<view class="user-box">
 		<view class="head-box">
 			<view :class="scrollTop < 50 ? 'transtion-head' : 'transtion-head--active'">
-				<cu-custom><text slot="content">我的</text></cu-custom>
+				<cu-custom><text slot="content" style="font-weight: bold;font-size: 34rpx;">我的</text></cu-custom>
 			</view>
 			<image class="user-bg" src="http://shopro.7wpp.com/imgs/user/user_bg.png" mode=""></image>
 			<view class="head-wrap pad">
@@ -95,7 +95,7 @@
 				</view>
 			</view>
 			<!-- 功能卡片 -->
-			<sh-user-menu></sh-user-menu>
+			<sh-nav></sh-nav>
 		</view>
 		<!-- 版本号 -->
 		<view class="foot_box">
@@ -125,11 +125,11 @@ import shForceLogin from './components/sh-force-login.vue';
 import Wechat from '@/common/wechat/wechat';
 import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
 import shFollowWechat from './components/sh-follow-wechat.vue';
-import shUserMenu from './components/sh-user-menu.vue';
+import shNav from './components/sh-nav.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
-		shUserMenu,
+		shNav,
 		shFollowWechat,
 		shoproNoticeModal,
 		// #ifdef MP-WEIXIN
@@ -140,7 +140,7 @@ export default {
 		return {
 			platform: uni.getStorageSync('platform'), //当前平台。
 			isRefresh: false, //更新
-			showFollowWechat: false, //绑定公众号
+			showFollowWechat: true, //绑定公众号
 			orderScrollLeft: 0, //订单卡片滑动。
 			scrollTop: 0, //页面滚动距离
 			orderNav: [
@@ -297,6 +297,7 @@ export default {
 	z-index: 99;
 	transition: all 0.2s linear;
 	transform: translateY(-120rpx);
+	border-bottom: 1rpx solid #f2f2f2;
 }
 .transtion-head--active {
 	height: 120rpx;
@@ -307,6 +308,7 @@ export default {
 	z-index: 99;
 	transition: all 0.2s linear;
 	transform: translateY(0rpx);
+	border-bottom: 1rpx solid #f2f2f2;
 }
 
 .head-box {

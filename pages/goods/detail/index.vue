@@ -58,7 +58,7 @@
 				<view class="sticky-box">
 					<view class="tab-box x-f">
 						<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
-							<view class="tab-title">{{ tab.title }}</view>
+							<view class="tab-title">{{ tab.title }}<text v-if="tab.id=='tab2'" class="comment-num">({{commentList.length}})</text></view>
 							<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
 						</view>
 					</view>

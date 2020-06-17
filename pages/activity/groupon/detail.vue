@@ -109,6 +109,10 @@
 			:buyType="'buy'"
 			:grouponBuyType="'groupon'"
 		></shopro-sku>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-follow-wechat></shopro-follow-wechat>
 	</view>
 </template>
 

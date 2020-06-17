@@ -14,7 +14,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
-				//				 "enablePullDownRefresh": true,
+				//	 "enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			},
 			"meta": {
@@ -69,7 +69,7 @@
 		}
 	],
 	// 分包加载
-	// 不要接受编辑器的组件放置分包建议。因为那些不是在单个分包内使用的。
+	// 不要接受编辑器的组件放置分包建议。因为那些不是在单个分包内使用的,也不知道为啥老报错。
 	"subPackages": [{
 			"root": "pages/activity",
 			"pages": [

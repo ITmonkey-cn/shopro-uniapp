@@ -4,11 +4,13 @@ import store from '@/common/store'
 import {
 	INIT_DATA,
 	PAGE_ROUTES,
-	CART_NUM
+	CART_NUM,
+	TEMPLATE
 } from '../types.js'
 const state = {
 	initData: {},
-	routes: []
+	routes: [],
+	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {}, //购物车,涉及到刷新数据丢失，所以存了本地,
 }
 
 const actions = {
@@ -28,11 +30,14 @@ const actions = {
 				uni.setStorageSync('sysInfo', res.data.info);
 				uni.setStorageSync('shareInfo', res.data.share);
 				resolve(res)
+			}).then(() => {
+				store.dispatch('getTemplate');
 			}).catch(e => {
 				reject(e)
 			})
 		})
 	},
+	// 同步前端路由
 	getRoutes({
 		commit
 	}) {
@@ -47,6 +52,20 @@ const actions = {
 			})
 		})
 	},
+	// 模板信息
+	getTemplate({
+		commit
+	}) {
+		return new Promise((resolve, reject) => {
+			api('template').then(res => {
+				uni.setStorageSync('templateData', res.data);
+				commit('TEMPLATE', res.data);
+				resolve(res)
+			}).catch(e => {
+				reject(e)
+			})
+		})
+	},
 }
 
 const mutations = {
@@ -55,6 +74,9 @@ const mutations = {
 	},
 	[INIT_DATA](state, data) {
 		state.initData = data
+	},
+	[TEMPLATE](state, data) {
+		state.templateData = data
 	},
 }
 

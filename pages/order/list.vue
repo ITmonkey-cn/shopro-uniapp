@@ -65,6 +65,10 @@
 			<shopro-load v-model="isLoading"></shopro-load>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-follow-wechat></shopro-follow-wechat>
 	</view>
 </template>
 

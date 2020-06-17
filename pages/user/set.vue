@@ -40,6 +40,10 @@
 			<view class="title">退出登录</view>
 			<text class="cuIcon-right"></text>
 		</view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-follow-wechat></shopro-follow-wechat>
 	</view>
 </template>
 

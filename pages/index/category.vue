@@ -56,7 +56,8 @@ export default {
 		getCategory() {
 			this.$api('category').then(res => {
 				if (res.code === 1) {
-					this.categoryData = res.data;
+					// this.categoryData = res.data;
+					this.categoryData = [...res.data,...res.data,...res.data,...res.data,...res.data,...res.data];
 				}
 			});
 		},

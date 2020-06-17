@@ -115,7 +115,6 @@ export default {
 				uni.createSelectorQuery()
 					.selectAll(className)
 					.boundingClientRect(res => {
-						console.log(res);
 						if (res) {
 							resolve(res);
 						} else {

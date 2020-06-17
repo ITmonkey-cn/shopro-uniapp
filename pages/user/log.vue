@@ -27,6 +27,10 @@
 				<button class="cu-btn close-btn" @tap="cancelFavorite">删除</button>
 			</view>
 		</view>
+	<!-- 自定义底部导航 -->
+	<shopro-tabbar></shopro-tabbar>
+	<!-- 关注弹窗 -->
+	<shopro-follow-wechat></shopro-follow-wechat>
 	</view>
 </template>
 

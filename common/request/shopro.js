@@ -19,6 +19,14 @@ export default {
 		// desc: '上传',
 	},
 
+	/** 模板信息 ↓ **/
+	template: {
+		url: 'index/template',
+		auth: false,
+		method: 'GET',
+		// desc: '模板信息',
+	},
+
 	/** 直播 ↓ **/
 	live: {
 		url: 'live',
