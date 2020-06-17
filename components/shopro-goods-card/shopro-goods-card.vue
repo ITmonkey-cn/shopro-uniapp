@@ -8,7 +8,7 @@
 		<view class="title more-t">{{ detail.title }}</view>
 		<view class="price-box">
 			<view class="flex x-bc align-end">
-				<view class="current">{{ detail.price }}</view>
+				<view class="current">{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</view>
 				<view class="sales miso-font">销量{{ detail.sales }}件</view>
 			</view>
 			<view class="x-f tag-box">

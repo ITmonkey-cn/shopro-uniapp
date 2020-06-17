@@ -117,8 +117,7 @@ export default {
 		}
 	},
 	onLoad() {
-		console.log(this.$route),
-		console.log(this.template)
+		console.log(this.$route), console.log(this.template);
 	},
 	mounted() {},
 	onShow() {

@@ -64,6 +64,7 @@ export default {
 		let that = this;
 		that.goodsInfo = that.$Route.query;
 		that.goodsInfo.image = decodeURIComponent(that.$Route.query.image);
+		that.goodsInfo.title = decodeURIComponent(that.$Route.query.title);
 		that.setShareInfo({
 			query: {
 				url: 'groupon-' + that.$Route.query.id
@@ -117,7 +118,7 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url: that.userInfo.avatar,
+									url: that.$tools.checkImgHttp(that.userInfo.avatar),
 									alpha: 1,
 									dx: bgObj.width * 0.06,
 									dy: bgObj.width * 0.06,
@@ -177,7 +178,7 @@ export default {
 								},
 								{
 									type: 'image', //商品图片
-									url: that.goodsInfo.image,
+									url: that.$tools.checkImgHttp(that.goodsInfo.image),
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
 									dx: bgObj.width * 0.054,
@@ -240,7 +241,7 @@ export default {
 								{
 									type: 'text', //价格
 									// fontStyle: 'italic',//倾斜
-									text: `${that.goodsInfo.grouponPrice}`,
+									text: `${that.goodsInfo.price}`,
 									size: fontSize * 1.1,
 									color: '#E1212B',
 									alpha: 1,

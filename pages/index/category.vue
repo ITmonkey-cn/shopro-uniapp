@@ -3,12 +3,12 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<view class="x-f wrapper-box">
-				<view class="left y-f">
+				<scroll-view class="left y-f" scroll-y>
 					<view class="type-list x-c" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
 						<view class="line" :class="[{ 'line-active': listId == index }]"></view>
 						{{ item.name }}
 					</view>
-				</view>
+				</scroll-view>
 				<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
@@ -57,7 +57,7 @@ export default {
 			this.$api('category').then(res => {
 				if (res.code === 1) {
 					// this.categoryData = res.data;
-					this.categoryData = [...res.data,...res.data,...res.data,...res.data,...res.data,...res.data];
+					this.categoryData = res.data;
 				}
 			});
 		},
@@ -102,7 +102,7 @@ export default {
 	.list-active {
 		background: #fff;
 		color: #333333 !important;
-		font-weight: bold!important;
+		font-weight: bold !important;
 	}
 
 	.line-active {

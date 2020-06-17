@@ -6,10 +6,14 @@
 			<text class="pay-money" v-if="pay && orderDetail.total_fee">￥{{ orderDetail.total_fee }}</text>
 			<view class="btn-box flex justify-between">
 				<block v-if="pay && orderDetail.activity_type === 'groupon' && orderDetail.ext_arr.buy_type === 'groupon'">
-					<button class="cu-btn base-btn" v-if="orderDetail.ext_arr.groupon_id > 0" @tap="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })">
+					<button
+						class="cu-btn base-btn"
+						v-if="orderDetail.ext_arr.groupon_id > 0"
+						@tap="replace('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })"
+					>
 						拼团详情
 					</button>
-					<button class="cu-btn base-btn" v-else @tap="jump('/pages/activity/groupon/my-groupon')">我的拼团</button>
+					<button class="cu-btn base-btn" v-else @tap="replace('/pages/activity/groupon/my-groupon')">我的拼团</button>
 				</block>
 
 				<button class="cu-btn base-btn" v-else @tap="routerTo.pushTab('/pages/index/index')">返回首页</button>
@@ -44,6 +48,12 @@ export default {
 		...mapActions(['getCartList']),
 		jump(path, parmas) {
 			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
+		replace(path, parmas) {
+			this.$Router.replace({
 				path: path,
 				query: parmas
 			});

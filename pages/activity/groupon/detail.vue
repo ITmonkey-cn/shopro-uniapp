@@ -54,7 +54,7 @@
 						<text class="group-num">{{ grouponDetail.num - grouponDetail.current_num }}</text>
 						人拼团成功
 					</view>
-					<view class="count-down x-f">
+					<view class="count-down x-f" v-if="time">
 						<text class="count-down-tip">倒计时</text>
 						<view class="time-box x-f">
 							<view class="count-text">{{ time.h || '00' }}</view>
@@ -85,14 +85,10 @@
 					</view>
 				</view>
 			</view>
-			<view
-				v-if="grouponDetail.goods && grouponDetail.goods.activity && grouponDetail.goods.activity.richtext_id"
-				class="groupon-play x-bc"
-				@tap="jump('/pages/public/richtext', { id: grouponDetail.goods.activity.richtext_id })"
-			>
+			<view v-if="activity && activity.richtext_id" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
 				<text class="title">玩法</text>
 				<view class="x-f">
-					<view class="description one-t">{{ grouponDetail.goods.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
+					<view class="description one-t">{{ activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -131,6 +127,7 @@ export default {
 			grouponDetail: {},
 			showShare: false,
 			showSku: false,
+			activity: {},
 			surplusNum: 0 //剩余拼团人数、
 		};
 	},
@@ -155,7 +152,7 @@ export default {
 					t--;
 				} else {
 					clearInterval(timer);
-					_self.time = '倒计时结束';
+					_self.time = false;
 				}
 			}, 1000);
 		},
@@ -166,6 +163,10 @@ export default {
 				id: that.$Route.query.id
 			}).then(res => {
 				that.grouponDetail = res.data;
+				that.activity = res.data.goods.activity;
+				if (that.activity) {
+					that.activity.richtext_id = parseInt(that.activity.richtext_id);
+				}
 				that.surplusNum = res.data.num - res.data.current_num;
 				let newTime = new Date().getTime();
 				let endTime = res.data.expiretime * 1000;
@@ -242,7 +243,8 @@ export default {
 .group-box {
 	background: #fff;
 	padding: 40rpx 0;
-	height: 370rpx;
+	min-height: 370rpx;
+	justify-content: center;
 	.tip-box {
 		font-size: 28rpx;
 		font-weight: bold;
@@ -286,9 +288,14 @@ export default {
 	}
 
 	.group-people {
+		flex-wrap: wrap;
+		padding: 50rpx;
 		.img-box {
 			position: relative;
-			margin-right: 20rpx;
+			margin-right: 34rpx;
+			&:nth-child(6n){
+				margin-right: 0;
+			}
 			.tag {
 				position: absolute;
 				line-height: 36rpx;
@@ -304,8 +311,8 @@ export default {
 				transform: translateX(-50%);
 			}
 			.avatar {
-				width: 86rpx;
-				height: 86rpx;
+				width: 80rpx;
+				height: 80rpx;
 				border-radius: 50%;
 				background: #ccc;
 			}

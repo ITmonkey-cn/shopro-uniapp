@@ -7,6 +7,7 @@
 			<open-data class="user-name" type="userNickName"></open-data>
 			<view class="login-notice">为了提供更优质的服务，需要获取您的头像昵称</view>
 			<button class="cu-btn author-btn" @getuserinfo="getuserinfo" open-type="getUserInfo">授权并查看</button>
+			<button class="cu-btn close-btn" @tap="closeAuth">暂不授权</button>
 		</view>
 	</view>
 	<!-- #endif -->
@@ -28,6 +29,9 @@ export default {
 			let token = await wechat.wxMiniProgramLogin(e);
 			store.commit('FORCE_OAUTH', false);
 			this.setTokenAndBack(token);
+		},
+		closeAuth() {
+			store.commit('FORCE_OAUTH', false);
 		}
 	}
 };
@@ -85,6 +89,18 @@ export default {
 			font-family: PingFang SC;
 			font-weight: 500;
 			color: rgba(255, 255, 255, 1);
+		}
+		.close-btn {
+			width: 630rpx;
+			height: 80rpx;
+			margin-top: 30rpx;
+			border-radius: 40rpx;
+			border: 2rpx solid rgba(233, 180, 97, 1);
+			background: none;
+			font-size: 30rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(233, 180, 97, 1);
 		}
 	}
 }

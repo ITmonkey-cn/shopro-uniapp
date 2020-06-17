@@ -85,7 +85,7 @@ export default {
 				const d = await getSharePoster({
 					_this: this, //若在组件中使用 必传
 					// type: 'invitePoster',
-					backgroundImage: that.shareData.user_poster_bg, //接口返回的背景图
+					backgroundImage: that.$tools.checkImgHttp(that.shareData.user_poster_bg), //接口返回的背景图
 					formData: {
 						//访问接口获取背景图携带自定义数据
 					},
@@ -114,7 +114,7 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url: that.userInfo.avatar,
+									url: that.$tools.checkImgHttp(that.userInfo.avatar),
 									alpha: 1,
 									dx: bgObj.width * 0.5 - (bgObj.width * 0.16) / 2,
 									dy: bgObj.width * 0.16,

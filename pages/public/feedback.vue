@@ -42,7 +42,7 @@
 			</view>
 			<view class="foot_box x-bc pad">
 				<button class="cu-btn post-btn" @tap="addFeedback">提交</button>
-				<button class="cu-btn contact-btn">联系客服</button>
+				<button class="cu-btn contact-btn" v-if="false">联系客服</button>
 			</view>
 		</view>
 	</form>
@@ -84,9 +84,9 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast('提交成功');
-					setTimeout(()=>{
-						that.$router.back()
-					},300)
+					setTimeout(() => {
+						that.$router.back();
+					}, 300);
 				}
 			});
 		},
@@ -97,12 +97,11 @@ export default {
 		onChooseImg() {
 			let that = this;
 			that.$tools.chooseImage(1).then(res => {
-				res.forEach(img=>{
+				res.forEach(img => {
 					that.$tools.uploadImage('index/upload', img).then(res => {
 						that.imgList.push(res.full_url);
 					});
-				})
-				
+				});
 			});
 		},
 		DelImg(index) {
@@ -227,7 +226,7 @@ export default {
 	border-top: 1rpx solid #eeeeee;
 	height: 100rpx;
 	.contact-btn {
-		width: 335rpx;
+		flex: 1;
 		height: 70rpx;
 		background: linear-gradient(90deg, rgba(103, 104, 105, 1), rgba(82, 82, 82, 1));
 		box-shadow: 0px 2rpx 5rpx 0px rgba(102, 103, 104, 0.46);
@@ -238,7 +237,7 @@ export default {
 		color: rgba(255, 255, 255, 1);
 	}
 	.post-btn {
-		width: 335rpx;
+		flex: 1;
 		height: 74rpx;
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
 		box-shadow: 0px 7rpx 6rpx 0rpx rgba(229, 138, 0, 0.22);

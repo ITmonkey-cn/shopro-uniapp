@@ -1,7 +1,7 @@
 <template>
 	<view class="page_box">
 		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box" enable-back-to-top scroll-with-animation>
+			<scroll-view class="scroll-box" scroll-y enable-back-to-top scroll-with-animation @scrolltolower="loadMore">
 				<view class="group-wrap">
 					<view class="group-head x-bc">
 						<text class="group-head__title">爆款推荐</text>
@@ -74,6 +74,8 @@ export default {
 	onLoad() {
 		this.getGrouponList();
 	},
+	onPullDownRefresh() {
+	},
 	computed: {},
 	methods: {
 		// 路由跳转
@@ -95,8 +97,8 @@ export default {
 			let that = this;
 			that.isLoading = true;
 			that.loadStatus = 'loading';
-			that.$api('goods.grouponList',{
-				page:that.currentPage
+			that.$api('goods.grouponList', {
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
