@@ -110,7 +110,7 @@
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 关注公众号 -->
-		<sh-follow-wechat v-model="showFollowWechat"></sh-follow-wechat>
+		<shopro-follow-wechat v-model="showFollowWechat"></shopro-follow-wechat>
 		<!-- 强制登录 -->
 		<!-- #ifdef MP-WEIXIN -->
 		<sh-force-login></sh-force-login>
@@ -124,13 +124,11 @@ import shForceLogin from './components/sh-force-login.vue';
 // #endif
 import Wechat from '@/common/wechat/wechat';
 import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
-import shFollowWechat from './components/sh-follow-wechat.vue';
 import shNav from './components/sh-nav.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shNav,
-		shFollowWechat,
 		shoproNoticeModal,
 		// #ifdef MP-WEIXIN
 		shForceLogin

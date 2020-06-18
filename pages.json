@@ -68,6 +68,21 @@
 				"title": "我的",
 				"group": "用户"
 			}
+		},
+		{
+			"path": "pages/index/view",
+			"name": "user",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "自定义",
+				"group": "商城"
+			}
 		}
 	],
 	// 分包加载

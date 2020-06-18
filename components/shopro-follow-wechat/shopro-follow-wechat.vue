@@ -1,5 +1,5 @@
 <template>
-	<view class="shopro-follow-wechat" v-if="showBtn">
+	<view class="shopro-follow-wechat">
 		<button class="cu-btn wechat-btn" @tap="onWechat"><image class="wechat_img" src="/static/imgs/modal/follow-wechat.png" mode="aspectFill"></image></button>
 		<view class="cu-modal" :class="[{ show: showWechat }, modalType]" cathctouchmove @tap="hideModal">
 			<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
@@ -19,7 +19,8 @@ export default {
 	components: {},
 	data() {
 		return {
-			showWechat: this.showModal
+			showWechat: this.showModal,
+			
 		};
 	},
 	props: {

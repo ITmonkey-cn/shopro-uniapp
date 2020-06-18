@@ -2,7 +2,7 @@
 	<view class="adv-box shopro-selector-rect">
 		<!-- 模板1-->
 		<view class="x-f" v-if="detail.style == 1">
-			<image style="width:710rpx;height: 220rpx;" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
+			<image style="" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
 		</view>
 		<!-- 模板2-->
 		<view class="type1 x-f" v-if="detail.style == 2">
@@ -70,15 +70,11 @@ export default {
 	},
 	computed: {},
 	created() {
-		// console.log(this.detail);
 	},
 	methods: {
 		// 路由跳转
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
+		jump(path) {
+			this.$tools.routerTo(path);
 		}
 	}
 };
