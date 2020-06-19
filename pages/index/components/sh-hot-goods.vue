@@ -1,7 +1,6 @@
 <template>
 	<!-- 为你推荐 -->
-	<view class="hot-goods">
-		<view class="title x-c"><image class="title-img" :src="detail.image" mode=""></image></view>
+	<view class="hot-goods" v-if="goodsList.length">
 		<view class="goods-list x-f">
 			<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
 		</view>
@@ -35,7 +34,6 @@ export default {
 			this.listParams.goods_ids = this.detail.ids;
 			this.getGoodsList();
 		}
-	
 	},
 	computed: {},
 	methods: {
@@ -59,14 +57,6 @@ export default {
 	background: linear-gradient(#fff 200rpx, #f6f6f6 500rpx, #f6f6f6);
 	border-radius: 20rpx;
 	padding: 10rpx 0;
-	.title {
-		.title-img {
-			width: 710rpx;
-			height: 88rpx;
-			border-radius: 20rpx 20rpx 0 0;
-		}
-	}
-
 	.goods-list {
 		flex-wrap: wrap;
 		width: 710rpx;

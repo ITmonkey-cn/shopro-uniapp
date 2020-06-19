@@ -71,7 +71,7 @@
 		},
 		{
 			"path": "pages/index/view",
-			"name": "user",
+			"name": "view",
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
@@ -80,8 +80,8 @@
 			"meta": {
 				"auth": false,
 				"async": true,
-				"title": "自定义",
-				"group": "商城"
+				"title": "自定义页面",
+				"group": "自定义页面"
 			}
 		}
 	],
@@ -89,9 +89,7 @@
 	// 不要接受编辑器的组件放置分包建议。因为那些不是在单个分包内使用的,也不知道为啥老报错。
 	"subPackages": [{
 			"root": "pages/activity",
-			"pages": [
-				// 活动activity------start
-				{
+			"pages": [{
 					"path": "groupon/list",
 					"style": {
 						"navigationBarTitleText": "今日必拼"
@@ -138,13 +136,11 @@
 						"group": "活动"
 					}
 				}
-				// 活动activity------end
 			]
 		},
 		{
 			"root": "pages/app",
 			"pages": [
-				// 扩展app ------start
 				// #ifdef MP-WEIXIN
 				{
 					"path": "live/list",
@@ -198,7 +194,6 @@
 						"group": "应用"
 					}
 				}
-				// 扩展app------end
 			]
 		},
 		{
@@ -421,7 +416,7 @@
 
 					},
 					"meta": {
-						"auth": true,
+						"auth": false,
 						"async": true,
 						"title": "海报",
 						"group": "通用"

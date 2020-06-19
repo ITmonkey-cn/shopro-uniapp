@@ -27,7 +27,7 @@
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
-		<shopro-follow-wechat></shopro-follow-wechat>
+		<shopro-float-btn></shopro-float-btn>
 	</view>
 </template>
 
@@ -75,7 +75,6 @@ export default {
 		}
 		if (this.$Route.query.keywords) {
 			this.listParams.keywords = this.$Route.query.keywords;
-			this.searchVal = this.$Route.query.keywords;
 		}
 		this.getGoodsList();
 	},

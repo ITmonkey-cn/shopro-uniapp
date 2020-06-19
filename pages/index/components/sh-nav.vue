@@ -1,16 +1,10 @@
 <template>
 	<view class="sh-user-menu-box">
-		<view class="tools-box" v-if="false">
-			<view class="tool-item y-f" @tap="jump(menu.url, menu.parmas)" v-for="menu in menuList" :key="menu.title">
-				<image class="tool-img" :src="menu.img" mode=""></image>
-				<text class="item-title">{{ menu.title }}</text>
-			</view>
-		</view>
 		<view class="menu-list-box">
-			<view class="menu-item x-bc" @tap="jump(menu.url, menu.parmas)" v-for="menu in menuList" :key="menu.title">
+			<view class="menu-item x-bc" @tap="routerTo(nav.path)" v-for="nav in detail.list" :key="nav.title">
 				<view class="x-f">
-					<image class="item-img" :src="menu.img" mode=""></image>
-					<text class="item-title">{{ menu.title }}</text>
+					<image v-if="nav.image" class="item-img" :src="nav.image" mode="aspectFill"></image>
+					<text class="item-title">{{ nav.name }}</text>
 				</view>
 				<text class="cuIcon-right item-arrow"></text>
 			</view>
@@ -23,67 +17,25 @@ export default {
 	name: 'shUserMenu',
 	components: {},
 	data() {
-		return {};
+		return {
+			routerTo: this.$tools.routerTo
+		};
 	},
 	props: {
-		menuList: {
-			type: Array,
-			default() {
-				return [
-					{
-						title: '商品收藏',
-						img: 'http://shopro.7wpp.com/imgs/user/list1.png',
-						url: '/pages/user/favorite'
-					},
-					{
-						title: '浏览足迹',
-						img: 'http://shopro.7wpp.com/imgs/user/user_log.png',
-						url: '/pages/user/log'
-					},
-
-					{
-						title: '常见问题',
-						img: 'http://shopro.7wpp.com/imgs/user/list7.png',
-						url: '/pages/public/faq'
-					},
-					{
-						title: '邀请好友',
-						img: 'http://shopro.7wpp.com/imgs/user/list11.png',
-						url: '/pages/public/poster/index',
-						parmas: { posterType: 'user' }
-					},
-					{
-						title: '积分商城',
-						img: 'http://shopro.7wpp.com/imgs/user/list12.png',
-						url: '/pages/app/score/list'
-					},
-					{
-						title: '我的拼团',
-						img: 'http://shopro.7wpp.com/imgs/user/list5.png',
-						url: '/pages/activity/groupon/my-groupon'
-					},
-					{
-						title: '系统设置',
-						img: 'http://shopro.7wpp.com/imgs/user/list8.png',
-						url: '/pages/user/set'
-					}
-				];
-			}
+		detail: {
+			type: Object,
+			default: null
 		}
 	},
 	computed: {},
-	methods: {
-		jump(path, query) {
-			this.$Router.push({
-				path: path,
-				query: query
-			});
-		}
-	}
+	methods: {}
 };
 </script>
 
 <style lang="scss">
+.sh-user-menu-box {
+	margin-bottom: 20rpx;
+}
 // 宫格
 .tools-box {
 	background: #fff;
@@ -122,6 +74,7 @@ export default {
 		.item-img {
 			width: 44rpx;
 			height: 44rpx;
+			margin-right: 20rpx;
 			// background: #ccc;
 		}
 
@@ -131,10 +84,9 @@ export default {
 			font-weight: 500;
 			color: rgba(153, 153, 153, 1);
 			line-height: 24rpx;
-			margin-left: 20rpx;
 		}
-		.item-arrow{
-			color:rgba(153, 153, 153, 1);
+		.item-arrow {
+			color: rgba(153, 153, 153, 1);
 		}
 	}
 }

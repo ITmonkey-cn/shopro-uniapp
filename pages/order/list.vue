@@ -68,7 +68,7 @@
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
-		<shopro-follow-wechat></shopro-follow-wechat>
+		<shopro-float-btn></shopro-float-btn>
 	</view>
 </template>
 

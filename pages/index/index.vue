@@ -29,6 +29,18 @@
 					<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
 					<!-- 富文本 -->
 					<sh-richtext v-if="item.type === 'rich-text'" :detail="item.content"></sh-richtext>
+					<!-- 功能列表 -->
+					<sh-nav v-if="item.type === 'nav'" :detail="item.content"></sh-nav>
+					<!-- 九宫格列表 -->
+					<sh-grid v-if="item.type === 'grid-list'" :detail="item.content"></sh-grid>
+					<!-- 功能标题 -->
+					<sh-title-card v-if="item.type === 'title-block'" :detail="item.content"></sh-title-card>
+					<!-- 个人信息 -->
+					<sh-userinfo v-if="item.type === 'user'" :detail="item.content"></sh-userinfo>
+					<!-- 钱包 -->
+					<sh-wallet v-if="item.type === 'wallet-card'" :detail="item.content"></sh-wallet>
+					<!-- 订单卡片 -->
+					<sh-order v-if="item.type === 'order-card'" :detail="item.content"></sh-order>
 					<!-- 直播 -->
 					<!-- #ifdef MP-WEIXIN -->
 					<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>
@@ -40,7 +52,7 @@
 		<!-- 骨架屏 -->
 		<shopro-skeleton :showSkeleton="false"></shopro-skeleton>
 		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal v-if="popupIndex" :detail="popupIndex"></shopro-notice-modal>
+		<shopro-notice-modal></shopro-notice-modal>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 强制登录 -->
@@ -50,7 +62,7 @@
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
-		<shopro-follow-wechat></shopro-follow-wechat>
+		<shopro-float-btn></shopro-float-btn>
 	</view>
 </template>
 
@@ -64,6 +76,13 @@ import shCoupon from './components/sh-coupon.vue';
 import shSeckill from './components/sh-seckill.vue';
 import shGroupon from './components/sh-groupon.vue';
 import shRichtext from './components/sh-richtext.vue';
+import shNav from './components/sh-nav.vue';
+import shUserinfo from './components/sh-userinfo.vue';
+import shGrid from './components/sh-grid.vue';
+import shTitleCard from './components/sh-title-card.vue';
+import shOrder from './components/sh-order.vue';
+import shWallet from './components/sh-wallet.vue';
+
 import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
 import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 // #ifdef MP-WEIXIN
@@ -76,13 +95,19 @@ export default {
 	components: {
 		shSearch,
 		shBanner,
+		shUserinfo,
 		shHotGoods,
+		shTitleCard,
+		shOrder,
+		shWallet,
 		shMenu,
 		shAdv,
+		shGrid,
 		shCoupon,
 		shSeckill,
 		shGroupon,
 		shRichtext,
+		shNav,
 		shoproNoticeModal,
 		shoproSkeletons,
 		// #ifdef MP-WEIXIN
@@ -102,6 +127,7 @@ export default {
 		...mapState({
 			initData: state => state.init.initData,
 			template: state => state.init.templateData.home,
+			popupData: state => state.init.templateData.popup,
 			cartNum: state => state.cart.cartNum,
 			forceOauth: state => state.user.forceOauth
 		}),
@@ -116,16 +142,14 @@ export default {
 			}
 		}
 	},
-	onLoad() {
-		console.log(this.$route);
-	},
+	onLoad() {},
 	mounted() {},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
 		// #ifndef MP-WEIXIN
-		if (this.initData.info) {
+		if (this.info && this.info.name) {
 			uni.setNavigationBarTitle({
-				title: this.initData.info.name
+				title: this.info.name
 			});
 		}
 		// #endif
