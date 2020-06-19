@@ -12,9 +12,10 @@ export default function api(url, data = {}) {
 				cancel('token 不存在'); // 接收一个参数，会传给catch((err) => {}) err.errMsg === 'token 不存在'
 				store.commit('LOGIN_TIP', true)
 				store.commit('OUT_LOGIN');
+			}else{
+				config.header.token = uni.getStorageSync('token');
 			}
 		}
-		config.header.token = uni.getStorageSync('token');
 		return config
 	});
 
