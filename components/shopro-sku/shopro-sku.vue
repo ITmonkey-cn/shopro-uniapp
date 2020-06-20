@@ -10,7 +10,7 @@
 			</view>
 		</view> -->
 		<!-- 规格 -->
-		<view class="cu-modal sku-modal  bottom-modal" style="z-index: 999;" :class="{ show: showModal }" @tap="hideModal" catchtouchmove="true" v-if="goodsInfo.sku_price">
+		<view class="cu-modal sku-modal  bottom-modal" style="z-index: 999;" :class="{ show: showModal }" @tap="hideModal" v-if="goodsInfo.sku_price">
 			<view class="cu-dialog" @tap.stop style="background: none;">
 				<view class="shop-modal page_box">
 					<text class="cuIcon-roundclosefill" @tap="hideModal"></text>
@@ -77,7 +77,7 @@
 import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
-		name:"shoproSku",
+	name: 'shoproSku',
 	components: {
 		uniNumberBox
 	},
@@ -140,6 +140,7 @@ export default {
 			currentSkuArray.forEach(v => {
 				that.skuList.forEach(s => {
 					s.content.forEach(u => {
+						console.log(v,s,u)
 						if (u.id === v) {
 							str += ' ' + u.name;
 						}

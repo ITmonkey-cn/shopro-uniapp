@@ -21,6 +21,8 @@
 				<button class="again-pay cu-btn" v-if="!pay" @tap="onPay">重新支付</button>
 			</view>
 		</view>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 

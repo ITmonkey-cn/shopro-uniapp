@@ -34,6 +34,8 @@
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
 		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
 	</view>
 </template>
 
