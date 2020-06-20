@@ -149,7 +149,7 @@ export default {
 	onLoad() {
 		// 预览模式截图
 		// #ifdef H5
-		if (uni.getStorageSync('mode') == 'preview') {
+		
 			console.log("h5 preview")
 			window.addEventListener('message', function (e) {
 				console.log("h5", e)
@@ -178,7 +178,7 @@ export default {
 					})
 				}
 			});
-		}
+		
 		// #endif
 	},
 	mounted() {},
