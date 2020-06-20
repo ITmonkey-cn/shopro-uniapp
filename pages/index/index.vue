@@ -147,10 +147,10 @@ export default {
 		}
 	},
 	onLoad() {
+		// 预览模式截图
 		// #ifdef H5
-		// if (uni.getStorageSync('mode') == 'preview') {
+		if (uni.getStorageSync('mode') == 'preview') {
 			console.log("h5 preview")
-			// 预览模式截图
 			window.addEventListener('message', function (e) {
 				console.log("h5", e)
 				if (e.data.type == 'screenshot') {
@@ -169,16 +169,16 @@ export default {
 						height: div[0].offsetHeight,
 		                useCORS: true,	//保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
 					}).then((canvas) => {
-						var dataUrl = canvas.toDataURL();
-						console.log("h5 dataUrl", dataUrl)
+						var screenShotBase64 = canvas.toDataURL();
+						console.log("h5 dataUrl", screenShotBase64)
 						window.parent.postMessage({
 							type: 'screeshot',
-							data: dataUrl
+							data: screenShotBase64
 						}, '*');
 					})
 				}
 			});
-		// }
+		}
 		// #endif
 	},
 	mounted() {},

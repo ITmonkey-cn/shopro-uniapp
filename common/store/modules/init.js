@@ -1,6 +1,7 @@
 // 初始化数据模块
 import api from '@/common/request/index'
 import store from '@/common/store'
+import Router from '@/common/router';
 import {
 	INIT_DATA,
 	PAGE_ROUTES,
@@ -17,21 +18,15 @@ const actions = {
 	getAppInit({
 		commit
 	}, options) {
-		let params = {}
 		uni.setStorageSync('mode', 'product');
-
-		if (options.query.preview_id) {
-			uni.setStorageSync('mode', 'preview');
-			params.preview_id = options.query.preview_id;
-		}
 		return new Promise((resolve, reject) => {
-			api('init', params).then(res => {
+			api('init').then(res => {
 				commit('INIT_DATA', res.data);
 				uni.setStorageSync('sysInfo', res.data.info);
 				uni.setStorageSync('shareInfo', res.data.share);
 				resolve(res)
 			}).then(() => {
-				store.dispatch('getTemplate');
+				store.dispatch('getTemplate', options);
 			}).catch(e => {
 				reject(e)
 			})
@@ -55,8 +50,22 @@ const actions = {
 	// 模板信息
 	getTemplate({
 		commit
-	}) {
+	}, options) {
+		console.log(options,123123)
 		return new Promise((resolve, reject) => {
+			//请求预览商城模板
+			if (options.query.shop_id) {
+				uni.setStorageSync('mode', 'preview');
+				params.shop_id = options.query.shop_id;
+			}
+			if(options.query.custom_id) {
+			Router.replace({
+				path: '/pages/index/view',
+				query: {
+					id: options.query.custom_id,
+				}
+			});
+			}
 			api('template').then(res => {
 				uni.setStorageSync('templateData', res.data);
 				commit('TEMPLATE', res.data);
