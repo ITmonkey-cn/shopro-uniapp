@@ -91,6 +91,11 @@ import shLive from './components/sh-live.vue';
 import shForceLogin from './components/sh-force-login.vue';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
+
+// #ifdef H5
+import html2canvas from '@/common/utils/sdk/html2canvas.js';
+// #endif
+
 export default {
 	components: {
 		shSearch,
@@ -141,7 +146,39 @@ export default {
 			}
 		}
 	},
-	onLoad() {},
+	onLoad() {
+		// #ifdef H5
+		if (uni.getStorageSync('mode') == 'preview') {
+			// 预览模式截图
+			window.addEventListener('message', function (e) {
+				if (e.data.type == 'screenshot') {
+					let div = window.window.document.getElementsByClassName("page_box");
+					
+					html2canvas(div[0], {
+						x: 0,
+		                y: 0,
+						scrollX: 0,
+						scrollY: 0,
+		                foreignObjectRendering: true,
+		                allowTaint: false,
+		                taintTest: true,
+		                scale: 1,
+						width: div[0].offsetWidth,
+						height: div[0].offsetHeight,
+		                useCORS: true,	//保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
+					}).then((canvas) => {
+						var dataUrl = canvas.toDataURL();
+						
+						window.parent.postMessage({
+							type: 'screeshot',
+							data: dataUrl
+						}, '*');
+					})
+				}
+			});
+		}
+		// #endif
+	},
 	mounted() {},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
