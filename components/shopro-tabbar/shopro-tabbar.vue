@@ -24,6 +24,9 @@ export default {
 			tabCurrent: ({ tabbar }) => tabbar.tabCurrent
 		})
 	},
+	created() {
+		uni.hideTabBar();
+	},
 	methods: {
 		// 切换tabbar
 		switchTabbar(tab, index) {

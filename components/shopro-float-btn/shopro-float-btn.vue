@@ -38,7 +38,12 @@ export default {
 			floatData: ({ init }) => init.templateData['float-button'][0].content
 		}),
 		currentPath() {
-			return '/' + this.$route.meta.pagePath;
+			let pages = getCurrentPages();
+			let currPage = null;
+			if (pages.length) {
+				currPage = pages[pages.length - 1].route;
+			}
+			return '/' + currPage;
 		},
 		floatList() {
 			let arr = this.floatData.list.filter(item => {

@@ -1,6 +1,6 @@
 <template>
-	<view class="popup-box" v-if="popupData.type === 'popup'">
-		<block v-for="(p, index) in popupData.content.list" :key="index">
+	<view class="popup-box">
+		<block v-for="(p, index) in newPopupList" :key="index">
 			<view class="cu-modal" :class="{ show: currentPath == p.page && showModal }" cathctouchmove @tap="hideModal">
 				<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
 					<view class="img-box">
@@ -29,17 +29,26 @@ export default {
 	},
 	computed: {
 		...mapState({
-			popupData: state => state.init.templateData.popup[0]
+			template: state => state.init.templateData
 		}),
-		currentPath() {
-			return '/' + this.$route.meta.pagePath;
+		popupData() {
+			if (this.template.popup) {
+				return this.template.popup[0].content;
+			}
 		},
-		newPopup() {
-			let obj = {};
-			this.detail.list.forEach(item => {
-				obj[item.page] = 0;
+		currentPath() {
+			let pages = getCurrentPages();
+			let currPage = null;
+			if (pages.length) {
+				currPage = pages[pages.length - 1].route;
+			}
+			return '/' + currPage;
+		},
+		newPopupList() {
+			let arr = this.popupData.list.filter(item => {
+				return item.page == this.currentPath;
 			});
-			return obj;
+			return arr;
 		}
 	},
 	created() {},

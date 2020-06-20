@@ -127,7 +127,6 @@ export default {
 		...mapState({
 			initData: state => state.init.initData,
 			template: state => state.init.templateData.home,
-			popupData: state => state.init.templateData.popup,
 			cartNum: state => state.cart.cartNum,
 			forceOauth: state => state.user.forceOauth
 		}),
