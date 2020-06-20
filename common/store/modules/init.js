@@ -52,6 +52,7 @@ const actions = {
 		commit
 	}, options) {
 		console.log(options,123123)
+		var params = {};
 		return new Promise((resolve, reject) => {
 			//请求预览商城模板
 			if (options.query.shop_id) {
@@ -66,7 +67,7 @@ const actions = {
 				}
 			});
 			}
-			api('template').then(res => {
+			api('template', params).then(res => {
 				uni.setStorageSync('templateData', res.data);
 				commit('TEMPLATE', res.data);
 				resolve(res)
