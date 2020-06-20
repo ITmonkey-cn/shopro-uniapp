@@ -7,7 +7,7 @@ export default {
 	 * 跳转再封装，不支持复杂传参。
 	 */
 	routerTo(path, params = {}, isLogin) {
-		console.log(path)
+
 		if (path.indexOf('/pages/index/') !== -1) {
 			router.pushTab({
 				path: path
@@ -30,6 +30,7 @@ export default {
 					query: params
 				})
 			} else {
+				console.log(path)
 				router.push({
 					path: path,
 					query: params

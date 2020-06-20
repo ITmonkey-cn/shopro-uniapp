@@ -2,7 +2,7 @@
 	<view class="page_box shopro-selector">
 		<!-- 导航栏 -->
 		<view class="head_box " :style="{ background: bgcolor }" :class="{ active: bgcolor }">
-			<cu-custom :isBack="true" v-if="template">
+			<cu-custom :isBack="true" v-if="info.name">
 				<block slot="backText">
 					<text class="nav-title shopro-selector-rect">{{ info.name || '商城' }}</text>
 				</block>

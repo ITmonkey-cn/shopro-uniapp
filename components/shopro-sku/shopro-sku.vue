@@ -116,6 +116,7 @@ export default {
 		this.skuList = this.goodsInfo.sku;
 		this.changeDisabled(false);
 	},
+	mounted() {},
 	watch: {
 		type(nweVal, oldVal) {
 			return newVal;
@@ -140,7 +141,7 @@ export default {
 			currentSkuArray.forEach(v => {
 				that.skuList.forEach(s => {
 					s.content.forEach(u => {
-						console.log(v,s,u)
+						console.log(v, s, u);
 						if (u.id === v) {
 							str += ' ' + u.name;
 						}

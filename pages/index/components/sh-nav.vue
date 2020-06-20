@@ -75,7 +75,7 @@ export default {
 			width: 44rpx;
 			height: 44rpx;
 			margin-right: 20rpx;
-			// background: #ccc;
+			background: #ccc;
 		}
 
 		.item-title {

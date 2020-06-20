@@ -31,6 +31,7 @@ export default {
 		// 切换tabbar
 		switchTabbar(tab, index) {
 			this.$store.commit('switchTabbar', index);
+			console.log(tab.path,1111111111)
 			this.$tools.routerTo(tab.path);
 		}
 	}
