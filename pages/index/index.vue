@@ -148,12 +148,14 @@ export default {
 	},
 	onLoad() {
 		// #ifdef H5
-		if (uni.getStorageSync('mode') == 'preview') {
+		// if (uni.getStorageSync('mode') == 'preview') {
+			console.log("h5 preview")
 			// 预览模式截图
 			window.addEventListener('message', function (e) {
+				console.log("h5", e)
 				if (e.data.type == 'screenshot') {
 					let div = window.window.document.getElementsByClassName("page_box");
-					
+					console.log("h5 div", div)
 					html2canvas(div[0], {
 						x: 0,
 		                y: 0,
@@ -168,7 +170,7 @@ export default {
 		                useCORS: true,	//保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
 					}).then((canvas) => {
 						var dataUrl = canvas.toDataURL();
-						
+						console.log("h5 dataUrl", dataUrl)
 						window.parent.postMessage({
 							type: 'screeshot',
 							data: dataUrl
@@ -176,7 +178,7 @@ export default {
 					})
 				}
 			});
-		}
+		// }
 		// #endif
 	},
 	mounted() {},
