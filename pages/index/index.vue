@@ -50,9 +50,7 @@
 		</view>
 		<view class="foot_box"></view>
 		<!-- 骨架屏 -->
-		<shopro-skeleton :showSkeleton="false"></shopro-skeleton>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
+		<shopro-skeleton :showSkeleton="!template.length"></shopro-skeleton>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 强制登录 -->
@@ -63,6 +61,8 @@
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
 		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
 	</view>
 </template>
 

@@ -153,6 +153,12 @@
 			<shopro-login-modal></shopro-login-modal>
 			<!-- 骨架屏 -->
 			<shopro-skeleton :showSkeleton="false"></shopro-skeleton>
+			<!-- 自定义底部导航 -->
+			<shopro-tabbar></shopro-tabbar>
+			<!-- 关注弹窗 -->
+			<shopro-float-btn></shopro-float-btn>
+			<!-- 连续弹窗提醒 -->
+			<shopro-notice-modal></shopro-notice-modal>
 		</view>
 	</block>
 </template>

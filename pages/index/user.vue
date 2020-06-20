@@ -48,13 +48,14 @@
 				<view class="code2">{{ info.copyright[1] }} {{ info.version }}</view>
 			</view>
 		</view>
+		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
-		<!-- 广告弹窗 -->
-		<shopro-notice-modal v-if="popupUser" :detail="popupUser"></shopro-notice-modal>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
-		<!-- 关注公众号 -->
-		<shopro-float-btn v-model="showFollowWechat"></shopro-float-btn>
 		<!-- 强制登录 -->
 		<!-- #ifdef MP-WEIXIN -->
 		<sh-force-login></sh-force-login>

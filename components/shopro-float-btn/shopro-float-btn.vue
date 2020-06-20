@@ -1,5 +1,5 @@
 <template>
-	<view class="shopro-float-btn" :class="{ 'custom-tabbar': isCustom }">
+	<view v-if="floatList.length && floatList[0].page == currentPath" class="shopro-float-btn">
 		<view :class="{ 'btn-mark': showBtnList }" cathctouchmove @tap="hideBtnModal"></view>
 		<button class="cu-btn wechat-btn" @tap="onBtn">
 			<image class="wechat_img" :src="floatList.length == 1 ? floatList[0].btnimage : floatData.image" mode="widthFix"></image>
@@ -34,7 +34,6 @@ export default {
 	props: {},
 	computed: {
 		...mapState({
-			isCustom: ({ init }) => init.templateData.tabbar[0].content.isshow,
 			floatData: ({ init }) => init.templateData['float-button'][0].content
 		}),
 		currentPath() {
@@ -92,7 +91,7 @@ export default {
 }
 .shopro-float-btn {
 	position: fixed;
-	bottom: calc(var(--window-bottom) + 30px);
+	bottom: 130rpx;
 	right: 30rpx;
 	z-index: 888;
 	.float--active {
@@ -117,6 +116,14 @@ export default {
 		height: 50rpx;
 		margin-bottom: 20rpx;
 	}
+	.wechat-btn {
+		background: #ccc;
+		padding: 0;
+		.wechat_img {
+			width: 80rpx;
+			height: 80rpx;
+		}
+	}
 }
 .modal-img {
 	width: 610rpx;
@@ -132,18 +139,6 @@ export default {
 		color: #fff;
 		font-size: 60rpx;
 		z-index: 99;
-	}
-}
-// 按钮
-.custom-tabbar {
-	bottom: 160rpx !important;
-}
-.wechat-btn {
-	background: none;
-	padding: 0;
-	.wechat_img {
-		width: 80rpx;
-		width: 80rpx;
 	}
 }
 </style>
