@@ -192,13 +192,14 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					let orderId = res.data.id;
+					let orderSn = res.data.order_sn;
 					that.getCartList();
 					that.isSubOrder = false;
 					if (res.data.status > 0) {
 						that.$Router.replace({
 							path: '/pages/order/payment/result',
 							query: {
-								id: orderId,
+								orderSn: orderSn,
 								type: '',
 								pay: 1
 							}
