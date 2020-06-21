@@ -1,5 +1,5 @@
 <template>
-	<view v-if="floatList.length && floatList[0].page == currentPath" class="shopro-float-btn">
+	<view v-if="floatList.length && floatList[0].page.includes(currentPath)" class="shopro-float-btn">
 		<view :class="{ 'btn-mark': showBtnList }" cathctouchmove @tap="hideBtnModal"></view>
 		<button class="cu-btn wechat-btn" @tap="onBtn">
 			<image class="wechat_img" :src="floatList.length == 1 ? floatList[0].btnimage : floatData.image" mode="widthFix"></image>
@@ -45,13 +45,16 @@ export default {
 			return '/' + currPage;
 		},
 		floatList() {
-			let arr = this.floatData.list.filter(item => {
-				return item.page == this.currentPath;
-			});
-			return arr;
+			if (this.floatData) {
+				let arr = this.floatData.list.filter(item => {
+					return item.page.includes(this.currentPath);
+				});
+				return arr;
+			}
 		}
 	},
-	created() {},
+	created() {
+	},
 	methods: {
 		hideModal() {
 			this.showModal = false;
@@ -111,13 +114,13 @@ export default {
 		transition: all 0.2s linear;
 	}
 	.btn-img {
-		background-color: #ccc;
+		// background-color: #ccc;
 		width: 50rpx;
 		height: 50rpx;
 		margin-bottom: 20rpx;
 	}
 	.wechat-btn {
-		background: #ccc;
+		// background: #ccc;
 		padding: 0;
 		.wechat_img {
 			width: 80rpx;

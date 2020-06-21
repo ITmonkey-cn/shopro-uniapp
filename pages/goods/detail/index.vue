@@ -393,7 +393,7 @@ export default {
 
 <style lang="scss">
 .detail-content {
-	padding-bottom: 100rpx;
+	// padding-bottom: 100rpx;
 	&::-webkit-scrollbar {
 		width: 0;
 		height: 0;

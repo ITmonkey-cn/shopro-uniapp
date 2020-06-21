@@ -26,6 +26,13 @@ export default {
 		method: 'GET',
 		// desc: '模板信息',
 	},
+	/** 自定义模板页面 ↓ **/
+	custom: {
+		url: 'index/custom',
+		auth: false,
+		method: 'GET',
+		// desc: '自定义模板页面',
+	},
 
 	/** 直播 ↓ **/
 	live: {

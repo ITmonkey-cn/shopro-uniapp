@@ -9,7 +9,7 @@ export default {
 	routerTo(path, params = {}, isLogin) {
 
 		if (path.indexOf('/pages/index/') !== -1) {
-			router.pushTab({
+			router.push({
 				path: path
 			})
 		} else {

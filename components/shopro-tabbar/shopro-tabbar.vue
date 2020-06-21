@@ -2,8 +2,10 @@
 	<view class="shopro-tabbar-wrap" v-if="tabbarData.isshow">
 		<view class="tabbar-box" :style="{ background: tabbarData.bgcolor }">
 			<view class="tabbar-item" v-for="(tab, index) in tabbarData.list" :key="tab.name" @tap="switchTabbar(tab, index)">
-				<image class="tabbar-icon" :src="tabCurrent == index ? tab.activeImage : tab.image" mode="aspectFill"></image>
-				<view class="tabbar-text" :style="{ color: tabCurrent == index ? tabbarData.activeColor : tabbarData.color }">{{ tab.name }}</view>
+				<image class="tabbar-icon" v-if="tabbarData.style == 1 || tabbarData.style == 2" :src="tabCurrent == index ? tab.activeImage : tab.image" mode="aspectFill"></image>
+				<view class="tabbar-text" v-if="tabbarData.style == 1 || tabbarData.style == 3" :style="{ color: tabCurrent == index ? tabbarData.activeColor : tabbarData.color }">
+					{{ tab.name }}
+				</view>
 			</view>
 		</view>
 	</view>
@@ -31,7 +33,7 @@ export default {
 		// 切换tabbar
 		switchTabbar(tab, index) {
 			this.$store.commit('switchTabbar', index);
-			console.log(tab.path,1111111111)
+			console.log(tab.path, 1111111111);
 			this.$tools.routerTo(tab.path);
 		}
 	}

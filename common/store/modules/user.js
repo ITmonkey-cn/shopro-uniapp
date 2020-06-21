@@ -34,8 +34,8 @@ const actions = {
 			tools.routerTo(fromLogin.path, fromLogin.query, true);
 			uni.removeStorageSync('fromLogin')
 		} else {
-			//默认跳转首页
-			router.pushTab('/pages/index/index')
+			//默认跳转首页S
+			router.push('/pages/index/index')
 		}
 	},
 
