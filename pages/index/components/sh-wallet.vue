@@ -1,6 +1,6 @@
 <template>
 	<!-- 钱包卡片 -->
-	<view class="sh-wallet-box x-f">
+	<view class="sh-wallet-box x-f mb10">
 		<view class="x-f wallet-left">
 			<view class="wallet-item y-f" @tap="jump('/pages/user/wallet/index')">
 				<text class="wallet-item__detail item-balance">{{ userInfo.money || '0' }}</text>
@@ -53,7 +53,6 @@ export default {
 .sh-wallet-box {
 	background: #fff;
 	height: 180rpx;
-	margin-bottom: 20rpx;
 	position: relative;
 	.wallet-left {
 		flex: 4;

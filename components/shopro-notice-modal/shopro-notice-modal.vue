@@ -1,11 +1,11 @@
 <template>
 	<view class="popup-box">
 		<block v-for="(p, index) in newPopupList" :key="index">
-			<view class="cu-modal" :class="{ show: p.page.includes(currentPath) && showModal && popupCurrent === index }" cathctouchmove @tap="hideModal">
-				<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
+			<view class="cu-modal" :class="{ show: p.page.includes(currentPath) && showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
+				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
 					<view class="img-box">
 						<image class="modal-img" :src="p.image" mode="widthFix"></image>
-						<text class="cuIcon-roundclose" @tap="hideModal"></text>
+						<text class="cuIcon-roundclose" @tap.stop="hideModal(p)"></text>
 					</view>
 				</view>
 			</view>
@@ -15,6 +15,7 @@
 
 <script>
 import { mapMutations, mapActions, mapState } from 'vuex';
+let timer = null;
 export default {
 	name: 'shoproNoticeModal',
 	components: {},
@@ -42,7 +43,6 @@ export default {
 		newPopupList() {
 			if (this.popupData) {
 				let arr = this.popupData.list.filter(item => {
-					console.log(item);
 					return item.page.includes(this.currentPath);
 				});
 				return arr;
@@ -50,19 +50,20 @@ export default {
 		}
 	},
 	created() {
-		console.log(this.popupData);
-		console.log(this.newPopupList, this.currentPath);
 	},
 	methods: {
-		hideModal() {
+		hideModal(p) {
 			clearTimeout(timer);
 			this.showModal = false;
-			let timer = setTimeout(() => {
+			timer = setTimeout(() => {
 				this.popupCurrent += 1;
 				this.showModal = true;
 			}, 500);
+			p.style == 1 && this.$store.commit('delPopup', this.currentPath);
 		},
-		changePopup(path) {}
+		changePopup(path) {
+			this.$tools.routerTo(path);
+		}
 	}
 };
 </script>

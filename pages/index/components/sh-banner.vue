@@ -1,6 +1,6 @@
 <template>
 	<!-- 轮播 -->
-	<view class="banner-swiper-box" v-if="detail.list">
+	<view class="banner-swiper-box mb10" v-if="detail.list">
 		<canvas canvas-id="colorThief" class="hide-canvas"></canvas>
 		<swiper class="banner-carousel shopro-selector-rect" circular @change="swiperChange" :autoplay="true">
 			<swiper-item v-for="(item,index) in detail.list" :key="index" class="carousel-item " @tap="routerTo(item.path)">
@@ -110,7 +110,6 @@ export default {
 
 // 轮播
 .banner-swiper-box{
-	margin-bottom: 20rpx;
 	background: #fff;
 }
 .banner-swiper-box,

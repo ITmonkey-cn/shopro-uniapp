@@ -51,7 +51,7 @@ const actions = {
 	getTemplate({
 		commit
 	}, options) {
-		console.log(options,123123)
+		console.log(options, 123123)
 		var params = {};
 		return new Promise((resolve, reject) => {
 			//请求预览商城模板
@@ -59,13 +59,13 @@ const actions = {
 				uni.setStorageSync('mode', 'preview');
 				params.shop_id = options.query.shop_id;
 			}
-			if(options.query.custom_id) {
-			Router.replace({
-				path: '/pages/index/view',
-				query: {
-					id: options.query.custom_id,
-				}
-			});
+			if (options.query.custom_id) {
+				Router.replace({
+					path: '/pages/index/view',
+					query: {
+						id: options.query.custom_id,
+					}
+				});
 			}
 			api('template', params).then(res => {
 				uni.setStorageSync('templateData', res.data);
@@ -88,6 +88,20 @@ const mutations = {
 	[TEMPLATE](state, data) {
 		state.templateData = data
 	},
+	// 弹窗一次的话，关闭的时候删除数据。
+	delPopup(state, path) {
+		let templateData = state.templateData
+		templateData.popup[0].content.list.forEach(item => {
+			if (item.page.includes(path)) {
+				let index = item.page.indexOf(path);
+				item.page.splice(index, 1)
+			}
+		})
+
+		state.templateData = templateData;
+		uni.setStorageSync('templateData', templateData);
+		console.log(state.templateData)
+	}
 }
 
 const getters = {

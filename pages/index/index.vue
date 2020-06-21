@@ -30,7 +30,7 @@
 					<!-- 富文本 -->
 					<sh-richtext v-if="item.type === 'rich-text'" :detail="item.content"></sh-richtext>
 					<!-- 功能列表 -->
-					<sh-nav v-if="item.type === 'nav'" :detail="item.content"></sh-nav>
+					<sh-nav v-if="item.type === 'nav-list'" :detail="item.content"></sh-nav>
 					<!-- 九宫格列表 -->
 					<sh-grid v-if="item.type === 'grid-list'" :detail="item.content"></sh-grid>
 					<!-- 功能标题 -->

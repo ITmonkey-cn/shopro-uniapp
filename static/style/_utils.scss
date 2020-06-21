@@ -165,134 +165,31 @@ div.dib {
 }
 
 /*盒子模型*/
-.ml4 {
-	margin-left: 4px;
-}
+@each $typeKey, $type in $spaceTypes {
+	@each $sizeKey, $size in $spaceSizes {
+		// margin-top:10rpx
+		@each $directionKey, $direction in $spaceDirections {
+			.#{$typeKey}#{$directionKey}#{$sizeKey} {
+				#{$type}-#{$direction}: $size;
+			}
+		}
 
-.mr4 {
-	margin-right: 4px;
-}
+		// margin: 10rpx 0;
+		.#{$typeKey}x#{$sizeKey} {
+			#{$type}-left: $size;
+			#{$type}-right: $size;
+		}
+		.#{$typeKey}y#{$sizeKey} {
+			#{$type}-top: $size;
+			#{$type}-bottom: $size;
+		}
 
-.mt4 {
-	margin-top: 4px;
+		// margin: 10rpx ;
+		.#{$typeKey}a#{$sizeKey} {
+			#{$type}: $size;
+		}
+	}
 }
-
-.mb4 {
-	margin-bottom: 4px;
-}
-
-.ml8 {
-	margin-left: 8px;
-}
-
-.mr8 {
-	margin-right: 8px;
-}
-
-.mt8 {
-	margin-top: 8px;
-}
-
-.mb8 {
-	margin-bottom: 8px;
-}
-
-.ml12 {
-	margin-left: 12px;
-}
-
-.mr12 {
-	margin-right: 12px;
-}
-
-.mt12 {
-	margin-top: 12px;
-}
-
-.mb12 {
-	margin-bottom: 12px;
-}
-
-.ml16 {
-	margin-left: 16px;
-}
-
-.mr16 {
-	margin-right: 16px;
-}
-
-.mt16 {
-	margin-top: 16px;
-}
-
-.mb16 {
-	margin-bottom: 16px;
-}
-
-.ml20 {
-	margin-left: 20px;
-}
-
-.mr20 {
-	margin-right: 20px;
-}
-
-.mt20 {
-	margin-top: 20px;
-}
-
-.mb20 {
-	margin-bottom: 20px;
-}
-
-.ml24 {
-	margin-left: 24px;
-}
-
-.mr24 {
-	margin-right: 24px;
-}
-
-.mt24 {
-	margin-top: 24px;
-}
-
-.mb24 {
-	margin-bottom: 24px;
-}
-
-.ml10 {
-	margin-left: 10px;
-}
-
-.mr10 {
-	margin-right: 10px;
-}
-
-.mt10 {
-	margin-top: 10px;
-}
-
-.mb10 {
-	margin-bottom: 10px;
-}
-
-.ml15 {
-	margin-left: 15px;
-}
-
-.mr15 {
-	margin-right: 15px;
-}
-
-.mt15 {
-	margin-top: 15px;
-}
-
-.mb15 {
-	margin-bottom: 15px;
-}
-
 /*按钮禁用*/
 .disabled {
 	outline: 0 none;

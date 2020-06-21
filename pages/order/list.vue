@@ -126,8 +126,9 @@ export default {
 	},
 	computed: {},
 	onLoad() {
-		this.orderType = this.$Route.query.type;
-		// this.init();
+		if (this.$Route.query.type) {
+			this.orderType = this.$Route.query.type;
+		}
 	},
 	onShow() {
 		this.init();

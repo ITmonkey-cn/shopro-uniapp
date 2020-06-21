@@ -45,15 +45,15 @@ export default {
 	height: 100rpx;
 	position: relative;
 	width: 100%;
-	z-index: 6;
+	z-index: 70;
 	.tabbar-box {
 		position: fixed;
 		display: flex;
 		align-items: center;
 		width: 100%;
 		height: 100rpx;
-		border-top: 1rpx solid #ccc;
-		z-index: 998;
+		border-top: 1rpx solid #eeeeee;
+		z-index:998;
 		bottom: 0;
 		.tabbar-item {
 			height: 100%;

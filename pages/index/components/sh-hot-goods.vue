@@ -1,6 +1,6 @@
 <template>
 	<!-- 为你推荐 -->
-	<view class="hot-goods" v-if="goodsList.length">
+	<view class="hot-goods mx20 mb10" v-if="goodsList.length">
 		<view class="goods-list x-f">
 			<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
 		</view>
@@ -53,10 +53,8 @@ export default {
 <style lang="scss">
 // 为你推荐
 .hot-goods {
-	margin: 20rpx;
 	background: linear-gradient(#fff 200rpx, #f6f6f6 500rpx, #f6f6f6);
 	border-radius: 20rpx;
-	padding: 10rpx 0;
 	.goods-list {
 		flex-wrap: wrap;
 		width: 710rpx;

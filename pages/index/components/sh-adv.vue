@@ -1,7 +1,9 @@
 <template>
-	<view class="adv-box shopro-selector-rect">
+	<view class="adv-box mx20 mb10 shopro-selector-rect">
 		<!-- 模板1-->
-		<view class="x-f" v-if="detail.style == 1"><image style="" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image></view>
+		<view class="x-f" v-if="detail.style == 1">
+			<image style="width:710rpx;height: 220rpx;" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
+		</view>
 		<!-- 模板2-->
 		<view class="type1 x-f" v-if="detail.style == 2">
 			<image class="type1-img" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
@@ -79,7 +81,6 @@ export default {
 
 <style lang="scss">
 .adv-box {
-	margin: 0 20rpx 20rpx;
 	background-color: #fff;
 	border-radius: 20rpx;
 	overflow: hidden;

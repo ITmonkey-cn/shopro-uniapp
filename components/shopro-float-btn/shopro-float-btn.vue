@@ -53,8 +53,7 @@ export default {
 			}
 		}
 	},
-	created() {
-	},
+	created() {},
 	methods: {
 		hideModal() {
 			this.showModal = false;
@@ -99,28 +98,27 @@ export default {
 	z-index: 888;
 	.float--active {
 		position: absolute;
-		bottom: 90rpx;
-		left: 50%;
-		margin-left: -25%;
+		bottom: 80rpx;
+		left: 10rpx;
 		transform: scale(1);
 		transition: all 0.2s linear;
 	}
 	.float-list-box {
 		position: absolute;
 		bottom: 0;
-		left: 50%;
-		margin-left: -25%;
+		left: 10rpx;
 		transform: scale(0);
 		transition: all 0.2s linear;
 	}
 	.btn-img {
 		// background-color: #ccc;
-		width: 50rpx;
-		height: 50rpx;
+		width: 60rpx;
+		height: 60rpx;
 		margin-bottom: 20rpx;
 	}
 	.wechat-btn {
 		// background: #ccc;
+		background: none;
 		padding: 0;
 		.wechat_img {
 			width: 80rpx;

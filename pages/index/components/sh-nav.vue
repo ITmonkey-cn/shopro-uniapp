@@ -1,5 +1,5 @@
 <template>
-	<view class="sh-user-menu-box">
+	<view class="sh-user-menu-box mb10">
 		<view class="menu-list-box">
 			<view class="menu-item x-bc" @tap="routerTo(nav.path)" v-for="nav in detail.list" :key="nav.title">
 				<view class="x-f">
@@ -33,9 +33,6 @@ export default {
 </script>
 
 <style lang="scss">
-.sh-user-menu-box {
-	margin-bottom: 20rpx;
-}
 // 宫格
 .tools-box {
 	background: #fff;

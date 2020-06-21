@@ -1,5 +1,5 @@
 <template>
-	<view class="live-el">
+	<view class="live-el mx20 mb10">
 		<view class="head">
 			<text class="head-title">{{ detail.name }}</text>
 			<view class="head-more" @tap="$Router.push('/pages/app/live/list')">
@@ -144,7 +144,6 @@ export default {
 	background: #fff;
 	border-radius: 20rpx;
 	padding: 30rpx 20rpx 25rpx;
-	margin: 0 20rpx 20rpx;
 	.head {
 		@include flex($justify: between, $align: center);
 		&-title {

@@ -1,6 +1,6 @@
 <template>
 	<!-- 今日必拼 -->
-	<view class="group-goods">
+	<view class="group-goods pa20 mx20 mb10">
 		<view class="title-box x-bc" @tap="jump('/pages/activity/groupon/list')">
 			<text class="title">今日必拼</text>
 			<view class="group-people x-f">
@@ -29,7 +29,7 @@
 <script>
 import shActivityGoods from './sh-activity-goods.vue';
 export default {
-	name:'shGroupon',
+	name: 'shGroupon',
 	components: {
 		shActivityGoods
 	},
@@ -136,14 +136,10 @@ export default {
 	}
 }
 // 今日必拼+限时抢购
-.group-goods,
-.seckill-goods {
+.group-goods{
 	background: #fff;
 	border-radius: 20rpx;
-	margin: 20rpx;
-	padding: 20rpx;
-	overflow: hidden;
-
+	overflow: hidden; 
 	.title-box {
 		padding-bottom: 20rpx;
 

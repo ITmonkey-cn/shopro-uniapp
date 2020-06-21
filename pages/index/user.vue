@@ -27,7 +27,7 @@
 			<!-- 订单卡片 -->
 			<sh-order v-if="item.type === 'order-card'" :detail="item.content"></sh-order>
 			<!-- 功能列表 -->
-			<sh-nav v-if="item.type === 'nav'" :detail="item.content"></sh-nav>
+			<sh-nav v-if="item.type === 'nav-list'" :detail="item.content"></sh-nav>
 			<!-- 钱包 -->
 			<sh-wallet v-if="item.type === 'wallet-card'" :detail="item.content"></sh-wallet>
 			<!-- 九宫格列表 -->

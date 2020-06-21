@@ -1,5 +1,5 @@
 <template>
-	<view class="sh-richtext-box"><uni-parse :content="richText.content"></uni-parse></view>
+	<view class="sh-richtext-box mb10"><uni-parse :content="richText.content"></uni-parse></view>
 </template>
 
 <script>

@@ -52,6 +52,26 @@ $bg-bar: #f9f9f9;
 $bg-page: #f3f3f3;
 $bg-page-light: #f9f9f9;
 
-
-
-
+/* ==================
+       自定义变量   
+ ==================== */
+$spaceTypes: (
+	m: margin,
+	p: padding
+);
+$spaceDirections: (
+	t: top,
+	r: right,
+	b: bottom,
+	l: left
+);
+$spaceSizes: (
+	2: 2rpx,
+	4: 4rpx,
+	8: 8rpx,
+	10: 10rpx,
+	15: 15rpx,
+	20: 20rpx,
+	24: 24rpx,
+	30: 30rpx
+);

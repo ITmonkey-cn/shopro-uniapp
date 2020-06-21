@@ -1,5 +1,5 @@
 <template>
-	<view class="sh-grid-box">
+	<view class="sh-grid-box mb10">
 		<view class="tool-item y-f" @tap="routerTo(menu.path)" v-for="menu in detail.list" :key="menu.title">
 			<image class="tool-img" :src="menu.image" mode="aspectFill"></image>
 			<text class="item-title">{{ menu.name }}</text>
@@ -33,7 +33,6 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 	padding-bottom: 40rpx;
-	margin-bottom: 20rpx;
 
 	.tool-item {
 		width: (750rpx/4);

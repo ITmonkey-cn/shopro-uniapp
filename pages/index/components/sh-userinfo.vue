@@ -1,6 +1,6 @@
 <template>
 	<view class="sh-userinfo-box">
-		<image class="user-bg" src="http://shopro.7wpp.com/imgs/user/user_bg.png" mode=""></image>
+		<image class="user-bg" :src="detail.image" mode=""></image>
 		<view class="head-wrap pad">
 			<view class="titleNav ">
 				<view class="status-bar"></view>
@@ -61,6 +61,12 @@ export default {
 		...mapState({
 			userInfo: state => state.user.userInfo
 		})
+	},
+	props:{
+		detail: {
+			type: Object,
+			default: null
+		},
 	},
 	methods: {
 		jump(path, query) {

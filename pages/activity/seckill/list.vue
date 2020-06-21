@@ -192,6 +192,7 @@ export default {
 	}
 }
 .goods-item {
+	margin-bottom: 2rpx;
 	.cu-progress {
 		width: 225rpx;
 		height: 16rpx;

@@ -1,6 +1,6 @@
 <template>
 	<!-- 产品分类导航 -->
-	<view class="menu-category-box" v-if="carousel" :style="detail.list.length <= menu ? `height:200rpx` : `height:360rpx`">
+	<view class="menu-category-box mb10" v-if="carousel" :style="detail.list.length <= menu ? `height:200rpx` : `height:360rpx`">
 		<swiper
 			class="menu-swiper-box"
 			:style="detail.list.length <= menu ? `height:160rpx` : `height:320rpx`"
@@ -87,7 +87,6 @@ export default {
 <style lang="scss">
 // 产品分类
 .menu-category-box {
-	margin-bottom: 20rpx;
 	padding: 30rpx 30rpx 0 30rpx;
 	background: #fff;
 }

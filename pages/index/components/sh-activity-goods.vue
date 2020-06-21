@@ -1,13 +1,13 @@
 <template>
 	<view class="min-goods" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
-		<view class="img-box" >
-			<view class="tag" v-if="detail.activity_type === 'groupon'">{{detail.activity.rules.team_num}}人团</view>
+		<view class="img-box">
+			<view class="tag" v-if="detail.activity_type === 'groupon'">{{ detail.activity.rules.team_num }}人团</view>
 			<image class="img" :src="detail.image" mode="widthFix"></image>
 		</view>
 		<view class="price-box">
 			<view class="y-f">
 				<text class="seckill-current">￥{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</text>
-					<text class="original">￥{{ detail.original_price }}</text>
+				<text class="original">￥{{ detail.original_price }}</text>
 			</view>
 		</view>
 		<view class="title"><slot name="titleText"></slot></view>

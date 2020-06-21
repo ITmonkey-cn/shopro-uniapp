@@ -1,6 +1,6 @@
 <template>
 	<!-- 订单卡片 -->
-	<view class="sh-order-box x-f">
+	<view class="sh-order-box x-f mb10">
 		<view class="order-box x-f">
 			<view class="order-item y-f" @tap="jump('/pages/order/list', { type: order.type })" v-for="order in orderNav" :key="order.id">
 				<view class="y-f item-box">
@@ -83,7 +83,6 @@ export default {
 .sh-order-box {
 	height: 180rpx;
 	background: #fff;
-	margin-bottom: 20rpx;
 	.order-box {
 		flex: 4;
 	}

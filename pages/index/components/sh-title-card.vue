@@ -1,5 +1,5 @@
 <template>
-	<view class="sh-title-card">
+	<view class="sh-title-card mb10">
 		<view class="title-box">
 			<image class="title-bg" :src="detail.image" mode="aspectFill"></image>
 			<view class="title-text" :style="{ color: detail.color }">{{ detail.name }}</view>
@@ -27,7 +27,6 @@ export default {
 <style lang="scss">
 .sh-title-card {
 	width: 750rpx;
-	margin-bottom: 20rpx;
 }
 .title-box {
 	width: 710rpx;
