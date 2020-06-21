@@ -149,17 +149,8 @@ export default {
 	onLoad() {
 		// 预览模式截图
 		// #ifdef H5
-<<<<<<< HEAD
-		if (uni.getStorageSync('mode') == 'preview') {
-			console.log('h5 preview');
-			window.addEventListener('message', function(e) {
-				console.log('h5', e);
-=======
-		
-			console.log("h5 preview")
 			window.addEventListener('message', function (e) {
 				console.log("h5", e)
->>>>>>> 93d3e7c5fc98b8d2805ad0c60f6cb82cacc4f3db
 				if (e.data.type == 'screenshot') {
 					let div = window.window.document.getElementsByClassName('page_box');
 					console.log('h5 div', div);
