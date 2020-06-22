@@ -74,7 +74,7 @@
 					备注:
 					<text class="remark-notice">(100字以内)</text>
 				</view>
-				<textarea v-show="!showPicker" class="remark-inp" maxlength="100" v-model="remark" placeholder="请填写备注信息" />
+				<textarea v-show="!showPicker" fixed="true" class="remark-inp" maxlength="100" v-model="remark" placeholder="请填写备注信息" />
 			</view>
 		</view>
 		<view class="foot_box x-f">

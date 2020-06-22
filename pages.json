@@ -73,8 +73,7 @@
 			"path": "pages/index/view",
 			"name": "view",
 			"style": {
-				"navigationBarTitleText": "",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": ""
 
 			},
 			"meta": {
@@ -609,6 +608,13 @@
 			]
 		}
 	],
+	// 分包预加载规则
+	// "preloadRule": {
+	// 	"pages/index/index": {
+	// 		"network": "all",
+	// 		"packages": ["__APP__"]
+	// 	}
+	// },
 	// 默认导航栏样式
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

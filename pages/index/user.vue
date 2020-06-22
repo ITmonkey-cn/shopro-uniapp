@@ -1,10 +1,10 @@
 <template>
 	<view class="user-box">
 		<!-- 上拉显示的标题栏 -->
-		<view :class="scrollTop < 50 ? 'transtion-head' : 'transtion-head--active'">
+		<!-- <view :class="scrollTop < 50 ? 'transtion-head' : 'transtion-head--active'">
 			<cu-custom><text slot="content" style="font-weight: bold;font-size: 34rpx;">我的</text></cu-custom>
-		</view>
-
+		</view> -->
+		<button type="default" @tap="onMssage">订阅消息</button>
 		<block v-if="template.length" v-for="(item, index) in template" :key="index">
 			<!-- 搜索 -->
 			<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
@@ -82,8 +82,8 @@ import shNav from './components/sh-nav.vue';
 import shUserinfo from './components/sh-userinfo.vue';
 import shOrder from './components/sh-order.vue';
 import shWallet from './components/sh-wallet.vue';
-import shGrid from './components/sh-grid.vue'
-import shTitleCard from './components/sh-title-card.vue'
+import shGrid from './components/sh-grid.vue';
+import shTitleCard from './components/sh-title-card.vue';
 
 import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
@@ -189,6 +189,15 @@ export default {
 	},
 	methods: {
 		...mapActions(['getUserInfo', 'getOrderNum']),
+		// 订阅消息
+		onMssage() {
+			uni.requestSubscribeMessage({
+				tmplIds: ['w1ZV0qgXC0y1F-PcJvu8zR3-My6WufFV35X7h3hPnEs', 'z1VKS8ffkJQiv5lKuhGWHtNwGZdGzlExKonoAu5WP2w'],
+				success(res) {
+					console.log(res);
+				}
+			});
+		},
 		jump(path, query) {
 			this.$Router.push({
 				path: path,
@@ -255,33 +264,6 @@ export default {
 	transition: all 0.2s linear;
 	transform: translateY(0rpx);
 	border-bottom: 1rpx solid #f2f2f2;
-}
-
-// 绑定微信公众号
-.notice-box {
-	width: 750rpx;
-	height: 70rpx;
-	background: rgba(253, 239, 216, 1);
-	padding: 0 35rpx;
-
-	.notice-detail {
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
-		color: rgba(204, 149, 59, 1);
-	}
-
-	.bindPhone {
-		width: 135rpx;
-		height: 52rpx;
-		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-		border-radius: 26rpx;
-		padding: 0;
-		font-size: 26rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(255, 255, 255, 1);
-	}
 }
 
 .foot_box {

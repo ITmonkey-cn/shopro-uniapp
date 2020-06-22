@@ -131,7 +131,7 @@ export default {
 <style lang="scss">
 .shopro-skeleton-box {
 	position: fixed;
-	z-index: 99998;
+	z-index: 99999;
 	overflow: hidden;
 	left: 0;
 	top: 0;

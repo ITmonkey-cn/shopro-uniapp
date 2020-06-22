@@ -111,10 +111,13 @@ export default {
 		getViewData() {
 			let that = this;
 			that.$api('custom', {
-				id: that.$route.query.id
+				id: that.$Route.query.id
 			}).then(res => {
 				if (res.code == 1) {
 					this.viewData = res.data.template;
+					uni.setNavigationBarTitle({
+						title: res.data.name
+					});
 				}
 			});
 		}

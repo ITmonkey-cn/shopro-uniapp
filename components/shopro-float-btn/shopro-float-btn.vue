@@ -6,13 +6,16 @@
 		</button>
 		<view :class="showBtnList ? 'float--active' : 'float-list-box'">
 			<view class="btn-img-box y-f" @tap="onBtnItem(item)" v-for="item in floatList" :key="item.btnimage">
-				<image class="btn-img" :src="item.btnimage" mode="aspectFill"></image>
+				<view class="btn-item">
+					<image class="btn-img" :src="item.btnimage" mode="aspectFill"></image>
+					<view class="btn-name">{{ item.name }}</view>
+				</view>
 			</view>
 		</view>
 		<view class="cu-modal" :class="{ show: showModal }" cathctouchmove @tap="hideModal">
 			<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
 				<view class="img-box">
-					<image class="modal-img" :src="modalImg" mode="widthFix"></image>
+					<image class="modal-img" :src="modalImg" mode="widthFix" @longtap="saveImg(modalImg)"></image>
 					<text class="cuIcon-roundclose" @tap="hideModal"></text>
 				</view>
 			</view>
@@ -36,6 +39,11 @@ export default {
 		...mapState({
 			floatData: ({ init }) => init.templateData['float-button'][0].content
 		}),
+		// floatData() {
+		// 	if (this.template.length) {
+		// 		return this.template
+		// 	}
+		// },
 		currentPath() {
 			let pages = getCurrentPages();
 			let currPage = null;
@@ -62,14 +70,30 @@ export default {
 			this.showBtnList = false;
 		},
 		onBtnItem(item) {
-			item.path && this.$tools.routerTo(item.path);
-			this.modalImg = item.image;
-			this.showModal = true;
+			if (item.style == 2) {
+				this.$tools.routerTo(item.path);
+				this.showModal = false;
+			} else {
+				this.modalImg = item.image;
+				this.showModal = true;
+			}
+		},
+		// 保存图片
+		saveImg(img) {
+			uni.saveImageToPhotosAlbum({
+				filePath: img,
+				success: res => {
+					that.$tools.toast('保存成功');
+				},
+				fail: err => {
+					that.$tools.toast('保存失败');
+				}
+			});
 		},
 		onBtn() {
 			if (this.floatList.length == 1) {
 				this.modalImg = this.floatList[0].image;
-				this.floatList[0].path ? this.$tools.routerTo(this.floatList[0].path) : (this.showModal = true);
+				this.floatList[0].style == 2 ? this.$tools.routerTo(this.floatList[0].path) : (this.showModal = true);
 			} else {
 				this.showBtnList = !this.showBtnList;
 			}
@@ -87,13 +111,14 @@ export default {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+	background: rgba(#000, 0.4);
 }
 .cu-modal {
 	z-index: 999999;
 }
 .shopro-float-btn {
 	position: fixed;
-	bottom: 130rpx;
+	bottom: 200rpx;
 	right: 30rpx;
 	z-index: 888;
 	.float--active {
@@ -110,12 +135,21 @@ export default {
 		transform: scale(0);
 		transition: all 0.2s linear;
 	}
-	.btn-img {
-		// background-color: #ccc;
-		width: 60rpx;
-		height: 60rpx;
+	.btn-item {
 		margin-bottom: 20rpx;
+		.btn-img {
+			// background-color: #ccc;
+			width: 60rpx;
+			height: 60rpx;
+		}
+		.btn-name {
+			font-size: 20rpx;
+			color: #fff;
+			text-align: center;
+			white-space: nowrap;
+		}
 	}
+
 	.wechat-btn {
 		// background: #ccc;
 		background: none;

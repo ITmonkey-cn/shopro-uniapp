@@ -1,7 +1,7 @@
 <template>
 	<block>
-		<!-- <view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view> -->
-		<view class="detail_box shopro-selector" v-if="goodsInfo.price">
+		<view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view>
+		<view class="detail_box shopro-selector" v-else>
 			<view class="detail-content">
 				<view class="goodes_detail_swiper-box">
 					<!-- 拼团滚动提示 -->
@@ -58,7 +58,10 @@
 				<view class="sticky-box">
 					<view class="tab-box x-f">
 						<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
-							<view class="tab-title">{{ tab.title }}<text v-if="tab.id=='tab2'" class="comment-num">({{commentList.length}})</text></view>
+							<view class="tab-title">
+								{{ tab.title }}
+								<text v-if="tab.id == 'tab2'" class="comment-num">({{ commentList.length }})</text>
+							</view>
 							<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
 						</view>
 					</view>
@@ -104,8 +107,8 @@
 			<view class="detail-foot_box  x-f" v-if="!showSku && !showServe && detailType !== 'score'">
 				<view class="left x-f">
 					<view class="tools-item y-f" @tap="goHome">
-						<image class="tool-img" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
-						<text class="tool-title">首页</text>
+						<image class="tool-img shopro-selector-circular" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
+						<text class="tool-title shopro-selector-rect">首页</text>
 					</view>
 					<view class="tools-item y-f" @tap="onFavorite(goodsInfo.id)">
 						<image
@@ -262,9 +265,7 @@ export default {
 		},
 		// 回到首页
 		goHome() {
-			uni.switchTab({
-				url: '/pages/index/index'
-			});
+			this.$tools.routerTo('/pages/index/index');
 		},
 		// 轮播图切换
 		swiperChange(e) {

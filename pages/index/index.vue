@@ -149,37 +149,37 @@ export default {
 	onLoad() {
 		// 预览模式截图
 		// #ifdef H5
-			window.addEventListener('message', function (e) {
-				console.log("h5", e)
-				if (e.data.type == 'screenshot') {
-					let div = window.window.document.getElementsByClassName('page_box');
-					console.log('h5 div', div);
-					html2canvas(div[0], {
-						x: 0,
-						y: 0,
-						scrollX: 0,
-						scrollY: 0,
-						foreignObjectRendering: true,
-						allowTaint: false,
-						taintTest: true,
-						scale: 1,
-						width: div[0].offsetWidth,
-						height: div[0].offsetHeight,
-						useCORS: true //保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
-					}).then(canvas => {
-						var screenShotBase64 = canvas.toDataURL();
-						console.log('h5 dataUrl', screenShotBase64);
-						window.parent.postMessage(
-							{
-								type: 'screeshot',
-								data: screenShotBase64
-							},
-							'*'
-						);
-					});
-				}
-			});
-		
+		window.addEventListener('message', function(e) {
+			console.log('h5', e);
+			if (e.data.type == 'screenshot') {
+				let div = window.window.document.getElementsByClassName('page_box');
+				console.log('h5 div', div);
+				html2canvas(div[0], {
+					x: 0,
+					y: 0,
+					scrollX: 0,
+					scrollY: 0,
+					foreignObjectRendering: true,
+					allowTaint: false,
+					taintTest: true,
+					scale: 1,
+					width: div[0].offsetWidth,
+					height: div[0].offsetHeight,
+					useCORS: true //保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
+				}).then(canvas => {
+					var screenShotBase64 = canvas.toDataURL();
+					console.log('h5 dataUrl', screenShotBase64);
+					window.parent.postMessage(
+						{
+							type: 'screeshot',
+							data: screenShotBase64
+						},
+						'*'
+					);
+				});
+			}
+		});
+
 		// #endif
 	},
 	mounted() {},

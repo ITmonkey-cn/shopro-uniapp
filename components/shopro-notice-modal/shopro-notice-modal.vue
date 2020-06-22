@@ -4,7 +4,7 @@
 			<view class="cu-modal" :class="{ show: p.page.includes(currentPath) && showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
 				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
 					<view class="img-box">
-						<image class="modal-img" :src="p.image" mode="widthFix"></image>
+						<image class="modal-img" :src="p.image" mode="widthFix" lazy-load></image>
 						<text class="cuIcon-roundclose" @tap.stop="hideModal(p)"></text>
 					</view>
 				</view>
@@ -32,6 +32,11 @@ export default {
 		...mapState({
 			popupData: state => state.init.templateData.popup[0].content
 		}),
+		// popupData(){
+		// 	if(this.template.length){
+		// 		return this.template.popup[0].content
+		// 	}
+		// },
 		currentPath() {
 			let pages = getCurrentPages();
 			let currPage = null;
@@ -49,8 +54,7 @@ export default {
 			}
 		}
 	},
-	created() {
-	},
+	created() {},
 	methods: {
 		hideModal(p) {
 			clearTimeout(timer);
@@ -73,7 +77,7 @@ export default {
 	width: 610rpx;
 }
 .cu-modal {
-	z-index: 99999;
+	z-index: 10000;
 }
 .img-box {
 	position: relative;

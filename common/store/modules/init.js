@@ -11,7 +11,7 @@ import {
 const state = {
 	initData: {},
 	routes: [],
-	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {}, //购物车,涉及到刷新数据丢失，所以存了本地,
+	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {}
 }
 
 const actions = {
@@ -97,10 +97,8 @@ const mutations = {
 				item.page.splice(index, 1)
 			}
 		})
-
-		state.templateData = templateData;
 		uni.setStorageSync('templateData', templateData);
-		console.log(state.templateData)
+		state.templateData = templateData;
 	}
 }
 

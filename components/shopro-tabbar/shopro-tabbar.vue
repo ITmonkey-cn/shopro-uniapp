@@ -2,8 +2,17 @@
 	<view class="shopro-tabbar-wrap" v-if="tabbarData.isshow">
 		<view class="tabbar-box" :style="{ background: tabbarData.bgcolor }">
 			<view class="tabbar-item" v-for="(tab, index) in tabbarData.list" :key="tab.name" @tap="switchTabbar(tab, index)">
-				<image class="tabbar-icon" v-if="tabbarData.style == 1 || tabbarData.style == 2" :src="tabCurrent == index ? tab.activeImage : tab.image" mode="aspectFill"></image>
-				<view class="tabbar-text" v-if="tabbarData.style == 1 || tabbarData.style == 3" :style="{ color: tabCurrent == index ? tabbarData.activeColor : tabbarData.color }">
+				<image
+					class="tabbar-icon"
+					v-if="tabbarData.style == 1 || tabbarData.style == 2"
+					:src="currentPath == tab.path ? tab.activeImage : tab.image"
+					mode="aspectFill"
+				></image>
+				<view
+					class="tabbar-text"
+					v-if="tabbarData.style == 1 || tabbarData.style == 3"
+					:style="{ color: currentPath == tab.path ? tabbarData.activeColor : tabbarData.color }"
+				>
 					{{ tab.name }}
 				</view>
 			</view>
@@ -22,19 +31,27 @@ export default {
 	props: {},
 	computed: {
 		...mapState({
-			tabbarData: state => state.init.templateData.tabbar[0].content,
-			tabCurrent: ({ tabbar }) => tabbar.tabCurrent
-		})
+			tabbarData: state => state.init.templateData.tabbar[0].content
+		}),
+		// tabbarData() {
+		// 	if (this.template.length) {
+		// 		return this.template.tabbar[0].content;
+		// 	}
+		// },
+		currentPath() {
+			let pages = getCurrentPages();
+			let currPage = null;
+			if (pages.length) {
+				currPage = pages[pages.length - 1].route;
+			}
+			return '/' + currPage;
+		}
 	},
-	created() {
-		uni.hideTabBar();
-	},
+	created() {},
 	methods: {
 		// 切换tabbar
 		switchTabbar(tab, index) {
-			this.$store.commit('switchTabbar', index);
-			console.log(tab.path, 1111111111);
-			this.$tools.routerTo(tab.path);
+			this.$tools.routerTo(tab.path, null, true);
 		}
 	}
 };
@@ -53,7 +70,7 @@ export default {
 		width: 100%;
 		height: 100rpx;
 		border-top: 1rpx solid #eeeeee;
-		z-index:998;
+		z-index: 998;
 		bottom: 0;
 		.tabbar-item {
 			height: 100%;

@@ -7,39 +7,27 @@ export default {
 	 * 跳转再封装，不支持复杂传参。
 	 */
 	routerTo(path, params = {}, isLogin) {
+		console.log(path)
+		if (path.indexOf('?') !== -1) {
+			let index = path.lastIndexOf('?');
+			let query = path.substring(index + 1, path.length);
+			let arr = query.split('&')
+			path = path.slice(0, index);
+			arr.forEach(item => {
+				let mArr = item.split('=');
+				params[mArr[0]] = mArr[1];
 
-		if (path.indexOf('/pages/index/') !== -1) {
-			router.push({
-				path: path
 			})
-		} else {
-			if (path.indexOf('?') !== -1) {
-				let index = path.lastIndexOf('?');
-				let query = path.substring(index + 1, path.length);
-				let arr = query.split('&')
-				path = path.slice(0, index);
-				arr.forEach(item => {
-					let mArr = item.split('=');
-					params[mArr[0]] = mArr[1];
-
-				})
-			}
-			if (isLogin) {
-				router.replaceAll({
-					path: path,
-					query: params
-				})
-			} else {
-				console.log(path)
-				router.push({
-					path: path,
-					query: params
-				})
-			}
-
 		}
-
-
+		isLogin ?
+			router.replaceAll({
+				path: path,
+				query: params
+			}) :
+			router.push({
+				path: path,
+				query: params
+			})
 	},
 	/**
 	 * fn：检测图片协议，主要用于检测海报图片协议。

@@ -25,9 +25,7 @@ export default {
 	methods: {
 		// 回到首页
 		goHome() {
-			uni.switchTab({
-				url: '/pages/index/index'
-			});
+			this.$tools.routerTo('/pages/index/index');
 		},
 		// 去支付
 		goPay() {

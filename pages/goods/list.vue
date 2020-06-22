@@ -15,7 +15,7 @@
 		</view>
 		<view class="content-box">
 			<view class="goods-list x-f">
-				<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods"></shopro-goods-card></view>
+				<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
 			</view>
 			<!-- 空白页 -->
 			<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
