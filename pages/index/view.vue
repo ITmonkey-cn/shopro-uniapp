@@ -73,6 +73,8 @@ import { HAS_LIVE } from '@/env';
 import shLive from './components/sh-live.vue';
 import shForceLogin from './components/sh-force-login.vue';
 // #endif
+
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shSearch,
@@ -99,22 +101,26 @@ export default {
 		return {
 			viewData: {},
 			// #ifdef MP-WEIXIN
-			HAS_LIVE: HAS_LIVE
+			HAS_LIVE: HAS_LIVE,
 			// #endif
+			viewId: 0
 		};
 	},
 	computed: {},
 	onLoad() {
+		this.viewId = this.$Route.query.id;
+	},
+	onShow() {
 		this.getViewData();
 	},
 	methods: {
 		getViewData() {
 			let that = this;
 			that.$api('custom', {
-				id: that.$Route.query.id
+				id: that.viewId
 			}).then(res => {
 				if (res.code == 1) {
-					this.viewData = res.data.template;
+					that.viewData = res.data.template;
 					uni.setNavigationBarTitle({
 						title: res.data.name
 					});

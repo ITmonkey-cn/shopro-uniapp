@@ -152,6 +152,8 @@ export default {
 
 	.wechat-btn {
 		// background: #ccc;
+		box-shadow: 0px 0px 20px 4px rgba(199, 199, 199, 0.22);
+		border-radius: 50%;
 		background: none;
 		padding: 0;
 		.wechat_img {

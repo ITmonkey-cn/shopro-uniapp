@@ -1,7 +1,7 @@
 <template>
 	<view class="sh-user-menu-box mb10">
 		<view class="menu-list-box">
-			<view class="menu-item x-bc" v-for="(nav,index) in detail.list" :key="index"  @tap="jump(nav)">
+			<view class="menu-item x-bc" v-for="(nav, index) in detail.list" :key="index" @tap="jump(nav)">
 				<view class="x-f">
 					<image v-if="nav.image" class="item-img" :src="nav.image" mode=""></image>
 					<text class="item-title">{{ nav.name }}</text>
@@ -14,9 +14,10 @@
 
 <script>
 export default {
-	name: 'shUserMenu',
 	components: {},
-	data() {},
+	data() {
+		return {};
+	},
 	props: {
 		detail: {
 			type: Object,
@@ -26,7 +27,6 @@ export default {
 	computed: {},
 	methods: {
 		jump(data) {
-			console.log(data,1111111111111)
 			this.$tools.routerTo(data.path);
 		}
 	}

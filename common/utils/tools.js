@@ -7,7 +7,7 @@ export default {
 	 * 跳转再封装，不支持复杂传参。
 	 */
 	routerTo(path, params = {}, isLogin) {
-		console.log(path)
+		let objParams = {}
 		if (path.indexOf('?') !== -1) {
 			let index = path.lastIndexOf('?');
 			let query = path.substring(index + 1, path.length);
@@ -15,19 +15,22 @@ export default {
 			path = path.slice(0, index);
 			arr.forEach(item => {
 				let mArr = item.split('=');
-				params[mArr[0]] = mArr[1];
-
+				objParams[mArr[0]] = mArr[1]
 			})
 		}
-		isLogin ?
+		if (isLogin) {
+
 			router.replaceAll({
 				path: path,
-				query: params
-			}) :
+				query: objParams
+			})
+		} else {
 			router.push({
 				path: path,
-				query: params
+				query: objParams
 			})
+		}
+
 	},
 	/**
 	 * fn：检测图片协议，主要用于检测海报图片协议。

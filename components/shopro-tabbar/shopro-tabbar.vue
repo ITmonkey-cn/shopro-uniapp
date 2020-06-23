@@ -1,6 +1,6 @@
 <template>
 	<view class="shopro-tabbar-wrap" v-if="tabbarData.isshow">
-		<view class="tabbar-box" :style="{ background: tabbarData.bgcolor }">
+		<view class="tabbar-box" :style="{ background: tabbarData.bgcolor || '#fff' }">
 			<view class="tabbar-item" v-for="(tab, index) in tabbarData.list" :key="tab.name" @tap="switchTabbar(tab, index)">
 				<image
 					class="tabbar-icon"

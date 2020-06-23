@@ -116,46 +116,7 @@ export default {
 			showFollowWechat: true, //绑定公众号
 			orderScrollLeft: 0, //订单卡片滑动。
 			scrollTop: 0, //页面滚动距离
-			bgcolor: '',
-			toolsNav: [
-				{
-					title: '商品收藏',
-					img: 'http://shopro.7wpp.com/imgs/user/list1.png',
-					url: '/pages/user/favorite'
-				},
-				{
-					title: '浏览足迹',
-					img: 'http://shopro.7wpp.com/imgs/user/user_log.png',
-					url: '/pages/user/log'
-				},
-
-				{
-					title: '常见问题',
-					img: 'http://shopro.7wpp.com/imgs/user/list7.png',
-					url: '/pages/public/faq'
-				},
-				{
-					title: '邀请好友',
-					img: 'http://shopro.7wpp.com/imgs/user/list11.png',
-					url: '/pages/public/poster/index',
-					parmas: { posterType: 'user' }
-				},
-				{
-					title: '积分商城',
-					img: 'http://shopro.7wpp.com/imgs/user/list12.png',
-					url: '/pages/app/score/list'
-				},
-				{
-					title: '我的拼团',
-					img: 'http://shopro.7wpp.com/imgs/user/list5.png',
-					url: '/pages/activity/groupon/my-groupon'
-				},
-				{
-					title: '系统设置',
-					img: 'http://shopro.7wpp.com/imgs/user/list8.png',
-					url: '/pages/user/set'
-				}
-			]
+			bgcolor: ''
 		};
 	},
 	computed: {

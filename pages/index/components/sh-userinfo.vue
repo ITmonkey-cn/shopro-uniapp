@@ -100,7 +100,7 @@ export default {
 			font-size: 38rpx;
 			font-family: PingFang SC;
 			font-weight: 500;
-			color: rgba(51, 51, 51, 1);
+			color:#fff;
 		}
 		.status-bar {
 			// #ifndef H5
@@ -152,9 +152,9 @@ export default {
 				font-size: 30rpx;
 				font-family: PingFang SC;
 				font-weight: 500;
-				color: rgba(51, 51, 51, 1);
+				color: #fff;
 				line-height: 30rpx;
-				width: 150rpx;
+				width: 130rpx;
 			}
 		}
 		.tag-box {
@@ -186,6 +186,7 @@ export default {
 			background: none;
 			.cuIcon-qr_code {
 				font-size: 50rpx;
+				color: #fff;
 			}
 		}
 	}

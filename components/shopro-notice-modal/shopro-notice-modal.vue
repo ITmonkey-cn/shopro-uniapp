@@ -4,7 +4,7 @@
 			<view class="cu-modal" :class="{ show: p.page.includes(currentPath) && showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
 				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
 					<view class="img-box">
-						<image class="modal-img" :src="p.image" mode="widthFix" lazy-load></image>
+						<image class="modal-img" :src="p.image" mode="widthFix"></image>
 						<text class="cuIcon-roundclose" @tap.stop="hideModal(p)"></text>
 					</view>
 				</view>
