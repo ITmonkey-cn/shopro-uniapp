@@ -19,6 +19,14 @@ export default {
 		// desc: '上传',
 	},
 
+	/** 消息订阅模板 ↓ **/
+	messageIds: {
+		url: 'notification/template',
+		auth: true,
+		method: 'GET',
+		// desc: '订阅消息模板ids',
+	},
+
 	/** 模板信息 ↓ **/
 	template: {
 		url: 'index/template',

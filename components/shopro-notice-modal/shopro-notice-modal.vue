@@ -63,6 +63,7 @@ export default {
 				this.popupCurrent += 1;
 				this.showModal = true;
 			}, 500);
+			console.log('modal', p);
 			p.style == 1 && this.$store.commit('delPopup', this.currentPath);
 		},
 		changePopup(path) {

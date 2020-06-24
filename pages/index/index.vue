@@ -195,9 +195,6 @@ export default {
 	},
 	methods: {
 		...mapMutations(['CART_NUM']),
-		init() {
-			return Promise.all([]);
-		},
 		getbgcolor(e) {
 			this.bgcolor = e;
 		},

@@ -4,7 +4,6 @@
 		<!-- <view :class="scrollTop < 50 ? 'transtion-head' : 'transtion-head--active'">
 			<cu-custom><text slot="content" style="font-weight: bold;font-size: 34rpx;">我的</text></cu-custom>
 		</view> -->
-		<button type="default" @tap="onMssage">订阅消息</button>
 		<block v-if="template.length" v-for="(item, index) in template" :key="index">
 			<!-- 搜索 -->
 			<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
@@ -150,15 +149,6 @@ export default {
 	},
 	methods: {
 		...mapActions(['getUserInfo', 'getOrderNum']),
-		// 订阅消息
-		onMssage() {
-			uni.requestSubscribeMessage({
-				tmplIds: ['w1ZV0qgXC0y1F-PcJvu8zR3-My6WufFV35X7h3hPnEs', 'z1VKS8ffkJQiv5lKuhGWHtNwGZdGzlExKonoAu5WP2w'],
-				success(res) {
-					console.log(res);
-				}
-			});
-		},
 		jump(path, query) {
 			this.$Router.push({
 				path: path,

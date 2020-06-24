@@ -5,13 +5,13 @@
 				<image
 					class="tabbar-icon"
 					v-if="tabbarData.style == 1 || tabbarData.style == 2"
-					:src="currentPath == tab.path ? tab.activeImage : tab.image"
+					:src="currentPath == getPath(tab.path) ? tab.activeImage : tab.image"
 					mode="aspectFill"
 				></image>
 				<view
 					class="tabbar-text"
 					v-if="tabbarData.style == 1 || tabbarData.style == 3"
-					:style="{ color: currentPath == tab.path ? tabbarData.activeColor : tabbarData.color }"
+					:style="{ color: currentPath == getPath(tab.path) ? tabbarData.activeColor : tabbarData.color }"
 				>
 					{{ tab.name }}
 				</view>
@@ -33,11 +33,6 @@ export default {
 		...mapState({
 			tabbarData: state => state.init.templateData.tabbar[0].content
 		}),
-		// tabbarData() {
-		// 	if (this.template.length) {
-		// 		return this.template.tabbar[0].content;
-		// 	}
-		// },
 		currentPath() {
 			let pages = getCurrentPages();
 			let currPage = null;
@@ -52,6 +47,13 @@ export default {
 		// 切换tabbar
 		switchTabbar(tab, index) {
 			this.$tools.routerTo(tab.path, null, true);
+		},
+		getPath(path) {
+			if (path.indexOf('?') !== -1) {
+				let index = path.lastIndexOf('?');
+				path = path.slice(0, index);
+			}
+			return path;
 		}
 	}
 };

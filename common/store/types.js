@@ -16,3 +16,4 @@ export const LOGIN_TIP = 'LOGIN_TIP' //登录提示
 // #ifdef MP-WEIXIN
 export const FORCE_OAUTH = 'FORCE_OAUTH' // 小程序强制登录弹窗
 // #endif
+export const MESSAGE_IDS = 'MESSAGE_IDS' // 小程序订阅消息模板ids
