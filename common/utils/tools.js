@@ -19,7 +19,6 @@ export default {
 			})
 		}
 		if (isLogin) {
-
 			router.replaceAll({
 				path: path,
 				query: objParams
