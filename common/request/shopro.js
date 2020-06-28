@@ -18,6 +18,14 @@ export default {
 		method: 'POST',
 		// desc: '上传',
 	},
+	
+	/** 上传Base64图片 ↓ **/
+	uploadBase64: {
+		url: 'index/uploadBase64',
+		auth: false,
+		method: 'POST',
+		// desc: '上传Base64位图片',
+	},
 
 	/** 消息订阅模板 ↓ **/
 	messageIds: {
@@ -84,16 +92,16 @@ export default {
 			method: 'POST',
 			// desc: '路由表',
 		},
+		asyncDecorateScreenShot: {
+			url: 'index/asyncDecorateScreenShot',
+			auth: false,
+			method: 'POST',
+			// desc: '更新店铺装修截图',
+		},
 		asyncBannerBgColor: {
 			url: 'index/asyncBannerBgColor',
 			auth: false,
 			method: 'POST',
-			// desc: '路由表',
-		},
-		preview: {
-			url: 'index/tempPreview',
-			auth: false,
-			method: 'GET',
 			// desc: '路由表',
 		},
 		debug: {
