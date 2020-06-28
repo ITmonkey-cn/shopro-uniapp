@@ -67,185 +67,176 @@
 </template>
 
 <script>
-	import shSearch from './components/sh-search.vue';
-	import shBanner from './components/sh-banner.vue';
-	import shHotGoods from './components/sh-hot-goods.vue';
-	import shMenu from './components/sh-menu.vue';
-	import shAdv from './components/sh-adv.vue';
-	import shCoupon from './components/sh-coupon.vue';
-	import shSeckill from './components/sh-seckill.vue';
-	import shGroupon from './components/sh-groupon.vue';
-	import shRichtext from './components/sh-richtext.vue';
-	import shNav from './components/sh-nav.vue';
-	import shUserinfo from './components/sh-userinfo.vue';
-	import shGrid from './components/sh-grid.vue';
-	import shTitleCard from './components/sh-title-card.vue';
-	import shOrder from './components/sh-order.vue';
-	import shWallet from './components/sh-wallet.vue';
+import shSearch from './components/sh-search.vue';
+import shBanner from './components/sh-banner.vue';
+import shHotGoods from './components/sh-hot-goods.vue';
+import shMenu from './components/sh-menu.vue';
+import shAdv from './components/sh-adv.vue';
+import shCoupon from './components/sh-coupon.vue';
+import shSeckill from './components/sh-seckill.vue';
+import shGroupon from './components/sh-groupon.vue';
+import shRichtext from './components/sh-richtext.vue';
+import shNav from './components/sh-nav.vue';
+import shUserinfo from './components/sh-userinfo.vue';
+import shGrid from './components/sh-grid.vue';
+import shTitleCard from './components/sh-title-card.vue';
+import shOrder from './components/sh-order.vue';
+import shWallet from './components/sh-wallet.vue';
 
-	import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
-	import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
-	// #ifdef MP-WEIXIN
-	import {
-		HAS_LIVE
-	} from '@/env';
-	import shLive from './components/sh-live.vue';
-	import shForceLogin from './components/sh-force-login.vue';
-	// #endif
-	import {
-		mapMutations,
-		mapActions,
-		mapState
-	} from 'vuex';
+import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
+import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
+// #ifdef MP-WEIXIN
+import { HAS_LIVE } from '@/env';
+import shLive from './components/sh-live.vue';
+import shForceLogin from './components/sh-force-login.vue';
+// #endif
+import { mapMutations, mapActions, mapState } from 'vuex';
 
-	// #ifdef H5
-	import html2canvas from '@/common/utils/sdk/html2canvas.js';
-	// #endif
+// #ifdef H5
+import html2canvas from '@/common/utils/sdk/html2canvas.js';
+// #endif
 
-	export default {
-		components: {
-			shSearch,
-			shBanner,
-			shUserinfo,
-			shHotGoods,
-			shTitleCard,
-			shOrder,
-			shWallet,
-			shMenu,
-			shAdv,
-			shGrid,
-			shCoupon,
-			shSeckill,
-			shGroupon,
-			shRichtext,
-			shNav,
-			shoproNoticeModal,
-			shoproSkeletons,
+export default {
+	components: {
+		shSearch,
+		shBanner,
+		shUserinfo,
+		shHotGoods,
+		shTitleCard,
+		shOrder,
+		shWallet,
+		shMenu,
+		shAdv,
+		shGrid,
+		shCoupon,
+		shSeckill,
+		shGroupon,
+		shRichtext,
+		shNav,
+		shoproNoticeModal,
+		shoproSkeletons,
+		// #ifdef MP-WEIXIN
+		shLive,
+		shForceLogin
+		// #endif
+	},
+	data() {
+		return {
+			bgcolor: '',
 			// #ifdef MP-WEIXIN
-			shLive,
-			shForceLogin
+			HAS_LIVE: HAS_LIVE,
 			// #endif
-		},
-		data() {
-			return {
-				bgcolor: '',
-				// #ifdef MP-WEIXIN
-				HAS_LIVE: HAS_LIVE,
-				// #endif
-				mode: '',
-				shop_id: 0
-				
-
-			};
-		},
-		computed: {
-			...mapState({
-				initData: state => state.init.initData,
-				template: state => state.init.templateData.home,
-				cartNum: state => state.cart.cartNum,
-				forceOauth: state => state.user.forceOauth
-			}),
-			popupIndex() {
-				if (this.initData.popup) {
-					return this.initData.popup.content.index;
-				}
-			},
-			info() {
-				if (this.initData.info) {
-					return this.initData.info;
-				}
+			mode: '',
+			shop_id: 0
+		};
+	},
+	computed: {
+		...mapState({
+			initData: state => state.init.initData,
+			template: state => state.init.templateData.home,
+			cartNum: state => state.cart.cartNum,
+			forceOauth: state => state.user.forceOauth
+		}),
+		popupIndex() {
+			if (this.initData.popup) {
+				return this.initData.popup.content.index;
 			}
 		},
-		onLoad(options) {
-			// 预览模式截图
-			let mode = options.mode;
-			if (mode !== undefined) {
-				this.mode = mode;
-				this.shop_id = options.shop_id;
+		info() {
+			if (this.initData.info) {
+				return this.initData.info;
 			}
-		},
-		onReady() {
-			if (this.mode === 'save') {
-				this.screenShotPreviewImage();
-			}
-		},
-		onShow() {
-			this.$store.commit('CART_NUM', this.cartNum);
-			// #ifndef MP-WEIXIN
-			if (this.info && this.info.name) {
-				uni.setNavigationBarTitle({
-					title: this.info.name
-				});
-			}
-			// #endif
-		},
-		methods: {
-			...mapMutations(['CART_NUM']),
-			getbgcolor(e) {
-				this.bgcolor = e;
-			},
-			// 路由跳转
-			jump(path, parmas) {
-				this.$Router.push({
-					path: path,
-					query: parmas
-				});
-			},
-			// #ifdef H5
-			//装修模式屏幕截图
-			screenShotPreviewImage() {
-				let that = this;
-				let div = window.window.document.getElementsByClassName('page_box');
-				console.log('h5 div', div);
-				console.log(1233, div[0])
-				html2canvas(div[0], {
-					x: 0,
-					y: 0,
-					scrollX: 0,
-					scrollY: 0,
-					foreignObjectRendering: true,
-					allowTaint: false,
-					taintTest: true,
-					scale: 1,
-					width: div[0].offsetWidth,
-					height: div[0].offsetHeight,
-					useCORS: true //保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
-				}).then(canvas => {
-					let screenShotBase64 = canvas.toDataURL();
-					that.$api('uploadBase64',{content: screenShotBase64}).then(res => {
-					if(res.code === 1) {
-						that.$api('dev.asyncDecorateScreenShot',{shop_id: that.shop_id,image: res.data.url});
-					}
-					})
-					
-					
-				});
-			}
-			// #endif
 		}
-	};
+	},
+	onLoad(options) {
+		// 预览模式截图
+		let mode = options.mode;
+		if (mode !== undefined) {
+			this.mode = mode;
+			this.shop_id = options.shop_id;
+		}
+	},
+	onReady() {
+		if (this.mode === 'save') {
+			this.screenShotPreviewImage();
+		}
+	},
+	onShow() {
+		this.$store.commit('CART_NUM', this.cartNum);
+		// #ifndef MP-WEIXIN
+		if (this.info && this.info.name) {
+			uni.setNavigationBarTitle({
+				title: this.info.name
+			});
+		}
+		// #endif
+	},
+	methods: {
+		...mapMutations(['CART_NUM']),
+		getbgcolor(e) {
+			this.bgcolor = e;
+		},
+		// 路由跳转
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
+		// #ifdef H5
+		//装修模式屏幕截图
+		screenShotPreviewImage() {
+			let that = this;
+			let div = window.window.document.getElementsByClassName('page_box');
+			console.log('h5 div', div);
+			console.log(1233, div[0]);
+			html2canvas(div[0], {
+				x: 0,
+				y: 0,
+				scrollX: 0,
+				scrollY: 0,
+				backgroundColor: '#f6f6f6',
+				foreignObjectRendering: true,
+				allowTaint: false,
+				taintTest: true,
+				scale: 1,
+				width: div[0].offsetWidth,
+				height: div[0].offsetHeight,
+				useCORS: true //保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
+			}).then(canvas => {
+				let screenShotBase64 = canvas.toDataURL();
+				that.$api('uploadBase64', { content: screenShotBase64 }).then(res => {
+					if (res.code === 1) {
+						that.$api('dev.asyncDecorateScreenShot', { shop_id: that.shop_id, image: res.data.url });
+					}
+				});
+			});
+		}
+		// #endif
+	}
+};
 </script>
 
 <style lang="scss">
-	// 标题搜索栏
-	.active {
-		transition: all linear 0.3s;
+// 标题搜索栏
+.active {
+	transition: all linear 0.3s;
+}
+
+.head_box {
+	width: 750rpx;
+	// background: #fff;
+	transition: all linear 0.3s;
+
+	/deep/.cuIcon-back {
+		display: none;
 	}
 
-	.head_box {
-		width: 750rpx;
-		// background: #fff;
-		transition: all linear 0.3s;
-
-		/deep/.cuIcon-back {
-			display: none;
-		}
-
-		.nav-title {
-			font-size: 38rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: #fff;
-		}
+	.nav-title {
+		font-size: 38rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: #fff;
 	}
+}
 </style>
