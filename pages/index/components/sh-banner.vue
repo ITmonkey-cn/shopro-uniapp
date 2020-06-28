@@ -61,13 +61,6 @@
 												// console.log(bgcolor)												
 												that.$set(item, 'bgcolor', bgcolor);
 												that.$emit('getbgcolor', bgcolor);
-												// 同步颜色
-
-												that.$api('dev.asyncBannerBgColor', {
-													index: that.swiperCurrent,
-													item: item
-												})
-
 
 											}
 										},
