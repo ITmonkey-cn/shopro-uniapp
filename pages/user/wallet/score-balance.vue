@@ -71,6 +71,7 @@ export default {
 		onTab(type) {
 			this.tabDot = type;
 			this.scoreLog = [];
+			this.currentPage = 1;
 			this.getScoreLog();
 		},
 		// 积分明细
