@@ -67,93 +67,137 @@
 </template>
 
 <script>
-import shSearch from './components/sh-search.vue';
-import shBanner from './components/sh-banner.vue';
-import shHotGoods from './components/sh-hot-goods.vue';
-import shMenu from './components/sh-menu.vue';
-import shAdv from './components/sh-adv.vue';
-import shCoupon from './components/sh-coupon.vue';
-import shSeckill from './components/sh-seckill.vue';
-import shGroupon from './components/sh-groupon.vue';
-import shRichtext from './components/sh-richtext.vue';
-import shNav from './components/sh-nav.vue';
-import shUserinfo from './components/sh-userinfo.vue';
-import shGrid from './components/sh-grid.vue';
-import shTitleCard from './components/sh-title-card.vue';
-import shOrder from './components/sh-order.vue';
-import shWallet from './components/sh-wallet.vue';
+	import shSearch from './components/sh-search.vue';
+	import shBanner from './components/sh-banner.vue';
+	import shHotGoods from './components/sh-hot-goods.vue';
+	import shMenu from './components/sh-menu.vue';
+	import shAdv from './components/sh-adv.vue';
+	import shCoupon from './components/sh-coupon.vue';
+	import shSeckill from './components/sh-seckill.vue';
+	import shGroupon from './components/sh-groupon.vue';
+	import shRichtext from './components/sh-richtext.vue';
+	import shNav from './components/sh-nav.vue';
+	import shUserinfo from './components/sh-userinfo.vue';
+	import shGrid from './components/sh-grid.vue';
+	import shTitleCard from './components/sh-title-card.vue';
+	import shOrder from './components/sh-order.vue';
+	import shWallet from './components/sh-wallet.vue';
 
-import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
-import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
-// #ifdef MP-WEIXIN
-import { HAS_LIVE } from '@/env';
-import shLive from './components/sh-live.vue';
-import shForceLogin from './components/sh-force-login.vue';
-// #endif
-import { mapMutations, mapActions, mapState } from 'vuex';
+	import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
+	import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
+	// #ifdef MP-WEIXIN
+	import {
+		HAS_LIVE
+	} from '@/env';
+	import shLive from './components/sh-live.vue';
+	import shForceLogin from './components/sh-force-login.vue';
+	// #endif
+	import {
+		mapMutations,
+		mapActions,
+		mapState
+	} from 'vuex';
 
-// #ifdef H5
-import html2canvas from '@/common/utils/sdk/html2canvas.js';
-// #endif
+	// #ifdef H5
+	import html2canvas from '@/common/utils/sdk/html2canvas.js';
+	// #endif
 
-export default {
-	components: {
-		shSearch,
-		shBanner,
-		shUserinfo,
-		shHotGoods,
-		shTitleCard,
-		shOrder,
-		shWallet,
-		shMenu,
-		shAdv,
-		shGrid,
-		shCoupon,
-		shSeckill,
-		shGroupon,
-		shRichtext,
-		shNav,
-		shoproNoticeModal,
-		shoproSkeletons,
-		// #ifdef MP-WEIXIN
-		shLive,
-		shForceLogin
-		// #endif
-	},
-	data() {
-		return {
-			bgcolor: '',
+	export default {
+		components: {
+			shSearch,
+			shBanner,
+			shUserinfo,
+			shHotGoods,
+			shTitleCard,
+			shOrder,
+			shWallet,
+			shMenu,
+			shAdv,
+			shGrid,
+			shCoupon,
+			shSeckill,
+			shGroupon,
+			shRichtext,
+			shNav,
+			shoproNoticeModal,
+			shoproSkeletons,
 			// #ifdef MP-WEIXIN
-			HAS_LIVE: HAS_LIVE
+			shLive,
+			shForceLogin
 			// #endif
-		};
-	},
-	computed: {
-		...mapState({
-			initData: state => state.init.initData,
-			template: state => state.init.templateData.home,
-			cartNum: state => state.cart.cartNum,
-			forceOauth: state => state.user.forceOauth
-		}),
-		popupIndex() {
-			if (this.initData.popup) {
-				return this.initData.popup.content.index;
+		},
+		data() {
+			return {
+				bgcolor: '',
+				// #ifdef MP-WEIXIN
+				HAS_LIVE: HAS_LIVE,
+				// #endif
+				mode: '',
+				shop_id: 0
+				
+
+			};
+		},
+		computed: {
+			...mapState({
+				initData: state => state.init.initData,
+				template: state => state.init.templateData.home,
+				cartNum: state => state.cart.cartNum,
+				forceOauth: state => state.user.forceOauth
+			}),
+			popupIndex() {
+				if (this.initData.popup) {
+					return this.initData.popup.content.index;
+				}
+			},
+			info() {
+				if (this.initData.info) {
+					return this.initData.info;
+				}
 			}
 		},
-		info() {
-			if (this.initData.info) {
-				return this.initData.info;
+		onLoad(options) {
+			// 预览模式截图
+			let mode = options.mode;
+			if (mode !== undefined) {
+				this.mode = mode;
+				this.shop_id = options.shop_id;
 			}
-		}
-	},
-	onLoad() {
-		// 预览模式截图
-		// #ifdef H5
-		window.addEventListener('message', function(e) {
-			console.log('h5', e);
-			if (e.data.type == 'screenshot') {
+		},
+		onReady() {
+			if (this.mode === 'save') {
+				this.screenShotPreviewImage();
+			}
+		},
+		onShow() {
+			this.$store.commit('CART_NUM', this.cartNum);
+			// #ifndef MP-WEIXIN
+			if (this.info && this.info.name) {
+				uni.setNavigationBarTitle({
+					title: this.info.name
+				});
+			}
+			// #endif
+		},
+		methods: {
+			...mapMutations(['CART_NUM']),
+			getbgcolor(e) {
+				this.bgcolor = e;
+			},
+			// 路由跳转
+			jump(path, parmas) {
+				this.$Router.push({
+					path: path,
+					query: parmas
+				});
+			},
+			// #ifdef H5
+			//装修模式屏幕截图
+			screenShotPreviewImage() {
+				let that = this;
 				let div = window.window.document.getElementsByClassName('page_box');
 				console.log('h5 div', div);
+				console.log(1233, div[0])
 				html2canvas(div[0], {
 					x: 0,
 					y: 0,
@@ -167,66 +211,41 @@ export default {
 					height: div[0].offsetHeight,
 					useCORS: true //保证跨域图片的显示，如果为不添加改属性，或者值为false, 跨域的图片显示灰背景
 				}).then(canvas => {
-					var screenShotBase64 = canvas.toDataURL();
-					console.log('h5 dataUrl', screenShotBase64);
-					window.parent.postMessage(
-						{
-							type: 'screeshot',
-							data: screenShotBase64
-						},
-						'*'
-					);
+					let screenShotBase64 = canvas.toDataURL();
+					that.$api('uploadBase64',{content: screenShotBase64}).then(res => {
+					if(res.code === 1) {
+						that.$api('dev.asyncDecorateScreenShot',{shop_id: that.shop_id,image: res.data.url});
+					}
+					})
+					
+					
 				});
 			}
-		});
-
-		// #endif
-	},
-	mounted() {},
-	onShow() {
-		this.$store.commit('CART_NUM', this.cartNum);
-		// #ifndef MP-WEIXIN
-		if (this.info && this.info.name) {
-			uni.setNavigationBarTitle({
-				title: this.info.name
-			});
+			// #endif
 		}
-		// #endif
-	},
-	methods: {
-		...mapMutations(['CART_NUM']),
-		getbgcolor(e) {
-			this.bgcolor = e;
-		},
-		// 路由跳转
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
-		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-// 标题搜索栏
-.active {
-	transition: all linear 0.3s;
-}
-.head_box {
-	width: 750rpx;
-	// background: #fff;
-	transition: all linear 0.3s;
-	/deep/.cuIcon-back {
-		display: none;
+	// 标题搜索栏
+	.active {
+		transition: all linear 0.3s;
 	}
 
-	.nav-title {
-		font-size: 38rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: #fff;
+	.head_box {
+		width: 750rpx;
+		// background: #fff;
+		transition: all linear 0.3s;
+
+		/deep/.cuIcon-back {
+			display: none;
+		}
+
+		.nav-title {
+			font-size: 38rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: #fff;
+		}
 	}
-}
 </style>

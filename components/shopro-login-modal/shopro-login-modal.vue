@@ -17,99 +17,103 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex';
-export default {
-		name:"shoproLoginModal",
-	components: {},
-	data() {
-		return {};
-	},
-	props: {
-		value: {},
-		modalType: {
-			type: String,
-			default: ''
-		}
-	},
-	computed: {
-		...mapState({
-			showLoginTip: state => state.user.showLoginTip
-		}),
-		showModal: {
-			get() {
-				return this.showLoginTip;
+	import {
+		mapMutations,
+		mapActions,
+		mapState
+	} from 'vuex';
+	export default {
+		name: "shoproLoginModal",
+		components: {},
+		data() {
+			return {};
+		},
+		props: {
+			value: {},
+			modalType: {
+				type: String,
+				default: ''
+			}
+		},
+		computed: {
+			...mapState({
+				showLoginTip: state => state.user.showLoginTip
+			}),
+			showModal: {
+				get() {
+					return this.showLoginTip;
+				},
+				set(val) {
+					this.$store.commit('LOGIN_TIP', val);
+				}
+			}
+		},
+		methods: {
+			hideModal() {
+				this.showModal = false;
 			},
-			set(val) {
-				this.$store.commit('LOGIN_TIP', val);
+			onLogin() {
+				this.showModal = false;
+				uni.setStorageSync('fromLogin', this.$Route);
+				this.$Router.push({
+					path: '/pages/public/login'
+				});
 			}
 		}
-	},
-	methods: {
-		hideModal() {
-			this.showModal = false;
-		},
-		onLogin() {
-			this.showModal = false;
-			uni.setStorageSync('fromLogin', this.$Route);
-			this.$Router.push({
-				path: '/pages/public/login'
-			});
-		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-// 登录提示
-.modal-box {
-	width: 610rpx;
-	border-radius: 20rpx;
-	background: #fff;
-	position: relative;
-	left: 50%;
-	transform: translateX(-50%);
-	padding-bottom: 30rpx;
+	// 登录提示
+	.modal-box {
+		width: 610rpx;
+		border-radius: 20rpx;
+		background: #fff;
+		position: relative;
+		left: 50%;
+		transform: translateX(-50%);
+		padding-bottom: 30rpx;
 
-	.head-bg {
-		width: 100%;
-		height: 210rpx;
+		.head-bg {
+			width: 100%;
+			height: 210rpx;
+		}
+
+		.detail {
+			.title1 {
+				color: #46351b;
+				font-size: 35rpx;
+				font-weight: bold;
+			}
+
+			.title2 {
+				font-size: 28rpx;
+				color: #999;
+				padding-top: 20rpx;
+			}
+		}
+
+		.btn-box {
+			margin-top: 80rpx;
+
+			.login-btn {
+				width: 492rpx;
+				height: 70rpx;
+				background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
+				box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
+				border-radius: 35rpx;
+				font-size: 28rpx;
+				color: rgba(#fff, 0.9);
+			}
+
+			.close-btn {
+				width: 492rpx;
+				height: 70rpx;
+				color: #e9b766;
+				font-size: 26rpx;
+				margin-top: 20rpx;
+				background: none;
+			}
+		}
 	}
-
-	.detail {
-		.title1 {
-			color: #46351b;
-			font-size: 35rpx;
-			font-weight: bold;
-		}
-
-		.title2 {
-			font-size: 28rpx;
-			color: #999;
-			padding-top: 20rpx;
-		}
-	}
-
-	.btn-box {
-		margin-top: 80rpx;
-
-		.login-btn {
-			width: 492rpx;
-			height: 70rpx;
-			background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-			box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
-			border-radius: 35rpx;
-			font-size: 28rpx;
-			color: rgba(#fff, 0.9);
-		}
-
-		.close-btn {
-			width: 492rpx;
-			height: 70rpx;
-			color: #e9b766;
-			font-size: 26rpx;
-			margin-top: 20rpx;
-			background: none;
-		}
-	}
-}
 </style>

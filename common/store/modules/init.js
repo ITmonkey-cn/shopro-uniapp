@@ -51,12 +51,10 @@ const actions = {
 	getTemplate({
 		commit
 	}, options) {
-		console.log(options, 123123)
 		var params = {};
 		return new Promise((resolve, reject) => {
 			//请求预览商城模板
 			if (options.query.shop_id) {
-				uni.setStorageSync('mode', 'preview');
 				params.shop_id = options.query.shop_id;
 			}
 			if (options.query.custom_id) {
