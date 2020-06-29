@@ -6,14 +6,15 @@ import store from '@/common/store';
 
 export default {
 	methods: {
-		...mapActions(['getAppInit', 'getRoutes', 'getUserInfo', 'setTokenAndBack']),
+		...mapActions(['getAppInit', 'getTemplate', 'getRoutes', 'getUserInfo', 'setTokenAndBack']),
 		init(options) {
-			return Promise.all([this.setAppInfo(), this.getAppInit(options)]);
+			return Promise.all([this.setAppInfo(), this.getTemplate(options), this.getAppInit(options)]);
 		},
 		// 获取系统栏高度
-		setAppInfo() {
+		async setAppInfo() {
 			let that = this;
 			let platform = '';
+			return new Promise((resolve, reject) => {
 			uni.getSystemInfo({
 				success: function(e) {
 					Vue.prototype.StatusBar = e.statusBarHeight;
@@ -46,6 +47,8 @@ export default {
 				}
 			});
 			uni.setStorageSync('platform', platform);
+			resolve(platform)
+			})
 		},
 		// 自动登录
 		async autoLogin(data) {
@@ -69,7 +72,8 @@ export default {
 		// 自定义底部导航，控制显示隐藏。
 		this.init(options)
 			.then(res => {
-				this.autoLogin(res[1].data);
+				console.log(res,1111)
+				this.autoLogin(res[2].data);
 				this.getRoutes();
 			})
 			.catch(err => {

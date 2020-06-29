@@ -6,7 +6,7 @@ import {
 	INIT_DATA,
 	PAGE_ROUTES,
 	CART_NUM,
-	TEMPLATE
+	TEMPLATE_DATA
 } from '../types.js'
 const state = {
 	initData: {},
@@ -25,8 +25,6 @@ const actions = {
 				uni.setStorageSync('sysInfo', res.data.info);
 				uni.setStorageSync('shareInfo', res.data.share);
 				resolve(res)
-			}).then(() => {
-				store.dispatch('getTemplate', options);
 			}).catch(e => {
 				reject(e)
 			})
@@ -67,7 +65,7 @@ const actions = {
 			}
 			api('template', params).then(res => {
 				uni.setStorageSync('templateData', res.data);
-				commit('TEMPLATE', res.data);
+				commit('TEMPLATE_DATA', res.data);
 				resolve(res)
 			}).catch(e => {
 				reject(e)
@@ -83,7 +81,7 @@ const mutations = {
 	[INIT_DATA](state, data) {
 		state.initData = data
 	},
-	[TEMPLATE](state, data) {
+	[TEMPLATE_DATA](state, data) {
 		state.templateData = data
 	},
 	// 弹窗一次的话，关闭的时候删除数据。

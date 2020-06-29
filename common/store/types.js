@@ -1,6 +1,6 @@
 export const INIT_DATA = 'INIT_DATA' //初始化数据
 export const PAGE_ROUTES = 'PAGE_ROUTES'//路由表
-export const TEMPLATE = 'TEMPLATE'//模板信息
+export const TEMPLATE_DATA = 'TEMPLATE_DATA'//模板信息
 
 export const SET_THEME = 'SET_THEME' //更改主题
 

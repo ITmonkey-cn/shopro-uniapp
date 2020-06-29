@@ -26,13 +26,15 @@ export default {
 	name: 'shoproTabbar',
 	components: {},
 	data() {
-		return {};
+		return {
+			tabbarData: {}
+		};
 	},
 	props: {},
 	computed: {
-		...mapState({
-			tabbarData: state => state.init.templateData.tabbar[0].content
-		}),
+		// ...mapState({
+		// 	tabbarData: state => state.init.templateData.tabbar[0].content
+		// }),
 		currentPath() {
 			let pages = getCurrentPages();
 			let currPage = null;
@@ -42,8 +44,21 @@ export default {
 			return '/' + currPage;
 		}
 	},
-	created() {},
+	async created() {
+		let that = this;
+		let templateData = await this.getTemplate();
+			console.log(123123,templateData)
+				// console.log('tab', that.$store.state.init.templateData.tabbar[0].content);
+				// console.log(that.tabbarData,1)
+				// that.tabbarData = that.$store.state.init.templateData.tabbar[0].content;
+				// console.log(that.tabbarData,2)
+	
+			
+	
+		
+	},
 	methods: {
+				...mapActions(['getTemplate']),
 		// 切换tabbar
 		switchTabbar(tab, index) {
 			this.$tools.routerTo(tab.path, null, true);
