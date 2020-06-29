@@ -58,7 +58,7 @@
 		<sh-force-login></sh-force-login>
 		<!-- #endif -->
 		<!-- 自定义底部导航 -->
-		<shopro-tabbar v-if="!template.length"></shopro-tabbar>
+		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
 		<shopro-float-btn></shopro-float-btn>
 		<!-- 连续弹窗提醒 -->

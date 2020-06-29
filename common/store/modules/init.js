@@ -11,7 +11,8 @@ import {
 const state = {
 	initData: {},
 	routes: [],
-	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {}
+	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {},
+	popupData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData').popup[0].content : {}
 }
 
 const actions = {

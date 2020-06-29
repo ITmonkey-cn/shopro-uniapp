@@ -1,5 +1,5 @@
 <template>
-	<view v-if="floatList.length && floatList[0].page.includes(currentPath)" class="shopro-float-btn">
+	<view v-if="showBtn" class="shopro-float-btn">
 		<view :class="{ 'btn-mark': showBtnList }" cathctouchmove @tap="hideBtnModal"></view>
 		<button class="cu-btn wechat-btn" @tap="onBtn">
 			<image class="wechat_img" :src="floatList.length == 1 ? floatList[0].btnimage : floatData.image" mode="widthFix"></image>
@@ -31,19 +31,20 @@ export default {
 		return {
 			showModal: false,
 			showBtnList: false,
-			modalImg: ''
+			modalImg: '',
+			showBtn:false
 		};
 	},
 	props: {},
 	computed: {
 		...mapState({
-			floatData: ({ init }) => init.templateData['float-button'][0].content
+			template: state => state.init.templateData['float-button']
 		}),
-		// floatData() {
-		// 	if (this.template.length) {
-		// 		return this.template
-		// 	}
-		// },
+		floatData() {
+			if (this.template) {
+				return this.template[0].content;
+			}
+		},
 		currentPath() {
 			let pages = getCurrentPages();
 			let currPage = null;
@@ -53,15 +54,17 @@ export default {
 			return '/' + currPage;
 		},
 		floatList() {
-			if (this.floatData) {
+			if (this.floatData&&this.floatData.list) {
 				let arr = this.floatData.list.filter(item => {
 					return item.page.includes(this.currentPath);
 				});
+				this.showBtn = arr[0].page.includes(this.currentPath)
 				return arr;
 			}
 		}
 	},
-	created() {},
+	created() {
+	},
 	methods: {
 		hideModal() {
 			this.showModal = false;

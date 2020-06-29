@@ -72,7 +72,6 @@ export default {
 		// 自定义底部导航，控制显示隐藏。
 		this.init(options)
 			.then(res => {
-				console.log(res,1111)
 				this.autoLogin(res[2].data);
 				this.getRoutes();
 			})
