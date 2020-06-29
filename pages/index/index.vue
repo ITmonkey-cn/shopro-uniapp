@@ -150,9 +150,8 @@ export default {
 	},
 	onLoad(options) {
 		// 预览模式截图
-		let mode = options.mode;
-		if (mode !== undefined) {
-			this.mode = mode;
+		if (typeof options !== 'undefined' && typeof options.mode !== 'undefined') {
+			this.mode = options.mode;
 			this.shop_id = options.shop_id;
 		}
 	},
@@ -188,8 +187,6 @@ export default {
 		screenShotPreviewImage() {
 			let that = this;
 			let div = window.window.document.getElementsByClassName('page_box');
-			console.log('h5 div', div);
-			console.log(1233, div[0]);
 			html2canvas(div[0], {
 				x: 0,
 				y: 0,
