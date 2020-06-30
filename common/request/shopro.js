@@ -286,6 +286,13 @@ export default {
 			// desc: '账号密码登录',
 		},
 
+		getWxMiniProgramSessionKey: {
+			url: 'user/getWxMiniProgramSessionKey',
+			auth: false,
+			method: 'POST',
+			// desc: '获取用户session_key',
+		},
+		
 		wxMiniProgramLogin: {
 			url: 'user/wxMiniProgramLogin',
 			auth: false,

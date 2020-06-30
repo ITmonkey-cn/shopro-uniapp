@@ -622,7 +622,7 @@
 		"navigationBarTitleText": "",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
-		"navigationStyle": "default" //默认是default，即带有原生导航栏。custom,取消导航栏。
+		"navigationStyle": "custom" //默认是default，即带有原生导航栏。custom,取消导航栏。
 	}
 	// 默认底部导航栏
 	// "tabBar": {

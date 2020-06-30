@@ -93,6 +93,38 @@ export default class Wechat {
 	}
 
 	// #ifdef MP-WEIXIN
+	getWxMiniProgramSessionKey() {
+		let that = this;
+		let sessionStatus = false;
+		let session_key = '';
+		return new Promise((resolve, reject) => {
+			uni.checkSession({
+				success(res) {
+					if(res.errMsg === 'checkSession:ok') sessionStatus = true;
+				}
+			})
+			if(!uni.getStorageSync('session_key') || !sessionStatus) {
+				uni.login({
+						success: function(info) {
+							let code = info.code;
+							api('user.getWxMiniProgramSessionKey', {
+								code: code,
+							}).then(res => {
+								if (res.code === 1) {
+									uni.setStorageSync('session_key', res.data.session_key);
+									session_key = res.data.session_key;
+								}
+							});
+						}
+				});	
+			}else{
+				session_key = uni.getStorageSync('session_key');
+			}
+			resolve(session_key);
+				
+		});
+	}
+	
 	wxMiniProgramLogin(e) {
 		let that = this;
 		return new Promise((resolve, reject) => {
@@ -101,7 +133,7 @@ export default class Wechat {
 					success: function(info) {
 						let code = info.code;
 						api('user.wxMiniProgramLogin', {
-							code: code,
+							session_key: uni.getStorageSync('session_key'),
 							encryptedData: e.detail.encryptedData,
 							iv: e.detail.iv,
 							signature: e.detail.signature

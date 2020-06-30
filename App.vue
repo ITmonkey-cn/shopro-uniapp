@@ -40,6 +40,7 @@ export default {
 
 					// #ifdef MP-WEIXIN
 					platform = 'wxMiniProgram';
+					new Wechat().getWxMiniProgramSessionKey();
 					let custom = wx.getMenuButtonBoundingClientRect();
 					Vue.prototype.Custom = custom;
 					Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
