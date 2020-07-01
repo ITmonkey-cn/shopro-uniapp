@@ -127,7 +127,6 @@ export default {
 			HAS_LIVE: HAS_LIVE,
 			// #endif
 			mode: '',
-			shop_id: 0
 		};
 	},
 	computed: {
@@ -149,14 +148,10 @@ export default {
 		}
 	},
 	onLoad(options) {
-		// 预览模式截图
-		if (typeof options !== 'undefined' && typeof options.mode !== 'undefined') {
-			this.mode = options.mode;
-			this.shop_id = options.shop_id;
-		}
+		
 	},
-	onReady() {
-		if (this.mode === 'save') {
+	mounted() {
+		if (uni.getStorageSync('screenShot')) {
 			this.screenShotPreviewImage();
 		}
 	},
@@ -204,7 +199,9 @@ export default {
 				let screenShotBase64 = canvas.toDataURL();
 				that.$api('uploadBase64', { content: screenShotBase64 }).then(res => {
 					if (res.code === 1) {
-						that.$api('dev.asyncDecorateScreenShot', { shop_id: that.shop_id, image: res.data.url });
+						that.$api('dev.asyncDecorateScreenShot', { shop_id: uni.getStorageSync('shop_id'), image: res.data.url });
+						uni.removeStorageSync('screenShot');
+						uni.removeStorageSync('shop_id');
 					}
 				});
 			});

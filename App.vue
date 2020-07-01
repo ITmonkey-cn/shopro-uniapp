@@ -70,6 +70,11 @@ export default {
 		}
 	},
 	onLaunch: async function(options) {
+		if(options.query.mode === 'save') {
+			//截图模式
+			uni.setStorageSync('screenShot', true);
+			uni.setStorageSync('shop_id', options.query.shop_id);
+		}
 		// 自定义底部导航，控制显示隐藏。
 		this.init(options)
 			.then(res => {

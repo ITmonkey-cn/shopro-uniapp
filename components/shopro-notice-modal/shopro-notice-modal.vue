@@ -1,5 +1,5 @@
 <template>
-	<view class="popup-box">
+	<view class="popup-box" v-if="!screenShot">
 		<view v-for="(p, index) in newPopupList" :key="index">
 			<view class="cu-modal" :class="{ show:showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
 				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
@@ -26,7 +26,8 @@
 		data() {
 			return {
 				popupCurrent: 0,
-				showModal: true
+				showModal: true,
+				screenShot: uni.getStorageSync('screenShot')
 			};
 		},
 		props: {
@@ -36,11 +37,6 @@
 			...mapState({
 				popupData: state => state.init.popupData
 			}),
-			// popupData(){
-			// 	if(this.template.length){
-			// 		return this.template.popup[0].content
-			// 	}
-			// },
 			currentPath() {
 				let pages = getCurrentPages();
 				let currPage = null;

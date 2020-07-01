@@ -17,7 +17,7 @@ export default class Wechat {
 
 	async login() {
 		let token = '';
-		if(router.$Route.path.indexOf('public/login') == -1) {
+		if (router.$Route.path.indexOf('public/login') == -1) {
 			uni.setStorageSync('fromLogin', router.$Route);
 		}
 		// #ifdef MP-WEIXIN
@@ -32,7 +32,7 @@ export default class Wechat {
 		// #endif
 	}
 	// #ifdef H5
-	
+
 	wxOfficialAccountLogin() {
 		let oUrl = window.location.href;
 		window.location = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + store.state.init.initData.wechat.appid +
@@ -41,7 +41,7 @@ export default class Wechat {
 		throw 'stop';
 	}
 	//临时登录获取OpenId 不入库不绑定用户
-	
+
 	wxOfficialAccountBaseLogin() {
 		let oUrl = window.location.href;
 		//首次进入 没有登录 保存
@@ -100,52 +100,46 @@ export default class Wechat {
 		return new Promise((resolve, reject) => {
 			uni.checkSession({
 				success(res) {
-					if(res.errMsg === 'checkSession:ok') sessionStatus = true;
+					if (res.errMsg === 'checkSession:ok') sessionStatus = true;
 				}
 			})
-			if(!uni.getStorageSync('session_key') || !sessionStatus) {
-				uni.login({
-						success: function(info) {
-							let code = info.code;
-							api('user.getWxMiniProgramSessionKey', {
-								code: code,
-							}).then(res => {
-								if (res.code === 1) {
-									uni.setStorageSync('session_key', res.data.session_key);
-									session_key = res.data.session_key;
-								}
-							});
-						}
-				});	
-			}else{
-				session_key = uni.getStorageSync('session_key');
-			}
-			resolve(session_key);
-				
-		});
-	}
-	
-	wxMiniProgramLogin(e) {
-		let that = this;
-		return new Promise((resolve, reject) => {
-			if(e.detail.errMsg === "getUserInfo:ok"){
+			if (!uni.getStorageSync('session_key') || !sessionStatus) {
 				uni.login({
 					success: function(info) {
 						let code = info.code;
-						api('user.wxMiniProgramLogin', {
-							session_key: uni.getStorageSync('session_key'),
-							encryptedData: e.detail.encryptedData,
-							iv: e.detail.iv,
-							signature: e.detail.signature
+						api('user.getWxMiniProgramSessionKey', {
+							code: code,
 						}).then(res => {
 							if (res.code === 1) {
-								resolve(res.data.token);
+								uni.setStorageSync('session_key', res.data.session_key);
+								session_key = res.data.session_key;
 							}
 						});
 					}
-			});
-		}
-	
+				});
+			} else {
+				session_key = uni.getStorageSync('session_key');
+			}
+			resolve(session_key);
+
+		});
+	}
+
+	wxMiniProgramLogin(e) {
+		let that = this;
+		return new Promise((resolve, reject) => {
+			if (e.detail.errMsg === "getUserInfo:ok") {
+				api('user.wxMiniProgramLogin', {
+					session_key: uni.getStorageSync('session_key'),
+					encryptedData: e.detail.encryptedData,
+					iv: e.detail.iv,
+					signature: e.detail.signature
+				}).then(res => {
+					if (res.code === 1) {
+						resolve(res.data.token);
+					}
+				});
+			}
 		});
 	}
 
