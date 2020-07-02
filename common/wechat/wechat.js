@@ -146,7 +146,6 @@ export default class Wechat {
 	checkMiniProgramUpdate() {
 		let updateManager = uni.getUpdateManager();
 		updateManager.onCheckForUpdate(function(res) {
-			console.log('小程序版本更新检查', res);
 			// 请求完新版本信息的回调
 		});
 		updateManager.onUpdateReady(function(res) {

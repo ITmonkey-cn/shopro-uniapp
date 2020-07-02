@@ -10,7 +10,7 @@
 
 <script>
 export default {
-	name:"shoproEmpty",
+	name: 'shoproEmpty',
 	components: {},
 	data() {
 		return {

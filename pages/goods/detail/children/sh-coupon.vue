@@ -38,8 +38,7 @@ export default {
 </script>
 
 <style lang="scss">
-
-.category-box{
+.category-box {
 	padding-top: 20rpx;
 	background: #fff;
 }
@@ -49,7 +48,7 @@ export default {
 	height: 220rpx;
 	margin-bottom: 20rpx;
 	.tab-list {
-		/deep/.coupon-wrap{
+		/deep/.coupon-wrap {
 			width: 710rpx;
 		}
 	}

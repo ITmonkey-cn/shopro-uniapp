@@ -18,7 +18,7 @@ export default {
 		method: 'POST',
 		// desc: '上传',
 	},
-	
+
 	/** 上传Base64图片 ↓ **/
 	uploadBase64: {
 		url: 'index/uploadBase64',
@@ -292,7 +292,7 @@ export default {
 			method: 'POST',
 			// desc: '获取用户session_key',
 		},
-		
+
 		wxMiniProgramLogin: {
 			url: 'user/wxMiniProgramLogin',
 			auth: false,

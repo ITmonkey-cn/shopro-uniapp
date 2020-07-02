@@ -43,7 +43,7 @@ export default {
 	width: 100vw;
 	height: 100vh;
 	overflow: hidden;
-	z-index: 9999;
+	z-index: 11111;
 	top: 0;
 	background: linear-gradient(180deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 25%, rgba(255, 255, 255, 1) 98%);
 	.logo-bg {

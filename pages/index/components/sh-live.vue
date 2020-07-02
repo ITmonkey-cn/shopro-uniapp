@@ -121,9 +121,6 @@ export default {
 					.then(res => {
 						// 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
 						that.detail.live_status = res.liveStatus;
-
-						console.log('get live status', that.detail.room_id, res.liveStatus);
-						console.log('detail', that.detail.room_id, that.detail.live_status);
 					})
 					.catch(err => {
 						console.log('get live status', err);

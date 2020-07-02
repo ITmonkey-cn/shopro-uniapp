@@ -195,7 +195,7 @@ export default {
 					that.$tools.toast('申请售后成功');
 					that.getOrderList();
 					//  #ifdef MP-WEIXIN
-					this.$store.dispatch('getMessageIds','aftersale');
+					this.$store.dispatch('getMessageIds', 'aftersale');
 					//  #endif
 				}
 			});

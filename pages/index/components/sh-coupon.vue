@@ -26,7 +26,6 @@ export default {
 	},
 	computed: {},
 	created() {
-		// console.log('coupons', this.detail);
 		this.getCouponsList();
 	},
 	methods: {

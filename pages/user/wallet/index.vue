@@ -86,7 +86,7 @@ export default {
 	},
 	onLoad() {
 		this.getApplyRules();
-		this.getUserInfo()
+		this.getUserInfo();
 	},
 	methods: {
 		...mapActions(['getUserInfo']),

@@ -15,48 +15,47 @@ export default {
 			let that = this;
 			let platform = '';
 			return new Promise((resolve, reject) => {
-			uni.getSystemInfo({
-				success: function(e) {
-					Vue.prototype.StatusBar = e.statusBarHeight;
-					// #ifdef H5
-					Vue.prototype.CustomBar = e.statusBarHeight + 45;
-					if (that.$wxsdk.isWechat()) {
-						platform = 'wxOfficialAccount';
-					} else {
-						platform = 'H5';
-					}
-					// #endif
-
-					// #ifdef APP-PLUS
-					platform = 'App';
-					if (e.platform == 'android') {
-						uni.setStorageSync('isAndroid', true);
-						Vue.prototype.CustomBar = e.statusBarHeight + 50;
-					} else {
+				uni.getSystemInfo({
+					success: function(e) {
+						Vue.prototype.StatusBar = e.statusBarHeight;
+						// #ifdef H5
 						Vue.prototype.CustomBar = e.statusBarHeight + 45;
-						uni.setStorageSync('isAndroid', false);
-					}
-					// #endif
+						if (that.$wxsdk.isWechat()) {
+							platform = 'wxOfficialAccount';
+						} else {
+							platform = 'H5';
+						}
+						// #endif
 
-					// #ifdef MP-WEIXIN
-					platform = 'wxMiniProgram';
-					new Wechat().getWxMiniProgramSessionKey();
-					let custom = wx.getMenuButtonBoundingClientRect();
-					Vue.prototype.Custom = custom;
-					Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-					// #endif
-				}
+						// #ifdef APP-PLUS
+						platform = 'App';
+						if (e.platform == 'android') {
+							uni.setStorageSync('isAndroid', true);
+							Vue.prototype.CustomBar = e.statusBarHeight + 50;
+						} else {
+							Vue.prototype.CustomBar = e.statusBarHeight + 45;
+							uni.setStorageSync('isAndroid', false);
+						}
+						// #endif
+
+						// #ifdef MP-WEIXIN
+						platform = 'wxMiniProgram';
+						new Wechat().getWxMiniProgramSessionKey();
+						let custom = wx.getMenuButtonBoundingClientRect();
+						Vue.prototype.Custom = custom;
+						Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+						// #endif
+					}
+				});
+				uni.setStorageSync('platform', platform);
+				resolve(platform);
 			});
-			uni.setStorageSync('platform', platform);
-			resolve(platform)
-			})
 		},
 		// 自动登录
 		async autoLogin(data) {
 			let initData = data;
 			var wechat = new Wechat();
 			if (initData.wechat.autologin && !uni.getStorageSync('token')) {
-				console.log('自动登录状态', initData.wechat.autologin);
 				// #ifdef H5
 				uni.setStorageSync('appid', initData.wechat.appid);
 				let token = await wechat.login();
@@ -70,7 +69,7 @@ export default {
 		}
 	},
 	onLaunch: async function(options) {
-		if(options.query.mode === 'save') {
+		if (options.query.mode === 'save') {
 			//截图模式
 			uni.setStorageSync('screenShot', true);
 			uni.setStorageSync('shop_id', options.query.shop_id);

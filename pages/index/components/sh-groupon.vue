@@ -136,10 +136,10 @@ export default {
 	}
 }
 // 今日必拼+限时抢购
-.group-goods{
+.group-goods {
 	background: #fff;
 	border-radius: 20rpx;
-	overflow: hidden; 
+	overflow: hidden;
 	.title-box {
 		padding-bottom: 20rpx;
 

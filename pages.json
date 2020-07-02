@@ -15,7 +15,7 @@
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
 
-				//				 "enablePullDownRefresh": true,
+				// "enablePullDownRefresh": true,
 
 				"navigationStyle": "custom"
 			},
@@ -354,6 +354,15 @@
 						"async": true,
 						"title": "富文本",
 						"group": "通用"
+					}
+				},
+				{
+					"path": "webview",
+					"style": {
+						"navigationBarTitleText": "" //外部链接
+					},
+					"meta": {
+
 					}
 				},
 				{

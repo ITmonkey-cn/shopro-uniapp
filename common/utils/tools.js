@@ -8,6 +8,17 @@ export default {
 	 */
 	routerTo(path, params = {}, isLogin) {
 		let objParams = {}
+		// 是否跳转外部链接
+		if (~path.indexOf('http')) {
+			router.push({
+				path: '/pages/public/webview',
+				query: {
+					'webviewPath': path
+				}
+			})
+			return false
+		}
+		// 判断是否有参数
 		if (path.indexOf('?') !== -1) {
 			let index = path.lastIndexOf('?');
 			let query = path.substring(index + 1, path.length);
@@ -18,6 +29,7 @@ export default {
 				objParams[mArr[0]] = mArr[1]
 			})
 		}
+		// 判断是否是tabbar
 		if (isLogin) {
 			router.replaceAll({
 				path: path,

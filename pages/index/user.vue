@@ -1,9 +1,5 @@
 <template>
 	<view class="user-box">
-		<!-- 上拉显示的标题栏 -->
-		<!-- <view :class="scrollTop < 50 ? 'transtion-head' : 'transtion-head--active'">
-			<cu-custom><text slot="content" style="font-weight: bold;font-size: 34rpx;">我的</text></cu-custom>
-		</view> -->
 		<block v-if="template.length" v-for="(item, index) in template" :key="index">
 			<!-- 搜索 -->
 			<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
@@ -112,8 +108,6 @@ export default {
 		return {
 			platform: uni.getStorageSync('platform'), //当前平台。
 			isRefresh: false, //更新
-			showFollowWechat: true, //绑定公众号
-			orderScrollLeft: 0, //订单卡片滑动。
 			scrollTop: 0, //页面滚动距离
 			bgcolor: ''
 		};
@@ -139,9 +133,6 @@ export default {
 		}
 	},
 	onLoad() {},
-	onPageScroll(e) {
-		this.scrollTop = e.scrollTop;
-	},
 	onShow() {
 		this.$store.commit('CART_NUM');
 		this.getUserInfo();
@@ -154,23 +145,6 @@ export default {
 				path: path,
 				query: query
 			});
-		},
-		// 更新信息
-		onRefresh() {
-			const that = this;
-			that.isRefresh = true;
-			setTimeout(() => {
-				that.isRefresh = false;
-			}, 200);
-		},
-		refreshWechatUser(e) {
-			this.onRefresh();
-			if (this.platform === 'wxOfficialAccount') {
-				let wechat = new Wechat();
-				wechat.login();
-			} else if (this.platform === 'wxMiniProgram') {
-				this.$store.commit('FORCE_OAUTH', true);
-			}
 		},
 		getbgcolor(e) {
 			this.bgcolor = e;

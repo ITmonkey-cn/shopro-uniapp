@@ -297,7 +297,7 @@ export default {
 		.img-box {
 			position: relative;
 			margin-right: 34rpx;
-			&:nth-child(6n){
+			&:nth-child(6n) {
 				margin-right: 0;
 			}
 			.tag {

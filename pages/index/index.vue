@@ -126,7 +126,7 @@ export default {
 			// #ifdef MP-WEIXIN
 			HAS_LIVE: HAS_LIVE,
 			// #endif
-			mode: '',
+			mode: ''
 		};
 	},
 	computed: {
@@ -147,9 +147,7 @@ export default {
 			}
 		}
 	},
-	onLoad(options) {
-		
-	},
+	onLoad(options) {},
 	mounted() {
 		if (uni.getStorageSync('screenShot')) {
 			this.screenShotPreviewImage();

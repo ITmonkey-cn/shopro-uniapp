@@ -22,7 +22,6 @@ export default {
 	},
 	created() {
 		this.detail.id && this.getRichText();
-		
 	},
 	methods: {
 		getRichText() {

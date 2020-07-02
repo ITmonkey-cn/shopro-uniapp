@@ -8,7 +8,7 @@
 			</view>
 			<view class="nav-item y-f" :class="{ current: filterIndex === 0 }" @tap="tabClick(0)">
 				<view class="title-box flex align-center">
-					<text class="filter-title">{{defaultOrder === 1 ?'自定义':'综合推荐'}}</text>
+					<text class="filter-title">{{ defaultOrder === 1 ? '自定义' : '综合推荐' }}</text>
 					<view class="p-box"><text :class="{ active: filterIndex === 0 }" class="yticon cuIcon-fold xia"></text></view>
 				</view>
 				<view class="line" :class="{ 'line-active': filterIndex === 0 }"></view>
@@ -47,7 +47,7 @@ export default {
 			defaultOrder: 0, //综合
 			priceOrder: 0, //价格
 			salesOrder: 0, //销量
-			newProdcutOrder:0//新品优先
+			newProdcutOrder: 0 //新品优先
 		};
 	},
 	computed: {
@@ -56,7 +56,7 @@ export default {
 				defaultOrder: this.defaultOrder,
 				priceOrder: this.priceOrder,
 				salesOrder: this.salesOrder,
-				newProdcutOrder:this.newProdcutOrder
+				newProdcutOrder: this.newProdcutOrder
 			};
 			return data;
 		}
@@ -83,7 +83,7 @@ export default {
 			}
 			if (index === 3) {
 				this.newProdcutOrder = 1;
-			}else{
+			} else {
 				this.newProdcutOrder = 0;
 			}
 			this.$emit('change', this.filterData);

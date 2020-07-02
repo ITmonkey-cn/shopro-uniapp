@@ -13,7 +13,7 @@
 						<view class="img-box x-c"><image class="coupon-img" src="http://shopro.7wpp.com/imgs/coupon.png" mode=""></image></view>
 						<view class="title">{{ couponDetail.amount }}元优惠券</view>
 						<view class="tip">满{{ couponDetail.enough }}元可用</view>
-						<button class="cu-btn use-btn" @tap="goScroll">{{state===2?'已使用':'立即使用'}}</button>
+						<button class="cu-btn use-btn" @tap="goScroll">{{ state === 2 ? '已使用' : '立即使用' }}</button>
 						<button class="cu-btn fail-btn" v-if="couponGoods.usetimeend - nowTime <= 0">已失效</button>
 						<view class="time" v-if="couponDetail.usetime">
 							有效期：{{ tools.timestamp(couponDetail.usetime.start) }} 至 {{ tools.timestamp(couponDetail.usetime.end) }}
@@ -57,7 +57,7 @@ export default {
 			couponGoods: [],
 			scrollId: '',
 			nowTime: new Date().getTime(),
-			state:0
+			state: 0
 		};
 	},
 	computed: {},

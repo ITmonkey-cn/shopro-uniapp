@@ -5,8 +5,8 @@
 				<image class="avatar" :src="comment.user.avatar" mode="aspectFill"></image>
 				<view class="user-name">{{ comment.user.nickname }}</view>
 				<view class="x-f star-box">
-					<text class="cuIcon-favorfill star-active" v-for="s in comment.level" :key="s" ></text>
-					<text class="cuIcon-favorfill" v-for="z in (5 - comment.level)" :key="z"></text>
+					<text class="cuIcon-favorfill star-active" v-for="s in comment.level" :key="s"></text>
+					<text class="cuIcon-favorfill" v-for="z in 5 - comment.level" :key="z"></text>
 				</view>
 			</view>
 			<text class="time">{{ tools.timestamp(comment.createtime) }}</text>
@@ -15,8 +15,16 @@
 		<view class="img-box">
 			<view class="mask"></view>
 			<scroll-view class="nav" scroll-x scroll-with-animation :scroll-left="scrollLeft">
-				<image v-for="(img, index) in comment.images" :key="index" @tap="imgSelect(index)" @tap.stop="tools.previewImage(comment.images, index)" class="comment-img" :src="img" mode="aspectFill"></image>
-			</scroll-view> 
+				<image
+					v-for="(img, index) in comment.images"
+					:key="index"
+					@tap="imgSelect(index)"
+					@tap.stop="tools.previewImage(comment.images, index)"
+					class="comment-img"
+					:src="img"
+					mode="aspectFill"
+				></image>
+			</scroll-view>
 		</view>
 	</view>
 </template>

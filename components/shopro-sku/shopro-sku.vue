@@ -1,14 +1,5 @@
 <template>
 	<view class="">
-		<!-- 	<view class="size-box" @tap="showSkuModal">
-			<view class="x-bc">
-				<view class="x-f">
-					<text class="title">规格</text>
-					<text class="tip">{{ currentSkuText || '请选择规格' }}</text>
-				</view>
-				<text class="cuIcon-right"></text>
-			</view>
-		</view> -->
 		<!-- 规格 -->
 		<view class="cu-modal sku-modal  bottom-modal" style="z-index: 999;" :class="{ show: showModal }" @tap="hideModal" v-if="goodsInfo.sku_price">
 			<view class="cu-dialog" @tap.stop style="background: none;">
@@ -141,7 +132,6 @@ export default {
 			currentSkuArray.forEach(v => {
 				that.skuList.forEach(s => {
 					s.content.forEach(u => {
-						console.log(v, s, u);
 						if (u.id === v) {
 							str += ' ' + u.name;
 						}

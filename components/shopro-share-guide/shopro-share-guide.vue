@@ -1,12 +1,14 @@
 <template>
 	<view class="cu-modal" :class="[{ show: showModal }]" cathctouchmove @tap="hideModal">
-		<view class="cu-dialog cu-dialog1" @tap.stop style="background: none;overflow: visible;"><image class="guide-img" src="http://shopro.7wpp.com/imgs/modal/share_guide.png" mode=""></image></view>
+		<view class="cu-dialog cu-dialog1" @tap.stop style="background: none;overflow: visible;">
+			<image class="guide-img" src="http://shopro.7wpp.com/imgs/modal/share_guide.png" mode=""></image>
+		</view>
 	</view>
 </template>
 
 <script>
 export default {
-		name:"shoproShareGuide",
+	name: 'shoproShareGuide',
 	components: {},
 	data() {
 		return {};
@@ -41,7 +43,7 @@ export default {
 	width: 580rpx;
 	height: 430rpx;
 }
-.cu-dialog1{
+.cu-dialog1 {
 	vertical-align: top;
 }
 </style>

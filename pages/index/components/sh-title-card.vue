@@ -34,7 +34,7 @@ export default {
 	margin: 0 auto;
 	position: relative;
 	border-radius: 30rpx;
-	
+
 	.title-bg {
 		width: 100%;
 		height: 100%;

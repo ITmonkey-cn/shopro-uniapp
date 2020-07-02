@@ -52,7 +52,6 @@ export default {
 		selCoupon(index) {
 			this.radioId = index;
 			this.$emit('changeCoupon', this.radioId - 1);
-			console.log('index', this.radioId - 1);
 		},
 		saveCoupon() {
 			this.showModal = false;

@@ -71,7 +71,6 @@ const actions = {
 				resolve(res)
 
 			}).catch(e => {
-				console.log(e)
 				reject(e)
 			})
 		})
@@ -118,9 +117,13 @@ const actions = {
 				})
 				uni.requestSubscribeMessage({
 					tmplIds: arr,
-					success(res) {
+					success: (res) => {
 						console.log(res);
+					},
+					fail: (err) => {
+						console.log(err);
 					}
+
 				});
 				resolve(res)
 			}).catch(e => {
@@ -159,7 +162,6 @@ const mutations = {
 		store.commit('CART_LIST', []);
 		store.commit('CART_NUM');
 		store.commit('ORDER_NUMBER', 0);
-		// store.commit('FORCE_OAUTH', true);
 	},
 
 }

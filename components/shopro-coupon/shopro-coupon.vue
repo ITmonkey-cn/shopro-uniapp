@@ -42,7 +42,7 @@
 
 <script>
 export default {
-	name:'shoproCoupon',
+	name: 'shoproCoupon',
 	components: {},
 	data() {
 		return {

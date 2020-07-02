@@ -52,13 +52,13 @@ export default {
 		getFaqList() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$api('faq.list',{
-				page:that.currentPage
+			that.$api('faq.list', {
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					res.data.data.forEach((faq, index) => {
 						faq.indexNum = (index + 1).toString().padStart(2, '0');
-					})
+					});
 					that.faqList = [...that.faqList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {

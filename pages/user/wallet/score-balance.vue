@@ -59,7 +59,7 @@ export default {
 		})
 	},
 	onLoad() {
-		this.getScoreLog()
+		this.getScoreLog();
 	},
 	methods: {
 		loadMore() {

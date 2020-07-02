@@ -1,6 +1,6 @@
 <template>
 	<view class="sh-grid-box mb10">
-		<view class="tool-item y-f" v-for="(menu,index) in detail.list" :key="index" @tap="jump(menu)">
+		<view class="tool-item y-f" v-for="(menu, index) in detail.list" :key="index" @tap="jump(menu)">
 			<image class="tool-img" :src="menu.image" mode="aspectFill"></image>
 			<text class="item-title">{{ menu.name }}</text>
 		</view>
@@ -24,7 +24,6 @@ export default {
 	},
 	methods: {
 		jump(data) {
-			console.log(data, 1111111111111);
 			this.$tools.routerTo(data.path);
 		}
 	}

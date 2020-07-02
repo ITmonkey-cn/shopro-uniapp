@@ -17,7 +17,7 @@
 					</view>
 				</checkbox-group>
 				<!-- 缺省页 -->
-				<shopro-empty  v-if="!favoriteList.length" :emptyData="emptyData"></shopro-empty>
+				<shopro-empty v-if="!favoriteList.length" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
 				<view v-if="favoriteList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>

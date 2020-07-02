@@ -51,7 +51,7 @@
 <script>
 import shoproShareGuide from '@/components/shopro-share-guide/shopro-share-guide.vue';
 export default {
-		name:"shoproShare",
+	name: 'shoproShare',
 	components: {
 		shoproShareGuide
 	},

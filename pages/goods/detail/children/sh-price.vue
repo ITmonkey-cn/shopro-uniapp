@@ -94,7 +94,7 @@
 <script>
 var timer = null;
 export default {
-	name:"shPrice",
+	name: 'shPrice',
 	components: {},
 	data() {
 		return {

@@ -68,7 +68,6 @@ export default {
 		},
 		// 路由跳转
 		jump(path, parmas) {
-			console.log(parmas);
 			this.$Router.push({
 				path: path,
 				query: parmas

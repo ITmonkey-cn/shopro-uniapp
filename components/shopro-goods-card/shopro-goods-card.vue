@@ -21,7 +21,7 @@
 
 <script>
 export default {
-		name:"shoproGoodsCard",
+	name: 'shoproGoodsCard',
 	components: {},
 	data() {
 		return {

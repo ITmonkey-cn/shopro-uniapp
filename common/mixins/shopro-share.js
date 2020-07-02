@@ -74,12 +74,12 @@ export default {
 			}
 		}
 	},
-	
+
 	methods: {
 		setShareInfo(scene = {
 			title: '', //自定义分享标题
 			image: '', //自定义分享图片
-			query: {}  //自定义分享参数
+			query: {} //自定义分享参数
 		}) {
 			let that = this;
 			uni.getStorage({

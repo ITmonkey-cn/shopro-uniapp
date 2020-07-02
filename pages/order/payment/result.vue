@@ -75,9 +75,6 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
-					//  #ifdef MP-WEIXIN
-					res.data.activity_type == 'groupon' ? this.$store.dispatch('getMessageIds', 'grouponResult') : this.$store.dispatch('getMessageIds', 'result');
-					//  #endif
 				}
 			});
 		},

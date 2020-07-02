@@ -14,7 +14,7 @@ export default function api(url, data = {}) {
 				store.commit('OUT_LOGIN');
 			}
 		}
-		if( uni.getStorageSync('token')){
+		if (uni.getStorageSync('token')) {
 			config.header.token = uni.getStorageSync('token');
 		}
 		return config

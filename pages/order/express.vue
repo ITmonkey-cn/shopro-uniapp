@@ -27,17 +27,17 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getOrderItemDetail()
+		this.getOrderItemDetail();
 	},
 	computed: {},
 	methods: {
 		getOrderItemDetail() {
 			let that = this;
 			that.$api('order.itemDetail', {
-				id:that.$Route.query.orderId,
-				order_item_id:that.$Route.query.ordrderItemId
+				id: that.$Route.query.orderId,
+				order_item_id: that.$Route.query.ordrderItemId
 			}).then(res => {
-				if(res.code === 1){
+				if (res.code === 1) {
 					that.goodsDetail = res.data[0];
 				}
 			});

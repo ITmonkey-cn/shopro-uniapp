@@ -97,26 +97,26 @@ export default class ShoproPay {
 				order_sn: that.order.order_sn,
 				payment: that.payment
 			}
-			if(uni.getStorageSync('openid')) {
+			if (uni.getStorageSync('openid')) {
 				params.openid = uni.getStorageSync('openid');
 			}
 			api('pay.prepay', params).then(res => {
 				if (res.code === 1) {
 					if (res.data === 'no_openid') {
 						uni.showModal({
-						    title: '微信支付',
-						    content: '点击确定后请再次使用微信支付',
-						    success: function (res) {
-						        if (res.confirm) {
-						           //静默获取openid
-						           let wechat = new Wechat();
-						           wechat.wxOfficialAccountBaseLogin();
-						        } else if (res.cancel) {
-						            console.log('用户点击取消');
-						        }
-						    }
+							title: '微信支付',
+							content: '点击确定后请再次使用微信支付',
+							success: function(res) {
+								if (res.confirm) {
+									//静默获取openid
+									let wechat = new Wechat();
+									wechat.wxOfficialAccountBaseLogin();
+								} else if (res.cancel) {
+									console.log('用户点击取消');
+								}
+							}
 						});
-						
+
 					} else {
 						uni.hideLoading();
 						resolve(res);
@@ -132,8 +132,7 @@ export default class ShoproPay {
 	async wxOfficialAccountPay() {
 		let that = this;
 		let result = await this.prepay();
-	    wxsdk.wxpay(result.data.pay_data, (res) => {
-			console.log('choose', res)
+		wxsdk.wxpay(result.data.pay_data, (res) => {
 			if (res.errMsg == "chooseWXPay:ok") {
 				Router.replace({
 					path: '/pages/order/payment/result',
@@ -143,18 +142,18 @@ export default class ShoproPay {
 						pay: 1
 					}
 				});
-			}else if(res.errMsg === 'chooseWXPay:cancel') {
+			} else if (res.errMsg === 'chooseWXPay:cancel') {
 				//取消支付
-				
-			}else{
-					Router.replace({
-						path: '/pages/order/payment/result',
-						query: {
-							orderSn: that.order.order_sn,
-							type: that.payment,
-							pay: 0
-						}
-					});
+
+			} else {
+				Router.replace({
+					path: '/pages/order/payment/result',
+					query: {
+						orderSn: that.order.order_sn,
+						type: that.payment,
+						pay: 0
+					}
+				});
 			}
 		});
 
@@ -170,9 +169,8 @@ export default class ShoproPay {
 			let reg = new RegExp('&amp;', 'g') //g代表全部
 			let newUrl = url[1].replace(reg, '&');
 			window.location.href = newUrl
-			console.log(newUrl);
+
 		}
-		// console.log('333',result)
 
 	}
 
@@ -180,7 +178,6 @@ export default class ShoproPay {
 		let that = this;
 		let result = await this.prepay();
 		let payData = result.data.pay_data;
-		console.log('123', payData);
 		uni.requestPayment({
 			provider: 'wxpay',
 			timeStamp: payData.timeStamp,
@@ -199,7 +196,6 @@ export default class ShoproPay {
 				});
 			},
 			fail: function(err) {
-				console.log('err', err)
 				if (err.errMsg !== "requestPayment:fail cancel") {
 					Router.replace({
 						path: '/pages/order/payment/result',
@@ -266,7 +262,6 @@ export default class ShoproPay {
 		let that = this;
 		let result = await this.prepay();
 		if (result.code === 1) {
-			console.log(result.data.pay_data)
 			window.location = result.data.pay_data;
 		}
 	}

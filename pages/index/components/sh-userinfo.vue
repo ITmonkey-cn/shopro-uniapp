@@ -56,7 +56,8 @@ export default {
 	components: {},
 	data() {
 		return {
-			platform: uni.getStorageSync('platform') //当前平台。
+			platform: uni.getStorageSync('platform'), //当前平台。
+			isRefresh: false //更新
 		};
 	},
 	computed: {
@@ -76,6 +77,23 @@ export default {
 				path: path,
 				query: query
 			});
+		},
+		// 更新信息
+		onRefresh() {
+			const that = this;
+			that.isRefresh = true;
+			setTimeout(() => {
+				that.isRefresh = false;
+			}, 200);
+		},
+		refreshWechatUser(e) {
+			this.onRefresh();
+			if (this.platform === 'wxOfficialAccount') {
+				let wechat = new Wechat();
+				wechat.login();
+			} else if (this.platform === 'wxMiniProgram') {
+				this.$store.commit('FORCE_OAUTH', true);
+			}
 		}
 	}
 };
@@ -100,7 +118,7 @@ export default {
 			font-size: 38rpx;
 			font-family: PingFang SC;
 			font-weight: 500;
-			color:#fff;
+			color: #fff;
 		}
 		.status-bar {
 			// #ifndef H5

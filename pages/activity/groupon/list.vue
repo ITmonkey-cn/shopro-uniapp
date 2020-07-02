@@ -40,7 +40,6 @@
 				<view v-if="grouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
 				<shopro-load v-model="isLoading"></shopro-load>
-				
 			</scroll-view>
 		</view>
 		<!-- 自定义底部导航 -->
@@ -78,8 +77,7 @@ export default {
 	onLoad() {
 		this.getGrouponList();
 	},
-	onPullDownRefresh() {
-	},
+	onPullDownRefresh() {},
 	computed: {},
 	methods: {
 		// 路由跳转

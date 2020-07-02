@@ -142,7 +142,6 @@ export default {
 		this.orderType = this.$Route.query.orderType;
 		this.grouponBuyType = this.$Route.query.grouponBuyType;
 		this.grouponId = this.$Route.query.grouponId;
-		console.log(this.grouponId);
 		await this.init();
 	},
 	onShow() {},
@@ -195,6 +194,9 @@ export default {
 					let orderSn = res.data.order_sn;
 					that.getCartList();
 					that.isSubOrder = false;
+					//  #ifdef MP-WEIXIN
+					res.data.activity_type == 'groupon' ? this.$store.dispatch('getMessageIds', 'grouponResult') : this.$store.dispatch('getMessageIds', 'result');
+					//  #endif
 					if (res.data.status > 0) {
 						that.$Router.replace({
 							path: '/pages/order/payment/result',

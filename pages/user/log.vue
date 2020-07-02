@@ -27,14 +27,14 @@
 				<button class="cu-btn close-btn" @tap="cancelFavorite">删除</button>
 			</view>
 		</view>
-	<!-- 自定义底部导航 -->
-	<shopro-tabbar></shopro-tabbar>
-	<!-- 关注弹窗 -->
-	<shopro-float-btn></shopro-float-btn>
-	<!-- 连续弹窗提醒 -->
-	<shopro-notice-modal></shopro-notice-modal>
-	<!-- 登录提示 -->
-	<shopro-login-modal></shopro-login-modal>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
@@ -142,7 +142,6 @@ export default {
 		},
 		// 加载更多
 		loadMore() {
-			console.log('bottom')
 			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
 				this.getbrowseList();

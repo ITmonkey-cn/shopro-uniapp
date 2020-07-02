@@ -8,10 +8,8 @@
 						<view v-if="index < 3">
 							<image class="tip-img" :src="serve.image" mode=""></image>
 							<text>{{ serve.name }}</text>
-							</view>
-						
+						</view>
 					</view>
-					
 				</view>
 			</view>
 			<text class="cuIcon-right"></text>
