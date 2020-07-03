@@ -193,6 +193,7 @@ export default {
 	.area-inp {
 		color: #999;
 		font-size: 28rpx;
+		padding-right: 30rpx;
 	}
 }
 .default-box {
