@@ -1,5 +1,5 @@
 <template>
-	<view class="shopro-tabbar-wrap" v-if="tabbarData.isshow">
+	<view class="shopro-tabbar-wrap" v-if="tabbarData.isshow && showTabbar">
 		<view class="tabbar-box" :style="{ background: tabbarData.bgcolor || '#fff' }">
 			<view class="tabbar-item" v-for="(tab, index) in tabbarList" :key="tab.name" @tap="switchTabbar(tab, index)">
 				<image
@@ -50,6 +50,17 @@ export default {
 				currPage = pages[pages.length - 1].route;
 			}
 			return '/' + currPage;
+		},
+		showTabbar() {
+			if (this?.tabbarData?.list) {
+				let arr = [];
+				let path = '';
+				for (let item of this.tabbarData.list) {
+					path = this.getPath(item.path);
+					arr.push(path);
+				}
+				return arr.includes(this.currentPath);
+			}
 		}
 	},
 	created() {},
@@ -63,6 +74,7 @@ export default {
 				let index = path.lastIndexOf('?');
 				path = path.slice(0, index);
 			}
+			// this.showTabbar = arr[0].page.includes(this.currentPath);
 			return path;
 		}
 	}
