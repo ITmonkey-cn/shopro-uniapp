@@ -201,7 +201,7 @@ export default {
 	}
 
 	image {
-		background-color: #ccc;
+		// background-color: #ccc;
 	}
 }
 </style>

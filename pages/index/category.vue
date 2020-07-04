@@ -1,6 +1,5 @@
 <template>
 	<view class="page_box">
-		<view class="head_box"></view>
 		<view class="content_box">
 			<view class="x-f wrapper-box">
 				<scroll-view class="left y-f" scroll-y>
@@ -31,7 +30,6 @@
 				</scroll-view>
 			</view>
 		</view>
-		<view class="foot_box"></view>
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
