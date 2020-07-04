@@ -31,8 +31,13 @@ export default {
 	},
 	computed: {
 		...mapState({
-			popupData: state => state.init.popupData
+			templateData: state => state.init?.templateData
 		}),
+		popupData() {
+			if (this.templateData) {
+				return this.templateData?.popup[0]?.content;
+			}
+		},
 		currentPath() {
 			let pages = getCurrentPages();
 			let currPage = null;
@@ -55,11 +60,13 @@ export default {
 		hideModal(p) {
 			clearTimeout(timer);
 			this.showModal = false;
+			if(p.style==1){
+				this.$store.commit('delPopup', this.currentPath);
+			}
 			timer = setTimeout(() => {
 				this.popupCurrent += 1;
 				this.showModal = true;
 			}, 500);
-			p.style == 1 && this.$store.commit('delPopup', this.currentPath);
 		},
 		changePopup(path) {
 			this.$tools.routerTo(path);

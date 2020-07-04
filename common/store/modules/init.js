@@ -11,8 +11,7 @@ import {
 const state = {
 	initData: {},
 	routes: [],
-	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {},
-	popupData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData').popup[0].content : {}
+	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {}
 }
 
 const actions = {
@@ -65,6 +64,7 @@ const actions = {
 				});
 			}
 			api('template', params).then(res => {
+
 				uni.setStorageSync('templateData', res.data);
 				commit('TEMPLATE_DATA', res.data);
 				resolve(res)
@@ -87,6 +87,7 @@ const mutations = {
 	},
 	// 弹窗一次的话，关闭的时候删除数据。
 	delPopup(state, path) {
+		uni.removeStorageSync('templateData');
 		let templateData = state.templateData
 		templateData.popup[0].content.list.forEach(item => {
 			if (item.page.includes(path)) {

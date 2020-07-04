@@ -7,7 +7,7 @@ export default {
 	 * 跳转再封装，不支持复杂传参。
 	 */
 	routerTo(path, params = {}, isLogin) {
-		let objParams = {}
+		let objParams = params;
 		// 是否跳转外部链接
 		if (~path.indexOf('http')) {
 			router.push({
