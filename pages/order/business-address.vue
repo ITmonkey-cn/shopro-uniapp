@@ -231,6 +231,7 @@ export default {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+	padding-bottom: 30rpx;
 }
 .touch-guide {
 	justify-content: center;
@@ -242,7 +243,7 @@ export default {
 	font-size: 80rpx;
 }
 .search-box {
-	width: 690rpx;
+	flex: 1;
 	height: 60rpx;
 	background: rgba(243, 243, 243, 1);
 	border-radius: 30rpx;
@@ -250,7 +251,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	padding: 0 25rpx;
-	margin: 20rpx 0;
+	margin-top: 30rpx;
 }
 .cuIcon-search {
 	color: #bdbdbd;
@@ -293,7 +294,9 @@ export default {
 	color: rgba(51, 51, 51, 1);
 	margin-bottom: 30rpx;
 }
-.time-box,.address-detail,.address-phone {
+.time-box,
+.address-detail,
+.address-phone {
 	flex-direction: row;
 	align-items: center;
 	font-size: 24rpx;
