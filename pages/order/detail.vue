@@ -165,11 +165,13 @@
 				</view>
 			</view>
 		</view>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 export default {
 	components: {
 		shoproMiniCard
@@ -259,6 +261,9 @@ export default {
 				if (res.code === 1) {
 					that.$tools.toast('申请退款成功');
 					that.getOrderDetail();
+					//  #ifdef MP-WEIXIN
+					this.$store.dispatch('getMessageIds', 'aftersale');
+					//  #endif
 				}
 			});
 		},

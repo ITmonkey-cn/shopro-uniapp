@@ -7,6 +7,7 @@
 
 <script>
 export default {
+	name: 'shoproSkeletons',
 	components: {},
 	data() {
 		return {
@@ -31,7 +32,7 @@ export default {
 	overflow: hidden;
 	height: 100%;
 	position: fixed;
-	z-index: 998;
+	z-index: 99999;
 	.img {
 		width: 100%;
 	}

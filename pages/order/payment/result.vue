@@ -16,28 +16,21 @@
 					<button class="cu-btn base-btn" v-else @tap="replace('/pages/activity/groupon/my-groupon')">我的拼团</button>
 				</block>
 
-				<button class="cu-btn base-btn" v-else @tap="routerTo.pushTab('/pages/index/index')">返回首页</button>
+				<button class="cu-btn base-btn" v-else @tap="routerTo.push('/pages/index/index')">返回首页</button>
 				<button class="cu-btn base-btn" @tap="onOrder">查看订单</button>
 				<button class="again-pay cu-btn" v-if="!pay" @tap="onPay">重新支付</button>
 			</view>
 		</view>
-		<view class="hot-box" v-if="false">
-			<view class="hot-title flex align-center">为你推荐</view>
-			<view class="hot-wrap">
-				<block v-for="n in 6" :key="n"><shopro-goods></shopro-goods></block>
-			</view>
-		</view>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproGoods from '@/components/goods/shopro-goods.vue';
 import ShoproPay from '@/common/shopro-pay';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
-	components: {
-		shoproGoods
-	},
+	components: {},
 	data() {
 		return {
 			routerTo: this.$Router,

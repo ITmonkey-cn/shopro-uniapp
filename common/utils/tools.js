@@ -7,36 +7,40 @@ export default {
 	 * 跳转再封装，不支持复杂传参。
 	 */
 	routerTo(path, params = {}, isLogin) {
-		if (path.indexOf('/pages/index/') !== -1) {
-			router.pushTab({
-				path: path
+		let objParams = params;
+		// 是否跳转外部链接
+		if (~path.indexOf('http')) {
+			router.push({
+				path: '/pages/public/webview',
+				query: {
+					'webviewPath': path
+				}
+			})
+			return false
+		}
+		// 判断是否有参数
+		if (path.indexOf('?') !== -1) {
+			let index = path.lastIndexOf('?');
+			let query = path.substring(index + 1, path.length);
+			let arr = query.split('&')
+			path = path.slice(0, index);
+			arr.forEach(item => {
+				let mArr = item.split('=');
+				objParams[mArr[0]] = mArr[1]
+			})
+		}
+		// 判断是否是tabbar
+		if (isLogin) {
+			router.replaceAll({
+				path: path,
+				query: objParams
 			})
 		} else {
-			if (path.indexOf('?') !== -1) {
-				let index = path.lastIndexOf('?');
-				let query = path.substring(index + 1, path.length);
-				let arr = query.split('&')
-				path = path.slice(0, index);
-				arr.forEach(item => {
-					let mArr = item.split('=');
-					params[mArr[0]] = mArr[1];
-
-				})
-			}
-			if (isLogin) {
-				router.replaceAll({
-					path: path,
-					query: params
-				})
-			} else {
-				router.push({
-					path: path,
-					query: params
-				})
-			}
-
+			router.push({
+				path: path,
+				query: objParams
+			})
 		}
-
 
 	},
 	/**
@@ -49,7 +53,6 @@ export default {
 		if (imgPath.indexOf('data:image/svg+xml') !== -1) {
 			newPath = '/static/imgs/base_avatar.png'
 		} else {
-			console.log('poster1', imgPath)
 			let pathArr = imgPath.split('://');
 			// #ifdef H5
 			let ishttps = 'https:' == window.location.protocol ? true : false;

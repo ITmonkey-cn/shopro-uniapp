@@ -30,6 +30,12 @@
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
 	</view>
 </template>
 
@@ -53,7 +59,7 @@ export default {
 		})
 	},
 	onLoad() {
-		this.getScoreLog()
+		this.getScoreLog();
 	},
 	methods: {
 		loadMore() {
@@ -65,6 +71,7 @@ export default {
 		onTab(type) {
 			this.tabDot = type;
 			this.scoreLog = [];
+			this.currentPage = 1;
 			this.getScoreLog();
 		},
 		// 积分明细

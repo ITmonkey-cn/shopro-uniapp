@@ -163,7 +163,7 @@
 					备注:
 					<text class="remark-notice">(100字以内)</text>
 				</view>
-				<textarea v-show="!showPicker" class="remark-inp" maxlength="100" v-model="remark" placeholder="请填写备注信息" />
+				<textarea v-show="!showPicker" fixed="true" class="remark-inp" maxlength="100" v-model="remark" placeholder="请填写备注信息" />
 			</view>
 		</view>
 		<view class="foot_box x-f">
@@ -222,15 +222,13 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 import shPickerModal from './children/sh-picker-modal.vue';
-import shoproModal from '@/components/modal/shopro-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
 		shoproMiniCard,
-		shPickerModal,
-		shoproModal
+		shPickerModal
 	},
 	data() {
 		return {
@@ -314,7 +312,6 @@ export default {
 		this.orderType = this.$Route.query.orderType;
 		this.grouponBuyType = this.$Route.query.grouponBuyType;
 		this.grouponId = this.$Route.query.grouponId;
-		console.log(this.grouponId);
 		await this.init();
 	},
 	onShow() {},
@@ -364,13 +361,17 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					let orderId = res.data.id;
+					let orderSn = res.data.order_sn;
 					that.getCartList();
 					that.isSubOrder = false;
+					//  #ifdef MP-WEIXIN
+					res.data.activity_type == 'groupon' ? this.$store.dispatch('getMessageIds', 'grouponResult') : this.$store.dispatch('getMessageIds', 'result');
+					//  #endif
 					if (res.data.status > 0) {
 						that.$Router.replace({
 							path: '/pages/order/payment/result',
 							query: {
-								id: orderId,
+								orderSn: orderSn,
 								type: '',
 								pay: 1
 							}

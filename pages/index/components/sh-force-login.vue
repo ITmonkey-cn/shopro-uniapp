@@ -1,4 +1,5 @@
 <template>
+	<!-- #ifdef MP-WEIXIN -->
 	<view v-if="forceOauth" class="force-login-wrap">
 		<image class="logo-bg" src="http://shopro.7wpp.com/imgs/logo_bg.png" mode="aspectFill"></image>
 		<view class="force-login__content y-f">
@@ -9,6 +10,7 @@
 			<button class="cu-btn close-btn" @tap="closeAuth">暂不授权</button>
 		</view>
 	</view>
+	<!-- #endif -->
 </template>
 <script>
 import Wechat from '@/common/wechat/wechat';
@@ -41,7 +43,7 @@ export default {
 	width: 100vw;
 	height: 100vh;
 	overflow: hidden;
-	z-index: 9999;
+	z-index: 11111;
 	top: 0;
 	background: linear-gradient(180deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 25%, rgba(255, 255, 255, 1) 98%);
 	.logo-bg {

@@ -1,6 +1,6 @@
 <template>
 	<!-- 限时抢购 -->
-	<view class="seckill-goods" v-if="showActivity">
+	<view class="seckill-goods pa20 mx20 mb10" v-if="showActivity">
 		<view class="title-box x-bc">
 			<text class="title">{{ detail.name }}</text>
 			<view class="group-people x-f" @tap="$Router.push('/pages/activity/seckill/list')">
@@ -68,7 +68,6 @@ export default {
 		},
 		// 路由跳转
 		jump(path, parmas) {
-			console.log(parmas);
 			this.$Router.push({
 				path: path,
 				query: parmas
@@ -174,12 +173,9 @@ export default {
 	}
 }
 // 今日必拼+限时抢购
-.group-goods,
 .seckill-goods {
 	background: #fff;
 	border-radius: 20rpx;
-	margin: 20rpx;
-	padding: 20rpx;
 	overflow: hidden;
 
 	.title-box {

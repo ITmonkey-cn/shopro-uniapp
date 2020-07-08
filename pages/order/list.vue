@@ -62,14 +62,20 @@
 			<!-- 空白页 -->
 			<shopro-empty v-if="!orderList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 			<!-- load -->
-			<shoproLoad v-model="isLoading"></shoproLoad>
+			<shopro-load v-model="isLoading"></shopro-load>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 export default {
 	components: {
 		shoproMiniCard
@@ -120,8 +126,9 @@ export default {
 	},
 	computed: {},
 	onLoad() {
-		this.orderType = this.$Route.query.type;
-		// this.init();
+		if (this.$Route.query.type) {
+			this.orderType = this.$Route.query.type;
+		}
 	},
 	onShow() {
 		this.init();
@@ -174,6 +181,9 @@ export default {
 				if (res.code === 1) {
 					that.$tools.toast('申请退款成功');
 					that.getOrderList();
+					//  #ifdef MP-WEIXIN
+					this.$store.dispatch('getMessageIds', 'aftersale');
+					//  #endif
 				}
 			});
 		},

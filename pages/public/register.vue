@@ -20,7 +20,7 @@
 				</view>
 				<view class="input-item x-c">
 					<text class="inp-title">密&emsp;码</text>
-					<input class="inp" password v-model="password"  type="text" placeholder="请输入6-14位密码" placeholder-class="pl" />
+					<input class="inp" password v-model="password" type="text" placeholder="请输入6-14位密码" placeholder-class="pl" />
 				</view>
 				<view class="tip-box" @tap="onTcp">
 					<label class="x-f">
@@ -54,7 +54,7 @@ export default {
 			},
 			password: '',
 			isTcp: false, //协议
-			sysInfo:uni.getStorageSync('sysInfo')
+			sysInfo: uni.getStorageSync('sysInfo')
 		};
 	},
 	computed: {
@@ -64,6 +64,7 @@ export default {
 	},
 	onLoad() {},
 	methods: {
+		...mapActions(['setTokenAndBack']),
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,
@@ -112,7 +113,7 @@ export default {
 							duration: 1000,
 							mask: true,
 							success: function() {
-								that.$Router.back();
+								that.setTokenAndBack(res.data.userinfo.token);
 							}
 						});
 					}

@@ -19,6 +19,37 @@ export default {
 		// desc: '上传',
 	},
 
+	/** 上传Base64图片 ↓ **/
+	uploadBase64: {
+		url: 'index/uploadBase64',
+		auth: false,
+		method: 'POST',
+		// desc: '上传Base64位图片',
+	},
+
+	/** 消息订阅模板 ↓ **/
+	messageIds: {
+		url: 'notification/template',
+		auth: true,
+		method: 'GET',
+		// desc: '订阅消息模板ids',
+	},
+
+	/** 模板信息 ↓ **/
+	template: {
+		url: 'index/template',
+		auth: false,
+		method: 'GET',
+		// desc: '模板信息',
+	},
+	/** 自定义模板页面 ↓ **/
+	custom: {
+		url: 'index/custom',
+		auth: false,
+		method: 'GET',
+		// desc: '自定义模板页面',
+	},
+
 	/** 直播 ↓ **/
 	live: {
 		url: 'live',
@@ -61,16 +92,16 @@ export default {
 			method: 'POST',
 			// desc: '路由表',
 		},
+		asyncDecorateScreenShot: {
+			url: 'index/asyncDecorateScreenShot',
+			auth: false,
+			method: 'POST',
+			// desc: '更新店铺装修截图',
+		},
 		asyncBannerBgColor: {
 			url: 'index/asyncBannerBgColor',
 			auth: false,
 			method: 'POST',
-			// desc: '路由表',
-		},
-		preview: {
-			url: 'index/tempPreview',
-			auth: false,
-			method: 'GET',
 			// desc: '路由表',
 		},
 		debug: {
@@ -253,6 +284,13 @@ export default {
 			auth: false,
 			method: 'POST',
 			// desc: '账号密码登录',
+		},
+
+		getWxMiniProgramSessionKey: {
+			url: 'user/getWxMiniProgramSessionKey',
+			auth: false,
+			method: 'POST',
+			// desc: '获取用户session_key',
 		},
 
 		wxMiniProgramLogin: {

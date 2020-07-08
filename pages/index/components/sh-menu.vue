@@ -1,6 +1,6 @@
 <template>
 	<!-- 产品分类导航 -->
-	<view class="menu-category-box" v-if="carousel" :style="detail.list.length <= menu ? `height:200rpx` : `height:360rpx`">
+	<view class="menu-category-box mb10" v-if="carousel" :style="detail.list.length <= menu ? `height:200rpx` : `height:360rpx`">
 		<swiper
 			class="menu-swiper-box"
 			:style="detail.list.length <= menu ? `height:160rpx` : `height:320rpx`"
@@ -13,8 +13,8 @@
 			<swiper-item class="menu-swiper-item" v-for="(itemList, index) in carousel" :key="index" :style="detail.list.length <= menu ? `height:200rpx` : `height:340rpx`">
 				<view class="menu-tab-box">
 					<view class="tab-list y-f" :style="{ width: 690 / menu + 'rpx' }" v-for="item in itemList" :key="item.name" @tap="routerTo(item.path)">
-						<image class="tab-img" :style="{ width: imgW + 'rpx', height: imgW + 'rpx' }" :src="item.image"></image>
-						<text>{{ item.name }}</text>
+						<image class="tab-img shopro-selector-circular" :style="{ width: imgW + 'rpx', height: imgW + 'rpx' }" :src="item.image"></image>
+						<text class="shopro-selector-rect">{{ item.name }}</text>
 					</view>
 				</view>
 			</swiper-item>
@@ -87,7 +87,6 @@ export default {
 <style lang="scss">
 // 产品分类
 .menu-category-box {
-	margin-bottom: 20rpx;
 	padding: 30rpx 30rpx 0 30rpx;
 	background: #fff;
 }

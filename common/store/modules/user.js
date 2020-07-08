@@ -8,6 +8,7 @@ import {
 	USER_INFO,
 	LOGIN_TIP,
 	ORDER_NUMBER,
+	MESSAGE_IDS,
 	OUT_LOGIN,
 	// #ifdef MP-WEIXIN
 	FORCE_OAUTH,
@@ -18,8 +19,10 @@ const state = {
 	showLoginTip: false,
 	orderNum: {},
 	// #ifdef MP-WEIXIN
-	forceOauth: false
+	forceOauth: false,
 	// #endif
+	messageIds: {}, //小程序订阅消息模板ids
+
 }
 
 const actions = {
@@ -34,8 +37,8 @@ const actions = {
 			tools.routerTo(fromLogin.path, fromLogin.query, true);
 			uni.removeStorageSync('fromLogin')
 		} else {
-			//默认跳转首页
-			router.pushTab('/pages/index/index')
+			//默认跳转首页S
+			router.replaceAll('/pages/index/index')
 		}
 	},
 
@@ -68,7 +71,6 @@ const actions = {
 				resolve(res)
 
 			}).catch(e => {
-				console.log(e)
 				reject(e)
 			})
 		})
@@ -86,9 +88,56 @@ const actions = {
 			})
 		})
 	},
+	// 获取订阅消息模板ids;
+	getMessageIds({
+		commit
+	}, type) {
+		return new Promise((resolve, reject) => {
+			api('messageIds').then(res => {
+				commit('MESSAGE_IDS', res.data);
+				let typeName = []; //模板键
+				let obj = res.data; //模板对象
+				let arr = []; //模板ids
+				switch (type) {
+					case 'result': //支付成功后
+						typeName = ['order_sended']
+						break;
+					case 'grouponResult': //拼团支付成功后
+						typeName = ['groupon_success', 'groupon_fail', 'order_sended']
+						break;
+					case 'aftersale': //点击售后
+						typeName = ['refund_agree', 'refund_refuse']
+						break;
+					default:
+						typeName = []
+						break;
+				}
+				typeName.forEach(item => {
+					obj[item] && arr.push(obj[item])
+				})
+				uni.requestSubscribeMessage({
+					tmplIds: arr,
+					success: (res) => {
+						console.log(res);
+					},
+					fail: (err) => {
+						console.log(err);
+					}
+
+				});
+				resolve(res)
+			}).catch(e => {
+				reject(e)
+			})
+		})
+	},
 }
 
 const mutations = {
+	// 小程序订阅消息模板ids
+	[MESSAGE_IDS](state, data) {
+		state.messageIds = data
+	},
 	[USER_INFO](state, data) {
 		state.userInfo = data
 	},
@@ -113,7 +162,6 @@ const mutations = {
 		store.commit('CART_LIST', []);
 		store.commit('CART_NUM','');
 		store.commit('ORDER_NUMBER', 0);
-		// store.commit('FORCE_OAUTH', true);
 	},
 
 }

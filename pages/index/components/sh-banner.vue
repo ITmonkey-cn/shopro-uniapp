@@ -1,13 +1,15 @@
 <template>
 	<!-- 轮播 -->
-	<view class="banner-swiper-box" v-if="detail.list">
+	<view class="banner-swiper-box mb10" v-if="detail.list">
 		<canvas canvas-id="colorThief" class="hide-canvas"></canvas>
-		<swiper class="banner-carousel" circular @change="swiperChange" :autoplay="true">
-			<swiper-item v-for="(item,index) in detail.list" :key="index" class="carousel-item" @tap="routerTo(item.path)">
-				<image class="swiper-image" :src="item.image" mode="widthFix" lazy-load></image>
+		<swiper class="banner-carousel shopro-selector-rect" circular @change="swiperChange" :autoplay="true">
+			<swiper-item v-for="(item, index) in detail.list" :key="index" class="carousel-item " @tap="routerTo(item.path)">
+				<image class="swiper-image " :src="item.image" mode="widthFix" lazy-load></image>
 			</swiper-item>
 		</swiper>
-		<view class="banner-swiper-dots"><text :class="swiperCurrent === index ? 'banner-dot-active' : 'banner-dot'" v-for="(dot, index) in detail.list.length" :key="index"></text></view>
+		<view class="banner-swiper-dots">
+			<text :class="swiperCurrent === index ? 'banner-dot-active' : 'banner-dot'" v-for="(dot, index) in detail.list.length" :key="index"></text>
+		</view>
 	</view>
 </template>
 
@@ -58,17 +60,8 @@ export default {
 											let bgcolor = colorThief(res.data)
 												.color()
 												.getHex();
-												// console.log(bgcolor)												
 											that.$set(item, 'bgcolor', bgcolor);
 											that.$emit('getbgcolor', bgcolor);
-											// 同步颜色
-											if(uni.getStorageSync('mode') === 'product') {
-												that.$api('dev.asyncBannerBgColor', {
-													index: that.swiperCurrent,
-													item: item
-												})
-											}
-											
 										}
 									},
 									that
@@ -77,7 +70,7 @@ export default {
 						}
 					});
 				}
-			}else{
+			} else {
 				that.$set(item, 'bgcolor', bgcolor);
 				that.$emit('getbgcolor', bgcolor);
 			}
@@ -102,22 +95,23 @@ export default {
 
 <style lang="scss">
 .hide-canvas {
-	position: fixed!important;
+	position: fixed !important;
 	top: -99999upx;
 	left: -99999upx;
 	z-index: -99999;
 }
 
 // 轮播
-.banner-swiper-box{
-	margin-bottom: 20rpx;
+.banner-swiper-box {
 	background: #fff;
 }
+
 .banner-swiper-box,
 .banner-carousel {
 	width: 750rpx;
 	height: 350upx;
 	position: relative;
+
 	.carousel-item {
 		width: 100%;
 		height: 100%;
@@ -129,7 +123,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		// border-radius: 10upx;
-		background: #ccc;
+		// background: #ccc;
 	}
 }
 

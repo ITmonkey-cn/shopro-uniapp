@@ -11,14 +11,7 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item" v-for="item in goodsList" :key="item.id">
-					<shopro-activity-card
-						:cardId="item.id"
-						:title="item.title"
-						:subtitle="item.subtitle"
-						:img="item.image"
-						:price="item.price"
-						:originalPrice="item.original_price"
-					>
+					<sh-activity-card :cardId="item.id" :title="item.title" :subtitle="item.subtitle" :img="item.image" :price="item.price" :originalPrice="item.original_price">
 						<block slot="sell">
 							<view class="x-f">
 								<view class="cu-progress round sm">
@@ -30,26 +23,34 @@
 						<block slot="btn">
 							<button class="cu-btn buy-btn" :class="btnType[tabCurrent].color">{{ btnType[tabCurrent].name }}</button>
 						</block>
-					</shopro-activity-card>
+					</sh-activity-card>
 				</view>
 				<!-- 空白 -->
 				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 				<!-- 加载更多 -->
 				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
-				<shoproLoad v-model="isLoading"></shoproLoad>
+				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
-		shoproActivityCard,
+		shActivityCard,
 		shoproEmpty
 	},
 	data() {
@@ -184,6 +185,7 @@ export default {
 	}
 }
 .goods-item {
+	margin-bottom: 2rpx;
 	.cu-progress {
 		width: 225rpx;
 		height: 16rpx;

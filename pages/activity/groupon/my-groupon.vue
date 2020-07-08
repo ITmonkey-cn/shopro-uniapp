@@ -22,7 +22,7 @@
 					<view class="group-card">
 						<image v-if="stateId !== 'ing'" class="group-state" :src="grouponStatus[groupon.groupon.status]" mode=""></image>
 						<view class="goods-content">
-							<shopro-activity-card
+							<sh-activity-card
 								:cardId="groupon.goods.id"
 								:title="groupon.goods.title"
 								:subtitle="groupon.goods.subtitle"
@@ -39,7 +39,7 @@
 										<text class="group-num">{{ groupon.groupon.num }}人团</text>
 									</view>
 								</block>
-							</shopro-activity-card>
+							</sh-activity-card>
 						</view>
 						<view class="btn-box x-f">
 							<button class="cu-btn invite-btn" @tap="jump('/pages/activity/groupon/detail', { id: groupon.groupon_id })">拼团详情</button>
@@ -51,18 +51,26 @@
 				<!-- 加载更多 -->
 				<view v-if="myGrouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
-				<shoproLoad v-model="isLoading"></shoproLoad>
+				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
 export default {
 	components: {
-		shoproActivityCard
+		shActivityCard
 	},
 	data() {
 		return {

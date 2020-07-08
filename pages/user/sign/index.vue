@@ -3,18 +3,6 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<view class="">
-				<!-- 补卡邀请 -->
-				<!-- <view class="resign-box">
-						<view class="title-box x-f">
-							<text class="resign-title">我的补签卡数：</text>
-							<text class="resign-card-num">2</text>
-						</view>
-						<view class="invite-box x-bc">
-							<image class="invite-tag" src="http://shopro.7wpp.com/imgs/sign_tag.png" mode=""></image>
-							<text class="invite-notice">每邀请一个好友即可获得一张补签卡</text>
-							<button class="cu-btn invite-btn">去邀请</button>
-						</view>
-					</view> -->
 				<!-- 打卡日历页面 -->
 				<view class="calendar">
 					<view class="sign-everyday x-bc pad">
@@ -97,11 +85,19 @@
 				</view>
 			</block>
 		</shopro-modal>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproModal from '@/components/modal/shopro-modal.vue';
+import shoproModal from '@/components/shopro-modal/shopro-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
@@ -193,7 +189,7 @@ export default {
 				if (res.code == 1) {
 					that.getSignList();
 					that.score = res.data.score;
-					that.getUserInfo()
+					that.getUserInfo();
 					that.showSign = true;
 				}
 			});

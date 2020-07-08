@@ -49,8 +49,9 @@
 </template>
 
 <script>
-import shoproShareGuide from '@/components/modal/shopro-share-guide.vue';
+import shoproShareGuide from '@/components/shopro-share-guide/shopro-share-guide.vue';
 export default {
+	name: 'shoproShare',
 	components: {
 		shoproShareGuide
 	},

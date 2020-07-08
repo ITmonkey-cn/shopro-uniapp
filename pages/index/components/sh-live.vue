@@ -1,5 +1,5 @@
 <template>
-	<view class="live-el">
+	<view class="live-el mx20 mb10">
 		<view class="head">
 			<text class="head-title">{{ detail.name }}</text>
 			<view class="head-more" @tap="$Router.push('/pages/app/live/list')">
@@ -121,9 +121,6 @@ export default {
 					.then(res => {
 						// 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
 						that.detail.live_status = res.liveStatus;
-
-						console.log('get live status', that.detail.room_id, res.liveStatus);
-						console.log('detail', that.detail.room_id, that.detail.live_status);
 					})
 					.catch(err => {
 						console.log('get live status', err);
@@ -144,7 +141,6 @@ export default {
 	background: #fff;
 	border-radius: 20rpx;
 	padding: 30rpx 20rpx 25rpx;
-	margin: 0 20rpx 20rpx;
 	.head {
 		@include flex($justify: between, $align: center);
 		&-title {

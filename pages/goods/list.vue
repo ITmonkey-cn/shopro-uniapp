@@ -14,32 +14,37 @@
 			<view class="filter-item"><sh-filter @change="onFilter"></sh-filter></view>
 		</view>
 		<view class="content-box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<view class="goods-list x-f">
-					<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods :detail="goods"></shopro-goods></view>
-				</view>
-				<!-- 空白页 -->
-				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
-				<!-- 加载更多 -->
-				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
-				<!-- load -->
-				<shoproLoad v-model="isLoading"></shoproLoad>
-			</scroll-view>
+			<view class="goods-list x-f">
+				<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
+			</view>
+			<!-- 空白页 -->
+			<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
+			<!-- 加载更多 -->
+			<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
+			<!-- load -->
+			<shopro-load v-model="isLoading"></shopro-load>
 		</view>
-		<view class="foot_box"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
 import shFilter from './children/sh-filter.vue';
-import shoproGoods from '@/components/goods/shopro-goods.vue';
+import shoproGoodsCard from '@/components/shopro-goods-card/shopro-goods-card.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 let timer = null;
 export default {
 	components: {
 		shFilter,
-		shoproGoods,
+		shoproGoodsCard,
 		shoproEmpty
 	},
 	data() {
@@ -61,13 +66,19 @@ export default {
 		};
 	},
 	computed: {},
+	// 触底加载更多
+	onReachBottom() {
+		if (this.listParams.page < this.lastPage) {
+			this.listParams.page += 1;
+			this.getGoodsList();
+		}
+	},
 	onLoad() {
 		if (this.$Route.query.id) {
 			this.listParams.category_id = this.$Route.query.id;
 		}
 		if (this.$Route.query.keywords) {
 			this.listParams.keywords = this.$Route.query.keywords;
-			this.searchVal = this.$Route.query.keywords;
 		}
 		this.getGoodsList();
 	},
@@ -104,13 +115,6 @@ export default {
 		// 清除搜索框
 		clearSearch() {
 			this.searchVal = '';
-		},
-		// 加载更多
-		loadMore() {
-			if (this.listParams.page < this.lastPage) {
-				this.listParams.page += 1;
-				this.getGoodsList();
-			}
 		},
 		// 商品列表
 		getGoodsList() {
@@ -163,9 +167,17 @@ export default {
 		padding: 0 10rpx;
 	}
 }
-
+.list-box {
+	&:-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		color: transparent;
+		display: none;
+	}
+}
 .content-box {
 	padding: 20rpx;
+	width: 750rpx;
 }
 
 .goods-list {
@@ -179,13 +191,5 @@ export default {
 			margin-right: 0;
 		}
 	}
-}
-
-// 空白页
-.empty-box {
-	position: fixed;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
 }
 </style>

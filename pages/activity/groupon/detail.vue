@@ -2,7 +2,7 @@
 	<view class="page_box">
 		<view class="head_box">
 			<view class="goods-card" v-if="grouponDetail.id">
-				<shopro-activity-card
+				<sh-activity-card
 					:cardId="grouponDetail.goods_id"
 					:title="grouponDetail.goods.title"
 					:subtitle="grouponDetail.goods.subtitle"
@@ -19,7 +19,7 @@
 							<text class="group-num">{{ grouponDetail.num }}人团</text>
 						</view>
 					</block>
-				</shopro-activity-card>
+				</sh-activity-card>
 			</view>
 		</view>
 		<view class="content_box">
@@ -105,17 +105,24 @@
 			:buyType="'buy'"
 			:grouponBuyType="'groupon'"
 		></shopro-sku>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
-import shoproShare from '@/components/shopro-share/shopro-share.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
+
 import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
 export default {
 	components: {
-		shoproActivityCard,
-		shoproShare,
+		shActivityCard,
 		shoproSku
 	},
 	data() {
@@ -240,7 +247,8 @@ export default {
 .group-box {
 	background: #fff;
 	padding: 40rpx 0;
-	height: 370rpx;
+	min-height: 370rpx;
+	justify-content: center;
 	.tip-box {
 		font-size: 28rpx;
 		font-weight: bold;
@@ -284,9 +292,14 @@ export default {
 	}
 
 	.group-people {
+		flex-wrap: wrap;
+		padding: 50rpx;
 		.img-box {
 			position: relative;
-			margin-right: 20rpx;
+			margin-right: 34rpx;
+			&:nth-child(6n) {
+				margin-right: 0;
+			}
 			.tag {
 				position: absolute;
 				line-height: 36rpx;
@@ -302,8 +315,8 @@ export default {
 				transform: translateX(-50%);
 			}
 			.avatar {
-				width: 86rpx;
-				height: 86rpx;
+				width: 80rpx;
+				height: 80rpx;
 				border-radius: 50%;
 				background: #ccc;
 			}

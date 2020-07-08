@@ -129,9 +129,9 @@
         // "uniStatistics" : {
         //     "enable" : false// mp-wixn无效
         // },
-        // "optimization": {
-        // 	"subPackages": true
-        // },
+        "optimization" : {
+            "subPackages" : true //开启小程序分包优化。
+        },
         "plugins" : {}
     },
     // "live-player-plugin" : {
@@ -141,7 +141,7 @@
     // }
     "h5" : {
         "title" : "Shopro",
-        "domain" : "fastadmin.smallnews.top",
+        "domain" : "fa-frontend.smallnews.top",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true

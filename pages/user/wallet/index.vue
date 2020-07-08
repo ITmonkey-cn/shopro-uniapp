@@ -58,11 +58,15 @@
 				</view>
 			</block>
 		</shopro-modal>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
 	</view>
 </template>
 
 <script>
-import shoproModal from '@/components/modal/shopro-modal';
+import shoproModal from '@/components/shopro-modal/shopro-modal.vue';
 import { mapState, mapActions } from 'vuex';
 export default {
 	components: {
@@ -82,7 +86,7 @@ export default {
 	},
 	onLoad() {
 		this.getApplyRules();
-		this.getUserInfo()
+		this.getUserInfo();
 	},
 	methods: {
 		...mapActions(['getUserInfo']),

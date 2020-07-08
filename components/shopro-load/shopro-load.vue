@@ -8,6 +8,7 @@
 
 <script>
 export default {
+	name: 'shoproLoad',
 	components: {},
 	data() {
 		return {};

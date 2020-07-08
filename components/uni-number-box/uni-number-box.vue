@@ -35,16 +35,18 @@ export default {
 		},
 		currentSkuPrice: {
 			type: Object,
-			default: () => {return {}}
+			default: () => {
+				return {};
+			}
 		},
 		goodsInfo: {
 			type: Object,
-			default: () => {return {}}
+			default: () => {
+				return {};
+			}
 		}
 	},
-	computed: {
-	
-	},
+	computed: {},
 	data() {
 		return {
 			inputValue: 0
@@ -61,8 +63,8 @@ export default {
 		},
 		currentSkuPrice(val) {
 			let that = this;
-			if(JSON.stringify(val) !== '{}') {
-				if(that.inputValue >= val.stock) {
+			if (JSON.stringify(val) !== '{}') {
+				if (that.inputValue >= val.stock) {
 					that.inputValue = val.stock;
 				}
 			}
@@ -89,19 +91,18 @@ export default {
 					value = this.max;
 				}
 			} else if (type === 'plus') {
-				if(JSON.stringify(that.currentSkuPrice) !== '{}') {
-					if(value >= that.currentSkuPrice.stock) {
+				if (JSON.stringify(that.currentSkuPrice) !== '{}') {
+					if (value >= that.currentSkuPrice.stock) {
 						that.$tools.toast('库存不足');
 						return;
 					}
 				}
-				
-				if(that.goodsInfo.activity_type === 'seckill') {
+
+				if (that.goodsInfo.activity_type === 'seckill') {
 					let rules = that.goodsInfo.activity.rules;
-					if(rules.limit_buy != 0 && value >= rules.limit_buy) {
-						that.$tools.toast('本次活动最多购买'+ rules.limit_buy + '件');
+					if (rules.limit_buy != 0 && value >= rules.limit_buy) {
+						that.$tools.toast('本次活动最多购买' + rules.limit_buy + '件');
 						return;
-						
 					}
 				}
 				value += step;

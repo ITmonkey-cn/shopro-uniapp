@@ -22,45 +22,6 @@ router.beforeEach((to, from, next) => {
 	// 权限控制
 	if (to.meta && to.meta.auth && !userInfo) {
 		store.commit('LOGIN_TIP', true)
-		// 跳转方式控制
-		switch (to.path) {
-			case '/pages/index/index':
-				next({
-					name: 'home',
-					params: {
-						msg: '我拦截了tabbar',
-					},
-					NAVTYPE: 'pushTab'
-				});
-				break;
-			case '/pages/index/category':
-				next({
-					name: 'category',
-					params: {
-						msg: '我拦截了tabbar',
-					},
-					NAVTYPE: 'pushTab'
-				});
-				break;
-			case '/pages/index/cart':
-				next({
-					name: 'cart',
-					params: {
-						msg: '我拦截了tabbar',
-					},
-					NAVTYPE: 'pushTab'
-				});
-				break;
-			case '/pages/index/user':
-				next({
-					name: 'user',
-					params: {
-						msg: '我拦截了tabbar',
-					},
-					NAVTYPE: 'pushTab'
-				});
-				break;
-		}
 	} else {
 		next()
 	}

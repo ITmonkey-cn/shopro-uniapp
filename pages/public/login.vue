@@ -77,7 +77,7 @@ export default {
 			loginWay: 0,
 			userPhone: '',
 			userPassword: '',
-			sysInfo:uni.getStorageSync('sysInfo')
+			sysInfo: uni.getStorageSync('sysInfo')
 		};
 	},
 	computed: {
@@ -98,13 +98,13 @@ export default {
 			var wechat = new Wechat();
 			let token = await wechat.wxMiniProgramLogin(e);
 			store.commit('FORCE_OAUTH', false);
-			this.setTokenAndBack(token)
+			this.setTokenAndBack(token);
 		},
 		// #endif
 		async wxLogin() {
 			let wechat = new Wechat();
 			let token = await wechat.login();
-			if(token !== undefined) {
+			if (token !== undefined) {
 				this.setTokenAndBack(token);
 			}
 		},

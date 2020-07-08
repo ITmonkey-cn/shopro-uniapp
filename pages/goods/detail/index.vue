@@ -1,7 +1,7 @@
 <template>
 	<block>
 		<view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view>
-		<view class="detail_box" v-else>
+		<view class="detail_box shopro-selector" v-else>
 			<view class="detail-content">
 				<view class="goodes_detail_swiper-box">
 					<!-- 拼团滚动提示 -->
@@ -9,7 +9,7 @@
 					<!-- 详情轮播 -->
 					<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
 						<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
-							<image class="swiper-image" :src="img" mode="aspectFill" lazy-load></image>
+							<image class="swiper-image shopro-selector-rect" :src="img" mode="aspectFill" lazy-load></image>
 						</swiper-item>
 					</swiper>
 					<view v-if="goodsInfo.images" class="swiper-dots">{{ swiperCurrent + 1 }} / {{ goodsInfo.images.length }}</view>
@@ -17,10 +17,14 @@
 
 				<!-- 价格卡片组 -->
 				<sh-price v-if="goodsInfo" :detail="goodsInfo" :type="detailType" @change="getActivityRules"></sh-price>
-				<view class="goods-title">{{ goodsInfo.title }}</view>
-				<view class="sub-title">{{ goodsInfo.subtitle }}</view>
+				<view class="goods-title ">
+					<text class="shopro-selector-rect">{{ goodsInfo.title }}</text>
+				</view>
+				<view class="sub-title ">
+					<text class="shopro-selector-rect">{{ goodsInfo.subtitle }}</text>
+				</view>
 				<!-- 规格选择 -->
-				<view class="sku-box" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon')">
+				<view class="sku-box shopro-selector-rect" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon')">
 					<view class="x-bc">
 						<view class="x-f">
 							<text class="title">规格</text>
@@ -54,13 +58,16 @@
 				<view class="sticky-box">
 					<view class="tab-box x-f">
 						<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
-							<view class="tab-title">{{ tab.title }}</view>
+							<view class="tab-title">
+								{{ tab.title }}
+								<text v-if="tab.id == 'tab2'" class="comment-num">({{ commentList.length }})</text>
+							</view>
 							<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
 						</view>
 					</view>
 					<view class="tab-detail">
 						<view class="rich-box" v-show="tabCurrent === 'tab0'">
-							<shopro-parse :content="goodsInfo.content"></shopro-parse>
+							<uni-parse :content="goodsInfo.content"></uni-parse>
 							<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
 						</view>
 						<view class="goods-size" v-if="tabCurrent === 'tab1'">
@@ -100,8 +107,8 @@
 			<view class="detail-foot_box  x-f" v-if="!showSku && !showServe && detailType !== 'score'">
 				<view class="left x-f">
 					<view class="tools-item y-f" @tap="goHome">
-						<image class="tool-img" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
-						<text class="tool-title">首页</text>
+						<image class="tool-img shopro-selector-circular" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
+						<text class="tool-title shopro-selector-rect">首页</text>
 					</view>
 					<view class="tools-item y-f" @tap="onFavorite(goodsInfo.id)">
 						<image
@@ -147,6 +154,14 @@
 			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="'goods'"></shopro-share>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
+			<!-- 骨架屏 -->
+			<shopro-skeleton :showSkeleton="false"></shopro-skeleton>
+			<!-- 自定义底部导航 -->
+			<shopro-tabbar></shopro-tabbar>
+			<!-- 关注弹窗 -->
+			<shopro-float-btn></shopro-float-btn>
+			<!-- 连续弹窗提醒 -->
+			<shopro-notice-modal></shopro-notice-modal>
 		</view>
 	</block>
 </template>
@@ -159,22 +174,20 @@ import shGrouponTip from './children/sh-groupon-tip.vue';
 import shCoupon from './children/sh-coupon.vue';
 import shComment from '../children/sh-comment.vue';
 import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
-import shoproShare from '@/components/shopro-share/shopro-share.vue';
-import shoproParse from '@/components/parse/parse.vue';
+import uniParse from '@/components/uni-parse/uni-parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
-		shPrice,
+		uniParse,
 		shServe,
+		shPrice,
 		shGroupon,
 		shCoupon,
 		shGrouponTip,
 		shoproSku,
-		shoproShare,
 		shComment,
-		shoproParse,
 		shoproSkeletons,
 		shoproEmpty
 	},
@@ -252,9 +265,7 @@ export default {
 		},
 		// 回到首页
 		goHome() {
-			uni.switchTab({
-				url: '/pages/index/index'
-			});
+			this.$tools.routerTo('/pages/index/index');
 		},
 		// 轮播图切换
 		swiperChange(e) {
@@ -342,7 +353,7 @@ export default {
 			if (Boolean(uni.getStorageSync('token'))) {
 				if (type === 'groupon') {
 					this.grouponBuyType = 'groupon';
-				}else{
+				} else {
 					this.grouponBuyType = 'alone';
 				}
 				this.buyType = 'buy';
@@ -383,7 +394,7 @@ export default {
 
 <style lang="scss">
 .detail-content {
-	padding-bottom: 100rpx;
+	// padding-bottom: 100rpx;
 	&::-webkit-scrollbar {
 		width: 0;
 		height: 0;
@@ -508,7 +519,7 @@ export default {
 	padding-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
-		// font-size: 0;//纯图片间隙问题，如果有文字详情，注释掉。
+		// font-size: 0; // 解决图片间隙问题。如果详情有文字，注释掉。
 		image {
 			margin-top: -1rpx; //富文本的图片之间的间隙，一般是空格造成，父级用size:0,可以解决，不行就hack一下
 		}

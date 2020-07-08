@@ -45,7 +45,6 @@ const mutations = {
 		state.themeKey = data;
 		uni.setStorageSync('themeKey', data);
 		let fcolor = data == 'dark-theme' ? '#ffffff' : '#000000'; //标题字体色
-		console.log(data)
 		let item = barTheme[data];
 		let tcolor = item.color;
 		let bcolor = item.background; //背景色。

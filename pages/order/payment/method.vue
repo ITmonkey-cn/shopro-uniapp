@@ -41,6 +41,8 @@
 			</view>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
@@ -93,7 +95,6 @@ export default {
 		},
 		selPay(e) {
 			this.payType = e.detail.value;
-			console.log(this.payType);
 		},
 		// 倒计时
 		countDown() {
@@ -114,6 +115,7 @@ export default {
 		// 发起支付
 		confirmPay() {
 			let that = this;
+
 			let pay = new ShoproPay(that.payType, that.orderDetail);
 		},
 		// 支付信息

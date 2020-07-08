@@ -17,7 +17,7 @@
 					</view>
 				</checkbox-group>
 				<!-- 缺省页 -->
-				<shopro-empty  v-if="!favoriteList.length" :emptyData="emptyData"></shopro-empty>
+				<shopro-empty v-if="!favoriteList.length" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
 				<view v-if="favoriteList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
@@ -31,11 +31,19 @@
 				<button class="cu-btn close-btn" @tap="cancelFavorite">取消收藏</button>
 			</view>
 		</view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproMiniCard from '@/components/goods/shopro-mini-card.vue';
+import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {

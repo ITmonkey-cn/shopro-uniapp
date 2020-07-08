@@ -9,7 +9,7 @@
 					</view>
 					<view class="group-box">
 						<view class="goods-item" v-for="(groupon, index) in grouponList" :key="groupon.id">
-							<shopro-activity-card
+							<sh-activity-card
 								:cardId="groupon.id"
 								:title="groupon.title"
 								:subtitle="groupon.subtitle"
@@ -30,7 +30,7 @@
 									</view>
 								</block>
 								<block slot="btn"><button class="cu-btn buy-btn" @tap.stop="jump('/pages/goods/detail/index', { id: groupon.id })">马上拼</button></block>
-							</shopro-activity-card>
+							</sh-activity-card>
 						</view>
 					</view>
 				</view>
@@ -39,17 +39,25 @@
 				<!-- 加载更多 -->
 				<view v-if="grouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- loading -->
-				<shoproLoad v-model="isLoading"></shoproLoad>
+				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
 		</view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-import shoproActivityCard from '@/components/goods/shopro-activity-card.vue';
+import shActivityCard from '../children/sh-activity-card.vue';
 export default {
 	components: {
-		shoproActivityCard
+		shActivityCard
 	},
 	data() {
 		return {
@@ -69,8 +77,7 @@ export default {
 	onLoad() {
 		this.getGrouponList();
 	},
-	onPullDownRefresh() {
-	},
+	onPullDownRefresh() {},
 	computed: {},
 	methods: {
 		// 路由跳转

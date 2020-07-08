@@ -1,16 +1,24 @@
 <template>
 	<view class="page_box">
 		<view class="head_box"></view>
-		<view class="content_box"><shopro-parse :content="richText.content"></shopro-parse></view>
+		<view class="content_box"><uni-parse :content="richText.content"></uni-parse></view>
 		<view class="foot_box"></view>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
 	</view>
 </template>
 
 <script>
-import shoproParse from '@/components/parse/parse.vue';
+import uniParse from '@/components/uni-parse/uni-parse.vue';
 export default {
 	components: {
-		shoproParse
+		uniParse
 	},
 	data() {
 		return {

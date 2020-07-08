@@ -1,5 +1,5 @@
 <template>
-	<view class="adv-box">
+	<view class="adv-box mx20 mb10">
 		<!-- 模板1-->
 		<view class="x-f" v-if="detail.style == 1">
 			<image style="width:710rpx;height: 220rpx;" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
@@ -18,8 +18,8 @@
 			</view>
 		</view>
 		<!-- 模板4-->
-		<view class="type3 y-f" v-if="detail.style == 4">
-			<view class="type3-box x-f">
+		<view class="type3 x-bc" v-if="detail.style == 4">
+			<view class="type3-box y-f">
 				<image class="type3-img1" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
 				<image class="type3-img1" @tap="jump(detail.list[1].path)" :src="detail.list[1].image" mode="aspectFill"></image>
 			</view>
@@ -27,19 +27,19 @@
 		</view>
 		<!-- 模板5-->
 		<view class="type4 y-f" v-if="detail.style == 5">
-			<image class="type4-img2" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
 			<view class="type4-box x-f">
+				<image class="type4-img1" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
 				<image class="type4-img1" @tap="jump(detail.list[1].path)" :src="detail.list[1].image" mode="aspectFill"></image>
-				<image class="type4-img1" @tap="jump(detail.list[2].path)" :src="detail.list[2].image" mode="aspectFill"></image>
 			</view>
+			<image class="type4-img2" @tap="jump(detail.list[2].path)" :src="detail.list[2].image" mode="aspectFill"></image>
 		</view>
 		<!-- 模板6-->
-		<view class="type5 x-bc" v-if="detail.style == 6">
-			<view class="y-f type5-box">
-				<image class="type5-img2" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill" style="border-bottom:1rpx solid #f6f6f6"></image>
-				<image class="type5-img2" @tap="jump(detail.list[1].path)" :src="detail.list[1].image" mode="aspectFill"></image>
+		<view class="type5 y-f" v-if="detail.style == 6">
+			<image class="type5-img1" @tap="jump(detail.list[0].path)" :src="detail.list[0].image" mode="aspectFill"></image>
+			<view class="type5-box x-bc">
+				<image class="type5-img2" @tap="jump(detail.list[1].path)" :src="detail.list[1].image" mode="aspectFill" style="border-bottom:1rpx solid #f6f6f6"></image>
+				<image class="type5-img2" @tap="jump(detail.list[2].path)" :src="detail.list[2].image" mode="aspectFill"></image>
 			</view>
-			<image class="type5-img1" @tap="jump(detail.list[2].path)" :src="detail.list[2].image" mode="aspectFill"></image>
 		</view>
 		<!-- 模板7-->
 		<view class="type6 y-f" v-if="detail.style == 7">
@@ -63,22 +63,14 @@ export default {
 		return {};
 	},
 	props: {
-		detail: {
-			type: Object,
-			default: null
-		}
+		detail: {}
 	},
 	computed: {},
-	created() {
-		// console.log(this.detail);
-	},
+	created() {},
 	methods: {
 		// 路由跳转
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
+		jump(path) {
+			this.$tools.routerTo(path);
 		}
 	}
 };
@@ -86,11 +78,9 @@ export default {
 
 <style lang="scss">
 .adv-box {
-	margin: 0 20rpx 20rpx;
 	background-color: #fff;
 	border-radius: 20rpx;
 	overflow: hidden;
-
 	.type1 {
 		.type1-img {
 			flex: 1;
@@ -122,26 +112,28 @@ export default {
 
 	.type3 {
 		.type3-box {
+			width: (710rpx/2);
+			border-right: 1rpx solid #f6f6f6;
 			.type3-img1 {
 				flex: 1;
 				height: (340rpx/2);
 
 				&:first-child {
-					border-right: 1rpx solid #f6f6f6;
+					border-bottom: 1rpx solid #f6f6f6;
 				}
 			}
 		}
 
 		.type3-img2 {
 			flex: 1;
-			height: (340rpx/2);
-			width: 100%;
-			border-top: 1rpx solid #f6f6f6;
+			height: 340rpx;
+			width: (710rpx/2);
 		}
 	}
 
 	.type4 {
 		.type4-box {
+			border-bottom: 1rpx solid #f6f6f6;
 			.type4-img1 {
 				flex: 1;
 				height: (340rpx/2);
@@ -155,24 +147,28 @@ export default {
 		.type4-img2 {
 			flex: 1;
 			height: (340rpx/2);
-			border-bottom: 1rpx solid #f6f6f6;
+			width: 710rpx;
 		}
 	}
 
 	.type5 {
 		.type5-img1 {
-			width: (710rpx/2);
-			height: 340rpx;
-			border-left: 1rpx solid #f6f6f6;
+			width: 710rpx;
+			height: (340rpx/2);
+			border-bottom: 1rpx solid #f6f6f6;
 		}
 
 		.type5-box {
 			flex: 1;
-			height: 340rpx;
-			width: (710rpx/2);
+			height: (340rpx/2);
+			width: 710rpx;
 
 			.type5-img2 {
 				height: (340rpx/2);
+
+				&:first-child {
+					border-right: 1rpx solid #f6f6f6;
+				}
 			}
 		}
 	}
@@ -205,7 +201,7 @@ export default {
 	}
 
 	image {
-		background-color: #ccc;
+		// background-color: #ccc;
 	}
 }
 </style>

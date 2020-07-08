@@ -64,8 +64,8 @@ export default {
 					that.$tools.toast('修改手机号成功');
 					that.getUserInfo();
 					setTimeout(() => {
-						that.$Router.replace('pages/user/info');
-					}, 1000);
+						that.$Router.back();
+					}, 500);
 				}
 			});
 		},

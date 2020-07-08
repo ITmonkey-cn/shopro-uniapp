@@ -9,11 +9,19 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="coupon-list" @tap="jump('/pages/app/coupon/detail',{couponId:c.id,state:stateCurrent})" v-for="c in couponList" :key="c.id">
+			<view class="coupon-list" @tap="jump('/pages/app/coupon/detail', { couponId: c.id, state: stateCurrent })" v-for="c in couponList" :key="c.id">
 				<shoprp-coupon :state="stateCurrent" :couponData="c"></shoprp-coupon>
 			</view>
 		</view>
 		<view class="foot_box"></view>
+		<!-- 自定义底部导航 -->
+		<shopro-tabbar></shopro-tabbar>
+		<!-- 关注弹窗 -->
+		<shopro-float-btn></shopro-float-btn>
+		<!-- 连续弹窗提醒 -->
+		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 

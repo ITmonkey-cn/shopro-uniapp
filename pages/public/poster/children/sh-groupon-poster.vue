@@ -64,6 +64,7 @@ export default {
 		let that = this;
 		that.goodsInfo = that.$Route.query;
 		that.goodsInfo.image = decodeURIComponent(that.$Route.query.image);
+		that.goodsInfo.title = decodeURIComponent(that.$Route.query.title);
 		that.setShareInfo({
 			query: {
 				url: 'groupon-' + that.$Route.query.id
