@@ -7,26 +7,42 @@
 					{{ item.name }}
 				</view>
 			</scroll-view>
-			<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
-				<view class="right" v-if="categoryData.length">
-					<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
-					<view class="item-list" v-for="(list, index1) in categoryData[listId].children" :key="index1">
-						<view class="type-box x-bc">
-							<text class="type-title">{{ list.name }}</text>
-							<view class="more" @tap="jump('/pages/goods/list', { id: list.id })">
-								<text>查看更多</text>
-								<text class="cuIcon-right"></text>
+			<view class="scroll-box">
+				<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
+				<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation :scroll-into-view="`goodsType${listId}`">
+					<view class="right" v-if="categoryData.length">
+						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`goodsType${index1}`">
+							<view class="type-box x-bc">
+								<text class="type-title">{{ item.name }}</text>
 							</view>
-						</view>
-						<view class="item-box x-f">
-							<view class="y-f goods-item" @tap="jump('/pages/goods/list', { id: mlist.id })" v-for="(mlist, index2) in list.chirdren" :key="index2">
-								<image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image>
-								<text class="item-title one-t ">{{ mlist.name }}</text>
+							<view class="item-box">
+								<view class="goods-item x-f mb30" v-for="(mlist, index2) in item.goods" :key="index2">
+									<view class="item-img"><image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image></view>
+
+									<view class="goods-item--right">
+										<view class="item-right--title one-t">黑胡椒牛肉煲仔饭+黄黑胡椒牛肉煲仔饭+黄桃…</view>
+										<view class="item-right--sales">销量1230份</view>
+										<view class="x-bc item-right--bottom">
+											<view class="price-box x-f">
+												<view class="current-price">
+													<text class="current-price--unit">￥</text>
+													25.6
+												</view>
+												<view class="origin-price">
+													<text class="origin-price--unit">￥</text>
+													28.6
+												</view>
+											</view>
+											<button class="cu-btn item-btn add-cart" v-if="true"><text class="cuIcon-roundaddfill"></text></button>
+											<button class="cu-btn item-btn sel-sku" v-else></button>
+										</view>
+									</view>
+								</view>
 							</view>
 						</view>
 					</view>
-				</view>
-			</scroll-view>
+				</scroll-view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -46,12 +62,36 @@ export default {
 	},
 	methods: {
 		getCategory() {
-			this.$api('category').then(res => {
+			this.$api('categoryGoods').then(res => {
 				if (res.code === 1) {
 					// this.categoryData = res.data;
 					this.categoryData = res.data;
 				}
 			});
+		},
+		// 获取
+		// 查询节点信息
+		getRect(selector, all) {
+			return new Promise(resolve => {
+				let query = null;
+				// 支付宝小程序不能加后面的.in(this)，是它自身的限制
+				// #ifndef MP-ALIPAY
+				query = uni.createSelectorQuery().in(this)
+				// #endif
+				// #ifdef MP-ALIPAY
+				query = uni.createSelectorQuery()
+				// #endif
+				query[all ? 'selectAll' : 'select'](selector)
+					.boundingClientRect(rect => {
+						if (all && Array.isArray(rect) && rect.length) {
+							resolve(rect)
+						}
+						if (!all && rect) {
+							resolve(rect)
+						}
+					})
+					.exec()
+			})
 		},
 		onType(id) {
 			this.listId = id;
@@ -148,27 +188,61 @@ export default {
 
 		.item-box {
 			flex-wrap: wrap;
-
 			.goods-item {
-				margin-right: 20rpx;
-				margin-bottom: 20rpx;
-
-				&:nth-child(3n) {
-					margin-right: 0;
+				.goods-item--right {
+					@include flex($direction: column, $justify: around, $align: top);
+					width: 100%;
+					position: relative;
+					height: 140rpx;
+					margin-left: 20rpx;
 				}
-
+				.item-right--bottom {
+					width: 100%;
+				}
 				.item-img {
-					width: 150rpx;
-					height: 150rpx;
-					// background: #ccc;
+					width: 140rpx;
+					height: 140rpx;
+					border-radius: 10rpx;
+				}
+				.item-right--title {
+					width: 350rpx;
+					font-weight: bold;
+					font-size: 26rpx;
+				}
+				.item-right--sales {
+					font-size: 24rpx;
+					font-family: PingFang SC;
+					font-weight: 400;
+					color: rgba(153, 153, 153, 1);
+				}
+				.price-box {
+					.current-price {
+						color: #e1212b;
+						font-size: 28rpx;
+						.current-price--unit {
+							font-size: 24rpx;
+						}
+					}
+					.origin-price {
+						color: #999;
+						font-size: 18rpx;
+						margin-left: 12rpx;
+						.origin-price--unit {
+							font-size: 14rpx;
+						}
+					}
 				}
 
-				.item-title {
-					font-size: 24rpx;
-					line-height: 24rpx;
-					margin-top: 10rpx;
-					width: 150rpx;
-					text-align: center;
+				.item-btn {
+					background: none;
+					position: absolute;
+					bottom: 0;
+					right: 30rpx;
+					padding: 0;
+					.cuIcon-roundaddfill {
+						color: #e6b873;
+						font-size: 40rpx;
+					}
 				}
 			}
 		}

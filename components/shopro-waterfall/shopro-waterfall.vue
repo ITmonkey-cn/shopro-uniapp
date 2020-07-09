@@ -52,8 +52,8 @@ export default {
 	methods: {
 		async splitData() {
 			if (!this.tempList.length) return;
-			let leftRect = await this.$uGetRect('#shopro-left-cloumn');
-			let rightRect = await this.$uGetRect('#shopro-right-cloumn');
+			let leftRect = await this.$getRect('#shopro-left-cloumn');
+			let rightRect = await this.$getRect('#shopro-right-cloumn');
 			let item = this.tempList[0];
 			if (!item) return;
 			if (leftRect.height < rightRect.height) {

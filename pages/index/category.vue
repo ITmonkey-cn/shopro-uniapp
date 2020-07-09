@@ -1,9 +1,9 @@
 <template>
 	<view class="page_box">
 		<!-- 三级导航 -->
-		<sh-three-grades></sh-three-grades>
+		<sh-three-grades v-if="false"></sh-three-grades>
 		<!--二级导航 -->
-		<sh-two-grades v-if="false"></sh-two-grades>
+		<sh-two-grades v-else></sh-two-grades>
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
