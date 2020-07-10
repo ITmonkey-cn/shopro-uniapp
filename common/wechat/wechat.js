@@ -101,25 +101,29 @@ export default class Wechat {
 			uni.checkSession({
 				success(res) {
 					if (res.errMsg === 'checkSession:ok') sessionStatus = true;
-				}
-			})
-			if (!uni.getStorageSync('session_key') || !sessionStatus) {
-				uni.login({
-					success: function(info) {
-						let code = info.code;
-						api('user.getWxMiniProgramSessionKey', {
-							code: code,
-						}).then(res => {
-							if (res.code === 1) {
-								uni.setStorageSync('session_key', res.data.session_key);
-								session_key = res.data.session_key;
+				},
+				complete() {
+					if (!uni.getStorageSync('session_key') || !sessionStatus) {
+						uni.login({
+							success: function(info) {
+								let code = info.code;
+								api('user.getWxMiniProgramSessionKey', {
+									code: code,
+								}).then(res => {
+									if (res.code === 1) {
+										uni.setStorageSync('session_key', res.data.session_key);
+										uni.setStorageSync('openid', res.data.openid);
+										session_key = res.data.session_key;
+									}
+								});
 							}
 						});
+					} else {
+						session_key = uni.getStorageSync('session_key');
 					}
-				});
-			} else {
-				session_key = uni.getStorageSync('session_key');
-			}
+				}
+			})
+			
 			resolve(session_key);
 
 		});
