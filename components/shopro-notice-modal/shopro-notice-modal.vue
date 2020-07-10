@@ -47,7 +47,7 @@ export default {
 			return '/' + currPage;
 		},
 		newPopupList() {
-			if (this.popupData.list) {
+			if (this.popupData) {
 				let arr = this.popupData.list.filter(item => {
 					return item.page.includes(this.currentPath);
 				});
