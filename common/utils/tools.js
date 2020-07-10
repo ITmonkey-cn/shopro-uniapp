@@ -7,7 +7,8 @@ export default {
 	 * 跳转再封装，不支持复杂传参。
 	 */
 	routerTo(path, params = {}, isTabbar) {
-		let objParams = params ? parmas : {};
+
+		let objParams = params;
 		// 是否跳转外部链接
 		if (~path.indexOf('http')) {
 			router.push({
@@ -18,12 +19,7 @@ export default {
 			})
 			return false
 		}
-		// 判断原生
-		if (~path.indexOf('/pages/index/')) {
-			router.pushTab({
-				path: path
-			})
-		}
+
 		// 判断是否有参数
 		if (~path.indexOf('?')) {
 			let index = path.lastIndexOf('?');

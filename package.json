@@ -6,6 +6,6 @@
 		"jweixin-module": "^1.6.0",
 		"miniapp-color-thief": "^1.0.5",
 		"uni-read-pages": "^1.0.5",
-		"uni-simple-router": "^1.5.5"
+		"uni-simple-router": "1.5.2"
 	}
 }

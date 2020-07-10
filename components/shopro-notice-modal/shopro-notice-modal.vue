@@ -31,7 +31,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			templateData: state => state.init?.templateData
+			templateData: state => state.init?.templateData,
+			showLoginTip: state => state.user.showLoginTip
 		}),
 		popupData() {
 			if (this.templateData) {
@@ -60,7 +61,7 @@ export default {
 		hideModal(p) {
 			clearTimeout(timer);
 			this.showModal = false;
-			if(p.style==1){
+			if (p.style == 1) {
 				this.$store.commit('delPopup', this.currentPath);
 			}
 			timer = setTimeout(() => {
@@ -69,7 +70,7 @@ export default {
 			}, 500);
 		},
 		changePopup(path) {
-			this.$tools.routerTo(path);
+			this.$tools.routerTo(path, null);
 		}
 	}
 };

@@ -69,6 +69,8 @@ export default {
 		}
 	},
 	onLaunch: async function(options) {
+		// 原生底部导航，自定义底部导航切换。
+
 		if (options.query.mode === 'save') {
 			//截图模式
 			uni.setStorageSync('screenShot', true);
@@ -86,8 +88,6 @@ export default {
 	},
 	onShow: function() {
 		this.$store.commit('CART_NUM');
-		// 原生底部导航，自定义底部导航切换。
-		this.$store.state.init.templateData.tabbar && this.$store.state.init.templateData.tabbar[0].content.list ? uni.showTabBar() : uni.hideTabBar();
 	},
 	onHide: function() {}
 };
