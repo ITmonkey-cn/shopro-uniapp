@@ -1,0 +1,35 @@
+/* shopro主题颜色 */
+/* 深黑 */
+#dark-theme {
+	background: #000;
+	.bColor {
+		background: #333;
+		color: #999;
+	}
+	.borderColor {
+		border-color: #999;
+	}
+}
+
+/* 粉红 */
+#red-theme {
+	background: #f9e5ee;
+	.bColor {
+		background: #f9e5ee;
+		color: #8e5a54;
+	}
+	.borderColor {
+		border-color: #8e5a54;
+	}
+}
+/* 橘黄 */
+#yellow-theme {
+	background: #f6e1c9;
+	.bColor {
+		background: #f6e1c9;
+		color: #8c6031;
+	}
+	.borderColor {
+		border-color: #8c6031;
+	}
+}

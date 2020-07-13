@@ -1,5 +1,5 @@
 <template>
-	<view class="cu-modal" v-if="showModal && !screenShot" :class="[{ show: showModal }, modalType]" cathctouchmove @tap="hideModal">
+	<view class="cu-modal" v-if="showLogin && !screenShot" :class="[{ show: showLogin }, modalType]" cathctouchmove @tap="hideModal">
 		<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
 			<view class="modal-box">
 				<image class="head-bg" src="http://shopro.7wpp.com/imgs/nologin_bg.png" mode=""></image>
@@ -37,7 +37,7 @@ export default {
 		...mapState({
 			showLoginTip: state => state.user.showLoginTip
 		}),
-		showModal: {
+		showLogin: {
 			get() {
 				return this.showLoginTip;
 			},
@@ -48,10 +48,10 @@ export default {
 	},
 	methods: {
 		hideModal() {
-			this.showModal = false;
+			this.showLogin = false;
 		},
 		onLogin() {
-			this.showModal = false;
+			this.showLogin = false;
 			uni.setStorageSync('fromLogin', this.$Route);
 			this.$Router.push({
 				path: '/pages/public/login'

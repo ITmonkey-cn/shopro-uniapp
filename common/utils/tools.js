@@ -6,7 +6,8 @@ export default {
 	/**
 	 * 跳转再封装，不支持复杂传参。
 	 */
-	routerTo(path, params = {}, isLogin) {
+	routerTo(path, params = {}, isTabbar) {
+
 		let objParams = params;
 		// 是否跳转外部链接
 		if (~path.indexOf('http')) {
@@ -18,8 +19,9 @@ export default {
 			})
 			return false
 		}
+
 		// 判断是否有参数
-		if (path.indexOf('?') !== -1) {
+		if (~path.indexOf('?')) {
 			let index = path.lastIndexOf('?');
 			let query = path.substring(index + 1, path.length);
 			let arr = query.split('&')
@@ -27,10 +29,11 @@ export default {
 			arr.forEach(item => {
 				let mArr = item.split('=');
 				objParams[mArr[0]] = mArr[1]
+
 			})
 		}
 		// 判断是否是tabbar
-		if (isLogin) {
+		if (isTabbar) {
 			router.replaceAll({
 				path: path,
 				query: objParams

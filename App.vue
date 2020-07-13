@@ -69,6 +69,8 @@ export default {
 		}
 	},
 	onLaunch: async function(options) {
+		// 原生底部导航，自定义底部导航切换。
+
 		if (options.query.mode === 'save') {
 			//截图模式
 			uni.setStorageSync('screenShot', true);

@@ -34,7 +34,7 @@ export default {
 			templateData: state => state.init.templateData.tabbar
 		}),
 		tabbarData() {
-			if (this.templateData) {
+			if (this.templateData.length) {
 				return this.templateData[0].content;
 			}
 		},
