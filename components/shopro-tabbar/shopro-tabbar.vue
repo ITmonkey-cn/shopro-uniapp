@@ -2,12 +2,17 @@
 	<view class="shopro-tabbar-wrap" v-if="showTabbar">
 		<view class="tabbar-box" :style="{ background: tabbarData.bgcolor || '#fff' }">
 			<view class="tabbar-item" v-for="(tab, index) in tabbarList" :key="tab.name" @tap="switchTabbar(tab, index)">
-				<image
-					class="tabbar-icon"
-					v-if="tabbarData.style == 1 || tabbarData.style == 2"
-					:src="currentPath == getPath(tab.path) ? tab.activeImage : tab.image"
-					mode="aspectFill"
-				></image>
+				<view class="img-box">
+					<image
+						class="tabbar-icon"
+						v-if="tabbarData.style == 1 || tabbarData.style == 2"
+						:src="currentPath == getPath(tab.path) ? tab.activeImage : tab.image"
+						mode="aspectFill"
+					></image>
+					<!-- 购物车角标 -->
+					<view v-if="getPath(tab.path) == '/pages/index/cart' && cartNum" class="cu-tag badge">{{ cartNum }}</view>
+				</view>
+
 				<view
 					class="tabbar-text"
 					v-if="tabbarData.style == 1 || tabbarData.style == 3"
@@ -31,7 +36,8 @@ export default {
 	props: {},
 	computed: {
 		...mapState({
-			templateData: state => state.init.templateData.tabbar
+			templateData: state => state.init.templateData.tabbar,
+			cartNum: state => state.cart.cartNum
 		}),
 		tabbarData() {
 			if (this.templateData.length) {
@@ -67,7 +73,7 @@ export default {
 	methods: {
 		// 切换tabbar
 		switchTabbar(tab, index) {
-			this.$tools.routerTo(tab.path, null, true);
+			this.$tools.routerTo(tab.path, {}, true);
 		},
 		getPath(path) {
 			if (path.indexOf('?') !== -1) {
@@ -105,6 +111,12 @@ export default {
 			align-items: center;
 			justify-content: center;
 			flex: 1;
+			.img-box {
+				position: relative;
+				.cu-tag {
+					right: -12px;
+				}
+			}
 
 			.tabbar-icon {
 				width: 50rpx;
