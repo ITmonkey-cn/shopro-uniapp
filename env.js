@@ -2,12 +2,12 @@
 // 不同环境访问不同的路径
 import store from '@/common/store/index'
 const ENV_API_URL = {
-	development: 'https://api.7wpp.com/addons/shopro/', //开发环境
-	production: 'https://api.7wpp.com/addons/shopro/', //生产环境
+	development: 'https://dev.7wpp.com/addons/shopro/', //开发环境
+	production: 'https://dev.7wpp.com/addons/shopro/', //生产环境
 }
 const ENV_BASE_URL = {
-	development: 'https://api.7wpp.com', //开发环境
-	production: 'https://api.7wpp.com', //生产环境
+	development: 'https://dev.7wpp.com', //开发环境
+	production: 'https://dev.7wpp.com', //生产环境
 }
 
 export const BASE_URL = ENV_BASE_URL[process.env.NODE_ENV || 'development']; //后台根域名
