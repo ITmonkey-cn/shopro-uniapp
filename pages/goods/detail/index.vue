@@ -24,7 +24,11 @@
 					<text class="shopro-selector-rect">{{ goodsInfo.subtitle }}</text>
 				</view>
 				<!-- 规格选择 -->
-				<view class="sku-box shopro-selector-rect" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon')">
+				<view
+					class="sku-box shopro-selector-rect"
+					@tap="showSku = true"
+					v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon') && goodsInfo.is_sku"
+				>
 					<view class="x-bc">
 						<view class="x-f">
 							<text class="title">规格</text>
