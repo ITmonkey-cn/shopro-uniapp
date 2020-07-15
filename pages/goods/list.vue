@@ -79,6 +79,7 @@ export default {
 		}
 		if (this.$Route.query.keywords) {
 			this.listParams.keywords = this.$Route.query.keywords;
+			this.searchVal = this.$Route.query.keywords;
 		}
 		this.getGoodsList();
 	},
@@ -115,6 +116,8 @@ export default {
 		// 清除搜索框
 		clearSearch() {
 			this.searchVal = '';
+			this.listParams.keywords = '';
+			this.getGoodsList();
 		},
 		// 商品列表
 		getGoodsList() {
