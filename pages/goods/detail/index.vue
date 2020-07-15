@@ -307,6 +307,9 @@ export default {
 						image: that.goodsInfo.image
 					});
 				}
+				if (res.code == 0) {
+					that.$tools.toast(res.msg);
+				}
 			});
 		},
 		// 商品评论
@@ -398,7 +401,7 @@ export default {
 
 <style lang="scss">
 .detail-content {
-	// padding-bottom: 100rpx;
+	padding-bottom: 80rpx;
 	&::-webkit-scrollbar {
 		width: 0;
 		height: 0;
@@ -520,7 +523,7 @@ export default {
 .tab-detail {
 	min-height: 300rpx;
 	background: #fff;
-	padding-bottom: 30rpx;
+	margin-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
 		// font-size: 0; // 解决图片间隙问题。如果详情有文字，注释掉。
@@ -565,6 +568,7 @@ export default {
 
 	.goods-comment {
 		padding-top: 30rpx;
+		min-height: 300rpx;
 		.more-box {
 			height: 100rpx;
 			background: #fff;
