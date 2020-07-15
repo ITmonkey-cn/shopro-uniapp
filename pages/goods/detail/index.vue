@@ -308,6 +308,7 @@ export default {
 					});
 				}
 				if (res.code == 0) {
+					console.log(111111111111);
 					that.$tools.toast(res.msg);
 				}
 			});
@@ -400,6 +401,11 @@ export default {
 </script>
 
 <style lang="scss">
+.load-box {
+	/deep/.skeletons_box {
+		z-index: 11;
+	}
+}
 .detail-content {
 	padding-bottom: 80rpx;
 	&::-webkit-scrollbar {
