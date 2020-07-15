@@ -120,18 +120,11 @@ export default {
 	},
 
 	/** 分类 ↓ **/
-	
 	category: {
 		url: 'category',
 		auth: false,
 		method: 'GET',
-		// desc: '三级分类',
-	},
-	categoryGoods: {
-		url: 'category/goods',
-		auth: false,
-		method: 'GET',
-		// desc: '二级分类',
+		// desc: '所有分类',
 	},
 
 	/** 积分商城 ↓ **/

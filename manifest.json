@@ -141,7 +141,7 @@
     // }
     "h5" : {
         "title" : "Shopro",
-        "domain" : "fa-frontend.smallnews.top",
+        "domain" : "frontend.test.7wpp.com",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true
