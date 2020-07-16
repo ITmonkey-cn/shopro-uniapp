@@ -10,12 +10,17 @@ export default {
 		let objParams = params;
 		// 是否跳转外部链接
 		if (~path.indexOf('http')) {
+			// #ifdef H5
+			window.location = path;
+			// #endif
+			// #ifndef  H5
 			router.push({
 				path: '/pages/public/webview',
 				query: {
 					'webviewPath': path
 				}
 			})
+			// #endif
 			return false
 		}
 		// 判断是否有参数

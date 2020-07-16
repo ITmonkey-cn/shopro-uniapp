@@ -61,6 +61,7 @@ export default {
 			if (this?.tabbarData?.list) {
 				let arr = [];
 				let path = '';
+				arr.push('/pages/index/index');
 				for (let item of this.tabbarData.list) {
 					path = this.getPath(item.path);
 					arr.push(path);
