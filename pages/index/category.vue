@@ -1,7 +1,7 @@
 <template>
 	<view class="page_box">
 		<!-- 三级导航 -->
-		<sh-three-grades v-if="false"></sh-three-grades>
+		<sh-three-grades v-if="true"></sh-three-grades>
 		<!--二级导航 -->
 		<sh-two-grades v-else></sh-two-grades>
 		<!-- 自定义底部导航 -->

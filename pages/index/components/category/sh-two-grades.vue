@@ -1,17 +1,27 @@
 <template>
 	<view class="content_box">
 		<view class="x-f wrapper-box">
-			<scroll-view class="left y-f" scroll-y>
-				<view class="type-list x-c" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
-					<view class="line" :class="[{ 'line-active': listId == index }]"></view>
-					{{ item.name }}
-				</view>
-			</scroll-view>
 			<view class="scroll-box">
-				<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
-				<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation :scroll-into-view="`goodsType${listId}`">
+				<scroll-view class="left" scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
+					<view
+						class="type-list x-c"
+						:id="`left_${index}`"
+						:class="[{ 'list-active': currentTab == index }]"
+						v-for="(item, index) in categoryData"
+						:key="index"
+						@tap="onType(index)"
+					>
+						<view class="line" :class="[{ 'line-active': currentTab == index }]"></view>
+						{{ item.name }}
+					</view>
+				</scroll-view>
+			</view>
+			
+			<view class="scroll-box">
+				<image class="type-img" v-show="categoryData[currentTab].image" :src="categoryData[currentTab].image" mode=""></image>
+				<scroll-view scroll-y class="scroll-box" scroll-with-animation :scroll-into-view="scroll_rightId" @scroll="rightScroll">
 					<view class="right" v-if="categoryData.length">
-						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`goodsType${index1}`">
+						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
 							<view class="type-box x-bc">
 								<text class="type-title">{{ item.name }}</text>
 							</view>
@@ -20,17 +30,17 @@
 									<view class="item-img"><image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image></view>
 
 									<view class="goods-item--right">
-										<view class="item-right--title one-t">黑胡椒牛肉煲仔饭+黄黑胡椒牛肉煲仔饭+黄桃…</view>
-										<view class="item-right--sales">销量1230份</view>
+										<view class="item-right--title one-t">{{ mlist.title }}</view>
+										<view class="item-right--sales">销量{{ mlist.sales }}份</view>
 										<view class="x-bc item-right--bottom">
 											<view class="price-box x-f">
 												<view class="current-price">
 													<text class="current-price--unit">￥</text>
-													25.6
+													{{ mlist.price }}
 												</view>
 												<view class="origin-price">
 													<text class="origin-price--unit">￥</text>
-													28.6
+													{{ mlist.original_price }}
 												</view>
 											</view>
 											<button class="cu-btn item-btn add-cart" v-if="true"><text class="cuIcon-roundaddfill"></text></button>
@@ -52,7 +62,11 @@ export default {
 	components: {},
 	data() {
 		return {
-			listId: 0,
+			currentTab: 0,
+			scroll_leftId: 'left_0',
+			scroll_rightId: 'right_0',
+			isScroll: true,
+			isTap: true,
 			categoryData: {}
 		};
 	},
@@ -64,37 +78,36 @@ export default {
 		getCategory() {
 			this.$api('categoryGoods').then(res => {
 				if (res.code === 1) {
-					// this.categoryData = res.data;
 					this.categoryData = res.data;
 				}
 			});
 		},
-		// 获取
-		// 查询节点信息
-		getRect(selector, all) {
-			return new Promise(resolve => {
-				let query = null;
-				// 支付宝小程序不能加后面的.in(this)，是它自身的限制
-				// #ifndef MP-ALIPAY
-				query = uni.createSelectorQuery().in(this);
-				// #endif
-				// #ifdef MP-ALIPAY
-				query = uni.createSelectorQuery();
-				// #endif
-				query[all ? 'selectAll' : 'select'](selector)
-					.boundingClientRect(rect => {
-						if (all && Array.isArray(rect) && rect.length) {
-							resolve(rect);
-						}
-						if (!all && rect) {
-							resolve(rect);
-						}
-					})
-					.exec();
-			});
+		onType(index) {
+			if (this.currentTab == index) {
+				return false;
+			} else {
+				this.currentTab = index;
+				this.checkCor();
+			}
 		},
-		onType(id) {
-			this.listId = id;
+		// 检测
+		checkCor(isScroll) {
+			if (!isScroll) {
+				this.isScroll = false;
+				this.isTap = true;
+				if (this.currentTab > 6) {
+					this.scroll_leftId = `left_${this.currentTab - 2}`;
+				} else {
+					this.scroll_leftId = 'left_0';
+				}
+				this.scroll_rightId = `right_${this.currentTab}`;
+			} else {
+				this.scroll_leftId = `left_${this.currentTab}`;
+			}
+		},
+		// 右侧滑动
+		rightScroll(e) {
+			// console.log(e);
 		},
 		// 路由跳转
 		jump(path, parmas) {
@@ -112,7 +125,9 @@ export default {
 	margin-top: 1upx;
 	display: flex;
 	flex-direction: column;
+	flex: 1;
 	overflow: hidden;
+	height: 100%;
 }
 
 .wrapper-box {
@@ -125,7 +140,7 @@ export default {
 	width: 505rpx;
 	height: 150rpx;
 	background: #ccc;
-	margin-top: 30rpx;
+	margin: 10rpx 30rpx;
 }
 
 .scroll-box {
@@ -137,7 +152,7 @@ export default {
 .left {
 	width: 200upx;
 	height: 100%;
-
+	flex: 1;
 	.list-active {
 		background: #fff;
 		color: #333333 !important;
