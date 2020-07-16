@@ -2,7 +2,7 @@
 	<!-- 今日必拼 -->
 	<view class="group-goods pa20 mx20 mb10">
 		<view class="title-box x-bc" @tap="jump('/pages/activity/groupon/list')">
-			<text class="title">今日必拼</text>
+			<text class="title">{{ detail.name }}</text>
 			<view class="group-people x-f">
 				<!-- <view class="head-box x-f"><image v-for="i in 3" class="head-img" src="" mode="" :key="i"></image></view> -->
 				<text class="tip">更多</text>

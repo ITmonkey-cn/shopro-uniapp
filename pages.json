@@ -127,7 +127,8 @@
 				{
 					"path": "groupon/my-groupon",
 					"style": {
-						"navigationBarTitleText": "我的拼团"
+						"navigationBarTitleText": "我的拼团",
+						   "enablePullDownRefresh": true
 					},
 					"meta": {
 						"auth": true,
@@ -439,7 +440,7 @@
 
 					},
 					"meta": {
-						"auth": false,
+						"auth": true,
 						"async": true,
 						"title": "海报",
 						"group": "通用"

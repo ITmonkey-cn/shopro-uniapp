@@ -41,8 +41,8 @@ const actions = {
 				goods_list: data.list,
 				from: data.from
 			}).then(res => {
-				resolve(res)
 				store.dispatch('getCartList');
+				resolve(res)
 			}).catch(e => {
 				reject(e)
 			})
@@ -61,8 +61,7 @@ const actions = {
 				act: param.art
 			}).then(res => {
 				if (param.art === 'delete' && res.code === 1) {
-					dispatch('getCartList');
-					commit('CART_NUM');
+					store.dispatch('getCartList');
 				}
 
 			}).catch(e => {
@@ -80,19 +79,7 @@ const mutations = {
 	// cart数量角标更新。
 	[CART_NUM](state, data) {
 		let cartNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : 0;
-		if (data === '') {
-			cartNum = ''
-		}
-		if (+cartNum) {
-			uni.setTabBarBadge({
-				index: 2,
-				text: cartNum + ''
-			})
-		} else {
-			uni.removeTabBarBadge({
-				index: 2
-			})
-		}
+		state.cartNum = cartNum
 	},
 	// 切换全选。
 	changeAllSellect(state) {

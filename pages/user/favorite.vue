@@ -11,7 +11,7 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<checkbox-group @change="onSel" v-if="favoriteList.length">
-					<view class="collect-list x-f" v-for="f in favoriteList" :key="f.id">
+					<view class="collect-list x-f" v-if="f.goods_id" v-for="f in favoriteList" :key="f.id">
 						<checkbox v-if="isSel" :value="f.goods_id.toString()" :checked="f.checked" :class="{ checked: f.checked }" class="goods-radio round orange"></checkbox>
 						<shopro-mini-card :detail="f" :type="'favorite'"></shopro-mini-card>
 					</view>

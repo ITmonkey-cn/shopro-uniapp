@@ -98,7 +98,7 @@ export default {
 					}
 				}
 
-				if (that.goodsInfo.activity_type === 'seckill') {
+				if (that.goodsInfo.activity_type === 'seckill' || that.goodsInfo.activity_type === 'groupon') {
 					let rules = that.goodsInfo.activity.rules;
 					if (rules.limit_buy != 0 && value >= rules.limit_buy) {
 						that.$tools.toast('本次活动最多购买' + rules.limit_buy + '件');

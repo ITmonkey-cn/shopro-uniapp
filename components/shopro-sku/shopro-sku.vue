@@ -3,7 +3,7 @@
 		<!-- 规格 -->
 		<view class="cu-modal sku-modal  bottom-modal" style="z-index: 999;" :class="{ show: showModal }" @tap="hideModal" v-if="goodsInfo.sku_price">
 			<view class="cu-dialog" @tap.stop style="background: none;">
-				<view class="shop-modal page_box">
+				<view class="shop-modal page_box" :style="goodsInfo.is_sku == 0 ? 'height:500rpx' : ''">
 					<text class="cuIcon-roundclosefill" @tap="hideModal"></text>
 					<!-- 商品信息 -->
 					<view class="top x-f modal-head__box">
@@ -107,7 +107,12 @@ export default {
 		this.skuList = this.goodsInfo.sku;
 		this.changeDisabled(false);
 	},
-	mounted() {},
+	mounted() {
+		// 单规格选项
+		if (!this.goodsInfo.is_sku) {
+			this.currentSkuPrice = this.skuPrice[0];
+		}
+	},
 	watch: {
 		type(nweVal, oldVal) {
 			return newVal;
@@ -399,7 +404,7 @@ export default {
 // 规格
 .shop-modal {
 	width: 750upx;
-	height: 950upx;
+	height: 950rpx;
 	background: rgba(255, 255, 255, 1);
 	border-radius: 30rpx 30rpx 0 0 !important;
 	padding: 60upx 20upx 30rpx;

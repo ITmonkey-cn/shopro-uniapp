@@ -3,6 +3,8 @@
 		<sh-invite-poster v-if="posterType === 'user'" @getShareInfo="getShareInfo"></sh-invite-poster>
 		<sh-goods-poster v-if="posterType === 'goods'" @getShareInfo="getShareInfo"></sh-goods-poster>
 		<sh-groupon-poster v-if="posterType === 'groupon'" @getShareInfo="getShareInfo"></sh-groupon-poster>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 

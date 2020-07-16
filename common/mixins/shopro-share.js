@@ -1,3 +1,4 @@
+
 /**
  * Wechat v1.0.0
  * @description shopro-wechat 1.0.1 wehcat全局分享组件
