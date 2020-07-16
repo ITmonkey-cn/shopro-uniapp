@@ -76,22 +76,22 @@ export default {
 				let query = null;
 				// 支付宝小程序不能加后面的.in(this)，是它自身的限制
 				// #ifndef MP-ALIPAY
-				query = uni.createSelectorQuery().in(this)
+				query = uni.createSelectorQuery().in(this);
 				// #endif
 				// #ifdef MP-ALIPAY
-				query = uni.createSelectorQuery()
+				query = uni.createSelectorQuery();
 				// #endif
 				query[all ? 'selectAll' : 'select'](selector)
 					.boundingClientRect(rect => {
 						if (all && Array.isArray(rect) && rect.length) {
-							resolve(rect)
+							resolve(rect);
 						}
 						if (!all && rect) {
-							resolve(rect)
+							resolve(rect);
 						}
 					})
-					.exec()
-			})
+					.exec();
+			});
 		},
 		onType(id) {
 			this.listId = id;
@@ -119,6 +119,13 @@ export default {
 	flex: 1;
 	margin-top: 1upx;
 	height: 100%;
+}
+
+.type-img {
+	width: 505rpx;
+	height: 150rpx;
+	background: #ccc;
+	margin-top: 30rpx;
 }
 
 .scroll-box {
@@ -163,13 +170,6 @@ export default {
 	padding: 0 30upx;
 	flex: 1;
 	height: 100%;
-
-	.type-img {
-		width: 505rpx;
-		height: 150rpx;
-		background: #ccc;
-		margin-top: 30rpx;
-	}
 
 	.item-list {
 		.type-box {
