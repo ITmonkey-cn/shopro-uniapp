@@ -24,6 +24,7 @@ const actions = {
 				commit('INIT_DATA', res.data);
 				uni.setStorageSync('sysInfo', res.data.info);
 				uni.setStorageSync('shareInfo', res.data.share);
+				console.log(res,'init');
 				resolve(res)
 			}).catch(e => {
 				reject(e)
@@ -64,9 +65,9 @@ const actions = {
 				});
 			}
 			api('template', params).then(res => {
-
 				uni.setStorageSync('templateData', res.data);
 				commit('TEMPLATE_DATA', res.data);
+				console.log(res,'template');
 				resolve(res)
 			}).catch(e => {
 				reject(e)

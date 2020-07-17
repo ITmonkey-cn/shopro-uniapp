@@ -8,10 +8,10 @@ export default function api(url, data = {}) {
 	request.interceptor.request((config, cancel) => { /* 请求之前拦截器 */
 		if (api.auth) {
 			let token = uni.getStorageSync('token');
-			if (!token) { // 如果token不存在，调用cancel 会取消本次请求，但是该函数的catch() 仍会执行
-				cancel('token 不存在'); // 接收一个参数，会传给catch((err) => {}) err.errMsg === 'token 不存在'
+			if (!token) {
 				store.commit('LOGIN_TIP', true)
 				store.commit('OUT_LOGIN');
+				throw('暂未登录,已阻止此次API请求~');
 			}
 		}
 		if (uni.getStorageSync('token')) {

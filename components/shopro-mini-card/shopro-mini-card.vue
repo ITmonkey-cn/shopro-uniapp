@@ -5,7 +5,7 @@
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
 				<slot name="tipTag"></slot>
-				<view class="size-tip">{{ detail.goods_sku_text }}</view>
+				<view class="size-tip">{{ detail.goods_sku_text ? detail.goods_sku_text : ''}}</view>
 				<slot name="goodsBottom">
 					<view class="price">￥{{ detail.price }}</view>
 				</slot>
@@ -16,7 +16,7 @@
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
 				<slot name="tipTag"></slot>
-				<view class="size-tip">{{ sku.goods_sku_text }}</view>
+				<view class="size-tip">{{ sku.goods_sku_text ? sku.goods_sku_text: ''}}</view>
 				<slot name="goodsBottom">
 					<view class="price">￥{{ detail.price }}</view>
 				</slot>
@@ -38,7 +38,7 @@
 			<image class="goods-img" :src="detail.goods_image" mode=""></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.goods_title }}</view>
-				<view class="size-tip">{{ detail.goods_sku_text }}</view>
+				<view class="size-tip">{{ detail.goods_sku_text ? detail.goods_sku_text : ''}}</view>
 				<view class="order-goods flex align-center justify-between">
 					<text class="order-price">￥{{ detail.goods_price }}</text>
 					<text class="order-num">x{{ detail.goods_num }}</text>

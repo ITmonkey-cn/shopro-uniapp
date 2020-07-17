@@ -10,7 +10,7 @@
 		</view>
 		<view class="content_box " style="margin-top: -4rpx;">
 			<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top>
-				<block v-if="template.length" v-for="(item, index) in template" :key="index">
+				<block v-if="template" v-for="(item, index) in template" :key="index">
 					<!-- 搜索 -->
 					<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
 					<!-- 轮播 -->
@@ -50,7 +50,7 @@
 		</view>
 		<view class="foot_box"></view>
 		<!-- 骨架屏 -->
-		<shopro-skeleton :showSkeleton="!template.length"></shopro-skeleton>
+		<shopro-skeleton :showSkeleton="!template"></shopro-skeleton>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 强制登录 -->

@@ -40,7 +40,7 @@ export default {
 			cartNum: state => state.cart.cartNum
 		}),
 		tabbarData() {
-			if (this.templateData.length) {
+			if (this.templateData) {
 				return this.templateData[0].content;
 			}
 		},
