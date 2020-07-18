@@ -16,41 +16,17 @@
 				</view>
 				<view class="goods-order" v-for="goods in order.item" :key="goods.id">
 					<view class="order-content"><shopro-mini-card :type="'order'" :detail="goods"></shopro-mini-card></view>
-
-					<view class="goods-bottom  x-f">
-						<view class="btn-box" v-for="(btn, index) in goods.btns" :key="btn">
-							<button
-								@tap.stop="jump('/pages/goods/detail/index', { id: goods.goods_id })"
-								class="cu-btn btn1"
-								:class="{ btn2: index + 1 === goods.btns.length }"
-								v-if="btn === 'buy_again'"
-							>
-								再次购买
-							</button>
-							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'express'" @tap.stop="checkExpress(order.id, goods.id)">
-								查看物流
-							</button>
-							<button @tap.stop="onConfirm(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'get'">
-								确认收货
-							</button>
-							<button @tap.stop="onAftersale(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'aftersale'">
-								申请售后
-							</button>
-							<button v-if="btn === 'reapply_refund'" @tap.stop="onRefund(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }">
-								重新退款
-							</button>
-							<button @tap.stop="onRefund(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'apply_refund'">
-								申请退款
-							</button>
-							<button @tap.stop="onComment(order.id, goods.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'comment'">
-								待评价
-							</button>
-							<button class="cu-btn btn1" :class="{ btn2: index + 1 === goods.btns.length }" v-if="btn === 'after_detail'">售后详情</button>
-						</view>
-					</view>
 				</view>
-				<view class="order-bottom x-f" v-if="order.btns.length">
-					<view class="btn-box" v-for="orderBtn in order.btns" :key="orderBtn">
+				<view class="order-bottom" v-if="order.btns.length">
+					<view class="all-msg x-f">
+						优惠：
+						<text class="all-unit">￥</text>
+						{{ order.discount_fee }} ，运费：
+						<text class="all-unit">￥</text>
+						{{ order.dispatch_amount }} ，需付款：
+						<view class="all-money">{{ order.pay_fee }}</view>
+					</view>
+					<view class="btn-box x-f" v-for="orderBtn in order.btns" :key="orderBtn">
 						<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id)" class="cu-btn obtn1">取消订单</button>
 						<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.id)" class="cu-btn obtn2">立即支付</button>
 						<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn2">
@@ -115,11 +91,6 @@ export default {
 					id: 4,
 					title: '待评价',
 					type: 'nocomment'
-				},
-				{
-					id: 5,
-					title: '退换货',
-					type: 'aftersale'
 				}
 			]
 		};
@@ -261,8 +232,29 @@ export default {
 	background: #fff;
 	margin: 20rpx 0;
 	.order-bottom {
-		justify-content: flex-end;
-		padding-bottom: 30rpx;
+		padding-bottom: 20rpx;
+		.btn-box {
+			justify-content: flex-end;
+		}
+		.all-msg {
+			font-size: 24rpx;
+			color: #999;
+			justify-content: flex-end;
+			margin-bottom: 10rpx;
+			padding: 0 30rpx;
+			.all-unit {
+				font-size: 20rpx;
+			}
+			.all-money {
+				font-size: 26rpx;
+				color: #333;
+				font-weight: 500;
+				&::before {
+					content: '￥';
+					font-size: 20rpx;
+				}
+			}
+		}
 		.obtn1 {
 			width: 160rpx;
 			height: 60rpx;
@@ -304,6 +296,9 @@ export default {
 			color: #a8700d;
 		}
 	}
+	.order-content {
+		padding-bottom: 20rpx;
+	}
 	.goods-order {
 		border-bottom: 1px solid rgba(223, 223, 223, 0.5);
 		padding: 20rpx 20rpx 0;
@@ -313,29 +308,6 @@ export default {
 	.goods-bottom {
 		background: #fff;
 		padding-bottom: 30rpx;
-		justify-content: flex-end;
-		.btn-box {
-			.btn1 {
-				height: 60rpx;
-				border: 1rpx solid rgba(223, 223, 223, 1);
-				border-radius: 30rpx;
-				font-size: 26rpx;
-				background: #fff;
-				padding: 0 20rpx;
-				margin-right: 20rpx;
-			}
-			.btn2 {
-				width: 160rpx;
-				height: 60rpx;
-				border: 1rpx solid rgba(213, 166, 90, 1) !important;
-				border-radius: 30rpx;
-				font-size: 26rpx;
-				color: #d5a65a !important;
-				padding: 0;
-				background: #fff;
-				margin-right: 20rpx;
-			}
-		}
 	}
 }
 </style>

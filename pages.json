@@ -307,8 +307,19 @@
 				{
 					"path": "refund",
 					"style": {
-						"navigationBarTitleText": "退款"
+						"navigationBarTitleText": "售后"
 
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale",
+					"style": {
+						"navigationBarTitleText": "退换货"
+				
 					},
 					"meta": {
 						"auth": true,

@@ -11,7 +11,7 @@
 			<view class="detail-goods">
 				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
-					<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
+					<view class="" @tap="jump('/pages/goods/detail/index', { id: order.goods_id })"><shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card></view>
 					<view class="order-bottom  x-f">
 						<!-- 退款原因 -->
 						<view class="refund_msg" v-if="order.refund_msg">
@@ -19,14 +19,6 @@
 							{{ order.refund_msg }}
 						</view>
 						<view class="btn-box" v-for="(btn, index) in order.btns" :key="btn">
-							<button
-								@tap="jump('/pages/goods/detail/index', { id: order.goods_id })"
-								class="cu-btn btn1"
-								:class="{ btn2: index + 1 === order.btns.length }"
-								v-if="btn === 'buy_again'"
-							>
-								再次购买
-							</button>
 							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'express'" @tap="checkExpress(orderDetail.id, order.id)">
 								查看物流
 							</button>
@@ -341,7 +333,6 @@ export default {
 		}
 		.order-bottom {
 			background: #fff;
-			padding-bottom: 20rpx;
 			justify-content: flex-end;
 			padding-top: 20rpx;
 			.btn1 {
