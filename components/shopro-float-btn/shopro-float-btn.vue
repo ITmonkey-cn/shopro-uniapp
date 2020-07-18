@@ -38,7 +38,7 @@ export default {
 	props: {},
 	computed: {
 		...mapState({
-			template: state => state.init.templateData.floatButton
+			template: state => state.init.templateData['float-button']
 		}),
 		floatData() {
 			if (this.template) {
@@ -62,7 +62,11 @@ export default {
 			}
 		}
 	},
-	created() {},
+	created() {
+		// setInterval(function(){ 
+		// 	console.log(this.template,123)
+		// 	}, 100);
+	},
 	methods: {
 		hideModal() {
 			this.showModal = false;

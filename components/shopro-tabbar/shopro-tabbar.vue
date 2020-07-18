@@ -40,7 +40,7 @@ export default {
 			cartNum: state => state.cart.cartNum
 		}),
 		tabbarData() {
-			if (this.templateData.length) {
+			if (this.templateData) {
 				return this.templateData[0].content;
 			}
 		},
@@ -61,7 +61,7 @@ export default {
 			if (this?.tabbarData?.list) {
 				let arr = [];
 				let path = '';
-				arr.push('/pages/index/index')
+				arr.push('/pages/index/index');
 				for (let item of this.tabbarData.list) {
 					path = this.getPath(item.path);
 					arr.push(path);

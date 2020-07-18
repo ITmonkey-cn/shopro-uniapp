@@ -31,12 +31,12 @@ export default {
 	},
 	computed: {
 		...mapState({
-			templateData: state => state.init?.templateData,
+			templateData: state => state.init.templateData.popup,
 			showLoginTip: state => state.user.showLoginTip
 		}),
 		popupData() {
 			if (this.templateData) {
-				return this.templateData?.popup[0]?.content;
+				return this.templateData[0].content;
 			}
 		},
 		currentPath() {

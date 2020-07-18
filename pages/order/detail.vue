@@ -158,7 +158,7 @@
 			<view class="btn-box x-f">
 				<view class="" v-for="btn in orderDetail.btns" :key="btn">
 					<button v-if="btn === 'cancel'" @tap.stop="onCancel(orderDetail.id)" class="cu-btn obtn1">取消订单</button>
-					<button v-if="btn === 'pay'" @tap.stop="onPay(orderDetail.order_sn)" class="cu-btn obtn2">付款</button>
+					<button v-if="btn === 'pay'" @tap.stop="onPay(orderDetail.id)" class="cu-btn obtn2">付款</button>
 					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
 						拼团详情
 					</button>
@@ -294,7 +294,7 @@ export default {
 		// 立即购买
 		onPay(id) {
 			uni.navigateTo({
-				url: `/pages/order/payment/method?id=${id}`
+				url: `/pages/order/payment/method?orderId=${id}`
 			});
 		},
 		// 待评价
