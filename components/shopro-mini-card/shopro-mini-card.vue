@@ -5,7 +5,7 @@
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
 				<slot name="tipTag"></slot>
-				<view class="size-tip">{{ detail.goods_sku_text ? detail.goods_sku_text : ''}}</view>
+				<view class="size-tip">{{ detail.goods_sku_text ? detail.goods_sku_text : '' }}</view>
 				<slot name="goodsBottom">
 					<view class="price">￥{{ detail.price }}</view>
 				</slot>
@@ -16,7 +16,7 @@
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>
 				<slot name="tipTag"></slot>
-				<view class="size-tip">{{ sku.goods_sku_text ? sku.goods_sku_text: ''}}</view>
+				<view class="size-tip">{{ sku.goods_sku_text ? sku.goods_sku_text : '' }}</view>
 				<slot name="goodsBottom">
 					<view class="price">￥{{ detail.price }}</view>
 				</slot>
@@ -35,13 +35,13 @@
 		</view>
 		<view class="goods-box x-start" v-if="type === 'order'">
 			<image v-if="detail.activity_type" class="order-goods__tag" :src="orderStatus[detail.activity_type]" mode=""></image>
-			<image class="goods-img" :src="detail.goods_image" mode=""></image>
+			<image class="goods-img" :src="detail.goods_image || ''" mode="aspectFill"></image>
 			<view class="y-start">
-				<view class="goods-title more-t">{{ detail.goods_title }}</view>
-				<view class="size-tip">{{ detail.goods_sku_text ? detail.goods_sku_text : ''}}</view>
+				<view class="goods-title more-t">{{ detail.goods_title || '' }}</view>
+				<view class="size-tip">{{ detail.goods_sku_text ? detail.goods_sku_text : '' }}</view>
 				<view class="order-goods flex align-center justify-between">
-					<text class="order-price">￥{{ detail.goods_price }}</text>
-					<text class="order-num">x{{ detail.goods_num }}</text>
+					<text class="order-price">￥{{ detail.goods_price || 0 }}</text>
+					<text class="order-num">x{{ detail.goods_num || 0 }}</text>
 				</view>
 			</view>
 		</view>
@@ -66,11 +66,7 @@ export default {
 		sku: {},
 		type: ''
 	},
-	computed: {
-		goodsId() {
-			return this.detail.goods_id;
-		}
-	},
+	computed: {},
 	created() {},
 	methods: {
 		// 路由跳转
