@@ -2,8 +2,8 @@
 	<view>
 		<view class="sh-userinfo-box" :style="{ backgroundColor: detail.color }">
 			<image class="user-bg" :src="detail.image" mode=""></image>
-			<view class="head-wrap pad">
-				<view class="titleNav ">
+			<view class="head-wrap">
+				<view class="titleNav pad">
 					<view class="status-bar"></view>
 					<text class="nav-title x-f">我的</text>
 				</view>
@@ -31,9 +31,12 @@
 							<text class="tag-title">{{ userInfo.group.name }}</text>
 						</view>
 					</view>
-					<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/public/poster/index', { posterType: 'user' })">
-						<text class="cuIcon-qr_code"></text>
-					</button>
+					<view class="x-f">
+						<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/public/poster/index', { posterType: 'user' })">
+							<text class="cuIcon-qr_code"></text>
+						</button>
+						<button v-if="true" @tap="jump('/pages/user/merchant')" class="cu-btn merchant-btn">切换商家版</button>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -134,7 +137,7 @@ export default {
 	.user-head {
 		padding-top: 50rpx;
 		.info-box {
-			// padding: 0 20rpx;
+			padding-left: 30rpx;
 			.head-img-wrap {
 				position: relative;
 				.refresh-btn {
@@ -206,6 +209,17 @@ export default {
 				font-size: 50rpx;
 				color: #fff;
 			}
+		}
+		.merchant-btn {
+			padding: 0;
+			width: 136rpx;
+			height: 46rpx;
+			background: rgba(255, 255, 255, 1);
+			border-radius: 23rpx 0px 0px 23rpx;
+			font-size: 20rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(168, 112, 13, 1);
 		}
 	}
 	.wallet {

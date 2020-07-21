@@ -128,7 +128,7 @@
 					"path": "groupon/my-groupon",
 					"style": {
 						"navigationBarTitleText": "我的拼团",
-						   "enablePullDownRefresh": true
+						"enablePullDownRefresh": true
 					},
 					"meta": {
 						"auth": true,
@@ -546,6 +546,33 @@
 						"auth": true,
 						"async": true,
 						"title": "个人信息",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "merchant",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "商户信息",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "merchant-info",
+					"style": {
+						"navigationBarTitleText": "门店信息"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "门店信息",
 						"group": "用户"
 					}
 				},
