@@ -3,37 +3,42 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<view class="goods-box">
-				<shopro-mini-card><block slot="goodsBottom"></block></shopro-mini-card>
+				<shopro-mini-card :type="'order'" :detail="orderDetail"><block slot="goodsBottom"></block></shopro-mini-card>
 			</view>
-			<view class="goods-item x-bc" @tap="onSel(1)">
-				<text class="item-title">货物状态</text>
+			<view class="refund-item">
+				<view class="item-title">请选择售后类型</view>
+				<view class="radio-box y-start">
+					<label class="radio-label x-f" v-for="item in refundTypeList" :key="item.title" @tap="selRefundType(item.title)">
+						<checkbox class="radio-check round orange" :class="{ checked: refundType == item.title }"></checkbox>
+						<text class="radio-title">{{ item.title }}</text>
+					</label>
+				</view>
+			</view>
+			<view class="goods-item x-bc" @tap="onSelCause">
+				<text class="item-title">选择申请原因</text>
 				<text class="cuIcon-right"></text>
 			</view>
-			<view class="goods-item x-bc" @tap="onSel(2)">
-				<text class="item-title">退款原因</text>
-				<text class="cuIcon-right"></text>
-			</view>
-			<view class="goods-item x-f">
-				<text class="item-title">退款金额：</text>
-				<text class="price">￥16.00</text>
-			</view>
-			<view class="explain goods-item x-f">
-				<text class="item-title">说明：</text>
-				<input class="flex-sub" value="" placeholder="选填" />
-			</view>
-
-			<view class="upload-img">
-				<text class="upload-title">上传凭证</text>
-				<view class="img-box">
-					<view class="preview-box" v-for="(item, index) in imgList" :key="index">
-						<image class="preview-img" :src="imgList[index]" mode="aspectFill"></image>
-						<text class="cuIcon-close" @tap="DelImg(index)"></text>
+			<!-- 留言 -->
+			<view class="refund-item" style="margin-bottom: 20rpx;">
+				<view class="item-title">相关描述</view>
+				<view class="describe-box">
+					<textarea class="describe-content" maxlength="500" placeholder="客官~请描述您遇到的问题，建议上传照片" placeholder-class="describe-content--pl"></textarea>
+					<view class="upload-img">
+						<view class="img-box">
+							<view class="preview-box" v-for="(item, index) in imgList" :key="index">
+								<image class="preview-img" :src="imgList[index]" mode="aspectFill"></image>
+								<text class="cuIcon-close" @tap="DelImg(index)"></text>
+							</view>
+							<view class="choose-img x-c" @tap="chooseImg" v-if="imgList.length < 10"><text class="cuIcon-cameraadd"></text></view>
+						</view>
 					</view>
-					<view class="choose-img x-c" @tap="chooseImg" v-if="imgList.length < 10"><text class="cuIcon-cameraadd"></text></view>
 				</view>
 			</view>
 		</view>
-		<view class="foot_box x-c"><button class="cu-btn sub-btn">提交</button></view>
+		<view class="foot_box x-bc">
+			<button class="cu-btn contcat-btn">联系客服</button>
+			<button class="cu-btn sub-btn">提交</button>
+		</view>
 		<shopro-modal v-model="showModal" :modalType="'bottom-modal'">
 			<block slot="modalContent">
 				<view class="modal-box page_box">
@@ -65,22 +70,22 @@ export default {
 		return {
 			showModal: false,
 			imgList: [],
+			orderDetail: {}, //订单信息
 			modalDetail: {},
-			goodsState: {
-				title: '货物状态',
-				list: [
-					{
-						id: 1,
-						val: '已收到货'
-					},
-					{
-						id: 2,
-						val: '未收到货'
-					}
-				]
-			},
+			refundType: '',
+			refundTypeList: [
+				{
+					title: '退款'
+				},
+				{
+					title: '退货退款'
+				},
+				{
+					title: '其他'
+				}
+			],
 			refundList: {
-				title: '退款原因',
+				title: '申请原因',
 				list: [
 					{
 						id: 1,
@@ -107,11 +112,29 @@ export default {
 		};
 	},
 	computed: {},
+	onLoad() {
+		this.getOrderDetail();
+	},
 	methods: {
 		chooseImg() {
 			let that = this;
 			that.$tools.chooseImage(1).then(res => {
 				that.imgList.push(res);
+			});
+		},
+		// 选择售后类型
+		selRefundType(title) {
+			this.refundType == title ? (this.refundType = '') : (this.refundType = title);
+		},
+		// 订单详情
+		getOrderDetail() {
+			let that = this;
+			that.$api('order.detail', {
+				id: 244 //that.$Route.query.id
+			}).then(res => {
+				if (res.code === 1) {
+					that.orderDetail = res.data;
+				}
 			});
 		},
 		DelImg(index) {
@@ -127,17 +150,9 @@ export default {
 				}
 			});
 		},
-		onSel(state) {
-			switch (state) {
-				case 1:
-					this.modalDetail = this.goodsState;
-					break;
-				case 2:
-					this.modalDetail = this.refundList;
-					break;
-				default:
-					break;
-			}
+		// 选择申请原因
+		onSelCause() {
+			this.modalDetail = this.refundList;
 			this.showModal = true;
 		}
 	}
@@ -145,6 +160,57 @@ export default {
 </script>
 
 <style lang="scss">
+.uni-checkbox:not([disabled]) .uni-checkbox-input:hover {
+	border-color: none !important;
+}
+// 售后项目
+.refund-item {
+	background-color: #fff;
+	border-bottom: 1rpx solid #f5f5f5;
+	padding: 30rpx;
+	.item-title {
+		font-size: 30rpx;
+		font-family: PingFang SC;
+		font-weight: bold;
+		color: rgba(51, 51, 51, 1);
+		margin-bottom: 20rpx;
+	}
+	.radio-label {
+		height: 80rpx;
+		.radio-check {
+			transform: scale(0.8);
+			margin-right: 10rpx;
+		}
+		.radio-title {
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(51, 51, 51, 1);
+		}
+	}
+	// 留言
+	.describe-box {
+		width: 690rpx;
+		min-height: 322rpx;
+		background: rgba(249, 250, 251, 1);
+		border-radius: 20rpx;
+		.describe-content {
+			width: 690rpx;
+			padding: 30rpx;
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(177, 179, 199, 1);
+		}
+		.describe-content--pl {
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(177, 179, 199, 1);
+		}
+	}
+}
+
 .goods-box {
 	background: #fff;
 	padding: 30rpx 25rpx;
@@ -178,7 +244,6 @@ export default {
 }
 
 .upload-img {
-	background: #fff;
 	padding: 30rpx 25rpx;
 
 	.upload-title {
@@ -198,11 +263,11 @@ export default {
 		height: 120rpx;
 		background: rgba(249, 250, 251, 1);
 		border: 1rpx solid rgba(223, 223, 223, 1);
-		margin-right: 25rpx;
-		margin-bottom: 25rpx;
+		margin-right: 54rpx;
+		margin-bottom: 40rpx;
 		position: relative;
 
-		&:nth-child(5n) {
+		&:nth-child(4n) {
 			margin-right: 0;
 		}
 
@@ -231,14 +296,27 @@ export default {
 }
 
 .foot_box {
+	height: 100rpx;
+	background-color: #fff;
+	padding: 0 30rpx;
 	.sub-btn {
-		width: 710rpx;
-		height: 80rpx;
+		width: 335rpx;
+		height: 74rpx;
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
 		border: 1rpx solid rgba(238, 238, 238, 1);
-		border-radius: 40rpx;
+		border-radius: 38rpx;
 		color: rgba(#fff, 0.9);
-		margin-bottom: 30rpx;
+		font-size: 28rpx;
+	}
+	.contcat-btn {
+		width: 335rpx;
+		height: 74rpx;
+		background: rgba(238, 238, 238, 1);
+		border-radius: 38rpx;
+		font-size: 28rpx;
+		font-family: PingFang SC;
+		font-weight: 400;
+		color: rgba(51, 51, 51, 1);
 	}
 }
 
