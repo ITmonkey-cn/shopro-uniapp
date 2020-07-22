@@ -475,12 +475,6 @@ export default {
 			method: 'POST',
 			// desc: '申请退款',
 		},
-		aftersale: {
-			url: 'order/aftersale',
-			auth: true,
-			method: 'POST',
-			// desc: '申请售后',
-		},
 		cancel: {
 			url: 'order/cancel',
 			auth: true,
@@ -505,6 +499,30 @@ export default {
 			method: 'POST',
 			// desc: '商品可用优惠券',
 		},
+		aftersale: {
+			url: 'order_aftersale/aftersale',
+			auth: true,
+			method: 'POST',
+			// desc: '申请售后',
+		},
+		aftersaleList: {
+			url: 'order_aftersale/index',
+			auth: true,
+			method: 'GET',
+			// desc: '售后列表',
+		},
+		aftersaleDetail: {
+			url: 'order_aftersale/detail',
+			auth: true,
+			method: 'GET',
+			// desc: '售后列表详情',
+		},
+		deleteOrder: {
+			url: 'order/delete',
+			auth: true,
+			method: 'POST',
+			// desc: '删除订单',
+		}
 	},
 
 	/** 支付 ↓ **/

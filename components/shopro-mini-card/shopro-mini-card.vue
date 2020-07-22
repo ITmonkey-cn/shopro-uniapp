@@ -44,7 +44,7 @@
 				</view>
 				<view class="order-goods x-f ">
 					<text class="order-price">￥{{ detail.goods_price || 0 }}</text>
-					<button class="cu-btn status-btn">{{ detail.status_name }}</button>
+					<button class="cu-btn status-btn" v-if="detail.status_name">{{ detail.status_name }}</button>
 				</view>
 			</view>
 		</view>

@@ -9,7 +9,7 @@
 					<view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view>
 				</view>
 			</view>
-			<view class="order-item y-f"  @tap="jump('/pages/order/after-sale')">
+			<view class="order-item y-f"  @tap="jump('/pages/order/after-sale/list')">
 				<view class="y-f item-box">
 					<image class="order-img" src="http://shopro.7wpp.com/imgs/user/tab55.png" mode=""></image>
 					<text class="item-title">退换货</text>

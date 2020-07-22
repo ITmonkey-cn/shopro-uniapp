@@ -3,26 +3,35 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<view class="goods-box">
-				<shopro-mini-card :type="'order'" :detail="orderDetail"><block slot="goodsBottom"></block></shopro-mini-card>
+				<shopro-mini-card :type="'order'" :detail="orderItemDetail"><block slot="goodsBottom"></block></shopro-mini-card>
 			</view>
 			<view class="refund-item">
 				<view class="item-title">请选择售后类型</view>
 				<view class="radio-box y-start">
-					<label class="radio-label x-f" v-for="item in refundTypeList" :key="item.title" @tap="selRefundType(item.title)">
-						<checkbox class="radio-check round orange" :class="{ checked: refundType == item.title }"></checkbox>
+					<label class="radio-label x-f" v-for="item in refundTypeList" :key="item.title" @tap="selRefundType(item.value)">
+						<checkbox class="radio-check round orange" :class="{ checked: refundType == item.value }"></checkbox>
 						<text class="radio-title">{{ item.title }}</text>
 					</label>
 				</view>
 			</view>
 			<view class="goods-item x-bc" @tap="onSelCause">
 				<text class="item-title">选择申请原因</text>
-				<text class="cuIcon-right"></text>
+				<view class="x-f refund-cause">
+					<text style="margin-right: 20rpx;">{{ refundCause }}</text>
+					<text class="cuIcon-right"></text>
+				</view>
 			</view>
 			<!-- 留言 -->
 			<view class="refund-item" style="margin-bottom: 20rpx;">
 				<view class="item-title">相关描述</view>
 				<view class="describe-box">
-					<textarea class="describe-content" maxlength="500" placeholder="客官~请描述您遇到的问题，建议上传照片" placeholder-class="describe-content--pl"></textarea>
+					<textarea
+						class="describe-content"
+						v-model="refundContent"
+						maxlength="500"
+						placeholder="客官~请描述您遇到的问题，建议上传照片"
+						placeholder-class="describe-content--pl"
+					></textarea>
 					<view class="upload-img">
 						<view class="img-box">
 							<view class="preview-box" v-for="(item, index) in imgList" :key="index">
@@ -37,21 +46,21 @@
 		</view>
 		<view class="foot_box x-bc">
 			<button class="cu-btn contcat-btn">联系客服</button>
-			<button class="cu-btn sub-btn">提交</button>
+			<button class="cu-btn sub-btn" @tap="postAftersale">提交</button>
 		</view>
 		<shopro-modal v-model="showModal" :modalType="'bottom-modal'">
 			<block slot="modalContent">
 				<view class="modal-box page_box">
 					<view class="modal-head head_box x-c">{{ modalDetail.title }}</view>
 					<view class="modal-content content_box">
-						<radio-group @tap="onRadio" class="y-f">
-							<label class="sel-item x-bc" v-for="item in modalDetail.list" :key="item.id">
+						<view class="y-f">
+							<label class="sel-item x-bc" @tap="onRefundCause(item.val)" v-for="item in modalDetail.list" :key="item.id">
 								<text>{{ item.val }}</text>
-								<radio class="brown sel-radio" :value="item.val"></radio>
+								<checkbox class="orange radio round sel-radio" :class="{ checked: refundCause == item.val }"></checkbox>
 							</label>
-						</radio-group>
+						</view>
 					</view>
-					<view class="modal-foot foot_box x-c"><button class="cu-btn close-btn" @tap="onClose">关闭</button></view>
+					<view class="modal-foot foot_box x-c"><button class="cu-btn close-btn" @tap="onClose">确定</button></view>
 				</view>
 			</block>
 		</shopro-modal>
@@ -69,19 +78,25 @@ export default {
 	data() {
 		return {
 			showModal: false,
-			imgList: [],
-			orderDetail: {}, //订单信息
+			imgList: [], //本地地址
+			orderId: 0, //订单ID
+			orderItemDetail: {}, //订单信息
 			modalDetail: {},
-			refundType: '',
+			refundType: '', //退款方式
+			refundCause: '', //退款原因
+			refundContent: '', //相关描述
 			refundTypeList: [
 				{
-					title: '退款'
+					title: '退款',
+					value: 'refund'
 				},
 				{
-					title: '退货退款'
+					title: '退货',
+					value: 'return'
 				},
 				{
-					title: '其他'
+					title: '其他',
+					value: 'other'
 				}
 			],
 			refundList: {
@@ -113,27 +128,50 @@ export default {
 	},
 	computed: {},
 	onLoad() {
-		this.getOrderDetail();
+		this.getOrderItemDetail();
 	},
 	methods: {
 		chooseImg() {
 			let that = this;
 			that.$tools.chooseImage(1).then(res => {
-				that.imgList.push(res);
+				res.forEach(img => {
+					that.$tools.uploadImage('index/upload', img).then(res => {
+						that.imgList.push(res.full_url);
+					});
+				});
 			});
 		},
 		// 选择售后类型
-		selRefundType(title) {
-			this.refundType == title ? (this.refundType = '') : (this.refundType = title);
+		selRefundType(value) {
+			this.refundType == value ? (this.refundType = '') : (this.refundType = value);
 		},
-		// 订单详情
-		getOrderDetail() {
+		// 订单item详情
+		getOrderItemDetail() {
 			let that = this;
-			that.$api('order.detail', {
-				id: 244 //that.$Route.query.id
+			that.$api('order.itemDetail', {
+				id: that.$Route.query.orderId,
+				order_item_id: that.$Route.query.orderItemId
 			}).then(res => {
 				if (res.code === 1) {
-					that.orderDetail = res.data;
+					that.orderItemDetail = res.data[0];
+				}
+			});
+		},
+		// 提交售后
+		postAftersale() {
+			let that = this;
+			uni.showLoading();
+			that.$api('order.aftersale', {
+				type: that.refundType,
+				order_id: that.$Route.query.orderId,
+				order_item_id: that.$Route.query.orderItemId,
+				reason: that.refundCause,
+				content: that.refundContent,
+				images: that.imgList
+			}).then(res => {
+				if (res.code === 1) {
+					uni.hideLoading();
+					that.$Router.replace('/pages/order/after-sale/list');
 				}
 			});
 		},
@@ -154,6 +192,13 @@ export default {
 		onSelCause() {
 			this.modalDetail = this.refundList;
 			this.showModal = true;
+		},
+		// 关闭
+		onClose() {
+			this.showModal = false;
+		},
+		onRefundCause(value) {
+			this.refundCause == value ? (this.refundCause = '') : (this.refundCause = value);
 		}
 	}
 };
@@ -223,6 +268,14 @@ export default {
 	padding: 0 25rpx;
 	margin-bottom: 20rpx;
 	border-top: 1rpx solid rgba(#dfdfdf, 0.5);
+
+	// 售后原因
+	.refund-cause {
+		font-size: 26rpx;
+		font-family: PingFang SC;
+		font-weight: 400;
+		color: rgba(177, 179, 199, 1);
+	}
 
 	&:nth-of-type(2n) {
 		margin-bottom: 0;

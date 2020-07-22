@@ -128,7 +128,7 @@
 					"path": "groupon/my-groupon",
 					"style": {
 						"navigationBarTitleText": "我的拼团",
-						   "enablePullDownRefresh": true
+						"enablePullDownRefresh": true
 					},
 					"meta": {
 						"auth": true,
@@ -305,9 +305,9 @@
 					}
 				},
 				{
-					"path": "refund",
+					"path": "after-sale/refund",
 					"style": {
-						"navigationBarTitleText": "售后"
+						"navigationBarTitleText": "申请售后"
 
 					},
 					"meta": {
@@ -316,9 +316,20 @@
 					}
 				},
 				{
-					"path": "after-sale",
+					"path": "after-sale/list",
 					"style": {
-						"navigationBarTitleText": "退换货"
+						"navigationBarTitleText": "退换/售后列表"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/detail",
+					"style": {
+						"navigationBarTitleText": "服务单详情"
 				
 					},
 					"meta": {

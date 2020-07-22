@@ -9,36 +9,42 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="order-list" v-for="order in orderList" :key="order.id" @tap.stop="jump('/pages/order/detail', { id: order.id })">
-				<view class="order-head x-bc">
-					<text class="no">订单编号：{{ order.order_sn }}</text>
-					<text class="state">{{ order.status_name }}</text>
-				</view>
-				<view class="goods-order" v-for="goods in order.item" :key="goods.id">
-					<view class="order-content"><shopro-mini-card :type="'order'" :detail="goods"></shopro-mini-card></view>
-				</view>
-				<view class="order-bottom" v-if="order.btns.length">
-					<view class="all-msg x-f">
-						优惠：
-						<text class="all-unit">￥</text>
-						{{ order.discount_fee }} ，运费：
-						<text class="all-unit">￥</text>
-						{{ order.dispatch_amount }} ，需付款：
-						<view class="all-money">{{ order.pay_fee }}</view>
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+				<view class="order-list" v-for="(order, orderIndex) in orderList" :key="order.id" @tap.stop="jump('/pages/order/detail', { id: order.id })">
+					<view class="order-head x-bc">
+						<text class="no">订单编号：{{ order.order_sn }}</text>
+						<text class="state">{{ order.status_name }}</text>
 					</view>
-					<view class="btn-box x-f" v-for="orderBtn in order.btns" :key="orderBtn">
-						<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id)" class="cu-btn obtn1">取消订单</button>
-						<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.id)" class="cu-btn obtn2">立即支付</button>
-						<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn2">
-							拼团详情
-						</button>
+					<view class="goods-order" v-for="goods in order.item" :key="goods.id">
+						<view class="order-content"><shopro-mini-card :type="'order'" :detail="goods"></shopro-mini-card></view>
+					</view>
+					<view class="order-bottom" v-if="order.btns.length">
+						<view class="all-msg x-f">
+							优惠：
+							<text class="all-unit">￥</text>
+							{{ order.discount_fee }} ，运费：
+							<text class="all-unit">￥</text>
+							{{ order.dispatch_amount }} ，需付款：
+							<view class="all-money">{{ order.pay_fee }}</view>
+						</view>
+						<view class="btn-box x-f" v-for="orderBtn in order.btns" :key="orderBtn">
+							<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id)" class="cu-btn obtn1">取消订单</button>
+							<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.id)" class="cu-btn obtn2">立即支付</button>
+							<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn2">
+								拼团详情
+							</button>
+							<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn1">删除</button>
+							<button v-if="orderBtn === 'express'" @tap.stop="onExpress" class="cu-btn obtn1">查看物流</button>
+						</view>
 					</view>
 				</view>
-			</view>
-			<!-- 空白页 -->
-			<shopro-empty v-if="!orderList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
-			<!-- load -->
-			<shopro-load v-model="isLoading"></shopro-load>
+				<!-- 空白页 -->
+				<shopro-empty v-if="!orderList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
+				<!-- load -->
+				<shopro-load v-model="isLoading"></shopro-load>
+				<!-- 更多 -->
+				<view v-if="orderList.length" class="cu-load text-gray" :class="loadStatus"></view>
+			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
 		<!-- 自定义底部导航 -->
@@ -60,6 +66,9 @@ export default {
 		return {
 			routerTo: this.$Router,
 			isLoading: true,
+			loadStatus: '', //loading,over分页
+			currentPage: 1,
+			lastPage: 0,
 			orderType: 'all',
 			orderList: [],
 			emptyData: {
@@ -116,19 +125,35 @@ export default {
 		},
 		onNav(id) {
 			this.orderType = id;
+			this.orderList = [];
 			this.getOrderList();
 		},
 		getOrderList() {
 			let that = this;
 			that.isLoading = true;
+			that.loadStatus = 'loading';
 			that.$api('order.index', {
-				type: that.orderType
+				type: that.orderType,
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
-					that.orderList = res.data.data;
+					that.orderList = [...that.orderList, ...res.data.data];
+					that.lastPage = res.data.last_page;
+					if (that.currentPage < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
 				}
 			});
+		},
+		// 加载更多
+		loadMore() {
+			if (this.currentPage < this.lastPage) {
+				this.currentPage += 1;
+				this.getAftersaleList();
+			}
 		},
 		// 确认收货
 		onConfirm(id, itemId) {
@@ -142,32 +167,15 @@ export default {
 				}
 			});
 		},
-		// 申请退款
-		onRefund(id, itemId) {
+		// 删除订单
+		onDelete(orderId, orderIndex) {
 			let that = this;
-			that.$api('order.refund', {
-				id: id,
-				order_item_id: itemId
+			that.$api('order.deleteOrder', {
+				id: orderId
 			}).then(res => {
 				if (res.code === 1) {
-					that.$tools.toast('申请退款成功');
-					that.getOrderList();
-					//  #ifdef MP-WEIXIN
-					this.$store.dispatch('getMessageIds', 'aftersale');
-					//  #endif
-				}
-			});
-		},
-		// 申请售后
-		onAftersale(id, itemId) {
-			let that = this;
-			that.$api('order.aftersale', {
-				id: id,
-				order_item_id: itemId
-			}).then(res => {
-				if (res.code === 1) {
-					that.$tools.toast('申请售后成功');
-					that.getOrderList();
+					this.$tools.toast(res.msg);
+					this.orderList.splice(orderIndex, 1);
 				}
 			});
 		},
