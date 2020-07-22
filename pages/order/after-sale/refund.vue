@@ -21,6 +21,11 @@
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
+			<!-- 联系方式 -->
+			<view class="refund-item mb20">
+				<view class="item-title">联系方式</view>
+				<view class="input-box x-f"><input type="text" class="item-input" v-model="phone" placeholder="请输入您的联系电话" placeholder-class="input--pl" /></view>
+			</view>
 			<!-- 留言 -->
 			<view class="refund-item" style="margin-bottom: 20rpx;">
 				<view class="item-title">相关描述</view>
@@ -30,7 +35,7 @@
 						v-model="refundContent"
 						maxlength="500"
 						placeholder="客官~请描述您遇到的问题，建议上传照片"
-						placeholder-class="describe-content--pl"
+						placeholder-class="input--pl"
 					></textarea>
 					<view class="upload-img">
 						<view class="img-box">
@@ -45,7 +50,7 @@
 			</view>
 		</view>
 		<view class="foot_box x-bc">
-			<button class="cu-btn contcat-btn">联系客服</button>
+			<button class="cu-btn contcat-btn" open-type="contact">联系客服</button>
 			<button class="cu-btn sub-btn" @tap="postAftersale">提交</button>
 		</view>
 		<shopro-modal v-model="showModal" :modalType="'bottom-modal'">
@@ -85,6 +90,7 @@ export default {
 			refundType: '', //退款方式
 			refundCause: '', //退款原因
 			refundContent: '', //相关描述
+			phone: '', //联系方式
 			refundTypeList: [
 				{
 					title: '退款',
@@ -167,7 +173,8 @@ export default {
 				order_item_id: that.$Route.query.orderItemId,
 				reason: that.refundCause,
 				content: that.refundContent,
-				images: that.imgList
+				images: that.imgList,
+				phone: that.phone
 			}).then(res => {
 				if (res.code === 1) {
 					uni.hideLoading();
@@ -223,7 +230,7 @@ export default {
 	.radio-label {
 		height: 80rpx;
 		.radio-check {
-			transform: scale(0.8);
+			transform: scale(0.7);
 			margin-right: 10rpx;
 		}
 		.radio-title {
@@ -236,19 +243,33 @@ export default {
 	// 留言
 	.describe-box {
 		width: 690rpx;
-		min-height: 322rpx;
 		background: rgba(249, 250, 251, 1);
 		border-radius: 20rpx;
 		.describe-content {
 			width: 690rpx;
 			padding: 30rpx;
+			height: 200rpx;
 			font-size: 24rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
 			color: rgba(177, 179, 199, 1);
 		}
-		.describe-content--pl {
-			font-size: 24rpx;
+	}
+	.input--pl {
+		font-size: 24rpx;
+		font-family: PingFang SC;
+		font-weight: 400;
+		color: rgba(177, 179, 199, 1);
+	}
+	// 联系方式
+	.input-box {
+		height: 84rpx;
+		background: rgba(249, 250, 251, 1);
+		border-radius: 20rpx;
+		.item-input {
+			padding: 0 30rpx;
+			flex: 1;
+			font-size: 28rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
 			color: rgba(177, 179, 199, 1);
@@ -297,7 +318,7 @@ export default {
 }
 
 .upload-img {
-	padding: 30rpx 25rpx;
+	padding: 25rpx;
 
 	.upload-title {
 		font-size: 28rpx;
@@ -308,19 +329,18 @@ export default {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	margin-top: 20rpx;
 
 	.choose-img,
 	.preview-box {
-		width: 120rpx;
-		height: 120rpx;
+		width: 110rpx;
+		height: 110rpx;
 		background: rgba(249, 250, 251, 1);
 		border: 1rpx solid rgba(223, 223, 223, 1);
-		margin-right: 54rpx;
-		margin-bottom: 40rpx;
+		margin-right: 20rpx;
+		margin-bottom: 20rpx;
 		position: relative;
 
-		&:nth-child(4n) {
+		&:nth-child(5n) {
 			margin-right: 0;
 		}
 

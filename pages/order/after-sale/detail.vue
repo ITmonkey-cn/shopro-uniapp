@@ -31,7 +31,7 @@
 				<view class="aftersale-item x-f">
 					<view class="item-title">服务单号：</view>
 					<view class="item-content">{{ aftersaleDetail.aftersale_sn }}</view>
-					<button class="cu-btn copy-btn">复制</button>
+					<button class="cu-btn copy-btn" @tap="onCopy(aftersaleDetail.aftersale_sn)">复制</button>
 				</view>
 				<view class="aftersale-item x-f">
 					<view class="item-title">申请时间：</view>
@@ -94,6 +94,20 @@ export default {
 		this.getAftersaleDetail();
 	},
 	methods: {
+		// 复制
+		onCopy(code) {
+			let that = this;
+			uni.setClipboardData({
+				data: code,
+				success: function(data) {
+					//#ifdef H5
+					that.$tools.toast('已复制到剪切板');
+					//#endif
+				},
+				fail: function(err) {},
+				complete: function(res) {}
+			});
+		},
 		// 服务单详情
 		getAftersaleDetail() {
 			let that = this;
@@ -175,7 +189,7 @@ export default {
 // 服务内容
 .aftersale-content {
 	background-color: #fff;
-	padding: 20rpx 20rpx 0;
+	padding: 20rpx;
 	.aftersale-item {
 		height: 60rpx;
 		.copy-btn {
