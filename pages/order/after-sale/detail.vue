@@ -4,14 +4,30 @@
 			<!-- 步骤条 -->
 			<view class="bg-gradual-green steps-box">
 				<view class="cu-steps">
-					<view class="cu-item" :class="index > status[aftersaleDetail.type] ? 'text-after' : 'text-white'" v-for="(item, index) in basicsList" :key="index">
-						<text :class="'cuIcon-' + item.cuIcon"></text>
-						{{ item.name }}
+					<view class="cu-item" :class="aftersaleDetail.aftersale_status < 0 || aftersaleDetail.aftersale_status == 0 ? 'text-white' : 'text-after'">
+						<text class="cuIcon-roundcheckfill"></text>
+						提交申请
+					</view>
+					<view class="cu-item" :class="aftersaleDetail.aftersale_status < 0 || aftersaleDetail.aftersale_status == 1 ? 'text-white' : 'text-after'">
+						<text class="cuIcon-roundcheckfill"></text>
+						进行中
+					</view>
+					<view class="cu-item" v-if="aftersaleDetail.aftersale_status >= 0" :class="aftersaleDetail.aftersale_status == 2 ? 'text-white' : 'text-after'">
+						<text class="cuIcon-roundcheckfill"></text>
+						完成
+					</view>
+					<view class="cu-item" v-if="aftersaleDetail.aftersale_status == -2" :class="aftersaleDetail.aftersale_status == -2 ? 'text-white' : 'text-after'">
+						<text class="cuIcon-roundclosefill"></text>
+						取消
+					</view>
+					<view class="cu-item" v-if="aftersaleDetail.aftersale_status == -1" :class="aftersaleDetail.aftersale_status == -1 ? 'text-white' : 'text-after'">
+						<text class="cuIcon-roundclosefill"></text>
+						驳回
 					</view>
 				</view>
 			</view>
 			<!-- 服务状态 -->
-			<view class="status-box x-bc">
+			<view class="status-box x-bc" @tap="jump('/pages/order/after-sale/log', { aftersaleId: aftersaleDetail.id })">
 				<view class="y-start">
 					<view class="status-text">{{ aftersaleDetail.aftersale_status_desc }}</view>
 					<view class="status-time">{{ aftersaleDetail.updatetime }}</view>
@@ -66,30 +82,8 @@ export default {
 	components: {},
 	data() {
 		return {
-			status: {
-				refund: 0,
-				ing: 1,
-				finish: 2
-			},
 			aftersaleDetail: {}, //售后详情
-			aftersaleLog: [], //售后记录
-			basicsList: [
-				{
-					cuIcon: 'roundcheckfill',
-					name: '提交申请',
-					status: 'refund'
-				},
-				{
-					cuIcon: 'roundcheckfill',
-					name: '处理中',
-					status: 'ing'
-				},
-				{
-					cuIcon: 'roundcheckfill',
-					name: '完成',
-					status: 'finish'
-				}
-			]
+			aftersaleLog: [] //售后记录
 		};
 	},
 	computed: {},
@@ -97,6 +91,12 @@ export default {
 		this.getAftersaleDetail();
 	},
 	methods: {
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 		// 复制
 		onCopy(code) {
 			let that = this;

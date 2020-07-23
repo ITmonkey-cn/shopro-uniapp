@@ -54,7 +54,7 @@ export default {
 				order_item_id: that.$Route.query.orderItemId
 			}).then(res => {
 				if (res.code === 1) {
-					that.goodsDetail = res.data[0];
+					that.goodsDetail = res.data;
 				}
 			});
 		},

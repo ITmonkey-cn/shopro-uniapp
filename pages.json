@@ -338,6 +338,17 @@
 					}
 				},
 				{
+					"path": "after-sale/log",
+					"style": {
+						"navigationBarTitleText": "进度详情"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
 					"path": "payment/method",
 					"style": {
 						"navigationBarTitleText": "支付方式"
