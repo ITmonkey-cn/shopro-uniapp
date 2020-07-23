@@ -62,7 +62,7 @@ export default {
 			},
 			isLoading: true, //loading和空白页。
 			loadStatus: '', //loading,over
-			lastPage: 0
+			lastPage: 1
 		};
 	},
 	computed: {},

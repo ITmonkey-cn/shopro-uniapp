@@ -10,12 +10,7 @@
 		</view>
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<view
-					class="order-list"
-					v-for="order in orderList"
-					:key="order.id"
-					@tap="jump('/pages/order/after-sale/detail', {aftersaleId: order.id })"
-				>
+				<view class="order-list" v-for="(order, orderIndex) in orderList" :key="order.id" @tap="jump('/pages/order/after-sale/detail', { aftersaleId: order.id })">
 					<view class="order-head x-bc">
 						<text class="no">服务单号：{{ order.aftersale_sn }}</text>
 						<view class="order-status x-f">
@@ -36,11 +31,8 @@
 							<text class="cuIcon-right"></text>
 						</view>
 						<view class="btn-box x-f" v-for="orderBtn in order.btns" :key="orderBtn">
-							<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id)" class="cu-btn obtn">取消订单</button>
-							<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.id)" class="cu-btn obtn">立即支付</button>
-							<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn">
-								拼团详情
-							</button>
+							<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id, orderIndex)" class="cu-btn obtn">取消</button>
+							<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn">删除</button>
 						</view>
 					</view>
 				</view>
@@ -64,7 +56,7 @@ export default {
 			orderList: [], //售后列表
 			loadStatus: '', //loading,over分页
 			currentPage: 1,
-			lastPage: 0,
+			lastPage: 1,
 			emptyData: {
 				img: '/static/imgs/empty/empty_groupon.png',
 				tip: '暂无相关记录~'
@@ -103,7 +95,9 @@ export default {
 		};
 	},
 	computed: {},
-	onLoad() {
+	onLoad() {},
+	onShow() {
+		this.orderList = [];
 		this.getAftersaleList();
 	},
 	methods: {
@@ -138,6 +132,31 @@ export default {
 				}
 			});
 		},
+		//取消
+		onCancel(aftersaleId, orderIndex) {
+			let that = this;
+			that.$api('order.cancelAftersaleOrder', {
+				id: aftersaleId
+			}).then(res => {
+				if (res.code === 1) {
+					this.$tools.toast(res.msg);
+					this.orderList.splice(orderIndex, 1);
+				}
+			});
+		},
+		// 删除
+		onDelete(aftersaleId, orderIndex) {
+			let that = this;
+			that.$api('order.deleteAftersaleOrder', {
+				id: aftersaleId
+			}).then(res => {
+				if (res.code === 1) {
+					this.$tools.toast(res.msg);
+					this.orderList.splice(orderIndex, 1);
+				}
+			});
+		},
+
 		// 加载更多
 		loadMore() {
 			if (this.currentPage < this.lastPage) {

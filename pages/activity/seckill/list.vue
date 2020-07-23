@@ -61,7 +61,7 @@ export default {
 			},
 			isLoading: true,
 			loadStatus: '', //loading,over
-			lastPage: 0,
+			lastPage: 1,
 			currentPage: 1,
 			tabCurrent: 'ing',
 			goodsList: [],

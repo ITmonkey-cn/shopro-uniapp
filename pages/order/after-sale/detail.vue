@@ -41,18 +41,21 @@
 					<view class="item-title">售后类型：</view>
 					<view class="item-content">{{ 'askldfkaskl' }}</view>
 				</view>
-				<view class="aftersale-item x-f" v-if="aftersaleLog.length">
+				<view class="aftersale-item x-f" v-if="aftersaleLog && aftersaleLog.length">
 					<view class="item-title">申请原因：</view>
 					<view class="item-content">{{ aftersaleLog[aftersaleLog.length - 1].reason }}</view>
 				</view>
-				<view class="aftersale-item x-f" v-if="aftersaleLog.length">
+				<view class="aftersale-item x-f" v-if="aftersaleLog && aftersaleLog.length">
 					<view class="item-title">相关描述：</view>
 					<view class="item-content">{{ aftersaleLog[aftersaleLog.length - 1].content }}</view>
 				</view>
 			</view>
 		</view>
 		<view class="foot_box">
-			<button class="cu-btn cancel-btn btn">取消申请</button>
+			<block v-for="orderBtn in aftersaleDetail.btns" :key="orderBtn">
+				<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(aftersaleDetail.id)" class="cu-btn btn">取消</button>
+				<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(aftersaleDetail.id)" class="cu-btn btn">删除</button>
+			</block>
 			<button class="cu-btn contcat-btn btn" open-type="contact">联系客服</button>
 		</view>
 	</view>
@@ -121,6 +124,28 @@ export default {
 					let update = new Date(res.data.updatetime * 1000);
 					that.aftersaleDetail.createtime = that.$tools.dateFormat('YYYY-mm-dd HH:MM', createdate);
 					that.aftersaleDetail.updatetime = that.$tools.dateFormat('YYYY-mm-dd HH:MM', update);
+				}
+			});
+		},
+		//取消
+		onCancel(aftersaleId) {
+			let that = this;
+			that.$api('order.cancelAftersaleOrder', {
+				id: aftersaleId
+			}).then(res => {
+				if (res.code === 1) {
+					that.$Router.back();
+				}
+			});
+		},
+		// 删除
+		onDelete(aftersaleId) {
+			let that = this;
+			that.$api('order.deleteAftersaleOrder', {
+				id: aftersaleId
+			}).then(res => {
+				if (res.code === 1) {
+					that.$Router.back();
 				}
 			});
 		}

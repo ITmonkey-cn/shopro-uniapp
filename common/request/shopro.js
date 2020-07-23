@@ -522,7 +522,19 @@ export default {
 			auth: true,
 			method: 'POST',
 			// desc: '删除订单',
-		}
+		},
+		deleteAftersaleOrder: {
+			url: 'order_aftersale/delete',
+			auth: true,
+			method: 'POST',
+			// desc: '删除售后订单',
+		},
+		cancelAftersaleOrder: {
+			url: 'order_aftersale/cancel',
+			auth: true,
+			method: 'POST',
+			// desc: '取消售后订单',
+		},
 	},
 
 	/** 支付 ↓ **/

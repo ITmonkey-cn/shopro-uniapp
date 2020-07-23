@@ -40,7 +40,7 @@ export default {
 			commentTypeList: [],
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 0
+			lastPage: 1
 		};
 	},
 	computed: {},

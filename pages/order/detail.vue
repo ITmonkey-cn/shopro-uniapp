@@ -26,7 +26,7 @@
 								去评价
 							</button>
 							<button
-								@tap.stop="onBuyAgain(orderDetail.id, order.id)"
+								@tap.stop="jump('/pages/goods/detail/index', { id: order.goods_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'buy_again'"
@@ -34,12 +34,12 @@
 								再次购买
 							</button>
 							<button
-								@tap.stop="onAftersaleInfo(orderDetail.id, order.id)"
+								@tap.stop="jump('/pages/order/after-sale/detail', { aftersaleId: order.ext_arr.aftersale_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'aftersale_info'"
 							>
-								重新退款
+								售后详情
 							</button>
 							<button
 								@tap.stop="onAftersale(orderDetail.id, order.id)"
@@ -50,7 +50,7 @@
 								申请售后
 							</button>
 							<button
-								@tap.stop="onReAftersale(orderDetail.id, order.id)"
+								@tap.stop="onAftersale(orderDetail.id, order.id)"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 're_aftersale'"
@@ -158,7 +158,7 @@
 					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
 						拼团详情
 					</button>
-					<button v-if="btn === 'delete'" @tap.stop="onDelete(order.id)" class="cu-btn obtn1">删除</button>
+					<button v-if="btn === 'delete'" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
 					<button v-if="btn === 'express'" @tap.stop="onExpress" class="cu-btn obtn1">查看物流</button>
 				</view>
 			</view>
@@ -276,13 +276,24 @@ export default {
 				url: `/pages/order/payment/method?orderId=${id}`
 			});
 		},
-		// 待评价
-		onComment(orderId, ordrderItemId) {
-			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId: ordrderItemId });
+		// 删除订单
+		onDelete(orderId) {
+			let that = this;
+			that.$api('order.deleteOrder', {
+				id: orderId
+			}).then(res => {
+				if (res.code === 1) {
+					that.$Router.back();
+				}
+			});
 		},
-		// 查看物流,
+		// 待评价
+		onComment(orderId, orderItemId) {
+			this.jump('/pages/order/add-comment', { orderId: orderId, orderItemId: orderItemId });
+		},
+		// 查看物流,Todo
 		checkExpress(orderId, ordrderItemId) {
-			this.jump('/pages/order/express', { orderId: orderId, ordrderItemId: ordrderItemId });
+			this.jump('/pages/order/express', { orderId: orderId, orderItemId: orderItemId });
 		}
 	}
 };

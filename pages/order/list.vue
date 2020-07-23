@@ -27,14 +27,16 @@
 							{{ order.dispatch_amount }} ，需付款：
 							<view class="all-money">{{ order.pay_fee }}</view>
 						</view>
-						<view class="btn-box x-f" v-for="orderBtn in order.btns" :key="orderBtn">
-							<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id)" class="cu-btn obtn1">取消订单</button>
-							<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.id)" class="cu-btn obtn2">立即支付</button>
-							<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn2">
-								拼团详情
-							</button>
-							<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn1">删除</button>
-							<button v-if="orderBtn === 'express'" @tap.stop="onExpress" class="cu-btn obtn1">查看物流</button>
+						<view class="btn-box x-f">
+							<block v-for="orderBtn in order.btns" :key="orderBtn">
+								<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id, orderIndex)" class="cu-btn obtn1">取消订单</button>
+								<button v-if="orderBtn === 'pay'" @tap.stop="onPay(order.id)" class="cu-btn obtn2">立即支付</button>
+								<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn2">
+									拼团详情
+								</button>
+								<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn1">删除</button>
+								<button v-if="orderBtn === 'express'" @tap.stop="onExpress" class="cu-btn obtn1">查看物流</button>
+							</block>
 						</view>
 					</view>
 				</view>
@@ -68,7 +70,7 @@ export default {
 			isLoading: true,
 			loadStatus: '', //loading,over分页
 			currentPage: 1,
-			lastPage: 0,
+			lastPage: 1,
 			orderType: 'all',
 			orderList: [],
 			emptyData: {
@@ -111,12 +113,10 @@ export default {
 		}
 	},
 	onShow() {
-		this.init();
+		this.orderList = [];
+		this.getOrderList();
 	},
 	methods: {
-		init() {
-			return Promise.all([this.getOrderList()]);
-		},
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,
@@ -128,6 +128,7 @@ export default {
 			this.orderList = [];
 			this.getOrderList();
 		},
+		// 订单列表
 		getOrderList() {
 			let that = this;
 			that.isLoading = true;
@@ -155,18 +156,6 @@ export default {
 				this.getAftersaleList();
 			}
 		},
-		// 确认收货
-		onConfirm(id, itemId) {
-			let that = this;
-			that.$api('order.confirm', {
-				id: id,
-				order_item_id: itemId
-			}).then(res => {
-				if (res.code === 1) {
-					that.getOrderList();
-				}
-			});
-		},
 		// 删除订单
 		onDelete(orderId, orderIndex) {
 			let that = this;
@@ -180,13 +169,14 @@ export default {
 			});
 		},
 		// 取消订单
-		onCancel(id) {
+		onCancel(id, orderIndex) {
 			let that = this;
 			that.$api('order.cancel', {
 				id: id
 			}).then(res => {
 				if (res.code === 1) {
-					that.getOrderList();
+					this.$tools.toast(res.msg);
+					this.orderList.splice(orderIndex, 1);
 				}
 			});
 		},
@@ -196,13 +186,9 @@ export default {
 				url: `/pages/order/payment/method?orderId=${id}`
 			});
 		},
-		// 待评价
-		onComment(orderId, ordrderItemId) {
-			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId: ordrderItemId });
-		},
-		// 查看物流,
-		checkExpress(orderId, ordrderItemId) {
-			this.jump('/pages/order/express', { orderId: orderId, ordrderItemId: ordrderItemId });
+		// 查看物流,Todo
+		onExpress(orderId, orderItemId) {
+			// this.jump('/pages/order/express', { orderId: orderId, orderItemId: orderItemId });
 		}
 	}
 };
