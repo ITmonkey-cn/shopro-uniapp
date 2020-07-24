@@ -5,7 +5,9 @@
 				<view class="item-list">
 					<view class="item-title">{{ log.reason }}</view>
 					<view class="item-content">{{ log.content }}</view>
-					<view class="item-img-box" v-if="log.images"></view>
+					<view class="item-img-box" v-if="log.images.length">
+						<block v-for="img in log.images" :key="img"><image :src="img" class="log-img" mode="aspectFill"></image></block>
+					</view>
 					<view class="item-time">{{ formatTime(log.createtime) }}</view>
 				</view>
 			</view>
@@ -68,6 +70,14 @@ page {
 		color: rgba(153, 153, 153, 1);
 		line-height: 40rpx;
 		padding-bottom: 20rpx;
+	}
+	.item-img-box {
+		.log-img {
+			width: 120rpx;
+			height: 120rpx;
+			background-color: #ccc;
+			margin-right: 10rpx;
+		}
 	}
 	.item-time {
 		font-size: 24rpx;
