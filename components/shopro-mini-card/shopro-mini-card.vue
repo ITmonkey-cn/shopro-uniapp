@@ -87,8 +87,8 @@ export default {
 .goods-box {
 	position: relative;
 	.goods-img {
-		width: 200rpx;
-		height: 200rpx;
+		height: 180rpx;
+		width: 180rpx;
 		background-color: #ccc;
 		margin-right: 25rpx;
 	}
@@ -107,15 +107,15 @@ export default {
 		color: rgba(51, 51, 51, 1);
 		width: 450rpx;
 		line-height: 40rpx;
+		margin-bottom: 10rpx;
 	}
 
 	.size-tip {
 		line-height: 40rpx;
-		background: #f4f4f4;
-		padding: 0 16rpx;
+		// background: #f4f4f4;
+		// padding: 0 16rpx;
 		font-size: 24rpx;
 		color: #666;
-		margin: 20rpx 0;
 	}
 	.sub-tip {
 		width: 480rpx;
@@ -133,8 +133,7 @@ export default {
 // order
 .goods-box {
 	.order-right {
-		height: 200rpx;
-		justify-content: space-between;
+		height: 180rpx;
 	}
 	.order-tip {
 		font-size: 24rpx;
@@ -142,6 +141,7 @@ export default {
 		font-weight: 400;
 		color: rgba(153, 153, 153, 1);
 		width: 450rpx;
+			margin-bottom: 20rpx;
 		.order-num {
 			margin-right: 10rpx;
 		}
@@ -149,6 +149,7 @@ export default {
 
 	.order-goods {
 		width: 480rpx;
+	
 		.status-btn {
 			background: none;
 			height: 32rpx;
@@ -160,6 +161,7 @@ export default {
 			color: rgba(168, 112, 13, 1);
 			padding: 0 10rpx;
 			margin-left: 20rpx;
+			background:rgba(233,183,102,0.16);
 		}
 		.order-price {
 			font-size: 26rpx;
