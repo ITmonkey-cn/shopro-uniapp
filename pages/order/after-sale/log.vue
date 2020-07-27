@@ -4,7 +4,7 @@
 			<view class="cu-item " v-for="(log, index) in aftersaleLog" :key="log.id" :class="index == 0 ? 'text-green' : 'text-gray'">
 				<view class="item-list">
 					<view class="item-title">{{ log.reason }}</view>
-					<view class="item-content">{{ log.content }}</view>
+					<view class="item-content"><rich-text :nodes="log.content"></rich-text></view>
 					<view class="item-img-box" v-if="log.images.length">
 						<block v-for="img in log.images" :key="img"><image :src="img" class="log-img" mode="aspectFill"></image></block>
 					</view>
