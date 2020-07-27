@@ -5,7 +5,10 @@
 			<view class="head-wrap pad">
 				<view class="titleNav ">
 					<view class="status-bar"></view>
-					<text class="nav-title x-f">我的</text>
+					<text class="nav-title x-f">
+						我的
+						<text @tap="onService" class="cuIcon-servicefill"></text>
+					</text>
 				</view>
 				<view class="user-head x-bc">
 					<view class="x-f">
@@ -78,6 +81,10 @@ export default {
 				query: query
 			});
 		},
+		// 跳转客服
+		onService() {
+			this.$tools.callPhone('13733867125');
+		},
 		// 更新信息
 		onRefresh() {
 			const that = this;
@@ -114,11 +121,21 @@ export default {
 		width: 100%;
 		z-index: 9;
 		top: 0;
+
 		.nav-title {
 			font-size: 38rpx;
 			font-family: PingFang SC;
 			font-weight: 500;
 			color: #fff;
+			position: relative;
+			.cuIcon-servicefill {
+				position: absolute;
+				z-index: 7;
+				color: #fff;
+				top: 0rpx;
+				right: 30rpx;
+				font-size: 50rpx;
+			}
 		}
 		.status-bar {
 			// #ifndef H5
