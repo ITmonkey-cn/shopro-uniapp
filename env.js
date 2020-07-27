@@ -1,6 +1,9 @@
 // .env.js 文件
 // 不同环境访问不同的路径
 import store from '@/common/store/index'
+// #ifdef H5
+let protocol = window.location.protocol;
+// #endif
 const ENV_API_URL = {
 	development: 'https://dev.7wpp.com/addons/shopro/', //开发环境
 	production: 'https://api.7wpp.com/addons/shopro/', //生产环境
