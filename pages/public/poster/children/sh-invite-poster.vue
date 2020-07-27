@@ -226,7 +226,7 @@ export default {
 				href: that.shareInfo.path,
 				title: that.shareInfo.title,
 				summary: that.shareInfo.title,
-				imageUrl: that.shareInfo.image,
+				imageUrl: that.shareInfo.imageUrl,
 				success: res => {
 					console.log('success:' + JSON.stringify(res));
 				},

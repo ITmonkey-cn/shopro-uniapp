@@ -19,7 +19,7 @@ export default class Request {
 		timeout: 30000,
 		// #endif
 		// #ifdef APP-PLUS
-		sslVerify: true
+		sslVerify: false
 		// #endif
 	}
 
