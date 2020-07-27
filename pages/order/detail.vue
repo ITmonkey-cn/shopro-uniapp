@@ -2,11 +2,20 @@
 	<view class="page_box">
 		<view class="head_box"></view>
 		<view class="content_box">
+			<!-- 订单状态 -->
 			<view class="detail-head">
 				<view class="state-box x-f">
 					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
 					<text>{{ orderDetail.status_name }}</text>
 				</view>
+			</view>
+			<!-- 收货地址 -->
+			<view class="order-address-box">
+				<view class="x-f">
+					<text class="address-username">{{ orderDetail.consignee }}</text>
+					<text class="address-phone">{{ orderDetail.phone }}</text>
+				</view>
+				<view class="address-detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
 			</view>
 			<view class="detail-goods">
 				<!-- 订单信息 -->
@@ -312,7 +321,8 @@ export default {
 <style lang="scss">
 .detail-head {
 	background: linear-gradient(0deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 100%) no-repeat;
-	background-size: 100% 134rpx;
+	background-size: 100% 180rpx;
+	height: 180rpx;
 
 	.state-box {
 		padding: 30rpx 40rpx;
@@ -327,6 +337,29 @@ export default {
 	}
 }
 
+// 收货地址
+.order-address-box {
+	width: 710rpx;
+	margin: -50rpx auto 20rpx;
+	background-color: #fff;
+	min-height: 160rpx;
+	border-radius: 20rpx;
+	padding: 20rpx;
+	font-size: 30rpx;
+	font-family: PingFang SC;
+	font-weight: 500;
+	color: rgba(51, 51, 51, 1);
+	.address-username {
+		margin-right: 20rpx;
+	}
+	.address-detail{
+		font-size:26rpx;
+		font-family:PingFang SC;
+		font-weight:500;
+		color:rgba(153,153,153,1);
+		margin-top: 20rpx;
+	}
+}
 .detail-goods {
 	padding: 20rpx;
 	background: #fff;
