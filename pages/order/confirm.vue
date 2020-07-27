@@ -37,11 +37,10 @@
 						</block>
 					</shopro-mini-card>
 				</view>
-
 				<!-- 配送方式 -->
 				<view class="logistic item-list x-bc">
 					<view class="x-f"><view class="item-title">配送方式</view></view>
-					<view class="x-f">
+					<view class="x-f" @tap="onSelExpressType">
 						<view class="detail">普通配送</view>
 						<text class="cuIcon-right"></text>
 					</view>
@@ -210,6 +209,43 @@
 				</view>
 			</block>
 		</shopro-modal>
+		<!-- 配送时间弹窗 -->
+		<shopro-modal v-model="showCheckTime" :modalType="'bottom-modal'">
+			<block slot="modalContent">
+				<view class="checkTime-box page_box">
+					<view class="checkTime-head">
+						选择{{ checkType }}时间
+						<text class="cuIcon-roundclosefill" @tap="showCheckTime = false"></text>
+					</view>
+					<view class="checkTime-content content_box">
+						<view class="checkTime-content__left">
+							<view
+								class="left-item x-c"
+								@tap="check('day', index)"
+								:class="{ 'item--active': checkDayCur == index }"
+								v-for="(day, index) in checkTime.day"
+								:key="day"
+							>
+								{{ day }}
+							</view>
+						</view>
+						<scroll-view class="checkTime-content__right scroll-box" :scroll-into-view="'c' + checkTimeId" scroll-y scroll-with-animation>
+							<view
+								class="right-item"
+								:id="'c' + time.split(':')[0]"
+								@tap="check('time', index)"
+								:class="{ 'item--active': checkTimeCur == index }"
+								v-for="(time, index) in checkTime.time"
+								:key="time"
+							>
+								{{ time }}
+							</view>
+						</scroll-view>
+					</view>
+					<view class=" checkTime-foot x-c"><button class="cu-btn save-btn" @tap="showCheckTime = false">保存并使用</button></view>
+				</view>
+			</block>
+		</shopro-modal>
 	</view>
 </template>
 
@@ -243,8 +279,9 @@ export default {
 			orderPre: {},
 			couponId: 0,
 			couponPrice: '选择优惠券',
-			showExpressType: true ,//配送方式弹窗
+			showExpressType: false, //配送方式弹窗
 			expressTypeCur: 0,
+			showCheckTime: false, //配送时间弹窗。
 			expressType: [
 				//快递方式
 				{
@@ -419,6 +456,41 @@ export default {
 				this.couponId = 0;
 				this.pickerData.title = '选择优惠券';
 				this.getPre();
+			}
+		},
+		// 显示配送方式弹窗
+		onSelExpressType() {
+			this.showExpressType = true;
+		},
+		// 选择快递方式
+		changeExpressType(cur) {
+			this.expressTypeCur = cur;
+		},
+		// 是否同意协议
+		checkProtocol() {
+			this.isProtocol = !this.isProtocol;
+		},
+		// 选择配送时间
+		checkExpressTime(type) {
+			switch (type) {
+				case 'shop':
+					this.checkType = '配送';
+					break;
+				case 'oneself':
+					this.checkType = '自提';
+					break;
+				default:
+					this.checkType = '自提';
+			}
+			this.showCheckTime = !this.showCheckTime;
+		},
+		check(type, index) {
+			if (type == 'time') {
+				this.checkTimeCur = index;
+				this.checkTimeId = this.checkTime['time'][index].split(':')[[0]];
+			}
+			if (type == 'day') {
+				this.checkDayCur = index;
 			}
 		}
 	}
@@ -847,5 +919,78 @@ export default {
 		}
 	}
 }
-
+// 选择配送给时间
+.checkTime-box {
+	background: rgba(255, 255, 255, 1);
+	border-radius: 20rpx 20rpx 0px 0px;
+	height: 720rpx;
+	.checkTime-head {
+		font-size: 32rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(51, 51, 51, 1);
+		line-height: 100rpx;
+		position: relative;
+		.cuIcon-roundclosefill {
+			color: #e0e0e0;
+			position: absolute;
+			top: 30rpx;
+			right: 30rpx;
+			line-height: 30rpx;
+			font-size: 40rpx;
+		}
+	}
+	.checkTime-foot {
+		height: 100rpx;
+		.save-btn {
+			width: 690rpx;
+			height: 80rpx;
+			background: linear-gradient(90deg, rgba(240, 199, 133, 1), rgba(246, 214, 157, 1));
+			border-radius: 40rpx;
+			font-size: 30rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 1);
+		}
+	}
+	.checkTime-content {
+		@include flex($justify: between, $align: center, $direction: null, $warp: null, $warpAlign: null);
+		.checkTime-content__left {
+			height: 100%;
+			width: 190rpx;
+			background: #f5f5f5;
+			.left-item {
+				font-size: 26rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(51, 51, 51, 1);
+				height: 100rpx;
+				width: 100%;
+			}
+		}
+		.checkTime-content__right {
+			flex: 1;
+			height: 100%;
+			overflow-y: auto;
+			.right-item {
+				font-size: 26rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(51, 51, 51, 1);
+				width: 100%;
+				text-align: left;
+				border-bottom: 1rpx solid rgba(#dfdfdf, 0.6);
+				margin: 0 30rpx;
+				line-height: 100rpx;
+			}
+		}
+		.item--active {
+			font-size: 26rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(168, 112, 13, 1) !important;
+			background-color: #fff;
+		}
+	}
+}
 </style>
