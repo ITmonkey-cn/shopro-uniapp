@@ -20,7 +20,18 @@
 			<view class="detail-goods">
 				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
-					<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
+					<view class="order-card"><shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card></view>
+					<!-- 配送方式 -->
+					<view class="express-type-box x-bc">
+						<view class="x-f">
+							<view class="express-type--title">配送：</view>
+							<view class="express-type--content">物流快递</view>
+						</view>
+						<view class="x-f express-type--detail" @tap="jump('/pages/order/distribution')">
+							<text>详情</text>
+							<text class="cuIcon-right"></text>
+						</view>
+					</view>
 					<view class="order-bottom  x-f">
 						<!-- 退款原因 -->
 						<view class="refund_msg" v-if="order.refund_msg">
@@ -74,20 +85,7 @@
 					</view>
 				</view>
 			</view>
-			<!-- 收货信息 -->
-			<view class="notice-box" v-if="true">
-				<view class="notice-box__head">收货信息</view>
-				<view class="notice-box__content">
-					<view class="x-f notice-item">
-						<text class="title">收货人：</text>
-						<text class="detail">{{ orderDetail.consignee }} {{ orderDetail.phone }}</text>
-					</view>
-					<view class="x-f notice-item">
-						<text class="title">收货地址：</text>
-						<text class="detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</text>
-					</view>
-				</view>
-			</view>
+			<!--  -->
 			<!-- 自提信息 -->
 			<view class="notice-box" v-if="false">
 				<view class="notice-box__head">自提信息</view>
@@ -145,7 +143,6 @@
 			</view>
 			<!-- 订单信息 -->
 			<view class="notice-box">
-				<view class="notice-box__head">订单信息</view>
 				<view class="notice-box__content">
 					<view class="notice-item--center x-f">
 						<text class="title">订单编号：</text>
@@ -156,6 +153,33 @@
 						<text class="title">下单时间：</text>
 						<text class="detail">{{ orderDetail.createtime }}</text>
 					</view>
+					<view class="notice-item x-f">
+						<text class="title">支付方式：</text>
+						<text class="detail">余额支付</text>
+					</view>
+					<view class="notice-item x-f">
+						<text class="title">支付时间：</text>
+						<text class="detail">{{ orderDetail.createtime }}</text>
+					</view>
+				</view>
+			</view>
+			<!--  价格信息 -->
+			<view class="order-price-box">
+				<view class="notice-item x-bc">
+					<text class="title">商品总额</text>
+					<text class="detail">{{ orderDetail.createtime }}</text>
+				</view>
+				<view class="notice-item x-bc">
+					<text class="title">运费</text>
+					<text class="detail">余额支付</text>
+				</view>
+				<view class="notice-item x-bc">
+					<text class="title">优惠券</text>
+					<text class="detail">{{ orderDetail.createtime }}</text>
+				</view>
+				<view class="notice-item all-rpice-item x-f" style="width: 100%;">
+					<text class="title">实付款：</text>
+					<text class="detail all-price">￥{{ orderDetail.total_fee }}</text>
 				</view>
 			</view>
 		</view>
@@ -352,20 +376,50 @@ export default {
 	.address-username {
 		margin-right: 20rpx;
 	}
-	.address-detail{
-		font-size:26rpx;
-		font-family:PingFang SC;
-		font-weight:500;
-		color:rgba(153,153,153,1);
+	.address-detail {
+		font-size: 26rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(153, 153, 153, 1);
 		margin-top: 20rpx;
 	}
 }
 .detail-goods {
-	padding: 20rpx;
+	padding: 0 20rpx;
 	background: #fff;
 	margin-bottom: 20rpx;
 
 	.order-list {
+		.order-card {
+			padding: 20rpx 0;
+		}
+		// 配送方式
+		.express-type-box {
+			width: 710rpx;
+			height: 90rpx;
+			background: rgba(247, 247, 247, 1);
+			border-radius: 10rpx;
+			padding: 0 20rpx;
+			.express-type--title {
+				font-size: 28rpx;
+				font-family: PingFang SC;
+				font-weight: 400;
+				color: rgba(153, 153, 153, 1);
+			}
+			.express-type--content {
+				font-size: 26rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(51, 51, 51, 1);
+			}
+			.express-type--detail {
+				font-size: 24rpx;
+				font-family: PingFang SC;
+				font-weight: 400;
+				color: rgba(153, 153, 153, 1);
+				line-height: 30rpx;
+			}
+		}
 		.refund_msg {
 			font-size: 28rpx;
 			color: #999;
@@ -499,7 +553,7 @@ export default {
 	}
 	.notice-item,
 	.notice-item--center {
-		margin-bottom: 10rpx;
+		height: 50rpx;
 		align-items: flex-start;
 		.title {
 			font-size: 28rpx;
@@ -516,19 +570,46 @@ export default {
 			flex: 1;
 		}
 		.copy-btn {
-			width: 120rpx;
+			width: 100rpx;
 			height: 50rpx;
-			// border: 1rpx solid rgba(223, 223, 223, 1);
-			// border-radius: 25rpx;
+			border-radius: 20rpx;
 			padding: 0;
-			background: #fff;
-			color: #b38436;
-			font-size: 26rpx;
+			background: rgba(238, 238, 238, 1);
+			font-size: 22rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(51, 51, 51, 1);
 			margin-left: 30rpx;
 		}
 	}
 	.notice-item--center {
 		align-items: center;
+	}
+}
+
+// 订单价格信息
+.order-price-box {
+	background-color: #fff;
+	padding: 20rpx;
+	margin-bottom: 20rpx;
+	.notice-item {
+		height: 50rpx;
+		.title {
+			font-size: 28rpx;
+			color: #999;
+		}
+
+		.detail {
+			font-size: 28rpx;
+			color: #333;
+		}
+	}
+	.all-rpice-item {
+		justify-content: flex-end;
+		.all-price {
+			font-size: 26rpx;
+			color: #e1212b;
+		}
 	}
 }
 

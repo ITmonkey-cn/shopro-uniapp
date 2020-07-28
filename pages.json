@@ -128,7 +128,7 @@
 					"path": "groupon/my-groupon",
 					"style": {
 						"navigationBarTitleText": "我的拼团",
-						   "enablePullDownRefresh": true
+						"enablePullDownRefresh": true
 					},
 					"meta": {
 						"auth": true,
@@ -261,6 +261,17 @@
 					"style": {
 						"navigationBarTitleText": "选择自提点",
 						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "distribution",
+					"style": {
+						"navigationBarTitleText": "" //配送方式详情
 
 					},
 					"meta": {
