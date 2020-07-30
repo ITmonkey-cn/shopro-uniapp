@@ -35,7 +35,7 @@
 						<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/public/poster/index', { posterType: 'user' })">
 							<text class="cuIcon-qr_code"></text>
 						</button>
-						<button v-if="true" @tap="jump('/pages/user/merchant')" class="cu-btn merchant-btn">切换商家版</button>
+						<button v-if="true" @tap="jump('/pages/app/merchant/index')" class="cu-btn merchant-btn">切换商家版</button>
 					</view>
 				</view>
 			</view>
