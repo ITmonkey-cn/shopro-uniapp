@@ -84,7 +84,7 @@
 			}
 		},
 		{
-			"path": "pages/public/kefu/kefu",
+			"path": "pages/public/kefu/index",
 			"name": "kefu",
 			"style": {
 				"navigationBarTitleText": ""
