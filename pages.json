@@ -82,6 +82,20 @@
 				"title": "自定义页面",
 				"group": "自定义页面"
 			}
+		},
+		{
+			"path": "pages/public/kefu/kefu",
+			"name": "kefu",
+			"style": {
+				"navigationBarTitleText": ""
+		
+			},
+			"meta": {
+				"auth": false,
+				"async": true,
+				"title": "客服",
+				"group": "通用"
+			}
 		}
 
 	],
