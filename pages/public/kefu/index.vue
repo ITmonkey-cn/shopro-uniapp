@@ -236,8 +236,8 @@
 				uni.request({
 					url: that.build_url('initialize'),
 					data: {
-						token: token,
-						// kefu_tourists_token: kefu_tourists_token,
+						token: uni.getStorageSync('token'),
+						kefu_tourists_token: kefu_tourists_token,
 						fixed_csr: fixedCsr
 					},
 					success: (res) => {
@@ -362,7 +362,7 @@
 				uni.request({
 					url: data_api_url,
 					data: {
-						token: token
+						token: uni.getStorageSync('token')
 					},
 					success: res => {
 						if (res.data.code == 1) {
@@ -420,7 +420,7 @@
 							filePath: tempFilePaths[0],
 							name: 'file',
 							formData: {
-								token: token,
+								token: uni.getStorageSync('token'),
 							},
 							success: (res) => {
 								uni.hideLoading()
