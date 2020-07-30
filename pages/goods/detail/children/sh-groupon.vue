@@ -23,15 +23,6 @@
 				</view>
 			</view>
 		</block>
-
-		<!-- 拼团玩法 -->
-		<view v-if="parseInt(grouponData.activity.richtext_id)" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: grouponData.activity.richtext_id })">
-			<view class="x-f">
-				<text class="title">玩法</text>
-				<view class="description one-t">{{ grouponData.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
-			</view>
-			<text class="cuIcon-right"></text>
-		</view>
 		<!-- 弹窗 -->
 		<view class="cu-modal bottom-modal" :class="{ show: showModal }" @tap="hideModal">
 			<view class="cu-dialog shop-modal" @tap.stop style="background: none;">
@@ -135,22 +126,7 @@ export default {
 </script>
 
 <style lang="scss">
-// 拼团玩法
-.groupon-play {
-	height: 94rpx;
-	background: #fff;
-	.title {
-		font-size: 28rpx;
-		color: #999;
-	}
-	.description {
-		font-size: 28rpx;
-		margin-left: 30rpx;
-	}
-	.cuIcon-right {
-		margin-left: 20rpx;
-	}
-}
+
 // 弹窗
 .modal-box {
 	width: 750rpx;

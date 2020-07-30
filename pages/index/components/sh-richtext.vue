@@ -1,12 +1,10 @@
 <template>
-	<view class="sh-richtext-box mb10" v-if="richText.content"><uni-parse :content="richText.content"></uni-parse></view>
+	<view class="sh-richtext-box mb10" v-if="richText.content"><uni-parser :html="richText.content"></uni-parser></view>
 </template>
 
 <script>
-import uniParse from '@/components/uni-parse/uni-parse.vue';
 export default {
 	components: {
-		uniParse
 	},
 	data() {
 		return {

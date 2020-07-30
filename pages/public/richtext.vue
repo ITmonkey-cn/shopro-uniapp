@@ -1,7 +1,7 @@
 <template>
 	<view class="page_box">
 		<view class="head_box"></view>
-		<view class="content_box"><uni-parse :content="richText.content"></uni-parse></view>
+		<view class="content_box"><uni-parser :html="richText.content"></uni-parser></view>
 		<view class="foot_box"></view>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
@@ -15,11 +15,8 @@
 </template>
 
 <script>
-import uniParse from '@/components/uni-parse/uni-parse.vue';
 export default {
-	components: {
-		uniParse
-	},
+	components: {},
 	data() {
 		return {
 			richText: ''

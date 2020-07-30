@@ -5,11 +5,11 @@ import store from '@/common/store/index'
 let protocol = window.location.protocol;
 // #endif
 const ENV_API_URL = {
-	development: 'https://dev.7wpp.com/addons/shopro/', //开发环境
+	development: 'https://api.7wpp.com/addons/shopro/', //开发环境
 	production: 'https://api.7wpp.com/addons/shopro/', //生产环境
 }
 const ENV_BASE_URL = {
-	development: 'https://dev.7wpp.com', //开发环境
+	development: 'https://api.7wpp.com', //开发环境
 	production: 'https://api.7wpp.com', //生产环境
 }
 

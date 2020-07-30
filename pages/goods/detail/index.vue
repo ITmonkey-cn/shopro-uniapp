@@ -58,6 +58,14 @@
 					v-if="goodsInfo.activity && goodsInfo.activity.type === 'groupon' && goodsInfo.activity.rules.team_card === '1' && detailType !== 'score'"
 					:grouponData="goodsInfo"
 				></sh-groupon>
+				<!-- 拼团玩法 -->
+				<view v-if="parseInt(goodsInfo.activity.richtext_id)" class="groupon-play x-bc px20" @tap="jump('/pages/public/richtext', { id: goodsInfo.activity.richtext_id })">
+					<view class="x-f">
+						<text class="title">玩法</text>
+						<view class="description one-t">{{ goodsInfo.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
+					</view>
+					<text class="cuIcon-right" style="color: #bfbfbf;"></text>
+				</view>
 				<!-- 选项卡 -->
 				<view class="sticky-box">
 					<view class="tab-box x-f">
@@ -71,7 +79,7 @@
 					</view>
 					<view class="tab-detail">
 						<view class="rich-box" v-show="tabCurrent === 'tab0'">
-							<uni-parse :content="goodsInfo.content"></uni-parse>
+							<uni-parser :html="goodsInfo.content"></uni-parser>
 							<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
 						</view>
 						<view class="goods-size" v-if="tabCurrent === 'tab1'">
@@ -178,13 +186,11 @@ import shGrouponTip from './children/sh-groupon-tip.vue';
 import shCoupon from './children/sh-coupon.vue';
 import shComment from '../children/sh-comment.vue';
 import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
-import uniParse from '@/components/uni-parse/uni-parse.vue';
 import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
-		uniParse,
 		shServe,
 		shPrice,
 		shGroupon,
@@ -401,6 +407,22 @@ export default {
 </script>
 
 <style lang="scss">
+// 拼团玩法
+.groupon-play {
+	height: 94rpx;
+	background: #fff;
+	.title {
+		font-size: 28rpx;
+		color: #999;
+	}
+	.description {
+		font-size: 28rpx;
+		margin-left: 30rpx;
+	}
+	.cuIcon-right {
+		margin-left: 20rpx;
+	}
+}
 .load-box {
 	/deep/.skeletons_box {
 		z-index: 11;
