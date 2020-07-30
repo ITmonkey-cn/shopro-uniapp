@@ -59,7 +59,7 @@
 					:grouponData="goodsInfo"
 				></sh-groupon>
 				<!-- 拼团玩法 -->
-				<view v-if="parseInt(goodsInfo.activity.richtext_id)" class="groupon-play x-bc px20" @tap="jump('/pages/public/richtext', { id: goodsInfo.activity.richtext_id })">
+				<view v-if=" goodsInfo.activity && parseInt(goodsInfo.activity.richtext_id)" class="groupon-play x-bc px20" @tap="jump('/pages/public/richtext', { id: goodsInfo.activity.richtext_id })">
 					<view class="x-f">
 						<text class="title">玩法</text>
 						<view class="description one-t">{{ goodsInfo.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
