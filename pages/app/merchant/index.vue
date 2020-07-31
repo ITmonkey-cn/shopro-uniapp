@@ -52,16 +52,16 @@
 					<view class="y-f" style="width: 100%;">
 						<view class="item-title" :class="{ 'title-active': cancelType === nav.type }">
 							{{ nav.title }}
-							<text class="cuIcon-triangleupfill" :class="{ 'title-active': cancelType === nav.type }"></text>
+							<text class="cuIcon-triangleupfill" :class="{ 'icon-active': cancelType === nav.type }"></text>
 						</view>
 						<text class="nav-line" :class="{ 'line-active': cancelType === nav.type }"></text>
 					</view>
 				</view>
 				<!-- 下拉窗 -->
 				<view class="drop-down-box" :class="{ 'hide-drop-down': !isShowDropDown }">
-					<view class="drop-down-item x-bc" v-for="(item, index) in dropDown[cancelType]" :key="index">
+					<view class="drop-down-item x-bc" v-for="(item, index) in dropDown[cancelType]" :key="index" @tap="onFilter(item.value)">
 						<text class="item-title">{{ item.title }}</text>
-						<text class="cuIcon-check" v-if="item.isChecked"></text>
+						<text class="cuIcon-check" v-if="filter[cancelType] == item.value"></text>
 					</view>
 				</view>
 			</view>
@@ -80,6 +80,7 @@
 			:range-color="rangeColor"
 			:range-bg-color="rangeBgColor"
 			:active-bg-color="activeBgColor"
+			@change="selDate"
 		></uni-calendar>
 	</view>
 </template>
@@ -103,11 +104,8 @@ export default {
 					type: 'status'
 				}
 			],
-			filter: {
-				date: '',
-				status: ''
-			},
-			showCalendar: true, //日期选择
+
+			showCalendar: false, //日期选择
 			mode: 'range',
 			result: '请选择日期',
 			startText: '开始',
@@ -116,6 +114,10 @@ export default {
 			rangeBgColor: 'rgba(76,184,157,0.13)',
 			activeBgColor: '#4CB89D',
 			isShowDropDown: true, //是否显示下拉菜单
+			filter: {
+				date: 'yesterday',
+				status: 'all'
+			},
 			dropDown: {
 				date: [
 					{ title: '昨日', value: 'yesterday', isChecked: false },
@@ -141,8 +143,22 @@ export default {
 			this.cancelType = type;
 			this.isShowDropDown = true;
 		},
+		// 选择日期
+		selDate(e) {
+			console.log(11111111, e);
+			this.isShowDropDown = false;
+		},
+		// 下拉筛选
 		onHideDropDown() {
 			this.isShowDropDown = false;
+		},
+		// 选择筛选
+		onFilter(val) {
+			if (val == 'custom') {
+				this.showCalendar = true;
+			}
+			this.filter[this.cancelType] = val;
+			console.log(this.filter);
 		}
 	}
 };
@@ -305,6 +321,12 @@ export default {
 		}
 		.cuIcon-triangleupfill {
 			color: #bdbdbd;
+			transition: all linear 0.1s;
+		}
+		.icon-active {
+			transform: rotate(180deg);
+			transition: all linear 0.1s;
+			color: #4cb89d;
 		}
 		.title-active {
 			color: #4cb89d;

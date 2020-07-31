@@ -1,5 +1,5 @@
 <template>
-	<shopro-modal v-model="value" :modalType="'bottom-modal'">
+	<shopro-modal v-model="showModal" :modalType="'bottom-modal'">
 		<view class="calendar-wrap" slot="modalContent">
 			<view class="u-calendar">
 				<view class="u-calendar__action x-c u-row-center">
@@ -263,7 +263,16 @@ export default {
 		uZIndex() {
 			// 如果用户有传递z-index值，优先使用
 			return this.zIndex ? this.zIndex : this.$u.zIndex.popup;
+		},
+		showModal: {
+			get() {
+				return this.value;
+			},
+			set(val) {
+				this.$emit('input', val);
+			}
 		}
+		
 	},
 	watch: {
 		dataChange(val) {
