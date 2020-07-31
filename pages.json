@@ -221,6 +221,17 @@
 						"title": "门店信息",
 						"group": "用户"
 					}
+				},
+				{
+					"path": "merchant/detail",
+					"style": {
+						"navigationBarTitleText": "订单详情"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
 				}
 			]
 		},

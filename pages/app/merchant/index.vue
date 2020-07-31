@@ -28,7 +28,7 @@
 				<image class="card-bg" src="/static/imgs/user/shop_info.png" mode="aspectFill"></image>
 				<view class="card-content y-c">
 					<view class="card-title">输码核销</view>
-					<view class="x-f card-detail-box">
+					<view class="x-f card-detail-box" @tap="onEditCode">
 						<text class="cuIcon-edit card-icon"></text>
 						<text class="card-detail">输码</text>
 					</view>
@@ -50,9 +50,11 @@
 			<view class="cancel-nav x-f">
 				<view class="nav-item x-f" v-for="nav in cancelTypeList" :key="nav.id" @tap="onNav(nav.type)">
 					<view class="y-f" style="width: 100%;">
-						<view class="item-title" :class="{ 'title-active': cancelType === nav.type }">
-							{{ nav.title }}
-							<text class="cuIcon-triangleupfill" :class="{ 'icon-active': cancelType === nav.type }"></text>
+						<view class="item-title x-f" :class="{ 'title-active': cancelType === nav.type }">
+							<text>{{ nav.title }}</text>
+							<view :class="{ 'icon-active': cancelType === nav.type }">
+								<text class="cuIcon-triangleupfill" :class="{ 'icon-active': cancelType === nav.type }"></text>
+							</view>
 						</view>
 						<text class="nav-line" :class="{ 'line-active': cancelType === nav.type }"></text>
 					</view>
@@ -71,6 +73,21 @@
 				<view class="sales-volume x-c">交易额(元)：5693.86</view>
 			</view>
 		</view>
+		<!-- 订单列表 -->
+		<view class="order-list" v-for="order in 7" :key="order" @tap.stop="jump('/pages/app/merchant/detail')">
+			<view class="order-head x-bc">
+				<text class="no">订单编号：25689456336</text>
+				<text class="state">已完成</text>
+			</view>
+			<view class="goods-order" v-if="false">
+				<view class="order-content"><shopro-mini-card :type="'order'" :detail="goods"></shopro-mini-card></view>
+			</view>
+			<view class="order-bottom x-f">
+				<text class="total-price-title">实付款：</text>
+				<text class="total-price">678.90</text>
+			</view>
+		</view>
+
 		<!-- 日期选择 -->
 		<uni-calendar
 			v-model="showCalendar"
@@ -82,6 +99,19 @@
 			:active-bg-color="activeBgColor"
 			@change="selDate"
 		></uni-calendar>
+		<!-- 输码弹窗 -->
+		<shopro-modal v-model="showInputModal" style="z-index: 88;">
+			<block slot="modalContent">
+				<view class="modal-box">
+					<view class="modal-head">
+						<image class="modal-head-img" src="/static/imgs/modal/qrcode_modal.png" mode=""></image>
+						<text class="modal-head-title">输码核销</text>
+					</view>
+					<input class="inp" type="number" v-model="qrcode" placeholder="在此输入核销码" placeholder-class="pl-inp" />
+					<button class="cu-btn post-btn" @tap="onConfirm">核销</button>
+				</view>
+			</block>
+		</shopro-modal>
 	</view>
 </template>
 
@@ -104,7 +134,8 @@ export default {
 					type: 'status'
 				}
 			],
-
+			showInputModal: false, //输码核销
+			qrcode: '',
 			showCalendar: false, //日期选择
 			mode: 'range',
 			result: '请选择日期',
@@ -113,7 +144,7 @@ export default {
 			rangeColor: '#4CB89D',
 			rangeBgColor: 'rgba(76,184,157,0.13)',
 			activeBgColor: '#4CB89D',
-			isShowDropDown: true, //是否显示下拉菜单
+			isShowDropDown: false, //是否显示下拉菜单
 			filter: {
 				date: 'yesterday',
 				status: 'all'
@@ -121,7 +152,7 @@ export default {
 			dropDown: {
 				date: [
 					{ title: '昨日', value: 'yesterday', isChecked: false },
-					{ title: '今日', value: 'today', isChecked: true },
+					{ title: '今日', value: 'today', isChecked: false },
 					{ title: '本周', value: 'week', isChecked: false },
 					{ title: '本月', value: 'month', isChecked: false },
 					{ title: '自定义', value: 'custom', isChecked: false }
@@ -159,6 +190,10 @@ export default {
 			}
 			this.filter[this.cancelType] = val;
 			console.log(this.filter);
+		},
+		//输码
+		onEditCode() {
+			this.showInputModal = true;
 		}
 	}
 };
@@ -321,11 +356,11 @@ export default {
 		}
 		.cuIcon-triangleupfill {
 			color: #bdbdbd;
-			transition: all linear 0.1s;
+			transition: all linear 0.2s;
 		}
 		.icon-active {
 			transform: rotate(180deg);
-			transition: all linear 0.1s;
+			transition: all linear 0.2s;
 			color: #4cb89d;
 		}
 		.title-active {
@@ -333,13 +368,13 @@ export default {
 		}
 		.nav-line {
 			width: 100%;
-			height: 4rpx;
+			height: 2rpx;
 			background: rgba(#ccc, 0.5);
 		}
 
 		.line-active {
 			background: #4cb89d;
-			height: 4rpx;
+			height: 2rpx;
 		}
 	}
 }
@@ -389,6 +424,95 @@ export default {
 		font-family: PingFang SC;
 		font-weight: 400;
 		color: rgba(76, 184, 157, 1);
+	}
+}
+// 输码弹窗
+.modal-box {
+	background: #fff;
+	width: 610rpx;
+	margin: 0 auto;
+	border-radius: 20rpx;
+	.modal-head-img {
+		width: 100%;
+		height: 213rpx;
+	}
+
+	.modal-head-title {
+		font-size: 35rpx;
+		font-family: PingFang SC;
+		font-weight: bold;
+		color: #6d5028;
+		line-height: 42rpx;
+	}
+
+	.inp {
+		width: 501rpx;
+		height: 78rpx;
+		border: 1rpx solid rgba(168, 112, 13, 1);
+		margin: 60rpx auto 40rpx;
+		font-size: 28rpx;
+		font-family: PingFang SC;
+		font-weight: 400;
+		color: #6d5028;
+
+		.pl-inp {
+			color: #bd9560;
+		}
+	}
+	.post-btn {
+		width: 492rpx;
+		height: 70rpx;
+		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
+		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
+		border-radius: 35rpx;
+		font-size: 28rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(255, 255, 255, 1);
+		padding: 0;
+		margin-bottom: 60rpx;
+	}
+}
+// 订单列表
+.order-list {
+	background: #fff;
+	margin: 20rpx 0;
+	.order-bottom {
+		justify-content: flex-end;
+		height: 80rpx;
+		padding: 0 20rpx;
+		.total-price-title {
+			color: #999999;
+			font-size: 24rpx;
+		}
+		.total-price{
+			color: #333;
+			font-size: 26rpx;
+			&::before{
+				content: '￥';
+				font-size: 20rpx;
+			}
+		}
+	}
+	.order-head {
+		padding: 0 25rpx;
+		height: 77rpx;
+		border-bottom: 1rpx solid #dfdfdf;
+
+		.no {
+			font-size: 26rpx;
+			color: #999;
+		}
+
+		.state {
+			font-size: 26rpx;
+			color: #a8700d;
+		}
+	}
+	.goods-order {
+		border-bottom: 1px solid rgba(223, 223, 223, 0.5);
+		padding: 20rpx 20rpx 0;
+		margin-bottom: 20rpx;
 	}
 }
 </style>
