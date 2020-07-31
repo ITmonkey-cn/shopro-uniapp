@@ -16,9 +16,9 @@
 					</view>
 				</scroll-view>
 			</view>
-			
-			<view class="scroll-box">
-				<image class="type-img" v-show="categoryData[currentTab].image" :src="categoryData[currentTab].image" mode=""></image>
+
+			<view class="scroll-box" style="padding-bottom: 150rpx;">
+				<image class="type-img" v-if="categoryData[currentTab] && categoryData[currentTab].image" :src="categoryData[currentTab].image" mode=""></image>
 				<scroll-view scroll-y class="scroll-box" scroll-with-animation :scroll-into-view="scroll_rightId" @scroll="rightScroll">
 					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
@@ -53,6 +53,20 @@
 					</view>
 				</scroll-view>
 			</view>
+		</view>
+		<!-- 购物车 -->
+		<view class="cart-box x-f">
+			<view class="cart-left flex-sub x-f">
+				<view class="cart-img-box">
+					<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
+					<view class="cu-tag badge">99</view>
+				</view>
+				<view class="price-box x-f">
+					<text class="price">25.6</text>
+					<text class="original-price">￥39</text>
+				</view>
+			</view>
+			<button class="cu-btn pay-btn">去结算</button>
 		</view>
 	</view>
 </template>
@@ -121,6 +135,61 @@ export default {
 </script>
 
 <style lang="scss">
+// 购物车
+.cart-box {
+	position: absolute;
+	bottom: 100rpx;
+	z-index: 77;
+	height: 80rpx;
+	width: 750rpx;
+	.cart-left {
+		background: linear-gradient(rgba(103, 104, 105, 1), rgba(82, 82, 82, 1));
+		height: 80rpx;
+		position: relative;
+		.cart-img-box {
+			position: absolute;
+			left: 50rpx;
+			width: 96rpx;
+			height: 96rpx;
+			top: -20rpx;
+			.cart-img {
+				width: 96rpx;
+				height: 96rpx;
+			}
+		}
+		.price-box {
+			padding-left: 180rpx;
+			.original-price {
+				font-size: 22rpx;
+				font-family: OPPOSans;
+				font-weight: 400;
+				text-decoration: line-through;
+				color: rgba(153, 153, 153, 1);
+				margin-left: 10rpx;
+			}
+			.price {
+				font-size: 32rpx;
+				font-family: OPPOSans;
+				font-weight: 500;
+				color: rgba(250, 253, 253, 1);
+				&::before {
+					content: '￥';
+					font-size: 22rpx;
+				}
+			}
+		}
+	}
+	.pay-btn {
+		width: 205rpx;
+		height: 80rpx;
+		border-radius: 0;
+		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
+		font-size: 30rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(255, 255, 255, 1);
+	}
+}
 .content_box {
 	margin-top: 1upx;
 	display: flex;
@@ -128,6 +197,7 @@ export default {
 	flex: 1;
 	overflow: hidden;
 	height: 100%;
+	margin-bottom: 40px;
 }
 
 .wrapper-box {
@@ -185,7 +255,6 @@ export default {
 	padding: 0 30upx;
 	flex: 1;
 	height: 100%;
-
 	.item-list {
 		.type-box {
 			height: 84rpx;
