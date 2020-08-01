@@ -366,7 +366,8 @@
 					},
 					success: res => {
 						if (res.data.code == 1) {
-							this.selectModelData = res.data.data
+							console.log(res.data.data)
+							this.selectModelData = res.data.data.data
 						} else {
 							uni.showModal({
 								title: '温馨提示',
