@@ -129,6 +129,20 @@ const getters = {
 			totalPrice
 		}
 	},
+	// 外卖购物车数量和总价
+	takeoutTotalCount: state => {
+		let totalNum = 0;
+		let totalPrice = 0;
+		state.cartList.forEach(item => {
+			totalNum += item.goods_num;
+			totalPrice += item.goods_num * item.sku_price.price;
+		})
+		return {
+			totalNum,
+			totalPrice
+		}
+
+	},
 	// 是否选择了商品
 	isSel: state => {
 		let isSel = false;

@@ -28,7 +28,6 @@
 							<view class="item-box">
 								<view class="goods-item x-f mb30" v-for="(mlist, index2) in item.goods" :key="index2">
 									<view class="item-img"><image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image></view>
-
 									<view class="goods-item--right">
 										<view class="item-right--title one-t">{{ mlist.title }}</view>
 										<view class="item-right--sales">销量{{ mlist.sales }}份</view>
@@ -43,8 +42,18 @@
 													{{ mlist.original_price }}
 												</view>
 											</view>
-											<button class="cu-btn item-btn add-cart" v-if="true"><text class="cuIcon-roundaddfill"></text></button>
-											<button class="cu-btn item-btn sel-sku" v-else></button>
+											<button class="cu-btn item-btn add-cart" v-if="!mlist.is_sku">
+												<text class="cuIcon-roundaddfill" v-if="!isCart(mlist.id)" @tap="addCart(mlist.sku_price[0])"></text>
+												<view class="num-step" v-else>
+													<uni-number-box
+														@change="onChangeNum($event, mlist.sku_price[0])"
+														:value="checkCart[mlist.id].num"
+														:step="1"
+														:min="1"
+													></uni-number-box>
+												</view>
+											</button>
+											<button class="cu-btn item-btn sel-sku" @tap="selSku(mlist)" v-else>选规格</button>
 										</view>
 									</view>
 								</view>
@@ -59,21 +68,61 @@
 			<view class="cart-left flex-sub x-f">
 				<view class="cart-img-box">
 					<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
-					<view class="cu-tag badge">99</view>
+					<view class="cu-tag badge">{{ takeoutTotalCount.totalNum }}</view>
 				</view>
 				<view class="price-box x-f">
-					<text class="price">25.6</text>
-					<text class="original-price">￥39</text>
+					<text class="price">{{ takeoutTotalCount.totalPrice.toFixed(2) }}</text>
 				</view>
 			</view>
-			<button class="cu-btn pay-btn">去结算</button>
+			<button class="cu-btn pay-btn" @tap="onPay">去结算</button>
+			<!-- 购物车商品列表 -->
+
+			<view class="cart-list-box page_box">
+				<view class="head_box x-bc cart-list__head px20">
+					<label class="check-all x-f" @tap="onAllSel">
+						<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
+						<text>全选</text>
+					</label>
+					<view class="delete-box">
+						<text class="cuIcon-delete"></text>
+						<text>清空购物车</text>
+					</view>
+				</view>
+				<view class="block">
+					<checkbox-group class="block" v-if="cartList.length">
+						<view class="collect-list x-start" v-for="(g, index) in cartList" :key="index">
+							<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
+								<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
+							</view>
+							<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'">
+								<block slot="goodsBottom">
+									<view class="x-bc price-box">
+										<view class="price">￥{{ g.sku_price.price }}</view>
+										<view class="num-step">
+											<uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="1"></uni-number-box>
+										</view>
+									</view>
+								</block>
+							</shopro-mini-card>
+						</view>
+					</checkbox-group>
+				</view>
+			</view>
 		</view>
+		<!-- 规格 -->
+		<sh-takeout-sku v-if="goodsInfo.id" v-model="showSku" :goodsInfo="goodsInfo" :buyType="'cart'"></sh-takeout-sku>
+		<!-- 遮罩 -->
+		<view class="mask"></view>
 	</view>
 </template>
 
 <script>
+import shTakeoutSku from './sh-takeout-sku.vue';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
-	components: {},
+	components: {
+		shTakeoutSku
+	},
 	data() {
 		return {
 			currentTab: 0,
@@ -81,14 +130,121 @@ export default {
 			scroll_rightId: 'right_0',
 			isScroll: true,
 			isTap: true,
-			categoryData: {}
+			categoryData: {}, //商品分类数据
+			showSku: true, //是否显示规格弹窗
+			goodsInfo: {} //点击商品详情
 		};
 	},
-	computed: {},
+	computed: {
+		...mapState({
+			cartNum: state => state.cart.cartNum,
+			cartList: state => state.cart.cartList,
+			allSel: ({ cart }) => cart.allSelected
+		}),
+		...mapGetters(['takeoutTotalCount']),
+		// 购物车检测
+		checkCart() {
+			let obj = {};
+			this.cartList.forEach(item => {
+				obj[item.goods_id] = {
+					num: item.goods_num,
+					cartOrderId: item.id
+				};
+			});
+			return obj;
+		}
+	},
 	created() {
 		this.getCategory();
+		this.getCartList();
 	},
 	methods: {
+		...mapActions(['getCartList', 'changeCartList', 'addCartGoods', 'changeAllSellect', 'getAllSellectCartList']),
+		// 全选
+		onAllSel() {
+			let that = this;
+			that.$store.commit('changeAllSellect'); //按钮切换全选。
+			that.$store.commit('getAllSellectCartList', that.allSel); //列表全选
+		},
+		// 单选
+		onSel(index, flag) {
+			let that = this;
+			that.$store.commit('selectItem', { index, flag });
+		},
+		// 清空购物车
+		deleteAll() {
+			let that = this;
+			let { cartList } = this;
+			let selectedIdsArray = [];
+			cartList.map(item => {
+				if (item.checked) {
+					selectedIdsArray.push(item.id);
+				}
+			});
+			this.changeCartList({ ids: selectedIdsArray, art: 'delete' });
+		},
+		// 加入购物车
+		addCart(goods) {
+			let obj = {
+				goods_id: goods.goods_id,
+				goods_num: 1,
+				sku_price_id: goods.id,
+				goods_price: goods.price
+			};
+			let confirmGoodsList = {
+				list: [obj],
+				from: 'goods'
+			};
+			this.addCartGoods(confirmGoodsList).then(res => {
+				if (res.code === 1) {
+					this.$tools.toast(res.msg);
+				}
+			});
+		},
+		// 更改商品数
+		onChangeNum(e, goods) {
+			if (e != this.checkCart[goods.goods_id].num) {
+				this.changeCartList({ ids: [this.checkCart[goods.goods_id].cartOrderId], goodsNum: e, art: 'change' });
+				this.getCartList();
+			}
+		},
+		// 检测是否为购物车商品
+		isCart(id) {
+			let goodsId = id + '';
+			return Object.keys(this.checkCart).includes(goodsId);
+		},
+		// 结算
+		onPay() {
+			let that = this;
+			let { cartList } = this;
+			let confirmcartList = [];
+			this.cartList.forEach(item => {
+				confirmcartList.push({
+					goods_id: item.goods_id,
+					goods_num: item.goods_num,
+					sku_price_id: item.sku_price_id,
+					goods_price: item.sku_price.price
+				});
+			});
+			that.jump('/pages/order/confirm', { goodsList: JSON.stringify(confirmcartList), from: 'cart' });
+		},
+		// 添加购物车
+		selSku(info) {
+			this.showSku = true;
+			this.getGoodsDetail(info.id);
+		},
+		// 商品详情
+		getGoodsDetail(id) {
+			let that = this;
+			that.$api('goods.detail', {
+				id: id
+			}).then(res => {
+				if (res.code === 1) {
+					that.goodsInfo = res.data;
+				}
+			});
+		},
+		// 获取分类
 		getCategory() {
 			this.$api('categoryGoods').then(res => {
 				if (res.code === 1) {
@@ -135,6 +291,95 @@ export default {
 </script>
 
 <style lang="scss">
+// 购物车列表
+.mask {
+	position: fixed;
+	background: rgba(#000, 0.3);
+	width: 100%;
+	height: 100%;
+}
+.cart-list-box {
+	position: absolute;
+	width: 750rpx;
+	bottom: 80rpx;
+	background: #fff;
+	height: 700rpx;
+	z-index: 66;
+	border-radius: 20rpx 20rpx 0 0;
+	.cart-list__head {
+		height: 90rpx;
+		border-bottom: 1rpx solid rgba(#dfdfdf, 0.5);
+		.check-all {
+			font-size: 28rpx;
+			.check-all-radio {
+				transform: scale(0.7);
+				color: #e9b564;
+			}
+		}
+		.delete-box {
+			font-size: 26rpx;
+			font-weight: 500;
+			color: rgba(153, 153, 153, 1);
+			.cuIcon-delete {
+				font-size: 30rpx;
+				margin-right: 10rpx;
+			}
+		}
+	}
+	// 购物车列表
+	.block {
+		flex: 1;
+		overflow-y: auto;
+	}
+	.collect-list {
+		padding: 30rpx 20rpx;
+		background: #fff;
+		margin-bottom: 20rpx;
+
+		/deep/ .goods-title {
+			width: 420rpx !important;
+		}
+
+		.tag-box {
+			.tag1 {
+				line-height: 36rpx;
+				padding: 0 8rpx;
+				font-size: 18rpx;
+				color: rgba(#fff, 0.9);
+				background: #f39800;
+				display: inline-block;
+				box-sizing: border-box;
+			}
+
+			.tag2 {
+				line-height: 34rpx;
+				padding: 0 8rpx;
+				font-size: 18rpx;
+				color: rgba(#f39800, 0.9);
+				background: #fff;
+				border-top: 1rpx solid #f39800;
+				border-right: 1rpx solid #f39800;
+				border-bottom: 1rpx solid #f39800;
+				display: inline-block;
+				box-sizing: border-box;
+			}
+		}
+
+		.goods-radio {
+			transform: scale(0.7);
+			margin-right: 20rpx;
+			// background:  #E9B564;
+		}
+
+		.price-box {
+			width: 420rpx;
+
+			.price {
+				color: #e1212b;
+			}
+		}
+	}
+}
 // 购物车
 .cart-box {
 	position: absolute;
@@ -152,6 +397,7 @@ export default {
 			width: 96rpx;
 			height: 96rpx;
 			top: -20rpx;
+			z-index: 88;
 			.cart-img {
 				width: 96rpx;
 				height: 96rpx;
@@ -321,11 +567,26 @@ export default {
 					background: none;
 					position: absolute;
 					bottom: 0;
-					right: 30rpx;
+					right: 0rpx;
 					padding: 0;
 					.cuIcon-roundaddfill {
 						color: #e6b873;
 						font-size: 40rpx;
+					}
+				}
+				.sel-sku {
+					width: 100rpx;
+					height: 40rpx;
+					background: rgba(230, 184, 115, 1);
+					border-radius: 20rpx;
+					font-size: 22rpx;
+					font-family: PingFang SC;
+					font-weight: 500;
+					color: rgba(250, 253, 253, 1);
+				}
+				.num-step {
+					/deep/.uni-numbox__value {
+						width: 32rpx;
 					}
 				}
 			}
