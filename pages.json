@@ -82,20 +82,6 @@
 				"title": "自定义页面",
 				"group": "自定义页面"
 			}
-		},
-		{
-			"path": "pages/public/kefu/index",
-			"name": "kefu",
-			"style": {
-				"navigationBarTitleText": ""
-		
-			},
-			"meta": {
-				"auth": false,
-				"async": true,
-				"title": "客服",
-				"group": "通用"
-			}
 		}
 
 	],
@@ -142,7 +128,7 @@
 					"path": "groupon/my-groupon",
 					"style": {
 						"navigationBarTitleText": "我的拼团",
-						   "enablePullDownRefresh": true
+						"enablePullDownRefresh": true
 					},
 					"meta": {
 						"auth": true,
@@ -358,6 +344,21 @@
 			"root": "pages/public",
 			"pages": [
 				// 公共public ------ start
+
+				{
+					"path": "kefu/index",
+					"name": "kefu",
+					"style": {
+						"navigationBarTitleText": ""
+
+					},
+					"meta": {
+						"auth": false,
+						"async": true,
+						"title": "客服",
+						"group": "通用"
+					}
+				},
 				{
 					"path": "richtext",
 					"style": {

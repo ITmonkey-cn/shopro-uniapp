@@ -3,8 +3,10 @@
 	<view>
 		<view class="kefu_container">
 			<view v-if="errorTips" class="error_tips">{{errorTips}}</view>
-			<view v-if="config.announcement && errorTips == ''" class="notice">{{config.announcement}}<text @tap="close_notice"
-				 class="close_notice">不再显示</text></view>
+			<view v-if="config.announcement && errorTips == ''" class="notice x-start"> 
+				<text> {{config.announcement}}</text>
+				<text @tap="close_notice" class="close_notice cuIcon-roundclose y-end"></text>
+			</view>
 
 			<!--留言板-->
 			<view v-if="showLeaveMessage" class="leave_message">
@@ -46,28 +48,33 @@
 							<block v-for="message in item.data" :key="message.id">
 								
 								<view v-if="message.message_type == 3" class="status"><text>{{message.message}}</text></view>
-								
-								<view v-if="message.message_type != 3" class="bubble" :class="message.sender == 'me' ? 'me':'you'">
-
-									<!-- 除了商品/订单卡片和图片，其他的都使用富文本 -->
-									<uni-parser @imgtap="message_img_preview" :tag-style="{img:'width:60px;height:60px;'}" v-if="message.message_type == 0" :html="message.message"></uni-parser>
+								<view class="message-item x-f" :class="message.sender == 'me' ? 'message__right':'message__left'">
+									<view class="head-img">
+										<image class="head-img" v-if="message.sender == 'you'"  src="/static/imgs/kefu/sys_head.png" mode=""></image>
+									</view>
+									<view v-if="message.message_type != 3" class="bubble" :class="message.sender == 'me' ? 'me':'you'">
+											<!-- 除了商品/订单卡片和图片，其他的都使用富文本 -->
+											<uni-parser @imgtap="message_img_preview" :tag-style="{img:'width:50rpx;height:50rpx;'}" v-if="message.message_type == 0" :html="message.message"></uni-parser>
+											
+											<uni-parser v-if="message.message_type == 2" :html="'<a target=_blank href=' + message.message + '>' + message.message + '</a>'"></uni-parser>
 									
-									<uni-parser v-if="message.message_type == 2" :html="'<a target=_blank href=' + message.message + '>' + message.message + '</a>'"></uni-parser>
-
-									<image @tap="preview_img(message.message)" v-if="message.message_type == 1" :src="message.message" mode="widthFix"></image>
-
-									<view v-if="message.message_type == 4 || message.message_type == 5" class="project_item">
-										<image :src="message.message.logo"></image>
-										<view class="project_item_body">
-											<view class="project_item_title">{{message.message.subject}}</view>
-											<view v-if="message.message.note" class="project_item_note">{{message.message.note}}</view>
-											<view class="project_item_price">
-												<text v-if="message.message.price">￥{{message.message.price}}</text>
-												<text v-if="message.message.number">x{{message.message.number}}</text>
+											<image @tap="preview_img(message.message)" v-if="message.message_type == 1" :src="message.message" mode="widthFix"></image>
+									
+											<view v-if="message.message_type == 4 || message.message_type == 5" class="project_item">
+												<image :src="message.message.logo"></image>
+												<view class="project_item_body">
+													<view class="project_item_title more-t">{{message.message.subject}}</view>
+												<!-- 	<view v-if="message.message.note" class="project_item_note">{{message.message.note}}</view> -->
+													<view class="project_item_price">
+														<text class="price" v-if="message.message.price">￥{{message.message.price}}</text>
+														<!-- <text v-if="message.message.number">x{{message.message.number}}</text> -->
+													</view>
+												</view>
 											</view>
 										</view>
-									</view>
-
+										<view class="head-img">
+											<image class="head-img" v-if="message.sender == 'me'" :src="userInfo.avatar" mode=""></image>
+										</view>
 								</view>
 							</block>
 						</block>
@@ -124,7 +131,7 @@
 						<label v-for="(item, index) in selectModelData" :key="index" class="project_item">
 							<image :src="item.logo"></image>
 							<view class="project_item_body">
-								<view class="project_item_title">{{item.subject}}</view>
+								<view class="project_item_title more-t">{{item.subject}}</view>
 								<view v-if="item.note" class="project_item_note">{{item.note}}</view>
 								<view class="project_item_price">
 									<text v-if="item.price">￥{{item.price}}</text>
@@ -147,6 +154,7 @@
 	var token = uni.getStorageSync('token'); // 用户身份标识
 	var fixedCsr = ''; // 指定客服
 	var innerAudioContext = null;
+	import { mapMutations, mapActions, mapState } from 'vuex';
 	export default {
 		components: {},
 		data() {
@@ -187,6 +195,11 @@
 				selectModelData: [],
 				writeBottom: 0
 			}
+		},
+		computed:{
+			...mapState({
+				userInfo: state => state.user.userInfo
+			})
 		},
 		onLoad(opt) {
 			fixedCsr = opt.fixed_csr ? opt.fixed_csr : fixedCsr
@@ -1024,7 +1037,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	* {
 		padding: 0;
 		margin: 0;
@@ -1057,20 +1070,23 @@
 		position: fixed;
 		top: var(--window-top);
 		width: 100%;
-		font-size: 30rpx;
-		line-height: 36rpx;
+		font-size:26rpx;
+		font-weight:400;
+		color:rgba(204,149,59,1);
+		line-height:40rpx;
 		padding: 16rpx;
 		box-sizing: border-box;
-		background: rgba(252, 248, 227, 1);
+		background: rgba(252, 248, 227, 0.7);
 		color: #c09853;
 		z-index: 999;
 	}
 
 	.close_notice {
-		color: #999;
-		font-size: 26rpx;
-		text-decoration: underline;
+		width: 100rpx;
+		font-size:40rpx;
+		
 	}
+	
 
 	.select_model {
 		background-color: #f2f2f2;
@@ -1110,9 +1126,9 @@
 	}
 
 	.project_item image {
-		width: 180rpx;
-		height: 180rpx;
-		min-width: 180rpx;
+		width: 160rpx;
+		height: 160rpx;
+		min-width: 160rpx;
 	}
 
 	.project_item_body {
@@ -1122,16 +1138,9 @@
 	}
 
 	.project_item_title {
-		font-size: 30rpx;
-		display: block;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 2;
-		line-height: 34rpx;
-		height: 68rpx;
-		color: #181818;
+		font-size: 26rpx;
+		line-height: 32rpx;
+		color: #333333;
 	}
 
 	.project_item_note {
@@ -1146,6 +1155,12 @@
 		height: 64rpx;
 		color: #999999;
 		margin-top: 6rpx;
+	}
+	.project_item_price{
+		.price{
+			color: #E1212B;
+			font-size: 26rpx;
+		}
 	}
 
 	.project_item_price text:last-child {
@@ -1184,10 +1199,10 @@
 	}
 
 	.chat_wrapper .status {
-		position: relative;
-		float: right;
+		// position: relative;
+		// float: right;
 		width: 100%;
-		margin-bottom: 20rpx;
+		margin: 20rpx;
 		text-align: center;
 		height: 60rpx;
 		line-height: 60rpx;
@@ -1195,43 +1210,61 @@
 
 	.chat_wrapper .status text {
 		font-size: 24rpx;
-		display: inline-block;
+		// display: inline-block;
 		background: #ccc;
 		color: #fff;
-		border-radius: 10rpx;
+		border-radius: 17rpx;
 		padding: 6rpx 20rpx;
 		line-height: 24rpx;
 	}
 
+// 消息列表
+.message-item{
+	align-items: flex-start;
+	margin: 20rpx;
+	.head-img{
+		width:70rpx;
+		height:70rpx;
+		border-radius:50%;
+	}
+}
+.message__left{
+	justify-content: flex-start;
+}
+.message__right{
+	justify-content: flex-end;
+}
 	.chat_wrapper .bubble {
-		font-size: 32rpx;
+		font-size: 26rpx;
 		position: relative;
 		display: inline-block;
-		clear: both;
+		// clear: both;
 		margin-bottom: 16rpx;
-		padding: 24rpx 24rpx;
-		vertical-align: top;
+		padding: 20rpx;
+		// vertical-align: top;
 		border-radius: 10rpx;
+		// width: 260px;
+		
 	}
 
 	.chat_wrapper .bubble.me {
-		float: right;
+		// float: right;
 		margin-right: 28rpx;
 		margin-left: 20rpx;
 		color: #fff;
-		background-color: #00b0ff;
-		word-wrap: break-word;
-		word-break: break-all;
+		background-color: #E6B873;
+		// word-wrap: break-word;
+		// word-break: break-all;
 	}
 
 	.chat_wrapper .bubble.you {
-		float: left;
+		// float: left;
 		margin-right: 20rpx;
 		margin-left: 28rpx;
 		color: #181818;
 		background-color: #fff;
-		word-wrap: break-word;
-		word-break: break-all;
+		// word-wrap: break-word;
+		// word-break: break-all;
 	}
 
 	.chat_wrapper .bubble:before {
@@ -1252,7 +1285,7 @@
 
 	.chat_wrapper .bubble.me:before {
 		right: -6rpx;
-		background-color: #00b0ff;
+		background-color: #E6B873;
 	}
 
 	.chat_wrapper .bubble image {
