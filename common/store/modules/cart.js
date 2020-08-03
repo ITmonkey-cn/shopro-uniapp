@@ -21,7 +21,7 @@ const actions = {
 			http('cart.index').then(res => {
 				let cartData = res.data;
 				cartData.map(item => {
-					item.checked = false;
+					item.checked = true;
 				})
 				uni.setStorageSync('cartNum', cartData.length);
 				commit('CART_LIST', cartData);

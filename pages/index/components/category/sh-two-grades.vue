@@ -66,9 +66,9 @@
 		<!-- 购物车 -->
 		<view class="cart-box x-f">
 			<view class="cart-left flex-sub x-f">
-				<view class="cart-img-box">
+				<view class="cart-img-box" @tap="onShowCartList">
 					<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
-					<view class="cu-tag badge">{{ takeoutTotalCount.totalNum }}</view>
+					<view class="cu-tag badge" v-if="takeoutTotalCount.totalNum">{{ takeoutTotalCount.totalNum }}</view>
 				</view>
 				<view class="price-box x-f">
 					<text class="price">{{ takeoutTotalCount.totalPrice.toFixed(2) }}</text>
@@ -77,18 +77,18 @@
 			<button class="cu-btn pay-btn" @tap="onPay">去结算</button>
 			<!-- 购物车商品列表 -->
 
-			<view class="cart-list-box page_box">
+			<view class="cart-list-box page_box" :class="takeoutTotalCount.totalNum && showCartList ? '' : 'hide-cart-list'">
 				<view class="head_box x-bc cart-list__head px20">
 					<label class="check-all x-f" @tap="onAllSel">
 						<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
 						<text>全选</text>
 					</label>
-					<view class="delete-box">
+					<view class="delete-box" @tap="deleteAll">
 						<text class="cuIcon-delete"></text>
 						<text>清空购物车</text>
 					</view>
 				</view>
-				<view class="block">
+				<view class="block cart-list">
 					<checkbox-group class="block" v-if="cartList.length">
 						<view class="collect-list x-start" v-for="(g, index) in cartList" :key="index">
 							<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
@@ -99,7 +99,7 @@
 									<view class="x-bc price-box">
 										<view class="price">￥{{ g.sku_price.price }}</view>
 										<view class="num-step">
-											<uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="1"></uni-number-box>
+											<uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="0"></uni-number-box>
 										</view>
 									</view>
 								</block>
@@ -112,7 +112,7 @@
 		<!-- 规格 -->
 		<sh-takeout-sku v-if="goodsInfo.id" v-model="showSku" :goodsInfo="goodsInfo" :buyType="'cart'"></sh-takeout-sku>
 		<!-- 遮罩 -->
-		<view class="mask"></view>
+		<view class="mask" @tap="hideCartList" v-if="takeoutTotalCount.totalNum && showCartList"></view>
 	</view>
 </template>
 
@@ -132,7 +132,8 @@ export default {
 			isTap: true,
 			categoryData: {}, //商品分类数据
 			showSku: true, //是否显示规格弹窗
-			goodsInfo: {} //点击商品详情
+			goodsInfo: {}, //点击商品详情
+			showCartList: false
 		};
 	},
 	computed: {
@@ -141,7 +142,7 @@ export default {
 			cartList: state => state.cart.cartList,
 			allSel: ({ cart }) => cart.allSelected
 		}),
-		...mapGetters(['takeoutTotalCount']),
+		...mapGetters(['totalCount', 'takeoutTotalCount']),
 		// 购物车检测
 		checkCart() {
 			let obj = {};
@@ -154,12 +155,22 @@ export default {
 			return obj;
 		}
 	},
-	created() {
+	mounted() {
 		this.getCategory();
 		this.getCartList();
+		// this.$store.commit('getAllSellectCartList', true); //列表全选
 	},
 	methods: {
-		...mapActions(['getCartList', 'changeCartList', 'addCartGoods', 'changeAllSellect', 'getAllSellectCartList']),
+		...mapActions(['getCartList', 'changeCartList', 'addCartGoods', 'getAllSellectCartList']),
+		...mapMutations(['changeAllSellect']),
+		// 显示购物车列表
+		onShowCartList() {
+			if (!this.takeoutTotalCount.totalNum) return;
+			this.showCartList = !this.showCartList;
+		},
+		hideCartList() {
+			this.showCartList = false;
+		},
 		// 全选
 		onAllSel() {
 			let that = this;
@@ -219,12 +230,14 @@ export default {
 			let { cartList } = this;
 			let confirmcartList = [];
 			this.cartList.forEach(item => {
-				confirmcartList.push({
-					goods_id: item.goods_id,
-					goods_num: item.goods_num,
-					sku_price_id: item.sku_price_id,
-					goods_price: item.sku_price.price
-				});
+				if (item.checked) {
+					confirmcartList.push({
+						goods_id: item.goods_id,
+						goods_num: item.goods_num,
+						sku_price_id: item.sku_price_id,
+						goods_price: item.sku_price.price
+					});
+				}
 			});
 			that.jump('/pages/order/confirm', { goodsList: JSON.stringify(confirmcartList), from: 'cart' });
 		},
@@ -298,6 +311,11 @@ export default {
 	width: 100%;
 	height: 100%;
 }
+.hide-cart-list {
+	transform: scaleY(0);
+	transform-origin: center bottom;
+	transition: all linear 0.1s;
+}
 .cart-list-box {
 	position: absolute;
 	width: 750rpx;
@@ -305,6 +323,8 @@ export default {
 	background: #fff;
 	height: 700rpx;
 	z-index: 66;
+	transform-origin: center bottom;
+	transition: all linear 0.1s;
 	border-radius: 20rpx 20rpx 0 0;
 	.cart-list__head {
 		height: 90rpx;
