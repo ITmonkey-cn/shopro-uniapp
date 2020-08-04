@@ -83,7 +83,7 @@ export default {
 		},
 		// 跳转客服
 		onService() {
-			this.$tools.callPhone('13733867125');
+			this.$Router.push('/pages/public/kefu/index')
 		},
 		// 更新信息
 		onRefresh() {

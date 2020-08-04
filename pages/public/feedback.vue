@@ -42,7 +42,7 @@
 			</view>
 			<view class="foot_box x-bc pad">
 				<button class="cu-btn post-btn" @tap="addFeedback">提交</button>
-				<button class="cu-btn contact-btn" v-if="false">联系客服</button>
+				<button class="cu-btn contact-btn" @tap="onService">联系客服</button>
 			</view>
 		</view>
 	</form>
@@ -65,6 +65,10 @@ export default {
 		this.getFeedbackType();
 	},
 	methods: {
+		// 跳转客服
+		onService() {
+			this.$Router.push('/pages/public/kefu/index');
+		},
 		// 获取意见分类
 		getFeedbackType() {
 			let that = this;
