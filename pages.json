@@ -339,10 +339,43 @@
 					}
 				},
 				{
-					"path": "refund",
+					"path": "after-sale/refund",
 					"style": {
-						"navigationBarTitleText": "退款"
+						"navigationBarTitleText": "申请售后"
 
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/list",
+					"style": {
+						"navigationBarTitleText": "退换/售后列表"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/detail",
+					"style": {
+						"navigationBarTitleText": "服务单详情"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/log",
+					"style": {
+						"navigationBarTitleText": "进度详情"
+				
 					},
 					"meta": {
 						"auth": true,

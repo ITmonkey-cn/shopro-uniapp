@@ -9,7 +9,15 @@
 					<view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view>
 				</view>
 			</view>
+			<view class="order-item y-f"  @tap="jump('/pages/order/after-sale/list')">
+				<view class="y-f item-box">
+					<image class="order-img" src="http://shopro.7wpp.com/imgs/user/tab55.png" mode=""></image>
+					<text class="item-title">退换货</text>
+					<!-- <view class="cu-tag badge"></view> -->
+				</view>
+			</view>
 		</view>
+		
 		<view class="order-item y-f all-order" @tap="jump('/pages/order/list', { type: 'all' })">
 			<image class="cut-off--line" src="/static/imgs/user/cut_off_line.png" mode=""></image>
 			<view class="y-f item-box">
@@ -52,12 +60,12 @@ export default {
 					img: 'http://shopro.7wpp.com/imgs/user/tab44.png',
 					type: 'nocomment'
 				},
-				{
-					id: 5,
-					title: '退换货',
-					img: 'http://shopro.7wpp.com/imgs/user/tab55.png',
-					type: 'aftersale'
-				}
+				// {
+				// 	id: 5,
+				// 	title: '退换货',
+				// 	img: 'http://shopro.7wpp.com/imgs/user/tab55.png',
+				// 	type: 'aftersale'
+				// }
 			]
 		};
 	},

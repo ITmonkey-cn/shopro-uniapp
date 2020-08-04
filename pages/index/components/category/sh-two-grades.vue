@@ -74,7 +74,7 @@
 					<text class="price">{{ takeoutTotalCount.totalPrice.toFixed(2) }}</text>
 				</view>
 			</view>
-			<button class="cu-btn pay-btn" @tap="onPay">去结算</button>
+			<button class="cu-btn pay-btn" @tap="onPay" :disabled="!isSel">去结算</button>
 			<!-- 购物车商品列表 -->
 
 			<view class="cart-list-box page_box" :class="takeoutTotalCount.totalNum && showCartList ? '' : 'hide-cart-list'">
@@ -142,7 +142,7 @@ export default {
 			cartList: state => state.cart.cartList,
 			allSel: ({ cart }) => cart.allSelected
 		}),
-		...mapGetters(['totalCount', 'takeoutTotalCount']),
+		...mapGetters(['totalCount', 'takeoutTotalCount', 'isSel']),
 		// 购物车检测
 		checkCart() {
 			let obj = {};
@@ -229,17 +229,19 @@ export default {
 			let that = this;
 			let { cartList } = this;
 			let confirmcartList = [];
-			this.cartList.forEach(item => {
-				if (item.checked) {
-					confirmcartList.push({
-						goods_id: item.goods_id,
-						goods_num: item.goods_num,
-						sku_price_id: item.sku_price_id,
-						goods_price: item.sku_price.price
-					});
-				}
-			});
-			that.jump('/pages/order/confirm', { goodsList: JSON.stringify(confirmcartList), from: 'cart' });
+			if (this.isSel) {
+				this.cartList.forEach(item => {
+					if (item.checked) {
+						confirmcartList.push({
+							goods_id: item.goods_id,
+							goods_num: item.goods_num,
+							sku_price_id: item.sku_price_id,
+							goods_price: item.sku_price.price
+						});
+					}
+				});
+				that.jump('/pages/order/confirm', { goodsList: JSON.stringify(confirmcartList), from: 'cart' });
+			}
 		},
 		// 添加购物车
 		selSku(info) {

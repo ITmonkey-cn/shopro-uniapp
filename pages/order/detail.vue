@@ -6,7 +6,7 @@
 			<view class="detail-head">
 				<view class="state-box x-f">
 					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
-					<text>{{ orderDetail.status_name }}</text>
+					<text>{{ orderDetail.status_desc }}</text>
 				</view>
 			</view>
 			<!-- 收货地址 -->
@@ -32,6 +32,7 @@
 							<text class="cuIcon-right"></text>
 						</view>
 					</view>
+
 					<view class="order-bottom  x-f">
 						<!-- 退款原因 -->
 						<view class="refund_msg" v-if="order.refund_msg">
@@ -39,19 +40,27 @@
 							{{ order.refund_msg }}
 						</view>
 						<view class="btn-box" v-for="(btn, index) in order.btns" :key="btn">
+							<button @tap.stop="onConfirm(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'get'">
+								确认收货
+							</button>
+							<button @tap.stop="onComment(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'comment'">
+								去评价
+							</button>
 							<button
-								@tap="jump('/pages/goods/detail/index', { id: order.goods_id })"
+								@tap.stop="jump('/pages/goods/detail/index', { id: order.goods_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'buy_again'"
 							>
 								再次购买
 							</button>
-							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'express'" @tap="checkExpress(orderDetail.id, order.id)">
-								查看物流
-							</button>
-							<button @tap.stop="onConfirm(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'get'">
-								确认收货
+							<button
+								@tap.stop="jump('/pages/order/after-sale/detail', { aftersaleId: order.ext_arr.aftersale_id })"
+								class="cu-btn btn1"
+								:class="{ btn2: index + 1 === order.btns.length }"
+								v-if="btn === 'aftersale_info'"
+							>
+								售后详情
 							</button>
 							<button
 								@tap.stop="onAftersale(orderDetail.id, order.id)"
@@ -62,25 +71,13 @@
 								申请售后
 							</button>
 							<button
-								@tap.stop="onRefund(orderDetail.id, order.id)"
+								@tap.stop="onAftersale(orderDetail.id, order.id)"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
-								v-if="btn === 'apply_refund'"
+								v-if="btn === 're_aftersale'"
 							>
-								申请退款
+								重新售后
 							</button>
-							<button
-								@tap.stop="onRefund(orderDetail.id, order.id)"
-								class="cu-btn btn1"
-								:class="{ btn2: index + 1 === order.btns.length }"
-								v-if="btn === 'reapply_refund'"
-							>
-								重新退款
-							</button>
-							<button @tap.stop="onComment(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'comment'">
-								待评价
-							</button>
-							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'after_detail'">售后详情</button>
 						</view>
 					</view>
 				</view>
@@ -195,6 +192,8 @@
 					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
 						拼团详情
 					</button>
+					<button v-if="btn === 'delete'" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
+					<button v-if="btn === 'express'" @tap.stop="onExpress" class="cu-btn obtn1">查看物流</button>
 				</view>
 			</view>
 		</view>
@@ -284,33 +283,14 @@ export default {
 				}
 			});
 		},
-		// 申请退款
-		onRefund(id, itemId) {
-			let that = this;
-			that.$api('order.refund', {
-				id: id,
-				order_item_id: itemId
-			}).then(res => {
-				if (res.code === 1) {
-					that.$tools.toast('申请退款成功');
-					that.getOrderDetail();
-					//  #ifdef MP-WEIXIN
-					this.$store.dispatch('getMessageIds', 'aftersale');
-					//  #endif
-				}
-			});
-		},
 		// 申请售后
-		onAftersale(id, itemId) {
-			let that = this;
-			that.$api('order.aftersale', {
-				id: id,
-				order_item_id: itemId
-			}).then(res => {
-				if (res.code === 1) {
-					that.$tools.toast('申请售后成功');
-					that.getOrderDetail();
-				}
+		onAftersale(orderId, orderItemId) {
+			//  #ifdef MP-WEIXIN
+			this.$store.dispatch('getMessageIds', 'aftersale');
+			//  #endif
+			this.$Router.push({
+				path: '/pages/order/after-sale/refund',
+				query: { orderId: orderId, orderItemId: orderItemId }
 			});
 		},
 		// 取消订单
@@ -330,13 +310,24 @@ export default {
 				url: `/pages/order/payment/method?orderId=${id}`
 			});
 		},
-		// 待评价
-		onComment(orderId, ordrderItemId) {
-			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId: ordrderItemId });
+		// 删除订单
+		onDelete(orderId) {
+			let that = this;
+			that.$api('order.deleteOrder', {
+				id: orderId
+			}).then(res => {
+				if (res.code === 1) {
+					that.$Router.back();
+				}
+			});
 		},
-		// 查看物流,
+		// 待评价
+		onComment(orderId, orderItemId) {
+			this.jump('/pages/order/add-comment', { orderId: orderId, orderItemId: orderItemId });
+		},
+		// 查看物流,Todo
 		checkExpress(orderId, ordrderItemId) {
-			this.jump('/pages/order/express', { orderId: orderId, ordrderItemId: ordrderItemId });
+			this.jump('/pages/order/express', { orderId: orderId, orderItemId: orderItemId });
 		}
 	}
 };
@@ -385,11 +376,11 @@ export default {
 	}
 }
 .detail-goods {
-	padding: 0 20rpx;
-	background: #fff;
 	margin-bottom: 20rpx;
-
 	.order-list {
+		margin-bottom: 20rpx;
+		background-color: #fff;
+		padding: 0 20rpx;
 		.order-card {
 			padding: 20rpx 0;
 		}
@@ -428,9 +419,8 @@ export default {
 		}
 		.order-bottom {
 			background: #fff;
-			padding-bottom: 20rpx;
 			justify-content: flex-end;
-			padding-top: 20rpx;
+			padding: 20rpx 0;
 			.btn1 {
 				width: 160rpx;
 				height: 60rpx;

@@ -51,10 +51,10 @@ export default {
 			let that = this;
 			that.$api('order.itemDetail', {
 				id: that.$Route.query.orderId,
-				order_item_id: that.$Route.query.ordrderItemId
+				order_item_id: that.$Route.query.orderItemId
 			}).then(res => {
 				if (res.code === 1) {
-					that.goodsDetail = res.data[0];
+					that.goodsDetail = res.data;
 				}
 			});
 		},

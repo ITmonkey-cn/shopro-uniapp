@@ -69,7 +69,7 @@ export default {
 			isLoading: true,
 			isTriggered: false, //下拉刷新状态，是否被触发。
 			loadStatus: '', //loading,over
-			lastPage: 0,
+			lastPage: 1,
 			currentPage: 1,
 			emptyData: {
 				img: '/static/imgs/empty/empty_groupon.png',

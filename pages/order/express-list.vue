@@ -1,17 +1,17 @@
 <template>
 	<view class="express-list-wrap">
-		<view class="tip-box x-f px20">3个包裹已发出</view>
-		<view class="express-list mb20">
+		<view class="tip-box x-f px20">{{expressList.length}}个包裹已发出</view>
+		<view class="express-list mb20" v-for="express in expressList" :key="express.id" @tap="toExpressDetail(express.id)">
 			<view class="x-bc list-head px20">
-				<text class="list-status">派送中</text>
-				<view class="express-name">天天快递：25689456336</view>
+				<text class="list-status">{{express.log[0].status_name}}</text>
+				<view class="express-name">{{express.express_name}}：{{express.express_no}}</view>
 			</view>
 			<view class="list-content pa20">
-				<view class="express-detail mb20">郑州市凤台综合揽投部安排投递，投递局：郑州市凤台综合揽投部</view>
+				<view class="express-detail mb20">{{express.log[0].content}}</view>
 				<view class="goods-box x-f">
-					<view class="goods-img-box"><image class="goods-img" src="/static/imgs/group/group_detail_bg.png" mode="aspectFill"></image></view>
+					<view class="goods-img-box" v-for="img in express.item" :key="img.id"><image class="goods-img" :src="img.goods_image" mode="aspectFill"></image></view>
 				</view>
-				<view class="all-goods">共1件商品</view>
+				<view class="all-goods">共{{express.item.length}}件商品</view>
 			</view>
 		</view>
 	</view>
@@ -21,11 +21,37 @@
 export default {
 	components: {},
 	data() {
-		return {};
+		return {
+			expressList: []
+		};
 	},
 	computed: {},
-	onLoad() {},
-	methods: {}
+	onLoad() {
+		this.getExpressList();
+	},
+	methods: {
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
+		// 物流详情
+		toExpressDetail(id){
+			this.jump('/pages/order/express',{orderId:this.$Route.query.orderId,expressId:id})
+		},
+		// 包裹列表
+		getExpressList() {
+			let that = this;
+			that.$api('order.expressList', {
+				order_id: that.$Route.query.orderId
+			}).then(res => {
+				if (res.code === 1) {
+					that.expressList = res.data;
+				}
+			});
+		}
+	}
 };
 </script>
 
@@ -58,31 +84,30 @@ export default {
 			color: rgba(153, 153, 153, 1);
 		}
 	}
-	.list-content{
-		.express-detail{
-			font-size:28rpx;
-			font-family:PingFang SC;
-			font-weight:500;
-			color:rgba(51,51,51,1);
+	.list-content {
+		.express-detail {
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(51, 51, 51, 1);
 		}
-		.goods-box{
+		.goods-box {
 			flex-wrap: wrap;
-			.goods-img-box{
-				width:160rpx;
-				height:160rpx;
+			.goods-img-box {
+				width: 160rpx;
+				height: 160rpx;
 				overflow: hidden;
 				margin-right: 22rpx;
 				margin-bottom: 22rpx;
-				&:nth-child(4n){
+				&:nth-child(4n) {
 					margin-right: 0;
 				}
-				.goods-img{
+				.goods-img {
 					width: 100%;
 					height: 100%;
 				}
 			}
 		}
-		
 	}
 }
 </style>

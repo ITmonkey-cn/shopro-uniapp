@@ -11,16 +11,16 @@
 			:include-points="includePoints"
 			show-location
 		></map>
-		<div class="dragLayer" :class="moveCard" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
+		<div class="dragLayer" :class="moveCard">
 			<div class="oilStation">
-				<div class="oilStation-top">
+				<div class="oilStation-top" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
 					<view class="x-bc express-card__head">
 						<view class="x-f">
 							<view class="img-box">
-								<image class="goods-image" :src="goodsDetail.goods_image" mode="aspectFill"></image>
-								<view class="shop-tag">2件商品</view>
+								<image class="goods-image" :src="firstGoods.goods_image" mode="aspectFill"></image>
+								<view class="shop-tag">{{ goodsList.length }}件商品</view>
 							</view>
-							<text class="express-status">{{ goodsDetail.status_name }}</text>
+							<text class="express-status">{{ firstGoods.status_name }}</text>
 						</view>
 						<view class="express-phone__box y-f">
 							<text class="cuIcon-phone"></text>
@@ -28,20 +28,22 @@
 						</view>
 					</view>
 					<view class="express-sn x-f">
-						<text>{{ goodsDetail.express_name }} {{ goodsDetail.express_no }}</text>
-						<text class="cuIcon-copy" @tap="copyCode"></text>
+						<text>{{ expressDetail.express_name }} {{ expressDetail.express_no }}</text>
+						<text class="cuIcon-copy" @tap="copyCode(expressDetail.express_no)"></text>
 					</view>
 				</div>
 				<scroll-view class="oilStation-bottom" :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
-					<view class="express-item x-f" v-for="ex in 3" :key="ex">
-						<view class="item-left y-end">
-							<text class="day">02-06</text>
-							<text class="time">12:46</text>
-						</view>
-						<view class="item-right">
-							<image class="express-tag" src="/static/imgs/order/step1.png" mode="aspectFill"></image>
-							<view class="express-title">已签收</view>
-							<view class="express-detail">郑州市凤台综合揽投部安排投递，投递局：郑州市凤台综合揽投部</view>
+					<view class="py30">
+						<view class="express-item x-f" v-for="log in expressDetail.log" :key="log.id">
+							<view class="item-left y-end">
+								<text class="day">{{ log.changedate.split(' ')[0] }}</text>
+								<text class="time">{{ log.changedate.split(' ')[1] }}</text>
+							</view>
+							<view class="item-right">
+								<image class="express-tag" src="/static/imgs/order/step1.png" mode="aspectFill"></image>
+								<view class="express-title">{{ log.status_name }}</view>
+								<view class="express-detail">{{ log.content }}</view>
+							</view>
 						</view>
 					</view>
 				</scroll-view>
@@ -61,7 +63,9 @@ export default {
 			showCard: false,
 			scrollable: false, // 初始化禁止滑动
 			moveCard: 'dragLayer-bottom',
-			goodsDetail: {}, //物流信息
+			expressDetail: {}, //物流信息
+			firstGoods: {}, //商品列表
+			goodsList: [],
 			markers: [
 				{
 					id: 0,
@@ -79,7 +83,7 @@ export default {
 	},
 	computed: {},
 	onLoad() {
-		this.getOrderItemDetail();
+		this.getExpressDetail();
 	},
 	onReady() {
 		let that = this;
@@ -88,10 +92,10 @@ export default {
 	onShow() {},
 	methods: {
 		// 复制物流码
-		copyCode() {
+		copyCode(code) {
 			let that = this;
 			uni.setClipboardData({
-				data: that.goodsDetail.express_no,
+				data: code,
 				success: () => {
 					//#ifdef H5
 					that.$tools.toast('已复制到剪切板');
@@ -100,14 +104,16 @@ export default {
 			});
 		},
 		// 获取物流信息
-		getOrderItemDetail() {
+		getExpressDetail() {
 			let that = this;
-			that.$api('order.itemDetail', {
-				id: that.$Route.query.orderId,
-				order_item_id: that.$Route.query.ordrderItemId
+			that.$api('order.expressDetail', {
+				id: that.$Route.query.expressId,
+				order_id: that.$Route.query.orderId
 			}).then(res => {
 				if (res.code === 1) {
-					that.goodsDetail = res.data[0];
+					that.expressDetail = res.data;
+					that.goodsList = res.data.item;
+					that.firstGoods = res.data.item[0];
 				}
 			});
 		},
@@ -181,6 +187,9 @@ export default {
 					break;
 				// 向下滑动
 				case 2:
+					this.showCard = false;
+					this.moveCard = 'dragLayer-bottom';
+					this.scrollable = false;
 					break;
 				// 向左
 				case 3:
@@ -250,6 +259,7 @@ export default {
 	flex-direction: column;
 	flex: 1;
 	height: 100%;
+	background: linear-gradient(to bottom, rgba(#fff, 0), rgba(#fff, 1));
 }
 /* 物流卡片 */
 .oilStation-top {
@@ -335,7 +345,7 @@ export default {
 	margin: 0 20rpx 20rpx;
 	border-radius: 20rpx;
 	box-shadow: 0 1rpx 18rpx 0 rgba(184, 184, 184, 0.55);
-	padding: 30rpx;
+	padding: 0 30rpx;
 }
 // 物流步骤条
 .express-item {
@@ -354,7 +364,7 @@ export default {
 		position: relative;
 		padding-left: 54rpx;
 		margin-left: 54rpx;
-		border-left: 1rpx solid #E7E7E7;
+		border-left: 1rpx solid #e7e7e7;
 		padding-bottom: 40rpx;
 		.express-tag {
 			width: 54rpx;
@@ -363,18 +373,18 @@ export default {
 			left: -27rpx;
 			top: 0;
 		}
-		.express-title{
-			font-size:28rpx;
-			font-family:PingFang SC;
-			font-weight:500;
-			color:rgba(51,51,51,1);
+		.express-title {
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(51, 51, 51, 1);
 			margin-bottom: 10rpx;
 		}
-		.express-detail{
-			font-size:24rpx;
-			font-family:PingFang SC;
-			font-weight:500;
-			color:rgba(51,51,51,1);
+		.express-detail {
+			font-size: 24rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(51, 51, 51, 1);
 		}
 	}
 }
