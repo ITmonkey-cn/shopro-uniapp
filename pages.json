@@ -194,6 +194,44 @@
 						"title": "积分商城",
 						"group": "应用"
 					}
+				},
+				{
+					"path": "merchant/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "商户信息",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "merchant/info",
+					"style": {
+						"navigationBarTitleText": "门店信息"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "门店信息",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "merchant/detail",
+					"style": {
+						"navigationBarTitleText": "订单详情"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
 				}
 			]
 		},
