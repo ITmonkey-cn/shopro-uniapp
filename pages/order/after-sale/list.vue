@@ -22,7 +22,7 @@
 					<view class="order-content"><shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card></view>
 
 					<view class="order-bottom">
-						<view class="serve-status x-bc" @tap.stop="jump('/pages/order/after-sale/log',{aftersaleId:order.id})">
+						<view class="serve-status x-bc" @tap.stop="jump('/pages/order/after-sale/log', { aftersaleId: order.id })">
 							<view class="x-f">
 								<view class="serve-title">{{ order.aftersale_status_text }}</view>
 								<view class="serve-content">{{ order.aftersale_status_desc }}</view>
@@ -98,6 +98,7 @@ export default {
 	onLoad() {},
 	onShow() {
 		this.orderList = [];
+		this.currentPage = 1;
 		this.getAftersaleList();
 	},
 	methods: {

@@ -107,6 +107,7 @@ export default {
 		onTab(id) {
 			this.tabCurrent = id;
 			this.goodsList = [];
+			this.currentPage = 1;
 			this.getGoodsList();
 		},
 		// 百分比

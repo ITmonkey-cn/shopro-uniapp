@@ -40,6 +40,12 @@ export default {
 	onLoad() {
 		this.getFaqList();
 	},
+	onReachBottom() {
+	if (this.currentPage < this.lastPage) {
+		this.currentPage += 1;
+		this.getFaqList();
+	}
+	},
 	methods: {
 		onProblem(index) {
 			if (this.faqList[index].checked) {

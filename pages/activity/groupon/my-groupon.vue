@@ -118,6 +118,7 @@ export default {
 		onNav(id) {
 			this.stateId = id;
 			this.myGrouponList = [];
+			this.currentPage = 1;
 			this.getMyGroupon();
 		},
 		jump(path, parmas) {
