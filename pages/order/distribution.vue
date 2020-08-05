@@ -38,7 +38,7 @@
 			</view>
 		</view>
 		<view class="foot_box x-c pb20">
-			<button class="service-btn cu-btn">
+			<button class="service-btn cu-btn" @tap="onService">
 				<text class="cuIcon-dianhua"></text>
 				联系商家
 			</button>
@@ -58,7 +58,18 @@ export default {
 			title: '配送详情'
 		});
 	},
-	methods: {}
+	methods: {
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
+		// 跳转客服
+		onService() {
+			this.$Router.push('/pages/public/kefu/index');
+		}
+	}
 };
 </script>
 

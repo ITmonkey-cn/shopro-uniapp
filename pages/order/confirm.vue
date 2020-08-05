@@ -38,9 +38,9 @@
 					</shopro-mini-card>
 				</view>
 				<!-- 配送方式 -->
-				<view class="logistic item-list x-bc">
+				<view class="logistic item-list x-bc" @tap="onSelExpressType(g.detail.dispatch_type_arr)">
 					<view class="x-f"><view class="item-title">配送方式</view></view>
-					<view class="x-f" @tap="onSelExpressType">
+					<view class="x-f" >
 						<view class="detail">普通配送</view>
 						<text class="cuIcon-right"></text>
 					</view>
@@ -48,7 +48,7 @@
 				<!-- 备注 -->
 				<view class="remark-box x-f item-list">
 					<view class="item-title">备注</view>
-					<input class="item-input" placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
+					<input class="item-input"  placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" ></input>
 				</view>
 			</view>
 
@@ -96,24 +96,33 @@
 		<shopro-modal v-model="showExpressType" :modalType="'bottom-modal'">
 			<block slot="modalContent">
 				<!-- 配送方式 -->
-				<view class="express-type">
-					<view class="express-type__head">
-						<view class="express-type__head-nav" v-for="(nav, index) in expressType" :key="nav.id" @tap="changeExpressType(index)">
-							<text class="head-nav__title" :class="{ 'head-nav__title--active': expressTypeCur === index }">{{ nav.title }}</text>
-							<view :class="expressClass" v-show="expressTypeCur === index"></view>
+				<view class="express-type page_box">
+					<view class="express-type__head head-box">
+						<view
+							class="express-type__head-nav"
+							v-for="(nav, index) in expressType"
+							:key="nav.id"
+							@tap="changeExpressType(nav.value)"
+							v-if="inExpressType.includes(nav.value)"
+						>
+							<text class="head-nav__title" :class="{ 'head-nav__title--active':expressTypeCur === nav.value }">{{ nav.title }}</text>
+							<view :class="expressClass" v-show="expressTypeCur === nav.value"></view>
 						</view>
 					</view>
-					<view class="express-type__content">
+					<view class="express-type__content content_box">
 						<view class="empty-address" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							请添加收货地址
 							<text class="cuIcon-right"></text>
 						</view>
 						<!-- 快递 -->
-						<view class="express-address" v-if="addressId && expressTypeCur == 0">
-							<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
-								<text class="tag" v-if="address.is_default == 1">默认</text>
-								<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
-								<text class="cuIcon-right address-guide"></text>
+						<view class="express-address" v-if="expressTypeCur == 'express'">
+							<view class="express-top x-bc" @tap="jump('/pages/user/address/list', { from: 'order' })">
+								<view class="">
+									<text class="tag" v-if="address.is_default == 1">默认</text>
+									<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
+									<text class="cuIcon-right address-guide"></text>
+								</view>
+
 								<view class="address-location">
 									<image class="location-img" src="/static/imgs/order/e0.png" mode=""></image>
 									<text class="location-text">物流快递</text>
@@ -128,11 +137,14 @@
 							<view class="express-bottom"></view>
 						</view>
 						<!-- 自提 -->
-						<view class="express-address" v-if="addressId && expressTypeCur == 1">
-							<view class="express-top" @tap="jump('/pages/order/business-address', { from: 'order' })">
-								<text class="tag1" v-if="address.is_default == 1">最近</text>
-								<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
-								<text class="cuIcon-right address-guide"></text>
+						<view class="express-address" v-if="expressTypeCur == 'selfetch'">
+							<view class="express-top x-bc" @tap="jump('/pages/order/business-address', { from: 'order' })">
+								<view class="">
+									<text class="tag1" v-if="address.is_default == 1">最近</text>
+									<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
+									<text class="cuIcon-right address-guide"></text>
+								</view>
+
 								<view class="address-location">
 									<image class="location-img" src="/static/imgs/order/e1.png" mode=""></image>
 									<text class="location-text">距您650m</text>
@@ -166,11 +178,14 @@
 							</view>
 						</view>
 						<!-- 商家 -->
-						<view class="express-address" v-if="addressId && expressTypeCur == 2">
-							<view class="express-top" @tap="jump('/pages/user/address/list', { from: 'order' })">
-								<text class="tag" v-if="address.is_default == 1">默认</text>
-								<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
-								<text class="cuIcon-right address-guide"></text>
+						<view class="express-address" v-if="expressTypeCur == 'store'">
+							<view class="express-top x-bc" @tap="jump('/pages/user/address/list', { from: 'order' })">
+								<view class="">
+									<text class="tag" v-if="address.is_default == 1">默认</text>
+									<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
+									<text class="cuIcon-right address-guide"></text>
+								</view>
+
 								<view class="address-location">
 									<image class="location-img" src="/static/imgs/order/e2.png" mode=""></image>
 									<text class="location-text">商家配送</text>
@@ -196,8 +211,8 @@
 							<view class="express-bottom"></view>
 						</view>
 						<!-- 自动 -->
-						<view class="express-address" v-if="addressId && expressTypeCur == 3">
-							<view class="express-top">
+						<view class="express-address" v-if="expressTypeCur == 'autosend'">
+							<view class="express-top x-bc">
 								<text class="dispatch-notice">订单支付完成后，请在订单详情页查看发货信息</text>
 								<view class="address-location">
 									<image class="location-img" src="/static/imgs/order/e3.png" mode=""></image>
@@ -205,6 +220,10 @@
 								</view>
 							</view>
 						</view>
+					</view>
+					<view class="express-type__bottom x-bc">
+						<button class="cu-btn cancel-btn" @tap="hideExpressType">取消</button>
+						<button class="cu-btn save-btn">确定</button>
 					</view>
 				</view>
 			</block>
@@ -280,25 +299,30 @@ export default {
 			couponId: 0,
 			couponPrice: '选择优惠券',
 			showExpressType: false, //配送方式弹窗
-			expressTypeCur: 0,
+			expressTypeCur: 'express',
 			showCheckTime: false, //配送时间弹窗。
+			inExpressType: [], //当前商品支持的配送方式。
 			expressType: [
 				//快递方式
 				{
 					id: 'e1',
-					title: '物流快递'
+					title: '物流快递',
+					value: 'express'
 				},
 				{
 					id: 'e2',
-					title: '上门自提'
+					title: '到店/自提',
+					value: 'selfetch'
 				},
 				{
 					id: 'e3',
-					title: '商家配送'
+					title: '商家配送',
+					value: 'store'
 				},
 				{
 					id: 'e4',
-					title: '自动发货'
+					title: '自动发货',
+					value: 'autosend'
 				}
 			],
 			isProtocol: true, //自提协议。
@@ -355,6 +379,21 @@ export default {
 				query: parmas
 			});
 		},
+		// 检测是否开启定位
+		// checkAddress(list){
+		// 	for(let item of list){
+		// 		if(item.detail.dispatch_type_arr.includes('express') || item.detail.dispatch_type_arr.includes('store') ){
+		// 			uni.getLocation({
+		// 			    type: 'wgs84',
+		// 			    success: function (res) {
+		// 			        console.log('当前位置的经度：' + res.longitude);
+		// 			        console.log('当前位置的纬度：' + res.latitude);
+		// 			    }
+		// 			});
+		// 			return false
+		// 		}
+		// 	}
+		// },
 		// 订单信息
 		getPre() {
 			let that = this;
@@ -370,6 +409,8 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderPre = res.data;
+					// 判断是否需要开启定位
+					// this.checkAddress(res.data.new_goods_list)
 				}
 			});
 		},
@@ -459,9 +500,22 @@ export default {
 			}
 		},
 		// 显示配送方式弹窗
-		onSelExpressType() {
+		onSelExpressType(type) {
 			this.showExpressType = true;
+			this.inExpressType = type;
+			this.expressTypeCur = type[0];
+			uni.getLocation({
+			    type: 'wgs84',
+			    success: function (res) {
+			        console.log('当前位置的经度：' + res.longitude);
+			        console.log('当前位置的纬度：' + res.latitude);
+			    }
+			});
 		},
+		hideExpressType() {
+			this.showExpressType = false;
+		},
+
 		// 选择快递方式
 		changeExpressType(cur) {
 			this.expressTypeCur = cur;
@@ -620,7 +674,7 @@ export default {
 		color: #c4c4c4;
 		margin-right: 20rpx;
 	}
-	.cuIcon-right{
+	.cuIcon-right {
 		color: #c4c4c4;
 	}
 }
@@ -677,7 +731,7 @@ export default {
 		@include flex($align: center);
 		border-radius: 20rpx 20rpx 0 0;
 		&-nav {
-			flex: 1;
+			width: (750rpx/4);
 			@include flex($align: center, $justify: center);
 			position: relative;
 			height: 100%;
@@ -793,14 +847,15 @@ export default {
 			background-size: 430rpx 300rpx;
 			background-position: top right;
 			.express-top {
-				padding-bottom: 20rpx;
-				width: 450rpx;
+				margin-bottom: 20rpx;
+				width: 550rpx;
 				.address {
 					font-size: 28rpx;
 					font-family: PingFang SC;
 					font-weight: 500;
 					color: rgba(51, 51, 51, 1);
 					line-height: 40rpx;
+					text-align: left;
 				}
 				.dispatch-notice {
 					font-size: 28rpx;
@@ -808,6 +863,7 @@ export default {
 					font-weight: 500;
 					color: rgba(51, 51, 51, 1);
 					line-height: 40rpx;
+					text-align: left;
 				}
 				.address-location {
 					@include flex($justify: center, $align: center, $direction: column, $warp: null, $warpAlign: null);
@@ -852,7 +908,6 @@ export default {
 			}
 
 			.express-content {
-				margin: 20rpx 0;
 				@include flex($justify: null, $align: center, $direction: null, $warp: null, $warpAlign: null);
 				.box-line {
 					width: 1rpx;
@@ -919,6 +974,30 @@ export default {
 					}
 				}
 			}
+		}
+	}
+	.express-type__bottom {
+		height: 90rpx;
+		padding: 0 30rpx;
+		.cancel-btn {
+			width: 335rpx;
+			height: 74rpx;
+			background: rgba(238, 238, 238, 1);
+			border-radius: 37rpx;
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(51, 51, 51, 1);
+		}
+		.save-btn {
+			width: 335rpx;
+			height: 74rpx;
+			background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
+			border-radius: 37rpx;
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(255, 255, 255, 1);
 		}
 	}
 }
