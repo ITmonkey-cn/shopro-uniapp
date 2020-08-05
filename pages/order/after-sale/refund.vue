@@ -212,9 +212,7 @@ export default {
 </script>
 
 <style lang="scss">
-.uni-checkbox:not([disabled]) .uni-checkbox-input:hover {
-	border-color: none !important;
-}
+
 // 售后项目
 .refund-item {
 	background-color: #fff;

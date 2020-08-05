@@ -98,6 +98,11 @@ export default {
 
 // 其他scss集成在uni.scss,(变量,class,minix)
 
+uni-radio:not([disabled]) .uni-radio-input:hover,
+uni-checkbox:not([disabled]) .uni-checkbox-input:hover {
+	border-color: #ccc !important;
+}
+
 page {
 	-webkit-overflow-scrolling: touch; //ios滑动不流畅
 	height: 100%;
