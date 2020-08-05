@@ -125,24 +125,25 @@
 
 					<!-- 消息输入 -->
 					<view class="write" :style="{ bottom: writeBottom + 'px' }">
-						<view class="widget_textarea">
-							<textarea
-								:adjust-position="false"
-								:show-confirm-bar="false"
-								:fixed="true"
-								:focus="kefuMessageFocus"
-								:auto-height="false"
-								maxlength="-1"
-								@blur="kefu_message_blur"
-								@input="textarea_input"
-								:cursor-spacing="14"
-								@focus="textarea_focus"
-								placeholder="请输入你要咨询的问题"
-								placeholder-style="color:#999"
-								:value="kefuMessage"
-								class="kefu_message"
-							></textarea>
-						</view>
+							<label class="widget_textarea">
+								<textarea
+									:adjust-position="false"
+									:show-confirm-bar="false"
+									:fixed="true"
+									:focus="kefuMessageFocus"
+									:auto-height="true"
+									maxlength="-1"
+									@blur="kefu_message_blur"
+									@input="textarea_input"
+									:cursor-spacing="14"
+									@focus="textarea_focus"
+									placeholder="请输入你要咨询的问题"
+									placeholder-style="color:#999"
+									v-model="kefuMessage"
+									class="kefu_message"
+								></textarea>
+							</label>
+						
 						<view class="write_right" :style="{ flex: showSendButton ? 3 : 2 }">
 							<text
 								v-if="config.toolbar && config.toolbar.expression"
@@ -725,6 +726,7 @@ export default {
 			that.kefuMessage = '';
 			that.kefu_message_change();
 			that.scroll_into_footer(300);
+			that.wrapperHeight = 46;
 		},
 		find_emoji: function(emoji_title) {
 			for (let i in this.expressionData) {
@@ -1037,6 +1039,7 @@ export default {
 		textarea_focus: function(e) {
 			var that = this;
 			this.showTool = false;
+			console.log('获取焦点',e)
 			that.writeBottom = e.detail.height ? e.detail.height : 0;
 		},
 		// 输入框输入
@@ -1417,11 +1420,11 @@ page {
 	flex: 7;
 	background-color: #ffffff;
 	border-radius: 20rpx;
-	overflow: hidden;
-	overflow-y: auto;
+// overflow-y: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	// max-height: 200rpx;
 	padding: 20rpx;
 }
 
@@ -1440,6 +1443,7 @@ page {
 	outline: none;
 	border: none;
 	resize: none;
+	
 	-webkit-user-select: text !important;
 	-moz-user-select: text !important;
 	-ms-user-select: text !important;
@@ -1447,7 +1451,6 @@ page {
 	line-height: 36rpx;
 	font-size: 28rpx;
 	color: #333;
-	height: 50rpx;
 }
 
 .kefu_message::-webkit-scrollbar {
