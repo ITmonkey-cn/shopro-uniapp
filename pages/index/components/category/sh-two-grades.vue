@@ -1,8 +1,8 @@
 <template>
 	<view class="content_box">
 		<view class="x-f wrapper-box">
-			<view class="scroll-box">
-				<scroll-view class="left" scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
+			<view class="scroll-box" style="background-color: #F6F6F6;">
+				<scroll-view  style="padding-bottom:180rpx" class="left" scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
 					<view
 						class="type-list x-c"
 						:id="`left_${index}`"
@@ -17,10 +17,9 @@
 				</scroll-view>
 			</view>
 
-			<view class="scroll-box" style="padding-bottom: 150rpx;">
-				<image class="type-img" v-if="categoryData[currentTab] && categoryData[currentTab].image" :src="categoryData[currentTab].image" mode=""></image>
-				<scroll-view scroll-y class="scroll-box" scroll-with-animation :scroll-into-view="scroll_rightId" @scroll="rightScroll">
-					<view class="right" v-if="categoryData.length">
+			<view style="height: 100%;">
+				<scroll-view style="padding-bottom:180rpx" scroll-y class="scroll-box" scroll-with-animation :scroll-into-view="scroll_rightId" @scroll="rightScroll">
+					<view class="right" v-if="categoryData.length" >
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
 							<view class="type-box x-bc">
 								<text class="type-title">{{ item.name }}</text>

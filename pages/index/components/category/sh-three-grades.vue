@@ -1,32 +1,36 @@
 <template>
 	<view class="content_box">
 		<view class="x-f wrapper-box">
-			<scroll-view class="left y-f" scroll-y>
-				<view class="type-list x-c" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
-					<view class="line" :class="[{ 'line-active': listId == index }]"></view>
-					{{ item.name }}
-				</view>
-			</scroll-view>
-			<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
-				<view class="right" v-if="categoryData.length">
-					<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
-					<view class="item-list" v-for="(list, index1) in categoryData[listId].children" :key="index1">
-						<view class="type-box x-bc">
-							<text class="type-title">{{ list.name }}</text>
-							<view class="more" @tap="jump('/pages/goods/list', { id: list.id })">
-								<text>查看更多</text>
-								<text class="cuIcon-right"></text>
+			<view class="scroll-box" style="background-color: #F6F6F6;">
+				<scroll-view class="left y-f" scroll-y style="padding-bottom: 100rpx;">
+					<view class="type-list x-c" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
+						<view class="line" :class="[{ 'line-active': listId == index }]"></view>
+						{{ item.name }}
+					</view>
+				</scroll-view>
+			</view>
+			<view style="height: 100%;">
+				<scroll-view style="padding-bottom: 100rpx;" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
+					<view class="right" v-if="categoryData.length">
+						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
+						<view class="item-list" v-for="(list, index1) in categoryData[listId].children" :key="index1">
+							<view class="type-box x-bc">
+								<text class="type-title">{{ list.name }}</text>
+								<view class="more" @tap="jump('/pages/goods/list', { id: list.id })">
+									<text>查看更多</text>
+									<text class="cuIcon-right"></text>
+								</view>
 							</view>
-						</view>
-						<view class="item-box x-f">
-							<view class="y-f goods-item" @tap="jump('/pages/goods/list', { id: mlist.id })" v-for="(mlist, index2) in list.chirdren" :key="index2">
-								<image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image>
-								<text class="item-title one-t ">{{ mlist.name }}</text>
+							<view class="item-box x-f">
+								<view class="y-f goods-item" @tap="jump('/pages/goods/list', { id: mlist.id })" v-for="(mlist, index2) in list.chirdren" :key="index2">
+									<image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image>
+									<text class="item-title one-t ">{{ mlist.name }}</text>
+								</view>
 							</view>
 						</view>
 					</view>
-				</view>
-			</scroll-view>
+				</scroll-view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -73,6 +77,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	height: 100%;
 }
 
 .wrapper-box {
@@ -90,6 +95,7 @@ export default {
 .left {
 	width: 200upx;
 	height: 100%;
+	flex: 1;
 
 	.list-active {
 		background: #fff;

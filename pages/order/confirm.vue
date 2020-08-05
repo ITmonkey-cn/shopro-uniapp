@@ -620,6 +620,9 @@ export default {
 		color: #c4c4c4;
 		margin-right: 20rpx;
 	}
+	.cuIcon-right{
+		color: #c4c4c4;
+	}
 }
 .logistic,
 .price-box,

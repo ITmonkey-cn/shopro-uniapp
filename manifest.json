@@ -106,6 +106,18 @@
 		},
 		"compilerVersion": 3,
 		"nvueLaunchMode": "fast",
+		"safearea": { //安全区域配置，仅iOS平台生效
+			"background": "#FFFFFF", //安全区域外的背景颜色，默认值为"#FFFFFF"  
+			"bottom": { // 底部安全区域配置  
+				"offset": "auto" // 底部安全区域偏移，"none"表示不空出安全区域，"auto"自动计算空出安全区域，默认值为"none"  
+			}
+			// "left": { //左侧安全区域配置（横屏显示时有效）  
+			// 	"offset": "none|auto"
+			// },
+			// "right": { //右侧安全区域配置（横屏显示时有效）  
+			// 	"offset": "none|auto"
+			// }
+		},
 		"uniStatistics": {
 			"enable": false
 		}

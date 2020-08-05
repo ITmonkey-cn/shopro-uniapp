@@ -1,5 +1,5 @@
 <template>
-	<view class="page_box">
+	<view class="category-box">
 		<!-- 三级导航 -->
 		<sh-three-grades v-if="false"></sh-three-grades>
 		<!--二级导航 -->
@@ -32,4 +32,10 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.category-box {
+	height: 100%;
+	flex: 1;
+	overflow: hidden;
+}
+</style>
