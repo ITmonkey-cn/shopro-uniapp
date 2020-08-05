@@ -187,7 +187,7 @@ export default {
 		white-space: nowrap;
 	}
 	.area-inp {
-		color: #999;
+		color: #333;
 		font-size: 28rpx;
 		padding-right: 30rpx;
 	}
