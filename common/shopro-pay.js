@@ -206,7 +206,6 @@ export default class ShoproPay {
 						}
 					});
 				}
-
 			}
 		});
 	}
@@ -275,10 +274,26 @@ export default class ShoproPay {
 				provider: 'alipay',
 				orderInfo: result.data.pay_data, //支付宝订单数据
 				success: function(res) {
-					console.log('success:' + JSON.stringify(res));
+					Router.replace({
+						path: '/pages/order/payment/result',
+						query: {
+							orderSn: that.order.order_sn,
+							type: that.payment,
+							pay: 1
+						}
+					});
 				},
 				fail: function(err) {
-					console.log('fail:' + JSON.stringify(err));
+					if (err.errMsg !== "requestPayment:fail cancel") {
+						Router.replace({
+							path: '/pages/order/payment/result',
+							query: {
+								orderSn: that.order.order_sn,
+								type: that.payment,
+								pay: 0
+							}
+						});
+					}
 				}
 			});
 		}
@@ -292,10 +307,26 @@ export default class ShoproPay {
 				provider: 'wxpay',
 				orderInfo: JSON.parse(result.data.pay_data), //微信订单数据(官方说是string。实测为object)
 				success: function(res) {
-					console.log('success:' + JSON.stringify(res));
+					Router.replace({
+						path: '/pages/order/payment/result',
+						query: {
+							orderSn: that.order.order_sn,
+							type: that.payment,
+							pay: 1
+						}
+					});
 				},
 				fail: function(err) {
-					console.log(err);
+					if (err.errMsg !== "requestPayment:fail cancel") {
+						Router.replace({
+							path: '/pages/order/payment/result',
+							query: {
+								orderSn: that.order.order_sn,
+								type: that.payment,
+								pay: 0
+							}
+						});
+					}
 				}
 			});
 		}
