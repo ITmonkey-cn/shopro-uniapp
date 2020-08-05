@@ -64,7 +64,7 @@
 						<view class="tab-item y-f x-c" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
 							<view class="tab-title">
 								{{ tab.title }}
-								<text v-if="tab.id == 'tab2'" class="comment-num">({{ commentList.length }})</text>
+								<text v-if="tab.id == 'tab2'" class="comment-num">({{ commentNum }})</text>
 							</view>
 							<text class="tab-line" :class="{ 'line-active': tabCurrent === tab.id }"></text>
 						</view>
@@ -206,7 +206,8 @@ export default {
 			showServe: false,
 			tools: this.$tools,
 			goodsInfo: {},
-			commentList: [],
+			commentList: [],//商品评价列表
+			commentNum:0,//商品评价总数
 			favorite: false,
 			activityRules: {},
 			currentSkuList: [],
@@ -323,6 +324,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.commentList = res.data.data;
+					that.commentNum = res.data.total;
 				}
 			});
 		},
