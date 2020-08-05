@@ -32,7 +32,7 @@
 						<text class="cuIcon-copy" @tap="copyCode(expressDetail.express_no)"></text>
 					</view>
 				</div>
-				<scroll-view class="oilStation-bottom" :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
+				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
 					<view class="py30">
 						<view class="express-item x-f" v-for="log in expressDetail.log" :key="log.id">
 							<view class="item-left y-end">

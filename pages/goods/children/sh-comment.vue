@@ -14,7 +14,7 @@
 		<view class="detail">{{ comment.content }}</view>
 		<view class="img-box">
 			<view class="mask"></view>
-			<scroll-view class="nav" scroll-x scroll-with-animation :scroll-left="scrollLeft">
+			<scroll-view class="nav" enable-back-to-top scroll-x scroll-with-animation :scroll-left="scrollLeft">
 				<image
 					v-for="(img, index) in comment.images"
 					:key="index"

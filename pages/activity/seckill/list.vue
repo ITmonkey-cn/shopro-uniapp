@@ -9,7 +9,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+			<scroll-view scroll-y="true" enable-back-to-top @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item" v-for="item in goodsList" :key="item.id">
 					<sh-activity-card :cardId="item.id" :title="item.title" :subtitle="item.subtitle" :img="item.image" :price="item.price" :originalPrice="item.original_price">
 						<block slot="sell">

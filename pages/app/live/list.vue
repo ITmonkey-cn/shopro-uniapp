@@ -9,7 +9,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+			<scroll-view enable-back-to-top scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<view class="list-box">
 					<block v-for="live in liveList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></block>
 				</view>

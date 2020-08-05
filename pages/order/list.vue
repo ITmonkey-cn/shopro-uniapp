@@ -9,7 +9,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+			<scroll-view scroll-y="true" enable-back-to-top @scrolltolower="loadMore" class="scroll-box">
 				<view class="order-list" v-for="(order, orderIndex) in orderList" :key="order.id" @tap.stop="jump('/pages/order/detail', { id: order.id })">
 					<view class="order-head x-bc">
 						<text class="no">订单编号：{{ order.order_sn }}</text>

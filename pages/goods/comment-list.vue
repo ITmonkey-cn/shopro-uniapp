@@ -6,7 +6,7 @@
 			</button>
 		</view>
 		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+			<scroll-view scroll-y="true" enable-back-to-top @scrolltolower="loadMore" class="scroll-box">
 				<view class="comment-list">
 					<block v-for="comment in commentList" :key="comment.id"><sh-comment :comment="comment"></sh-comment></block>
 				</view>

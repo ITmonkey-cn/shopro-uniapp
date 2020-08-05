@@ -23,7 +23,7 @@
 						<input class="search-inp" placeholder-class="search-pl" placeholder="输入地址寻找周边自提点" type="text" value="" />
 					</div>
 				</div>
-				<scroll-view class="oilStation-bottom" :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
+				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
 					<view class="address-item x-f" v-for="a in 8" :key="a">
 						<view class="address-left">
 							<view class="address-name">龙宇国际店</view>

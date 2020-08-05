@@ -9,7 +9,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" refresher-background="#f5f5f5" class="scroll-box">
+			<scroll-view scroll-y="true" enable-back-to-top @scrolltolower="loadMore" refresher-background="#f5f5f5" class="scroll-box">
 				<block v-for="groupon in myGrouponList" :key="groupon.id">
 					<view class="group-card">
 						<image v-if="stateId !== 'ing'" class="group-state" :src="grouponStatus[groupon.groupon.status]" mode=""></image>

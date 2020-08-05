@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="x-f wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view  style="padding-bottom:180rpx" class="left" scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
+				<scroll-view  style="padding-bottom:180rpx" class="left" enable-back-to-top scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
 					<view
 						class="type-list x-c"
 						:id="`left_${index}`"

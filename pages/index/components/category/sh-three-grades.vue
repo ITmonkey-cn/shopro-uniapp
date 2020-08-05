@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="x-f wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view class="left y-f" scroll-y style="padding-bottom: 100rpx;">
+				<scroll-view class="left y-f" enable-back-to-top scroll-y style="padding-bottom: 100rpx;">
 					<view class="type-list x-c" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
 						<view class="line" :class="[{ 'line-active': listId == index }]"></view>
 						{{ item.name }}
