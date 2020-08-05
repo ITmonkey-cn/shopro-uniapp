@@ -194,6 +194,44 @@
 						"title": "积分商城",
 						"group": "应用"
 					}
+				},
+				{
+					"path": "merchant/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "商户信息",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "merchant/info",
+					"style": {
+						"navigationBarTitleText": "门店信息"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "门店信息",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "merchant/detail",
+					"style": {
+						"navigationBarTitleText": "订单详情"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
 				}
 			]
 		},
@@ -257,6 +295,29 @@
 					}
 				},
 				{
+					"path": "business-address",
+					"style": {
+						"navigationBarTitleText": "选择自提点",
+						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "distribution",
+					"style": {
+						"navigationBarTitleText": "" //配送方式详情
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
 					"path": "detail",
 					"style": {
 						"navigationBarTitleText": "订单详情"
@@ -294,9 +355,10 @@
 				},
 				{
 					"path": "express",
-					"name": "expressList",
+					"name": "express",
 					"style": {
-						"navigationBarTitleText": "物流信息"
+						"navigationBarTitleText": "物流信息",
+						"navigationStyle": "custom"
 
 					},
 					"meta": {
@@ -305,10 +367,53 @@
 					}
 				},
 				{
-					"path": "refund",
+					"path": "express-list",
 					"style": {
-						"navigationBarTitleText": "退款"
+						"navigationBarTitleText": "物流详情"
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/refund",
+					"style": {
+						"navigationBarTitleText": "申请售后"
 
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/list",
+					"style": {
+						"navigationBarTitleText": "退换/售后列表"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/detail",
+					"style": {
+						"navigationBarTitleText": "服务单详情"
+				
+					},
+					"meta": {
+						"auth": true,
+						"async": false
+					}
+				},
+				{
+					"path": "after-sale/log",
+					"style": {
+						"navigationBarTitleText": "进度详情"
+				
 					},
 					"meta": {
 						"auth": true,

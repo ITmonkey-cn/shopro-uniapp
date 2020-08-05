@@ -2,16 +2,37 @@
 	<view class="page_box">
 		<view class="head_box"></view>
 		<view class="content_box">
+			<!-- 订单状态 -->
 			<view class="detail-head">
 				<view class="state-box x-f">
 					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
-					<text>{{ orderDetail.status_name }}</text>
+					<text>{{ orderDetail.status_desc }}</text>
 				</view>
+			</view>
+			<!-- 收货地址 -->
+			<view class="order-address-box">
+				<view class="x-f">
+					<text class="address-username">{{ orderDetail.consignee }}</text>
+					<text class="address-phone">{{ orderDetail.phone }}</text>
+				</view>
+				<view class="address-detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
 			</view>
 			<view class="detail-goods">
 				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
-					<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
+					<view class="order-card"><shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card></view>
+					<!-- 配送方式 -->
+					<view class="express-type-box x-bc">
+						<view class="x-f">
+							<view class="express-type--title">配送：</view>
+							<view class="express-type--content">物流快递</view>
+						</view>
+						<view class="x-f express-type--detail" @tap="jump('/pages/order/distribution')">
+							<text>详情</text>
+							<text class="cuIcon-right"></text>
+						</view>
+					</view>
+
 					<view class="order-bottom  x-f">
 						<!-- 退款原因 -->
 						<view class="refund_msg" v-if="order.refund_msg">
@@ -19,19 +40,27 @@
 							{{ order.refund_msg }}
 						</view>
 						<view class="btn-box" v-for="(btn, index) in order.btns" :key="btn">
+							<button @tap.stop="onConfirm(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'get'">
+								确认收货
+							</button>
+							<button @tap.stop="onComment(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'comment'">
+								去评价
+							</button>
 							<button
-								@tap="jump('/pages/goods/detail/index', { id: order.goods_id })"
+								@tap.stop="jump('/pages/goods/detail/index', { id: order.goods_id })"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'buy_again'"
 							>
 								再次购买
 							</button>
-							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'express'" @tap="checkExpress(orderDetail.id, order.id)">
-								查看物流
-							</button>
-							<button @tap.stop="onConfirm(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'get'">
-								确认收货
+							<button
+								@tap.stop="jump('/pages/order/after-sale/detail', { aftersaleId: order.ext_arr.aftersale_id })"
+								class="cu-btn btn1"
+								:class="{ btn2: index + 1 === order.btns.length }"
+								v-if="btn === 'aftersale_info'"
+							>
+								售后详情
 							</button>
 							<button
 								@tap.stop="onAftersale(orderDetail.id, order.id)"
@@ -42,43 +71,18 @@
 								申请售后
 							</button>
 							<button
-								@tap.stop="onRefund(orderDetail.id, order.id)"
+								@tap.stop="onAftersale(orderDetail.id, order.id)"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
-								v-if="btn === 'apply_refund'"
+								v-if="btn === 're_aftersale'"
 							>
-								申请退款
+								重新售后
 							</button>
-							<button
-								@tap.stop="onRefund(orderDetail.id, order.id)"
-								class="cu-btn btn1"
-								:class="{ btn2: index + 1 === order.btns.length }"
-								v-if="btn === 'reapply_refund'"
-							>
-								重新退款
-							</button>
-							<button @tap.stop="onComment(orderDetail.id, order.id)" class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'comment'">
-								待评价
-							</button>
-							<button class="cu-btn btn1" :class="{ btn2: index + 1 === order.btns.length }" v-if="btn === 'after_detail'">售后详情</button>
 						</view>
 					</view>
 				</view>
 			</view>
-			<!-- 收货信息 -->
-			<view class="notice-box" v-if="true">
-				<view class="notice-box__head">收货信息</view>
-				<view class="notice-box__content">
-					<view class="x-f notice-item">
-						<text class="title">收货人：</text>
-						<text class="detail">{{ orderDetail.consignee }} {{ orderDetail.phone }}</text>
-					</view>
-					<view class="x-f notice-item">
-						<text class="title">收货地址：</text>
-						<text class="detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</text>
-					</view>
-				</view>
-			</view>
+			<!--  -->
 			<!-- 自提信息 -->
 			<view class="notice-box" v-if="false">
 				<view class="notice-box__head">自提信息</view>
@@ -136,7 +140,6 @@
 			</view>
 			<!-- 订单信息 -->
 			<view class="notice-box">
-				<view class="notice-box__head">订单信息</view>
 				<view class="notice-box__content">
 					<view class="notice-item--center x-f">
 						<text class="title">订单编号：</text>
@@ -147,6 +150,33 @@
 						<text class="title">下单时间：</text>
 						<text class="detail">{{ orderDetail.createtime }}</text>
 					</view>
+					<view class="notice-item x-f">
+						<text class="title">支付方式：</text>
+						<text class="detail">余额支付</text>
+					</view>
+					<view class="notice-item x-f">
+						<text class="title">支付时间：</text>
+						<text class="detail">{{ orderDetail.createtime }}</text>
+					</view>
+				</view>
+			</view>
+			<!--  价格信息 -->
+			<view class="order-price-box">
+				<view class="notice-item x-bc">
+					<text class="title">商品总额</text>
+					<text class="detail">{{ orderDetail.createtime }}</text>
+				</view>
+				<view class="notice-item x-bc">
+					<text class="title">运费</text>
+					<text class="detail">余额支付</text>
+				</view>
+				<view class="notice-item x-bc">
+					<text class="title">优惠券</text>
+					<text class="detail">{{ orderDetail.createtime }}</text>
+				</view>
+				<view class="notice-item all-rpice-item x-f" style="width: 100%;">
+					<text class="title">实付款：</text>
+					<text class="detail all-price">￥{{ orderDetail.total_fee }}</text>
 				</view>
 			</view>
 		</view>
@@ -162,6 +192,8 @@
 					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
 						拼团详情
 					</button>
+					<button v-if="btn === 'delete'" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
+					<button v-if="btn === 'express'" @tap.stop="onExpress" class="cu-btn obtn1">查看物流</button>
 				</view>
 			</view>
 		</view>
@@ -251,33 +283,14 @@ export default {
 				}
 			});
 		},
-		// 申请退款
-		onRefund(id, itemId) {
-			let that = this;
-			that.$api('order.refund', {
-				id: id,
-				order_item_id: itemId
-			}).then(res => {
-				if (res.code === 1) {
-					that.$tools.toast('申请退款成功');
-					that.getOrderDetail();
-					//  #ifdef MP-WEIXIN
-					this.$store.dispatch('getMessageIds', 'aftersale');
-					//  #endif
-				}
-			});
-		},
 		// 申请售后
-		onAftersale(id, itemId) {
-			let that = this;
-			that.$api('order.aftersale', {
-				id: id,
-				order_item_id: itemId
-			}).then(res => {
-				if (res.code === 1) {
-					that.$tools.toast('申请售后成功');
-					that.getOrderDetail();
-				}
+		onAftersale(orderId, orderItemId) {
+			//  #ifdef MP-WEIXIN
+			this.$store.dispatch('getMessageIds', 'aftersale');
+			//  #endif
+			this.$Router.push({
+				path: '/pages/order/after-sale/refund',
+				query: { orderId: orderId, orderItemId: orderItemId }
 			});
 		},
 		// 取消订单
@@ -297,13 +310,24 @@ export default {
 				url: `/pages/order/payment/method?orderId=${id}`
 			});
 		},
-		// 待评价
-		onComment(orderId, ordrderItemId) {
-			this.jump('/pages/order/add-comment', { orderId: orderId, ordrderItemId: ordrderItemId });
+		// 删除订单
+		onDelete(orderId) {
+			let that = this;
+			that.$api('order.deleteOrder', {
+				id: orderId
+			}).then(res => {
+				if (res.code === 1) {
+					that.$Router.back();
+				}
+			});
 		},
-		// 查看物流,
+		// 待评价
+		onComment(orderId, orderItemId) {
+			this.jump('/pages/order/add-comment', { orderId: orderId, orderItemId: orderItemId });
+		},
+		// 查看物流,Todo
 		checkExpress(orderId, ordrderItemId) {
-			this.jump('/pages/order/express', { orderId: orderId, ordrderItemId: ordrderItemId });
+			this.jump('/pages/order/express', { orderId: orderId, orderItemId: orderItemId });
 		}
 	}
 };
@@ -312,7 +336,8 @@ export default {
 <style lang="scss">
 .detail-head {
 	background: linear-gradient(0deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 100%) no-repeat;
-	background-size: 100% 134rpx;
+	background-size: 100% 180rpx;
+	height: 180rpx;
 
 	.state-box {
 		padding: 30rpx 40rpx;
@@ -327,12 +352,65 @@ export default {
 	}
 }
 
-.detail-goods {
+// 收货地址
+.order-address-box {
+	width: 710rpx;
+	margin: -50rpx auto 20rpx;
+	background-color: #fff;
+	min-height: 160rpx;
+	border-radius: 20rpx;
 	padding: 20rpx;
-	background: #fff;
+	font-size: 30rpx;
+	font-family: PingFang SC;
+	font-weight: 500;
+	color: rgba(51, 51, 51, 1);
+	.address-username {
+		margin-right: 20rpx;
+	}
+	.address-detail {
+		font-size: 26rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(153, 153, 153, 1);
+		margin-top: 20rpx;
+	}
+}
+.detail-goods {
 	margin-bottom: 20rpx;
-
 	.order-list {
+		margin-bottom: 20rpx;
+		background-color: #fff;
+		padding: 0 20rpx;
+		.order-card {
+			padding: 20rpx 0;
+		}
+		// 配送方式
+		.express-type-box {
+			width: 710rpx;
+			height: 90rpx;
+			background: rgba(247, 247, 247, 1);
+			border-radius: 10rpx;
+			padding: 0 20rpx;
+			.express-type--title {
+				font-size: 28rpx;
+				font-family: PingFang SC;
+				font-weight: 400;
+				color: rgba(153, 153, 153, 1);
+			}
+			.express-type--content {
+				font-size: 26rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(51, 51, 51, 1);
+			}
+			.express-type--detail {
+				font-size: 24rpx;
+				font-family: PingFang SC;
+				font-weight: 400;
+				color: rgba(153, 153, 153, 1);
+				line-height: 30rpx;
+			}
+		}
 		.refund_msg {
 			font-size: 28rpx;
 			color: #999;
@@ -341,9 +419,8 @@ export default {
 		}
 		.order-bottom {
 			background: #fff;
-			padding-bottom: 20rpx;
 			justify-content: flex-end;
-			padding-top: 20rpx;
+			padding: 20rpx 0;
 			.btn1 {
 				width: 160rpx;
 				height: 60rpx;
@@ -466,7 +543,7 @@ export default {
 	}
 	.notice-item,
 	.notice-item--center {
-		margin-bottom: 10rpx;
+		height: 50rpx;
 		align-items: flex-start;
 		.title {
 			font-size: 28rpx;
@@ -483,19 +560,46 @@ export default {
 			flex: 1;
 		}
 		.copy-btn {
-			width: 120rpx;
+			width: 100rpx;
 			height: 50rpx;
-			// border: 1rpx solid rgba(223, 223, 223, 1);
-			// border-radius: 25rpx;
+			border-radius: 20rpx;
 			padding: 0;
-			background: #fff;
-			color: #b38436;
-			font-size: 26rpx;
+			background: rgba(238, 238, 238, 1);
+			font-size: 22rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(51, 51, 51, 1);
 			margin-left: 30rpx;
 		}
 	}
 	.notice-item--center {
 		align-items: center;
+	}
+}
+
+// 订单价格信息
+.order-price-box {
+	background-color: #fff;
+	padding: 20rpx;
+	margin-bottom: 20rpx;
+	.notice-item {
+		height: 50rpx;
+		.title {
+			font-size: 28rpx;
+			color: #999;
+		}
+
+		.detail {
+			font-size: 28rpx;
+			color: #333;
+		}
+	}
+	.all-rpice-item {
+		justify-content: flex-end;
+		.all-price {
+			font-size: 26rpx;
+			color: #e1212b;
+		}
 	}
 }
 

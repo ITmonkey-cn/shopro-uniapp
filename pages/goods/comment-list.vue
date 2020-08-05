@@ -40,7 +40,7 @@ export default {
 			commentTypeList: [],
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 0
+			lastPage: 1
 		};
 	},
 	computed: {},
@@ -51,6 +51,7 @@ export default {
 		selType(id) {
 			this.typeCurrent = id;
 			this.commentList = [];
+			this.currentPage = 1;
 			this.getCommentList();
 		},
 		// 评价类型

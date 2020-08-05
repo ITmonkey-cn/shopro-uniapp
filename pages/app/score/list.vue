@@ -11,7 +11,7 @@
 				<!-- 加载更多 -->
 				<view v-if="scoreList.length" class="cu-load text-gray" :class="loadStatus"></view>
 				<!-- load -->
-				<shoproLoad v-model="isLoading"></shoproLoad>
+				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
@@ -43,7 +43,7 @@ export default {
 			},
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 0,
+			lastPage: 1,
 			isLoading: true
 		};
 	},
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style lang="scss">
-page {
+.page_box {
 	background: #fff;
 }
 .goods-box {

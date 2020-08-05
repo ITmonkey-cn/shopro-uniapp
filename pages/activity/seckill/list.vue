@@ -61,7 +61,7 @@ export default {
 			},
 			isLoading: true,
 			loadStatus: '', //loading,over
-			lastPage: 0,
+			lastPage: 1,
 			currentPage: 1,
 			tabCurrent: 'ing',
 			goodsList: [],
@@ -107,6 +107,7 @@ export default {
 		onTab(id) {
 			this.tabCurrent = id;
 			this.goodsList = [];
+			this.currentPage = 1;
 			this.getGoodsList();
 		},
 		// 百分比

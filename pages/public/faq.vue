@@ -33,12 +33,18 @@ export default {
 			faqList: [],
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 0
+			lastPage: 1
 		};
 	},
 	computed: {},
 	onLoad() {
 		this.getFaqList();
+	},
+	onReachBottom() {
+	if (this.currentPage < this.lastPage) {
+		this.currentPage += 1;
+		this.getFaqList();
+	}
 	},
 	methods: {
 		onProblem(index) {

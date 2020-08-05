@@ -62,7 +62,7 @@ export default {
 			},
 			isLoading: true, //loading和空白页。
 			loadStatus: '', //loading,over
-			lastPage: 0
+			lastPage: 1
 		};
 	},
 	computed: {},
@@ -87,6 +87,7 @@ export default {
 		onFilter(e) {
 			this.listParams.order = e;
 			this.goodsList = [];
+			this.listParams.page = 1;
 			this.getGoodsList();
 		},
 		// 键盘搜索
@@ -94,6 +95,7 @@ export default {
 			let that = this;
 			that.listParams.keywords = that.searchVal;
 			that.goodsList = [];
+			this.listParams.page = 1;
 			that.getGoodsList();
 		},
 		// 输入防抖搜索
@@ -110,6 +112,7 @@ export default {
 			}
 			timer = setTimeout(() => {
 				that.goodsList = [];
+				this.listParams.page = 1;
 				that.getGoodsList();
 			}, 1000);
 		},
@@ -117,6 +120,7 @@ export default {
 		clearSearch() {
 			this.searchVal = '';
 			this.listParams.keywords = '';
+			this.listParams.page = 1;
 			this.getGoodsList();
 		},
 		// 商品列表

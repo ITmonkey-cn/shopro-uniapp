@@ -21,7 +21,7 @@ const actions = {
 			http('cart.index').then(res => {
 				let cartData = res.data;
 				cartData.map(item => {
-					item.checked = false;
+					item.checked = true;
 				})
 				uni.setStorageSync('cartNum', cartData.length);
 				commit('CART_LIST', cartData);
@@ -128,6 +128,20 @@ const getters = {
 			totalNum,
 			totalPrice
 		}
+	},
+	// 外卖购物车数量和总价
+	takeoutTotalCount: state => {
+		let totalNum = 0;
+		let totalPrice = 0;
+		state.cartList.forEach(item => {
+			totalNum += item.goods_num;
+			totalPrice += item.goods_num * item.sku_price.price;
+		})
+		return {
+			totalNum,
+			totalPrice
+		}
+
 	},
 	// 是否选择了商品
 	isSel: state => {

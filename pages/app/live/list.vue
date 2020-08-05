@@ -58,7 +58,7 @@ export default {
 			liveList: [],
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 0
+			lastPage: 1
 		};
 	},
 	computed: {},
@@ -71,6 +71,7 @@ export default {
 		selTab(cur) {
 			this.tabCur = cur;
 			this.liveList = [];
+			this.currentPage = 1;
 			this.getLiveList();
 		},
 		// 加载更多
