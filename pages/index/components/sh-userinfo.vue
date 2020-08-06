@@ -7,7 +7,7 @@
 					<view class="status-bar"></view>
 					<text class="nav-title x-f">
 						我的
-						<text @tap="onService" class="cuIcon-servicefill"></text>
+						<!-- <text @tap="onService" class="cuIcon-servicefill"></text> -->
 					</text>
 				</view>
 				<view class="user-head x-bc">
@@ -86,7 +86,7 @@ export default {
 		},
 		// 跳转客服
 		onService() {
-			this.$Router.push('/pages/public/kefu/index')
+			this.$Router.push('/pages/public/kefu/index');
 		},
 		// 更新信息
 		onRefresh() {

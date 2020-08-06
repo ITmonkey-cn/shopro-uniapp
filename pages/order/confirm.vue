@@ -38,7 +38,7 @@
 					</shopro-mini-card>
 				</view>
 				<!-- 配送方式 -->
-				<view class="logistic item-list x-bc" @tap="onSelExpressType(g.detail.dispatch_type_arr)">
+				<view class="logistic item-list x-bc" @tap="onSelExpressType(g.detail)">
 					<view class="x-f"><view class="item-title">配送方式</view></view>
 					<view class="x-f" >
 						<view class="detail">普通配送</view>
@@ -136,46 +136,56 @@
 							</view>
 							<view class="express-bottom"></view>
 						</view>
-						<!-- 自提 -->
+						<!-- 自提  -->
 						<view class="express-address" v-if="expressTypeCur == 'selfetch'">
-							<view class="express-top x-bc" @tap="jump('/pages/order/business-address', { from: 'order' })">
-								<view class="">
-									<text class="tag1" v-if="address.is_default == 1">最近</text>
-									<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
-									<text class="cuIcon-right address-guide"></text>
+							<!-- 定位 -->
+							<view class="y-f location-box" v-if="!lat">
+								<image class="location-img" src="/static/imgs/order/e2.png" mode=""></image>
+								<text class="location-title">开启定位服务</text>
+								<text class="location-tip">为你推荐更精准的位置信息噢~</text>
+								<button class="cu-btn open-location" @tap="openLocation">去开启</button>
+							</view>
+							<!-- 已定位 -->
+							<view class="" v-else>
+								<view class="express-top x-bc" @tap="jump('/pages/order/business-address', { from: 'order' })">
+									<view class="">
+										<text class="tag1" v-if="address.is_default == 1">最近</text>
+										<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
+										<text class="cuIcon-right address-guide"></text>
+									</view>
+									<view class="address-location">
+										<image class="location-img" src="/static/imgs/order/e1.png" mode=""></image>
+										<text class="location-text">距您650m</text>
+									</view>
 								</view>
+								<view class="express-content">
+									<view class="time-box">
+										<text class="box-title">配送时间</text>
+										<view class="box-content" @tap="checkExpressTime('shop')">
+											<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
+											<text class="cuIcon-right box-icon"></text>
+										</view>
+									</view>
+									<view class="box-line"></view>
+									<view class="phone-box">
+										<text class="box-title">预留电话</text>
+										<view class="box-content x-f">
+											<input class="edit-phone" type="number" v-model="selfPhone" />
+											<text class="cuIcon-write box-icon"></text>
+										</view>
+									</view>
+								</view>
+								<view class="express-bottom">
+									<label class="x-f" @tap="checkProtocol">
+										<checkbox class="round protocol-checkbox orange" :class="{ checked: isProtocol }" :checked="true"></checkbox>
+										<view class="protocol">
+											同意并接受
+											<text class="protocol-text" @tap.stop="jump('/pages/public/richtext', { id: 3 })">《到店自提服务协议》</text>
+										</view>
+									</label>
+								</view>
+							</view>
 
-								<view class="address-location">
-									<image class="location-img" src="/static/imgs/order/e1.png" mode=""></image>
-									<text class="location-text">距您650m</text>
-								</view>
-							</view>
-							<view class="express-content">
-								<view class="time-box">
-									<text class="box-title">配送时间</text>
-									<view class="box-content" @tap="checkExpressTime('shop')">
-										<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
-										<text class="cuIcon-right box-icon"></text>
-									</view>
-								</view>
-								<view class="box-line"></view>
-								<view class="phone-box">
-									<text class="box-title">预留电话</text>
-									<view class="box-content x-f">
-										<input class="edit-phone" type="number" v-model="selfPhone" />
-										<text class="cuIcon-write box-icon"></text>
-									</view>
-								</view>
-							</view>
-							<view class="express-bottom">
-								<label class="x-f" @tap="checkProtocol">
-									<checkbox class="round protocol-checkbox orange" :class="{ checked: isProtocol }" :checked="true"></checkbox>
-									<view class="protocol">
-										同意并接受
-										<text class="protocol-text" @tap="jump('/pages/public/richtext', { id: 3 })">《到店自提服务协议》</text>
-									</view>
-								</label>
-							</view>
 						</view>
 						<!-- 商家 -->
 						<view class="express-address" v-if="expressTypeCur == 'store'">
@@ -221,9 +231,13 @@
 							</view>
 						</view>
 					</view>
-					<view class="express-type__bottom x-bc">
+					<view class="express-type__bottom x-bc" v-if="expressTypeCur !== 'selfetch'">
 						<button class="cu-btn cancel-btn" @tap="hideExpressType">取消</button>
-						<button class="cu-btn save-btn">确定</button>
+						<button class="cu-btn save-btn" @tap="saveExpressType">确定</button>
+					</view>
+					<view class="express-type__bottom x-bc" v-if="expressTypeCur == 'selfetch' &&  lat">
+						<button class="cu-btn cancel-btn" @tap="hideExpressType">取消</button>
+						<button class="cu-btn save-btn" @tap="saveExpressType">确定</button>
 					</view>
 				</view>
 			</block>
@@ -243,9 +257,9 @@
 								@tap="check('day', index)"
 								:class="{ 'item--active': checkDayCur == index }"
 								v-for="(day, index) in checkTime.day"
-								:key="day"
+								:key="day.value"
 							>
-								{{ day }}
+								{{ day.title }}
 							</view>
 						</view>
 						<scroll-view class="checkTime-content__right scroll-box" :scroll-into-view="'c' + checkTimeId" scroll-y scroll-with-animation>
@@ -294,6 +308,7 @@ export default {
 			grouponBuyType: 'alone',
 			grouponId: 0,
 			goodsList: [],
+			currentGoodsId:0,//当前商品id.
 			remark: '',
 			orderPre: {},
 			couponId: 0,
@@ -328,14 +343,13 @@ export default {
 			isProtocol: true, //自提协议。
 			selfPhone: 15625892568, //编辑手机号
 			checkType: '自提',
-			checkTime: {
-				//选择配送时间数据
-				day: ['今天（周五）', '明天（周六）'],
-				time: ['15:30', '15:50', '16:10', '16:30', '16:50', ' 17:10']
-			},
-			checkTimeCur: 0, //默认选中。
-			checkTimeId: 'c1',
-			checkDayCur: 0
+			checkTime:{},
+			checkTimeCur: 0, //默认选中时间。
+			checkTimeId: 'c1',//锚点用
+			checkDayCur: 0,//默认日期
+				lat:0,
+				lng:0
+			
 		};
 	},
 	computed: {
@@ -349,7 +363,8 @@ export default {
 				cl = 'head-nav__right--active';
 			}
 			return cl;
-		}
+		},
+		
 	},
 	watch: {
 		address(val, oldVal) {
@@ -365,6 +380,7 @@ export default {
 		this.orderType = this.$Route.query.orderType;
 		this.grouponBuyType = this.$Route.query.grouponBuyType;
 		this.grouponId = this.$Route.query.grouponId;
+		this.initDate()
 		await this.init();
 	},
 	onShow() {},
@@ -379,21 +395,69 @@ export default {
 				query: parmas
 			});
 		},
-		// 检测是否开启定位
-		// checkAddress(list){
-		// 	for(let item of list){
-		// 		if(item.detail.dispatch_type_arr.includes('express') || item.detail.dispatch_type_arr.includes('store') ){
-		// 			uni.getLocation({
-		// 			    type: 'wgs84',
-		// 			    success: function (res) {
-		// 			        console.log('当前位置的经度：' + res.longitude);
-		// 			        console.log('当前位置的纬度：' + res.latitude);
-		// 			    }
-		// 			});
-		// 			return false
-		// 		}
-		// 	}
-		// },
+		initDate(){
+		let week = {
+			0:'周日',
+			1:'周一',
+			2:'周二',
+			3:'周三',
+			4:'周四',
+			5:'周五',
+			6:'周六'
+		}
+		let now = new Date().getTime();
+		console.log(111111111111111,now)
+		let today = this.$tools.timestamp(now/1000);
+		let tomorrow = this.$tools.timestamp((now+86400000)/1000);
+		let aftertomorrow = this.$tools.timestamp((now+172800000)/1000);
+		let week1 = week[new Date().getDay()]
+		let week2 = week[new Date(now+86400000).getDay()]
+		let week3 = week[new Date(now+172800000).getDay()]
+			let obj = {
+				day: [
+					{
+						title:"今天（" +week1 +"）",
+						value:today
+					},
+					{
+					title:"明天（" +week2 +"）",
+						value:tomorrow
+					},
+					{
+					title:"后天（" +week3 +"）",
+						value:aftertomorrow
+					}
+				],
+				time: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00','14:00','15:00','16:00','17:00','18:00','19:00']
+			}
+			console.log(obj,12312311111)
+			this.checkTime = obj;
+		},
+		   
+		// 开启定位
+		openLocation(){
+			uni.getLocation({
+			    type: 'gcj02',
+			    success: res => {
+			        this.lng =  res.longitude;
+			       this.lat = res.latitude;
+				   this.getStoreAddress()
+			    }
+			});
+		},
+		// 获取商品支持的自提点。
+		getStoreAddress(){
+			let that = this;
+			that.$api('goods.storeAddress',{
+				id:that.currentGoodsId,
+				latitude:that.lat,
+				longitude:that.lng
+			}).then(res=>{
+				if(res.code == 1){
+					
+				}
+			})
+		},
 		// 订单信息
 		getPre() {
 			let that = this;
@@ -402,17 +466,27 @@ export default {
 				from: that.from,
 				address_id: that.addressId,
 				coupons_id: that.couponId,
-				dispatch_type: 'express',
 				order_type: that.orderType,
 				buy_type: that.grouponBuyType,
 				groupon_id: that.grouponId
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderPre = res.data;
-					// 判断是否需要开启定位
-					// this.checkAddress(res.data.new_goods_list)
+					this.changeGoodsExpressType()
 				}
 			});
+		},
+		// 更改商品配送方式
+		changeGoodsExpressType(){
+			let that = this;
+			that.orderPre.new_goods_list.forEach(newgoods => {
+				that.goodsList.forEach(goods => {
+					if(goods.goods_id == newgoods.goods_id && goods.sku_price_id == newgoods.sku_price_id){
+						goods.dispatch_type = newgoods.dispatch_type;
+					}
+				})
+			})
+			console.log('11111111',this.goodsList)
 		},
 		// 提交订单
 		subOrder() {
@@ -424,7 +498,6 @@ export default {
 				address_id: that.addressId,
 				coupons_id: that.couponId,
 				remark: that.remark,
-				dispatch_type: 'express',
 				order_type: that.orderType,
 				buy_type: that.grouponBuyType,
 				groupon_id: that.grouponId
@@ -472,7 +545,6 @@ export default {
 				from: that.from,
 				address_id: that.addressId,
 				coupons_id: that.couponId,
-				dispatch_type: 'express',
 				order_type: that.orderType
 			}).then(res => {
 				if (res.code === 1) {
@@ -500,25 +572,38 @@ export default {
 			}
 		},
 		// 显示配送方式弹窗
-		onSelExpressType(type) {
+		onSelExpressType(goodsDetail) {
 			this.showExpressType = true;
-			this.inExpressType = type;
-			this.expressTypeCur = type[0];
-			uni.getLocation({
-			    type: 'wgs84',
-			    success: function (res) {
-			        console.log('当前位置的经度：' + res.longitude);
-			        console.log('当前位置的纬度：' + res.latitude);
-			    }
-			});
+			this.inExpressType = goodsDetail.dispatch_type_arr;
+			this.expressTypeCur = goodsDetail.dispatch_type_arr[0];
+			this.currentGoodsId = goodsDetail.id;
 		},
 		hideExpressType() {
 			this.showExpressType = false;
+		},
+		saveExpressType(){
+			this.changeGoodsList()
+			this.showExpressType = false;
+			console.log(this.goodsList,'3333333333333')
 		},
 
 		// 选择快递方式
 		changeExpressType(cur) {
 			this.expressTypeCur = cur;
+			if(cur == 'selfetch' && this.lat){
+				this.getStoreAddress()
+				}
+			console.log('22222',this.goodsList)
+		},
+		// 更改提交数据
+		changeGoodsList(){
+			this.goodsList.forEach(goods => {
+				if(goods.goods_id == this.currentGoodsId ){
+					goods.dispatch_type = this.expressTypeCur
+					goods.phone = this.selfPhone
+					goods.dispatch_data = this.checkTime['day'][this.checkDayCur].value + ' ' +  this.checkTime['time'][this.checkTimeCur]+':00'
+				}
+			})
 		},
 		// 是否同意协议
 		checkProtocol() {
@@ -723,7 +808,7 @@ export default {
 	width: 750rpx;
 	background-color: #fff;
 	border-radius: 20rpx 20rpx 0 0;
-	min-height: 700rpx;
+	height: 700rpx;
 	.express-type__head {
 		width: 100%;
 		height: 62rpx;
@@ -839,6 +924,41 @@ export default {
 			font-weight: 400;
 			color: rgba(153, 153, 153, 1);
 		}
+		// 无定位
+	.location-box{
+		height: 500rpx;
+		justify-content: center;
+		.location-img{
+			width: 74rpx;
+			height: 74rpx;
+			margin-bottom: 40rpx;
+		}
+		.location-title{
+			font-size:35rpx;
+			font-family:PingFang SC;
+			font-weight:bold;
+			color:rgba(70,53,27,1);
+			margin-bottom: 20rpx;
+		}
+		.location-tip{
+			font-size:28rpx;
+			font-family:PingFang SC;
+			font-weight:400;
+			color:rgba(153,153,153,1);
+			margin-bottom: 40rpx;
+		}
+		.open-location{
+			width:492rpx;
+			height:70rpx;
+			background:linear-gradient(90deg,rgba(233,180,97,1),rgba(238,204,137,1));
+			box-shadow:0px 7rpx 6rpx 0px rgba(229,138,0,0.22);
+			border-radius:35rpx;
+			font-size:28rpx;
+			font-family:PingFang SC;
+			font-weight:500;
+			color:rgba(255,255,255,1);
+		}
+	}
 		// 快递
 		.express-address {
 			position: relative;
@@ -849,6 +969,7 @@ export default {
 			.express-top {
 				margin-bottom: 20rpx;
 				width: 550rpx;
+				text-align: left;
 				.address {
 					font-size: 28rpx;
 					font-family: PingFang SC;

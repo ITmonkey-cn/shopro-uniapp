@@ -69,7 +69,13 @@
                         "UniversalLinks" : ""
                     }
                 },
-                "ad" : {}
+                "ad" : {},
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "",
+                        "appkey_android" : ""
+                    }
+                }
             },
             "icons" : {
                 "android" : {
@@ -182,7 +188,11 @@
             "enable" : false
         },
         "sdkConfigs" : {
-            "maps" : {}
+            "maps" : {
+                "qqmap" : {
+                    "key" : "4NRBZ-CMP63-VSU3Y-YTSAF-ARYXH-DCFH3"
+                }
+            }
         }
     },
     "mp-baidu" : {

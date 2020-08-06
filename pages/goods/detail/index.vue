@@ -60,7 +60,7 @@
 				></sh-groupon>
 				<!-- 拼团玩法 -->
 				<view
-					v-if="goodsInfo.activity && parseInt(goodsInfo.activity.richtext_id)"
+					v-if="goodsInfo.activity && goodsInfo.activity.richtext_id + 0"
 					class="groupon-play x-bc px20"
 					@tap="jump('/pages/public/richtext', { id: goodsInfo.activity.richtext_id })"
 				>
@@ -216,8 +216,8 @@ export default {
 			showServe: false,
 			tools: this.$tools,
 			goodsInfo: {},
-			commentList: [],//商品评价列表
-			commentNum:0,//商品评价总数
+			commentList: [], //商品评价列表
+			commentNum: 0, //商品评价总数
 			favorite: false,
 			activityRules: {},
 			currentSkuList: [],

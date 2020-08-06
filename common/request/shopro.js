@@ -240,6 +240,12 @@ export default {
 			method: 'POST',
 			// desc: '删除足迹',
 		},
+		storeAddress: {
+			url: 'goods/store',
+			auth: true,
+			method: 'GET',
+			// desc: '商品支持的自提点',
+		},
 	},
 
 	/** 用户 ↓ **/
@@ -553,7 +559,7 @@ export default {
 			auth: true,
 			method: 'GET',
 			// desc: '包裹详情',
-		},
+		}
 	},
 
 	/** 支付 ↓ **/
