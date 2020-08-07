@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import _app from '../QS-SharePoster/app.js';
-import { getSharePoster } from '../QS-SharePoster/QS-SharePoster.js';
+import _app from '@/common/utils/QS-SharePoster/app.js';
+import { getSharePoster } from '@/common/utils/QS-SharePoster/QS-SharePoster.js';
 import { BASE_URL } from '@/env.js';
 import shoproShare from '@/common/mixins/shopro-share';
 // #ifdef H5

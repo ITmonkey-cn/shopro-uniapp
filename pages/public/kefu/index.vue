@@ -1109,7 +1109,7 @@ page {
 .kefu_container {
 	height: calc(100vh - var(--window-top));
 	overflow: hidden;
-	background-color: #e5e5e5;
+	background-color: #f8fbfb;
 }
 
 .error_tips {
@@ -1150,7 +1150,7 @@ page {
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	background: #000;
+	background-color: #000;
 }
 .select_model {
 	background-color: #f2f2f2;
@@ -1279,7 +1279,7 @@ page {
 }
 
 .chat_wrapper {
-	background-color: #e5e5e5;
+	background-color: #f8fbfb;
 	width: 100%;
 	box-sizing: border-box;
 	color: #181818;

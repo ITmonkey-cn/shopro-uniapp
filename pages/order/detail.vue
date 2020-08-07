@@ -25,9 +25,14 @@
 					<view class="express-type-box x-bc">
 						<view class="x-f">
 							<view class="express-type--title">配送：</view>
-							<view class="express-type--content">物流快递</view>
+							<view class="express-type--content">{{ expressType[order.dispatch_type] }}</view>
 						</view>
-						<view class="x-f express-type--detail" @tap="jump('/pages/order/distribution')">
+						<!--  -->
+						<view
+							class="x-f express-type--detail"
+							v-if="order.dispatch_type == 'store' || order.dispatch_type == 'selfetch'"
+							@tap="jump('/pages/order/distribution', { expressType: order.dispatch_type, orderId: orderDetail.id, orderItemId: order.id })"
+						>
 							<text>详情</text>
 							<text class="cuIcon-right"></text>
 						</view>
@@ -82,62 +87,6 @@
 					</view>
 				</view>
 			</view>
-			<!--  -->
-			<!-- 自提信息 -->
-			<view class="notice-box" v-if="false">
-				<view class="notice-box__head">自提信息</view>
-				<view class="notice-box__content">
-					<view class="self-pickup-box x-c"><image class="self-pickup--img" src="/static/imgs/order/send_bg.png" mode="widthFix"></image></view>
-					<view class="x-f notice-item--center">
-						<text class="title">自提码：</text>
-						<text class="detail">123456789</text>
-						<button class="cu-btn copy-btn" @tap="onCopy(123456)">复制</button>
-					</view>
-					<view class="x-f notice-item--center">
-						<text class="title">自提时间：</text>
-						<text class="detail">2020年05月12日 18:30</text>
-					</view>
-					<view class="x-f notice-item">
-						<text class="title">自提地址：</text>
-						<text class="detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</text>
-					</view>
-				</view>
-			</view>
-			<!-- 配送信息 -->
-			<view class="notice-box" v-if="false">
-				<view class="notice-box__head">配送信息</view>
-				<view class="notice-box__content">
-					<view class="x-f notice-item--center">
-						<text class="title">配送时间：</text>
-						<text class="detail">2020年05月12日 18:30</text>
-					</view>
-					<view class="x-f notice-item">
-						<text class="title">配送地址：</text>
-						<text class="detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</text>
-					</view>
-					<view class="x-f notice-item--center">
-						<text class="title">商家电话：</text>
-						<text class="detail">13985269546</text>
-						<button class="cu-btn copy-btn" @tap="$tools.callPhone(13985269546)">拨打</button>
-					</view>
-				</view>
-			</view>
-			<!-- 自动发货 -->
-			<view class="notice-box" v-if="false">
-				<view class="notice-box__head">发货信息</view>
-				<view class="notice-box__content">
-					<view class="x-f notice-item--center">
-						<text class="title">百度网盘：</text>
-						<text class="detail">https://pan.baidu.com/</text>
-						<button class="cu-btn copy-btn" @tap="onCopy('https://pan.baidu.com/')">复制</button>
-					</view>
-					<view class="x-f notice-item--center">
-						<text class="title">提取码：</text>
-						<text class="detail">123456</text>
-						<button class="cu-btn copy-btn" @tap="onCopy(123456)">复制</button>
-					</view>
-				</view>
-			</view>
 			<!-- 订单信息 -->
 			<view class="notice-box">
 				<view class="notice-box__content">
@@ -152,11 +101,11 @@
 					</view>
 					<view class="notice-item x-f">
 						<text class="title">支付方式：</text>
-						<text class="detail">余额支付</text>
+						<text class="detail">{{ payType[orderDetail.pay_type] }}</text>
 					</view>
 					<view class="notice-item x-f">
 						<text class="title">支付时间：</text>
-						<text class="detail">{{ orderDetail.createtime }}</text>
+						<text class="detail">{{ orderDetail.paytime }}</text>
 					</view>
 				</view>
 			</view>
@@ -164,15 +113,15 @@
 			<view class="order-price-box">
 				<view class="notice-item x-bc">
 					<text class="title">商品总额</text>
-					<text class="detail">{{ orderDetail.createtime }}</text>
+					<text class="detail">￥{{ orderDetail.goods_original_amount }}</text>
 				</view>
 				<view class="notice-item x-bc">
 					<text class="title">运费</text>
-					<text class="detail">余额支付</text>
+					<text class="detail">{{ orderDetail.discount_fee }}</text>
 				</view>
 				<view class="notice-item x-bc">
 					<text class="title">优惠券</text>
-					<text class="detail">{{ orderDetail.createtime }}</text>
+					<text class="detail">{{ orderDetail.coupon_fee }}</text>
 				</view>
 				<view class="notice-item all-rpice-item x-f" style="width: 100%;">
 					<text class="title">实付款：</text>
@@ -193,7 +142,7 @@
 						拼团详情
 					</button>
 					<button v-if="btn === 'delete'" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
-					<button v-if="btn === 'express'" @tap.stop="onExpress" class="cu-btn obtn1">查看物流</button>
+					<button v-if="btn === 'express'" @tap.stop="onExpress(orderDetail.id)" class="cu-btn obtn1">查看物流</button>
 				</view>
 			</view>
 		</view>
@@ -211,6 +160,7 @@ export default {
 	data() {
 		return {
 			time: 0,
+			tools: this.$tools,
 			orderDetail: {},
 			orderStatus: {
 				'-2': '已关闭',
@@ -218,6 +168,18 @@ export default {
 				'0': '未付款',
 				'1': '已付款',
 				'2': '已完成'
+			},
+			payType: {
+				wallet: '余额支付',
+				wechat: '微信支付',
+				alipay: '支付宝支付',
+				iospay: 'ApplePay'
+			},
+			expressType: {
+				express: '物流快递',
+				selfetch: '到店/自提',
+				store: '商家配送',
+				autosend: '自动发货'
 			}
 		};
 	},
@@ -253,7 +215,9 @@ export default {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
 					let date = new Date(res.data.createtime * 1000);
+					let date1 = new Date(res.data.paytime * 1000);
 					that.orderDetail.createtime = that.$tools.dateFormat('YYYY-mm-dd HH:MM', date);
+					that.orderDetail.paytime = that.$tools.dateFormat('YYYY-mm-dd HH:MM', date1);
 				}
 			});
 		},
@@ -326,8 +290,21 @@ export default {
 			this.jump('/pages/order/add-comment', { orderId: orderId, orderItemId: orderItemId });
 		},
 		// 查看物流,Todo
-		checkExpress(orderId, ordrderItemId) {
-			this.jump('/pages/order/express', { orderId: orderId, orderItemId: orderItemId });
+		onExpress(orderId, orderItemId) {
+			let that = this;
+			that.$api('order.expressList', {
+				order_id: orderId
+			}).then(res => {
+				if (res.code === 1) {
+					if (res.data.length == 1) {
+						this.jump('/pages/order/express', { orderId: orderId, expressId: res.data[0].id });
+					} else if (res.data.length > 1) {
+						this.jump('/pages/order/express-list', { orderId: orderId });
+					} else {
+						this.$tools.toast('暂无包裹~');
+					}
+				}
+			});
 		}
 	}
 };

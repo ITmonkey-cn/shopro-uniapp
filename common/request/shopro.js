@@ -559,6 +559,12 @@ export default {
 			auth: true,
 			method: 'GET',
 			// desc: '包裹详情',
+		},
+		itemDetail: {
+			url: 'order/itemDetail',
+			auth: true,
+			method: 'GET',
+			// desc: '订单商品详情',
 		}
 	},
 

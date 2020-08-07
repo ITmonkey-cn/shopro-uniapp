@@ -286,6 +286,9 @@
 import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 import shPickerModal from './children/sh-picker-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
+// #ifdef H5
+import wxsdk from '@/common/wechat/sdk'
+// #endif
 export default {
 	components: {
 		shoproMiniCard,
@@ -406,7 +409,6 @@ export default {
 			6:'周六'
 		}
 		let now = new Date().getTime();
-		console.log(111111111111111,now)
 		let today = this.$tools.timestamp(now/1000);
 		let tomorrow = this.$tools.timestamp((now+86400000)/1000);
 		let aftertomorrow = this.$tools.timestamp((now+172800000)/1000);
@@ -430,20 +432,31 @@ export default {
 				],
 				time: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00','14:00','15:00','16:00','17:00','18:00','19:00']
 			}
-			console.log(obj,12312311111)
 			this.checkTime = obj;
 		},
 		   
 		// 开启定位
 		openLocation(){
+			   // #ifdef MP-WEIXIN
 			uni.getLocation({
 			    type: 'gcj02',
 			    success: res => {
 			        this.lng =  res.longitude;
 			       this.lat = res.latitude;
 				   this.getStoreAddress()
-			    }
+			    },
+				fail:err => {
+					console.log('定位错误',err)
+				}
 			});
+			// #endif
+			// #ifdef H5
+			wxsdk.getlocation(res => {
+				this.lng =  res.longitude;
+				this.lat = res.latitude;
+				this.getStoreAddress()
+			})
+			// #endif
 		},
 		// 获取商品支持的自提点。
 		getStoreAddress(){
@@ -809,9 +822,10 @@ export default {
 	background-color: #fff;
 	border-radius: 20rpx 20rpx 0 0;
 	height: 700rpx;
+	overflow: visible;
 	.express-type__head {
 		width: 100%;
-		height: 62rpx;
+		height: 58rpx;
 		background: #faf0dc;
 		@include flex($align: center);
 		border-radius: 20rpx 20rpx 0 0;

@@ -188,7 +188,7 @@ export default {
 			});
 		},
 		// 查看物流,Todo
-		onExpress(orderId, orderItemId) {
+		onExpress(orderId) {
 			let that = this;
 			that.$api('order.expressList', {
 				order_id: orderId
