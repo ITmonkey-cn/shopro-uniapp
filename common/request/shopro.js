@@ -150,6 +150,34 @@ export default {
 		},
 	},
 
+	/** 商户 ↓ **/
+	store: {
+		info: {
+			url: 'store.store/index',
+			auth: true,
+			method: 'GET',
+			// desc: '商户信息',
+		},
+		order: {
+			url: 'store.order/index',
+			auth: true,
+			method: 'GET',
+			// desc: '商户订单',
+		},
+		orderDetail: {
+			url: 'store.order/detail',
+			auth: true,
+			method: 'GET',
+			// desc: '订单详情',
+		},
+		orderSend: {
+			url: 'store.order/send',
+			auth: true,
+			method: 'POST',
+			// desc: '订单发货',
+		},
+	},
+
 	/** 商品评论 ↓ **/
 	goods_comment: {
 		list: {

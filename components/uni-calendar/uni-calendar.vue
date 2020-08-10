@@ -272,7 +272,6 @@ export default {
 				this.$emit('input', val);
 			}
 		}
-		
 	},
 	watch: {
 		dataChange(val) {
@@ -640,7 +639,7 @@ export default {
 		padding: 0 40rpx 30rpx;
 		box-sizing: border-box;
 		font-size: 24rpx;
-		color: #4CB89D;
+		color: #4cb89d;
 
 		&__choose {
 			height: 50rpx;
@@ -649,9 +648,9 @@ export default {
 		&__btn {
 			width: 100%;
 		}
-		.save-btn{
+		.save-btn {
 			width: 680rpx;
-			background-color: #4CB89D;
+			background-color: #4cb89d;
 			border-radius: 30rpx;
 		}
 	}

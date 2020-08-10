@@ -12,10 +12,10 @@
 				<view class="user-head x-bc">
 					<view class="shop-info" @tap="jump('/pages/app/merchant/info')">
 						<view class="x-f mb30">
-							<text class="shop-title">龙宇国际店</text>
+							<text class="shop-title">{{ storeDetail.name }}</text>
 							<text class="cuIcon-roundrightfill"></text>
 						</view>
-						<view class="shop-phone">郑州市金水区曼哈顿广场</view>
+						<view class="shop-phone">{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}</view>
 					</view>
 
 					<button v-if="true" @tap="jump('/pages/index/user')" class="cu-btn merchant-btn">切换个人版</button>
@@ -61,7 +61,7 @@
 				</view>
 				<!-- 下拉窗 -->
 				<view class="drop-down-box" :class="{ 'hide-drop-down': !isShowDropDown }">
-					<view class="drop-down-item x-bc" v-for="(item, index) in dropDown[cancelType]" :key="index" @tap="onFilter(item.value)">
+					<view class="drop-down-item x-bc" v-for="(item, index) in dropDown[cancelType]" :key="index" @tap="onFilter(item.value, item.title)">
 						<text class="item-title">{{ item.title }}</text>
 						<text class="cuIcon-check" v-if="filter[cancelType] == item.value"></text>
 					</view>
@@ -69,24 +69,27 @@
 			</view>
 			<!-- 销量 -->
 			<view class="sales-volume-box x-bc pa30">
-				<view class="sales-volume x-c">订单量(单)：15893</view>
-				<view class="sales-volume x-c">交易额(元)：5693.86</view>
+				<view class="sales-volume x-c">订单量(单)：{{ orderInfo.total_num }}</view>
+				<view class="sales-volume x-c">交易额(元)：{{ orderInfo.total_money }}</view>
 			</view>
 		</view>
 		<!-- 订单列表 -->
-		<view class="order-list" v-for="order in 7" :key="order" @tap.stop="jump('/pages/app/merchant/detail')">
+		<view class="order-list" v-for="order in storeOrderList" :key="order.order_sn" @tap.stop="jump('/pages/app/merchant/detail',{orderId:order.id})">
 			<view class="order-head x-bc">
-				<text class="no">订单编号：25689456336</text>
-				<text class="state">已完成</text>
+				<text class="no">订单编号：{{ order.order_sn }}</text>
+				<text class="state">{{ order.status_name }}</text>
 			</view>
-			<view class="goods-order" v-if="false">
-				<view class="order-content"><shopro-mini-card :type="'order'" :detail="goods"></shopro-mini-card></view>
+			<view class="goods-order" v-for="item in order.item" :key="item.id">
+				<view class="order-content"><shopro-mini-card :type="'order'" :detail="item"></shopro-mini-card></view>
 			</view>
 			<view class="order-bottom x-f">
 				<text class="total-price-title">实付款：</text>
-				<text class="total-price">678.90</text>
+				<text class="total-price">{{ order.pay_fee }}</text>
 			</view>
 		</view>
+
+		<!-- 更多 -->
+		<view v-if="storeOrderList.length" class="cu-load text-gray" :class="loadStatus"></view>
 
 		<!-- 日期选择 -->
 		<uni-calendar
@@ -121,6 +124,9 @@ export default {
 	components: {},
 	data() {
 		return {
+			storeOrderList: [], //订单商品列表
+			orderInfo: {}, //订单统计信息
+			storeDetail: {}, //门店信息
 			cancelType: 'date', //核销分类
 			cancelTypeList: [
 				{
@@ -147,7 +153,8 @@ export default {
 			isShowDropDown: false, //是否显示下拉菜单
 			filter: {
 				date: 'yesterday',
-				status: 'all'
+				status: 'all',
+				custom: []
 			},
 			dropDown: {
 				date: [
@@ -157,16 +164,65 @@ export default {
 					{ title: '本月', value: 'month', isChecked: false },
 					{ title: '自定义', value: 'custom', isChecked: false }
 				],
-				status: [{ title: '全部', value: 'all', isChecked: false }, { title: '已完成', value: 'end', isChecked: true }, { title: '待完成', value: 'ing', isChecked: false }]
-			}
+				status: [
+					{ title: '全部', value: 'all', isChecked: false },
+					{ title: '未发货', value: 'nosend', isChecked: false },
+					{ title: '未收货', value: 'noget', isChecked: false },
+					{ title: '已完成', value: 'finish', isChecked: true }
+				]
+			},
+			loadStatus: '', //loading,over
+			currentPage: 1,
+			lastPage: 1
 		};
 	},
 	computed: {},
+	onLoad() {
+		this.getStoreDetail();
+		this.getStoreOrder();
+	},
+	onReachBottom() {
+		if (this.currentPage < this.lastPage) {
+			this.currentPage += 1;
+			this.getStoreOrder();
+		}
+	},
 	methods: {
 		jump(path, query) {
 			this.$Router.push({
 				path: path,
 				query: query
+			});
+		},
+		// 获取门店信息
+		getStoreDetail() {
+			let that = this;
+			that.$api('store.info').then(res => {
+				if (res.code === 1) {
+					that.storeDetail = res.data;
+				}
+			});
+		},
+		// 门店订单列表
+		getStoreOrder() {
+			let that = this;
+			that.loadStatus = 'loading';
+			that.$api('store.order', {
+				date_type: that.filter.date,
+				date: that.filter.custom,
+				type: that.filter.status,
+				page: that.currentPage
+			}).then(res => {
+				if (res.code == 1) {
+					that.storeOrderList = [...that.storeOrderList, ...res.data.result.data];
+					that.orderInfo = res.data;
+					that.lastPage = res.data.result.last_page;
+					if (that.currentPage < res.data.result.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
+				}
 			});
 		},
 		// 切换核销分类
@@ -176,20 +232,32 @@ export default {
 		},
 		// 选择日期
 		selDate(e) {
-			console.log(11111111, e);
+			this.filter.custom.push(e.startDate);
+			this.filter.custom.push(e.endDate);
 			this.isShowDropDown = false;
+			this.cancelTypeList[0].title = `${e.startDate.replace(/-/g, ':')}-${e.endDate}`;
+			this.currentPage = 1;
+			this.getStoreOrder();
 		},
 		// 下拉筛选
 		onHideDropDown() {
 			this.isShowDropDown = false;
 		},
 		// 选择筛选
-		onFilter(val) {
+		onFilter(val, title) {
+			this.isShowDropDown = false;
 			if (val == 'custom') {
 				this.showCalendar = true;
 			}
+			if (this.cancelType == 'date') {
+				this.cancelTypeList[0].title = title;
+			}
+			if (this.cancelType == 'status') {
+				this.cancelTypeList[1].title = title;
+			}
 			this.filter[this.cancelType] = val;
-			console.log(this.filter);
+			this.currentPage = 1;
+			this.getStoreOrder();
 		},
 		//输码
 		onEditCode() {
@@ -235,7 +303,7 @@ export default {
 			// #ifdef H5
 			height: 50rpx;
 			// #endif
-			width: 750rpx;
+			width: 700rpx;
 		}
 	}
 
@@ -351,11 +419,11 @@ export default {
 			font-size: 30rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
-			color: #bdbdbd;
+			color: #666;
 			line-height: 76rpx;
 		}
 		.cuIcon-triangleupfill {
-			color: #bdbdbd;
+			color: #666;
 			transition: all linear 0.2s;
 		}
 		.icon-active {
@@ -379,7 +447,6 @@ export default {
 	}
 }
 // 下拉窗
-
 .drop-down-box {
 	position: absolute;
 	z-index: 22;
@@ -395,7 +462,7 @@ export default {
 		padding: 0 60rpx;
 		.item-title {
 			font-size: 24rpx;
-			color: #bdbdbd;
+			color: #666;
 		}
 		.cuIcon-check {
 			color: #4cb89d;
@@ -409,6 +476,8 @@ export default {
 	top: 0;
 	width: 750rpx;
 	transform: scaleY(0);
+	opacity: 0;
+	transform-origin: top;
 	transition: all linear 0.1s;
 }
 // 销量
@@ -477,6 +546,7 @@ export default {
 .order-list {
 	background: #fff;
 	margin: 20rpx 0;
+	padding: 0 20rpx;
 	.order-bottom {
 		justify-content: flex-end;
 		height: 80rpx;
@@ -485,10 +555,10 @@ export default {
 			color: #999999;
 			font-size: 24rpx;
 		}
-		.total-price{
+		.total-price {
 			color: #333;
 			font-size: 26rpx;
-			&::before{
+			&::before {
 				content: '￥';
 				font-size: 20rpx;
 			}
@@ -511,7 +581,7 @@ export default {
 	}
 	.goods-order {
 		border-bottom: 1px solid rgba(223, 223, 223, 0.5);
-		padding: 20rpx 20rpx 0;
+		padding: 20rpx;
 		margin-bottom: 20rpx;
 	}
 }

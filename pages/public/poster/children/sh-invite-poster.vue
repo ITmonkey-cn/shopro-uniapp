@@ -70,8 +70,10 @@ export default {
 		let that = this;
 		that.setShareInfo();
 		if (that.shareInfo) {
+			
 			setTimeout(function() {
 				that.$emit('getShareInfo', that.shareInfo);
+				console.log(that.shareInfo.path)
 				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
 				that.shareFc();
 			}, 100);

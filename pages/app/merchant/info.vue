@@ -2,28 +2,28 @@
 	<view class="merchant-info-box">
 		<label class="x-f form-item">
 			<text class="form-tilte">门店名称：</text>
-			<view class="form-content">龙宇国际店</view>
+			<view class="form-content">{{storeDetail.name}}</view>
 		</label>
 		<label class="x-f form-item">
 			<text class="form-tilte">联系电话：</text>
-			<view class="form-content">111111111111</view>
+			<view class="form-content">{{storeDetail.phone}}</view>
 		</label>
 		<!-- 营业时间 -->
 		<label class="x-f form-item">
 			<text class="form-tilte">营业时间：</text>
-			<view class="form-content">08:00-20:00</view>
+			<view class="form-content">{{storeDetail.openhours}}</view>
 		</label>
 		<!-- 选择星期 -->
 		<checkbox-group class="week-box x-ac" style="margin-bottom: 20rpx;">
-			<label class="week-tiem" v-for="week in weekList" :key="week.title" @tap="selWeek(week.value)">
-				<checkbox disabled class="round orange" :class="{ checked: merchantInfo.week.includes(week.value) }" style="transform:scale(0.6)" />
+			<label class="week-tiem" v-for="week in weekList" :key="week.title">
+				<checkbox disabled class="round orange" :checked="storeWeek.includes(week.value)" :class="{ checked: storeWeek.includes(week.value) }" style="transform:scale(0.6)" ></checkbox>
 				<text class="week-title">{{ week.title }}</text>
 			</label>
 		</checkbox-group>
 		<!-- 选择省市 -->
-		<label class="x-f form-item" @tap="selCity">
+		<label class="x-f form-item" >
 			<text class="form-tilte">门店地址：</text>
-			<view class="form-content">郑州市金水区曼哈顿广场 </view>
+			<view class="form-content">{{storeDetail.province_name}}{{storeDetail.city_name}}{{storeDetail.area_name}}{{storeDetail.address}}</view>
 		</label>
 	</view>
 </template>
@@ -33,15 +33,8 @@ export default {
 	components: {},
 	data() {
 		return {
-			merchantInfo: {
-				shopName: '',
-				shopPhone: '',
-				starTime: '',
-				endTime: '',
-				week: [],
-				area: '',
-				address: ''
-			},
+			storeWeek:[],
+			storeDetail: {}, //门店信息
 			weekList: [
 				//星期
 				{
@@ -70,14 +63,26 @@ export default {
 				},
 				{
 					title: '周日',
-					value: '0'
+					value: '7'
 				}
 			]
 		};
 	},
 	computed: {},
-	onLoad() {},
-	methods: {}
+	onLoad() {
+		this.getStoreDetail();
+	},
+	methods: {
+		getStoreDetail() {
+			let that = this;
+			that.$api('store.info').then(res => {
+				if (res.code === 1) {
+					that.storeDetail = res.data;
+					that.storeWeek = res.data.openweeks.split(',')
+				}
+			});
+		}
+	}
 };
 </script>
 
