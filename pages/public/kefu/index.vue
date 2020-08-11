@@ -67,6 +67,8 @@
 					<!-- #endif -->
 
 					<view :style="{ height: 'calc(100% - ' + wrapperHeight + 'px)' }" class="chat_wrapper">
+						<!-- 遮罩 -->
+						<view class="mask" @tap="hideMask" v-if="showTool || selectModel"></view>
 						<scroll-view
 							@scrolltoupper="wrapper_scrolltoupper"
 							@tap="tap_scroll_view"
@@ -74,8 +76,7 @@
 							:scroll-with-animation="true"
 							:scroll-into-view="scrollIntoFooter"
 						>
-						<!-- 遮罩 -->
-						<view class="mask" v-if="showTool"></view>
+						
 							<block v-for="(item, index) in messageList" :key="index">
 								<view class="status">
 									<text>{{ item.datetime }}</text>
@@ -312,6 +313,12 @@ export default {
 		}
 	},
 	methods: {
+		// 关闭遮罩
+		hideMask(){
+			if(this.showTool){this.showTool = false}
+			if(this.selectModel){this.selectModel = false}
+				this.writeBottom = 0;
+			},
 		load: function() {
 			var that = this;
 			var kefu_tourists_token = '';

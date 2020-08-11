@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="x-f wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view  style="padding-bottom:180rpx" class="left" enable-back-to-top scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
+				<scroll-view style="padding-bottom:180rpx" class="left" enable-back-to-top scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
 					<view
 						class="type-list x-c"
 						:id="`left_${index}`"
@@ -19,7 +19,7 @@
 
 			<view style="height: 100%;">
 				<scroll-view style="padding-bottom:180rpx" scroll-y class="scroll-box" scroll-with-animation :scroll-into-view="scroll_rightId" @scroll="rightScroll">
-					<view class="right" v-if="categoryData.length" >
+					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
 							<view class="type-box x-bc">
 								<text class="type-title">{{ item.name }}</text>
@@ -98,7 +98,7 @@
 									<view class="x-bc price-box">
 										<view class="price">￥{{ g.sku_price.price }}</view>
 										<view class="num-step">
-											<uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="0"></uni-number-box>
+											<uni-number-box @change="onChangeNum($event, g, index)" v-model="g.goods_num" :step="1" :min="0"></uni-number-box>
 										</view>
 									</view>
 								</block>

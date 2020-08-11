@@ -41,7 +41,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="bottom-box x-c"><button class="cu-btn send-btn" @tap="sendOrder">发货</button></view>
+		<view class="bottom-box x-c" v-if="orderDetail.status_code == 'nosend'"><button class="cu-btn send-btn" @tap="sendOrder">发货</button></view>
 	</view>
 </template>
 
@@ -58,7 +58,6 @@ export default {
 	computed: {},
 	onLoad() {
 		this.getOrderDetail();
-		this.getStoreDetail();
 	},
 	methods: {
 		// 订单详情

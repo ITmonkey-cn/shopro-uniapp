@@ -2,6 +2,13 @@
 	<view class="page_box">
 		<view class="head_box"></view>
 		<view class="content_box">
+			<view class="location-item x-bc px30 mb20" @tap="chooseLocation">
+				<view class="x-f">
+					<text class="cuIcon-focus"></text>
+					<text> {{addressData.latitude ?'重新获取地理位置':'点击定位当前地点'}}</text>
+				</view>
+				<text class="cuIcon-right"></text>
+			</view>
 			<view class="address-item x-f">
 				<label class="x-f flex-sub">
 					<text class="item-title">收货人：</text>
@@ -58,7 +65,9 @@ export default {
 				phone: '',
 				area_id: '',
 				address: '',
-				is_default: false
+				is_default: false,
+				latitude: '',
+				longitude: ''
 			},
 			area_text: '',
 			// 城市
@@ -88,6 +97,18 @@ export default {
 		init() {
 			return Promise.all([]);
 		},
+		// 地图选择地址
+		chooseLocation() {
+			uni.chooseLocation({
+				success: res => {
+					this.addressData.latitude = res.latitude;
+					this.addressData.longitude = res.longitude;
+				},
+				fail: err => {
+					console.log(err);
+				}
+			});
+		},
 		onSwitch() {
 			this.addressData.is_default = !this.addressData.is_default;
 		},
@@ -98,14 +119,7 @@ export default {
 		// 编辑添加地址
 		editAddress() {
 			let that = this;
-			that.$api('address.edit', {
-				id: this.addressData.id,
-				consignee: this.addressData.consignee,
-				phone: this.addressData.phone,
-				area_id: this.addressData.area_id,
-				address: this.addressData.address,
-				is_default: this.addressData.is_default
-			}).then(res => {
+			that.$api('address.edit', that.addressData).then(res => {
 				if (res.code === 1) {
 					if (that.from === 'order') {
 						that.$Router.back();
@@ -161,6 +175,22 @@ export default {
 </script>
 
 <style lang="scss">
+// 点击定位
+.location-item {
+	height: 100rpx;
+	font-size: 28rpx;
+	font-family: PingFang SC;
+	font-weight: 500;
+	color: rgba(167, 111, 13, 1);
+	background-color: #fff;
+	.cuIcon-focus {
+		font-size: 34rpx;
+		margin-right: 10rpx;
+	}
+	.cuIcon-right {
+		font-size: 32rpx;
+	}
+}
 .address-item {
 	height: 96rpx;
 	background: #fff;

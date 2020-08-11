@@ -60,7 +60,7 @@
 								再次购买
 							</button>
 							<button
-								@tap.stop="jump('/pages/order/after-sale/detail', { aftersaleId: order.ext_arr.aftersale_id })"
+								@tap="onAftersaleDetail(order.ext_arr.aftersale_id)"
 								class="cu-btn btn1"
 								:class="{ btn2: index + 1 === order.btns.length }"
 								v-if="btn === 'aftersale_info'"
@@ -256,6 +256,10 @@ export default {
 				path: '/pages/order/after-sale/refund',
 				query: { orderId: orderId, orderItemId: orderItemId }
 			});
+		},
+		// 售后详情
+		onAftersaleDetail(id) {
+			this.jump('/pages/order/after-sale/detail', { aftersaleId: id });
 		},
 		// 取消订单
 		onCancel(id) {

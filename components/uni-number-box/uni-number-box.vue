@@ -1,5 +1,5 @@
 <template>
-	<view class="uni-numbox x-f" @tap.stop>
+	<view class="uni-numbox x-f">
 		<view @tap.stop="_calcValue('minus')" class="uni-numbox__minus">
 			<button class=" cu-btn uni-numbox--text" :class="{ 'uni-numbox--disabled': inputValue <= min || disabled }"><text class=" iconfont icon-reduce-fill"></text></button>
 		</view>
@@ -115,6 +115,7 @@ export default {
 			}
 
 			this.inputValue = String(value / scale);
+			
 		},
 		_getDecimalScale() {
 			let scale = 1;

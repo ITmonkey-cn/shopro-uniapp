@@ -4,11 +4,11 @@
 			<!-- 步骤条 -->
 			<view class="bg-gradual-green steps-box">
 				<view class="cu-steps">
-					<view class="cu-item" :class="aftersaleDetail.aftersale_status < 0 || aftersaleDetail.aftersale_status == 0 ? 'text-white' : 'text-after'">
+					<view class="cu-item" :class="aftersaleDetail.aftersale_status > 0 || aftersaleDetail.aftersale_status == 0 ? 'text-white' : 'text-after'">
 						<text class="cuIcon-roundcheckfill"></text>
 						提交申请
 					</view>
-					<view class="cu-item" :class="aftersaleDetail.aftersale_status < 0 || aftersaleDetail.aftersale_status == 1 ? 'text-white' : 'text-after'">
+					<view class="cu-item" :class="aftersaleDetail.aftersale_status > 0 || aftersaleDetail.aftersale_status == 1 ? 'text-white' : 'text-after'">
 						<text class="cuIcon-roundcheckfill"></text>
 						进行中
 					</view>

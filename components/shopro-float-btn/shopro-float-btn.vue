@@ -63,7 +63,7 @@ export default {
 		}
 	},
 	created() {
-		// setInterval(function(){ 
+		// setInterval(function(){
 		// 	console.log(this.template,123)
 		// 	}, 100);
 	},

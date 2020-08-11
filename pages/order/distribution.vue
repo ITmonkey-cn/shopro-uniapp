@@ -44,7 +44,7 @@
 				<view class="item-content">提 取 码 ：123456</view>
 			</view>
 		</view>
-		<view class="foot_box x-c pb20">
+		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store' ">
 			<button class="service-btn cu-btn" @tap="onService">
 				<text class="cuIcon-dianhua"></text>
 				联系商家
@@ -107,7 +107,7 @@ export default {
 		},
 		// 跳转客服
 		onService() {
-			this.$Router.push('/pages/public/kefu/index');
+			this.$tools.callPhone(this.itemDetail.store.phone)
 		},
 		// 查看核销码
 		checkCode(code) {
