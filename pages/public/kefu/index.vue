@@ -74,6 +74,8 @@
 							:scroll-with-animation="true"
 							:scroll-into-view="scrollIntoFooter"
 						>
+						<!-- 遮罩 -->
+						<view class="mask" v-if="showTool"></view>
 							<block v-for="(item, index) in messageList" :key="index">
 								<view class="status">
 									<text>{{ item.datetime }}</text>
@@ -217,9 +219,8 @@
 					<view class="select_model_no_data" v-if="selectModelData.length <= 0"><text>没有更多记录了...</text></view>
 				</view>
 			</view>
+			
 		</view>
-		<!-- 遮罩 -->
-		<view class="mask"></view>
 	</view>
 </template>
 
@@ -1150,7 +1151,8 @@ page {
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	background-color: #000;
+	background:rgba(#000,0.3);
+	z-index: 11;
 }
 .select_model {
 	background-color: #f2f2f2;
@@ -1474,6 +1476,7 @@ page {
 .footer_div {
 	position: fixed;
 	bottom: 0rpx;
+	z-index: 22;
 	background-color: #fff;
 	box-shadow: 0 8rpx 10rpx rgba(0, 0, 0, 0.1);
 	width: 100%;

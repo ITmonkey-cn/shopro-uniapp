@@ -138,6 +138,8 @@ export default {
 		bottom: 0;
 		left: 10rpx;
 		transform: scale(0);
+		transform-origin: bottom;
+		opacity: 0;
 		transition: all 0.2s linear;
 	}
 	.btn-item {

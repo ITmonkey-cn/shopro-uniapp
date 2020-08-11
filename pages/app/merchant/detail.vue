@@ -2,7 +2,18 @@
 	<view class="order-detail-wrap">
 		<!-- 订单卡片 -->
 		<view class="card-box">
-			<view class="order-goods-item" v-for="item in orderDetail.item" :key="item.id"><shopro-mini-card :type="'order'" :detail="item"></shopro-mini-card></view>
+			<view class="order-goods-item" v-for="item in orderDetail.item" :key="item.id">
+				<shopro-mini-card :type="'order'" :detail="item"></shopro-mini-card>
+				<view class="goods-phone card-item">
+					<text class="item-title">预留电话：</text>
+					<text class="item-content">{{ item.ext_arr.dispatch_phone }}</text>
+				</view>
+				<view class="goods-date card-item" v-if="false">
+					<text class="item-title" v-if="item.dispatch_type == 'slefetch'">到店/自提时间：</text>
+					<text class="item-title" v-if="item.dispatch_type == 'store'">配送时间：</text>
+					<text class="item-content">{{ tools.dateFormat('YYYY-mm-dd HH:MM', new Date(item.ext_arr.dispatch_date * 1000)) }}</text>
+				</view>
+			</view>
 		</view>
 		<!-- 订单信息 -->
 		<view class="order-detail-card">
@@ -24,40 +35,8 @@
 					<view class="item-title">备注：</view>
 					<view class="item-content">{{ orderDetail.remark }}</view>
 				</view>
-			</view>
-		</view>
-		<!-- 自提信息 -->
-		<view class="order-detail-card" v-if="orderType.includes('selfetch')">
-			<view class="card-title x-f">到店/自提信息</view>
-			<view class="detial-content">
-				<view class="detail-item x-f" v-if="orderDetail.ext_arr.dispatch_date">
-					<view class="item-title">到店时间：</view>
-					<view class="item-content">{{ tools.dateFormat('YYYY-mm-dd HH:MM', new Date(orderDetail.ext_arr.dispatch_date * 1000)) }}</view>
-				</view>
-				<view class="detail-item x-f" v-if="orderDetail.ext_arr.dispatch_phone">
-					<view class="item-title">预留电话：</view>
-					<view class="item-content">{{ orderDetail.ext_arr.dispatch_phone }}</view>
-				</view>
-				<view class="detail-item address-item">
-					<view class="item-title">门店地址：</view>
-					<view class="item-content address-content">{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}</view>
-				</view>
-			</view>
-		</view>
-		<!-- 配送信息 -->
-		<view class="order-detail-card" v-if="orderType.includes('store')">
-			<view class="card-title x-f">配送信息</view>
-			<view class="detial-content">
-				<view class="detail-item x-f" v-if="orderDetail.ext_arr.dispatch_date">
-					<view class="item-title">配送时间：</view>
-					<view class="item-content">{{ tools.dateFormat('YYYY-mm-dd HH:MM', new Date(orderDetail.ext_arr.dispatch_date * 1000)) }}</view>
-				</view>
-				<view class="detail-item x-f" v-if="orderDetail.ext_arr.dispatch_phone">
-					<view class="item-title">预留电话：</view>
-					<view class="item-content">{{ orderDetail.ext_arr.dispatch_phone }}</view>
-				</view>
-				<view class="detail-item address-item">
-					<view class="item-title">门店地址：</view>
+				<view class="detail-item address-item" v-if="orderType.includes('store')">
+					<view class="item-title">配送地址：</view>
 					<view class="item-content address-content">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
 				</view>
 			</view>
@@ -73,8 +52,7 @@ export default {
 		return {
 			orderDetail: {},
 			tools: this.$tools,
-			orderType: [],
-			storeDetail:{}//门店信息
+			orderType: []
 		};
 	},
 	computed: {},
@@ -97,23 +75,15 @@ export default {
 				}
 			});
 		},
-		// 获取门店信息
-		getStoreDetail() {
-			let that = this;
-			that.$api('store.info').then(res => {
-				if (res.code === 1) {
-					that.storeDetail = res.data;
-				}
-			});
-		},
 		// 订单发货
 		sendOrder() {
 			let that = this;
-			that.$api('store.orderSend',{
-				id:that.orderDetail.id
-				}).then(res => {
+			that.$api('store.orderSend', {
+				id: that.orderDetail.id
+			}).then(res => {
 				if (res.code === 1) {
-				
+					that.$tools.toast(res.msg);
+					that.getOrderDetail();
 				}
 			});
 		}
@@ -150,6 +120,17 @@ export default {
 	background-color: #fff;
 	.order-goods-item {
 		padding: 20rpx;
+		.card-item {
+			line-height: 60rpx;
+			.item-title {
+				font-size: 28rpx;
+				color: #999;
+			}
+			.item-content {
+				font-size: 26rpx;
+				color: #333;
+			}
+		}
 	}
 }
 .order-detail-card {
