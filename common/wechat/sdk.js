@@ -48,6 +48,23 @@ export default {
 			});
 		});
 	},
+	//获取微信收货地址
+	openAddress: function(callback) {
+		if (!this.isWechat()) {
+			return;
+		}
+		this.initJssdk(function(res) {
+			jweixin.ready(function() {
+				jweixin.openAddress({
+					success: function(res) {
+
+						callback(res)
+					},
+					fail: function(res) {},
+				});
+			});
+		});
+	},
 	share: function(data, callback) {
 		if (!this.isWechat()) {
 			return;

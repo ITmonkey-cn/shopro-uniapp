@@ -311,7 +311,7 @@ export default {
 
 	/**
 	 *@alias 防抖
-	 *@param {function} fn 节流被执行函数 
+	 *@param {function} fn 防抖被执行函数 
 	 *@param {Number}  delay 时间单位内
 	 */
 	debounce(fn, delay) {

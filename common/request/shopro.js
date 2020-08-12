@@ -176,6 +176,12 @@ export default {
 			method: 'POST',
 			// desc: '订单发货',
 		},
+		orderConfirm: {
+			url: 'store.order/confirm',
+			auth: true,
+			method: 'POST',
+			// desc: '核销订单',
+		},
 	},
 
 	/** 商品评论 ↓ **/

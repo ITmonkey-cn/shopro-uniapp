@@ -2,10 +2,10 @@
 	<view class="page_box">
 		<view class="head_box"></view>
 		<view class="content_box">
-			<view class="location-item x-bc px30 mb20" @tap="chooseLocation">
+			<view class="location-item x-bc pa20 mb20"  @tap="chooseLocation">
 				<view class="x-f">
 					<text class="cuIcon-focus"></text>
-					<text> {{addressData.latitude ?'重新获取地理位置':'点击定位当前地点'}}</text>
+					<text>{{ addressData.latitude ? '重新获取地理位置' : '点击定位当前地点' }}</text>
 				</view>
 				<text class="cuIcon-right"></text>
 			</view>
@@ -176,14 +176,22 @@ export default {
 
 <style lang="scss">
 // 点击定位
+
 .location-item {
-	height: 100rpx;
 	font-size: 28rpx;
 	font-family: PingFang SC;
 	font-weight: 500;
-	color: rgba(167, 111, 13, 1);
 	background-color: #fff;
-	.cuIcon-focus {
+	color: rgba(167, 111, 13, 1);
+	.address-box {
+		border-radius: 6rpx;
+		height: 72rpx;
+		padding: 0 30rpx;
+		width: 340rpx;
+	}
+
+	.cuIcon-focus,
+	.cuIcon-location {
 		font-size: 34rpx;
 		margin-right: 10rpx;
 	}

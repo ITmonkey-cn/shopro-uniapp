@@ -34,7 +34,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="info-card">
+			<view class="info-card" @tap="scanCode">
 				<image class="card-bg" src="/static/imgs/user/shop_qrcode.png" mode="aspectFill"></image>
 				<view class="card-content y-c">
 					<view class="card-title">扫码核销</view>
@@ -74,7 +74,7 @@
 			</view>
 		</view>
 		<!-- 订单列表 -->
-		<view class="order-list" v-for="order in storeOrderList" :key="order.order_sn" @tap.stop="jump('/pages/app/merchant/detail',{orderId:order.id})">
+		<view class="order-list" v-for="order in storeOrderList" :key="order.order_sn" @tap.stop="jump('/pages/app/merchant/detail', { orderId: order.id })">
 			<view class="order-head x-bc">
 				<text class="no">订单编号：{{ order.order_sn }}</text>
 				<text class="state">{{ order.status_name }}</text>
@@ -200,6 +200,27 @@ export default {
 			that.$api('store.info').then(res => {
 				if (res.code === 1) {
 					that.storeDetail = res.data;
+				}
+			});
+		},
+		// 扫码
+		scanCode() {
+			// 允许从相机和相册扫码
+			uni.scanCode({
+				success: function(res) {
+					console.log('条码类型：' + res.scanType);
+					console.log('条码内容：' + res.result);
+				}
+			});
+		},
+		// 核销
+		postOrderConfirm() {
+			let that = this;
+			that.$api('store.orderConfirm', {
+				id: '订单ID',
+				codes: '[订单编号数组]'
+			}).then(res => {
+				if (res.code === 1) {
 				}
 			});
 		},

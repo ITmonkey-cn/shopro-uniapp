@@ -451,7 +451,7 @@ export default {
 			});
 			// #endif
 			// #ifdef H5
-			wxsdk.getlocation(res => {
+			this.$wxsdk.getlocation(res => {
 				this.lng =  res.longitude;
 				this.lat = res.latitude;
 				this.getStoreAddress()

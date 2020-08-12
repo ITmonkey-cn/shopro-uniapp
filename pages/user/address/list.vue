@@ -12,7 +12,13 @@
 				<button class="cu-btn set-btn" @tap.stop="jump('/pages/user/address/edit', { id: address.id })">编辑</button>
 			</view>
 		</view>
-		<view class="foot_box"><button class="cu-btn add-btn" @tap="jump('/pages/user/address/edit', { id: 0, from: from })">添加新的收货地址</button></view>
+		<view class="foot_box x-ac">
+			<button class="cu-btn sync-wxaddress mr20" @tap="getWXaddress">
+				<text class="cuIcon-weixin"></text>
+				导入微信地址
+			</button>
+			<button class="cu-btn add-btn" @tap="jump('/pages/user/address/edit', { id: 0, from: from })">添加新的收货地址</button>
+		</view>
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
@@ -63,6 +69,29 @@ export default {
 			uni.navigateBack({
 				delta: 1
 			});
+		},
+		// 获取微信收货地址
+		getWXaddress() {
+			// #ifdef MP-WEIXIN
+			uni.chooseAddress({
+				success: res => {
+					console.log(res.userName);
+					console.log(res.postalCode);
+					console.log(res.provinceName);
+					console.log(res.cityName);
+					console.log(res.countyName);
+					console.log(res.detailInfo);
+					console.log(res.nationalCode);
+					console.log(res.telNumber);
+				},
+				fail: err => {}
+			});
+			// #endif
+			// #ifdef H5
+			this.$wxsdk.openAddress(res => {
+				console.log('h5', res);
+			});
+			// #endif
 		},
 		// 路由跳转
 		jump(path, parmas) {
@@ -130,10 +159,20 @@ export default {
 
 .foot_box {
 	padding: 20rpx;
-
-	.add-btn {
-		width: 710rpx;
+	.sync-wxaddress {
+		flex: 1;
 		height: 80rpx;
+		background: rgba(255, 255, 255, 1);
+		border-radius: 40rpx;
+		.cuIcon-weixin {
+			color: #1ea907;
+			margin-right: 10rpx;
+			font-size: 40rpx;
+		}
+	}
+	.add-btn {
+		height: 80rpx;
+		flex: 1;
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
 		border: 1rpx solid rgba(238, 238, 238, 1);
 		border-radius: 40rpx;
