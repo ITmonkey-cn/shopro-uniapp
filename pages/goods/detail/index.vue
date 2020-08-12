@@ -17,12 +17,8 @@
 
 				<!-- 价格卡片组 -->
 				<sh-price v-if="goodsInfo" :detail="goodsInfo" :type="detailType" @change="getActivityRules"></sh-price>
-				<view class="goods-title ">
-					<text class="shopro-selector-rect">{{ goodsInfo.title }}</text>
-				</view>
-				<view class="sub-title ">
-					<text class="shopro-selector-rect">{{ goodsInfo.subtitle }}</text>
-				</view>
+				<view class="goods-title more-t">{{ goodsInfo.title  }}</view>
+				<view class="sub-title more-t">{{ goodsInfo.subtitle }}</view>
 				<!-- 规格选择 -->
 				<view
 					class="sku-box shopro-selector-rect"
