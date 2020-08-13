@@ -591,6 +591,7 @@ export default {
 					flex: 4;
 					padding: 15rpx 20rpx;
 					height: 100%;
+					
 				}
 			}
 		}

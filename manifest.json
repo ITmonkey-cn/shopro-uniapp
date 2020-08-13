@@ -186,7 +186,7 @@
             "mode" : "history"
         },
         "devServer" : {
-            "https" : false
+            "https" : true
         },
         "uniStatistics" : {
             "enable" : false

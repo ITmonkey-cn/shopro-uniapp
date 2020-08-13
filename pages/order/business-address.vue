@@ -10,6 +10,7 @@
 			:polyline="polyline"
 			:include-points="includePoints"
 			show-location
+			@tap="onMap"
 		></map>
 		<div ref="testdiv" class="dragLayer" :class="moveCard" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
 			<div ref="oilStation" class="oilStation">
@@ -24,25 +25,25 @@
 					</div>
 				</div>
 				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
-					<view class="address-item x-f" v-for="a in 8" :key="a">
+					<view class="address-item x-f" v-for="address in addressList" :key="address.id">
 						<view class="address-left">
-							<view class="address-name">龙宇国际店</view>
+							<view class="address-name">{{ address.name }}</view>
 							<view class="time-box x-f">
 								<text class="cuIcon-time address-icon"></text>
-								08:00-18:00
+								{{ address.openhours }}
 							</view>
 							<view class="address-detail x-f">
 								<text class="cuIcon-location address-icon"></text>
-								郑东新区运动场东路龙宇国际A座
+								{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}
 							</view>
 							<view class="address-phone x-f">
 								<text class="cuIcon-phone address-icon"></text>
-								12345678911
+								{{ address.phone }}
 							</view>
 						</view>
 						<view class="address-right y-f">
 							<radio class="round address-checked orange checked" :checked="true"></radio>
-							<text class="address-distance">{{ distance }}</text>
+							<text class="address-distance">{{ address.distance_text || 0 }}</text>
 						</view>
 					</view>
 					<view class="more x-c"><text class="more-text">更多自提点，敬请期待</text></view>
@@ -56,36 +57,69 @@
 export default {
 	data() {
 		return {
-			longitude: 108.921672,
-			latitude: 34.250646,
+			longitude: 0,
+			latitude: 0,
 			mapHeight: 0,
 			topSize: 0,
 			showCard: false,
 			scrollable: false, // 初始化禁止滑动
 			moveCard: 'dragLayer-bottom',
-			markers: [
-				{
-					id: 0,
-					latitude: 39.98406,
-					longitude: 116.30752,
-					iconPath: '/static/imgs/order/e1.png',
-					width: 50,
-					height: 55
-				}
-			],
+			// markers: [], //标记点
 			polyline: [],
 			distance: 0,
-			includePoints: [{ longitude: 108.921672, latitude: 34.250646 }, { latitude: 39.98406, longitude: 116.30752 }]
+			includePoints: [], //可视区域点
+			addressList: []
 		};
 	},
-	computed: {},
-	onLoad() {},
+	computed: {
+		markers() {
+			if (this.addressList.length) {
+				let arr = [];
+				this.addressList.forEach(item => {
+					let obj = {
+						id: item.id,
+						latitude: item.latitude,
+						longitude: item.longitude,
+						iconPath: '/static/imgs/order/e1.png',
+						width: 50,
+						height: 55
+					};
+					arr.push(obj);
+				});
+				return arr;
+			}
+		}
+	},
+	onLoad(options) {
+		this.latitude = this.$Route.query.lat;
+		this.longitude = this.$Route.query.lng;
+		this.getStoreAddress();
+	},
 	onReady() {
 		let that = this;
 		this.editHeight();
 	},
 	onShow() {},
 	methods: {
+		// 点击地图
+		onMap() {
+			this.showCard = false;
+			this.moveCard = 'dragLayer-bottom';
+			this.scrollable = false;
+		},
+		// 获取商品支持的自提点。
+		getStoreAddress() {
+			let that = this;
+			that.$api('goods.storeAddress', {
+				id: that.$Route.query.goodsId,
+				latitude: that.$Route.query.lat,
+				longitude: that.$Route.query.lng
+			}).then(res => {
+				if (res.code == 1) {
+					that.addressList = res.data;
+				}
+			});
+		},
 		// 设置地图，卡片高度。
 		editHeight() {
 			let that = this;
@@ -197,6 +231,7 @@ export default {
 	background: rgba(0, 0, 0, 0.2);
 	z-index: 10;
 	border-radius: 50%;
+	color: #fff;
 }
 /* 浮层 */
 .dragLayer {

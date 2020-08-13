@@ -110,6 +110,7 @@ page {
 	width: 100%;
 	font-size: 30upx;
 	font-family: NotoSansHans-Bold;
+	 word-break:break-all;//英文文本不换行
 	color: #333;
 }
 ::-webkit-scrollbar {
