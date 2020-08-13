@@ -156,18 +156,20 @@
         "optimization" : {
             "subPackages" : true //开启小程序分包优化。
         },
-        "plugins" : {},
+        "plugins" : {
+			// "live-player-plugin" : {
+			//     //只有后台开通小程序直播功能权限，才可以打开，不然报错，程序无法运行。
+			//     "version" : "1.0.9", // 注意填写该直播组件最新版本号，微信开发者工具调试时可获取最新版本号（复制时请去掉注释）
+			//     "provider" : "wx2b03c6e691cd7370" // 必须填该直播组件appid，该示例值即为直播组件appid（复制时请去掉注释）
+			// }
+		},
         "permission" : {
             "scope.userLocation" : {
                 "desc" : "计算附近商店"
             }
         }
     },
-    // "live-player-plugin" : {
-    //     //只有后台开通小程序直播功能权限，才可以打开，不然报错，程序无法运行。
-    //     "version" : "1.0.9", // 注意填写该直播组件最新版本号，微信开发者工具调试时可获取最新版本号（复制时请去掉注释）
-    //     "provider" : "wx2b03c6e691cd7370" // 必须填该直播组件appid，该示例值即为直播组件appid（复制时请去掉注释）
-    // }
+  
     "h5" : {
         "title" : "Shopro",
         "domain" : "frontend.test.7wpp.com",

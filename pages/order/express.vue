@@ -1,6 +1,6 @@
 <template>
 	<view class="map-box">
-		<text class="cuIcon-back" @tap="$Router.back()"></text>
+		<!-- 	<text class="cuIcon-back" @tap="$Router.back()"></text>
 		<map
 			id="map"
 			:style="{ width: '750rpx', height: mapHeight + 'px' }"
@@ -10,8 +10,8 @@
 			:polyline="polyline"
 			:include-points="includePoints"
 			show-location
-		></map>
-		<div class="dragLayer" :class="moveCard">
+		></map> -->
+		<div class="express-wrap" :class="moveCard">
 			<div class="oilStation">
 				<div class="oilStation-top" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
 					<view class="x-bc express-card__head">
@@ -23,8 +23,8 @@
 							<text class="express-status">{{ firstGoods.status_name }}</text>
 						</view>
 						<view class="express-phone__box y-f">
-							<text class="cuIcon-phone"></text>
-							<text class="express-phone__text">物流电话</text>
+							<!-- 	<text class="cuIcon-phone"></text>
+							<text class="express-phone__text">物流电话</text> -->
 						</view>
 					</view>
 					<view class="express-sn x-f">
@@ -34,7 +34,7 @@
 				</div>
 				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
 					<view class="py30">
-						<view class="express-item x-f" v-for="log in expressDetail.log" :key="log.id">
+						<view v-if="exrpessLog.length" class="express-item x-f" v-for="log in exrpessLog" :key="log.id">
 							<view class="item-left y-end">
 								<text class="day">{{ log.changedate.split(' ')[0] }}</text>
 								<text class="time">{{ log.changedate.split(' ')[1] }}</text>
@@ -45,6 +45,7 @@
 								<view class="express-detail">{{ log.content }}</view>
 							</view>
 						</view>
+						<view v-if="!exrpessLog.length" class="no-log x-c">暂无物流信息~</view>
 					</view>
 				</scroll-view>
 			</div>
@@ -64,6 +65,7 @@ export default {
 			scrollable: false, // 初始化禁止滑动
 			moveCard: 'dragLayer-bottom',
 			expressDetail: {}, //物流信息
+			exrpessLog: [],
 			firstGoods: {}, //商品列表
 			goodsList: [],
 			markers: [
@@ -113,6 +115,7 @@ export default {
 				if (res.code === 1) {
 					that.expressDetail = res.data;
 					that.goodsList = res.data.item;
+					that.exrpessLog = res.data.log;
 					that.firstGoods = res.data.item[0];
 				}
 			});
@@ -254,12 +257,12 @@ export default {
 	transition: all ease-in-out 0.2s;
 }
 .oilStation {
-	width: 690rpx;
+	width: 750rpx;
 	display: flex;
 	flex-direction: column;
 	flex: 1;
 	height: 100%;
-	background: linear-gradient(to bottom, rgba(#fff, 0), rgba(#fff, 1));
+	// background: linear-gradient(to bottom, rgba(#fff, 0), rgba(#fff, 1));
 }
 /* 物流卡片 */
 .oilStation-top {
@@ -338,7 +341,7 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	flex-direction: row;
-	height: 600rpx;
+	min-height: 200rpx;
 	overflow: hidden;
 	background: #fff;
 	width: 710rpx;
@@ -348,6 +351,11 @@ export default {
 	padding: 0 30rpx;
 }
 // 物流步骤条
+.no-log{
+	width: 100%;
+	height: 100rpx;
+	color: #999;
+}
 .express-item {
 	align-items: flex-start;
 	.item-left {

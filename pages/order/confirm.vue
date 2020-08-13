@@ -319,7 +319,7 @@ export default {
 			couponId: 0,
 			couponPrice: '选择优惠券',
 			showExpressType: false, //配送方式弹窗
-			expressTypeCur: 'express',
+			expressTypeCur: '',
 			showCheckTime: false, //配送时间弹窗。
 			inExpressType: [], //当前商品支持的配送方式。
 			expressTypeMap:{
@@ -499,10 +499,16 @@ export default {
 					that.orderPre = res.data;
 					that.perGoodsList = res.data.new_goods_list
 					that.perGoodsList.map(item =>{
-						item.selType = "express"
 						item.selDate = '',
 						item.selPhone = 0
+						item.selType = item.dispatch_type;
+						that.goodsList.forEach(goods =>{
+							if(item.goods_id == goods.goods_id && item.sku_price_id == goods.sku_price_id){
+								goods.dispatch_type = item.dispatch_type;
+							}
+						})
 					})
+					console.log(that.goodsList);
 				
 				}
 			});
@@ -595,7 +601,7 @@ export default {
 		onSelExpressType(goods) {
 			this.showExpressType = true;
 			this.inExpressType = goods.detail.dispatch_type_arr;
-			this.expressTypeCur = goods.selType ? goods.selType : goods.detail.dispatch_type_arr[0];
+			this.expressTypeCur = goods.selType ? goods.selType : goods.dispatch_type;
 			this.selfPhone =  goods.selPhone ?  goods.selPhone :this.address.phone;
 			this.checkDayCur = goods.selDate ? goods.selDate : 0 ;
 			this.checkTimeCur = goods.selTime ? goods.selTime : 0;
@@ -605,7 +611,7 @@ export default {
 		// 关闭配送方式弹窗
 		hideExpressType() {
 			this.showExpressType = false;
-			this.changePerGoodsList()
+			this.expressTypeCur = ''
 		},
 		// 保存配送方式
 		saveExpressType(){
