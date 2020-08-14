@@ -41,7 +41,7 @@
 				<view class="logistic item-list x-bc" @tap="onSelExpressType(g)">
 					<view class="x-f"><view class="item-title">配送方式</view></view>
 					<view class="x-f" >
-						<view class="detail">{{ expressTypeMap[g.selType]}}</view>
+						<view class="detail">{{getCurGoodsExpress(g)}}</view>
 						<text class="cuIcon-right"></text>
 					</view>
 				</view>
@@ -161,7 +161,7 @@
 								<view class="express-content">
 									<view class="time-box">
 										<text class="box-title">配送时间</text>
-										<view class="box-content" @tap="checkExpressTime('shop')">
+										<view class="box-content" @tap="checkExpressTime('selfetch')">
 											<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
 											<text class="cuIcon-right box-icon"></text>
 										</view>
@@ -204,7 +204,7 @@
 							<view class="express-content">
 								<view class="time-box">
 									<text class="box-title">配送时间</text>
-									<view class="box-content" @tap="checkExpressTime('shop')">
+									<view class="box-content" @tap="checkExpressTime('store')">
 										<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
 										<text class="cuIcon-right box-icon"></text>
 									</view>
@@ -305,6 +305,7 @@ export default {
 			address: {
 				is_default: 0
 			},
+			storeList:[],//门店列表
 			storeInfo:{
 				id:0
 			},//商家信息
@@ -378,7 +379,7 @@ export default {
 				cl = 'head-nav__right--active';
 			}
 			return cl;
-		},
+		}
 		
 	},
 	watch: {
@@ -473,6 +474,14 @@ export default {
 				});
 			}
 		},
+		// 获取当前商品配送方式
+		getCurGoodsExpress(goods){
+			for( let item of this.goodsList){
+				if(item.goods_id == goods.goods_id &&  goods.sku_price_id == item.sku_price_id  ){
+					return this.expressTypeMap[item.dispatch_type];
+				}
+			}
+		},
 		// 获取商品支持的自提点。
 		getStoreAddress(){
 			let that = this;
@@ -483,6 +492,7 @@ export default {
 			}).then(res=>{
 				if(res.code == 1){
 					that.storeInfo = res.data[0]
+					that.storeList = res.data;
 				}
 			})
 		},
@@ -506,6 +516,7 @@ export default {
 						that.goodsList.forEach(goods =>{
 							if(item.goods_id == goods.goods_id && item.sku_price_id == goods.sku_price_id){
 								goods.dispatch_type = item.dispatch_type;
+								
 								if(item.store_id){
 									goods.store_id = item.store_id;
 								}
@@ -605,38 +616,56 @@ export default {
 		onSelExpressType(goods) {
 			this.showExpressType = true;
 			this.inExpressType = goods.detail.dispatch_type_arr;
-			this.expressTypeCur = goods.selType ? goods.selType : goods.dispatch_type;
-			this.selfPhone =  goods.selPhone;
-			this.checkDayCur = goods.selDate ? goods.selDate : 0 ;
-			this.checkTimeCur = goods.selTime ? goods.selTime : 0;
 			this.currentGoodsId = goods.goods_id;
 			this.currentSkuId = goods.sku_price_id;
+			
+			this.goodsList.forEach(item => {
+				if(item.goods_id == this.currentGoodsId &&  this.currentSkuId == item.sku_price_id  ){
+					this.expressTypeCur = item.dispatch_type;
+					this.selfPhone =  item.dispatch_phone?item.dispatch_phone:this.address.phone;
+					this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0 ;
+					this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
+					if (this.expressTypeCur == 'selfetch') {
+						this.storeList.forEach(store => {
+							if(item.store_id == store.id ){
+								this.storeInfo = store;
+							}
+						})
+						
+					}
+				}
+			})
+			
+
+			
 		},
 		// 关闭配送方式弹窗
 		hideExpressType() {
 			this.showExpressType = false;
-			this.expressTypeCur = ''
+			this.changeGoodsList()
 		},
 		// 保存配送方式
 		saveExpressType(){
 			this.showExpressType = false;
-			this.changePerGoodsList()
 			this.changeGoodsList()
 			this.getPre();
 		},
-		// 更改perGoods数据
-		changePerGoodsList(){
-			this.perGoodsList.map( goods => {
-				if(this.currentGoodsId == goods.goods_id && this.currentSkuId == goods.sku_price_id ){
-					goods.selType = this.expressTypeCur;
-					goods.selPhone = this.selfPhone
-					goods.selTime = this.checkTimeCur
-					goods.selDate = this.checkDayCur
-					
+
+	// 更改提交数据
+		changeGoodsList(){
+			this.goodsList.forEach(goods => {
+				if(goods.goods_id == this.currentGoodsId &&  this.currentSkuId == goods.sku_price_id  ){
+					goods.dispatch_type = this.expressTypeCur
+					goods.dispatch_phone =  this.selfPhone
+					goods.dispatch_date = this.checkTime['day'][this.checkDayCur].value + ' ' +  this.checkTime['time'][this.checkTimeCur]+':00'
+					if(this.expressTypeCur == 'selfetch'){
+						goods.store_id =  this.storeInfo.id ;
+					}
+					goods.checkDayCur = this.checkDayCur;
+					goods.checkTimeCur = this.checkTimeCur;
 				}
 			})
 		},
-
 		// 选择快递方式
 		changeExpressType(cur) {
 			this.expressTypeCur = cur;
@@ -644,17 +673,7 @@ export default {
 				this.getStoreAddress()
 				}
 		},
-		// 更改提交数据
-		changeGoodsList(){
-			this.goodsList.forEach(goods => {
-				if(goods.goods_id == this.currentGoodsId &&  this.currentSkuId == goods.sku_price_id  ){
-					goods.dispatch_type = this.expressTypeCur
-					goods.dispatch_phone =  this.selfPhone
-					goods.dispatch_date = this.checkTime['day'][this.checkDayCur].value + ' ' +  this.checkTime['time'][this.checkTimeCur]+':00'
-					goods.store_id = this.storeInfo.id ;
-				}
-			})
-		},
+	
 		// 格式日期
 		check(type, index) {
 			if (type == 'time') {
@@ -672,10 +691,10 @@ export default {
 		// 选择配送时间
 		checkExpressTime(type) {
 			switch (type) {
-				case 'shop':
+				case 'store':
 					this.checkType = '配送';
 					break;
-				case 'oneself':
+				case 'selfetch':
 					this.checkType = '自提';
 					break;
 				default:
