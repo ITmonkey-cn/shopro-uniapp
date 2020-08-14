@@ -13,7 +13,7 @@
 			</view>
 		</view>
 		<view class="foot_box x-ac">
-			<button class="cu-btn sync-wxaddress mr20" @tap="getWXaddress">
+			<button class="cu-btn sync-wxaddress mr20" @tap="getWXaddress" v-if="platform == 'wxMiniProgram' || platform == 'wxOfficialAccount'">
 				<text class="cuIcon-weixin"></text>
 				导入微信地址
 			</button>
@@ -36,7 +36,17 @@ export default {
 	data() {
 		return {
 			addressList: [],
-			from: ''
+			from: '',
+			platform: uni.getStorageSync('platform'),
+			addressData: {
+				consignee: '',
+				phone: '',
+				area_id: '',
+				address: '',
+				is_default: false,
+				latitude: '',
+				longitude: ''
+			}
 		};
 	},
 	computed: {},
@@ -75,23 +85,35 @@ export default {
 			// #ifdef MP-WEIXIN
 			uni.chooseAddress({
 				success: res => {
-					console.log(res.userName);
-					console.log(res.postalCode);
-					console.log(res.provinceName);
-					console.log(res.cityName);
-					console.log(res.countyName);
-					console.log(res.detailInfo);
-					console.log(res.nationalCode);
-					console.log(res.telNumber);
+					this.addressData.consignee = res.userName;
+					this.addressData.phone = res.telNumber;
+					this.addressData.area_id = res.nationalCode;
+					this.addressData.address = res.detailInfo;
+					this.addressData.is_default = false;
+					this.editAddress();
 				},
 				fail: err => {}
 			});
 			// #endif
 			// #ifdef H5
 			this.$wxsdk.openAddress(res => {
-				console.log('h5', res);
+				this.addressData.consignee = res.userName;
+				this.addressData.phone = res.telNumber;
+				this.addressData.area_id = res.nationalCode;
+				this.addressData.address = res.detailInfo;
+				this.addressData.is_default = false;
+				this.editAddress();
 			});
 			// #endif
+		},
+		// 添加地址
+		editAddress() {
+			let that = this;
+			that.$api('address.edit', that.addressData).then(res => {
+				if (res.code === 1) {
+					this.getAddressList();
+				}
+			});
 		},
 		// 路由跳转
 		jump(path, parmas) {

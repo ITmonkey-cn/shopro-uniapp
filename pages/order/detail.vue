@@ -10,13 +10,16 @@
 				</view>
 			</view>
 			<!-- 收货地址 -->
-			<view class="order-address-box">
-				<view class="x-f">
-					<text class="address-username">{{ orderDetail.consignee }}</text>
-					<text class="address-phone">{{ orderDetail.phone }}</text>
+			<view class="address-wrap">
+				<view class="order-address-box" v-if="orderDetail.consignee">
+					<view class="x-f">
+						<text class="address-username">{{ orderDetail.consignee }}</text>
+						<text class="address-phone">{{ orderDetail.phone }}</text>
+					</view>
+					<view class="address-detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
 				</view>
-				<view class="address-detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
 			</view>
+			
 			<view class="detail-goods">
 				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
@@ -334,9 +337,18 @@ export default {
 }
 
 // 收货地址
+.address-wrap{
+	position: relative;
+	background-color: #fff;
+	min-height:160rpx;
+	width: 100%;
+	margin-bottom: 20rpx;
+}
 .order-address-box {
 	width: 710rpx;
-	margin: -50rpx auto 20rpx;
+	left: 50%;
+	transform: translateX(-50%);
+	top: -50rpx;
 	background-color: #fff;
 	min-height: 160rpx;
 	border-radius: 20rpx;
@@ -345,6 +357,7 @@ export default {
 	font-family: PingFang SC;
 	font-weight: 500;
 	color: rgba(51, 51, 51, 1);
+	position: absolute;
 	.address-username {
 		margin-right: 20rpx;
 	}
@@ -630,7 +643,7 @@ export default {
 			font-size: 26rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
-			color: rgba(168, 112, 13, 0.9);
+			color: #fff;
 			padding: 0;
 		}
 	}

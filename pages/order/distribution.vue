@@ -10,28 +10,22 @@
 					<image class="qr-code--img my20" :src="allqrcodepath" mode=""></image>
 					<view class="detail-item">
 						<view class="item-title">核销码</view>
-						<view class="x-bc my20">
+						<view class="x-bc my20" v-for="code in qrcodeList" :key="code.code">
 							<view class="">
-								<text class="item-content">5368 4946 54</text>
+								<text class="item-content">{{ code.code }}</text>
 								<text class="item-status mx30">待使用</text>
 							</view>
-							<button class="cu-btn check-code" @tap="checkCode('123123123')">查看</button>
+							<button class="cu-btn check-code" @tap="checkCode(code.code)">查看</button>
 						</view>
-						<view class="x-bc my20">
-							<view class="">
-								<text class="item-content">5368 4946 54</text>
-								<text class="item-status  mx30">待使用</text>
-							</view>
-							<button class="cu-btn check-code" @tap="checkCode('asfasfasfasfd')">查看</button>
-						</view>
+
 						<view class="item-tip">为保障您的权益，未到店消费前请不要将提货码提供给商家</view>
 					</view>
 				</view>
 			</view>
 			<view class="detail-item pa20" v-if="expressType == 'selfetch'">
-				<view class="item-title">龙与国际店</view>
-				<view class="item-content">郑州市郑东新区运动场东路龙宇国际A座紫月星辰小店</view>
-				<view class="item-content">到店时间：2020-05-11 16:43</view>
+				<view class="item-title">{{storeInfo.name}}</view>
+				<view class="item-content">{{ storeInfo.province_name }}{{ storeInfo.city_name }}{{ storeInfo.area_name }}{{ storeInfo.address }}</view>
+				<view class="item-content">营业时间：{{storeInfo.openhours}}</view>
 			</view>
 			<view class="detail-item pa20" v-if="expressType == 'store'">
 				<view class="item-title">配送信息</view>
@@ -44,7 +38,7 @@
 				<view class="item-content">提 取 码 ：123456</view>
 			</view>
 		</view>
-		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store' ">
+		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store'">
 			<button class="service-btn cu-btn" @tap="onService">
 				<text class="cuIcon-dianhua"></text>
 				联系商家
@@ -76,7 +70,9 @@ export default {
 		return {
 			poster: {},
 			canvasId: 'qrcode_img',
-			qrcode: 'klaskdfkakfak',
+			qrcode: '', //核销总码
+			qrcodeList: [], //核销码列表
+			storeInfo:{},//自提点信息
 			qrcodepath: '',
 			allqrcodepath: '',
 			itemDetail: {}, //订单商品详情
@@ -107,7 +103,7 @@ export default {
 		},
 		// 跳转客服
 		onService() {
-			this.$tools.callPhone(this.itemDetail.store.phone)
+			this.$tools.callPhone(this.itemDetail.store.phone);
 		},
 		// 查看核销码
 		checkCode(code) {
@@ -129,7 +125,13 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.itemDetail = res.data;
-					that.qrcode = res.data.express_no;
+					that.qrcodeList = res.data.verify;
+					that.storeInfo = res.data.store;
+					let _arr = [];
+					that.qrcodeList.forEach(code => {
+						_arr.push(code.code);
+					});
+					that.qrcode = _arr.join(',');
 					that.shareFc();
 				}
 			});
