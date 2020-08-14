@@ -150,12 +150,12 @@
 								<view class="express-top x-bc" @tap="jump('/pages/order/business-address', {goodsId:currentGoodsId,lat:lat,lng:lng })">
 									<view class="">
 										<text class="tag1" v-if="address.is_default == 1">最近</text>
-										<text class="address">{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}</text>
+										<text class="address">{{storeInfo.name || '暂无自提点'}}</text>
 										<text class="cuIcon-right address-guide"></text>
 									</view>
 									<view class="address-location">
 										<image class="location-img" src="/static/imgs/order/e1.png" mode=""></image>
-										<text class="location-text">距您{{address.distance_text ||　0}}</text>
+										<text class="location-text">距您{{storeInfo.distance_text ||　0}}</text>
 									</view>
 								</view>
 								<view class="express-content">
@@ -305,6 +305,9 @@ export default {
 			address: {
 				is_default: 0
 			},
+			storeInfo:{
+				id:0
+			},//商家信息
 			addressId: 0,
 			from: '',
 			orderType: '',
@@ -479,7 +482,7 @@ export default {
 				longitude:that.lng
 			}).then(res=>{
 				if(res.code == 1){
-					that.address = res.data[0]
+					that.storeInfo = res.data[0]
 				}
 			})
 		},
@@ -505,6 +508,9 @@ export default {
 						that.goodsList.forEach(goods =>{
 							if(item.goods_id == goods.goods_id && item.sku_price_id == goods.sku_price_id){
 								goods.dispatch_type = item.dispatch_type;
+								if(item.store_id){
+									goods.store_id = item.store_id;
+								}
 							}
 						})
 					})
@@ -618,6 +624,9 @@ export default {
 			this.showExpressType = false;
 			this.changePerGoodsList()
 			this.changeGoodsList()
+			if(this.expressTypeCur == 'store'){
+				this.getPre();
+			}
 			
 		},
 		// 更改perGoods数据
@@ -628,6 +637,7 @@ export default {
 					goods.selPhone = this.selfPhone ?  this.selfPhone : this.address.phone
 					goods.selTime = this.checkTimeCur
 					goods.selDate = this.checkDayCur
+					
 				}
 			})
 		},
@@ -646,6 +656,7 @@ export default {
 					goods.dispatch_type = this.expressTypeCur
 					goods.dispatch_phone =  this.selfPhone ?  this.selfPhone : this.address.phone
 					goods.dispatch_date = this.checkTime['day'][this.checkDayCur].value + ' ' +  this.checkTime['time'][this.checkTimeCur]+':00'
+					goods.store_id = this.expressTypeCur == 'selfetch' ? this.storeInfo.id : 0;
 				}
 			})
 		},

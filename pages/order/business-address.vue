@@ -16,37 +16,50 @@
 			<div ref="oilStation" class="oilStation">
 				<div class="oilStation-top">
 					<view class="touch-guide x-c" @tap="onShowCard">
-						<text v-if="!showCard" class="iconfont touch-jintou icon-xiangxia2"></text>
-						<text v-if="showCard" class="iconfont touch-jintou icon-xiangshang21"></text>
+						<image class="touch-jintou" v-if="!showCard" src="/static/imgs/order/arrows1.png" mode=""></image>
+						<image class="touch-jintou" v-if="showCard" src="/static/imgs/order/arrows2.png" mode=""></image>
 					</view>
-					<div class="search-box x-f">
+					<!-- <div class="search-box x-f">
 						<text class="cuIcon-search"></text>
 						<input class="search-inp" placeholder-class="search-pl" placeholder="输入地址寻找周边自提点" type="text" value="" />
-					</div>
+					</div> -->
 				</div>
 				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
-					<view class="address-item x-f" v-for="address in addressList" :key="address.id">
-						<view class="address-left">
-							<view class="address-name">{{ address.name }}</view>
-							<view class="time-box x-f">
-								<text class="cuIcon-time address-icon"></text>
-								{{ address.openhours }}
-							</view>
-							<view class="address-detail x-f">
-								<text class="cuIcon-location address-icon"></text>
-								{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}
-							</view>
-							<view class="address-phone x-f">
-								<text class="cuIcon-phone address-icon"></text>
-								{{ address.phone }}
-							</view>
+					<view class="page_box">
+						<view class="content_box" style="background-color: #fff;overflow-x: hidden;">
+							<label @tap="selStoreAddress(address.id, index)" v-for="(address, index) in addressList" :key="address.id">
+								<view class="address-item x-f">
+									<view class="address-left">
+										<view class="address-name">{{ address.name }}</view>
+										<view class="time-box ">
+											<view class="x-f">
+												<text class="cuIcon-time address-icon"></text>
+												{{ address.openhours }}
+											</view>
+											<view class="x-f" style="padding-left: 30rpx;">
+												<text v-for="week in address.openweeks_arr" :key="week">{{ weekMap[week] }}、</text>
+											</view>
+										</view>
+										<view class="address-detail x-f">
+											<text class="cuIcon-location address-icon"></text>
+											{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}
+										</view>
+										<view class="address-phone x-f">
+											<text class="cuIcon-phone address-icon"></text>
+											{{ address.phone }}
+										</view>
+									</view>
+									<view class="address-right y-f">
+										<radio class="round address-checked orange checked" :checked="storeId == address.id"></radio>
+										<text class="address-distance">{{ address.distance_text || 0 }}</text>
+									</view>
+								</view>
+							</label>
+
+							<view class="more x-c"><text class="more-text">更多自提点，敬请期待</text></view>
 						</view>
-						<view class="address-right y-f">
-							<radio class="round address-checked orange checked" :checked="true"></radio>
-							<text class="address-distance">{{ address.distance_text || 0 }}</text>
-						</view>
+						<view class="foot_box x-c"><button class="cu-btn save-btn" @tap="onSave">确认</button></view>
 					</view>
-					<view class="more x-c"><text class="more-text">更多自提点，敬请期待</text></view>
 				</scroll-view>
 			</div>
 		</div>
@@ -67,8 +80,19 @@ export default {
 			// markers: [], //标记点
 			polyline: [],
 			distance: 0,
+			storeId: 0, //默认门店ID
 			includePoints: [], //可视区域点
-			addressList: []
+			addressList: [], //门店列表
+			storeInfo: [], //当前门店信息
+			weekMap: {
+				1: '周一',
+				2: '周二',
+				3: '周三',
+				4: '周四',
+				5: '周五',
+				6: '周六',
+				7: '周日'
+			}
 		};
 	},
 	computed: {
@@ -82,7 +106,14 @@ export default {
 						longitude: item.longitude,
 						iconPath: '/static/imgs/order/e1.png',
 						width: 50,
-						height: 55
+						height: 55,
+						callout: {
+							contetn: item.name,
+							color: '#a8700e',
+							borderRadius: 10,
+							display: 'ALWAYS',
+							textAlign: 'center'
+						}
 					};
 					arr.push(obj);
 				});
@@ -101,11 +132,34 @@ export default {
 	},
 	onShow() {},
 	methods: {
+		// 选中门店
+		onSave() {
+			let pages = getCurrentPages();
+
+			// #ifdef MP-WEIXIN || APP-PLUS
+			let currPage = pages[pages.length - 1].$vm;
+			let prevPage = pages[pages.length - 2].$vm; //上一个页面
+			// #endif
+
+			// #ifdef H5
+			let currPage = pages[pages.length - 1];
+			let prevPage = pages[pages.length - 2]; //上一个页面
+			// #endif
+			prevPage.storeInfo = this.storeInfo;
+			this.storeId == 0 ? this.$tools.toast('请选择门店') : this.$Router.back();
+		},
 		// 点击地图
 		onMap() {
 			this.showCard = false;
 			this.moveCard = 'dragLayer-bottom';
 			this.scrollable = false;
+		},
+		// 选择门店
+		selStoreAddress(id, index) {
+			this.storeId = id;
+			this.latitude = this.addressList[index].latitude;
+			this.longitude = this.addressList[index].longitude;
+			this.storeInfo = this.addressList[index];
 		},
 		// 获取商品支持的自提点。
 		getStoreAddress() {
@@ -117,6 +171,7 @@ export default {
 			}).then(res => {
 				if (res.code == 1) {
 					that.addressList = res.data;
+					this.storeId = res.data[0].id;
 				}
 			});
 		},
@@ -219,7 +274,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .cuIcon-back {
 	position: fixed;
 	top: 50rpx;
@@ -270,12 +325,12 @@ export default {
 }
 .touch-guide {
 	justify-content: center;
-	align-items: flex-start;
+	align-items: center;
 	height: 54rpx;
 }
 .touch-jintou {
-	color: #e5e5e5;
-	font-size: 80rpx;
+	width: 60rpx;
+	height: 8rpx;
 }
 .search-box {
 	flex: 1;
@@ -288,6 +343,21 @@ export default {
 	padding: 0 25rpx;
 	margin-top: 30rpx;
 }
+// 确认门店
+.foot_box {
+	height: 80rpx;
+	background-color: #fff;
+	.save-btn {
+		color: #fff;
+		width: 690rpx;
+		height: 60rpx;
+		background: linear-gradient(90deg, rgba(233, 181, 97, 1), rgba(238, 204, 138, 1));
+		box-shadow: 1rpx 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
+		border-radius: 40rpx;
+		font-size: 28rpx;
+	}
+}
+
 .cuIcon-search {
 	color: #bdbdbd;
 	font-size: 40rpx;
@@ -337,7 +407,7 @@ export default {
 	font-size: 24rpx;
 	font-family: PingFang SC;
 	font-weight: 400;
-	color: rgba(102, 102, 102, 1);
+	color: #666;
 	margin-bottom: 20rpx;
 }
 .address-icon {
