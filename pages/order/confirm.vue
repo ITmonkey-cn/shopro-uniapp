@@ -140,7 +140,7 @@
 						<view class="express-address" v-if="expressTypeCur == 'selfetch'">
 							<!-- 定位 -->
 							<view class="y-f location-box" v-if="!lat">
-								<image class="location-img" src="/static/imgs/order/e2.png" mode=""></image>
+								<image class="nolocation-img" src="/static/imgs/order/location.png" mode=""></image>
 								<text class="location-title">开启定位服务</text>
 								<text class="location-tip">为你推荐更精准的位置信息噢~</text>
 								<button class="cu-btn open-location" @tap="openLocation">去开启</button>
@@ -502,8 +502,6 @@ export default {
 					that.orderPre = res.data;
 					that.perGoodsList = res.data.new_goods_list
 					that.perGoodsList.map(item =>{
-						item.selDate = '',
-						item.selPhone = 0
 						item.selType = item.dispatch_type;
 						that.goodsList.forEach(goods =>{
 							if(item.goods_id == goods.goods_id && item.sku_price_id == goods.sku_price_id){
@@ -608,7 +606,7 @@ export default {
 			this.showExpressType = true;
 			this.inExpressType = goods.detail.dispatch_type_arr;
 			this.expressTypeCur = goods.selType ? goods.selType : goods.dispatch_type;
-			this.selfPhone =  goods.selPhone ?  goods.selPhone :this.address.phone;
+			this.selfPhone =  goods.selPhone;
 			this.checkDayCur = goods.selDate ? goods.selDate : 0 ;
 			this.checkTimeCur = goods.selTime ? goods.selTime : 0;
 			this.currentGoodsId = goods.goods_id;
@@ -624,17 +622,14 @@ export default {
 			this.showExpressType = false;
 			this.changePerGoodsList()
 			this.changeGoodsList()
-			if(this.expressTypeCur == 'store'){
-				this.getPre();
-			}
-			
+			this.getPre();
 		},
 		// 更改perGoods数据
 		changePerGoodsList(){
 			this.perGoodsList.map( goods => {
 				if(this.currentGoodsId == goods.goods_id && this.currentSkuId == goods.sku_price_id ){
 					goods.selType = this.expressTypeCur;
-					goods.selPhone = this.selfPhone ?  this.selfPhone : this.address.phone
+					goods.selPhone = this.selfPhone
 					goods.selTime = this.checkTimeCur
 					goods.selDate = this.checkDayCur
 					
@@ -654,9 +649,9 @@ export default {
 			this.goodsList.forEach(goods => {
 				if(goods.goods_id == this.currentGoodsId &&  this.currentSkuId == goods.sku_price_id  ){
 					goods.dispatch_type = this.expressTypeCur
-					goods.dispatch_phone =  this.selfPhone ?  this.selfPhone : this.address.phone
+					goods.dispatch_phone =  this.selfPhone
 					goods.dispatch_date = this.checkTime['day'][this.checkDayCur].value + ' ' +  this.checkTime['time'][this.checkTimeCur]+':00'
-					goods.store_id = this.expressTypeCur == 'selfetch' ? this.storeInfo.id : 0;
+					goods.store_id = this.storeInfo.id ;
 				}
 			})
 		},
@@ -804,7 +799,7 @@ export default {
 
 	.detail {
 		font-size: 28rpx;
-		color: #c4c4c4;
+		color: #333;
 	}
 
 	.price {
@@ -988,9 +983,9 @@ export default {
 	.location-box{
 		height: 500rpx;
 		justify-content: center;
-		.location-img{
+		.nolocation-img{
 			width: 74rpx;
-			height: 74rpx;
+			height: 90rpx;
 			margin-bottom: 40rpx;
 		}
 		.location-title{
@@ -1090,6 +1085,7 @@ export default {
 
 			.express-content {
 				@include flex($justify: null, $align: center, $direction: null, $warp: null, $warpAlign: null);
+				margin-bottom: 20rpx;
 				.box-line {
 					width: 1rpx;
 					height: 61rpx;

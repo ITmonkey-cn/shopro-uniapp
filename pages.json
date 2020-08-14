@@ -200,7 +200,7 @@
 					"style": {
 						"navigationBarTitleText": "",
 						"navigationStyle": "custom"
-				
+
 					},
 					"meta": {
 						"auth": true,
@@ -213,7 +213,7 @@
 					"path": "merchant/info",
 					"style": {
 						"navigationBarTitleText": "门店信息"
-				
+
 					},
 					"meta": {
 						"auth": true,
@@ -226,7 +226,7 @@
 					"path": "merchant/detail",
 					"style": {
 						"navigationBarTitleText": "订单详情"
-				
+
 					},
 					"meta": {
 						"auth": true,
@@ -401,7 +401,7 @@
 					"path": "after-sale/detail",
 					"style": {
 						"navigationBarTitleText": "服务单详情"
-				
+
 					},
 					"meta": {
 						"auth": true,
@@ -412,7 +412,7 @@
 					"path": "after-sale/log",
 					"style": {
 						"navigationBarTitleText": "进度详情"
-				
+
 					},
 					"meta": {
 						"auth": true,
@@ -751,7 +751,11 @@
 		"navigationBarTitleText": "",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#fff",
-		"navigationStyle": "default" //默认是default，即带有原生导航栏。custom,取消导航栏。
+		"navigationStyle": "default", //默认是default，即带有原生导航栏。custom,取消导航栏。
+		"SplitLineStyles": {
+			"color": "#ccc",
+			"height": "1px"
+		}
 	}
 	// 默认底部导航栏
 	// "tabBar": {
