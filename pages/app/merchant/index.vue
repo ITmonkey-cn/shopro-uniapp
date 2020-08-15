@@ -128,6 +128,7 @@ export default {
 			orderInfo: {}, //订单统计信息
 			storeDetail: {}, //门店信息
 			cancelType: 'date', //核销分类
+			scanCodes: [], //扫码内容。
 			cancelTypeList: [
 				{
 					id: 0,
@@ -141,7 +142,7 @@ export default {
 				}
 			],
 			showInputModal: false, //输码核销
-			qrcode: '',
+			qrcode: '', //输码
 			showCalendar: false, //日期选择
 			mode: 'range',
 			result: '请选择日期',
@@ -152,7 +153,7 @@ export default {
 			activeBgColor: '#4CB89D',
 			isShowDropDown: false, //是否显示下拉菜单
 			filter: {
-				date: 'yesterday',
+				date: 'today',
 				status: 'all',
 				custom: []
 			},
@@ -205,22 +206,48 @@ export default {
 		},
 		// 扫码
 		scanCode() {
-			// 允许从相机和相册扫码
-			uni.scanCode({
-				success: function(res) {
-					console.log('条码类型：' + res.scanType);
-					console.log('条码内容：' + res.result);
-				}
-			});
+			let platform = uni.getStorageSync('platform');
+			switch (platform) {
+				case 'wxOfficialAccount':
+					// #ifdef H5
+					this.$wxsdk.scanQRCode(res => {
+						this.scanCodes = res.resultStr.split(',');
+						this.postOrderConfirm();
+					});
+					// #endif
+					break;
+				case 'wxMiniProgram':
+					uni.scanCode({
+						success: res => {
+							this.scanCodes = res.result.split(',');
+							this.postOrderConfirm();
+						},
+						fail: err => {
+							console.log(err);
+						}
+					});
+					break;
+				default:
+					this.$tools.toast('请使用小程序或微信浏览器');
+			}
+		},
+		// 输码
+		onConfirm() {
+			this.showInputModal = false;
+			this.scanCodes.push(this.qrcode);
+			this.postOrderConfirm();
 		},
 		// 核销
 		postOrderConfirm() {
 			let that = this;
 			that.$api('store.orderConfirm', {
-				id: '订单ID',
-				codes: '[订单编号数组]'
+				codes: that.scanCodes
 			}).then(res => {
 				if (res.code === 1) {
+					that.$tools.toast(res.msg);
+					that.scanCodes = [];
+					that.qrcode = '';
+					that.getStoreOrder();
 				}
 			});
 		},
@@ -344,7 +371,7 @@ export default {
 				margin-left: 10rpx;
 			}
 			.shop-phone {
-				font-size: 22rpx;
+				font-size: 28rpx;
 				font-family: PingFang SC;
 				font-weight: 500;
 				color: rgba(255, 255, 255, 1);

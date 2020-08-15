@@ -65,6 +65,25 @@ export default {
 			});
 		});
 	},
+	// 微信扫码
+	scanQRCode: function(callback) {
+		if (!this.isWechat()) {
+			return;
+		}
+		this.initJssdk(function(res) {
+			jweixin.ready(function() {
+				jweixin.scanQRCode({
+					needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+					scanType: ["qrCode","barCode"],// 可以指定扫二维码还是一维码，默认二者都有
+					success: function(res) {
+						callback(res)
+					},
+					fail: function(res) {},
+				});
+			});
+		});
+	},
+	// 微信分享
 	share: function(data, callback) {
 		if (!this.isWechat()) {
 			return;
@@ -91,6 +110,7 @@ export default {
 		});
 
 	},
+	// 微信定位
 	openLocation: function(data, callback) { //打开位置
 		if (!this.isWechat()) {
 			return;
@@ -104,6 +124,7 @@ export default {
 			});
 		});
 	},
+	// 选择图片
 	chooseImage: function(callback) { //选择图片
 		if (!this.isWechat()) {
 			return;

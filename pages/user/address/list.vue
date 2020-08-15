@@ -112,6 +112,8 @@ export default {
 			that.$api('address.edit', that.addressData).then(res => {
 				if (res.code === 1) {
 					this.getAddressList();
+				}else{
+					this.$tools.toast(res.msg)
 				}
 			});
 		},

@@ -10,8 +10,8 @@
 				</view>
 			</view>
 			<!-- 收货地址 -->
-			<view class="address-wrap">
-				<view class="order-address-box" v-if="orderDetail.consignee">
+			<view class="address-wrap" v-if="orderDetail.consignee">
+				<view class="order-address-box" >
 					<view class="x-f">
 						<text class="address-username">{{ orderDetail.consignee }}</text>
 						<text class="address-phone">{{ orderDetail.phone }}</text>
