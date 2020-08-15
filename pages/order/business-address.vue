@@ -36,7 +36,7 @@
 												<text class="cuIcon-time address-icon"></text>
 												{{ address.openhours }}
 											</view>
-											<view class="x-f" style="padding-left: 30rpx;">
+											<view class="x-f" style="padding-left: 30rpx;margin-top: 20rpx;">
 												<text v-for="week in address.openweeks_arr" :key="week">{{ weekMap[week] }}、</text>
 											</view>
 										</view>
@@ -104,16 +104,9 @@ export default {
 						id: item.id,
 						latitude: item.latitude,
 						longitude: item.longitude,
-						iconPath: '/static/imgs/order/e1.png',
+						iconPath: item.image_first,
 						width: 50,
 						height: 55,
-						callout: {
-							contetn: item.name,
-							color: '#a8700e',
-							borderRadius: 10,
-							display: 'ALWAYS',
-							textAlign: 'center'
-						}
 					};
 					arr.push(obj);
 				});
@@ -386,7 +379,7 @@ export default {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #eef1f4;
-	padding: 35rpx 0 15rpx;
+	padding: 15rpx 0 15rpx;
 	width: 690rpx;
 	justify-content: space-between;
 	align-items: center;
