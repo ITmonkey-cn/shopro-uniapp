@@ -85,11 +85,13 @@ export default {
 			// #ifdef MP-WEIXIN
 			uni.chooseAddress({
 				success: res => {
+					this.addressData.id = 0;
 					this.addressData.consignee = res.userName;
 					this.addressData.phone = res.telNumber;
 					this.addressData.area_id = res.nationalCode;
 					this.addressData.address = res.detailInfo;
 					this.addressData.is_default = false;
+					console.log(this.addressData);
 					this.editAddress();
 				},
 				fail: err => {}
@@ -97,6 +99,7 @@ export default {
 			// #endif
 			// #ifdef H5
 			this.$wxsdk.openAddress(res => {
+				this.addressData.id = 0;
 				this.addressData.consignee = res.userName;
 				this.addressData.phone = res.telNumber;
 				this.addressData.area_id = res.nationalCode;
@@ -112,9 +115,8 @@ export default {
 			that.$api('address.edit', that.addressData).then(res => {
 				if (res.code === 1) {
 					this.getAddressList();
-				}else{
-					this.$tools.toast(res.msg)
 				}
+				console.log(res);
 			});
 		},
 		// 路由跳转

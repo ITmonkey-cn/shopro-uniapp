@@ -8,8 +8,8 @@
 				<!-- 到店自提 -->
 				<view class="y-f mb20 pb20" v-if="expressType == 'selfetch'">
 					<image class="qr-code--img my20" :src="allqrcodepath" mode=""></image>
-					<view class="detail-item">
-						<view class="item-title">核销码</view>
+					<view class="detail-item" style="align-items: flex-start;width: 100%;">
+						<view class="item-title" v-if="qrcodeList.length">核销码</view>
 						<view class="x-bc my20" v-for="code in qrcodeList" :key="code.code">
 							<view class="">
 								<text class="item-content">{{ code.code }}</text>
@@ -34,7 +34,7 @@
 			</view>
 			<view class="detail-item pa20" v-if="expressType == 'autosend'">
 				<view class="item-title">发货信息</view>
-				<view v-for="item in autosendList" :key="item.value" class="item-content">{{item.name}}：{{item.value}}</view>
+				<view v-for="item in autosendList" :key="item.value" class="item-content">{{ item.name }}：{{ item.value }}</view>
 			</view>
 		</view>
 		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store'">
@@ -127,7 +127,9 @@ export default {
 					that.itemDetail = res.data;
 					that.qrcodeList = res.data.verify;
 					that.storeInfo = res.data.store;
-					that.autosendList = JSON.parse(res.data.ext_arr.autosend_content);
+					if (res.data.ext_arr.autosend_content) {
+						that.autosendList = JSON.parse(res.data.ext_arr.autosend_content);
+					}
 					let _arr = [];
 					that.qrcodeList.forEach(code => {
 						_arr.push(code.code);

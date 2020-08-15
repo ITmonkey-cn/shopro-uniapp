@@ -1,6 +1,6 @@
 <template>
 	<view class="page_box">
-		<view class="head_box">
+		<view class="head_box" v-if="orderPre.need_address">
 			<view class="add-address-box flex-sub x-f" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
 				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
 				<view class="box-bg x-bc flex-sub pad">
@@ -162,7 +162,7 @@
 									<view class="time-box">
 										<text class="box-title">到店时间</text>
 										<view class="box-content" @tap="checkExpressTime('selfetch')">
-											<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
+											<text class="box-text">{{ checkTime['day'][checkDayCur].title }}{{ checkTime['time'][checkTimeCur] }}</text>
 											<text class="cuIcon-right box-icon"></text>
 										</view>
 									</view>
@@ -205,7 +205,7 @@
 								<view class="time-box">
 									<text class="box-title">配送时间</text>
 									<view class="box-content" @tap="checkExpressTime('store')">
-										<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
+										<text class="box-text">{{ checkTime['day'][checkDayCur].title }}{{ checkTime['time'][checkTimeCur] }}</text>
 										<text class="cuIcon-right box-icon"></text>
 									</view>
 								</view>

@@ -338,12 +338,12 @@ export default {
 }
 // 确认门店
 .foot_box {
-	height: 80rpx;
+	height: 100rpx;
 	background-color: #fff;
 	.save-btn {
 		color: #fff;
 		width: 690rpx;
-		height: 60rpx;
+		height: 80rpx;
 		background: linear-gradient(90deg, rgba(233, 181, 97, 1), rgba(238, 204, 138, 1));
 		box-shadow: 1rpx 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 		border-radius: 40rpx;

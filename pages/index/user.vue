@@ -155,9 +155,9 @@ export default {
 
 <style lang="scss">
 .user-box {
-	
 	overflow-x: hidden;
 	position: relative;
+	overflow-y: auto;
 	height: 100%;
 }
 // 微信登录蒙层
