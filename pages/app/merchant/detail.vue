@@ -8,10 +8,10 @@
 					<text class="item-title">预留电话：</text>
 					<text class="item-content">{{ item.ext_arr.dispatch_phone }}</text>
 				</view>
-				<view class="goods-date card-item" v-if="false">
+				<view class="goods-date card-item">
 					<text class="item-title" v-if="item.dispatch_type == 'slefetch'">到店/自提时间：</text>
 					<text class="item-title" v-if="item.dispatch_type == 'store'">配送时间：</text>
-					<text class="item-content">{{ tools.dateFormat('YYYY-mm-dd HH:MM', new Date(item.ext_arr.dispatch_date * 1000)) }}</text>
+					<text class="item-content">{{ item.ext_arr.dispatch_date }}</text>
 				</view>
 			</view>
 		</view>
