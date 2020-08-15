@@ -111,10 +111,10 @@ export default {
 		if (this.$Route.query.type) {
 			this.orderType = this.$Route.query.type;
 		}
+		this.getOrderList();
 	},
 	onShow() {
-		this.orderList = [];
-		this.getOrderList();
+		// this.orderList = [];
 	},
 	methods: {
 		jump(path, parmas) {

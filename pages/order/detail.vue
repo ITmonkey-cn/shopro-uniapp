@@ -30,10 +30,10 @@
 							<view class="express-type--title">配送：</view>
 							<view class="express-type--content">{{ expressType[order.dispatch_type] }}</view>
 						</view>
-						<!--  -->
+						<!-- 发货详情 -->
 						<view
 							class="x-f express-type--detail"
-							v-if="order.dispatch_type == 'store' || order.dispatch_type == 'selfetch'"
+							v-if="order.dispatch_type !== 'express'"
 							@tap="jump('/pages/order/distribution', { expressType: order.dispatch_type, orderId: orderDetail.id, orderItemId: order.id })"
 						>
 							<text>详情</text>

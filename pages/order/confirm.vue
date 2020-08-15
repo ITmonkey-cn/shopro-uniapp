@@ -160,7 +160,7 @@
 								</view>
 								<view class="express-content">
 									<view class="time-box">
-										<text class="box-title">配送时间</text>
+										<text class="box-title">到店时间</text>
 										<view class="box-content" @tap="checkExpressTime('selfetch')">
 											<text class="box-text">{{ checkTime['time'][checkTimeCur] }}</text>
 											<text class="cuIcon-right box-icon"></text>
@@ -170,8 +170,8 @@
 									<view class="phone-box">
 										<text class="box-title">预留电话</text>
 										<view class="box-content x-f">
-											<input class="edit-phone" type="number" v-model="selfPhone " />
-											<text class="cuIcon-write box-icon"></text>
+											<input class="edit-phone" :focus="getFocus"  type="number" v-model="selfPhone " />
+											<text class="cuIcon-write box-icon" @tap="onInput"></text>
 										</view>
 									</view>
 								</view>
@@ -213,8 +213,8 @@
 								<view class="phone-box">
 									<text class="box-title">预留电话</text>
 									<view class="box-content x-f">
-										<input class="edit-phone" type="number" v-model="selfPhone" />
-										<text class="cuIcon-write box-icon"></text>
+										<input class="edit-phone" :focus="getFocus" type="number" v-model="selfPhone" />
+										<text class="cuIcon-write box-icon" @tap="onInput"></text>
 									</view>
 								</view>
 							</view>
@@ -358,6 +358,7 @@ export default {
 			],
 			isProtocol: true, //自提协议。
 			selfPhone: 0, //编辑手机号
+			getFocus:false,//获取焦点。
 			checkType: '自提',
 			checkTime:{},
 			checkTimeCur: 0, //默认选中时间。
@@ -473,6 +474,12 @@ export default {
 					}
 				});
 			}
+		},
+		// 编译预留手机号
+		onInput(){
+			this.getFocus = true;
+			this.selfPhone = '' ;
+			
 		},
 		// 获取当前商品配送方式
 		getCurGoodsExpress(goods){
@@ -669,6 +676,7 @@ export default {
 		// 选择快递方式
 		changeExpressType(cur) {
 			this.expressTypeCur = cur;
+			this.getFocus = false;
 			if(cur == 'selfetch' && this.lat){
 				this.getStoreAddress()
 				}
@@ -1126,6 +1134,7 @@ export default {
 				}
 				.time-box,
 				.phone-box {
+					text-align: left;
 					.box-title {
 						font-size: 24rpx;
 						font-family: PingFang SC;

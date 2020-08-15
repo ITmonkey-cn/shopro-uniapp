@@ -1,19 +1,8 @@
 <template>
 	<view class="map-box">
-		<!-- 	<text class="cuIcon-back" @tap="$Router.back()"></text>
-		<map
-			id="map"
-			:style="{ width: '750rpx', height: mapHeight + 'px' }"
-			:latitude="latitude"
-			:longitude="longitude"
-			:markers="markers"
-			:polyline="polyline"
-			:include-points="includePoints"
-			show-location
-		></map> -->
-		<div class="express-wrap" :class="moveCard">
-			<div class="oilStation">
-				<div class="oilStation-top" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
+		<view class="express-wrap">
+			<view class="oilStation">
+				<view class="oilStation-top">
 					<view class="x-bc express-card__head">
 						<view class="x-f">
 							<view class="img-box">
@@ -31,25 +20,29 @@
 						<text>{{ expressDetail.express_name }} {{ expressDetail.express_no }}</text>
 						<text class="cuIcon-copy" @tap="copyCode(expressDetail.express_no)"></text>
 					</view>
-				</div>
-				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
+				</view>
+				<view class="oilStation-bottom">
 					<view class="py30">
-						<view v-if="exrpessLog.length" class="express-item x-f" v-for="log in exrpessLog" :key="log.id">
+						<view v-if="exrpessLog.length" class="express-item x-f" v-for="(log, index) in exrpessLog" :key="log.id">
 							<view class="item-left y-end">
 								<text class="day">{{ log.changedate.split(' ')[0] }}</text>
 								<text class="time">{{ log.changedate.split(' ')[1] }}</text>
 							</view>
 							<view class="item-right">
-								<image class="express-tag" src="/static/imgs/order/step1.png" mode="aspectFill"></image>
+								<image
+									class="express-tag"
+									:src="`/static/imgs/order/express${log.status}.png`"
+									mode="aspectFill"
+								></image>
 								<view class="express-title">{{ log.status_name }}</view>
 								<view class="express-detail">{{ log.content }}</view>
 							</view>
 						</view>
 						<view v-if="!exrpessLog.length" class="no-log x-c">暂无物流信息~</view>
 					</view>
-				</scroll-view>
-			</div>
-		</div>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -57,41 +50,16 @@
 export default {
 	data() {
 		return {
-			longitude: 108.921672,
-			latitude: 34.250646,
-			mapHeight: 0,
-			topSize: 0,
-			showCard: false,
-			scrollable: false, // 初始化禁止滑动
-			moveCard: 'dragLayer-bottom',
 			expressDetail: {}, //物流信息
-			exrpessLog: [],
+			exrpessLog: [], //包裹轨迹
 			firstGoods: {}, //商品列表
-			goodsList: [],
-			markers: [
-				{
-					id: 0,
-					latitude: 39.98406,
-					longitude: 116.30752,
-					iconPath: '/static/imgs/order/e1.png',
-					width: 50,
-					height: 55
-				}
-			],
-			polyline: [],
-			distance: 0,
-			includePoints: [{ longitude: 108.921672, latitude: 34.250646 }, { latitude: 39.98406, longitude: 116.30752 }]
+			goodsList: []
 		};
 	},
 	computed: {},
 	onLoad() {
 		this.getExpressDetail();
 	},
-	onReady() {
-		let that = this;
-		this.editHeight();
-	},
-	onShow() {},
 	methods: {
 		// 复制物流码
 		copyCode(code) {
@@ -119,104 +87,6 @@ export default {
 					that.firstGoods = res.data.item[0];
 				}
 			});
-		},
-		// 设置地图，卡片高度。
-		editHeight() {
-			let that = this;
-			uni.getSystemInfo({
-				success: res => {
-					let view = uni
-						.createSelectorQuery()
-						.in(this)
-						.select('.dragLayer');
-					view.fields(
-						{
-							size: true,
-							scrollOffset: true
-						},
-						data => {
-							that.mapHeight = res.screenHeight; //- data.height;
-						}
-					).exec();
-				}
-			});
-		},
-		// 获取角度
-		getAngle(angx, angy) {
-			return (Math.atan2(angy, angx) * 180) / Math.PI;
-		},
-		// 根据起点终点返回方向 1向上 2向下 3向左 4向右 0未滑动
-		getDirection(startx, starty, endx, endy) {
-			var angx = endx - startx;
-			var angy = endy - starty;
-			var result = 0;
-			//如果滑动距离太短
-			if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
-				return result;
-			}
-			var angle = this.getAngle(angx, angy);
-			if (angle >= -135 && angle <= -45) {
-				result = 1;
-			} else if (angle > 45 && angle < 135) {
-				result = 2;
-			} else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
-				result = 3;
-			} else if (angle >= -45 && angle <= 45) {
-				result = 4;
-			}
-			return result;
-		},
-		// 手势滑动开始
-		handleTouchStart(e) {
-			this.startx = e.changedTouches[0].pageX;
-			this.starty = e.changedTouches[0].pageY;
-		},
-		handleTouchMove(e) {},
-		// 手势滑动结束
-		handleTouchEnd(e) {
-			var endx, endy;
-			endx = e.changedTouches[0].pageX;
-			endy = e.changedTouches[0].pageY;
-			var direction = this.getDirection(this.startx, this.starty, endx, endy);
-			switch (direction) {
-				// 未滑动！
-				case 0:
-					break;
-				// 向上滑动
-				case 1:
-					this.showCard = true;
-					this.moveCard = 'dragLayer-top';
-					this.scrollable = true;
-					break;
-				// 向下滑动
-				case 2:
-					this.showCard = false;
-					this.moveCard = 'dragLayer-bottom';
-					this.scrollable = false;
-					break;
-				// 向左
-				case 3:
-					break;
-				// 向右
-				case 4:
-					break;
-				default:
-			}
-		},
-		scroll(e) {},
-		scrolltoupper(e) {},
-		scrolltolower(e) {},
-		// 点击显隐
-		onShowCard() {
-			this.showCard = !this.showCard;
-			console.log(this.moveCard);
-			if (this.showCard) {
-				this.moveCard = 'dragLayer-top';
-				this.scrollable = true;
-			} else {
-				this.moveCard = 'dragLayer-bottom';
-				this.scrollable = false;
-			}
 		}
 	}
 };
@@ -341,8 +211,7 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	flex-direction: row;
-	min-height: 200rpx;
-	overflow: hidden;
+	// min-height: 200rpx;
 	background: #fff;
 	width: 710rpx;
 	margin: 0 20rpx 20rpx;
@@ -351,7 +220,7 @@ export default {
 	padding: 0 30rpx;
 }
 // 物流步骤条
-.no-log{
+.no-log {
 	width: 100%;
 	height: 100rpx;
 	color: #999;
