@@ -31,7 +31,7 @@
 							<view class="item-right">
 								<image
 									class="express-tag"
-									:src="`/static/imgs/order/express${log.status}.png`"
+									:src="`/static/imgs/order/express${index == 0 ? log.status + '' + log.status : log.status}.png`"
 									mode="aspectFill"
 								></image>
 								<view class="express-title">{{ log.status_name }}</view>
