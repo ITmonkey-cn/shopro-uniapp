@@ -2,7 +2,7 @@
 	<view class="page_box">
 		<view class="head_box"></view>
 		<view class="content_box">
-			<view class="location-item x-bc pa20 mb20"  @tap="chooseLocation">
+			<view class="location-item x-bc pa20 mb20" @tap="chooseLocation">
 				<view class="x-f">
 					<text class="cuIcon-focus"></text>
 					<text>{{ addressData.latitude ? '重新获取地理位置' : '点击定位当前地点' }}</text>
@@ -99,15 +99,29 @@ export default {
 		},
 		// 地图选择地址
 		chooseLocation() {
+			// #ifdef MP-WEIXIN
 			uni.chooseLocation({
 				success: res => {
 					this.addressData.latitude = res.latitude;
 					this.addressData.longitude = res.longitude;
+					if (this.addressData.id == 0) {
+						this.addressData.address = res.address;
+					}
 				},
 				fail: err => {
 					console.log(err);
 				}
 			});
+			// #endif
+			// #ifdef H5
+			this.$wxsdk.openAddress(res => {
+				this.addressData.latitude = res.latitude;
+				this.addressData.longitude = res.longitude;
+				if (this.addressData.id == 0) {
+					this.addressData.address = res.address;
+				}
+			});
+			// #endif
 		},
 		onSwitch() {
 			this.addressData.is_default = !this.addressData.is_default;
@@ -222,12 +236,16 @@ export default {
 	padding: 30rpx 25rpx;
 	.item-title {
 		font-size: 28rpx;
+		line-height: 28rpx;
+		vertical-align: middle;
 		white-space: nowrap;
 	}
 	.area-inp {
 		color: #333;
 		font-size: 28rpx;
 		padding-right: 30rpx;
+		vertical-align: middle;
+		margin-top: 8rpx;
 	}
 }
 .default-box {
