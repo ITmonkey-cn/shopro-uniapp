@@ -1265,7 +1265,7 @@ export default {
 				font-weight: 500;
 				color: rgba(51, 51, 51, 1);
 				width: 100%;
-				text-align: left;
+				text-align: center;
 				border-bottom: 1rpx solid rgba(#dfdfdf, 0.6);
 				margin: 0 30rpx;
 				line-height: 100rpx;

@@ -23,8 +23,8 @@
 						<view class="name">{{ log.type_name }}</view>
 						<view class="time">{{ timestamp(log.createtime) }}</view>
 					</view>
-					<view class="num" v-if="log.is_add">+{{ log.wallet }}</view>
-					<view class="num" v-else>-{{ log.wallet }}</view>
+					<view class="num" v-if="log.wallet >= 0">{{ log.wallet }}</view>
+					<view class="num" v-else>{{ log.wallet }}</view>
 				</view>
 				<view v-if="scoreLog.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>

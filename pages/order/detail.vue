@@ -3,7 +3,7 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<!-- 订单状态 -->
-			<view class="detail-head">
+			<view class="detail-head" :style="orderDetail.consignee?'':'height:120rpx'">
 				<view class="state-box x-f">
 					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
 					<text>{{ orderDetail.status_desc }}</text>
@@ -23,7 +23,7 @@
 			<view class="detail-goods">
 				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
-					<view class="order-card"><shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card></view>
+					<view class="order-card" @tap="jump('/pages/goods/detail/index', { id: order.goods_id })"><shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card></view>
 					<!-- 配送方式 -->
 					<view class="express-type-box x-bc">
 						<view class="x-f">
@@ -556,7 +556,7 @@ export default {
 		.copy-btn {
 			width: 100rpx;
 			height: 50rpx;
-			border-radius: 20rpx;
+			border-radius: 25rpx;
 			padding: 0;
 			background: rgba(238, 238, 238, 1);
 			font-size: 22rpx;

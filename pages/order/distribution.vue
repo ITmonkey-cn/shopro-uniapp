@@ -10,7 +10,7 @@
 					<image class="qr-code--img my20" :src="allqrcodepath" mode=""></image>
 					<view class="detail-item" style="align-items: flex-start;width: 100%;">
 						<view class="item-title" v-if="qrcodeList.length">核销码</view>
-						<view class="x-bc my20" v-for="code in qrcodeList" :key="code.code">
+						<view class="x-bc my20" v-if="qrcodeList.length" v-for="code in qrcodeList" :key="code.code">
 							<view class="">
 								<text class="item-content">{{ code.code }}</text>
 								<text class="item-status mx30">待使用</text>
@@ -27,12 +27,12 @@
 				<view class="item-content">{{ storeInfo.province_name }}{{ storeInfo.city_name }}{{ storeInfo.area_name }}{{ storeInfo.address }}</view>
 				<view class="item-content">营业时间：{{ storeInfo.openhours }}</view>
 			</view>
-			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;':''" v-if="expressType == 'store'">
+			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'store'">
 				<view class="item-title">配送信息</view>
 				<view class="item-content">{{ itemDetail.order.city_name }}{{ itemDetail.order.area_name }}{{ itemDetail.order.address }}</view>
 				<view class="item-content">到店时间：{{ itemDetail.ext_arr.dispatch_date }}</view>
 			</view>
-			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;':''" v-if="expressType == 'autosend'">
+			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'autosend'">
 				<view class="item-title">发货信息</view>
 				<view v-for="item in autosendList" :key="item.value" class="item-content">{{ item.name }}：{{ item.value }}</view>
 			</view>
@@ -277,7 +277,7 @@ export default {
 	}
 	.check-code {
 		background: none;
-		border-radius: 20rpx;
+		border-radius: 25rpx;
 		border: 1rpx solid rgba(179, 132, 54, 1);
 		padding: 0;
 		width: 100rpx;

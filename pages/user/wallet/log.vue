@@ -6,8 +6,8 @@
 				<view class="title-box x-bc">
 					<text class="title one-t">{{ item.type_name }}-{{ item.title }}</text>
 					<view class="money">
-						<text v-if="item.is_add" class="add">+{{ item.wallet }}</text>
-						<text v-else class="minus">-{{ item.wallet }}</text>
+						<text v-if="item.wallet>=0" class="add">+{{ item.wallet }}</text>
+						<text v-else class="minus">{{ item.wallet }}</text>
 					</view>
 				</view>
 				<view class="tip-box x-bc">

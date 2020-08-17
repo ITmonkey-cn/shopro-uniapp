@@ -10,12 +10,15 @@
 					<text class="nav-title x-f">我的</text>
 				</view>
 				<view class="user-head x-bc">
-					<view class="shop-info" @tap="jump('/pages/app/merchant/info')">
-						<view class="x-f mb30">
+					<view class="shop-info">
+						<view class="x-f mb30" @tap="jump('/pages/app/merchant/info')">
 							<text class="shop-title">{{ storeDetail.name }}</text>
 							<text class="cuIcon-roundrightfill"></text>
 						</view>
-						<view class="shop-phone">{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}</view>
+						<view class="shop-phone">
+							查看门店详情
+							<text class="cuIcon-right"></text>
+						</view>
 					</view>
 
 					<button v-if="true" @tap="jump('/pages/index/user')" class="cu-btn merchant-btn">切换个人版</button>
