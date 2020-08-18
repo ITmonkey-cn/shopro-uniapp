@@ -223,6 +223,18 @@
 					}
 				},
 				{
+					"path": "merchant/list",
+					"style": {
+						"navigationBarTitleText": "门店列表"//todo
+					},
+					"meta": {
+						"auth": true,
+						"async": false,
+						"title": "门店列表",
+						"group": "用户"
+					}
+				},
+				{
 					"path": "merchant/detail",
 					"style": {
 						"navigationBarTitleText": "订单详情"

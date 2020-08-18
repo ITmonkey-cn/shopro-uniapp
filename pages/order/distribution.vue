@@ -22,16 +22,23 @@
 					</view>
 				</view>
 			</view>
+			<!-- 自提 -->
 			<view class="detail-item pa20" v-if="expressType == 'selfetch'">
 				<view class="item-title">{{ storeInfo.name }}</view>
 				<view class="item-content">{{ storeInfo.province_name }}{{ storeInfo.city_name }}{{ storeInfo.area_name }}{{ storeInfo.address }}</view>
 				<view class="item-content">营业时间：{{ storeInfo.openhours }}</view>
 			</view>
-			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'store'">
+			<!-- 配送 -->
+			<view
+				class="detail-item pa20"
+				:style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''"
+				v-if="expressType == 'store' && itemDetail.order"
+			>
 				<view class="item-title">配送信息</view>
 				<view class="item-content">{{ itemDetail.order.city_name }}{{ itemDetail.order.area_name }}{{ itemDetail.order.address }}</view>
-				<view class="item-content">到店时间：{{ itemDetail.ext_arr.dispatch_date }}</view>
+				<view class="item-content">配送时间：{{ itemDetail.ext_arr.dispatch_date }}</view>
 			</view>
+			<!-- 自动 -->
 			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'autosend'">
 				<view class="item-title">发货信息</view>
 				<view v-for="item in autosendList" :key="item.value" class="item-content">{{ item.name }}：{{ item.value }}</view>
