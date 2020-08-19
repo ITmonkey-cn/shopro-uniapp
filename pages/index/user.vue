@@ -158,7 +158,7 @@ export default {
 	overflow-x: hidden;
 	position: relative;
 	overflow-y: auto;
-	height: 100%;
+	// height: 100%;
 }
 // 微信登录蒙层
 .login-box {

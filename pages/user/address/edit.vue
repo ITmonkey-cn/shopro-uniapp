@@ -1,5 +1,5 @@
 <template>
-	<view class="page_box">
+	<view class="page_box" style="overflow-x: hidden;">
 		<view class="head_box"></view>
 		<view class="content_box">
 			<view class="location-item x-bc pa20 mb20" @tap="chooseLocation">
@@ -78,9 +78,19 @@ export default {
 	},
 	computed: {},
 	onLoad() {
-		this.init();
 		let addressId = this.$Route.query.id;
 		this.addressData.id = this.$Route.query.id;
+		if (this.$Route.query.addressData) {
+			let wxAddress = JSON.parse(this.$Route.query.addressData); //微信导入
+			this.addressData.id = 0;
+			addressId = 0;
+			this.addressData.consignee = wxAddress.userName;
+			this.addressData.phone = wxAddress.telNumber;
+			this.area_text = `${wxAddress.provinceName}-${wxAddress.cityName}-${wxAddress.countyName}`;
+			this.addressData.area_id = wxAddress.nationalCode;
+			this.addressData.address = wxAddress.detailInfo;
+			this.addressData.is_default = false;
+		}
 
 		if (this.addressData.id != 0) {
 			this.getAddressInfo();
@@ -93,10 +103,6 @@ export default {
 		}
 	},
 	methods: {
-		// 初始化
-		init() {
-			return Promise.all([]);
-		},
 		// 地图选择地址
 		chooseLocation() {
 			// #ifdef MP-WEIXIN
@@ -129,7 +135,6 @@ export default {
 		selCity() {
 			this.$refs.shoproCityPicker.show();
 		},
-
 		// 编辑添加地址
 		editAddress() {
 			let that = this;
