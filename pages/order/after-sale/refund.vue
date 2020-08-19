@@ -9,7 +9,7 @@
 				<view class="item-title">请选择售后类型</view>
 				<view class="radio-box y-start">
 					<label class="radio-label x-f" v-for="item in refundTypeList" :key="item.title" @tap="selRefundType(item.value)">
-						<checkbox class="radio-check round orange" :class="{ checked: refundType == item.value }"></checkbox>
+						<checkbox class="radio-check round orange" :checked="refundType == item.value" :class="{ checked: refundType == item.value }"></checkbox>
 						<text class="radio-title">{{ item.title }}</text>
 					</label>
 				</view>
@@ -27,7 +27,7 @@
 				<view class="input-box x-f"><input type="text" class="item-input" v-model="phone" placeholder="请输入您的联系电话" placeholder-class="input--pl" /></view>
 			</view>
 			<!-- 留言 -->
-			<view class="refund-item" style="margin-bottom: 20rpx;">
+			<view class="refund-item" style="margin-bottom: 20rpx;" v-show="!showModal">
 				<view class="item-title">相关描述</view>
 				<view class="describe-box">
 					<textarea
@@ -36,6 +36,7 @@
 						maxlength="500"
 						placeholder="客官~请描述您遇到的问题，建议上传照片"
 						placeholder-class="input--pl"
+						fixed
 					></textarea>
 					<view class="upload-img">
 						<view class="img-box">
@@ -61,7 +62,7 @@
 						<view class="y-f">
 							<label class="sel-item x-bc" @tap="onRefundCause(item.val)" v-for="item in modalDetail.list" :key="item.id">
 								<text>{{ item.val }}</text>
-								<checkbox class="orange radio round sel-radio" :class="{ checked: refundCause == item.val }"></checkbox>
+								<checkbox class="orange radio round sel-radio" :class="{ checked: refundCause == item.val }" :checked="refundCause == item.val"></checkbox>
 							</label>
 						</view>
 					</view>
@@ -153,7 +154,11 @@ export default {
 		},
 		// 选择售后类型
 		selRefundType(value) {
-			this.refundType == value ? (this.refundType = '') : (this.refundType = value);
+			this.refundType = value;
+		},
+		// 选择售后原因
+		onRefundCause(value) {
+			this.refundCause = value;
 		},
 		// 订单item详情
 		getOrderItemDetail() {
@@ -208,9 +213,7 @@ export default {
 		onClose() {
 			this.showModal = false;
 		},
-		onRefundCause(value) {
-			this.refundCause == value ? (this.refundCause = '') : (this.refundCause = value);
-		}
+
 	}
 };
 </script>

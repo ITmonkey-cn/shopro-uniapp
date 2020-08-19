@@ -8,14 +8,15 @@
 				<!-- 到店自提 -->
 				<view class="y-f mb20 pb20" v-if="expressType == 'selfetch' && itemDetail.status_code !== 'refund_finish'">
 					<image class="qr-code--img my20" :src="allqrcodepath" mode=""></image>
+					<view class="all-qrcode-title mb20">总核销码</view>
 					<view class="detail-item" style="align-items: flex-start;width: 100%;">
-						<view class="item-title" v-if="qrcodeList.length">核销码</view>
+						<view class="item-title x-f" v-if="qrcodeList.length">核销码</view>
 						<view class="x-bc my20" v-if="qrcodeList.length" v-for="code in qrcodeList" :key="code.code">
 							<view class="">
 								<text class="item-content">{{ code.code }}</text>
 								<text class="item-status mx30">待使用</text>
 							</view>
-							<button class="cu-btn check-code" @tap="checkCode(code.code)">查看</button>
+							<button class="cu-btn check-code" v-if="code.status_code == 'nouse'" @tap="checkCode(code.code)">查看</button>
 						</view>
 
 						<view class="item-tip">为保障您的权益，未到店消费前请不要将提货码提供给商家</view>
@@ -23,10 +24,18 @@
 				</view>
 			</view>
 			<!-- 自提 -->
-			<view class="detail-item pa20" v-if="expressType == 'selfetch'">
+			<view class="detail-item pa20 " v-if="expressType == 'selfetch'">
 				<view class="item-title">{{ storeInfo.name }}</view>
-				<view class="item-content">{{ storeInfo.province_name }}{{ storeInfo.city_name }}{{ storeInfo.area_name }}{{ storeInfo.address }}</view>
-				<view class="item-content">营业时间：{{ storeInfo.openhours }}</view>
+				<view class="x-bc">
+					<view class="" style="flex: 3;">
+						<view class="item-content">{{ storeInfo.province_name }}{{ storeInfo.city_name }}{{ storeInfo.area_name }}{{ storeInfo.address }}</view>
+						<view class="item-content">营业时间：{{ storeInfo.openhours }}</view>
+					</view>
+					<view class="y-f" style="flex: 1;height: 100%;justify-content: center;" @tap="openStoreMap">
+						<text class="iconfont icon-dingwei" style="color: #E9B664;"></text>
+						<text style="color: #999;font-size: 25rpx;">到这去</text>
+					</view>
+				</view>
 			</view>
 			<!-- 配送 -->
 			<view
@@ -41,7 +50,10 @@
 			<!-- 自动 -->
 			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'autosend'">
 				<view class="item-title">发货信息</view>
-				<view v-for="item in autosendList" :key="item.value" class="item-content">{{ item.name }}：{{ item.value }}</view>
+				<view v-if="itemDetail.ext_arr.autosend_type == 'params'" v-for="item in autosendList" :key="item.value" class="item-content">
+					{{ item.name }}：{{ item.value }}
+				</view>
+				<view v-if="itemDetail.ext_arr.autosend_type == 'text'" class="item-content">{{ itemDetail.ext_arr.autosend_content }}</view>
 			</view>
 		</view>
 		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store'">
@@ -55,7 +67,7 @@
 			<block slot="modalContent">
 				<view class="qr-code-modal">
 					<image class="qr-code-img" :src="qrcodepath" mode=""></image>
-					<view class="qr-code-text">核销码：122466565656</view>
+					<view class="qr-code-text">核销码：{{qrcodepath}}</view>
 					<button class="cu-btn hide-qrcode" @tap="hideModal">关闭</button>
 				</view>
 			</block>
@@ -106,6 +118,19 @@ export default {
 			this.$Router.push({
 				path: path,
 				query: parmas
+			});
+		},
+		// 自提打开地图
+		openStoreMap() {
+			uni.openLocation({
+				latitude: +this.storeInfo.latitude,
+				longitude: +this.storeInfo.longitude,
+				success: function() {
+					console.log('success');
+				},
+				fail: err => {
+					console.log(err);
+				}
 			});
 		},
 		// 跳转客服

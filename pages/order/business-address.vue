@@ -105,8 +105,8 @@ export default {
 						latitude: item.latitude,
 						longitude: item.longitude,
 						iconPath: item.image_first,
-						width: 50,
-						height: 55,
+						width: 40,
+						height: 40,
 					};
 					arr.push(obj);
 				});
@@ -314,12 +314,11 @@ export default {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	padding-bottom: 30rpx;
 }
 .touch-guide {
 	justify-content: center;
 	align-items: center;
-	height: 54rpx;
+	height: 80rpx;
 }
 .touch-jintou {
 	width: 60rpx;

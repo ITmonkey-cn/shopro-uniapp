@@ -167,8 +167,8 @@ export default {
 				],
 				status: [
 					{ title: '全部', value: 'all', isChecked: false },
-					{ title: '未发货', value: 'nosend', isChecked: false },
-					{ title: '未收货', value: 'noget', isChecked: false },
+					{ title: '待发货', value: 'nosend', isChecked: false },
+					{ title: '待完成', value: 'noget', isChecked: false },
 					{ title: '已完成', value: 'finish', isChecked: true }
 				]
 			},

@@ -894,8 +894,8 @@ export default {
 	overflow: visible;
 	.express-type__head {
 		width: 100%;
-		height: 58rpx;
-		background: #faf0dc;
+		height: 74rpx;
+		background: #F8E3BD;
 		@include flex($align: center);
 		border-radius: 20rpx 20rpx 0 0;
 		&-nav {
@@ -911,14 +911,14 @@ export default {
 			bottom: 0;
 			background: #fff;
 			width: 100%;
-			height: 74rpx;
+			height: 80rpx;
 			background-color: #fff;
 			border-radius: 20rpx 20rpx 0px 0px;
 			&::after {
 				content: '';
 				display: block;
 				width: 40rpx;
-				height: 74rpx;
+				height: 80rpx;
 				position: absolute;
 				transform: skewX(20deg);
 				background: #fff;
@@ -930,7 +930,7 @@ export default {
 				content: '';
 				display: block;
 				width: 40rpx;
-				height: 74rpx;
+				height: 80rpx;
 				position: absolute;
 				transform: skewX(-20deg);
 				background: #fff;

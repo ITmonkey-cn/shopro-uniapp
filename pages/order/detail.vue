@@ -116,7 +116,7 @@
 			<view class="order-price-box">
 				<view class="notice-item x-bc">
 					<text class="title">商品总额</text>
-					<text class="detail">￥{{ orderDetail.goods_original_amount }}</text>
+					<text class="detail">￥{{ orderDetail.goods_amount }}</text>
 				</view>
 				<view class="notice-item x-bc">
 					<text class="title">运费</text>
