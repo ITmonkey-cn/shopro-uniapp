@@ -159,8 +159,8 @@ export default {
 			},
 			dropDown: {
 				date: [
-					{ title: '昨日', value: 'yesterday', isChecked: false },
 					{ title: '今日', value: 'today', isChecked: false },
+					{ title: '昨日', value: 'yesterday', isChecked: false },
 					{ title: '本周', value: 'week', isChecked: false },
 					{ title: '本月', value: 'month', isChecked: false },
 					{ title: '自定义', value: 'custom', isChecked: false }

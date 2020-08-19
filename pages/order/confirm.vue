@@ -1,6 +1,7 @@
 <template>
 	<view class="page_box">
-		<view class="head_box" v-if="orderPre.need_address">
+	<!-- 	v-if="orderPre.need_address" -->
+		<view class="head_box" >
 			<view class="add-address-box flex-sub x-f" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
 				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
 				<view class="box-bg x-bc flex-sub pad">

@@ -15,6 +15,8 @@ import Wechat from '@/common/wechat/wechat'
 // #endif
 import Router from '@/common/router';
 
+
+
 export default class ShoproPay {
 
 
@@ -168,8 +170,10 @@ export default class ShoproPay {
 			var url = result.data.pay_data.match(/url\=\'(\S*)\'/);
 			let reg = new RegExp('&amp;', 'g') //g代表全部
 			let newUrl = url[1].replace(reg, '&');
-			window.location.href = newUrl
-
+			let domain = uni.getStorageSync('sysInfo').domain; //域名
+			let params = encodeURIComponent(
+				`${domain}/pages/order/payment/result?orderSn=${that.order.order_sn}&type=${that.payment}&pay=1`)
+			window.location.href = newUrl + '&redirect_url=' + params;
 		}
 
 	}
