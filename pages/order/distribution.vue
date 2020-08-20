@@ -50,10 +50,10 @@
 			<!-- 自动 -->
 			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'autosend'">
 				<view class="item-title">发货信息</view>
-				<view v-if="itemDetail.ext_arr.autosend_type == 'params'" v-for="item in autosendList" :key="item.value" class="item-content">
+				<view v-if=" itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'params'" v-for="item in autosendList" :key="item.value" class="item-content">
 					{{ item.name }}：{{ item.value }}
 				</view>
-				<view v-if="itemDetail.ext_arr.autosend_type == 'text'" class="item-content">{{ itemDetail.ext_arr.autosend_content }}</view>
+				<view v-if=" itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'text'" class="item-content">{{ itemDetail.ext_arr.autosend_content }}</view>
 			</view>
 		</view>
 		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store'">
@@ -159,15 +159,18 @@ export default {
 					that.itemDetail = res.data;
 					that.qrcodeList = res.data.verify;
 					that.storeInfo = res.data.store;
-					if (res.data.ext_arr.autosend_content) {
+					if (res.data.ext_arr.autosend_content && res.data.ext_arr.autosend_type=='params') {
 						that.autosendList = JSON.parse(res.data.ext_arr.autosend_content);
 					}
-					let _arr = [];
-					that.qrcodeList.forEach(code => {
-						_arr.push(code.code);
-					});
-					that.qrcode = _arr.join(',');
-					that.shareFc();
+					if(this.expressType == 'selfetch'){
+						let _arr = [];
+						that.qrcodeList.forEach(code => {
+							_arr.push(code.code);
+						});
+						that.qrcode = _arr.join(',');
+						that.shareFc();
+					}
+					
 				}
 			});
 		},

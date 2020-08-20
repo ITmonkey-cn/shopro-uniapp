@@ -110,7 +110,7 @@
 						</view>
 					</view>
 					<view class="express-type__content content_box">
-						<view class="empty-address" v-if="!addressId && expressTypeCur !== 'selfetch'" @tap="jump('/pages/user/address/list', { from: 'order' })">
+						<view class="empty-address" v-if="!addressId && expressTypeCur !== 'selfetch' && expressTypeCur !== 'autosend'" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							请选择收货地址
 							<text class="cuIcon-right"></text>
 						</view>

@@ -78,6 +78,7 @@ export default {
 			if (item.style == 2) {
 				this.$tools.routerTo(item.path);
 				this.showModal = false;
+				this.showBtnList = false;
 			} else {
 				this.modalImg = item.image;
 				this.showModal = true;

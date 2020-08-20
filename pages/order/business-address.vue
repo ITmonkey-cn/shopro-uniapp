@@ -103,10 +103,7 @@ export default {
 					let obj = {
 						id: item.id,
 						latitude: item.latitude,
-						longitude: item.longitude,
-						iconPath: item.image_first,
-						width: 40,
-						height: 40,
+						longitude: item.longitude
 					};
 					arr.push(obj);
 				});
@@ -379,7 +376,6 @@ export default {
 	border-bottom-style: solid;
 	border-bottom-color: #eef1f4;
 	padding: 15rpx 0 15rpx;
-	width: 690rpx;
 	justify-content: space-between;
 	align-items: center;
 	flex-direction: row;
@@ -407,11 +403,15 @@ export default {
 	margin-right: 10rpx;
 	font-size: 30rpx;
 }
+.address-left{
+	flex:1;
+}
 .address-right {
 	align-items: center;
 	color: #a8700e;
 	font-size: 24rpx;
 	margin-bottom: 20rpx;
+	white-space:nowrap;
 }
 .address-checked {
 	transform: scale(0.7);

@@ -103,7 +103,7 @@
 
 											<image @tap="preview_img(message.message)" v-if="message.message_type == 1" :src="message.message" mode="widthFix"></image>
 
-											<view v-if="message.message_type == 4 || message.message_type == 5" class="project_item" style="margin: 0;">
+											<view @tap="goDetail(message)" v-if="message.message_type == 4 || message.message_type == 5" class="project_item" style="margin: 0;">
 												<image :src="message.message.logo"></image>
 												<view class="project_item_body y-bc">
 													<view>
@@ -112,7 +112,7 @@
 													</view>
 													<view class="project_item_price">
 														<text class="price" v-if="message.message.price">￥{{ message.message.price }}</text>
-														<text class="unit" v-if="message.message.number">x{{message.message.number}}</text>
+													<!-- 	<text class="unit" v-if="message.message.number">x{{message.message.number}}</text> -->
 													</view>
 												</view>
 											</view>
@@ -128,7 +128,7 @@
 
 					<!-- 消息输入 -->
 					<view class="write" :style="{ bottom: writeBottom + 'px' }">
-							<label class="widget_textarea">
+							<label class="widget_textarea" v-if="!selectModel">
 								<textarea
 									:adjust-position="false"
 									:show-confirm-bar="false"
@@ -201,7 +201,7 @@
 				</view>
 
 				<view class="project_list">
-					<radio-group v-if="selectModelData.length > 0" @change="select_done">
+					<radio-group style="width: 100%;" v-if="selectModelData.length > 0" @change="select_done">
 						<label v-for="(item, index) in selectModelData" :key="index" class="project_item">
 							<image :src="item.logo"></image>
 							<view class="project_item_body y-bc">
@@ -211,7 +211,7 @@
 								</view>
 								<view class="project_item_price">
 									<text class="price" v-if="item.price">{{ item.price }}</text>
-									<text class="unit" v-if="item.number">x{{ item.number }}</text>
+								<!-- 	<text class="unit" v-if="item.number">x{{ item.number }}</text> -->
 								</view>
 							</view>
 							<radio style="opacity: 0;width: 0;height: 0;" :value="index.toString()" :checked="false" hide ></radio>
@@ -313,6 +313,27 @@ export default {
 		}
 	},
 	methods: {
+		// 路由跳转
+		// jump(path, parmas) {
+		// 	this.$Router.push({
+		// 		path: path,
+		// 		query: parmas
+		// 	});
+		// },
+		// 跳转详情
+		// goDetail(id){
+		// 	console.log(id,1111111111111);
+		// 	switch(this.selectModel){
+		// 		case 'goods':
+		// 		this.jump('/pages/goods/detail/index', { id:id })
+		// 		break;
+		// 		case 'order':
+		// 			this.jump('/pages/order/detail', { id:id })
+		// 		break;
+		// 		default:
+		// 		return false
+		// 	}
+		// },
 		// 关闭遮罩
 		hideMask(){
 			if(this.showTool){this.showTool = false}
@@ -1396,7 +1417,7 @@ page {
 .chat_wrapper .bubble .emoji {
 	display: inline-block;
 	width: 120rpx;
-	height: 120rpx;
+	min-height: 50rpx;
 }
 
 // 消息输入
