@@ -6,12 +6,12 @@
 				<view class="order-card-box"><shopro-mini-card :detail="itemDetail" :type="'order'"></shopro-mini-card></view>
 
 				<!-- 到店自提 -->
-				<view class="y-f mb20 pb20" v-if="expressType == 'selfetch' && itemDetail.status_code !== 'refund_finish'">
+				<view class="y-f mb20 pb20" v-if="expressType == 'selfetch' && itemDetail.status_code !== 'refund_finish' && qrcodeList.length">
 					<image class="qr-code--img my20" :src="allqrcodepath" mode=""></image>
 					<view class="all-qrcode-title mb20">总核销码</view>
 					<view class="detail-item" style="align-items: flex-start;width: 100%;">
-						<view class="item-title x-f" v-if="qrcodeList.length">核销码</view>
-						<view class="x-bc my20" v-if="qrcodeList.length" v-for="code in qrcodeList" :key="code.code">
+						<view class="item-title x-f">核销码</view>
+						<view class="x-bc my20" v-for="code in qrcodeList" :key="code.code">
 							<view :style="code.code !== 'nouse' ? 'color:#999' : ''">
 								<text class="item-content">{{ code.code }}</text>
 								<text class="item-status mx30">{{ code.status_name }}</text>
@@ -50,10 +50,10 @@
 			<!-- 自动 -->
 			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'autosend'">
 				<view class="item-title">发货信息</view>
-				<view v-if=" itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'params'" v-for="item in autosendList" :key="item.value" class="item-content">
+				<view v-if="itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'params'" v-for="item in autosendList" :key="item.value" class="item-content">
 					{{ item.name }}：{{ item.value }}
 				</view>
-				<view v-if=" itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'text'" class="item-content">{{ itemDetail.ext_arr.autosend_content }}</view>
+				<view v-if="itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'text'" class="item-content">{{ itemDetail.ext_arr.autosend_content }}</view>
 			</view>
 		</view>
 		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store'">
@@ -159,18 +159,19 @@ export default {
 					that.itemDetail = res.data;
 					that.qrcodeList = res.data.verify;
 					that.storeInfo = res.data.store;
-					if (res.data.ext_arr.autosend_content && res.data.ext_arr.autosend_type=='params') {
+					if (res.data.ext_arr.autosend_content && res.data.ext_arr.autosend_type == 'params') {
 						that.autosendList = JSON.parse(res.data.ext_arr.autosend_content);
 					}
-					if(this.expressType == 'selfetch'){
+					if (this.expressType == 'selfetch') {
 						let _arr = [];
 						that.qrcodeList.forEach(code => {
 							_arr.push(code.code);
 						});
 						that.qrcode = _arr.join(',');
-						that.shareFc();
+						if (that.qrcodeList.length) {
+							that.shareFc();
+						}
 					}
-					
 				}
 			});
 		},
@@ -335,7 +336,7 @@ export default {
 			left: 0;
 		}
 		.location-icon {
-			color: #4FBBFF;
+			color: #4fbbff;
 			margin-bottom: 20rpx;
 		}
 		.location-text {

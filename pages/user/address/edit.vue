@@ -248,9 +248,9 @@ export default {
 	.area-inp {
 		color: #333;
 		font-size: 28rpx;
-		padding-right: 30rpx;
 		vertical-align: middle;
 		margin-top: 8rpx;
+		width: 550rpx;
 	}
 }
 .default-box {

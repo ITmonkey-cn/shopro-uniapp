@@ -186,6 +186,9 @@ export default {
 				phone: that.phone
 			}).then(res => {
 				if (res.code === 1) {
+					//  #ifdef MP-WEIXIN
+					this.$store.dispatch('getMessageIds', 'aftersale');
+					//  #endif
 					uni.hideLoading();
 					that.$Router.replace('/pages/order/after-sale/list');
 				}

@@ -106,7 +106,10 @@ const actions = {
 						typeName = ['groupon_success', 'groupon_fail', 'order_sended']
 						break;
 					case 'aftersale': //点击售后
-						typeName = ['refund_agree', 'refund_refuse']
+						typeName = ['refund_agree', 'aftersale_change', 'wallet_change']
+						break;
+					case 'wallet': //体现提醒
+						typeName = ['score_change', 'wallet_apply', 'wallet_change']
 						break;
 					default:
 						typeName = []

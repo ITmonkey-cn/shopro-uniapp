@@ -120,7 +120,7 @@
 				</view>
 				<view class="notice-item x-bc">
 					<text class="title">运费</text>
-					<text class="detail">{{ orderDetail.discount_fee }}</text>
+					<text class="detail">{{ orderDetail.dispatch_amount }}</text>
 				</view>
 				<view class="notice-item x-bc">
 					<text class="title">优惠券</text>
@@ -252,9 +252,7 @@ export default {
 		},
 		// 申请售后
 		onAftersale(orderId, orderItemId) {
-			//  #ifdef MP-WEIXIN
-			this.$store.dispatch('getMessageIds', 'aftersale');
-			//  #endif
+			
 			this.$Router.push({
 				path: '/pages/order/after-sale/refund',
 				query: { orderId: orderId, orderItemId: orderItemId }
