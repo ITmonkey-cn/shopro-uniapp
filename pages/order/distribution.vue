@@ -12,9 +12,9 @@
 					<view class="detail-item" style="align-items: flex-start;width: 100%;">
 						<view class="item-title x-f" v-if="qrcodeList.length">核销码</view>
 						<view class="x-bc my20" v-if="qrcodeList.length" v-for="code in qrcodeList" :key="code.code">
-							<view class="">
+							<view :style="code.code !== 'nouse' ? 'color:#999' : ''">
 								<text class="item-content">{{ code.code }}</text>
-								<text class="item-status mx30">待使用</text>
+								<text class="item-status mx30">{{ code.status_name }}</text>
 							</view>
 							<button class="cu-btn check-code" v-if="code.status_code == 'nouse'" @tap="checkCode(code.code)">查看</button>
 						</view>
@@ -27,13 +27,13 @@
 			<view class="detail-item pa20 " v-if="expressType == 'selfetch'">
 				<view class="item-title">{{ storeInfo.name }}</view>
 				<view class="x-bc">
-					<view class="" style="flex: 3;">
+					<view class="mr20" style="flex: 3;">
 						<view class="item-content">{{ storeInfo.province_name }}{{ storeInfo.city_name }}{{ storeInfo.area_name }}{{ storeInfo.address }}</view>
 						<view class="item-content">营业时间：{{ storeInfo.openhours }}</view>
 					</view>
-					<view class="y-f" style="flex: 1;height: 100%;justify-content: center;" @tap="openStoreMap">
-						<text class="iconfont icon-dingwei" style="color: #E9B664;"></text>
-						<text style="color: #999;font-size: 25rpx;">到这去</text>
+					<view class="y-f location-box" style="flex: 1;" @tap="openStoreMap">
+						<text class="iconfont icon-dingwei location-icon"></text>
+						<text class="location-text">到这去</text>
 					</view>
 				</view>
 			</view>
@@ -67,7 +67,7 @@
 			<block slot="modalContent">
 				<view class="qr-code-modal">
 					<image class="qr-code-img" :src="qrcodepath" mode=""></image>
-					<view class="qr-code-text">核销码：{{qrcodepath}}</view>
+					<view class="qr-code-text">核销码：{{ qrcode }}</view>
 					<button class="cu-btn hide-qrcode" @tap="hideModal">关闭</button>
 				</view>
 			</block>
@@ -316,6 +316,29 @@ export default {
 		height: 50rpx;
 		font-size: 28rpx;
 		color: rgba(179, 132, 54, 1);
+	}
+	.location-box {
+		height: 100%;
+		justify-content: center;
+		position: relative;
+		&::before {
+			content: '';
+			width: 2rpx;
+			height: 94rpx;
+			background: #eeeeee;
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			left: 0;
+		}
+		.location-icon {
+			color: #4FBBFF;
+			margin-bottom: 20rpx;
+		}
+		.location-text {
+			color: #999;
+			font-size: 26rpx;
+		}
 	}
 }
 .service-btn {

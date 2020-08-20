@@ -10,12 +10,14 @@
 					<text class="nav-title x-f">我的</text>
 				</view>
 				<view class="user-head x-bc">
-					<view class="shop-info" @tap="jump('/pages/app/merchant/info')">
-						<view class="x-f mb30">
+					<view class="shop-info">
+						<view class="x-f mb30" @tap="goStoreList">
 							<text class="shop-title">{{ storeDetail.name }}</text>
 							<text class="cuIcon-roundrightfill"></text>
 						</view>
-						<view class="shop-phone">{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}</view>
+						<view class="shop-phone" @tap="jump('/pages/app/merchant/info')">
+							{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}
+						</view>
 					</view>
 
 					<button v-if="true" @tap="jump('/pages/index/user')" class="cu-btn merchant-btn">切换个人版</button>
@@ -182,6 +184,11 @@ export default {
 		this.getStoreDetail();
 		this.getStoreOrder();
 	},
+	onPullDownRefresh() {
+		this.storeOrderList = [];
+		this.currentPage = 1;
+		this.getStoreOrder();
+	},
 	onReachBottom() {
 		if (this.currentPage < this.lastPage) {
 			this.currentPage += 1;
@@ -195,10 +202,18 @@ export default {
 				query: query
 			});
 		},
+		// 选择门店
+		goStoreList() {
+			this.$Router.replace({
+				path: '/pages/app/merchant/list'
+			});
+		},
 		// 获取门店信息
 		getStoreDetail() {
 			let that = this;
-			that.$api('store.info').then(res => {
+			that.$api('store.info', {
+				store_id: uni.getStorageSync('storeId')
+			}).then(res => {
 				if (res.code === 1) {
 					that.storeDetail = res.data;
 				}
@@ -241,7 +256,8 @@ export default {
 		postOrderConfirm() {
 			let that = this;
 			that.$api('store.orderConfirm', {
-				codes: that.scanCodes
+				codes: that.scanCodes,
+				store_id: uni.getStorageSync('storeId')
 			}).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast(res.msg);
@@ -259,9 +275,11 @@ export default {
 				date_type: that.filter.date,
 				date: that.filter.custom,
 				type: that.filter.status,
-				page: that.currentPage
+				page: that.currentPage,
+				store_id: uni.getStorageSync('storeId')
 			}).then(res => {
 				if (res.code == 1) {
+					uni.stopPullDownRefresh();
 					that.storeOrderList = [...that.storeOrderList, ...res.data.result.data];
 					that.orderInfo = res.data;
 					that.lastPage = res.data.result.last_page;

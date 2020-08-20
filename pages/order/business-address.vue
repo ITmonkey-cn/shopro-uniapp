@@ -50,7 +50,7 @@
 										</view>
 									</view>
 									<view class="address-right y-f">
-										<radio class="round address-checked orange checked" :checked="storeId == address.id"></radio>
+										<radio class="round address-checked orange" :class="{'checked':storeId == address.id}"  :checked="storeId == address.id"></radio>
 										<text class="address-distance">{{ address.distance_text || 0 }}</text>
 									</view>
 								</view>

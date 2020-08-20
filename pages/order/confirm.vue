@@ -1,11 +1,10 @@
 <template>
 	<view class="page_box">
-	<!-- 	v-if="orderPre.need_address" -->
-		<view class="head_box" >
+		<view class="head_box" v-if="orderPre.need_address" >
 			<view class="add-address-box flex-sub x-f" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
 				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
 				<view class="box-bg x-bc flex-sub pad">
-					<text class="select-notice">请选择默认地址</text>
+					<text class="select-notice">请选择收货地址</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -111,12 +110,12 @@
 						</view>
 					</view>
 					<view class="express-type__content content_box">
-						<view class="empty-address" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
-							请添加收货地址
+						<view class="empty-address" v-if="!addressId && expressTypeCur !== 'selfetch'" @tap="jump('/pages/user/address/list', { from: 'order' })">
+							请选择收货地址
 							<text class="cuIcon-right"></text>
 						</view>
 						<!-- 快递 -->
-						<view class="express-address" v-if="expressTypeCur == 'express'">
+						<view class="express-address" v-if="expressTypeCur == 'express' && addressId">
 							<view class="express-top x-bc" @tap="jump('/pages/user/address/list', { from: 'order' })">
 								<view class="">
 									<text class="tag" v-if="address.is_default == 1">默认</text>
@@ -189,7 +188,7 @@
 
 						</view>
 						<!-- 商家 -->
-						<view class="express-address" v-if="expressTypeCur == 'store'">
+						<view class="express-address" v-if="expressTypeCur == 'store' && addressId">
 							<view class="express-top x-bc" @tap="jump('/pages/user/address/list', { from: 'order' })">
 								<view class="">
 									<text class="tag" v-if="address.is_default == 1">默认</text>
@@ -579,12 +578,12 @@ export default {
 		},
 		// 初始地址
 		getDefaultAddress() {
-			this.$api('address.defaults').then(res => {
-				if (res.code === 1) {
-					this.address = res.data;
-					this.selfPhone = res.data.phone
-				}
-			});
+				this.$api('address.defaults').then(res => {
+					if (res.code === 1) {
+						this.address = res.data;
+						this.selfPhone = res.data.phone
+					}
+				});
 		},
 		// 可用优惠券
 		getCoupons() {
@@ -626,25 +625,23 @@ export default {
 			this.inExpressType = goods.detail.dispatch_type_arr;
 			this.currentGoodsId = goods.goods_id;
 			this.currentSkuId = goods.sku_price_id;
-			
-			this.goodsList.forEach(item => {
-				if(item.goods_id == this.currentGoodsId &&  this.currentSkuId == item.sku_price_id  ){
-					this.expressTypeCur = item.dispatch_type;
-					this.selfPhone =  item.dispatch_phone?item.dispatch_phone:this.address.phone;
-					this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0 ;
-					this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
-					if (this.expressTypeCur == 'selfetch') {
-						this.storeList.forEach(store => {
-							if(item.store_id == store.id ){
-								this.storeInfo = store;
-							}
-						})
-						
+		
+				this.goodsList.forEach(item => {
+					if(item.goods_id == this.currentGoodsId &&  this.currentSkuId == item.sku_price_id  ){
+						this.expressTypeCur = item.dispatch_type;
+						this.selfPhone =  item.dispatch_phone?item.dispatch_phone:this.address.phone;
+						this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0 ;
+						this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
+						if (this.expressTypeCur == 'selfetch') {
+							this.storeList.forEach(store => {
+								if(item.store_id == store.id ){
+									this.storeInfo = store;
+								}
+							})
+							
+						}
 					}
-				}
-			})
-			
-
+				})
 			
 		},
 		// 关闭配送方式弹窗

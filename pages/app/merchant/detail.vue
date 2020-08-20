@@ -64,7 +64,8 @@ export default {
 		getOrderDetail() {
 			let that = this;
 			that.$api('store.orderDetail', {
-				id: that.$Route.query.orderId
+				id: that.$Route.query.orderId,
+				store_id: uni.getStorageSync('storeId')
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
@@ -78,7 +79,8 @@ export default {
 		sendOrder() {
 			let that = this;
 			that.$api('store.orderSend', {
-				id: that.orderDetail.id
+				id: that.orderDetail.id,
+				store_id: uni.getStorageSync('storeId')
 			}).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast(res.msg);

@@ -152,6 +152,12 @@ export default {
 
 	/** 商户 ↓ **/
 	store: {
+		list: {
+			url: 'store/index',
+			auth: true,
+			method: 'GET',
+			// desc: '商户列表，不需要storeId',
+		},
 		info: {
 			url: 'store.store/index',
 			auth: true,

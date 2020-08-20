@@ -163,19 +163,17 @@ export default class ShoproPay {
 	//
 
 	async wechatWapPay() {
-
 		let that = this;
 		let result = await this.prepay();
 		if (result.code === 1) {
 			var url = result.data.pay_data.match(/url\=\'(\S*)\'/);
 			let reg = new RegExp('&amp;', 'g') //g代表全部
 			let newUrl = url[1].replace(reg, '&');
-			let domain = uni.getStorageSync('sysInfo').domain; //域名
+			let domain = uni.getStorageSync('sysInfo').domain; //域名需要https
 			let params = encodeURIComponent(
 				`${domain}/pages/order/payment/result?orderSn=${that.order.order_sn}&type=${that.payment}&pay=1`)
 			window.location.href = newUrl + '&redirect_url=' + params;
 		}
-
 	}
 
 	async wxMiniProgramPay() {

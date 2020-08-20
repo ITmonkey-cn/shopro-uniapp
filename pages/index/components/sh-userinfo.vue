@@ -38,7 +38,7 @@
 						<button class="cu-btn code-btn" v-if="userInfo.avatar" @tap="jump('/pages/public/poster/index', { posterType: 'user' })">
 							<text class="cuIcon-qr_code"></text>
 						</button>
-						<button v-if="userInfo.is_store" @tap="jump('/pages/app/merchant/index')" class="cu-btn merchant-btn">切换商家版</button>
+						<button v-if="userInfo.is_store" @tap="goStore" class="cu-btn merchant-btn">切换商家版</button>
 					</view>
 				</view>
 			</view>
@@ -83,6 +83,19 @@ export default {
 				path: path,
 				query: query
 			});
+		},
+		// 跳转门店
+		goStore() {
+			if (this.userInfo.store_id) {
+				uni.setStorageSync('storeId', this.userInfo.store_id);
+				this.jump('/pages/app/merchant/index', { storeId: this.userInfo.store_id });
+			} else {
+				if (uni.getStorageSync('storeId')) {
+					this.jump('/pages/app/merchant/index');
+				} else {
+					this.jump('/pages/app/merchant/list');
+				}
+			}
 		},
 		// 跳转客服
 		onService() {

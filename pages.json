@@ -199,7 +199,8 @@
 					"path": "merchant/index",
 					"style": {
 						"navigationBarTitleText": "",
-						"navigationStyle": "custom"
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": true
 
 					},
 					"meta": {
@@ -225,7 +226,7 @@
 				{
 					"path": "merchant/list",
 					"style": {
-						"navigationBarTitleText": "门店列表"//todo
+						"navigationBarTitleText": "门店列表" //todo
 					},
 					"meta": {
 						"auth": true,

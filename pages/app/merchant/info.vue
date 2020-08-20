@@ -2,28 +2,34 @@
 	<view class="merchant-info-box">
 		<label class="x-f form-item">
 			<text class="form-tilte">门店名称：</text>
-			<view class="form-content">{{storeDetail.name}}</view>
+			<view class="form-content">{{ storeDetail.name }}</view>
 		</label>
 		<label class="x-f form-item">
 			<text class="form-tilte">联系电话：</text>
-			<view class="form-content">{{storeDetail.phone}}</view>
+			<view class="form-content">{{ storeDetail.phone }}</view>
 		</label>
 		<!-- 营业时间 -->
 		<label class="x-f form-item">
 			<text class="form-tilte">营业时间：</text>
-			<view class="form-content">{{storeDetail.openhours}}</view>
+			<view class="form-content">{{ storeDetail.openhours }}</view>
 		</label>
 		<!-- 选择星期 -->
 		<checkbox-group class="week-box x-ac" style="margin-bottom: 20rpx;">
 			<label class="week-tiem" v-for="week in weekList" :key="week.title">
-				<checkbox disabled class="round orange" :checked="storeWeek.includes(week.value)" :class="{ checked: storeWeek.includes(week.value) }" style="transform:scale(0.6)" ></checkbox>
+				<checkbox
+					disabled
+					class="round orange"
+					:checked="storeWeek.includes(week.value)"
+					:class="{ checked: storeWeek.includes(week.value) }"
+					style="transform:scale(0.6)"
+				></checkbox>
 				<text class="week-title">{{ week.title }}</text>
 			</label>
 		</checkbox-group>
 		<!-- 选择省市 -->
-		<label class="x-f form-item" >
+		<label class="x-f form-item">
 			<text class="form-tilte">门店地址：</text>
-			<view class="form-content">{{storeDetail.province_name}}{{storeDetail.city_name}}{{storeDetail.area_name}}{{storeDetail.address}}</view>
+			<view class="form-content">{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}</view>
 		</label>
 	</view>
 </template>
@@ -33,7 +39,7 @@ export default {
 	components: {},
 	data() {
 		return {
-			storeWeek:[],
+			storeWeek: [],
 			storeDetail: {}, //门店信息
 			weekList: [
 				//星期
@@ -75,10 +81,12 @@ export default {
 	methods: {
 		getStoreDetail() {
 			let that = this;
-			that.$api('store.info').then(res => {
+			that.$api('store.info', {
+				store_id: uni.getStorageSync('storeId')
+			}).then(res => {
 				if (res.code === 1) {
 					that.storeDetail = res.data;
-					that.storeWeek = res.data.openweeks.split(',')
+					that.storeWeek = res.data.openweeks.split(',');
 				}
 			});
 		}
