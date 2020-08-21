@@ -96,6 +96,9 @@ export default {
 					this.jump('/pages/app/merchant/list');
 				}
 			}
+			//  #ifdef MP-WEIXIN
+			this.$store.dispatch('getMessageIds', 'store');
+			//  #endif
 		},
 		// 跳转客服
 		onService() {

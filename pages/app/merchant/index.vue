@@ -180,7 +180,10 @@ export default {
 		};
 	},
 	computed: {},
-	onLoad() {
+	onLoad(options) {
+		if (options.storeId) {
+			uni.setStorageSync('storeId', options.storeId);
+		}
 		this.getStoreDetail();
 		this.getStoreOrder();
 	},
