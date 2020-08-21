@@ -15,7 +15,7 @@
 							<text class="shop-title">{{ storeDetail.name }}</text>
 							<text class="cuIcon-roundrightfill"></text>
 						</view>
-						<view class="shop-phone" @tap="jump('/pages/app/merchant/info')">
+						<view class="shop-address" @tap="jump('/pages/app/merchant/info')">
 							{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}
 						</view>
 					</view>
@@ -129,7 +129,7 @@ export default {
 			storeOrderList: [], //订单商品列表
 			orderInfo: {}, //订单统计信息
 			storeDetail: {}, //门店信息
-			cancelType: 'date', //核销分类
+			cancelType: '', //核销分类
 			scanCodes: [], //扫码内容。
 			cancelTypeList: [
 				{
@@ -293,8 +293,8 @@ export default {
 		},
 		// 切换核销分类
 		onNav(type) {
+			this.isShowDropDown = this.cancelType == type ? false : true;
 			this.cancelType = type;
-			this.isShowDropDown = true;
 		},
 		// 选择日期
 		selDate(e) {
@@ -309,6 +309,7 @@ export default {
 		// 下拉筛选
 		onHideDropDown() {
 			this.isShowDropDown = false;
+			this.cancelType = '';
 		},
 		// 选择筛选
 		onFilter(val, title) {
@@ -390,11 +391,12 @@ export default {
 				font-size: 34rpx;
 				margin-left: 10rpx;
 			}
-			.shop-phone {
+			.shop-address {
 				font-size: 28rpx;
 				font-family: PingFang SC;
 				font-weight: 500;
 				color: rgba(255, 255, 255, 1);
+				width: 560rpx;
 			}
 		}
 		.merchant-btn {
@@ -488,7 +490,7 @@ export default {
 			font-family: PingFang SC;
 			font-weight: 400;
 			color: #666;
-			line-height: 76rpx;
+			line-height: 100rpx;
 		}
 		.cuIcon-triangleupfill {
 			color: #666;
@@ -519,13 +521,13 @@ export default {
 	position: absolute;
 	z-index: 22;
 	width: 750rpx;
-	top: 82rpx;
+	top: 110rpx;
 	background-color: #ffff;
 	box-shadow: 0px 15rpx 27rpx 0px rgba(203, 203, 203, 0.34);
 	transform: scaleX(1);
 	transition: all linear 0.1s;
 	.drop-down-item {
-		height: 60rpx;
+		height: 80rpx;
 		border-bottom: 1rpx solid rgba(#dfdfdf, 0.5);
 		padding: 0 60rpx;
 		.item-title {

@@ -3,7 +3,7 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<!-- 订单状态 -->
-			<view class="detail-head" :style="orderDetail.consignee?'':'height:120rpx'">
+			<view class="detail-head" :style="orderDetail.consignee ? '' : 'height:120rpx'">
 				<view class="state-box x-f">
 					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
 					<text>{{ orderDetail.status_desc }}</text>
@@ -11,7 +11,7 @@
 			</view>
 			<!-- 收货地址 -->
 			<view class="address-wrap" v-if="orderDetail.consignee">
-				<view class="order-address-box" >
+				<view class="order-address-box">
 					<view class="x-f">
 						<text class="address-username">{{ orderDetail.consignee }}</text>
 						<text class="address-phone">{{ orderDetail.phone }}</text>
@@ -19,11 +19,13 @@
 					<view class="address-detail">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
 				</view>
 			</view>
-			
+
 			<view class="detail-goods">
 				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
-					<view class="order-card" @tap="jump('/pages/goods/detail/index', { id: order.goods_id })"><shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card></view>
+					<view class="order-card" @tap="jump('/pages/goods/detail/index', { id: order.goods_id })">
+						<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
+					</view>
 					<!-- 配送方式 -->
 					<view class="express-type-box x-bc">
 						<view class="x-f">
@@ -34,7 +36,7 @@
 						<view
 							class="x-f express-type--detail"
 							v-if="order.dispatch_type !== 'express'"
-							@tap="jump('/pages/order/distribution', { expressType: order.dispatch_type, orderId: orderDetail.id, orderItemId: order.id })"
+							@tap="goDistribution(order.dispatch_type, orderDetail.id, order.id, order.dispatch_status)"
 						>
 							<text>详情</text>
 							<text class="cuIcon-right"></text>
@@ -123,8 +125,8 @@
 					<text class="detail">{{ orderDetail.dispatch_amount }}</text>
 				</view>
 				<view class="notice-item x-bc">
-					<text class="title">优惠券</text>
-					<text class="detail">{{ orderDetail.coupon_fee }}</text>
+					<text class="title">优惠金额</text>
+					<text class="detail">-{{ orderDetail.discount_fee }}</text>
 				</view>
 				<view class="notice-item all-rpice-item x-f" style="width: 100%;">
 					<text class="title">实付款：</text>
@@ -209,6 +211,14 @@ export default {
 				query: parmas
 			});
 		},
+		// 详情发货信息
+		goDistribution(dispatchType, orderId, orderItemId, orderItemStatus) {
+			if (orderItemStatus) {
+				this.jump('/pages/order/distribution', { expressType: dispatchType, orderId: orderId, orderItemId: orderItemId });
+			} else {
+				this.$tools.toast('商品尚未发货');
+			}
+		},
 		// 订单详情
 		getOrderDetail() {
 			let that = this;
@@ -252,7 +262,6 @@ export default {
 		},
 		// 申请售后
 		onAftersale(orderId, orderItemId) {
-			
 			this.$Router.push({
 				path: '/pages/order/after-sale/refund',
 				query: { orderId: orderId, orderItemId: orderItemId }
@@ -335,10 +344,10 @@ export default {
 }
 
 // 收货地址
-.address-wrap{
+.address-wrap {
 	position: relative;
 	background-color: #fff;
-	min-height:160rpx;
+	min-height: 160rpx;
 	width: 100%;
 	margin-bottom: 20rpx;
 }

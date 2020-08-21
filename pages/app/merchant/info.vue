@@ -27,7 +27,7 @@
 			</label>
 		</checkbox-group>
 		<!-- 选择省市 -->
-		<label class="x-f form-item">
+		<label class="x-f form-item" style="align-items: flex-start;">
 			<text class="form-tilte">门店地址：</text>
 			<view class="form-content">{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}</view>
 		</label>
@@ -98,10 +98,9 @@ export default {
 .merchant-info-box {
 	border-top: 1rpx solid #f5f5f5;
 	.form-item {
-		height: 96rpx;
 		background-color: #fff;
 		border-bottom: 1rpx solid #f5f5f5;
-		padding: 0 30rpx;
+		padding: 20rpx 30rpx;
 		.form-title {
 			font-size: 28rpx;
 			font-family: PingFang SC;

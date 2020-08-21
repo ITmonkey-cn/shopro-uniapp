@@ -114,6 +114,9 @@ export default {
 				money: that.money
 			}).then(res => {
 				if (res.code === 1) {
+					//  #ifdef MP-WEIXIN
+					this.$store.dispatch('getMessageIds', 'wallet');
+					//  #endif
 					this.$tools.toast(res.msg);
 					that.getUserInfo();
 				}

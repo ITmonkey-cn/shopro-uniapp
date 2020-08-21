@@ -80,8 +80,9 @@ export default {
 	.store-title {
 		font-size: 30rpx;
 		font-family: PingFang SC;
-		font-weight: 500;
+		font-weight: 600;
 		color: rgba(52, 52, 52, 1);
+		margin-bottom: 10rpx;
 	}
 	.store-content {
 		font-size: 24rpx;

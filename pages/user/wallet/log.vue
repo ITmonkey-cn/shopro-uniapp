@@ -40,9 +40,6 @@ export default {
 		};
 	},
 	computed: {},
-	onPullDownRefresh() {
-		this.isBottom = true;
-	},
 	onLoad() {
 		this.getWalletLog();
 	},
