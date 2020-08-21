@@ -12,9 +12,9 @@
 					<view class="detail-item" style="align-items: flex-start;width: 100%;">
 						<view class="item-title x-f">核销码</view>
 						<view class="x-bc my20" v-for="code in qrcodeList" :key="code.code">
-							<view :style="code.code !== 'nouse' ? 'color:#999' : ''">
-								<text class="item-content">{{ code.code }}</text>
-								<text class="item-status mx30">{{ code.status_name }}</text>
+							<view>
+								<text :style="code.status_code !== 'nouse' ? 'color:#999' : ''" class="item-content">{{ code.code }}</text>
+								<text :style="code.status_code !== 'nouse' ? 'color:#999' : ''" class="item-status mx30">{{ code.status_name }}</text>
 							</view>
 							<button class="cu-btn check-code" v-if="code.status_code == 'nouse'" @tap="checkCode(code.code)">查看</button>
 						</view>
@@ -44,7 +44,7 @@
 				v-if="expressType == 'store' && itemDetail.order"
 			>
 				<view class="item-title">配送信息</view>
-				<view class="item-content">{{ itemDetail.order.city_name }}{{ itemDetail.order.area_name }}{{ itemDetail.order.address }}</view>
+				<view class="item-content">配送地址：{{ itemDetail.order.city_name }}{{ itemDetail.order.area_name }}{{ itemDetail.order.address }}</view>
 				<view class="item-content">配送时间：{{ itemDetail.ext_arr.dispatch_date }}</view>
 			</view>
 			<!-- 自动 -->
@@ -54,6 +54,7 @@
 					{{ item.name }}：{{ item.value }}
 				</view>
 				<view v-if="itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'text'" class="item-content">{{ itemDetail.ext_arr.autosend_content }}</view>
+				<view v-if="!itemDetail.ext_arr.length" style="color: #999;" class="item-content">暂未发货~</view>
 			</view>
 		</view>
 		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store'">

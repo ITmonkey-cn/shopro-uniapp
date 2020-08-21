@@ -43,7 +43,7 @@
 					@getSkuText="getSkuText"
 				></shopro-sku>
 				<!-- 服务 -->
-				<sh-serve v-model="showServe" :serveList="goodsInfo.service"></sh-serve>
+				<sh-serve v-if="goodsInfo.service.length" v-model="showServe" :serveList="goodsInfo.service"></sh-serve>
 				<!-- 优惠券 -->
 				<sh-coupon
 					v-if="goodsInfo.coupons && goodsInfo.coupons.length && goodsInfo.activity_type !== 'seckill' && goodsInfo.activity_type !== 'groupon' && detailType !== 'score'"

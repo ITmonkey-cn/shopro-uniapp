@@ -58,7 +58,7 @@ export default {
 			return '/' + currPage;
 		},
 		showTabbar() {
-			if (this?.tabbarData?.list) {
+			if (this?.tabbarData?.list) { //等同于this.tabbarData && this.tabbarData.list
 				let arr = [];
 				let path = '';
 				arr.push('/pages/index/index');

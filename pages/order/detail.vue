@@ -212,12 +212,8 @@ export default {
 			});
 		},
 		// 详情发货信息
-		goDistribution(dispatchType, orderId, orderItemId, orderItemStatus) {
-			if (orderItemStatus) {
-				this.jump('/pages/order/distribution', { expressType: dispatchType, orderId: orderId, orderItemId: orderItemId });
-			} else {
-				this.$tools.toast('商品尚未发货');
-			}
+		goDistribution(dispatchType, orderId, orderItemId) {
+			this.jump('/pages/order/distribution', { expressType: dispatchType, orderId: orderId, orderItemId: orderItemId });
 		},
 		// 订单详情
 		getOrderDetail() {

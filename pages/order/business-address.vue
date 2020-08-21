@@ -50,7 +50,7 @@
 										</view>
 									</view>
 									<view class="address-right y-f">
-										<radio class="round address-checked orange" :class="{'checked':storeId == address.id}"  :checked="storeId == address.id"></radio>
+										<radio class="round address-checked orange" :class="{ checked: storeId == address.id }" :checked="storeId == address.id"></radio>
 										<text class="address-distance">{{ address.distance_text || 0 }}</text>
 									</view>
 								</view>
@@ -114,6 +114,7 @@ export default {
 	onLoad(options) {
 		this.latitude = this.$Route.query.lat;
 		this.longitude = this.$Route.query.lng;
+		this.storeId = this.$Route.query.storeId;
 		this.getStoreAddress();
 	},
 	onReady() {
@@ -135,7 +136,7 @@ export default {
 			let currPage = pages[pages.length - 1];
 			let prevPage = pages[pages.length - 2]; //上一个页面
 			// #endif
-			prevPage.storeInfo = this.storeInfo;
+			prevPage.storeInfo = this.storeInfo.id ? this.storeInfo : this.addressList[0];
 			this.storeId == 0 ? this.$tools.toast('请选择门店') : this.$Router.back();
 		},
 		// 点击地图
@@ -403,15 +404,15 @@ export default {
 	margin-right: 10rpx;
 	font-size: 30rpx;
 }
-.address-left{
-	flex:1;
+.address-left {
+	flex: 1;
 }
 .address-right {
 	align-items: center;
 	color: #a8700e;
 	font-size: 24rpx;
 	margin-bottom: 20rpx;
-	white-space:nowrap;
+	white-space: nowrap;
 }
 .address-checked {
 	transform: scale(0.7);

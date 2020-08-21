@@ -147,7 +147,7 @@
 							</view>
 							<!-- 已定位 -->
 							<view class="" v-else>
-								<view class="express-top x-bc" @tap="jump('/pages/order/business-address', {goodsId:currentGoodsId,lat:lat,lng:lng })">
+								<view class="express-top x-bc" @tap="jump('/pages/order/business-address', {goodsId:currentGoodsId,lat:lat,lng:lng,storeId:storeInfo.id })">
 									<view class="">
 										<text class="tag1" v-if="address.is_default == 1">最近</text>
 										<text class="address">{{storeInfo.name || '暂无自提点'}}</text>
