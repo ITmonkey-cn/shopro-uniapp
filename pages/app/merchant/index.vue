@@ -297,7 +297,7 @@ export default {
 		// 切换核销分类
 		onNav(type) {
 			this.isShowDropDown = this.cancelType == type ? false : true;
-			this.cancelType = type;
+			this.cancelType = this.cancelType == type ? '' : type;
 		},
 		// 选择日期
 		selDate(e) {
@@ -317,6 +317,7 @@ export default {
 		// 选择筛选
 		onFilter(val, title) {
 			this.isShowDropDown = false;
+			this.cancelType = '';
 			if (val == 'custom') {
 				this.showCalendar = true;
 			}
