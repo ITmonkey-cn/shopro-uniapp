@@ -4,7 +4,11 @@
 			<view class="head_box"></view>
 			<view class="content_box pad">
 				<view class="form-item">
-					<view class="inp-title">请选择类型</view>
+					<view class="inp-title">
+						请选择类型
+						<text v-if="errTips.type" style="color: red; font-size: 24rpx;">({{ errTips.type }})</text>
+					</view>
+					<view class="err-msg"></view>
 					<radio-group class="y-start radio-box">
 						<label class="radio-item x-f" v-for="type in typeList" :key="type.code" @tap="changeType(type.code)">
 							<radio class="orange radio-inp" :class="{ chekced: type === type.code }" :checked="type === type.code"></radio>
@@ -57,7 +61,8 @@ export default {
 			type: '', //类型
 			content: '', //描述
 			phone: '', //电话
-			typeList: []
+			typeList: [],
+			errTips: {}
 		};
 	},
 	computed: {},
@@ -78,18 +83,20 @@ export default {
 				}
 			});
 		},
+
 		addFeedback() {
 			let that = this;
-			that.$api('feedback.add', {
+			let formData = {
 				type: that.type,
 				content: that.content,
 				images: that.imgList,
 				phone: that.phone
-			}).then(res => {
+			};
+			that.$api('feedback.add', formData).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast('提交成功');
 					setTimeout(() => {
-						that.$router.back();
+						that.$Router.back();
 					}, 300);
 				}
 			});
@@ -136,6 +143,7 @@ export default {
 		font-family: PingFang SC;
 		font-weight: bold;
 		color: rgba(51, 51, 51, 1);
+		align-items: center;
 		margin-bottom: 30rpx;
 	}
 	.inp {
