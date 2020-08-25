@@ -10,7 +10,8 @@
         "modules" : {
             "OAuth" : {},
             "Payment" : {},
-            "Share" : {}
+            "Share" : {},
+            "Maps" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -76,8 +77,8 @@
                 "ad" : {},
                 "maps" : {
                     "amap" : {
-                        "appkey_ios" : "",
-                        "appkey_android" : ""
+                        "appkey_ios" : "f3c725a2c41ae7218e39392f28635ee7",
+                        "appkey_android" : "7a3cedafa6b15b3482e85b7400355b1c"
                     }
                 }
             },

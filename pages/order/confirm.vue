@@ -139,11 +139,11 @@
 						<!-- 自提  -->
 						<view class="express-address" v-if="expressTypeCur == 'selfetch'">
 							<!-- 定位 -->
-							<view class="y-f location-box" v-if="!lat">
+							<view class="y-f location-box" v-if="hasLocationt">
 								<image class="nolocation-img" src="/static/imgs/order/location.png" mode=""></image>
 								<text class="location-title">开启定位服务</text>
 								<text class="location-tip">为你推荐更精准的位置信息噢~</text>
-								<button class="cu-btn open-location" @tap="openLocation">去开启</button>
+								<button class="cu-btn open-location" @tap="getLocation">去开启</button>
 							</view>
 							<!-- 已定位 -->
 							<view class="" v-else>
@@ -289,6 +289,9 @@ import { mapMutations, mapActions, mapState } from 'vuex';
 // #ifdef H5
 import wxsdk from '@/common/wechat/sdk'
 // #endif
+  // #ifdef APP-PLUS
+    import permision from "@/common/permission.js"
+    // #endif
 export default {
 	components: {
 		shoproMiniCard,
@@ -364,8 +367,9 @@ export default {
 			checkTimeCur: 0, //默认选中时间。
 			checkTimeId: 'c1',//锚点用
 			checkDayCur: 0,//默认日期
-				lat:0,
-				lng:0
+			hasLocation:false,//是否开启授权
+			lat:0,
+			lng:0
 			
 		};
 	},
@@ -450,8 +454,26 @@ export default {
 		},
 		   
 		// 开启定位
+		async getLocation() {
+		    // #ifdef APP-PLUS
+		    let status = await this.checkPermission();
+		    if (status !== 1) {
+		        return;
+		    }
+		    // #endif
+		    // #ifdef MP-WEIXIN || MP-TOUTIAO || MP-QQ
+		    let status = await this.getSetting();
+		    if (status === 2) {
+		        this.showConfirm();
+		        return;
+		    }
+		    // #endif
+		
+		    this.openLocation();
+		},
 		openLocation(){
 			let platform = uni.getStorageSync('platform');
+			  this.hasLocation = true;
 			if(platform == 'wxOfficialAccount'){
 				// #ifdef H5
 				this.$wxsdk.getlocation(res => {
@@ -474,6 +496,65 @@ export default {
 					}
 				});
 			}
+		},
+		getSetting: function() {
+		    return new Promise((resolve, reject) => {
+		        uni.getSetting({
+		            success: (res) => {
+		                if (res.authSetting['scope.userLocation'] === undefined) {
+		                    resolve(0);
+		                    return;
+		                }
+		                if (res.authSetting['scope.userLocation']) {
+		                    resolve(1);
+		                } else {
+		                    resolve(2);
+		                }
+		            }
+		        });
+		    });
+		},
+		openSetting: function() {
+		    uni.openSetting({
+		        success: (res) => {
+		            if (res.authSetting && res.authSetting['scope.userLocation']) {
+		                this.openLocation();
+		            }
+		        },
+		        fail: (err) => {}
+		    })
+		},
+		async checkPermission() {
+		    let status = permision.isIOS ? await permision.requestIOS('location') :
+		        await permision.requestAndroid('android.permission.ACCESS_FINE_LOCATION');
+		
+		    if (status === null || status === 1) {
+		        status = 1;
+		    } else if (status === 2) {
+		        uni.showModal({
+		            content: "系统定位已关闭",
+		            confirmText: "确定",
+		            showCancel: false,
+		            success: function(res) {
+		            }
+		        })
+		    } else if (status.code) {
+		        uni.showModal({
+		            content: status.message
+		        })
+		    } else {
+		        uni.showModal({
+		            content: "需要定位权限",
+		            confirmText: "设置",
+		            success: function(res) {
+		                if (res.confirm) {
+		                    permision.gotoAppSetting();
+		                }
+		            }
+		        })
+		    }
+		
+		    return status;
 		},
 		// 编译预留手机号
 		onInput(){
