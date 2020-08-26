@@ -235,7 +235,18 @@ export default {
 					});
 					// #endif
 					break;
-				case 'wxMiniProgram':
+				case 'wxMiniProgram' || 'App':
+					uni.scanCode({
+						success: res => {
+							this.scanCodes = res.result.split(',');
+							this.postOrderConfirm();
+						},
+						fail: err => {
+							console.log(err);
+						}
+					});
+					break;
+				case 'App':
 					uni.scanCode({
 						success: res => {
 							this.scanCodes = res.result.split(',');

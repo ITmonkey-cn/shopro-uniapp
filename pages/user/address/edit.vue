@@ -105,7 +105,6 @@ export default {
 	methods: {
 		// 地图选择地址
 		chooseLocation() {
-			// #ifdef MP-WEIXIN
 			uni.chooseLocation({
 				success: res => {
 					this.addressData.latitude = res.latitude;
@@ -118,7 +117,6 @@ export default {
 					console.log(err);
 				}
 			});
-			// #endif
 			// #ifdef H5
 			this.$wxsdk.openAddress(res => {
 				this.addressData.latitude = res.latitude;

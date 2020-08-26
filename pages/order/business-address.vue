@@ -12,9 +12,10 @@
 			show-location
 			@tap="onMap"
 		></map>
-		<div ref="testdiv" class="dragLayer" :class="moveCard" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
-			<div ref="oilStation" class="oilStation">
-				<div class="oilStation-top">
+		<view ref="testdiv" class="dragLayer" :class="moveCard" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="handleTouchMove">
+			<view ref="oilStation" class="oilStation">
+				<!-- #ifndef APP-PLUS -->
+				<view class="oilStation-top">
 					<view class="touch-guide x-c" @tap="onShowCard">
 						<image class="touch-jintou" v-if="!showCard" src="/static/imgs/order/arrows1.png" mode=""></image>
 						<image class="touch-jintou" v-if="showCard" src="/static/imgs/order/arrows2.png" mode=""></image>
@@ -23,7 +24,8 @@
 						<text class="cuIcon-search"></text>
 						<input class="search-inp" placeholder-class="search-pl" placeholder="输入地址寻找周边自提点" type="text" value="" />
 					</div> -->
-				</div>
+				</view>
+				<!-- #endif -->
 				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">
 					<view class="page_box">
 						<view class="content_box" style="background-color: #fff;overflow-x: hidden;">
@@ -61,8 +63,8 @@
 						<view class="foot_box x-c"><button class="cu-btn save-btn" @tap="onSave">确认</button></view>
 					</view>
 				</scroll-view>
-			</div>
-		</div>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -73,7 +75,7 @@ export default {
 			longitude: 0,
 			latitude: 0,
 			mapHeight: 0,
-			topSize: 0,
+			cardHeight: 0,
 			showCard: false,
 			scrollable: false, // 初始化禁止滑动
 			moveCard: 'dragLayer-bottom',
@@ -103,7 +105,12 @@ export default {
 					let obj = {
 						id: item.id,
 						latitude: item.latitude,
-						longitude: item.longitude
+						longitude: item.longitude,
+						// #ifdef APP-PLUS
+						iconPath: '/static/imgs/order/e1.png',
+						width: 100,
+						height: 100
+						// #endif
 					};
 					arr.push(obj);
 				});
@@ -182,6 +189,7 @@ export default {
 						},
 						data => {
 							that.mapHeight = res.screenHeight - data.height;
+							console.log('card-height', data.height);
 						}
 					).exec();
 				}
@@ -252,7 +260,6 @@ export default {
 		// 点击显隐
 		onShowCard() {
 			this.showCard = !this.showCard;
-			console.log(this.moveCard);
 			if (this.showCard) {
 				this.moveCard = 'dragLayer-top';
 				this.scrollable = true;
@@ -294,6 +301,9 @@ export default {
 }
 .dragLayer-bottom {
 	height: 450rpx !important;
+	/*#ifdef APP-PLUS */
+	height: 800rpx !important;
+	/*#endif*/
 	transition: all ease-in-out 0.2s;
 }
 .dragLayer-top {

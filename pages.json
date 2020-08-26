@@ -311,7 +311,13 @@
 					"path": "business-address",
 					"style": {
 						"navigationBarTitleText": "选择自提点",
-						"navigationStyle": "custom"
+						"navigationStyle": "custom",
+						"app-plus": {
+							"titleNView": {
+								"type": "transparent"
+
+							}
+						}
 
 					},
 					"meta": {
