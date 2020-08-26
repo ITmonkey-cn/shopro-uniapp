@@ -63,6 +63,26 @@
 		<shopro-float-btn></shopro-float-btn>
 		<!-- 连续弹窗提醒 -->
 		<shopro-notice-modal></shopro-notice-modal>
+		<!-- 隐私协议 -->
+		<shopro-modal v-model="showServiceContract">
+			<block slot="modalContent">
+				<view class="service-contract-wrap">
+					<image class="service-head-img" src="/static/imgs/modal/servece_head.png" mode="widthFix"></image>
+					<view class="service-title">用户隐私协议概况</view>
+					<view class="service-content ">
+						感谢您使用shopro商城，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读
+						<text style="color: #EAB866;" @tap="jump('/pages/public/richtext', { id: 2 })">《shopro商城隐私协议》</text>
+						，我们将会严格按照经您同意的各项条款使用您的个人信息，以便为您提供更好的服务。
+					</view>
+					<view class="service-tip ">如您同意此条款，请点击“同意”并开始使用我们的产品和服务，我们将尽全力保护您的个人信息安全。</view>
+					<view class="btn-box x-bc">
+						<button class="cu-btn cancel-btn" @tap="hideService">不同意</button>
+						<button class="cu-btn agree-btn" @tap="Agree">同意</button>
+					</view>
+					<text class="cuIcon-roundclose ic-hide" @tap="hideService"></text>
+				</view>
+			</block>
+		</shopro-modal>
 	</view>
 </template>
 
@@ -126,7 +146,8 @@ export default {
 			// #ifdef MP-WEIXIN
 			HAS_LIVE: HAS_LIVE,
 			// #endif
-			mode: ''
+			mode: '',
+			showServiceContract: uni.getStorageSync('showService')
 		};
 	},
 	computed: {
@@ -168,6 +189,7 @@ export default {
 		getbgcolor(e) {
 			this.bgcolor = e;
 		},
+
 		// 路由跳转
 		jump(path, parmas) {
 			this.$Router.push({
@@ -175,6 +197,18 @@ export default {
 				query: parmas
 			});
 		},
+
+		// 关闭协议
+		hideService() {
+			this.showServiceContract = false;
+		},
+
+		// 同意协议
+		Agree() {
+			uni.setStorageSync('showService', false);
+			this.showServiceContract = false;
+		},
+
 		// #ifdef H5
 		//装修模式屏幕截图
 		screenShotPreviewImage() {
@@ -213,6 +247,78 @@ export default {
 // 标题搜索栏
 .active {
 	transition: all linear 0.3s;
+}
+
+// 服务协议
+.service-contract-wrap {
+	background-color: #fff;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 610rpx;
+	border-radius: 20rpx;
+	.service-title {
+		font-size: 35rpx;
+		font-family: PingFang SC;
+		font-weight: bold;
+		color: rgba(255, 255, 255, 1);
+		line-height: 42rpx;
+		background: linear-gradient(180deg, rgba(62, 48, 25, 1) 0%, rgba(109, 80, 40, 1) 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		margin-bottom: 30rpx;
+	}
+	.service-content {
+		text-align: left;
+		font-size: 26rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(102, 102, 102, 1);
+		line-height: 50rpx;
+		padding: 0 40rpx;
+	}
+	.service-tip {
+		text-align: left;
+		font-size: 26rpx;
+		font-family: PingFang SC;
+		font-weight: 500;
+		color: rgba(154, 154, 154, 1);
+		line-height: 50rpx;
+		padding: 0 40rpx;
+	}
+	.btn-box {
+		padding: 40rpx;
+		.cancel-btn {
+			width: 248rpx;
+			height: 70rpx;
+			border: 1rpx solid rgba(234, 182, 99, 1);
+			border-radius: 35rpx;
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(234, 182, 99, 1);
+			background-color: #fff;
+		}
+		.agree-btn {
+			width: 241rpx;
+			height: 70rpx;
+			background: linear-gradient(90deg, rgba(233, 181, 97, 1), rgba(238, 204, 138, 1));
+			border-radius: 35rpx;
+			font-size: 28rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 1);
+		}
+	}
+	.ic-hide {
+		position: absolute;
+		font-size: 50rpx;
+		bottom: -100rpx;
+		z-index: 11;
+		color: #fff;
+		left: 50%;
+		transform: translateX(-50%);
+	}
 }
 
 .head_box {

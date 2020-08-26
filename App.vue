@@ -69,6 +69,9 @@ export default {
 		}
 	},
 	onLaunch: async function(options) {
+		if (!uni.getStorageInfoSync().keys.includes('showService')) {
+			uni.setStorageSync('showService', true);
+		}
 		if (options.query.mode === 'save') {
 			//截图模式
 			uni.setStorageSync('screenShot', true);
@@ -110,7 +113,7 @@ page {
 	width: 100%;
 	font-size: 30upx;
 	font-family: NotoSansHans-Bold;
-	 word-break:break-all;//英文文本不换行
+	word-break: break-all; //英文文本不换行
 	color: #333;
 }
 ::-webkit-scrollbar {

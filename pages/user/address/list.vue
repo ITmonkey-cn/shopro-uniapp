@@ -37,7 +37,7 @@ export default {
 		return {
 			addressList: [],
 			from: '',
-			platform: uni.getStorageSync('platform'),
+			platform: uni.getStorageSync('platform')
 		};
 	},
 	computed: {},
@@ -72,23 +72,60 @@ export default {
 			});
 		},
 		// 获取微信收货地址
-		getWXaddress() {
+		async getWXaddress() {
+			// #ifdef MP-WEIXIN || MP-TOUTIAO || MP-QQ
+			let status = await this.getSetting();
+			if (status === 2) {
+				this.openSetting();
+				return;
+			}
+			// #endif
+
+			this.openWXaddress();
+		},
+		openWXaddress() {
 			// #ifdef MP-WEIXIN
 			uni.chooseAddress({
 				success: res => {
-					console.log(res,111111111)
-					let data = JSON.stringify(res)
-					this.jump('/pages/user/address/edit',{addressData:data})
+					let data = JSON.stringify(res);
+					this.jump('/pages/user/address/edit', { addressData: data });
 				},
 				fail: err => {}
 			});
 			// #endif
 			// #ifdef H5
 			this.$wxsdk.openAddress(res => {
-				let data = JSON.stringify(res)
-				this.jump('/pages/user/address/edit',{addressData:data})
+				let data = JSON.stringify(res);
+				this.jump('/pages/user/address/edit', { addressData: data });
 			});
 			// #endif
+		},
+		getSetting: function() {
+			return new Promise((resolve, reject) => {
+				uni.getSetting({
+					success: res => {
+						if (res.authSetting['scope.address'] === undefined) {
+							resolve(0);
+							return;
+						}
+						if (res.authSetting['scope.address']) {
+							resolve(1);
+						} else {
+							resolve(2);
+						}
+					}
+				});
+			});
+		},
+		openSetting: function() {
+			uni.openSetting({
+				success: res => {
+					if (res.authSetting && res.authSetting['scope.address']) {
+						this.openWXaddress();
+					}
+				},
+				fail: err => {}
+			});
 		},
 		// 路由跳转
 		jump(path, parmas) {

@@ -222,6 +222,7 @@ export default {
 				}
 			});
 		},
+
 		// 扫码
 		scanCode() {
 			let platform = uni.getStorageSync('platform');
@@ -249,6 +250,7 @@ export default {
 					this.$tools.toast('请使用小程序或微信浏览器');
 			}
 		},
+
 		// 输码
 		onConfirm() {
 			this.showInputModal = false;

@@ -123,7 +123,7 @@ export default class Wechat {
 					}
 				}
 			})
-			
+
 			resolve(session_key);
 
 		});

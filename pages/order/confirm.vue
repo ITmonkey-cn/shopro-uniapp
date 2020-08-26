@@ -139,7 +139,7 @@
 						<!-- 自提  -->
 						<view class="express-address" v-if="expressTypeCur == 'selfetch'">
 							<!-- 定位 -->
-							<view class="y-f location-box" v-if="hasLocationt">
+							<view class="y-f location-box" v-if="!lat">
 								<image class="nolocation-img" src="/static/imgs/order/location.png" mode=""></image>
 								<text class="location-title">开启定位服务</text>
 								<text class="location-tip">为你推荐更精准的位置信息噢~</text>
@@ -367,7 +367,6 @@ export default {
 			checkTimeCur: 0, //默认选中时间。
 			checkTimeId: 'c1',//锚点用
 			checkDayCur: 0,//默认日期
-			hasLocation:false,//是否开启授权
 			lat:0,
 			lng:0
 			
@@ -463,17 +462,21 @@ export default {
 		    // #endif
 		    // #ifdef MP-WEIXIN || MP-TOUTIAO || MP-QQ
 		    let status = await this.getSetting();
-		    if (status === 2) {
-		        this.showConfirm();
+		    if (status === 1) {
+		       this.getStoreAddress()
 		        return;
-		    }
+		    }else{
+				if(status === 2){
+					this.openSetting();
+					return;
+				}
+			}
 		    // #endif
 		
 		    this.openLocation();
 		},
 		openLocation(){
 			let platform = uni.getStorageSync('platform');
-			  this.hasLocation = true;
 			if(platform == 'wxOfficialAccount'){
 				// #ifdef H5
 				this.$wxsdk.getlocation(res => {
@@ -611,8 +614,6 @@ export default {
 							}
 						})
 					})
-					console.log(that.goodsList);
-				
 				}
 			});
 		},
@@ -756,8 +757,8 @@ export default {
 		changeExpressType(cur) {
 			this.expressTypeCur = cur;
 			this.getFocus = false;
-			if(cur == 'selfetch' && this.lat){
-				this.getStoreAddress()
+			if(cur == 'selfetch' && !this.lat){
+				this.openLocation()
 				}
 		},
 	
