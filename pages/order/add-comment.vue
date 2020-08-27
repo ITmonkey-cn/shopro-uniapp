@@ -5,8 +5,8 @@
 			<view class="goods-card"><shopro-mini-card :detail="goodsDetail" :type="'order'"></shopro-mini-card></view>
 			<view class="form-item">
 				<view class="star-box x-f">
-					<view class="star-title">描述相符</view>
-					<view class=""><sh-star @changeStar="changeStar" :maxStar="5"></sh-star></view>
+					<view class="star-title">{{ starTip }}</view>
+					<view class=""><sh-star @changeStar="changeStar" :defaultStar="5" :maxStar="5"></sh-star></view>
 				</view>
 				<view class="area-box">
 					<textarea class="inp-area" v-model="message" placeholder="宝贝满足你的期待吗？说说你的使用心得，分享给想买的他们吧~" placeholder-class="pl-style" />
@@ -36,12 +36,26 @@ export default {
 		return {
 			imgList: [],
 			uploadImgList: [],
-			star: 1,
+			star: 5,
 			message: '',
 			goodsDetail: {}
 		};
 	},
-	computed: {},
+	computed: {
+		starTip() {
+			let text = '';
+			if (this.star <= 1) {
+				text = '差评';
+			}
+			if (this.star > 1 && this.star <= 3) {
+				text = '中评';
+			}
+			if (this.star >= 4) {
+				text = '好评';
+			}
+			return text;
+		}
+	},
 	onLoad() {
 		this.getOrderItemDetail();
 	},
@@ -97,7 +111,9 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.$tools.toast('评论发表成功');
-					that.$Router.back();
+					setTimeout(() => {
+						that.$Router.back();
+					}, 1000);
 				}
 			});
 		}

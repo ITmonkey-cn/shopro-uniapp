@@ -32,8 +32,8 @@
 			</view>
 			<!-- 登录按钮 -->
 			<view class="x-c y-f">
-				<button class="cu-btn login-btn" @tap="toLogin">登录</button>
-				<view class="x-bc tip-box">
+				<button class="cu-btn login-btn mb30" @tap="toLogin">登录</button>
+				<view class="x-bc tip-box ">
 					<button class="cu-btn tip-btn" @tap="jump('/pages/public/register')">立即注册</button>
 					<view class="" v-show="loginWay === 1"><button class="cu-btn tip-btn" @tap="jump('/pages/public/forgot')">忘记密码</button></view>
 				</view>

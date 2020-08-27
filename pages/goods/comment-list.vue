@@ -2,7 +2,7 @@
 	<view class="page_box">
 		<view class="head_box x-f">
 			<button :class="{ 'btn-active': typeCurrent === t.code }" class="cu-btn type-btn" @tap="selType(t.code)" v-for="t in commentTypeList" :key="t.code">
-				{{ t.name }}
+				{{ t.name }}({{t.num}})
 			</button>
 		</view>
 		<view class="content_box">
@@ -57,7 +57,9 @@ export default {
 		// 评价类型
 		getCommentType() {
 			let that = this;
-			that.$api('goods_comment.type').then(res => {
+			that.$api('goods_comment.type', {
+				goods_id: that.$Route.query.goodsId
+			}).then(res => {
 				if (res.code === 1) {
 					that.commentTypeList = res.data;
 					that.getCommentList();

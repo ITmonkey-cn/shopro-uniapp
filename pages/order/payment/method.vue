@@ -60,7 +60,8 @@ export default {
 			orderDetail: {},
 			timeText: '',
 			isPast: true, //是否显示订单倒计时。
-			isAndroid: uni.getStorageSync('isAndroid')
+			isAndroid: uni.getStorageSync('isAndroid'),
+			platform: uni.getStorageSync('platform')
 		};
 	},
 	computed: {

@@ -139,7 +139,7 @@
 						<!-- 自提  -->
 						<view class="express-address" v-if="expressTypeCur == 'selfetch'">
 							<!-- 定位 -->
-							<view class="y-f location-box" v-if="!lat">
+							<view class="y-f location-box" v-if="!hasLocation">
 								<image class="nolocation-img" src="/static/imgs/order/location.png" mode=""></image>
 								<text class="location-title">开启定位服务</text>
 								<text class="location-tip">为你推荐更精准的位置信息噢~</text>
@@ -367,6 +367,7 @@ export default {
 			checkTimeCur: 0, //默认选中时间。
 			checkTimeId: 'c1',//锚点用
 			checkDayCur: 0,//默认日期
+			hasLocation:false,//是否已经授权过
 			lat:0,
 			lng:0
 			
@@ -400,6 +401,9 @@ export default {
 		this.orderType = this.$Route.query.orderType;
 		this.grouponBuyType = this.$Route.query.grouponBuyType;
 		this.grouponId = this.$Route.query.grouponId;
+		// #ifdef MP-WEIXIN
+		this.getSetting()
+		// #endif
 		this.initDate()
 		await this.init();
 	},
@@ -480,6 +484,7 @@ export default {
 			if(platform == 'wxOfficialAccount'){
 				// #ifdef H5
 				this.$wxsdk.getlocation(res => {
+					this.hasLocation = true;
 					this.lng =  res.longitude;
 					this.lat = res.latitude;
 					console.log('h5',res)
@@ -490,12 +495,23 @@ export default {
 				uni.getLocation({
 				    type: platform == 'h5' ? 'wgs84' : 'gcj02',
 				    success: res => {
+						this.hasLocation = true;
 				        this.lng =  res.longitude;
 				       this.lat = res.latitude;
 					   this.getStoreAddress()
 				    },
 					fail:err => {
-						console.log('定位错误',err)
+						uni.chooseLocation({
+							success: res => {
+								this.hasLocation = true;
+								this.lng =  res.longitude;
+								this.lat = res.latitude;
+								this.getStoreAddress()
+							},
+							fail: err => {
+								console.log(err);
+							}
+						});
 					}
 				});
 			}
@@ -505,10 +521,12 @@ export default {
 		        uni.getSetting({
 		            success: (res) => {
 		                if (res.authSetting['scope.userLocation'] === undefined) {
+							this.hasLocation = false
 		                    resolve(0);
 		                    return;
 		                }
 		                if (res.authSetting['scope.userLocation']) {
+							this.hasLocation = true
 		                    resolve(1);
 		                } else {
 		                    resolve(2);
@@ -532,6 +550,7 @@ export default {
 		        await permision.requestAndroid('android.permission.ACCESS_FINE_LOCATION');
 		
 		    if (status === null || status === 1) {
+				this.hasLocation = true;
 		        status = 1;
 		    } else if (status === 2) {
 		        uni.showModal({
@@ -754,12 +773,15 @@ export default {
 			})
 		},
 		// 选择快递方式
-		changeExpressType(cur) {
+	  async	changeExpressType(cur) {
 			this.expressTypeCur = cur;
 			this.getFocus = false;
-			if(cur == 'selfetch' && !this.lat){
-				this.openLocation()
+			// #ifdef MP-WEIXIN
+			if(cur == 'selfetch' ){
+				let status =  await this.getSetting();
+				status == 1 && this.openLocation()
 				}
+			// #endif
 		},
 	
 		// 格式日期

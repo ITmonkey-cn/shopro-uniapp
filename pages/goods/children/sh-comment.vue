@@ -3,7 +3,7 @@
 		<view class="head x-bc">
 			<view class="x-f">
 				<image class="avatar" :src="comment.user.avatar" mode="aspectFill"></image>
-				<view class="user-name">{{ comment.user.nickname }}</view>
+				<view class="user-name one-t">{{ comment.user.nickname }}</view>
 				<view class="x-f star-box">
 					<text class="cuIcon-favorfill star-active" v-for="s in comment.level" :key="s"></text>
 					<text class="cuIcon-favorfill" v-for="z in 5 - comment.level" :key="z"></text>
@@ -69,6 +69,7 @@ export default {
 		.user-name {
 			font-size: 26rpx;
 			color: #999;
+			width: 140rpx;
 			margin: 0 20rpx;
 		}
 

@@ -132,14 +132,23 @@ export default {
 			}
 		}
 	},
+	onPullDownRefresh() {
+		this.init();
+	},
 	onLoad() {},
 	onShow() {
 		this.$store.commit('CART_NUM');
-		this.getUserInfo();
-		this.getOrderNum();
+		this.init();
 	},
 	methods: {
 		...mapActions(['getUserInfo', 'getOrderNum']),
+		// 初始化
+		init() {
+			return Promise.all([this.getUserInfo(), this.getOrderNum()]).then(() => {
+				uni.stopPullDownRefresh();
+			});
+		},
+
 		jump(path, query) {
 			this.$Router.push({
 				path: path,

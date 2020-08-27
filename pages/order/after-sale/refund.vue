@@ -51,7 +51,7 @@
 			</view>
 		</view>
 		<view class="foot_box x-bc">
-			<button class="cu-btn contcat-btn" @tap="onService">联系客服</button>
+			<button class="cu-btn contcat-btn" v-if="addons.includes('kefu')" @tap="onService">联系客服</button>
 			<button class="cu-btn sub-btn" @tap="postAftersale">提交</button>
 		</view>
 		<shopro-modal v-model="showModal" :modalType="'bottom-modal'">
@@ -83,6 +83,7 @@ export default {
 	},
 	data() {
 		return {
+			addons:uni.getStorageSync('addons'),
 			showModal: false,
 			imgList: [], //本地地址
 			orderId: 0, //订单ID
@@ -215,8 +216,7 @@ export default {
 		// 关闭
 		onClose() {
 			this.showModal = false;
-		},
-
+		}
 	}
 };
 </script>

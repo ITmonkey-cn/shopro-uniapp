@@ -5,7 +5,7 @@
 				<text class="title">服务</text>
 				<view class="tip x-f">
 					<view class="tip-list x-f" v-for="(serve, index) in serveList" :key="serve.title">
-						<view v-if="index < 3">
+						<view class="x-f" v-if="index < 3">
 							<image class="tip-img" :src="serve.image" mode=""></image>
 							<text>{{ serve.name }}</text>
 						</view>

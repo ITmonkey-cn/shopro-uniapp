@@ -59,7 +59,8 @@
 			"name": "user",
 			"style": {
 				"navigationBarTitleText": "我的",
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 
 			},
 			"meta": {
@@ -311,13 +312,15 @@
 					"path": "business-address",
 					"style": {
 						"navigationBarTitleText": "选择自提点",
-						"navigationStyle": "custom",
+						"navigationStyle": "custom"
+							// #ifdef APP-VUE
+							,
 						"app-plus": {
 							"titleNView": {
 								"type": "transparent"
-
 							}
 						}
+						// #endif
 
 					},
 					"meta": {

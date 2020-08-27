@@ -11,6 +11,7 @@ import {
 const state = {
 	initData: {},
 	routes: [],
+	addons: uni.getStorageSync('addons') ? uni.getStorageSync('addons') : [], //插件列表
 	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {}
 }
 
@@ -24,7 +25,8 @@ const actions = {
 				commit('INIT_DATA', res.data);
 				uni.setStorageSync('sysInfo', res.data.info);
 				uni.setStorageSync('shareInfo', res.data.share);
-				console.log(res,'init');
+				uni.setStorageSync('addons', res.data.addons)
+				console.log(res, 'init');
 				resolve(res)
 			}).catch(e => {
 				reject(e)
@@ -49,14 +51,14 @@ const actions = {
 	// 模板信息
 	getTemplate({
 		commit
-	}, options) {
+	}, options = {}) {
 		var params = {};
 		return new Promise((resolve, reject) => {
 			//请求预览商城模板
-			if (options.query.shop_id) {
+			if (options.query && options.query.shop_id) {
 				params.shop_id = options.query.shop_id;
 			}
-			if (options.query.custom_id) {
+			if (options.query && options.query.custom_id) {
 				Router.replace({
 					path: '/pages/index/view',
 					query: {
@@ -67,7 +69,7 @@ const actions = {
 			api('template', params).then(res => {
 				uni.setStorageSync('templateData', res.data);
 				commit('TEMPLATE_DATA', res.data);
-				console.log(res,'template');
+				console.log(res, 'template');
 				resolve(res)
 			}).catch(e => {
 				reject(e)

@@ -107,11 +107,11 @@ export default {
 		chooseLocation() {
 			uni.chooseLocation({
 				success: res => {
-					this.addressData.latitude = res.latitude;
-					this.addressData.longitude = res.longitude;
-					if (this.addressData.id == 0) {
-						this.addressData.address = res.address;
-					}
+					// this.addressData.latitude = res.latitude;
+					// this.addressData.longitude = res.longitude;
+					// if (this.addressData.id == 0) {
+					// 	this.addressData.address = res.address;
+					// }
 				},
 				fail: err => {
 					console.log(err);

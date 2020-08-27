@@ -116,6 +116,9 @@ export default class ShoproPay {
 								} else if (res.cancel) {
 									console.log('用户点击取消');
 								}
+							},
+							fail: (err) => {
+								uni.hideLoading();
 							}
 						});
 
@@ -123,9 +126,14 @@ export default class ShoproPay {
 						uni.hideLoading();
 						resolve(res);
 					}
+				} else {
+					uni.hideLoading();
+					uni.showToast({
+						title: '支付失败',
+						icon: 'none'
+					})
 				}
-			});
-
+			})
 		});
 	}
 

@@ -69,9 +69,6 @@ export default {
 		}
 	},
 	onLaunch: async function(options) {
-		if (!uni.getStorageInfoSync().keys.includes('showService')) {
-			uni.setStorageSync('showService', true);
-		}
 		if (options.query.mode === 'save') {
 			//截图模式
 			uni.setStorageSync('screenShot', true);

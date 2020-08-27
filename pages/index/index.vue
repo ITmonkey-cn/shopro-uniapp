@@ -9,7 +9,20 @@
 			</cu-custom>
 		</view>
 		<view class="content_box " style="margin-top: -4rpx;">
-			<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top>
+			<scroll-view
+				class="scroll-box"
+				scroll-y="true"
+				scroll-with-animation
+				enable-back-to-top
+				refresher-enabled="true"
+				:refresher-triggered="triggered"
+				:refresher-threshold="100"
+				refresher-background="#f6f6f6"
+				@refresherpulling="onPulling"
+				@refresherrefresh="onRefresh"
+				@refresherrestore="onRestore"
+				@refresherabort="onAbort"
+			>
 				<block v-if="template" v-for="(item, index) in template" :key="index">
 					<!-- 搜索 -->
 					<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
@@ -62,27 +75,31 @@
 		<!-- 关注弹窗 -->
 		<shopro-float-btn></shopro-float-btn>
 		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
+		<shopro-notice-modal v-if="!showPrivacy && showNoticeModal"></shopro-notice-modal>
 		<!-- 隐私协议 -->
-		<shopro-modal v-model="showServiceContract">
-			<block slot="modalContent">
-				<view class="service-contract-wrap">
-					<image class="service-head-img" src="/static/imgs/modal/servece_head.png" mode="widthFix"></image>
-					<view class="service-title">用户隐私协议概况</view>
-					<view class="service-content ">
-						感谢您使用shopro商城，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读
-						<text style="color: #EAB866;" @tap="jump('/pages/public/richtext', { id: 2 })">《shopro商城隐私协议》</text>
-						，我们将会严格按照经您同意的各项条款使用您的个人信息，以便为您提供更好的服务。
+		<!-- #ifdef APP-PLUS -->
+		<view class="modal-wrap">
+			<shopro-modal v-model="showPrivacy">
+				<block slot="modalContent">
+					<view class="service-contract-wrap">
+						<image class="service-head-img" src="/static/imgs/modal/servece_head.png" mode="widthFix"></image>
+						<view class="service-title">用户隐私协议概况</view>
+						<view class="service-content ">
+							感谢您使用Shopro商城，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读
+							<text style="color: #EAB866;" @tap="jump('/pages/public/richtext', { id: 2 })">《Shopro商城隐私协议》</text>
+							，我们将会严格按照经您同意的各项条款使用您的个人信息，以便为您提供更好的服务。
+						</view>
+						<view class="service-tip ">如您同意此条款，请点击“同意”并开始使用我们的产品和服务，我们将尽全力保护您的个人信息安全。</view>
+						<view class="btn-box x-bc">
+							<button class="cu-btn cancel-btn" @tap="hideService">不同意</button>
+							<button class="cu-btn agree-btn" @tap="Agree">同意</button>
+						</view>
+						<text class="cuIcon-roundclose ic-hide" @tap="hideService"></text>
 					</view>
-					<view class="service-tip ">如您同意此条款，请点击“同意”并开始使用我们的产品和服务，我们将尽全力保护您的个人信息安全。</view>
-					<view class="btn-box x-bc">
-						<button class="cu-btn cancel-btn" @tap="hideService">不同意</button>
-						<button class="cu-btn agree-btn" @tap="Agree">同意</button>
-					</view>
-					<text class="cuIcon-roundclose ic-hide" @tap="hideService"></text>
-				</view>
-			</block>
-		</shopro-modal>
+				</block>
+			</shopro-modal>
+		</view>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -147,7 +164,10 @@ export default {
 			HAS_LIVE: HAS_LIVE,
 			// #endif
 			mode: '',
-			showServiceContract: uni.getStorageSync('showService')
+			showPrivacy: false,
+			showNoticeModal: true,
+			triggered: false, //下拉刷新
+			_freshing: false //下拉刷新状态
 		};
 	},
 	computed: {
@@ -168,7 +188,15 @@ export default {
 			}
 		}
 	},
-	onLoad(options) {},
+	onLoad(options) {
+		// #ifdef APP-VUE
+		console.log('是否同意隐私协议', plus.runtime.isAgreePrivacy());
+		if (!plus.runtime.isAgreePrivacy()) {
+			this.showPrivacy = true;
+			this.showNoticeModal = false;
+		}
+		// #endif
+	},
 	mounted() {
 		if (uni.getStorageSync('screenShot')) {
 			this.screenShotPreviewImage();
@@ -176,6 +204,7 @@ export default {
 	},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
+
 		// #ifndef MP-WEIXIN
 		if (this.info && this.info.name) {
 			uni.setNavigationBarTitle({
@@ -186,6 +215,40 @@ export default {
 	},
 	methods: {
 		...mapMutations(['CART_NUM']),
+		...mapActions(['getAppInit', 'getTemplate']),
+		// 初始化
+		init() {
+			return Promise.all([this.getAppInit(), this.getTemplate()]).then(() => {
+				this.triggered = false;
+				this._freshing = false;
+			});
+		},
+
+		// 被下拉时
+		onPulling(e) {
+			// console.log('onpulling', e);
+		},
+
+		// 下拉刷新触发
+		onRefresh() {
+			if (this._freshing) return;
+			this._freshing = true;
+			this.triggered = true;
+			this.init();
+		},
+
+		// 下拉刷新复位
+		onRestore() {
+			this.triggered = 'restore'; // 需要重置
+			console.log('onRestore');
+		},
+
+		// 下拉刷新被终止
+		onAbort() {
+			console.log('onAbort');
+		},
+
+		// 获取轮播背景色
 		getbgcolor(e) {
 			this.bgcolor = e;
 		},
@@ -198,16 +261,19 @@ export default {
 			});
 		},
 
-		// 关闭协议
+		// #ifdef APP-PLUS
+		// 关闭协议,不同意
 		hideService() {
-			this.showServiceContract = false;
+			plus.runtime.disagreePrivacy();
+			this.showPrivacy = false;
 		},
 
 		// 同意协议
 		Agree() {
-			uni.setStorageSync('showService', false);
-			this.showServiceContract = false;
+			plus.runtime.agreePrivacy();
+			this.showPrivacy = false;
 		},
+		// #endif
 
 		// #ifdef H5
 		//装修模式屏幕截图
@@ -250,13 +316,20 @@ export default {
 }
 
 // 服务协议
+.modal-wrap {
+	/deep/ .cu-modal {
+		z-index: 99999;
+	}
+}
 .service-contract-wrap {
 	background-color: #fff;
 	position: relative;
 	left: 50%;
 	transform: translateX(-50%);
 	width: 610rpx;
+	min-height: 850rpx;
 	border-radius: 20rpx;
+
 	.service-title {
 		font-size: 35rpx;
 		font-family: PingFang SC;

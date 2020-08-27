@@ -62,6 +62,7 @@ export default {
 	methods: {
 		onNav(id) {
 			this.stateCurrent = id;
+			this.couponList = [];
 			this.getCouponList();
 		},
 		jump(path, parmas) {
