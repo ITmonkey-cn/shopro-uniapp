@@ -27,8 +27,16 @@ export default {
 	},
 	onLoad(options) {
 		let that = this;
-		//每个页面设置分享信息
+		//为每个页面设置分享信息
 		that.setShareInfo();
+		//直接进入页面
+		if(options.page) {
+			let page = decodeURIComponent(options.page);
+			console.log(page,'page')
+			uni.navigateTo({
+				url: page
+			})
+		}
 		//用户进入识别判断流程
 		// 1.解析进入信息
 		if (options.scene) {
@@ -113,17 +121,21 @@ export default {
 					//构造query参数链接
 					that.shareInfo.path = ''
 					let urlQuery = that.setPathQuery(scene.query);
-					if (platform === 'wxMiniProgram') {
-						that.shareInfo.path = '/pages/index/index' + urlQuery;
-						that.shareInfo.copyLink = domain + urlQuery;
-					} else {
-						that.shareInfo.path = domain + urlQuery;
-						that.shareInfo.copyLink = domain + urlQuery;
-					}
+					// #ifdef MP-WEIXIN
+					that.shareInfo.path = '/pages/index/index' + urlQuery;
+					that.shareInfo.copyLink = domain + urlQuery;
+					// #endif
+					// #ifndef MP-WEIXIN
+					that.shareInfo.path = domain + urlQuery;
+					that.shareInfo.copyLink = domain + urlQuery;
+					// #endif
 					//微信网页 使用jssdk分享 此处针对没有交互就进行分享转发的微信公众号用户
+					// #ifdef H5
 					if (platform === 'wxOfficialAccount') {
 						wxsdk.share(that.shareInfo);
 					}
+					// #endif
+			
 				}
 			})
 		},
