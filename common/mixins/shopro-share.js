@@ -29,6 +29,14 @@ export default {
 		let that = this;
 		//为每个页面设置分享信息
 		that.setShareInfo();
+		//直接进入页面
+		if(options.page) {
+			let page = decodeURIComponent(options.page);
+			console.log(page,'page')
+			uni.navigateTo({
+				url: page
+			})
+		}
 		//用户进入识别判断流程
 		// 1.解析进入信息
 		if (options.scene) {

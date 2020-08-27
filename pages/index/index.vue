@@ -170,9 +170,12 @@ export default {
 	},
 	onLoad(options) {},
 	mounted() {
+		// #ifdef H5
 		if (uni.getStorageSync('screenShot')) {
 			this.screenShotPreviewImage();
 		}
+		// #endif
+	
 	},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);

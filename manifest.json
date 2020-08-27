@@ -193,11 +193,7 @@
             "enable" : false
         },
         "sdkConfigs" : {
-            "maps" : {
-                "qqmap" : {
-                    "key" : "4NRBZ-CMP63-VSU3Y-YTSAF-ARYXH-DCFH3"
-                }
-            }
+            "maps" : {}
         }
     },
     "mp-baidu" : {

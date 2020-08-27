@@ -6,6 +6,7 @@ import store from '@/common/store';
 
 export default {
 	methods: {
+		//应用初始化,获取模板,获取页面路由,获取用户信息,保存用户Token并返回初始进入页面
 		...mapActions(['getAppInit', 'getTemplate', 'getRoutes', 'getUserInfo', 'setTokenAndBack']),
 		init(options) {
 			return Promise.all([this.setAppInfo(), this.getTemplate(options), this.getAppInit(options)]);
