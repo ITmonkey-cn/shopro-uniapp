@@ -199,7 +199,7 @@ export default {
 
 <style lang="scss">
 .head_box {
-	background: url('~@/static/imgs/group/group_detail_bg.png') no-repeat;
+	background: url('http://shopro.7wpp.com/imgs/group_detail_bg.png') no-repeat;
 	background-size: 100% 316rpx;
 	padding: 60rpx 20rpx 20rpx;
 	.goods-card {

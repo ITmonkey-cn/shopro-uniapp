@@ -121,7 +121,7 @@ export default {
 
 <style lang="scss">
 .group-wrap {
-	background: url('~@/static/imgs/group/group_list_bg.png') no-repeat;
+	background: url('http://shopro.7wpp.com/imgs/group_list_bg.png') no-repeat;
 	background-size: 100% 374rpx;
 }
 .group-head {
