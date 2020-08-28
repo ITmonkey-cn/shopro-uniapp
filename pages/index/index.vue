@@ -90,11 +90,7 @@
 							，我们将会严格按照经您同意的各项条款使用您的个人信息，以便为您提供更好的服务。
 						</view>
 						<view class="service-tip ">如您同意此条款，请点击“同意”并开始使用我们的产品和服务，我们将尽全力保护您的个人信息安全。</view>
-						<view class="btn-box x-bc">
-							<button class="cu-btn cancel-btn" @tap="hideService">不同意</button>
-							<button class="cu-btn agree-btn" @tap="Agree">同意</button>
-						</view>
-						<text class="cuIcon-roundclose ic-hide" @tap="hideService"></text>
+						<view class="btn-box x-c"><button class="cu-btn agree-btn" @tap="Agree">知道了</button></view>
 					</view>
 				</block>
 			</shopro-modal>
@@ -203,7 +199,6 @@ export default {
 			this.screenShotPreviewImage();
 		}
 		// #endif
-	
 	},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
@@ -265,12 +260,6 @@ export default {
 		},
 
 		// #ifdef APP-PLUS
-		// 关闭协议,不同意
-		hideService() {
-			plus.runtime.disagreePrivacy();
-			this.showPrivacy = false;
-		},
-
 		// 同意协议
 		Agree() {
 			plus.runtime.agreePrivacy();
@@ -376,7 +365,7 @@ export default {
 			background-color: #fff;
 		}
 		.agree-btn {
-			width: 241rpx;
+			width: 300rpx;
 			height: 70rpx;
 			background: linear-gradient(90deg, rgba(233, 181, 97, 1), rgba(238, 204, 138, 1));
 			border-radius: 35rpx;
