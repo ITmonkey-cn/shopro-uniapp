@@ -105,7 +105,7 @@ export default {
 		.send-btn {
 			width: 710rpx;
 			height: 80rpx;
-			background: linear-gradient(90deg, rgba(233, 180, 96, 1), rgba(238, 203, 137, 1));
+			background: linear-gradient(90deg, #2eae9c, #6cc29f);
 			border: 1rpx solid rgba(237, 237, 237, 1);
 			border-radius: 40rpx;
 			font-size: 30rpx;

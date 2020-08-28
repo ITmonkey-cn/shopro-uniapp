@@ -122,11 +122,15 @@
 				</view>
 				<view class="notice-item x-bc">
 					<text class="title">运费</text>
-					<text class="detail">{{ orderDetail.dispatch_amount }}</text>
+					<text class="detail">￥{{ orderDetail.dispatch_amount }}</text>
 				</view>
 				<view class="notice-item x-bc">
 					<text class="title">优惠金额</text>
-					<text class="detail">-{{ orderDetail.discount_fee }}</text>
+					<text class="detail">-￥{{ orderDetail.discount_fee }}</text>
+				</view>
+				<view class="notice-item x-bc" v-if="orderDetail.score_fee">
+					<text class="title">积分</text>
+					<text class="detail">-{{ orderDetail.score_fee }}积分</text>
 				</view>
 				<view class="notice-item all-rpice-item x-f" style="width: 100%;">
 					<text class="title">实付款：</text>

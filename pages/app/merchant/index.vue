@@ -7,7 +7,7 @@
 			<view class="head-wrap">
 				<view class="titleNav pad">
 					<view class="status-bar"></view>
-					<text class="nav-title x-f">我的</text>
+					<text class="nav-title x-f">商家中心</text>
 				</view>
 				<view class="user-head x-bc">
 					<view class="shop-info">
@@ -16,7 +16,7 @@
 							<text class="cuIcon-roundrightfill"></text>
 						</view>
 						<view class="shop-address" @tap="jump('/pages/app/merchant/info')">
-							{{ storeDetail.province_name }}{{ storeDetail.city_name }}{{ storeDetail.area_name }}{{ storeDetail.address }}
+							{{ storeDetail.province_name || '' }}{{ storeDetail.city_name || '' }}{{ storeDetail.area_name || '' }}{{ storeDetail.address || '' }}
 						</view>
 					</view>
 
@@ -55,7 +55,7 @@
 						<view class="item-title x-f" :class="{ 'title-active': cancelType === nav.type }">
 							<text>{{ nav.title }}</text>
 							<view :class="{ 'icon-active': cancelType === nav.type }">
-								<text class="cuIcon-triangleupfill" :class="{ 'icon-active': cancelType === nav.type }"></text>
+								<text class="cuIcon-triangledownfill" :class="{ 'icon-active': cancelType === nav.type }"></text>
 							</view>
 						</view>
 						<text class="nav-line" :class="{ 'line-active': cancelType === nav.type }"></text>
@@ -109,7 +109,7 @@
 			<block slot="modalContent">
 				<view class="modal-box">
 					<view class="modal-head">
-						<image class="modal-head-img" src="/static/imgs/modal/qrcode_modal.png" mode=""></image>
+						<image class="modal-head-img" src="/static/imgs/modal/store_check.png" mode=""></image>
 						<text class="modal-head-title">输码核销</text>
 					</view>
 					<input class="inp" type="number" v-model="qrcode" placeholder="在此输入核销码" placeholder-class="pl-inp" />
@@ -317,7 +317,7 @@ export default {
 			this.filter.custom.push(e.startDate);
 			this.filter.custom.push(e.endDate);
 			this.isShowDropDown = false;
-			this.cancelTypeList[0].title = `${e.startDate.replace(/-/g, ':')}-${e.endDate}`;
+			this.cancelTypeList[0].title = `${e.startDate.replace(/-/g, ':')}-${e.endDate.replace(/-/g, ':')}`;
 			this.storeOrderList = [];
 			this.currentPage = 1;
 			this.getStoreOrder();
@@ -330,7 +330,6 @@ export default {
 		// 选择筛选
 		onFilter(val, title) {
 			this.isShowDropDown = false;
-			this.cancelType = '';
 			if (val == 'custom') {
 				this.showCalendar = true;
 			}
@@ -344,6 +343,7 @@ export default {
 			this.storeOrderList = [];
 			this.currentPage = 1;
 			this.getStoreOrder();
+			this.cancelType = '';
 		},
 		//输码
 		onEditCode() {
@@ -407,6 +407,7 @@ export default {
 				color: rgba(255, 255, 255, 1);
 				font-size: 34rpx;
 				margin-left: 10rpx;
+				transform: rotate(90deg);
 			}
 			.shop-address {
 				font-size: 28rpx;
@@ -514,8 +515,8 @@ export default {
 			transition: all linear 0.2s;
 		}
 		.icon-active {
-			transform: rotate(180deg);
 			transition: all linear 0.2s;
+			transform: rotate(180deg);
 			color: #4cb89d;
 		}
 		.title-active {
@@ -597,14 +598,14 @@ export default {
 		font-size: 35rpx;
 		font-family: PingFang SC;
 		font-weight: bold;
-		color: #6d5028;
+		color:#343434;
 		line-height: 42rpx;
 	}
 
 	.inp {
 		width: 501rpx;
 		height: 78rpx;
-		border: 1rpx solid rgba(168, 112, 13, 1);
+		border: 1rpx solid #E5E5E5;
 		margin: 60rpx auto 40rpx;
 		font-size: 28rpx;
 		font-family: PingFang SC;
@@ -612,14 +613,14 @@ export default {
 		color: #6d5028;
 
 		.pl-inp {
-			color: #bd9560;
+			color: #9A9A9A;
 		}
 	}
 	.post-btn {
 		width: 492rpx;
 		height: 70rpx;
-		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
+		background: linear-gradient(90deg, #2eae9c, #6cc29f);
+		box-shadow: 0px 7rpx 6rpx 0px rgba(#6cc29f, 0.22);
 		border-radius: 35rpx;
 		font-size: 28rpx;
 		font-family: PingFang SC;

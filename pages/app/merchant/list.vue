@@ -26,7 +26,7 @@ export default {
 	data() {
 		return {
 			storeList: [],
-			storeId: 0
+			storeId: uni.getStorageSync('storeId')
 		};
 	},
 	computed: {},
@@ -98,7 +98,7 @@ export default {
 	.save-btn {
 		width: 710rpx;
 		height: 80rpx;
-		background: linear-gradient(90deg, rgba(233, 181, 97, 1), rgba(238, 204, 138, 1));
+		background: linear-gradient(90deg, #2eae9c, #6cc29f);
 		border: 1rpx solid rgba(238, 238, 238, 1);
 		font-size: 30rpx;
 		font-family: PingFang SC;

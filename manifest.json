@@ -1,231 +1,228 @@
 {
-	"name": "Shopro",
-	"appid": "__UNI__5B85585",
-	"description": "",
-	"versionName": "Shopro 1.0.6",
-	"versionCode": 215,
-	"transformPx": false,
-	"app-plus": {
-		/* 5+App特有相关 */
-		"modules": {
-			"OAuth": {},
-			"Payment": {},
-			"Share": {},
-			"Maps": {}
-		},
-		/* 模块配置 */
-		"distribute": {
-			/* 应用发布信息 */
-			"android": {
-				/* android打包配置 */
-				"permissions": [
-					"<uses-feature android:name=\"android.hardware.camera\"/>",
-					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.BLUETOOTH\"/>",
-					"<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>",
-					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
-					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
-					"<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-					"<uses-permission android:name=\"android.permission.INTERNET\"/>",
-					"<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
-					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-					"<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
-					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
-					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
-					"<uses-permission android:name=\"android.permission.BLUETOOTH\"/>",
-					"<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>"
-				]
-			},
-			"ios": {
-				"idfa": false
-			},
-			/* ios打包配置 */
-			"sdkConfigs": {
-				"oauth": {
-					"weixin": {
-						"appid": "wx522bf4cc9a13****",
-						"appsecret": "fa44dc893ab55338f46d65f900b1****",
-						"UniversalLinks": ""
-					}
-				},
-				"payment": {
-					"weixin": {
-						"appid": "wx522bf4cc9a13****",
-						"UniversalLinks": ""
-					},
-					"alipay": {}
-				},
-				"share": {
-					"weixin": {
-						"appid": "wx522bf4cc9a13****",
-						"UniversalLinks": ""
-					}
-				},
-				"ad": {},
-				"maps": {
-					"amap": {
-						"appkey_ios": "f3c725a2c41ae7218e39392f28635ee7",
-						"appkey_android": "7a3cedafa6b15b3482e85b7400355b1c"
-					}
-				}
-			},
-			"icons": {
-				"android": {
-					"hdpi": "",
-					"xhdpi": "",
-					"xxhdpi": "",
-					"xxxhdpi": ""
-				},
-				"ios": {
-					"appstore": "",
-					"ipad": {
-						"app": "",
-						"app@2x": "",
-						"notification": "",
-						"notification@2x": "",
-						"proapp@2x": "",
-						"settings": "",
-						"settings@2x": "",
-						"spotlight": "",
-						"spotlight@2x": ""
-					},
-					"iphone": {
-						"app@2x": "",
-						"app@3x": "",
-						"notification@2x": "",
-						"notification@3x": "",
-						"settings@2x": "",
-						"settings@3x": "",
-						"spotlight@2x": "",
-						"spotlight@3x": ""
-					}
-				}
-			}
-		},
-		"compilerVersion": 3,
-		"nvueLaunchMode": "fast",
-		"privacy": {
-			"prompt": "custom" //可取值template、custom、none  
-			//"template": { prompt取值为template时有效，用于配置模板提示框上显示的内容  
-			//}  
-		},
-		"safearea": {
-			//安全区域配置，仅iOS平台生效
-			"background": "#FFFFFF", //安全区域外的背景颜色，默认值为"#FFFFFF"  
-			"bottom": {
-				// 底部安全区域配置  
-				"offset": "auto" // 底部安全区域偏移，"none"表示不空出安全区域，"auto"自动计算空出安全区域，默认值为"none"  
-			}
-		},
-		// "left": { //左侧安全区域配置（横屏显示时有效）  
-		// 	"offset": "none|auto"
-		// },
-		// "right": { //右侧安全区域配置（横屏显示时有效）  
-		// 	"offset": "none|auto"
-		// }
-		"uniStatistics": {
-			"enable": false
-		}
-	},
-	/* SDK配置 */
-	"quickapp": {},
-	/* 快应用特有相关 */
-	"mp-weixin": {
-		/* 小程序特有相关 */
-		"usingComponents": {
-			"subscribe": "plugin-private://wx2b03c6e691cd7370/components/subscribe/subscribe"
-		},
-		"appid": "wx39cd0799d4567dd0",
-		"setting": {
-			"urlCheck": false,
-			"es6": false,
-			"minified": true,
-			"postcss": true,
-			"checkSiteMap": false // 关闭页面索引检测
-		},
-		// "uniStatistics" : {
-		//     "enable" : false// mp-wixn无效
-		// },
-		"optimization": {
-			"subPackages": true //开启小程序分包优化。
-		},
-		"plugins": {},
-		// "live-player-plugin" : { //这段代码，需要放到plugins中。
-		//     //只有后台开通小程序直播功能权限，才可以打开，不然报错，程序无法运行。
-		//     "version" : "1.0.9", // 注意填写该直播组件最新版本号，微信开发者工具调试时可获取最新版本号（复制时请去掉注释）
-		//     "provider" : "wx2b03c6e691cd7370" // 必须填该直播组件appid，该示例值即为直播组件appid（复制时请去掉注释）
-		// }
-		"permission": {
-			"scope.userLocation": {
-				"desc": "计算附近商店"
-			}
-		}
-	},
-	"h5": {
-		"title": "Shopro",
-		"domain": "frontend.test.7wpp.com",
-		"optimization": {
-			"treeShaking": {
-				"enable": true
-			},
-			"router": {
-				"mode": "history"
-			},
-			"devServer": {
-				"https": false
-			}
-		},
-		"router": {
-			"mode": "history"
-		},
-		"devServer": {
-			"https": false
-		},
-		"uniStatistics": {
-			"enable": false
-		},
-		"sdkConfigs": {
-			"maps": {
-				"qqmap": {
-					"key": "4NRBZ-CMP63-VSU3Y-YTSAF-ARYXH-DCFH3"
-				}
-			}
-		}
-	},
-	"mp-baidu": {
-		"uniStatistics": {
-			"enable": false
-		}
-	},
-	"mp-toutiao": {
-		"uniStatistics": {
-			"enable": false
-		}
-	},
-	"mp-qq": {
-		"uniStatistics": {
-			"enable": false
-		}
-	},
-	"mp-alipay": {
-		"uniStatistics": {
-			"enable": false
-		}
-	},
-	"uniStatistics": {
-		"enable": false
-	}
+    "name" : "Shopro",
+    "appid" : "__UNI__5B85585",
+    "description" : "",
+    "versionName" : "Shopro 1.0.6",
+    "versionCode" : 215,
+    "transformPx" : false,
+    "app-plus" : {
+        /* 5+App特有相关 */
+        "modules" : {
+            "OAuth" : {},
+            "Payment" : {},
+            "Share" : {},
+            "Maps" : {}
+        },
+        /* 模块配置 */
+        "distribute" : {
+            /* 应用发布信息 */
+            "android" : {
+                /* android打包配置 */
+                "permissions" : [
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.BLUETOOTH\"/>",
+                    "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>",
+                    "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.INTERNET\"/>",
+                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
+                    "<uses-permission android:name=\"android.permission.BLUETOOTH\"/>",
+                    "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>"
+                ]
+            },
+            "ios" : {
+                "idfa" : false
+            },
+            /* ios打包配置 */
+            "sdkConfigs" : {
+                "oauth" : {
+                    "weixin" : {
+                        "appid" : "wx522bf4cc9a13****",
+                        "appsecret" : "fa44dc893ab55338f46d65f900b1****",
+                        "UniversalLinks" : ""
+                    }
+                },
+                "payment" : {
+                    "weixin" : {
+                        "appid" : "wx522bf4cc9a13****",
+                        "UniversalLinks" : ""
+                    },
+                    "alipay" : {}
+                },
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wx522bf4cc9a13****",
+                        "UniversalLinks" : ""
+                    }
+                },
+                "ad" : {},
+                "maps" : {}
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "",
+                    "xhdpi" : "",
+                    "xxhdpi" : "",
+                    "xxxhdpi" : ""
+                },
+                "ios" : {
+                    "appstore" : "",
+                    "ipad" : {
+                        "app" : "",
+                        "app@2x" : "",
+                        "notification" : "",
+                        "notification@2x" : "",
+                        "proapp@2x" : "",
+                        "settings" : "",
+                        "settings@2x" : "",
+                        "spotlight" : "",
+                        "spotlight@2x" : ""
+                    },
+                    "iphone" : {
+                        "app@2x" : "",
+                        "app@3x" : "",
+                        "notification@2x" : "",
+                        "notification@3x" : "",
+                        "settings@2x" : "",
+                        "settings@3x" : "",
+                        "spotlight@2x" : "",
+                        "spotlight@3x" : ""
+                    }
+                }
+            }
+        },
+        "compilerVersion" : 3,
+        "nvueLaunchMode" : "fast",
+        "privacy" : {
+            "prompt" : "custom" //可取值template、custom、none  
+        },
+        //"template": { prompt取值为template时有效，用于配置模板提示框上显示的内容  
+        //}  
+        "safearea" : {
+            //安全区域配置，仅iOS平台生效
+            "background" : "#FFFFFF", //安全区域外的背景颜色，默认值为"#FFFFFF"  
+            "bottom" : {
+                // 底部安全区域配置  
+                "offset" : "auto" // 底部安全区域偏移，"none"表示不空出安全区域，"auto"自动计算空出安全区域，默认值为"none"  
+            },
+            "left" : {
+                //左侧安全区域配置（横屏显示时有效）
+                "offset" : "auto"
+            },
+            "right" : {
+                //右侧安全区域配置（横屏显示时有效）  
+                "offset" : "auto"
+            }
+        },
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    /* SDK配置 */
+    "quickapp" : {},
+    /* 快应用特有相关 */
+    "mp-weixin" : {
+        /* 小程序特有相关 */
+        "usingComponents" : {
+            "subscribe" : "plugin-private://wx2b03c6e691cd7370/components/subscribe/subscribe"
+        },
+        "appid" : "wx39cd0799d4567dd0",
+        "setting" : {
+            "urlCheck" : false,
+            "es6" : false,
+            "minified" : true,
+            "postcss" : true,
+            "checkSiteMap" : false // 关闭页面索引检测
+        },
+        // "uniStatistics" : {
+        //     "enable" : false// mp-wixn无效
+        // },
+        "optimization" : {
+            "subPackages" : true //开启小程序分包优化。
+        },
+        "plugins" : {},
+        // "live-player-plugin" : { //这段代码，需要放到plugins中。
+        //     //只有后台开通小程序直播功能权限，才可以打开，不然报错，程序无法运行。
+        //     "version" : "1.0.9", // 注意填写该直播组件最新版本号，微信开发者工具调试时可获取最新版本号（复制时请去掉注释）
+        //     "provider" : "wx2b03c6e691cd7370" // 必须填该直播组件appid，该示例值即为直播组件appid（复制时请去掉注释）
+        // }
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "计算附近商店"
+            }
+        }
+    },
+    "h5" : {
+        "title" : "Shopro",
+        "domain" : "frontend.test.7wpp.com",
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            },
+            "router" : {
+                "mode" : "history"
+            },
+            "devServer" : {
+                "https" : false
+            }
+        },
+        "router" : {
+            "mode" : "history"
+        },
+        "devServer" : {
+            "https" : false
+        },
+        "uniStatistics" : {
+            "enable" : false
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "4NRBZ-CMP63-VSU3Y-YTSAF-ARYXH-DCFH3"
+                }
+            }
+        }
+    },
+    "mp-baidu" : {
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "mp-toutiao" : {
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "mp-qq" : {
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "mp-alipay" : {
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "uniStatistics" : {
+        "enable" : false
+    }
 }

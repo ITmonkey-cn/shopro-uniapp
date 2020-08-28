@@ -227,12 +227,12 @@
 				{
 					"path": "merchant/list",
 					"style": {
-						"navigationBarTitleText": "门店列表" //todo
+						"navigationBarTitleText": "切换门店" 
 					},
 					"meta": {
 						"auth": true,
 						"async": false,
-						"title": "门店列表",
+						"title": "切换门店",
 						"group": "用户"
 					}
 				},
