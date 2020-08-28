@@ -66,10 +66,6 @@
 		<shopro-skeleton :showSkeleton="!template"></shopro-skeleton>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
-		<!-- 强制登录 -->
-		<!-- #ifdef MP-WEIXIN -->
-		<sh-force-login></sh-force-login>
-		<!-- #endif -->
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
@@ -121,7 +117,6 @@ import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue'
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
 import shLive from './components/sh-live.vue';
-import shForceLogin from './components/sh-force-login.vue';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
 
@@ -150,7 +145,6 @@ export default {
 		shoproSkeletons,
 		// #ifdef MP-WEIXIN
 		shLive,
-		shForceLogin
 		// #endif
 	},
 	data() {

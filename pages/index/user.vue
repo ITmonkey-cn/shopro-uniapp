@@ -51,17 +51,10 @@
 		<shopro-notice-modal></shopro-notice-modal>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
-		<!-- 强制登录 -->
-		<!-- #ifdef MP-WEIXIN -->
-		<sh-force-login></sh-force-login>
-		<!-- #endif -->
 	</view>
 </template>
 
 <script>
-// #ifdef MP-WEIXIN
-import shForceLogin from './components/sh-force-login.vue';
-// #endif
 import Wechat from '@/common/wechat/wechat';
 
 import shSearch from './components/sh-search.vue';
@@ -100,9 +93,6 @@ export default {
 		shGrid,
 		shTitleCard,
 		shoproNoticeModal,
-		// #ifdef MP-WEIXIN
-		shForceLogin
-		// #endif
 	},
 	data() {
 		return {
