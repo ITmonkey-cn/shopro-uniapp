@@ -3,7 +3,7 @@
 		<view class="mask" v-if="isShowDropDown" cathctouchmove @tap.stop="onHideDropDown"></view>
 		<!-- 商家信息 -->
 		<view class="shopinfo-box">
-			<image class="user-bg" src="/static/imgs/user/shop_headbg.png" mode=""></image>
+			<image class="user-bg" src="http://shopro.7wpp.com/imgs/shop_headbg.png" mode=""></image>
 			<view class="head-wrap">
 				<view class="titleNav pad">
 					<view class="status-bar"></view>
