@@ -2,8 +2,12 @@
 	<!-- 为你推荐 -->
 	<view class="hot-goods mx20 mb10" v-if="goodsList.length">
 		<view class="goods-list x-f">
-			<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
+			<view class="goods-item" v-if="goods.id" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
 		</view>
+		<button v-if="total > perPage" class="cu-btn refresh-btn my20 x-f" @tap="loadMore">
+			<text class="cuIcon-refresh" :class="{ 'refresh-active': isRefresh }"></text>
+			{{ listParams.page >= lastPage ? '重置' : '加载更多' }}
+		</button>
 	</view>
 </template>
 
@@ -15,8 +19,14 @@ export default {
 	},
 	data() {
 		return {
-			listParams: {},
-			goodsList: []
+			listParams: {
+				page: 1
+			},
+			lastPage: 1, //分页总数
+			total: 0, //总商品数
+			perPage: 0, //单页商品数
+			goodsList: [],
+			isRefresh: false
 		};
 	},
 	props: {
@@ -42,9 +52,29 @@ export default {
 			let that = this;
 			that.$api('goods.lists', this.listParams).then(res => {
 				if (res.code === 1) {
-					that.goodsList = res.data.data;
+					this.lastPage = res.data.last_page;
+					this.total = res.data.total;
+					this.perPage = res.data.per_page;
+					this.isRefresh = false;
+					that.goodsList = [that.goodsList, ...res.data.data];
 				}
 			});
+		},
+
+		// 加载更多
+		loadMore() {
+			this.isRefresh = true;
+			if (!this.isRefresh) {
+				// 加载更多
+				if (this.listParams.page < this.lastPage) {
+					this.listParams.page += 1;
+					this.getGoodsList();
+				} else {
+					// 重置为1页数据
+					this.listParams.page = 1;
+					this.getGoodsList();
+				}
+			}
 		}
 	}
 };
@@ -68,6 +98,27 @@ export default {
 				margin-right: 0;
 			}
 		}
+	}
+	.refresh-btn {
+		margin-left: 50%;
+		transform: translateX(-50%);
+		width: 156rpx;
+		height: 50rpx;
+		background: #ffffff;
+		border-radius: 25rpx;
+		font-size: 22rpx;
+		font-weight: 500;
+		color: #999999;
+		white-space: nowrap;
+		.cuIcon-refresh {
+			color: #dbdbdb;
+			margin-right: 12rpx;
+			font-size: 32rpx;
+		}
+	}
+	.refresh-active {
+		transform: rotate(360deg);
+		transition: all linear 0.5s;
 	}
 }
 </style>
