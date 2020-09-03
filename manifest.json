@@ -118,7 +118,7 @@
         //"template": { prompt取值为template时有效，用于配置模板提示框上显示的内容  
         //}  
         "safearea" : {
-            //安全区域配置，仅iOS平台生效
+            //安全区域配置
             "background" : "#FFFFFF", //安全区域外的背景颜色，默认值为"#FFFFFF"  
             "bottom" : {
                 // 底部安全区域配置  

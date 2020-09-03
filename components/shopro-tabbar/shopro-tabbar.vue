@@ -58,7 +58,8 @@ export default {
 			return '/' + currPage;
 		},
 		showTabbar() {
-			if (this?.tabbarData?.list) { //等同于this.tabbarData && this.tabbarData.list
+			if (this?.tabbarData?.list) {
+				//等同于this.tabbarData && this.tabbarData.list
 				let arr = [];
 				let path = '';
 				arr.push('/pages/index/index');
@@ -81,7 +82,6 @@ export default {
 				let index = path.lastIndexOf('?');
 				path = path.slice(0, index);
 			}
-			// this.showTabbar = arr[0].page.includes(this.currentPath);
 			return path;
 		}
 	}
@@ -90,10 +90,12 @@ export default {
 
 <style lang="scss">
 .shopro-tabbar-wrap {
-	height: 100rpx;
+	height: calc(100rpx + env(safe-area-inset-bottom) / 2);
+	padding-bottom: calc(env(safe-area-inset-bottom) / 2);
 	position: relative;
 	width: 100%;
 	z-index: 70;
+	background-color: #fff;
 
 	.tabbar-box {
 		position: fixed;
@@ -103,7 +105,7 @@ export default {
 		height: 100rpx;
 		border-top: 1rpx solid #eeeeee;
 		z-index: 998;
-		bottom: 0;
+		bottom: calc(env(safe-area-inset-bottom) / 2);
 
 		.tabbar-item {
 			height: 100%;
