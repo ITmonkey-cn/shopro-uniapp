@@ -109,7 +109,7 @@ export default {
 .banner-swiper-box,
 .banner-carousel {
 	width: 750rpx;
-	height: 350upx;
+	height: 350rpx;
 	position: relative;
 
 	.carousel-item {

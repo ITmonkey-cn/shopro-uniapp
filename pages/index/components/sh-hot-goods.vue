@@ -4,9 +4,9 @@
 		<view class="goods-list x-f">
 			<view class="goods-item" v-if="goods.id" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
 		</view>
-		<button v-if="total > perPage" class="cu-btn refresh-btn my20 x-f" @tap="loadMore">
+		<button v-if="total > perPage" class="cu-btn refresh-btn my20 x-f" @tap.stop="loadMore">
 			<text class="cuIcon-refresh" :class="{ 'refresh-active': isRefresh }"></text>
-			{{ listParams.page >= lastPage ? '重置' : '加载更多' }}
+			{{ listParams.page >= lastPage ? '收起' : '加载更多' }}
 		</button>
 	</view>
 </template>
@@ -56,22 +56,24 @@ export default {
 					this.total = res.data.total;
 					this.perPage = res.data.per_page;
 					this.isRefresh = false;
-					that.goodsList = [that.goodsList, ...res.data.data];
+					that.goodsList = [...that.goodsList, ...res.data.data];
 				}
 			});
 		},
 
 		// 加载更多
 		loadMore() {
-			this.isRefresh = true;
 			if (!this.isRefresh) {
 				// 加载更多
 				if (this.listParams.page < this.lastPage) {
+					this.isRefresh = true;
 					this.listParams.page += 1;
 					this.getGoodsList();
 				} else {
 					// 重置为1页数据
 					this.listParams.page = 1;
+					this.lastPage = 1;
+					this.goodsList = [];
 					this.getGoodsList();
 				}
 			}
