@@ -4,26 +4,29 @@
 			<view class="scroll-box" style="background-color: #F6F6F6;">
 				<scroll-view class="left y-f" enable-back-to-top scroll-y>
 					<view class="type-list x-f" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
-						<view class="x-c" :class="[{ 'line-active': listId == index }]">{{ item.name }}</view>
+						<view class="x-c list-item" :class="[{ 'line-active': listId == index }]">{{ item.name }}</view>
 					</view>
 				</scroll-view>
 			</view>
-			<view style="height: 100%;">
+			<view style="height: 100%;width: 100%;">
 				<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" lazy-load></image>
-						<view class="item-list" v-for="(list, index1) in categoryData[listId].children" :key="index1">
-							<view class="type-box x-bc">
-								<text class="type-title">{{ list.name }}</text>
-								<view class="more" @tap="jump('/pages/goods/list', { id: list.id })">
-									<text>查看更多</text>
-									<text class="cuIcon-right"></text>
-								</view>
-							</view>
+						<view class="type-box x-c">
+							<text class="cuIcon-move"></text>
+							<text class="type-title">{{ categoryData[listId].name }}</text>
+							<text class="cuIcon-move"></text>
+						</view>
+						<view class="item-list">
 							<view class="item-box x-f">
-								<view class="y-f goods-item" @tap="jump('/pages/goods/list', { id: mlist.id })" v-for="(mlist, index2) in list.chirdren" :key="index2">
-									<image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image>
-									<text class="item-title one-t ">{{ mlist.name }}</text>
+								<view
+									class="y-f goods-item"
+									@tap="jump('/pages/goods/list', { id: list.id })"
+									v-for="(list, index1) in categoryData[listId].children"
+									:key="index1"
+								>
+									<image class="item-img" lazy-load :src="list.image" mode="aspectFill"></image>
+									<text class="item-title one-t ">{{ list.name }}</text>
 								</view>
 							</view>
 						</view>
@@ -49,10 +52,11 @@ export default {
 	},
 	methods: {
 		getCategory() {
-			this.$api('category').then(res => {
+			this.$api('category', {
+				id: 11
+			}).then(res => {
 				if (res.code === 1) {
-					// this.categoryData = res.data;
-					this.categoryData = res.data;
+					this.categoryData = res.data.children;
 				}
 			});
 		},
@@ -100,7 +104,10 @@ export default {
 		background: #fff;
 		color: #ffff !important;
 	}
-
+	.list-item {
+		width: 180rpx;
+		height: 64rpx;
+	}
 	.line-active {
 		width: 180rpx;
 		height: 64rpx;
@@ -132,22 +139,25 @@ export default {
 		margin-top: 30rpx;
 		border-radius: 10rpx;
 	}
+	.type-box {
+		height: 84rpx;
 
-	.item-list {
-		.type-box {
-			height: 84rpx;
-
-			.type-title {
-				font-size: 28rpx;
-				font-weight: bold;
-			}
-
-			.more {
-				font-size: 26rpx;
-				color: #999;
-			}
+		.type-title {
+			font-size: 28rpx;
+			font-weight: bold;
+			padding: 0 16rpx;
+		}
+		.cuIcon-move {
+			color: #d3d3d3;
 		}
 
+		.more {
+			font-size: 26rpx;
+			color: #999;
+		}
+	}
+
+	.item-list {
 		.item-box {
 			flex-wrap: wrap;
 
@@ -162,7 +172,7 @@ export default {
 				.item-img {
 					width: 150rpx;
 					height: 150rpx;
-					// background: #ccc;
+					background: #ccc;
 				}
 
 				.item-title {

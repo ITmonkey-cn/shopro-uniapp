@@ -9,7 +9,7 @@
 					</view>
 				</scroll-view>
 			</view>
-			<view style="height: 100%;">
+			<view style="height: 100%;width: 100%;">
 				<scroll-view style="padding-bottom: 100rpx;" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
@@ -22,7 +22,7 @@
 								</view>
 							</view>
 							<view class="item-box x-f">
-								<view class="y-f goods-item" @tap="jump('/pages/goods/list', { id: mlist.id })" v-for="(mlist, index2) in list.chirdren" :key="index2">
+								<view class="y-f goods-item" @tap="jump('/pages/goods/list', { id: mlist.id })" v-for="(mlist, index2) in list.children" :key="index2">
 									<image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image>
 									<text class="item-title one-t ">{{ mlist.name }}</text>
 								</view>
@@ -45,15 +45,16 @@ export default {
 		};
 	},
 	computed: {},
-	created() {
-		this.getCategory();
+	async created() {
+		await this.getCategory();
 	},
 	methods: {
 		getCategory() {
-			this.$api('category').then(res => {
+			this.$api('category', {
+				id: 1
+			}).then(res => {
 				if (res.code === 1) {
-					// this.categoryData = res.data;
-					this.categoryData = res.data;
+					this.categoryData = res.data.children;
 				}
 			});
 		},
@@ -166,7 +167,7 @@ export default {
 				.item-img {
 					width: 150rpx;
 					height: 150rpx;
-					// background: #ccc;
+					background: #ccc;
 				}
 
 				.item-title {

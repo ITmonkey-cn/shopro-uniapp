@@ -1,13 +1,13 @@
 <template>
 	<view class="category-box">
 		<!-- 三级分类 -->
-		<sh-three-catgory v-if="false"></sh-three-catgory>
+		<sh-three-catgory v-if="categoryType === 4"></sh-three-catgory>
 		<!-- 二级分类 -->
-		<sh-two-catgory v-if="true"></sh-two-catgory>
+		<sh-two-catgory v-if="categoryType === 3"></sh-two-catgory>
 		<!-- 一级分类-->
-		<sh-one-catgory v-if="false"></sh-one-catgory>
+		<sh-one-catgory v-if="categoryType === 2"></sh-one-catgory>
 		<!--直接购买，点餐 -->
-		<sh-takeout-catgory v-if="false"></sh-takeout-catgory>
+		<sh-takeout-catgory v-if="categoryType === 1"></sh-takeout-catgory>
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
@@ -32,11 +32,33 @@ export default {
 		shOneCatgory
 	},
 	data() {
-		return {};
+		return {
+			categoryType: 1 //1:快速购买,2:一级分类，3:二级分类，4:三级分类
+		};
 	},
 	computed: {},
-	onLoad() {},
-	methods: {}
+	onLoad() {
+		// this.getCategory();
+	},
+	methods: {
+		/**
+		 * 获取分类数据
+		 *  type4:三级分类， type3:二级分类 ,type2:一级分类,type1:快速购买
+		 * 1:三级分类，11:二级分类，id=28 一级分类样式2，id=35 一级分类样式1,快速购买
+		 */
+		getCategory() {
+			this.$api('category', {
+				id: 1
+			}).then(res => {
+				if (res.code === 1) {
+					this.categoryType = res.data.type;
+					uni.setNavigationBarTitle({
+						title: res.data.name
+					});
+				}
+			});
+		}
+	}
 };
 </script>
 

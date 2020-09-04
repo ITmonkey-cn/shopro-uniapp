@@ -126,12 +126,12 @@ export default {
 		method: 'GET',
 		// desc: '三级分类',
 	},
-	/** 三级分类 ↓ **/
+	/** 二级分类 ↓ **/
 	categoryGoods: {
 		url: 'category/goods',
 		auth: false,
 		method: 'GET',
-		// desc: '二级分类',
+		// desc: '点餐用',
 	},
 
 	/** 积分商城 ↓ **/

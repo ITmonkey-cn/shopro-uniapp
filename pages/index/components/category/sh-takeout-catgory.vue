@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="x-f wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view style="padding-bottom:180rpx" class="left" enable-back-to-top scroll-y :scroll-with-animation="isTap" :scroll-into-view="scroll_leftId">
+				<scroll-view style="padding-bottom:180rpx" class="left left-scroll-box" :scroll-top="scrollLeftTop" enable-back-to-top scroll-y scroll-with-animation>
 					<view
 						class="type-list x-c"
 						:id="`left_${index}`"
@@ -18,7 +18,7 @@
 			</view>
 
 			<view style="height: 100%;">
-				<scroll-view style="padding-bottom:180rpx" scroll-y class="scroll-box" scroll-with-animation :scroll-into-view="scroll_rightId" @scroll="rightScroll">
+				<scroll-view style="padding-bottom:180rpx" scroll-y class="scroll-box righ-scroll-box" :scroll-top="scrollRightTop" scroll-with-animation @scroll="rightScroll">
 					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
 							<view class="type-box x-bc">
@@ -118,6 +118,7 @@
 <script>
 import shTakeoutSku from './sh-takeout-sku.vue';
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
+let timer = null; //节流定时器
 export default {
 	components: {
 		shTakeoutSku
@@ -125,9 +126,13 @@ export default {
 	data() {
 		return {
 			currentTab: 0,
-			scroll_leftId: 'left_0',
-			scroll_rightId: 'right_0',
-			isScroll: true,
+			scrollLeftTop: 0, //左边滚动距离
+			oldScrollTop: 0,
+			scrollRightTop: 0, //右边滚动距离
+			leftHeight: 0, //左边高度
+			leftItemHeight: 0, //左边边item高度
+			rightHeight: 0, //右边高度
+			rightArr: [], //右边item距离顶部数组。
 			isTap: true,
 			categoryData: {}, //商品分类数据
 			showSku: true, //是否显示规格弹窗
@@ -157,7 +162,7 @@ export default {
 	mounted() {
 		this.getCategory();
 		this.getCartList();
-		// this.$store.commit('getAllSellectCartList', true); //列表全选
+		this.getRightItemTop();
 	},
 	methods: {
 		...mapActions(['getCartList', 'changeCartList', 'addCartGoods', 'getAllSellectCartList']),
@@ -258,7 +263,7 @@ export default {
 				}
 			});
 		},
-		// 获取分类
+		// 获取分类数据
 		getCategory() {
 			this.$api('categoryGoods').then(res => {
 				if (res.code === 1) {
@@ -266,38 +271,106 @@ export default {
 				}
 			});
 		},
-		onType(index) {
-			if (this.currentTab == index) {
-				return false;
-			} else {
+
+		// 选择分类
+		async onType(index) {
+			if (this.rightArr.length == 0) {
+				await this.getRightItemTop();
+			}
+
+			if (this.currentTab == index) return;
+			this.scrollRightTop = this.oldScrollTop;
+			this.$nextTick(function() {
+				this.scrollRightTop = this.rightArr[index];
 				this.currentTab = index;
-				this.checkCor();
-			}
+				this.setLeftStatus(index);
+			});
 		},
-		// 检测
-		checkCor(isScroll) {
-			if (!isScroll) {
-				this.isScroll = false;
-				this.isTap = true;
-				if (this.currentTab > 6) {
-					this.scroll_leftId = `left_${this.currentTab - 2}`;
-				} else {
-					this.scroll_leftId = 'left_0';
-				}
-				this.scroll_rightId = `right_${this.currentTab}`;
-			} else {
-				this.scroll_leftId = `left_${this.currentTab}`;
+
+		// 设置左侧
+		async setLeftStatus(index) {
+			this.currentTab = index;
+			if (this.rightHeight == 0 || this.leftItemHeight == 0) {
+				await this.getElRect('left-scroll-box', 'leftHeight');
+				await this.getElRect('type-list', 'leftItemHeight');
 			}
+			this.scrollLeftTop = index * this.leftItemHeight + this.leftItemHeight / 2 - this.leftHeight / 2;
 		},
+
 		// 右侧滑动
-		rightScroll(e) {
-			// console.log(e);
+		async rightScroll(e) {
+			this.oldScrollTop = e.detail.scrollTop;
+			if (this.rightArr.length == 0) {
+				await this.getRightItemTop();
+			}
+			if (timer) return;
+			if (!this.leftHeight) {
+				await this.getElRect('left-scroll-box', 'leftHeight');
+			}
+			setTimeout(() => {
+				timer = null;
+				let middleRightHeight = e.detail.scrollTop + this.rightHeight / 2;
+				for (let i = 0; i < this.rightArr.length; i++) {
+					let h1 = this.rightArr[i];
+					let h2 = this.rightArr[i + 1];
+					if (!h2 || (middleRightHeight >= h1 && middleRightHeight < h2)) {
+						this.setLeftStatus(i);
+						return;
+					}
+				}
+			}, 50);
 		},
 		// 路由跳转
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,
 				query: parmas
+			});
+		},
+		// 获取右边item到达顶部的距离
+		getRightItemTop() {
+			new Promise(resolve => {
+				let query = uni.createSelectorQuery();
+				query
+					.selectAll('.item-list')
+					.boundingClientRect(rects => {
+						if (!rects.length) {
+							setTimeout(() => {
+								this.getRightItemTop();
+							}, 10);
+							return;
+						}
+						rects.forEach(rect => {
+							this.rightArr.push(rect.top - rects[0].top);
+							resolve();
+						});
+					})
+					.exec();
+			});
+		},
+		// 获取一个目标元素的高度
+		getElRect(elClass, dataVal) {
+			new Promise((resolve, reject) => {
+				const query = uni.createSelectorQuery().in(this);
+				query
+					.select('.' + elClass)
+					.fields(
+						{
+							size: true
+						},
+						res => {
+							// 如果节点尚未生成，res值为null，循环调用执行
+							if (!res) {
+								setTimeout(() => {
+									this.getElRect(elClass);
+								}, 10);
+								return;
+							}
+							this[dataVal] = res.height;
+							resolve();
+						}
+					)
+					.exec();
 			});
 		}
 	}
@@ -554,6 +627,7 @@ export default {
 					width: 140rpx;
 					height: 140rpx;
 					border-radius: 10rpx;
+					background-color: #ccc;
 				}
 				.item-right--title {
 					width: 350rpx;

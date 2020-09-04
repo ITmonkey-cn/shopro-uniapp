@@ -9,22 +9,16 @@
 					</view>
 				</scroll-view>
 			</view>
-			<view style="height: 100%;">
+			<view style="height: 100%;width: 100%;">
 				<scroll-view style="padding-bottom: 100rpx;" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
-						<view class="item-list" v-for="(list, index1) in categoryData[listId].children" :key="index1">
-							<view class="type-box x-bc">
-								<text class="type-title">{{ list.name }}</text>
-								<view class="more" @tap="jump('/pages/goods/list', { id: list.id })">
-									<text>查看更多</text>
-									<text class="cuIcon-right"></text>
-								</view>
-							</view>
+						<view class="item-list">
 							<view class="item-box x-f">
-								<view class="y-f goods-item" @tap="jump('/pages/goods/list', { id: mlist.id })" v-for="(mlist, index2) in list.chirdren" :key="index2">
-									<image class="item-img" lazy-load :src="mlist.image" mode="aspectFill"></image>
-									<text class="item-title one-t ">{{ mlist.name }}</text>
+								<view class="y-f goods-item" @tap="jump('/pages/goods/detail/index', { id: goods.id })" v-for="(goods, index1) in goodsList" :key="goods.id">
+									<image class="item-img" lazy-load :src="goods.image" mode="aspectFill"></image>
+									<text class="item-title one-t ">{{ goods.title }}</text>
+									<view class="item-price">{{ goods.price }}</view>
 								</view>
 							</view>
 						</view>
@@ -41,7 +35,14 @@ export default {
 	data() {
 		return {
 			listId: 0,
-			categoryData: {}
+			categoryData: {},
+			listParams: {
+				//获取商品数据
+				category_id: 0,
+				keywords: '',
+				page: 1
+			},
+			goodsList: [] //商品数据
 		};
 	},
 	computed: {},
@@ -49,16 +50,43 @@ export default {
 		this.getCategory();
 	},
 	methods: {
+		// 获取分类
 		getCategory() {
-			this.$api('category').then(res => {
+			this.$api('category', {
+				id: 28
+			}).then(res => {
 				if (res.code === 1) {
-					// this.categoryData = res.data;
-					this.categoryData = res.data;
+					this.categoryData = res.data.children;
+					this.listParams.category_id = res.data.children[0].id;
+					this.getGoodsList();
 				}
 			});
 		},
+
+		// 获取分类商品
+		getGoodsList() {
+			let that = this;
+			that.isLoading = true;
+			that.loadStatus = 'loading';
+			that.$api('goods.lists', that.listParams).then(res => {
+				if (res.code === 1) {
+					that.isLoading = false;
+					that.goodsList = [...that.goodsList, ...res.data.data];
+					that.lastPage = res.data.last_page;
+					if (that.listParams.page < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
+				}
+			});
+		},
+
 		onType(id) {
 			this.listId = id;
+			this.goodsList = [];
+			this.listParams.page = 1;
+			this.getGoodsList();
 		},
 		// 路由跳转
 		jump(path, parmas) {
@@ -156,25 +184,42 @@ export default {
 			flex-wrap: wrap;
 
 			.goods-item {
-				margin-right: 20rpx;
-				margin-bottom: 20rpx;
+				margin-right: 14rpx;
+				margin-bottom: 14rpx;
+				background: #ffffff;
+				box-shadow: 0px 0px 20rpx 4rpx rgba(199, 199, 199, 0.22);
+				border-radius: 10rpx;
 
-				&:nth-child(3n) {
+				&:nth-child(2n) {
 					margin-right: 0;
 				}
 
 				.item-img {
-					width: 150rpx;
-					height: 150rpx;
-					// background: #ccc;
+					width: 245rpx;
+					height: 246rpx;
+					border-radius: 10rpx 10rpx 0px 0px;
+					background: #ccc;
 				}
 
 				.item-title {
 					font-size: 24rpx;
 					line-height: 24rpx;
 					margin-top: 10rpx;
-					width: 150rpx;
-					text-align: center;
+					width: 200rpx;
+					text-align: left;
+					margin: 20rpx;
+				}
+				.item-price {
+					font-size: 28rpx;
+					font-weight: 500;
+					color: #e1212b;
+					text-align: left;
+					width: 200rpx;
+					margin: 0 20rpx 20rpx;
+					&::before {
+						content: '￥';
+						font-size: 22rpx;
+					}
 				}
 			}
 		}
