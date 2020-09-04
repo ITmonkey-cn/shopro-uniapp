@@ -33,7 +33,7 @@ export default {
 	},
 	data() {
 		return {
-			categoryType: 1 //1:快速购买,2:一级分类，3:二级分类，4:三级分类
+			categoryType: 2 //1:快速购买,2:一级分类，3:二级分类，4:三级分类
 		};
 	},
 	computed: {},

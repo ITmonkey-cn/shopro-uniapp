@@ -10,7 +10,7 @@
 				</scroll-view>
 			</view>
 			<view style="height: 100%;width: 100%;">
-				<scroll-view style="padding-bottom: 100rpx;" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
+				<scroll-view style="padding-bottom: 100rpx;" @scrolltolower="loadMore" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
 						<view class="item-list">
@@ -35,6 +35,7 @@ export default {
 	data() {
 		return {
 			listId: 0,
+			isLoading: false,
 			categoryData: {},
 			listParams: {
 				//获取商品数据
@@ -42,6 +43,7 @@ export default {
 				keywords: '',
 				page: 1
 			},
+			lastPage: 1, //总分页
 			goodsList: [] //商品数据
 		};
 	},
@@ -67,26 +69,29 @@ export default {
 		getGoodsList() {
 			let that = this;
 			that.isLoading = true;
-			that.loadStatus = 'loading';
 			that.$api('goods.lists', that.listParams).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
 					that.goodsList = [...that.goodsList, ...res.data.data];
 					that.lastPage = res.data.last_page;
-					if (that.listParams.page < res.data.last_page) {
-						that.loadStatus = '';
-					} else {
-						that.loadStatus = 'over';
-					}
 				}
 			});
 		},
 
-		onType(id) {
-			this.listId = id;
+		// 商品底部
+		loadMore() {
+			if (this.listParams.page < this.lastPage) {
+				this.listParams.page += 1;
+				this.getGoodsList();
+			}
+		},
+
+		onType(index) {
+			this.listId = index;
+			this.listParams.category_id = this.categoryData[index];
 			this.goodsList = [];
 			this.listParams.page = 1;
-			this.getGoodsList();
+			!this.isLoading && this.getGoodsList();
 		},
 		// 路由跳转
 		jump(path, parmas) {
