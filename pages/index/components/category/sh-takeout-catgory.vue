@@ -17,7 +17,7 @@
 				</scroll-view>
 			</view>
 
-			<view style="height: 100%;">
+			<view style="height: 100vh;width: 100%;">
 				<scroll-view style="padding-bottom:180rpx" scroll-y class="scroll-box righ-scroll-box" :scroll-top="scrollRightTop" scroll-with-animation @scroll="rightScroll">
 					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
@@ -277,7 +277,6 @@ export default {
 			if (this.rightArr.length == 0) {
 				await this.getRightItemTop();
 			}
-
 			if (this.currentTab == index) return;
 			this.scrollRightTop = this.oldScrollTop;
 			this.$nextTick(function() {
@@ -295,10 +294,12 @@ export default {
 				await this.getElRect('type-list', 'leftItemHeight');
 			}
 			this.scrollLeftTop = index * this.leftItemHeight + this.leftItemHeight / 2 - this.leftHeight / 2;
+			console.log('left', this.scrollLeftTop);
 		},
 
 		// 右侧滑动
 		async rightScroll(e) {
+			console.log(e);
 			this.oldScrollTop = e.detail.scrollTop;
 			if (this.rightArr.length == 0) {
 				await this.getRightItemTop();
@@ -318,7 +319,7 @@ export default {
 						return;
 					}
 				}
-			}, 50);
+			}, 10);
 		},
 		// 路由跳转
 		jump(path, parmas) {
@@ -330,10 +331,11 @@ export default {
 		// 获取右边item到达顶部的距离
 		getRightItemTop() {
 			new Promise(resolve => {
-				let query = uni.createSelectorQuery();
+				let query = uni.createSelectorQuery().in(this);
 				query
 					.selectAll('.item-list')
 					.boundingClientRect(rects => {
+						console.log(rects);
 						if (!rects.length) {
 							setTimeout(() => {
 								this.getRightItemTop();
@@ -351,7 +353,7 @@ export default {
 		// 获取一个目标元素的高度
 		getElRect(elClass, dataVal) {
 			new Promise((resolve, reject) => {
-				const query = uni.createSelectorQuery().in(this);
+				const query = uni.createSelectorQuery().in(this); //这个in(this),小程序自定义组件，一定要带。。。。。。。。。。
 				query
 					.select('.' + elClass)
 					.fields(
@@ -536,14 +538,14 @@ export default {
 	flex-direction: column;
 	flex: 1;
 	overflow: hidden;
-	height: 100%;
+	height: 100vh;
 	margin-bottom: 40px;
 }
 
 .wrapper-box {
 	flex: 1;
 	margin-top: 1upx;
-	height: 100%;
+	height: 100vh;
 }
 
 .type-img {
@@ -554,14 +556,14 @@ export default {
 }
 
 .scroll-box {
-	height: 100%;
+	height: 100vh;
 	flex: 1;
 	background: #fff;
 }
 
 .left {
 	width: 200upx;
-	height: 100%;
+	height: 100vh;
 	flex: 1;
 	.list-active {
 		background: #fff;
@@ -594,7 +596,7 @@ export default {
 .right {
 	padding: 0 30upx;
 	flex: 1;
-	height: 100%;
+	height: 100vh;
 	.item-list {
 		.type-box {
 			height: 84rpx;
