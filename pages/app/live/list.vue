@@ -10,9 +10,21 @@
 		</view>
 		<view class="content_box">
 			<scroll-view enable-back-to-top scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<view class="list-box">
+				<!-- <view class="list-box">
 					<block v-for="live in liveList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></block>
-				</view>
+				</view> -->
+
+				<uni-waterfall v-model="liveList" ref="uWaterfall">
+					<template v-slot:left="{ leftList }">
+						<view v-for="live in leftList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
+					</template>
+					<template v-slot:right="{ rightList }">
+						<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
+							<view v-for="live in rightList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
+						</view>
+					</template>
+				</uni-waterfall>
+
 				<view v-if="liveList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
 		</view>
@@ -30,9 +42,11 @@
 
 <script>
 import shoproLiveCard from '@/components/shopro-live-card/shopro-live-card.vue';
+import uniWaterfall from '@/components/uni-waterfall/uni-waterfall.vue';
 export default {
 	components: {
-		shoproLiveCard
+		shoproLiveCard,
+		uniWaterfall
 	},
 	data() {
 		return {

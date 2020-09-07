@@ -17,7 +17,7 @@
 
 				<!-- 价格卡片组 -->
 				<sh-price v-if="goodsInfo" :detail="goodsInfo" :type="detailType" @change="getActivityRules"></sh-price>
-				<view class="goods-title more-t">{{ goodsInfo.title  }}</view>
+				<view class="goods-title more-t">{{ goodsInfo.title }}</view>
 				<view class="sub-title more-t">{{ goodsInfo.subtitle }}</view>
 				<!-- 规格选择 -->
 				<view
@@ -78,10 +78,7 @@
 						</view>
 					</view>
 					<view class="tab-detail">
-						<view class="rich-box" v-show="tabCurrent === 'tab0'">
-							<uni-parser :html="goodsInfo.content"></uni-parser>
-							<!-- <rich-text :nodes="goodsInfo.content"></rich-text> -->
-						</view>
+						<view class="rich-box" v-show="tabCurrent === 'tab0'"><uni-parser :html="goodsInfo.content"></uni-parser></view>
 						<view class="goods-size" v-if="tabCurrent === 'tab1'">
 							<view class="table-box" v-if="goodsInfo.params && goodsInfo.params.length">
 								<view class="t-tr x-f" v-for="t in goodsInfo.params" :key="t.title">
@@ -556,9 +553,8 @@ export default {
 	margin-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
-		// font-size: 0; // 解决图片间隙问题。如果详情有文字，注释掉。
-		image {
-			margin-top: -1rpx; //富文本的图片之间的间隙，一般是空格造成，父级用size:0,可以解决，不行就hack一下
+		/deep/ img {
+			display: block;
 		}
 	}
 
@@ -591,7 +587,6 @@ export default {
 					flex: 4;
 					padding: 15rpx 20rpx;
 					height: 100%;
-					
 				}
 			}
 		}
