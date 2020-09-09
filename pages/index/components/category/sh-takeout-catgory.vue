@@ -21,7 +21,8 @@
 				<scroll-view style="padding-bottom:250rpx" scroll-y class="scroll-box righ-scroll-box" :scroll-top="scrollRightTop" scroll-with-animation @scroll="rightScroll">
 					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
-							<view class="type-box x-bc">
+							<view class="type-box y-c">
+								<image class="type-img" v-if="item.image" :src="item.image" lazy-load></image>
 								<text class="type-title">{{ item.name }}</text>
 							</view>
 							<view class="item-box">
@@ -294,12 +295,10 @@ export default {
 				await this.getElRect('type-list', 'leftItemHeight');
 			}
 			this.scrollLeftTop = index * this.leftItemHeight + this.leftItemHeight / 2 - this.leftHeight / 2;
-			console.log('left', this.scrollLeftTop);
 		},
 
 		// 右侧滑动
 		async rightScroll(e) {
-			console.log(e);
 			this.oldScrollTop = e.detail.scrollTop;
 			if (this.rightArr.length == 0) {
 				await this.getRightItemTop();
@@ -335,7 +334,6 @@ export default {
 				query
 					.selectAll('.item-list')
 					.boundingClientRect(rects => {
-						console.log(rects);
 						if (!rects.length) {
 							setTimeout(() => {
 								this.getRightItemTop();
@@ -548,13 +546,6 @@ export default {
 	height: 100vh;
 }
 
-.type-img {
-	width: 505rpx;
-	height: 150rpx;
-	background: #ccc;
-	margin: 10rpx 30rpx;
-}
-
 .scroll-box {
 	height: 100vh;
 	flex: 1;
@@ -599,16 +590,24 @@ export default {
 	height: 100vh;
 	.item-list {
 		.type-box {
-			height: 84rpx;
+			min-height: 84rpx;
 
 			.type-title {
 				font-size: 28rpx;
 				font-weight: bold;
+				line-height: 84rpx;
 			}
 
 			.more {
 				font-size: 26rpx;
 				color: #999;
+			}
+			.type-img {
+				width: 505rpx;
+				height: 150rpx;
+				background: #ccc;
+				margin: 10rpx 0;
+				border-radius: 10rpx;
 			}
 		}
 

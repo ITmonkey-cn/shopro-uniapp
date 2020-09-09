@@ -10,10 +10,6 @@
 		</view>
 		<view class="content_box">
 			<scroll-view enable-back-to-top scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<!-- <view class="list-box">
-					<block v-for="live in liveList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></block>
-				</view> -->
-
 				<uni-waterfall v-model="liveList" ref="uWaterfall">
 					<template v-slot:left="{ leftList }">
 						<view v-for="live in leftList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>

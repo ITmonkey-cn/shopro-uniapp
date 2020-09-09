@@ -46,9 +46,9 @@ export default {
 						Vue.prototype.Custom = custom;
 						Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
 						// #endif
+						uni.setStorageSync('platform', platform);
 					}
 				});
-				uni.setStorageSync('platform', platform);
 				resolve(platform);
 			});
 		},
@@ -76,7 +76,7 @@ export default {
 			uni.setStorageSync('shop_id', options.query.shop_id);
 		}
 
-		this.init(options)
+		await this.init(options)
 			.then(res => {
 				this.autoLogin(res[2].data);
 				this.getRoutes();

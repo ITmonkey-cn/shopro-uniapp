@@ -47,13 +47,19 @@ export default {
 		};
 	},
 	computed: {},
+	props: {
+		categoryId: {
+			type: Number,
+			default: 0
+		}
+	},
 	created() {
 		this.getCategory();
 	},
 	methods: {
 		getCategory() {
 			this.$api('category', {
-				id: 11
+				id: this.categoryId
 			}).then(res => {
 				if (res.code === 1) {
 					this.categoryData = res.data.children;
@@ -172,7 +178,7 @@ export default {
 				.item-img {
 					width: 150rpx;
 					height: 150rpx;
-					background: #ccc;
+					// background: #ccc;
 				}
 
 				.item-title {

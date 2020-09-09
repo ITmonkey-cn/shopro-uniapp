@@ -128,7 +128,6 @@ export default {
 
 			.tabbar-text {
 				font-size: 20rpx;
-				margin-top: 5rpx;
 			}
 		}
 	}

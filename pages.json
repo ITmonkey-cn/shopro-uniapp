@@ -74,7 +74,8 @@
 			"path": "pages/index/view",
 			"name": "view",
 			"style": {
-				"navigationBarTitleText": ""
+				"navigationBarTitleText": "",
+					"navigationStyle": "custom"
 
 			},
 			"meta": {

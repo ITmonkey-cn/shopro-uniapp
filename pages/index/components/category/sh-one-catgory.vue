@@ -47,6 +47,12 @@ export default {
 			goodsList: [] //商品数据
 		};
 	},
+	props:{
+		categoryId:{
+			type:Number,
+			default:0
+		}
+	},
 	computed: {},
 	created() {
 		this.getCategory();
@@ -55,7 +61,7 @@ export default {
 		// 获取分类
 		getCategory() {
 			this.$api('category', {
-				id: 28
+				id: this.categoryId
 			}).then(res => {
 				if (res.code === 1) {
 					this.categoryData = res.data.children;
@@ -167,7 +173,8 @@ export default {
 		width: 505rpx;
 		height: 150rpx;
 		background: #ccc;
-		margin-top: 30rpx;
+		margin: 20rpx 0;
+		border-radius: 10rpx;
 	}
 
 	.item-list {

@@ -45,13 +45,19 @@ export default {
 		};
 	},
 	computed: {},
+	props: {
+		categoryId: {
+			type: Number,
+			default: 0
+		}
+	},
 	async created() {
 		await this.getCategory();
 	},
 	methods: {
 		getCategory() {
 			this.$api('category', {
-				id: 1
+				id: this.categoryId
 			}).then(res => {
 				if (res.code === 1) {
 					this.categoryData = res.data.children;

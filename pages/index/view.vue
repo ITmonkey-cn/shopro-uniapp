@@ -1,5 +1,8 @@
 <template>
 	<view class="view-box">
+		<cu-custom :isBack="true" :bgColor="bgColor" :bgImage="bgImage">
+			<block slot="content">{{ customData.name }}</block>
+		</cu-custom>
 		<block v-if="viewData.length" v-for="(item, index) in viewData" :key="index">
 			<!-- 搜索 -->
 			<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
@@ -97,7 +100,10 @@ export default {
 			// #ifdef MP-WEIXIN
 			HAS_LIVE: HAS_LIVE,
 			// #endif
-			viewId: 0
+			viewId: 0,
+			bgColor: '',
+			bgImage: '',
+			customData: {}
 		};
 	},
 	computed: {},
@@ -115,6 +121,7 @@ export default {
 			}).then(res => {
 				if (res.code == 1) {
 					that.viewData = res.data.template;
+					that.customData = res.data;
 					uni.setNavigationBarTitle({
 						title: res.data.name
 					});
