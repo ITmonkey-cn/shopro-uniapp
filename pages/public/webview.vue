@@ -10,7 +10,7 @@ export default {
 		};
 	},
 	onLoad() {
-		this.webviewPath = this.$Route.query.webviewPath;
+		this.webviewPath = decodeURIComponent(this.$Route.query.webviewPath);
 	}
 };
 </script>

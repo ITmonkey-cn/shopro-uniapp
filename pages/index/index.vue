@@ -1,7 +1,7 @@
 <template>
 	<view class="page_box shopro-selector">
 		<!-- 导航栏 -->
-		<view class="head_box " :style="{ background: bgcolor }" :class="{ active: bgcolor }">
+		<view class="head_box active" :style="{ background: bgcolor }">
 			<cu-custom :isBack="true" v-if="info && info.name">
 				<block slot="backText">
 					<text class="nav-title shopro-selector-rect">{{ info.name || '商城' }}</text>
@@ -144,7 +144,7 @@ export default {
 		shoproNoticeModal,
 		shoproSkeletons,
 		// #ifdef MP-WEIXIN
-		shLive,
+		shLive
 		// #endif
 	},
 	data() {
@@ -290,7 +290,7 @@ export default {
 				});
 			});
 		}
-		// #endif
+		// #endif	
 	}
 };
 </script>
@@ -298,7 +298,8 @@ export default {
 <style lang="scss">
 // 标题搜索栏
 .active {
-	transition: all linear 0.3s;
+	// 动画时间跟随轮播组件动画时间
+	transition: all linear 0.5s;
 }
 
 // 服务协议

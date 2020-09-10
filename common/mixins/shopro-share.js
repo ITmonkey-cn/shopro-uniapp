@@ -30,9 +30,9 @@ export default {
 		//为每个页面设置分享信息
 		that.setShareInfo();
 		//直接进入页面
-		if(options.page) {
+		if (options.page) {
 			let page = decodeURIComponent(options.page);
-			console.log(page,'page')
+			console.log(page, 'page')
 			uni.navigateTo({
 				url: page
 			})
@@ -135,7 +135,7 @@ export default {
 						wxsdk.share(that.shareInfo);
 					}
 					// #endif
-			
+
 				}
 			})
 		},
@@ -192,7 +192,8 @@ export default {
 					title: '分享失败',
 					icon: 'none'
 				})
-			}
+			},
+			complete() {}
 		}
 	}
 	// #endif

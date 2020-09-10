@@ -31,57 +31,21 @@ export default {
 			default: null
 		}
 	},
-	created: async function() {
-		await this.doColorThief();
-	},
 	computed: {},
+	created() {
+		this.initBgColor();
+	},
 	methods: {
-		async doColorThief() {
-			let that = this;
-			let item = this.detail.list[this.swiperCurrent];
-			let bgcolor = item.bgcolor;
-			if (bgcolor === '') {
-				let ctx = uni.createCanvasContext('colorThief', that);
-				if (0 === that.webviewId || ctx.webviewId === that.webviewId) {
-					that.webviewId = ctx.webviewId;
-					uni.getImageInfo({
-						src: item.image,
-						success: function(image) {
-							ctx.drawImage(image.path, 0, 0, image.width, image.height);
-							ctx.draw(true, function(e) {
-								uni.canvasGetImageData(
-									{
-										canvasId: 'colorThief',
-										x: 0,
-										y: 0,
-										width: parseInt(image.width),
-										height: parseInt(image.height),
-										success(res) {
-											let bgcolor = colorThief(res.data)
-												.color()
-												.getHex();
-											that.$set(item, 'bgcolor', bgcolor);
-											that.$emit('getbgcolor', bgcolor);
-										}
-									},
-									that
-								);
-							});
-						}
-					});
-				}
-			} else {
-				that.$set(item, 'bgcolor', bgcolor);
-				that.$emit('getbgcolor', bgcolor);
-			}
-		},
+		// 轮播切换
 		swiperChange(e) {
 			this.swiperCurrent = e.detail.current;
-			this.doColorThief();
+			this.initBgColor();
+		},
+		// 初始化背景颜色，轮播图没滚动前
+		initBgColor() {
 			let bgcolor = this.detail.list[this.swiperCurrent].bgcolor;
 			this.$emit('getbgcolor', bgcolor);
 		},
-
 		// 路由跳转
 		jump(path, parmas) {
 			this.$Router.push({
