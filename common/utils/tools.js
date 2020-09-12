@@ -30,8 +30,15 @@ export default {
 			let arr = query.split('&')
 			path = path.slice(0, index);
 			arr.forEach(item => {
-				let mArr = item.split('=');
-				objParams[mArr[0]] = mArr[1]
+				let mArr = []
+				let obj = {}
+				mArr = item.split('=');
+				obj[mArr[0]] = mArr[1];
+				objParams = {
+					...objParams,
+					...obj
+				}
+
 			})
 		}
 		// 判断是否是tabbar

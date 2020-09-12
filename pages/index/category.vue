@@ -40,7 +40,7 @@ export default {
 	computed: {},
 	onLoad() {
 		this.getCategory();
-		this.categoryId = this.$Route.query.id;
+		this.categoryId = Number(this.$Route.query.id);
 	},
 	methods: {
 		/**

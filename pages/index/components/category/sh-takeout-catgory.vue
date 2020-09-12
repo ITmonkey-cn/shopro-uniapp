@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="x-f wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view style="padding-bottom:250rpx" class="left left-scroll-box" :scroll-top="scrollLeftTop" enable-back-to-top scroll-y scroll-with-animation>
+				<scroll-view :style=" takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'" class="left left-scroll-box" :scroll-top="scrollLeftTop" enable-back-to-top scroll-y scroll-with-animation>
 					<view
 						class="type-list x-c"
 						:id="`left_${index}`"
@@ -18,7 +18,7 @@
 			</view>
 
 			<view style="height: 100vh;width: 100%;">
-				<scroll-view style="padding-bottom:250rpx" scroll-y class="scroll-box righ-scroll-box" :scroll-top="scrollRightTop" scroll-with-animation @scroll="rightScroll">
+				<scroll-view :style=" takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'" scroll-y class="scroll-box righ-scroll-box" :scroll-top="scrollRightTop" scroll-with-animation @scroll="rightScroll">
 					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
 							<view class="type-box y-c">
@@ -64,20 +64,20 @@
 			</view>
 		</view>
 		<!-- 购物车 -->
-		<view class="cart-box x-f">
+		<view class="cart-box x-f" v-show="takeoutTotalCount.totalNum">
 			<view class="cart-left flex-sub x-f">
 				<view class="cart-img-box" @tap="onShowCartList">
 					<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
-					<view class="cu-tag badge" v-if="takeoutTotalCount.totalNum">{{ takeoutTotalCount.totalNum }}</view>
+					<view class="cu-tag badge" v-if="totalCount.totalNum">{{ totalCount.totalNum || takeoutTotalCount.totalNum }}</view>
 				</view>
 				<view class="price-box x-f">
-					<text class="price">{{ takeoutTotalCount.totalPrice.toFixed(2) }}</text>
+					<text class="price">{{ totalCount.totalPrice.toFixed(2) }}</text>
 				</view>
 			</view>
 			<button class="cu-btn pay-btn" @tap="onPay" :disabled="!isSel">去结算</button>
 			<!-- 购物车商品列表 -->
 
-			<view class="cart-list-box page_box" :class="takeoutTotalCount.totalNum && showCartList ? '' : 'hide-cart-list'">
+			<view class="cart-list-box page_box" :class="showCartList ? '' : 'hide-cart-list'">
 				<view class="head_box x-bc cart-list__head px20">
 					<label class="check-all x-f" @tap="onAllSel">
 						<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
@@ -141,13 +141,19 @@ export default {
 			showCartList: false
 		};
 	},
+	props: {
+		categoryId: {
+			type: Number,
+			default: 0
+		}
+	},
 	computed: {
 		...mapState({
 			cartNum: state => state.cart.cartNum,
 			cartList: state => state.cart.cartList,
 			allSel: ({ cart }) => cart.allSelected
 		}),
-		...mapGetters(['totalCount', 'takeoutTotalCount', 'isSel']),
+		...mapGetters(['totalCount', 'takeoutTotalCount', 'isSel','totalCount']),
 		// 购物车检测
 		checkCart() {
 			let obj = {};
@@ -266,7 +272,9 @@ export default {
 		},
 		// 获取分类数据
 		getCategory() {
-			this.$api('categoryGoods').then(res => {
+			this.$api('categoryGoods', {
+				category_id: this.categoryId
+			}).then(res => {
 				if (res.code === 1) {
 					this.categoryData = res.data;
 				}
@@ -426,9 +434,9 @@ export default {
 		overflow-y: auto;
 	}
 	.collect-list {
-		padding: 30rpx 20rpx;
+		padding: 0 20rpx;
 		background: #fff;
-		margin-bottom: 20rpx;
+		margin-top: 20rpx;
 
 		/deep/ .goods-title {
 			width: 420rpx !important;

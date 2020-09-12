@@ -6,6 +6,12 @@
     "versionCode" : 215,
     "transformPx" : false,
     "app-plus" : {
+		"splashscreen" : {
+		    "alwaysShowBeforeRender" : true,
+		    "waiting" : true,
+		    "autoclose" : true,
+		    "delay" : 3000
+		},
         /* 5+App特有相关 */
         "modules" : {
             "OAuth" : {},
