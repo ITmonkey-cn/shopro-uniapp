@@ -88,7 +88,7 @@ export default {
 			this.addressData.phone = wxAddress.telNumber;
 			this.area_text = `${wxAddress.provinceName}-${wxAddress.cityName}-${wxAddress.countyName}`;
 			this.addressData.area_id = wxAddress.nationalCode;
-			this.addressData.address = wxAddress.detailInfo;
+			this.addressData.address = wxAddress.detailInfo.replace(/%20/g,'');
 			this.addressData.is_default = false;
 		}
 

@@ -2,7 +2,14 @@
 	<view class="content_box">
 		<view class="x-f wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view :style=" takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'" class="left left-scroll-box" :scroll-top="scrollLeftTop" enable-back-to-top scroll-y scroll-with-animation>
+				<scroll-view
+					:style="takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'"
+					class="left left-scroll-box"
+					:scroll-top="scrollLeftTop"
+					enable-back-to-top
+					scroll-y
+					scroll-with-animation
+				>
 					<view
 						class="type-list x-c"
 						:id="`left_${index}`"
@@ -18,7 +25,14 @@
 			</view>
 
 			<view style="height: 100vh;width: 100%;">
-				<scroll-view :style=" takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'" scroll-y class="scroll-box righ-scroll-box" :scroll-top="scrollRightTop" scroll-with-animation @scroll="rightScroll">
+				<scroll-view
+					:style="takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'"
+					scroll-y
+					class="scroll-box righ-scroll-box"
+					:scroll-top="scrollRightTop"
+					scroll-with-animation
+					@scroll="rightScroll"
+				>
 					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
 							<view class="type-box y-c">
@@ -153,7 +167,7 @@ export default {
 			cartList: state => state.cart.cartList,
 			allSel: ({ cart }) => cart.allSelected
 		}),
-		...mapGetters(['totalCount', 'takeoutTotalCount', 'isSel','totalCount']),
+		...mapGetters(['totalCount', 'takeoutTotalCount', 'isSel', 'totalCount']),
 		// 购物车检测
 		checkCart() {
 			let obj = {};
