@@ -1,6 +1,6 @@
 <template>
 	<!-- 产品分类导航 -->
-	<view class="menu-category-box mb10" v-if="carousel" :style="detail.list.length <= menu ? `height:200rpx` : `height:360rpx`">
+	<view class="menu-category-box mb10" v-if="carousel.length" :style="detail.list.length <= menu ? `height:200rpx` : `height:360rpx`">
 		<swiper
 			class="menu-swiper-box"
 			:style="detail.list.length <= menu ? `height:160rpx` : `height:320rpx`"

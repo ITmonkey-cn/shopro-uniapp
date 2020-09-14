@@ -1,6 +1,6 @@
 <template>
 	<!-- 今日必拼 -->
-	<view class="group-goods pa20 mx20 mb10">
+	<view class="group-goods pa20 mx20 mb10" v-if="goodsList.length">
 		<view class="title-box x-bc" @tap="jump('/pages/activity/groupon/list')">
 			<text class="title">{{ detail.name }}</text>
 			<view class="group-people x-f">
