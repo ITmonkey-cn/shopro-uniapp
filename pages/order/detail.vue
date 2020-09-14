@@ -93,7 +93,7 @@
 				</view>
 			</view>
 			<!-- 订单信息 -->
-			<view class="notice-box">
+			<view class="notice-box" v-if="orderDetail.id">
 				<view class="notice-box__content">
 					<view class="notice-item--center x-f">
 						<text class="title">订单编号：</text>
@@ -115,7 +115,7 @@
 				</view>
 			</view>
 			<!--  价格信息 -->
-			<view class="order-price-box">
+			<view class="order-price-box"  v-if="orderDetail.id">
 				<view class="notice-item x-bc">
 					<text class="title">商品总额</text>
 					<text class="detail">￥{{ orderDetail.goods_amount }}</text>
