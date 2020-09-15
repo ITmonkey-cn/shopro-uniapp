@@ -14,9 +14,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
-
 				// "enablePullDownRefresh": true,
-
 				"navigationStyle": "custom"
 			},
 			"meta": {
@@ -75,7 +73,7 @@
 			"name": "view",
 			"style": {
 				"navigationBarTitleText": "",
-					"navigationStyle": "custom"
+				"navigationStyle": "custom"
 
 			},
 			"meta": {
@@ -228,7 +226,7 @@
 				{
 					"path": "merchant/list",
 					"style": {
-						"navigationBarTitleText": "切换门店" 
+						"navigationBarTitleText": "切换门店"
 					},
 					"meta": {
 						"auth": true,

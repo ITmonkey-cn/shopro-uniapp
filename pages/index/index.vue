@@ -8,10 +8,10 @@
 				</block>
 			</cu-custom>
 		</view>
-		<view class="content_box " style="margin-top: -4rpx;">
+		<view class="content_box" style="margin-top: -4rpx;overflow: hidden;">
 			<scroll-view
 				class="scroll-box"
-				scroll-y="true"
+				scroll-y
 				scroll-with-animation
 				enable-back-to-top
 				refresher-enabled="true"
@@ -179,6 +179,18 @@ export default {
 		}
 	},
 	onLoad(options) {
+		// #ifdef H5
+		document.body.addEventListener(
+			'touchmove',
+			function(e) {
+				e.preventDefault();
+			},
+			{
+				passive: false
+			}
+		);
+
+		// #endif
 		// #ifdef APP-VUE
 		console.log('是否同意隐私协议', plus.runtime.isAgreePrivacy());
 		if (!plus.runtime.isAgreePrivacy()) {
@@ -290,7 +302,7 @@ export default {
 				});
 			});
 		}
-		// #endif	
+		// #endif
 	}
 };
 </script>
@@ -301,7 +313,6 @@ export default {
 	// 动画时间跟随轮播组件动画时间
 	transition: all linear 0.5s;
 }
-
 // 服务协议
 .modal-wrap {
 	/deep/ .cu-modal {
