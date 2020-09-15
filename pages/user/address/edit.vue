@@ -5,7 +5,7 @@
 			<view class="location-item x-bc pa20 mb20" @tap="chooseLocation">
 				<view class="x-f">
 					<text class="cuIcon-focus"></text>
-					<text>{{ addressData.latitude ? '重新获取地理位置' : '点击定位当前地点' }}</text>
+					<text>{{ addressData.latitude ? chooseAddress : '点击定位当前地点' }}</text>
 				</view>
 				<text class="cuIcon-right"></text>
 			</view>
@@ -69,6 +69,7 @@ export default {
 				latitude: '',
 				longitude: ''
 			},
+			chooseAddress: '', //定位地址
 			area_text: '',
 			// 城市
 			cityPickerValueDefault: [0, 0, 0],
@@ -88,7 +89,7 @@ export default {
 			this.addressData.phone = wxAddress.telNumber;
 			this.area_text = `${wxAddress.provinceName}-${wxAddress.cityName}-${wxAddress.countyName}`;
 			this.addressData.area_id = wxAddress.nationalCode;
-			this.addressData.address = wxAddress.detailInfo.replace(/%20/g,'');
+			this.addressData.address = wxAddress.detailInfo.replace(/%20/g, '');
 			this.addressData.is_default = false;
 		}
 
@@ -107,11 +108,12 @@ export default {
 		chooseLocation() {
 			uni.chooseLocation({
 				success: res => {
-					// this.addressData.latitude = res.latitude;
-					// this.addressData.longitude = res.longitude;
-					// if (this.addressData.id == 0) {
-					// 	this.addressData.address = res.address;
-					// }
+					this.chooseAddress = res.address;
+					this.addressData.latitude = res.latitude;
+					this.addressData.longitude = res.longitude;
+					if (this.addressData.id == 0) {
+						this.addressData.address = res.address;
+					}
 				},
 				fail: err => {
 					console.log(err);
@@ -119,6 +121,7 @@ export default {
 			});
 			// #ifdef H5
 			this.$wxsdk.openAddress(res => {
+				this.chooseAddress = res.address;
 				this.addressData.latitude = res.latitude;
 				this.addressData.longitude = res.longitude;
 				if (this.addressData.id == 0) {
