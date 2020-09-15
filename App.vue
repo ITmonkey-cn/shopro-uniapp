@@ -8,9 +8,6 @@ export default {
 	methods: {
 		//应用初始化,获取模板,获取页面路由,获取用户信息,保存用户Token并返回初始进入页面
 		...mapActions(['getAppInit', 'getTemplate', 'getRoutes', 'getUserInfo', 'setTokenAndBack']),
-		init(options) {
-			return Promise.all([this.setAppInfo(), this.getTemplate(options), this.getAppInit(options)]);
-		},
 		// 获取系统栏高度
 		async setAppInfo() {
 			let that = this;
@@ -47,9 +44,10 @@ export default {
 						Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
 						// #endif
 						uni.setStorageSync('platform', platform);
+						resolve(platform);
+						console.log(11111111, 'setappinfo');
 					}
 				});
-				resolve(platform);
 			});
 		},
 		// 自动登录
@@ -67,6 +65,7 @@ export default {
 				wechat.login();
 				// #endif
 			}
+			console.log(444444444, 'login');
 		}
 	},
 	onLaunch: async function(options) {
@@ -75,15 +74,11 @@ export default {
 			uni.setStorageSync('screenShot', true);
 			uni.setStorageSync('shop_id', options.query.shop_id);
 		}
-
-		await this.init(options)
-			.then(res => {
-				this.autoLogin(res[2].data);
-				this.getRoutes();
-			})
-			.catch(err => {
-				console.log(err);
-			});
+		await this.setAppInfo();
+		await this.getTemplate(options);
+		let init = await this.getAppInit(options);
+		await this.autoLogin(init.data);
+		await this.getRoutes();
 	},
 	onShow: function() {
 		this.$store.commit('CART_NUM');
