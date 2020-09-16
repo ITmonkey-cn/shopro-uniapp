@@ -24,7 +24,7 @@
 			<!-- 联系方式 -->
 			<view class="refund-item mb20">
 				<view class="item-title">联系方式</view>
-				<view class="input-box x-f"><input type="text" class="item-input" v-model="phone" placeholder="请输入您的联系电话" placeholder-class="input--pl" /></view>
+				<view class="input-box x-f"><input type="number" class="item-input" v-model="phone" placeholder="请输入您的联系电话" placeholder-class="input--pl" /></view>
 			</view>
 			<!-- 留言 -->
 			<view class="refund-item" style="margin-bottom: 20rpx;" v-show="!showModal">
@@ -33,7 +33,7 @@
 					<textarea
 						class="describe-content"
 						v-model="refundContent"
-						maxlength="500"
+						maxlength="120"
 						placeholder="客官~请描述您遇到的问题，建议上传照片"
 						placeholder-class="input--pl"
 						fixed
@@ -380,7 +380,7 @@ export default {
 	background-color: #fff;
 	padding: 0 30rpx;
 	.sub-btn {
-		width: 335rpx;
+		flex: 1;
 		height: 74rpx;
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
 		border: 1rpx solid rgba(238, 238, 238, 1);
@@ -389,7 +389,7 @@ export default {
 		font-size: 28rpx;
 	}
 	.contcat-btn {
-		width: 335rpx;
+		flex: 1;
 		height: 74rpx;
 		background: rgba(238, 238, 238, 1);
 		border-radius: 38rpx;

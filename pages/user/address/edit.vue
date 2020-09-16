@@ -87,7 +87,13 @@ export default {
 			addressId = 0;
 			this.addressData.consignee = wxAddress.userName;
 			this.addressData.phone = wxAddress.telNumber;
+			// #ifdef MP-WEIXIN
 			this.area_text = `${wxAddress.provinceName}-${wxAddress.cityName}-${wxAddress.countyName}`;
+			// #endif
+			// #ifdef H5
+			this.area_text = `${wxAddress.provinceName}-${wxAddress.cityName}-${wxAddress.countryName}`;
+			// #endif
+
 			this.addressData.area_id = wxAddress.nationalCode;
 			this.addressData.address = wxAddress.detailInfo.replace(/%20/g, '');
 			this.addressData.is_default = false;

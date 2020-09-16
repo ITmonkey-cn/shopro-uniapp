@@ -277,7 +277,7 @@ export default {
 				font-size: 26rpx;
 				font-family: PingFang SC;
 				font-weight: 400;
-				color: rgba(51, 51, 51, 1);
+				color: #f83942;
 				margin-left: 10rpx;
 			}
 		}

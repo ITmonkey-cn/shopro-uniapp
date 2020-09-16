@@ -1,97 +1,102 @@
 <template>
-	<view class="page_box shopro-selector">
-		<!-- 导航栏 -->
-		<view class="head_box active" :style="{ background: bgcolor }">
-			<cu-custom :isBack="true" v-if="info && info.name">
-				<block slot="backText">
-					<text class="nav-title shopro-selector-rect">{{ info.name || '商城' }}</text>
-				</block>
-			</cu-custom>
-		</view>
-		<view class="content_box" style="margin-top: -4rpx;overflow: hidden;">
-			<scroll-view
-				class="scroll-box"
-				scroll-y
-				scroll-with-animation
-				enable-back-to-top
-				refresher-enabled="true"
-				:refresher-triggered="triggered"
-				:refresher-threshold="100"
-				refresher-background="#f6f6f6"
-				@refresherpulling="onPulling"
-				@refresherrefresh="onRefresh"
-				@refresherrestore="onRestore"
-				@refresherabort="onAbort"
-			>
-				<block v-if="template" v-for="(item, index) in template" :key="index">
-					<!-- 搜索 -->
-					<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
-					<!-- 轮播 -->
-					<sh-banner v-if="item.type === 'banner'" :detail="item.content" @getbgcolor="getbgcolor"></sh-banner>
-					<!-- 菜单 -->
-					<sh-menu v-if="item.type === 'menu'" :detail="item.content" :menu="item.content.style" :imgW="94"></sh-menu>
-					<!-- 推荐商品 -->
-					<sh-hot-goods v-if="item.type === 'goods-list' || item.type === 'goods-group'" :detail="item.content"></sh-hot-goods>
-					<!-- 广告魔方 -->
-					<sh-adv v-if="item.type === 'adv'" :detail="item.content"></sh-adv>
-					<!-- 优惠券 -->
-					<sh-coupon v-if="item.type === 'coupons'" :detail="item.content"></sh-coupon>
-					<!-- 秒杀 -->
-					<sh-seckill v-if="item.type === 'seckill'" :detail="item.content"></sh-seckill>
-					<!-- 拼团 -->
-					<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
-					<!-- 富文本 -->
-					<sh-richtext v-if="item.type === 'rich-text'" :detail="item.content"></sh-richtext>
-					<!-- 功能列表 -->
-					<sh-nav v-if="item.type === 'nav-list'" :detail="item.content"></sh-nav>
-					<!-- 九宫格列表 -->
-					<sh-grid v-if="item.type === 'grid-list'" :detail="item.content"></sh-grid>
-					<!-- 功能标题 -->
-					<sh-title-card v-if="item.type === 'title-block'" :detail="item.content"></sh-title-card>
-					<!-- 个人信息 -->
-					<sh-userinfo v-if="item.type === 'user'" :detail="item.content"></sh-userinfo>
-					<!-- 钱包 -->
-					<sh-wallet v-if="item.type === 'wallet-card'" :detail="item.content"></sh-wallet>
-					<!-- 订单卡片 -->
-					<sh-order v-if="item.type === 'order-card'" :detail="item.content"></sh-order>
-					<!-- 直播 -->
-					<!-- #ifdef MP-WEIXIN -->
-					<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>
-					<!-- #endif -->
-				</block>
-			</scroll-view>
-		</view>
-		<view class="foot_box"></view>
-		<!-- 骨架屏 -->
-		<shopro-skeleton :showSkeleton="!template"></shopro-skeleton>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal v-if="!showPrivacy && showNoticeModal"></shopro-notice-modal>
-		<!-- 隐私协议 -->
-		<!-- #ifdef APP-PLUS -->
-		<view class="modal-wrap">
-			<shopro-modal v-model="showPrivacy">
-				<block slot="modalContent">
-					<view class="service-contract-wrap">
-						<image class="service-head-img" src="/static/imgs/modal/servece_head.png" mode="widthFix"></image>
-						<view class="service-title">用户隐私协议概况</view>
-						<view class="service-content ">
-							感谢您使用Shopro商城，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读
-							<text style="color: #EAB866;" @tap="jump('/pages/public/richtext', { id: 2 })">《Shopro商城隐私协议》</text>
-							，我们将会严格按照经您同意的各项条款使用您的个人信息，以便为您提供更好的服务。
+	<view class="page_box">
+		<!-- 空白页 -->
+		<shopro-empty v-if="!template" :emptyData="emptyData"></shopro-empty>
+		<view v-else class="page_box shopro-selector">
+			<!-- 导航栏 -->
+			<view class="head_box active" :style="{ background: bgcolor }">
+				<cu-custom :isBack="true" v-if="info && info.name">
+					<block slot="backText">
+						<text class="nav-title shopro-selector-rect">{{ info.name || '商城' }}</text>
+					</block>
+				</cu-custom>
+			</view>
+			<view class="content_box" style="margin-top: -4rpx;overflow: hidden;">
+				<scroll-view
+					class="scroll-box"
+					scroll-y
+					scroll-with-animation
+					enable-back-to-top
+					refresher-enabled="true"
+					:refresher-triggered="triggered"
+					:refresher-threshold="100"
+					refresher-background="#f6f6f6"
+					@refresherpulling="onPulling"
+					@refresherrefresh="onRefresh"
+					@refresherrestore="onRestore"
+					@refresherabort="onAbort"
+				>
+					<block v-if="template" v-for="(item, index) in template" :key="index">
+						<!-- 搜索 -->
+						<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
+						<!-- 轮播 -->
+						<sh-banner v-if="item.type === 'banner'" :detail="item.content" @getbgcolor="getbgcolor"></sh-banner>
+						<!-- 菜单 -->
+						<sh-menu v-if="item.type === 'menu'" :detail="item.content" :menu="item.content.style" :imgW="94"></sh-menu>
+						<!-- 推荐商品 -->
+						<sh-hot-goods v-if="item.type === 'goods-list' || item.type === 'goods-group'" :detail="item.content"></sh-hot-goods>
+						<!-- 广告魔方 -->
+						<sh-adv v-if="item.type === 'adv'" :detail="item.content"></sh-adv>
+						<!-- 优惠券 -->
+						<sh-coupon v-if="item.type === 'coupons'" :detail="item.content"></sh-coupon>
+						<!-- 秒杀 -->
+						<sh-seckill v-if="item.type === 'seckill'" :detail="item.content"></sh-seckill>
+						<!-- 拼团 -->
+						<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
+						<!-- 富文本 -->
+						<sh-richtext v-if="item.type === 'rich-text'" :detail="item.content"></sh-richtext>
+						<!-- 功能列表 -->
+						<sh-nav v-if="item.type === 'nav-list'" :detail="item.content"></sh-nav>
+						<!-- 九宫格列表 -->
+						<sh-grid v-if="item.type === 'grid-list'" :detail="item.content"></sh-grid>
+						<!-- 功能标题 -->
+						<sh-title-card v-if="item.type === 'title-block'" :detail="item.content"></sh-title-card>
+						<!-- 个人信息 -->
+						<sh-userinfo v-if="item.type === 'user'" :detail="item.content"></sh-userinfo>
+						<!-- 钱包 -->
+						<sh-wallet v-if="item.type === 'wallet-card'" :detail="item.content"></sh-wallet>
+						<!-- 订单卡片 -->
+						<sh-order v-if="item.type === 'order-card'" :detail="item.content"></sh-order>
+						<!-- 直播 -->
+						<!-- #ifdef MP-WEIXIN -->
+						<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>
+						<!-- #endif -->
+					</block>
+				</scroll-view>
+			</view>
+			<view class="foot_box"></view>
+
+			<!-- 骨架屏 -->
+			<shopro-skeleton :showSkeleton="!template"></shopro-skeleton>
+			<!-- 登录提示 -->
+			<shopro-login-modal></shopro-login-modal>
+			<!-- 自定义底部导航 -->
+			<shopro-tabbar></shopro-tabbar>
+			<!-- 关注弹窗 -->
+			<shopro-float-btn></shopro-float-btn>
+			<!-- 连续弹窗提醒 -->
+			<shopro-notice-modal v-if="!showPrivacy && showNoticeModal"></shopro-notice-modal>
+			<!-- 隐私协议 -->
+			<!-- #ifdef APP-PLUS -->
+			<view class="modal-wrap">
+				<shopro-modal v-model="showPrivacy">
+					<block slot="modalContent">
+						<view class="service-contract-wrap">
+							<image class="service-head-img" src="/static/imgs/modal/servece_head.png" mode="widthFix"></image>
+							<view class="service-title">用户隐私协议概况</view>
+							<view class="service-content ">
+								感谢您使用Shopro商城，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读
+								<text style="color: #EAB866;" @tap="jump('/pages/public/richtext', { id: 2 })">《Shopro商城隐私协议》</text>
+								，我们将会严格按照经您同意的各项条款使用您的个人信息，以便为您提供更好的服务。
+							</view>
+							<view class="service-tip ">如您同意此条款，请点击“同意”并开始使用我们的产品和服务，我们将尽全力保护您的个人信息安全。</view>
+							<view class="btn-box x-c"><button class="cu-btn agree-btn" @tap="Agree">知道了</button></view>
 						</view>
-						<view class="service-tip ">如您同意此条款，请点击“同意”并开始使用我们的产品和服务，我们将尽全力保护您的个人信息安全。</view>
-						<view class="btn-box x-c"><button class="cu-btn agree-btn" @tap="Agree">知道了</button></view>
-					</view>
-				</block>
-			</shopro-modal>
+					</block>
+				</shopro-modal>
+			</view>
+			<!-- #endif -->
 		</view>
-		<!-- #endif -->
 	</view>
 </template>
 
@@ -161,13 +166,17 @@ export default {
 			showPrivacy: false,
 			showNoticeModal: true,
 			triggered: false, //下拉刷新
-			_freshing: false //下拉刷新状态
+			_freshing: false, //下拉刷新状态
+			emptyData: {
+				img: '/static/imgs/empty/template_empty.png',
+				tip: '暂未找到模板，赶快去装修吧~'
+			}
 		};
 	},
 	computed: {
 		...mapState({
 			initData: state => state.init.initData,
-			template: state => state.init.templateData.home,
+			template: state => state.init.templateData?.home,
 			cartNum: state => state.cart.cartNum,
 			forceOauth: state => state.user.forceOauth
 		}),
@@ -187,7 +196,6 @@ export default {
 		listenMove.addEventListener('touchmove', handle, {
 			passive: false
 		});
-
 		// #endif
 		// #ifdef APP-VUE
 		console.log('是否同意隐私协议', plus.runtime.isAgreePrivacy());
@@ -197,12 +205,18 @@ export default {
 		}
 		// #endif
 	},
+	onUnload() {
+		// #ifdef H5
+		listenMove.removeEventListener('touchmove', handle, {
+			passive: false
+		});
+		// #endif
+	},
 	onHide() {
 		// #ifdef H5
 		listenMove.removeEventListener('touchmove', handle, {
-			passive: true
+			passive: false
 		});
-
 		// #endif
 	},
 	mounted() {
