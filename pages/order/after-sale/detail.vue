@@ -70,7 +70,7 @@
 		<view class="foot_box">
 			<block v-for="orderBtn in aftersaleDetail.btns" :key="orderBtn">
 				<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(aftersaleDetail.id)" class="cu-btn btn">取消</button>
-				<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(aftersaleDetail.id)" class="cu-btn btn">删除</button>
+				<button v-if="orderBtn === 'delete'" style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(aftersaleDetail.id)" class="cu-btn btn">删除</button>
 			</block>
 			<button class="cu-btn contcat-btn btn" v-if="addons.includes('kefu')" @tap="onService">联系客服</button>
 		</view>
@@ -82,7 +82,7 @@ export default {
 	components: {},
 	data() {
 		return {
-				addons:uni.getStorageSync('addons'),
+			addons: uni.getStorageSync('addons'),
 			aftersaleDetail: {}, //售后详情
 			aftersaleLog: [] //售后记录
 		};
@@ -146,11 +146,21 @@ export default {
 		// 删除
 		onDelete(aftersaleId) {
 			let that = this;
-			that.$api('order.deleteAftersaleOrder', {
-				id: aftersaleId
-			}).then(res => {
-				if (res.code === 1) {
-					that.$Router.back();
+			uni.showModal({
+				title: '删除订单',
+				content: '确定要删除这个订单么？',
+				cancelText: '取消',
+				confirmText: '删除',
+				success: res => {
+					if (res.confirm) {
+						that.$api('order.deleteAftersaleOrder', {
+							id: aftersaleId
+						}).then(res => {
+							if (res.code === 1) {
+								that.$Router.back();
+							}
+						});
+					}
 				}
 			});
 		}

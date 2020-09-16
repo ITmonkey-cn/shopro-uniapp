@@ -129,7 +129,7 @@ export default class ShoproPay {
 				} else {
 					uni.hideLoading();
 					uni.showToast({
-						title: '支付失败',
+						title: res.msg,
 						icon: 'none'
 					})
 				}

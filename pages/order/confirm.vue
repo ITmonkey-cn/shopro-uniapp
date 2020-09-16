@@ -681,8 +681,11 @@ export default {
 		getDefaultAddress() {
 				this.$api('address.defaults').then(res => {
 					if (res.code === 1) {
-						this.address = res.data;
-						this.selfPhone = res.data.phone
+						if(res.data){
+							this.address = res.data;
+							this.selfPhone = res.data.phone
+						}
+					
 					}
 				});
 		},
@@ -726,11 +729,10 @@ export default {
 			this.inExpressType = goods.detail.dispatch_type_arr;
 			this.currentGoodsId = goods.goods_id;
 			this.currentSkuId = goods.sku_price_id;
-		
 				this.goodsList.forEach(item => {
 					if(item.goods_id == this.currentGoodsId &&  this.currentSkuId == item.sku_price_id  ){
 						this.expressTypeCur = item.dispatch_type;
-						this.selfPhone =  item.dispatch_phone?item.dispatch_phone:this.address.phone;
+						this.selfPhone =  item.dispatch_phone?item.dispatch_phone:this.address && this.address.phone;
 						this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0 ;
 						this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
 						if (this.expressTypeCur == 'selfetch') {

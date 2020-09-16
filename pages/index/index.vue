@@ -122,6 +122,10 @@ import { mapMutations, mapActions, mapState } from 'vuex';
 
 // #ifdef H5
 import html2canvas from '@/common/utils/sdk/html2canvas.js';
+let listenMove = document.body;
+let handle = function(e) {
+	e.preventDefault();
+};
 // #endif
 
 export default {
@@ -180,15 +184,9 @@ export default {
 	},
 	onLoad(options) {
 		// #ifdef H5
-		document.body.addEventListener(
-			'touchmove',
-			function(e) {
-				e.preventDefault();
-			},
-			{
-				passive: false
-			}
-		);
+		listenMove.addEventListener('touchmove', handle, {
+			passive: false
+		});
 
 		// #endif
 		// #ifdef APP-VUE
@@ -197,6 +195,14 @@ export default {
 			this.showPrivacy = true;
 			this.showNoticeModal = false;
 		}
+		// #endif
+	},
+	onHide() {
+		// #ifdef H5
+		listenMove.removeEventListener('touchmove', handle, {
+			passive: true
+		});
+
 		// #endif
 	},
 	mounted() {

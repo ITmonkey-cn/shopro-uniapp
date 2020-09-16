@@ -14,7 +14,7 @@
 					<view class="order-head x-bc">
 						<text class="no">服务单号：{{ order.aftersale_sn }}</text>
 						<view class="order-status x-f">
-							<text class="iconfont" :class="itemStatus[order.type].icon"></text>
+							<!-- 	<text class="iconfont" :class="itemStatus[order.type].icon"></text> -->
 							<text class="status-text">{{ itemStatus[order.type].text }}</text>
 						</view>
 					</view>
@@ -32,7 +32,9 @@
 						</view>
 						<view class="btn-box x-f" v-for="orderBtn in order.btns" :key="orderBtn">
 							<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id, orderIndex)" class="cu-btn obtn">取消</button>
-							<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn">删除</button>
+							<button v-if="orderBtn === 'delete'" style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn">
+								删除
+							</button>
 						</view>
 					</view>
 				</view>
@@ -148,12 +150,22 @@ export default {
 		// 删除
 		onDelete(aftersaleId, orderIndex) {
 			let that = this;
-			that.$api('order.deleteAftersaleOrder', {
-				id: aftersaleId
-			}).then(res => {
-				if (res.code === 1) {
-					this.$tools.toast(res.msg);
-					this.orderList.splice(orderIndex, 1);
+			uni.showModal({
+				title: '删除订单',
+				content: '确定要删除这个订单么？',
+				cancelText: '取消',
+				confirmText: '删除',
+				success: res => {
+					if (res.confirm) {
+						that.$api('order.deleteAftersaleOrder', {
+							id: aftersaleId
+						}).then(res => {
+							if (res.code === 1) {
+								this.$tools.toast(res.msg);
+								this.orderList.splice(orderIndex, 1);
+							}
+						});
+					}
 				}
 			});
 		},

@@ -115,7 +115,7 @@
 				</view>
 			</view>
 			<!--  价格信息 -->
-			<view class="order-price-box"  v-if="orderDetail.id">
+			<view class="order-price-box" v-if="orderDetail.id">
 				<view class="notice-item x-bc">
 					<text class="title">商品总额</text>
 					<text class="detail">￥{{ orderDetail.goods_amount }}</text>
@@ -150,7 +150,7 @@
 					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
 						拼团详情
 					</button>
-					<button v-if="btn === 'delete'" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
+					<button v-if="btn === 'delete'"  style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
 					<button v-if="btn === 'express'" @tap.stop="onExpress(orderDetail.id)" class="cu-btn obtn1">查看物流</button>
 				</view>
 			</view>
@@ -291,11 +291,21 @@ export default {
 		// 删除订单
 		onDelete(orderId) {
 			let that = this;
-			that.$api('order.deleteOrder', {
-				id: orderId
-			}).then(res => {
-				if (res.code === 1) {
-					that.$Router.back();
+			uni.showModal({
+				title: '删除订单',
+				content: '确定要删除这个订单么？',
+				cancelText: '取消',
+				confirmText: '删除',
+				success: res => {
+					if (res.confirm) {
+						that.$api('order.deleteOrder', {
+							id: orderId
+						}).then(res => {
+							if (res.code === 1) {
+								that.$Router.back();
+							}
+						});
+					}
 				}
 			});
 		},

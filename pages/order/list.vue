@@ -34,7 +34,7 @@
 								<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn2">
 									拼团详情
 								</button>
-								<button v-if="orderBtn === 'delete'" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn1">删除</button>
+								<button v-if="orderBtn === 'delete'" style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn1">删除</button>
 								<button v-if="orderBtn === 'express'" @tap.stop="onExpress(order.id, orderIndex)" class="cu-btn obtn1">查看物流</button>
 							</block>
 						</view>
@@ -160,12 +160,22 @@ export default {
 		// 删除订单
 		onDelete(orderId, orderIndex) {
 			let that = this;
-			that.$api('order.deleteOrder', {
-				id: orderId
-			}).then(res => {
-				if (res.code === 1) {
-					this.$tools.toast(res.msg);
-					this.orderList.splice(orderIndex, 1);
+			uni.showModal({
+				title: '删除订单',
+				content: '确定要删除这个订单么？',
+				cancelText: '取消',
+				confirmText: '删除',
+				success: res => {
+					if (res.confirm) {
+						that.$api('order.deleteOrder', {
+							id: orderId
+						}).then(res => {
+							if (res.code === 1) {
+								this.$tools.toast(res.msg);
+								this.orderList.splice(orderIndex, 1);
+							}
+						});
+					}
 				}
 			});
 		},
@@ -285,7 +295,7 @@ export default {
 			font-size: 26rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
-			color:#fff;
+			color: #fff;
 			padding: 0;
 		}
 	}

@@ -54,7 +54,7 @@
 					{{ item.name }}：{{ item.value }}
 				</view>
 				<view v-if="itemDetail.ext_arr && itemDetail.ext_arr.autosend_type == 'text'" class="item-content">{{ itemDetail.ext_arr.autosend_content }}</view>
-				<view v-if="!itemDetail.ext_arr.autosend_type" style="color: #999;" class="item-content">暂未发货~</view>
+				<view v-if="!(itemDetail.ext_arr && itemDetail.ext_arr.autosend_type)" style="color: #999;" class="item-content">暂未发货~</view>
 			</view>
 		</view>
 		<view class="foot_box x-c pb20" v-if="expressType == 'selfetch' || expressType == 'store'">
