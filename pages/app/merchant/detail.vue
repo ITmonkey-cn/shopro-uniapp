@@ -29,7 +29,7 @@
 				</view>
 				<view class="detail-item x-f">
 					<view class="item-title">下单时间：</view>
-					<view class="item-content">{{ tools.dateFormat('YYYY-mm-dd HH:MM', new Date(orderDetail.paytime * 1000)) }}</view>
+					<view class="item-content">{{ tools.dateFormat('YYYY-mm-dd HH:MM', new Date(orderDetail.paytime * 1000)) || '' }}</view>
 				</view>
 				<view class="detail-item x-f" v-if="orderDetail.remark">
 					<view class="item-title">备注：</view>

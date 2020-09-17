@@ -84,7 +84,7 @@ export default {
 			let step = this.step * scale;
 			if (type === 'minus') {
 				value -= step;
-				if (value < this.min) {
+				if (value <= this.min) {
 					return;
 				}
 				if (value > this.max) {
@@ -128,7 +128,7 @@ export default {
 		_onBlur(event) {
 			let value = event.detail.value;
 			if (!value) {
-				// this.inputValue = 0;
+				// this.inputValue = 1;
 				return;
 			}
 			value = +value;

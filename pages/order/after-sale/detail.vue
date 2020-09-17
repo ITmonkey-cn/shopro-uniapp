@@ -55,7 +55,7 @@
 				</view>
 				<view class="aftersale-item x-f">
 					<view class="item-title">售后类型：</view>
-					<view class="item-content">{{ 'askldfkaskl' }}</view>
+					<view class="item-content">{{ aftersaleDetail.type_text }}</view>
 				</view>
 				<view class="aftersale-item x-f" v-if="aftersaleLog && aftersaleLog.length">
 					<view class="item-title">申请原因：</view>

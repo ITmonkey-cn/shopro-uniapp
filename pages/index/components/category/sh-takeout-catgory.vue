@@ -99,7 +99,7 @@
 					</label>
 					<view class="delete-box" @tap="deleteAll">
 						<text class="cuIcon-delete"></text>
-						<text>清空购物车</text>
+						<text>删除商品</text>
 					</view>
 				</view>
 				<view class="block cart-list">

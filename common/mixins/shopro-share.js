@@ -178,6 +178,7 @@ export default {
 
 	onShareAppMessage(res) {
 		let that = this;
+		console.log(that.shareInfo);
 		return {
 			title: that.shareInfo.title,
 			path: that.shareInfo.path,

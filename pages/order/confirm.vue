@@ -724,7 +724,7 @@ export default {
 			}
 		},
 		// 显示配送方式弹窗
-		onSelExpressType(goods) {
+	  async	onSelExpressType(goods) {
 			this.showExpressType = true;
 			this.inExpressType = goods.detail.dispatch_type_arr;
 			this.currentGoodsId = goods.goods_id;
@@ -736,16 +736,17 @@ export default {
 						this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0 ;
 						this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
 						if (this.expressTypeCur == 'selfetch') {
+							 this.getSetting().then(res =>{
+								 	 res == 1 && this.openLocation()
+							 });
 							this.storeList.forEach(store => {
 								if(item.store_id == store.id ){
 									this.storeInfo = store;
 								}
 							})
-							
 						}
 					}
 				})
-			
 		},
 		// 关闭配送方式弹窗
 		hideExpressType() {
@@ -781,7 +782,7 @@ export default {
 			// #ifdef MP-WEIXIN
 			if(cur == 'selfetch' ){
 				let status =  await this.getSetting();
-				status == 1 && this.openLocation()
+				status == 1 && await this.openLocation()
 				}
 			// #endif
 		},

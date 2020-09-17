@@ -109,6 +109,7 @@ export default class ShoproPay {
 							title: '微信支付',
 							content: '点击确定后请再次使用微信支付',
 							success: function(res) {
+
 								if (res.confirm) {
 									//静默获取openid
 									let wechat = new Wechat();
@@ -278,7 +279,6 @@ export default class ShoproPay {
 	async aliPay() {
 		let that = this;
 		let result = await this.prepay();
-		console.log(result)
 		if (result.code === 1) {
 			uni.requestPayment({
 				provider: 'alipay',

@@ -84,7 +84,7 @@ export default {
 		async shareFc() {
 			let that = this;
 			try {
-				console.log('准备生成:' + new Date());
+				// console.log('准备生成:' + new Date());
 				const d = await getSharePoster({
 					_this: this, //若在组件中使用 必传
 					// type: 'goodsPoster',

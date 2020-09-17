@@ -358,8 +358,10 @@ export default {
 		// 确定规格
 		confirmSku() {
 			let that = this;
-			if (that.currentSkuPrice.stock < that.goodsNum) {
+			console.log(that.currentSkuPrice.stock, that.goodsNum);
+			if (that.currentSkuPrice.stock == 0 || that.currentSkuPrice.stock < that.goodsNum) {
 				that.$tools.toast('库存不足');
+				that.showModal = false;
 				return false;
 			} else {
 				that.currentSkuPrice.goods_num = that.goodsNum;
