@@ -57,7 +57,7 @@ export default {
 	components: {},
 	data() {
 		return {
-				addons:uni.getStorageSync('addons'),
+			addons:uni.getStorageSync('addons'),
 			imgList: [], //图片
 			type: '', //类型
 			content: '', //描述

@@ -12,20 +12,7 @@
 				</cu-custom>
 			</view>
 			<view class="content_box" style="margin-top: -4rpx;overflow: hidden;">
-				<scroll-view
-					class="scroll-box"
-					scroll-y
-					scroll-with-animation
-					enable-back-to-top
-					refresher-enabled="true"
-					:refresher-triggered="triggered"
-					:refresher-threshold="100"
-					refresher-background="#f6f6f6"
-					@refresherpulling="onPulling"
-					@refresherrefresh="onRefresh"
-					@refresherrestore="onRestore"
-					@refresherabort="onAbort"
-				>
+				<scroll-view class="scroll-box" scroll-y scroll-with-animation enable-back-to-top>
 					<block v-if="template" v-for="(item, index) in template" :key="index">
 						<!-- 搜索 -->
 						<sh-search v-if="item.type === 'search'" :detail="item" :bgcolor="bgcolor"></sh-search>
@@ -191,32 +178,16 @@ export default {
 			}
 		}
 	},
+	onPullDownRefresh() {
+		this.init();
+	},
 	onLoad(options) {
-		// #ifdef H5
-		listenMove.addEventListener('touchmove', handle, {
-			passive: false
-		});
-		// #endif
 		// #ifdef APP-VUE
 		console.log('是否同意隐私协议', plus.runtime.isAgreePrivacy());
 		if (!plus.runtime.isAgreePrivacy()) {
 			this.showPrivacy = true;
 			this.showNoticeModal = false;
 		}
-		// #endif
-	},
-	onUnload() {
-		// #ifdef H5
-		listenMove.removeEventListener('touchmove', handle, {
-			passive: false
-		});
-		// #endif
-	},
-	onHide() {
-		// #ifdef H5
-		listenMove.removeEventListener('touchmove', handle, {
-			passive: false
-		});
 		// #endif
 	},
 	mounted() {
@@ -243,33 +214,8 @@ export default {
 		// 初始化
 		init() {
 			return Promise.all([this.getAppInit(), this.getTemplate()]).then(() => {
-				this.triggered = false;
-				this._freshing = false;
+				uni.stopPullDownRefresh();
 			});
-		},
-
-		// 被下拉时
-		onPulling(e) {
-			// console.log('onpulling', e);
-		},
-
-		// 下拉刷新触发
-		onRefresh() {
-			if (this._freshing) return;
-			this._freshing = true;
-			this.triggered = true;
-			this.init();
-		},
-
-		// 下拉刷新复位
-		onRestore() {
-			this.triggered = 'restore'; // 需要重置
-			console.log('onRestore');
-		},
-
-		// 下拉刷新被终止
-		onAbort() {
-			console.log('onAbort');
 		},
 
 		// 获取轮播背景色

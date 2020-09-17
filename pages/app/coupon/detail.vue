@@ -94,6 +94,11 @@ export default {
 			this.scrollId = '';
 		},
 		goScroll() {
+			if (this.couponDetail.goods_ids === '0') {
+				this.$Router.push({
+					path: '/pages/goods/list'
+				});
+			}
 			this.scrollId = 'couponGoods';
 		}
 	}

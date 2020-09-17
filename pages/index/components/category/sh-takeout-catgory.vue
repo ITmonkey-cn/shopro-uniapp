@@ -67,7 +67,7 @@
 													></uni-number-box>
 												</view>
 											</button>
-											<button class="cu-btn item-btn sel-sku" @tap="selSku(mlist)" v-else>选规格</button>
+											<button class="cu-btn item-btn sel-sku" @tap.stop="selSku(mlist)" v-else>选规格</button>
 										</view>
 									</view>
 								</view>

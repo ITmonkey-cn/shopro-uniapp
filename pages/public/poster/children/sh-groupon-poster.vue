@@ -88,13 +88,13 @@ export default {
 				const d = await getSharePoster({
 					_this: this, //若在组件中使用 必传
 					type: 'grouponPoster',
-					backgroundImage: that.$tools.checkImgHttp(that.shareData.groupon_poster_bg), //接口返回的背景图
+					backgroundImage: that.shareData.groupon_poster_bg, //接口返回的背景图
 					formData: {
 						//访问接口获取背景图携带自定义数据
 					},
 					posterCanvasId: this.canvasId, //canvasId
 					delayTimeScale: 20, //延时系数
-					drawDelayTime: 500, //draw延时时间
+					// drawDelayTime: 500, //draw延时时间
 					/* background: {
 							width: 1080,
 							height: 1920,
@@ -118,7 +118,7 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url: that.$tools.checkImgHttp(that.userInfo.avatar),
+									url: that.userInfo.avatar,
 									alpha: 1,
 									dx: bgObj.width * 0.06,
 									dy: bgObj.width * 0.06,
@@ -178,7 +178,7 @@ export default {
 								},
 								{
 									type: 'image', //商品图片
-									url: that.$tools.checkImgHttp(that.goodsInfo.image),
+									url: that.goodsInfo.image,
 									alpha: 1,
 									drawDelayTime: 500, //draw延时时间
 									dx: bgObj.width * 0.054,

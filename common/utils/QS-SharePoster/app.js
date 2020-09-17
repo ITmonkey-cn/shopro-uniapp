@@ -1,5 +1,5 @@
 let log = console.log; // 如果在项目的APP.vue文件中的onlaunch中设置 console.log = ()=> {} 则在此也不会有打印信息
-log = () => {}; // 打开注释则该插件不会打印任何信息
+log = ()=>{};	// 打开注释则该插件不会打印任何信息
 let _app = {
 	//交互控制
 	log(t) {
@@ -32,14 +32,8 @@ let _app = {
 				image = backgroundImage;
 			} else {
 				switch (type) { //根据type获取背景图, 一般要改成request获取
-					case 'invitePoster':
-						image = '/static/imgs/poster/invite_bg.png';
-						break;
-					case 'goodsPoster':
-						image = '/static/imgs/poster/goods_poster.png';
-						break;
-					case 'grouponPoster':
-						image = '/static/imgs/poster/groupon_poster.png';
+					case 1:
+						image = '';
 						break;
 					default:
 						image = '';
@@ -253,7 +247,6 @@ let _app = {
 		return s[s.length - 1];
 	},
 	getImageInfo_PromiseFc(imgPath) {
-
 		return new Promise((rs, rj) => {
 			log('准备获取图片信息:' + imgPath);
 			imgPath = checkMPUrl(imgPath);
@@ -550,13 +543,16 @@ let _app = {
 
 function checkMPUrl(url) {
 	// #ifdef MP
-	if (
-		url.substring(0, 4) === 'http' &&
-		url.substring(0, 12) !== 'http://store' &&
-		url.substring(0, 10) !== 'http://tmp' &&
-		url.substring(0, 5) !== 'https'
-	) {
-		url = 'https' + url.substring(4, url.length);
+	if (process.env.NODE_ENV !== 'development') {
+		if (
+			url.substring(0, 4) === 'http' &&
+			url.substring(0, 5) !== 'https' &&
+			url.substring(0, 12) !== 'http://store' &&
+			url.substring(0, 10) !== 'http://tmp' &&
+			url.substring(0, 10) !== 'http://usr'
+		) {
+			url = 'https' + url.substring(4, url.length);
+		}
 	}
 	// #endif
 	return url;

@@ -92,7 +92,7 @@ export default {
 		shWallet,
 		shGrid,
 		shTitleCard,
-		shoproNoticeModal,
+		shoproNoticeModal
 	},
 	data() {
 		return {
@@ -134,9 +134,13 @@ export default {
 		...mapActions(['getUserInfo', 'getOrderNum']),
 		// 初始化
 		init() {
-			return Promise.all([this.getUserInfo(), this.getOrderNum()]).then(() => {
-				uni.stopPullDownRefresh();
-			});
+			return Promise.all([this.getUserInfo(), this.getOrderNum()])
+				.then(() => {
+					uni.stopPullDownRefresh();
+				})
+				.catch(() => {
+					uni.stopPullDownRefresh();
+				});
 		},
 
 		jump(path, query) {

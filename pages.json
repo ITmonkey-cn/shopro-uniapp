@@ -14,7 +14,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
-				// "enablePullDownRefresh": true,
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom"
 			},
 			"meta": {
