@@ -9,9 +9,7 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="coupon-list" @tap="jump('/pages/app/coupon/detail', { couponId: c.id, state: stateCurrent })" v-for="c in couponList" :key="c.id">
-				<shoprp-coupon :state="stateCurrent" :couponData="c"></shoprp-coupon>
-			</view>
+			<view class="coupon-list" v-for="(c,index) in couponList" :key="index" @tap="toCouponDetail(c)"><shoprp-coupon :state="stateCurrent" :couponData="c"></shoprp-coupon></view>
 		</view>
 		<view class="foot_box"></view>
 		<!-- 自定义底部导航 -->
@@ -80,6 +78,15 @@ export default {
 					that.couponList = res.data;
 				}
 			});
+		},
+
+		//跳转优惠券详情
+		toCouponDetail(data) {
+			if (data.user_coupons_id) {
+				this.jump('/pages/app/coupon/detail', { couponId: data.id, userCouponId: data.user_coupons_id });
+			} else {
+				this.jump('/pages/app/coupon/detail', { couponId: data.id });
+			}
 		}
 	}
 };

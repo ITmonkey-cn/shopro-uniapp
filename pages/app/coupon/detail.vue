@@ -13,8 +13,9 @@
 						<view class="img-box x-c"><image class="coupon-img" src="http://shopro.7wpp.com/imgs/coupon.png" mode=""></image></view>
 						<view class="title">{{ couponDetail.amount }}元优惠券</view>
 						<view class="tip">满{{ couponDetail.enough }}元可用</view>
-						<button class="cu-btn use-btn" @tap="goScroll">{{ state === 2 ? '已使用' : '立即使用' }}</button>
-						<button class="cu-btn fail-btn" v-if="couponGoods.usetimeend - nowTime <= 0">已失效</button>
+						<button class="cu-btn " :class="btnStataus == 'no_use' || !btnStataus ? 'use-btn' : 'fail-btn'" @tap="goScroll">
+							{{ btnStatusText[btnStataus] || '立即领取' }}
+						</button>
 						<view class="time" v-if="couponDetail.usetime">
 							有效期：{{ tools.timestamp(couponDetail.usetime.start) }} 至 {{ tools.timestamp(couponDetail.usetime.end) }}
 						</view>
@@ -57,25 +58,46 @@ export default {
 			couponGoods: [],
 			scrollId: '',
 			nowTime: new Date().getTime(),
-			state: 0
+			options: {},
+			btnStatusText: {
+				no_use: '立即使用',
+				used: '已使用',
+				expired: '已失效',
+				no_can_use: '暂不可用'
+			},
+			btnStataus: ''
 		};
 	},
 	computed: {},
 	onLoad() {
-		this.state = this.$Route.query.state;
+		this.options = this.$Route.query;
 		this.getCouponDetail();
 		this.getCouponGoods();
 	},
 	methods: {
+		// 领取优惠劵
+		getCoupon() {
+			let that = this;
+			that.$api('coupons.get', {
+				id: that.$Route.query.couponId
+			}).then(res => {
+				if (res.code === 1) {
+					that.$tools.toast(res.msg);
+					this.options.userCouponId = res.data.id;
+					that.getCouponDetail();
+				}
+			});
+		},
 		// 优惠券详情
 		getCouponDetail() {
 			let that = this;
 			that.$api('coupons.detail', {
-				id: that.$Route.query.couponId
+				id: that.$Route.query.couponId,
+				user_coupons_id: that.options.userCouponId
 			}).then(res => {
 				if (res.code === 1) {
 					that.couponDetail = res.data;
-					let useTime = res.data.usetimeend;
+					this.btnStataus = res.data.status_code;
 				}
 			});
 		},
@@ -94,12 +116,16 @@ export default {
 			this.scrollId = '';
 		},
 		goScroll() {
-			if (this.couponDetail.goods_ids === '0') {
-				this.$Router.push({
-					path: '/pages/goods/list'
-				});
+			if (!this.options.userCouponId) {
+				this.getCoupon();
+			} else {
+				if (this.couponDetail.goods_ids === '0' && this.btnStataus == 'no_use') {
+					this.$Router.push({
+						path: '/pages/goods/list'
+					});
+				}
+				this.scrollId = 'couponGoods';
 			}
-			this.scrollId = 'couponGoods';
 		}
 	}
 };

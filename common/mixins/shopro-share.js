@@ -27,7 +27,6 @@ export default {
 	},
 	onLoad(options) {
 		let that = this;
-		console.log(options);
 		//为每个页面设置分享信息
 		that.setShareInfo();
 		//直接进入页面

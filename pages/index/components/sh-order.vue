@@ -6,7 +6,7 @@
 				<view class="y-f item-box">
 					<image class="order-img" :src="order.img" mode=""></image>
 					<text class="item-title">{{ order.title }}</text>
-					<view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view>
+					<view class="cu-tag badge" v-if=" orderNum && orderNum[order.type]">{{ orderNum[order.type] }}</view>
 				</view>
 			</view>
 			<view class="order-item y-f"  @tap="jump('/pages/order/after-sale/list')">

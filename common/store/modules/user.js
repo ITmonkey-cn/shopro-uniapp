@@ -167,7 +167,7 @@ const mutations = {
 		store.commit('USER_INFO', {});
 		store.commit('CART_LIST', []);
 		store.commit('CART_NUM');
-		store.commit('ORDER_NUMBER', 0);
+		store.commit('ORDER_NUMBER', {});
 	},
 
 }
