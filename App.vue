@@ -45,7 +45,6 @@ export default {
 						// #endif
 						uni.setStorageSync('platform', platform);
 						resolve(platform);
-						console.log(11111111, 'setappinfo');
 					}
 				});
 			});
@@ -65,7 +64,6 @@ export default {
 				wechat.login();
 				// #endif
 			}
-			console.log(444444444, 'login');
 		}
 	},
 	onLaunch: async function(options) {

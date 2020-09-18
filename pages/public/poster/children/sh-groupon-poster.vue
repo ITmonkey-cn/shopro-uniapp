@@ -94,7 +94,7 @@ export default {
 					},
 					posterCanvasId: this.canvasId, //canvasId
 					delayTimeScale: 20, //延时系数
-					// drawDelayTime: 500, //draw延时时间
+					drawDelayTime: 500, //draw延时时间
 					/* background: {
 							width: 1080,
 							height: 1920,
