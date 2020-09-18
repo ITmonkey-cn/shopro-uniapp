@@ -28,8 +28,8 @@
 				<view class="item-title">{{ storeInfo.name }}</view>
 				<view class="x-bc">
 					<view class="mr20" style="flex: 3;">
-						<view class="item-content">{{ storeInfo.province_name }}{{ storeInfo.city_name }}{{ storeInfo.area_name }}{{ storeInfo.address }}</view>
-						<view class="item-content">营业时间：{{ storeInfo.openhours }}</view>
+						<view class="item-content">{{ storeInfo.province_name || '' }}{{ storeInfo.city_name || '' }}{{ storeInfo.area_name || '' }}{{ storeInfo.address || '' }}</view>
+						<view class="item-content">营业时间：{{ storeInfo.openhours || '' }}</view>
 					</view>
 					<view class="y-f location-box" style="flex: 1;" @tap="openStoreMap">
 						<text class="iconfont icon-dingwei location-icon"></text>
@@ -44,8 +44,8 @@
 				v-if="expressType == 'store' && itemDetail.order"
 			>
 				<view class="item-title">配送信息</view>
-				<view class="item-content">配送地址：{{ itemDetail.order.city_name }}{{ itemDetail.order.area_name }}{{ itemDetail.order.address }}</view>
-				<view class="item-content">配送时间：{{ itemDetail.ext_arr.dispatch_date }}</view>
+				<view class="item-content">配送地址：{{ itemDetail.order.city_name || '' }}{{ itemDetail.order.area_name || '' }}{{ itemDetail.order.address || '' }}</view>
+				<view class="item-content">配送时间：{{ itemDetail.ext_arr.dispatch_date || '' }}</view>
 			</view>
 			<!-- 自动 -->
 			<view class="detail-item pa20" :style="expressType !== 'selfetch' ? 'border-top-left-radius:0;border-top-right-radius:0;' : ''" v-if="expressType == 'autosend'">
@@ -114,6 +114,9 @@ export default {
 		});
 		this.getItemGoodsDetail();
 	},
+	onPullDownRefresh() {
+		this.getItemGoodsDetail();
+	},
 	methods: {
 		jump(path, parmas) {
 			this.$Router.push({
@@ -156,6 +159,7 @@ export default {
 				order_item_id: that.$Route.query.orderItemId,
 				type: 'dispatch'
 			}).then(res => {
+				uni.stopPullDownRefresh();
 				if (res.code === 1) {
 					that.itemDetail = res.data;
 					that.qrcodeList = res.data.verify;

@@ -11,7 +11,7 @@
 				<view class="goods-date card-item">
 					<text class="item-title" v-if="item.dispatch_type == 'slefetch'">到店/自提时间：</text>
 					<text class="item-title" v-if="item.dispatch_type == 'store'">配送时间：</text>
-					<text class="item-content">{{ item.ext_arr.dispatch_date }}</text>
+					<text class="item-content">{{ item.ext_arr.dispatch_date || '' }}</text>
 				</view>
 			</view>
 		</view>
@@ -37,7 +37,7 @@
 				</view>
 				<view class="detail-item address-item" v-if="orderType.includes('store')">
 					<view class="item-title">配送地址：</view>
-					<view class="item-content address-content">{{ orderDetail.province_name }}{{ orderDetail.city_name }}{{ orderDetail.area_name }}{{ orderDetail.address }}</view>
+					<view class="item-content address-content">{{ orderDetail.province_name || '' }}{{ orderDetail.city_name || '' }}{{ orderDetail.area_name || '' }}{{ orderDetail.address || '' }}</view>
 				</view>
 			</view>
 		</view>

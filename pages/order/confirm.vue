@@ -736,9 +736,11 @@ export default {
 						this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0 ;
 						this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
 						if (this.expressTypeCur == 'selfetch') {
+								// #ifdef MP-WEIXIN
 							 this.getSetting().then(res =>{
 								 	 res == 1 && this.openLocation()
 							 });
+							 	// #endif
 							this.storeList.forEach(store => {
 								if(item.store_id == store.id ){
 									this.storeInfo = store;

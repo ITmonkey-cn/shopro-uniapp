@@ -65,7 +65,6 @@
 				<!-- #ifndef H5 -->
 				<view class="content_wrapper" v-if="!showLeaveMessage" :style="{ height: 'calc(100vh - ' + writeBottom + 'px)' }">
 					<!-- #endif -->
-
 					<view :style="{ height: 'calc(100% - ' + wrapperHeight + 'px)' }" class="chat_wrapper">
 						<!-- 遮罩 -->
 						<view class="mask" @tap="hideMask" v-if="showTool || selectModel"></view>
@@ -76,7 +75,6 @@
 							:scroll-with-animation="true"
 							:scroll-into-view="scrollIntoFooter"
 						>
-						
 							<block v-for="(item, index) in messageList" :key="index">
 								<view class="status">
 									<text>{{ item.datetime }}</text>
@@ -103,7 +101,7 @@
 
 											<image @tap="preview_img(message.message)" v-if="message.message_type == 1" :src="message.message" mode="widthFix"></image>
 
-											<view @tap="goDetail(message)" v-if="message.message_type == 4 || message.message_type == 5" class="project_item" style="margin: 0;">
+											<view @tap="goDetail(message.message)" v-if="message.message_type == 4 || message.message_type == 5" class="project_item" style="margin: 0;">
 												<image :src="message.message.logo"></image>
 												<view class="project_item_body y-bc">
 													<view>
@@ -314,26 +312,16 @@ export default {
 	},
 	methods: {
 		// 路由跳转
-		// jump(path, parmas) {
-		// 	this.$Router.push({
-		// 		path: path,
-		// 		query: parmas
-		// 	});
-		// },
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 		// 跳转详情
-		// goDetail(id){
-		// 	console.log(id,1111111111111);
-		// 	switch(this.selectModel){
-		// 		case 'goods':
-		// 		this.jump('/pages/goods/detail/index', { id:id })
-		// 		break;
-		// 		case 'order':
-		// 			this.jump('/pages/order/detail', { id:id })
-		// 		break;
-		// 		default:
-		// 		return false
-		// 	}
-		// },
+		goDetail(msg){
+			msg.number ? this.jump('/pages/order/detail', { id:msg.id })  :this.jump('/pages/goods/detail/index', { id:msg.id })
+		},
 		// 关闭遮罩
 		hideMask(){
 			if(this.showTool){this.showTool = false}

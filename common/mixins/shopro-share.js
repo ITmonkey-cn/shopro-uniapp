@@ -27,12 +27,12 @@ export default {
 	},
 	onLoad(options) {
 		let that = this;
+		console.log(options);
 		//为每个页面设置分享信息
 		that.setShareInfo();
 		//直接进入页面
 		if (options.page) {
 			let page = decodeURIComponent(options.page);
-			console.log(page, 'page')
 			uni.navigateTo({
 				url: page
 			})
@@ -178,7 +178,6 @@ export default {
 
 	onShareAppMessage(res) {
 		let that = this;
-		console.log(that.shareInfo);
 		return {
 			title: that.shareInfo.title,
 			path: that.shareInfo.path,

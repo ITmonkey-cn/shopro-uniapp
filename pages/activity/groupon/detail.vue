@@ -139,6 +139,9 @@ export default {
 	onLoad() {
 		this.getGrouponDetail();
 	},
+	onPullDownRefresh() {
+		this.getGrouponDetail();
+	},
 	methods: {
 		// 路由跳转
 		jump(path, parmas) {
@@ -166,6 +169,7 @@ export default {
 			that.$api('goods.grouponDetail', {
 				id: that.$Route.query.id
 			}).then(res => {
+				uni.stopPullDownRefresh();
 				that.grouponDetail = res.data;
 				that.activity = res.data.goods.activity;
 				if (that.activity) {

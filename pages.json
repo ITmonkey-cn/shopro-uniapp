@@ -116,7 +116,8 @@
 				{
 					"path": "groupon/detail",
 					"style": {
-						"navigationBarTitleText": "拼团详情"
+						"navigationBarTitleText": "拼团详情",
+						"enablePullDownRefresh": true
 
 					},
 					"meta": {
@@ -330,7 +331,8 @@
 				{
 					"path": "distribution",
 					"style": {
-						"navigationBarTitleText": "" //配送方式详情
+						"navigationBarTitleText": "", //配送方式详情
+						"enablePullDownRefresh": true
 
 					},
 					"meta": {
