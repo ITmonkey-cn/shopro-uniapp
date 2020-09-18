@@ -49,8 +49,8 @@ export default {
 		return {
 			poster: {},
 			canvasId: 'groupon_poster',
-			goodsInfo: {},
-			scene: ''
+			scene: '',
+			goodsInfo: {}
 		};
 	},
 	computed: {
@@ -59,32 +59,30 @@ export default {
 			shareData: state => state.init.initData.share
 		})
 	},
-	props: {},
-	created() {
+	props: {
+		goodsId: 0
+	},
+
+	async created() {
 		let that = this;
 		that.goodsInfo = that.$Route.query;
 		that.goodsInfo.image = decodeURIComponent(that.$Route.query.image);
 		that.goodsInfo.title = decodeURIComponent(that.$Route.query.title);
-		that.setShareInfo({
+		await that.setShareInfo({
 			query: {
 				url: 'groupon-' + that.$Route.query.id
 			},
 			title: that.goodsInfo.title,
 			image: that.goodsInfo.image
 		});
-		if (that.shareInfo) {
-			setTimeout(function() {
-				that.$emit('getShareInfo', that.shareInfo);
-				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
-				that.shareFc();
-			}, 100);
-		}
+
+		that.scene = await encodeURIComponent(that.shareInfo.path.split('?')[1]);
+		await that.shareFc();
 	},
 	methods: {
 		async shareFc() {
 			let that = this;
 			try {
-				console.log('准备生成:' + new Date());
 				const d = await getSharePoster({
 					_this: this, //若在组件中使用 必传
 					type: 'grouponPoster',
@@ -180,7 +178,7 @@ export default {
 									type: 'image', //商品图片
 									url: that.goodsInfo.image,
 									alpha: 1,
-									drawDelayTime: 500, //draw延时时间
+									drawDelayTime: 800, //draw延时时间
 									dx: bgObj.width * 0.054,
 									dy: bgObj.width * 0.2,
 									infoCallBack(imageInfo) {
@@ -324,7 +322,7 @@ export default {
 			} catch (e) {
 				_app.hideLoading();
 				_app.showToast(JSON.stringify(e));
-				console.log(JSON.stringify(e));
+				// console.log(JSON.stringify(e));
 			}
 		},
 		// 保存图片

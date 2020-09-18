@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<sh-invite-poster v-if="posterType === 'user'" @getShareInfo="getShareInfo"></sh-invite-poster>
-		<sh-goods-poster v-if="posterType === 'goods'" @getShareInfo="getShareInfo"></sh-goods-poster>
-		<sh-groupon-poster v-if="posterType === 'groupon'" @getShareInfo="getShareInfo"></sh-groupon-poster>
+		<sh-invite-poster v-if="posterType === 'user'" :goodsId="goodsId" @getShareInfo="getShareInfo"></sh-invite-poster>
+		<sh-goods-poster v-if="posterType === 'goods'" :goodsId="goodsId" @getShareInfo="getShareInfo"></sh-goods-poster>
+		<sh-groupon-poster v-if="posterType === 'groupon'" :goodsId="goodsId" @getShareInfo="getShareInfo"></sh-groupon-poster>
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 	</view>
@@ -21,12 +21,14 @@ export default {
 	data() {
 		return {
 			posterType: '',
-			CustomBar: this.CustomBar
+			CustomBar: this.CustomBar,
+			goodsId: 0
 		};
 	},
 	computed: {},
 	onLoad(options) {
 		this.posterType = options.posterType;
+		this.goodsId = options.id;
 		switch (options.posterType) {
 			case 'user':
 				uni.setNavigationBarTitle({
