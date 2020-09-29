@@ -15,4 +15,4 @@ const ENV_BASE_URL = {
 
 export const BASE_URL = ENV_BASE_URL[process.env.NODE_ENV || 'development']; //后台根域名
 export const API_URL = ENV_API_URL[process.env.NODE_ENV || 'development']; //后台接口域名
-export const HAS_LIVE = true; //后台是否开通直播权限,根据情况在manifest.json中，开启注释相应组件的引入。
+export const HAS_LIVE = false; //后台是否开通直播权限,根据情况在manifest.json中，开启注释相应组件的引入。
