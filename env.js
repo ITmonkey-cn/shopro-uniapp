@@ -5,12 +5,12 @@ import store from '@/common/store/index'
 let protocol = window.location.protocol;
 // #endif
 const ENV_API_URL = {
-	development: 'http://107-2.test.7wpp.com/addons/shopro/', //开发环境
-	production: 'http://107-2.test.7wpp.com/addons/shopro/', //生产环境
+	development: 'http://api.7wpp.com/addons/shopro/', //开发环境
+	production: 'http://api.7wpp.com/addons/shopro/', //生产环境
 }
 const ENV_BASE_URL = {
-	development: 'http://107-2.test.7wpp.com', //开发环境
-	production: 'http://107-2.test.7wpp.com', //生产环境
+	development: 'http://api.7wpp.com', //开发环境
+	production: 'http://api.7wpp.com', //生产环境
 }
 
 export const BASE_URL = ENV_BASE_URL[process.env.NODE_ENV || 'development']; //后台根域名

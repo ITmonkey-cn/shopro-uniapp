@@ -196,7 +196,7 @@
     },
     "h5" : {
         "title" : "Shopro",
-        "domain" : "frontend.test.7wpp.com",
+        "domain" : "shopro.7wpp.com",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true
