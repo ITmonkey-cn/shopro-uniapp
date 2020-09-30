@@ -128,6 +128,7 @@ export default class Request {
 		return new Promise((resolve, reject) => {
 			let next = true
 			let handleRe = {}
+
 			options.complete = (response) => {
 				response.config = handleRe
 				if (this.validateStatus(response.statusCode)) { // 成功

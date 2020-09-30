@@ -173,7 +173,7 @@ export default {
 				.item-img {
 					width: 150rpx;
 					height: 150rpx;
-					background: #ccc;
+					// background: #ccc;
 				}
 
 				.item-title {

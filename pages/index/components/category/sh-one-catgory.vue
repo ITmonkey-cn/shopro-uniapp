@@ -210,7 +210,7 @@ export default {
 					width: 245rpx;
 					height: 246rpx;
 					border-radius: 10rpx 10rpx 0px 0px;
-					background: #ccc;
+					// background: #ccc;
 				}
 
 				.item-title {

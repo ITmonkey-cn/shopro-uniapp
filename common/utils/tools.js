@@ -62,16 +62,13 @@ export default {
 
 	checkImgHttp(imgPath) {
 		let newPath = '';
-		if (imgPath.indexOf('data:image/svg+xml') !== -1) {
-			newPath = '/static/imgs/base_avatar.png'
-		} else {
-			let pathArr = imgPath.split('://');
-			// #ifdef H5
-			let ishttps = 'https:' == window.location.protocol ? true : false;
-			ishttps ? (pathArr[0] = 'https') : (pathArr[0] = 'http');
-			// #endif
-			newPath = pathArr.join('://');
-		}
+		let pathArr = imgPath.split('://');
+		// #ifdef H5
+		let ishttps = 'https:' == window.location.protocol ? true : false;
+		ishttps ? (pathArr[0] = 'https') : (pathArr[0] = 'http');
+		// #endif
+		pathArr[0] = 'https'
+		newPath = pathArr.join('://');
 		return newPath;
 	},
 	// 打电话

@@ -126,6 +126,6 @@ const expression = [{
 let service = BASE_URL.split('://');
 export default {
 	baseURL: service[1], // dev.7wpp.com 启动workerman服务的域名，无需填写协议和端口
-	https_switch: false, // 是否启用https协议(默认关，正式版必开，且需要参考文档创建wss服务)
+	https_switch: true, // 是否启用https协议(默认关，正式版必开，且需要参考文档创建wss服务)
 	expression
 }

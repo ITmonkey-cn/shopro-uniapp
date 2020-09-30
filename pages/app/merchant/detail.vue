@@ -29,7 +29,7 @@
 				</view>
 				<view class="detail-item x-f">
 					<view class="item-title">下单时间：</view>
-					<view class="item-content">{{ tools.dateFormat('YYYY-mm-dd HH:MM', new Date(orderDetail.paytime * 1000)) || '' }}</view>
+					<view class="item-content">{{ orderDetail.paytime || '' }}</view>
 				</view>
 				<view class="detail-item x-f" v-if="orderDetail.remark">
 					<view class="item-title">备注：</view>
@@ -37,7 +37,9 @@
 				</view>
 				<view class="detail-item address-item" v-if="orderType.includes('store')">
 					<view class="item-title">配送地址：</view>
-					<view class="item-content address-content">{{ orderDetail.province_name || '' }}{{ orderDetail.city_name || '' }}{{ orderDetail.area_name || '' }}{{ orderDetail.address || '' }}</view>
+					<view class="item-content address-content">
+						{{ orderDetail.province_name || '' }}{{ orderDetail.city_name || '' }}{{ orderDetail.area_name || '' }}{{ orderDetail.address || '' }}
+					</view>
 				</view>
 			</view>
 		</view>
@@ -69,6 +71,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
+					that.orderDetail.paytime = this.$tools.dateFormat('YYYY-mm-dd HH:MM', new Date(res.data.paytime * 1000));
 					that.orderDetail.item.forEach(goods => {
 						that.orderType.push(goods.dispatch_type);
 					});

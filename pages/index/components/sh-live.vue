@@ -1,5 +1,5 @@
 <template>
-	<view class="live-el mx20 mb10">
+	<view class="live-el mx20 mb10" v-if="detail.ids">
 		<view class="head">
 			<text class="head-title">{{ detail.name }}</text>
 			<view class="head-more" @tap="$Router.push('/pages/app/live/list')">
@@ -81,7 +81,7 @@ export default {
 		detail: {}
 	},
 	created() {
-		this.getLiveList();
+		this.detail.ids && this.getLiveList();
 	},
 	mounted() {
 		let that = this;

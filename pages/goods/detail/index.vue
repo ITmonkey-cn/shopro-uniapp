@@ -56,7 +56,7 @@
 				></sh-groupon>
 				<!-- 拼团玩法 -->
 				<view
-					v-if="goodsInfo.activity && goodsInfo.activity.richtext_id + 0"
+					v-if="goodsInfo.activity && parseInt(goodsInfo.activity.richtext_id) && goodsInfo.activity_type !== 'seckill'"
 					class="groupon-play x-bc px20"
 					@tap="jump('/pages/public/richtext', { id: goodsInfo.activity.richtext_id })"
 				>

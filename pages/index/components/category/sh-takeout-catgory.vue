@@ -650,7 +650,7 @@ export default {
 					width: 140rpx;
 					height: 140rpx;
 					border-radius: 10rpx;
-					background-color: #ccc;
+					// background-color: #ccc;
 				}
 				.item-right--title {
 					width: 350rpx;
