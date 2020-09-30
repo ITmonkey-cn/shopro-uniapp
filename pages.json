@@ -144,18 +144,18 @@
 			"root": "pages/app",
 			"pages": [
 				// #ifdef MP-WEIXIN
-				{
-					"path": "live/list",
-					"style": {
-						"navigationBarTitleText": "直播"
-					},
-					"meta": {
-						"auth": false,
-						"async": true,
-						"title": "直播列表",
-						"group": "应用"
-					}
-				},
+				// {
+				// 	"path": "live/list",
+				// 	"style": {
+				// 		"navigationBarTitleText": "直播"
+				// 	},
+				// 	"meta": {
+				// 		"auth": false,
+				// 		"async": true,
+				// 		"title": "直播列表",
+				// 		"group": "应用"
+				// 	}
+				// },
 				// #endif
 				{
 					"path": "coupon/list",
