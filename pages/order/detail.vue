@@ -104,11 +104,11 @@
 						<text class="title">下单时间：</text>
 						<text class="detail">{{ orderDetail.createtime }}</text>
 					</view>
-					<view class="notice-item x-f">
+					<view class="notice-item x-f" v-if="orderDetail.status > 0">
 						<text class="title">支付方式：</text>
 						<text class="detail">{{ payType[orderDetail.pay_type] }}</text>
 					</view>
-					<view class="notice-item x-f">
+					<view class="notice-item x-f" v-if="orderDetail.status > 0">
 						<text class="title">支付时间：</text>
 						<text class="detail">{{ orderDetail.paytime }}</text>
 					</view>
@@ -150,7 +150,7 @@
 					<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="cu-btn obtn2">
 						拼团详情
 					</button>
-					<button v-if="btn === 'delete'"  style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
+					<button v-if="btn === 'delete'" style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(orderDetail.id)" class="cu-btn obtn1">删除</button>
 					<button v-if="btn === 'express'" @tap.stop="onExpress(orderDetail.id)" class="cu-btn obtn1">查看物流</button>
 				</view>
 			</view>
