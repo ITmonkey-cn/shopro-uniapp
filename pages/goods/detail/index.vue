@@ -312,7 +312,6 @@ export default {
 					});
 				}
 				if (res.code == 0) {
-					console.log(111111111111);
 					that.$tools.toast(res.msg);
 				}
 			});
@@ -550,7 +549,6 @@ export default {
 .tab-detail {
 	min-height: 300rpx;
 	background: #fff;
-	margin-bottom: 30rpx;
 	background: #fff;
 	.rich-box {
 		/deep/ img {
