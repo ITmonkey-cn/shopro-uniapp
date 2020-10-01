@@ -64,7 +64,6 @@
 						path = this.getPath(item.path);
 						arr.push(path);
 					}
-					console.log(111,arr);
 					return arr.includes(this.currentPath);
 				}
 			}
