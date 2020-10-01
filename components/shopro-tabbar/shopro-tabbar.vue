@@ -1,23 +1,15 @@
 <template>
-	<view class="shopro-tabbar-wrap" v-if="tabbarList && tabbarList.length">
+	<view class="shopro-tabbar-wrap" v-if="tabbarList && tabbarList.length && showTabbar">
 		<view class="tabbar-box" :style="{ background: tabbarData.bgcolor || '#fff' }">
 			<view class="tabbar-item" v-for="(tab, index) in tabbarList" :key="tab.name" @tap="switchTabbar(tab, index)">
 				<view class="img-box">
-					<image
-						class="tabbar-icon"
-						v-if="tabbarData.style == 1 || tabbarData.style == 2"
-						:src="currentPath == getPath(tab.path) ? tab.activeImage : tab.image"
-						mode="aspectFill"
-					></image>
+					<image class="tabbar-icon" v-if="tabbarData.style == 1 || tabbarData.style == 2" :src="currentPath == getPath(tab.path) ? tab.activeImage : tab.image"
+					 mode="aspectFill"></image>
 					<!-- 购物车角标 -->
 					<view v-if="getPath(tab.path) == '/pages/index/cart' && cartNum" class="cu-tag badge">{{ cartNum }}</view>
 				</view>
 
-				<view
-					class="tabbar-text"
-					v-if="tabbarData.style == 1 || tabbarData.style == 3"
-					:style="{ color: currentPath == getPath(tab.path) ? tabbarData.activeColor : tabbarData.color }"
-				>
+				<view class="tabbar-text" v-if="tabbarData.style == 1 || tabbarData.style == 3" :style="{ color: currentPath == getPath(tab.path) ? tabbarData.activeColor : tabbarData.color }">
 					{{ tab.name }}
 				</view>
 			</view>
@@ -26,111 +18,119 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
-export default {
-	name: 'shoproTabbar',
-	components: {},
-	data() {
-		return {};
-	},
-	props: {},
-	computed: {
-		...mapState({
-			templateData: state => state.init.templateData.tabbar,
-			cartNum: state => state.cart.cartNum
-		}),
-		tabbarData() {
-			if (this.templateData) {
-				return this.templateData[0].content;
-			}
+	import {
+		mapMutations,
+		mapActions,
+		mapState,
+		mapGetters
+	} from 'vuex';
+	export default {
+		name: 'shoproTabbar',
+		components: {},
+		data() {
+			return {};
 		},
-		tabbarList() {
-			if (this.tabbarData) {
-				return this.tabbarData.list;
-			}
-		},
-		currentPath() {
-			let pages = getCurrentPages();
-			let currPage = null;
-			if (pages.length) {
-				currPage = pages[pages.length - 1].route;
-			}
-			return '/' + currPage;
-		},
-		showTabbar() {
-			if (this.tabbarData && this.tabbarData.list) {
-				//等同于this?.tabbarData?.list
-				let arr = [];
-				let path = '';
-				arr.push('/pages/index/index');
-				for (let item of this.tabbarData.list) {
-					path = this.getPath(item.path);
-					arr.push(path);
+		props: {},
+		computed: {
+			...mapState({
+				templateData: state => state.init.templateData.tabbar,
+				cartNum: state => state.cart.cartNum
+			}),
+			tabbarData() {
+				if (this.templateData) {
+					return this.templateData[0].content;
 				}
-				return arr.includes(this.currentPath);
+			},
+			tabbarList() {
+				if (this.tabbarData) {
+					return this.tabbarData.list;
+				}
+			},
+			currentPath() {
+				let pages = getCurrentPages();
+				let currPage = null;
+				if (pages.length) {
+					currPage = pages[pages.length - 1].route;
+				}
+				return '/' + currPage;
+			},
+			showTabbar() {
+				if (this.tabbarData && this.tabbarData.list) {
+					//等同于this?.tabbarData?.list
+					let arr = [];
+					let path = '';
+					arr.push('/pages/index/index');
+					for (let item of this.tabbarData.list) {
+						path = this.getPath(item.path);
+						arr.push(path);
+					}
+					console.log(111,arr);
+					return arr.includes(this.currentPath);
+				}
 			}
-		}
-	},
-	created() {},
-	methods: {
-		// 切换tabbar
-		switchTabbar(tab, index) {
-			this.$tools.routerTo(tab.path, {}, true);
 		},
-		getPath(path) {
-			if (path.indexOf('?') !== -1) {
-				let index = path.lastIndexOf('?');
-				path = path.slice(0, index);
+		created() {},
+		methods: {
+			// 切换tabbar
+			switchTabbar(tab, index) {
+				this.$tools.routerTo(tab.path, {}, true);
+			},
+			getPath(path) {
+				if (path.indexOf('?') !== -1) {
+					let index = path.lastIndexOf('?');
+					path = path.slice(0, index);
+				}
+				return path;
 			}
-			return path;
 		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-.shopro-tabbar-wrap {
-	height: calc(100rpx + env(safe-area-inset-bottom) / 2);
-	padding-bottom: calc(env(safe-area-inset-bottom) / 2);
-	position: relative;
-	width: 100%;
-	z-index: 70;
-
-	.tabbar-box {
-		position: fixed;
-		display: flex;
-		align-items: center;
-		width: 100%;
+	.shopro-tabbar-wrap {
 		height: calc(100rpx + env(safe-area-inset-bottom) / 2);
-		border-top: 1rpx solid #eeeeee;
-		background-color: #fff;
-		z-index: 998;
-		bottom: 0;
 		padding-bottom: calc(env(safe-area-inset-bottom) / 2);
+		position: relative;
+		width: 100%;
+		z-index: 70;
 
-		.tabbar-item {
-			height: 100%;
+		.tabbar-box {
+			position: fixed;
 			display: flex;
-			flex-direction: column;
 			align-items: center;
-			justify-content: center;
-			flex: 1;
-			.img-box {
-				position: relative;
-				.cu-tag {
-					right: -12px;
+			width: 100%;
+			height: calc(100rpx + env(safe-area-inset-bottom) / 2);
+			border-top: 1rpx solid #eeeeee;
+			background-color: #fff;
+			z-index: 998;
+			bottom: 0;
+			padding-bottom: calc(env(safe-area-inset-bottom) / 2);
+
+			.tabbar-item {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				flex: 1;
+
+				.img-box {
+					position: relative;
+
+					.cu-tag {
+						right: -12px;
+					}
 				}
-			}
 
-			.tabbar-icon {
-				width: 50rpx;
-				height: 50rpx;
-			}
+				.tabbar-icon {
+					width: 50rpx;
+					height: 50rpx;
+				}
 
-			.tabbar-text {
-				font-size: 20rpx;
+				.tabbar-text {
+					font-size: 20rpx;
+				}
 			}
 		}
 	}
-}
 </style>
