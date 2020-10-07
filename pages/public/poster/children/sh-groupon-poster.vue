@@ -68,16 +68,21 @@ export default {
 		that.goodsInfo = that.$Route.query;
 		that.goodsInfo.image = decodeURIComponent(that.$Route.query.image);
 		that.goodsInfo.title = decodeURIComponent(that.$Route.query.title);
-		await that.setShareInfo({
+		that.setShareInfo({
 			query: {
 				url: 'groupon-' + that.$Route.query.id
 			},
 			title: that.goodsInfo.title,
 			image: that.goodsInfo.image
 		});
-
-		that.scene = await encodeURIComponent(that.shareInfo.path.split('?')[1]);
-		await that.shareFc();
+		if (that.shareInfo) {
+			setTimeout(function() {
+				that.$emit('getShareInfo', that.shareInfo);
+				console.log(that.shareInfo.path);
+				that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
+				that.shareFc();
+			}, 100);
+		}
 	},
 	methods: {
 		async shareFc() {

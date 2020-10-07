@@ -89,16 +89,15 @@ export default {
 			query: {} //自定义分享参数
 		}) {
 			let that = this;
+			
 			uni.getStorage({
 				key: 'shareInfo',
 				success(e) {
 					var defaultShareInfo = e.data;
-					var domain = uni.getStorageSync('sysInfo')['domain'];
 					var platform = uni.getStorageSync('platform');
+					var domain = uni.getStorageSync('sysInfo')['domain'];
 					if (domain === '' || defaultShareInfo.title === '' || defaultShareInfo.image === '') {
-						uni.showToast({
-							title: '请设置商城域名和分享信息'
-						})
+						throw '请在商城配置中设置商城域名或分享信息'
 					}
 					//设置自定义分享标题
 					if (scene.title != '') {
@@ -128,7 +127,7 @@ export default {
 					that.shareInfo.path = domain + urlQuery;
 					that.shareInfo.copyLink = domain + urlQuery;
 					// #endif
-					//微信网页 使用jssdk分享 此处针对没有交互就进行分享转发的微信公众号用户
+					//微信网页 使用jssdk分享 此处针对没有交互就进行任意页面分享转发的微信公众号用户，需针对每个页面url路径都进行注册
 					// #ifdef H5
 					if (platform === 'wxOfficialAccount') {
 						wxsdk.share(that.shareInfo);
@@ -137,6 +136,7 @@ export default {
 
 				}
 			})
+			console.log(that.shareInfo, 'shareInfo')
 		},
 		// 全局自定义url字符串拼接的方法
 		setPathQuery(query) {

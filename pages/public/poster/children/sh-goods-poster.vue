@@ -64,15 +64,24 @@ export default {
 	},
 	async created() {
 		let that = this;
-		await that.setShareInfo({
-			query: {
-				url: 'goods-' + that.$Route.query.id
-			},
-			title: that.goodsInfo.title,
-			image: that.goodsInfo.image
+		let goodsInfo = that.getGoodsDetail().then(res => {
+			that.setShareInfo({
+				title: that.goodsInfo.title,
+				image: that.goodsInfo.image,
+				query: {
+					url: 'goods-' + that.$Route.query.id
+				},
+			
+			});
+			if (that.shareInfo) {
+				setTimeout(function() {
+					that.$emit('getShareInfo', that.shareInfo);
+					console.log(that.shareInfo.path);
+					that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
+					that.shareFc();
+				}, 100);
+			}
 		});
-		that.scene = await encodeURIComponent(that.shareInfo.path.split('?')[1]);
-		await that.getGoodsDetail();
 	},
 	methods: {
 		// 商品详情
@@ -81,15 +90,18 @@ export default {
 			uni.showLoading({
 				title: '加载数据中'
 			});
+			return new Promise((resolve, reject) => {
 			that.$api('goods.detail', {
 				id: that.$Route.query.id
 			}).then(res => {
 				if (res.code === 1) {
 					uni.hideLoading();
 					that.goodsInfo = res.data;
-					that.shareFc();
+					resolve(that.goodsInfo);
+					
 				}
 			});
+			})
 		},
 		async shareFc() {
 			let that = this;
