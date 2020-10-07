@@ -44,7 +44,7 @@
 												<text class="cuIcon-roundaddfill" v-if="!isCart(mlist.id)" @tap="addCart(mlist.sku_price[0])"></text>
 												<view class="num-step" v-else>
 													<uni-number-box @change="onChangeNum($event, mlist.sku_price[0])" :value="checkCart[mlist.id].num" :step="1"
-													 :min="1"></uni-number-box>
+													 :min="0"></uni-number-box>
 												</view>
 											</button>
 											<button class="cu-btn item-btn sel-sku" @tap.stop="selSku(mlist)" v-else>选规格</button>
@@ -209,6 +209,9 @@
 						selectedIdsArray.push(item.id);
 					}
 				});
+				if (selectedIdsArray.length == cartList.length) {
+					this.showCartList = false;
+				}
 				this.changeCartList({
 					ids: selectedIdsArray,
 					art: 'delete'
@@ -233,14 +236,14 @@
 				});
 			},
 			// 更改商品数
-			onChangeNum(e, goods) {
+			async onChangeNum(e, goods) {
 				if (e != this.checkCart[goods.goods_id].num) {
 					this.changeCartList({
 						ids: [this.checkCart[goods.goods_id].cartOrderId],
 						goodsNum: e,
 						art: 'change'
 					});
-					this.getCartList();
+					this.getCartList()
 				}
 			},
 			// 检测是否为购物车商品
