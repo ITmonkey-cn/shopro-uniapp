@@ -1,5 +1,5 @@
 <template>
-	<view class="page_box">
+	<view class="box">
 		<view class="load-box" v-if="!goodsInfo.price">
 			<shopro-skeletons :type="'detail'"></shopro-skeletons>
 		</view>
@@ -398,7 +398,7 @@
 </script>
 
 <style lang="scss">
-	.page_box {
+	.box {
 		padding-bottom: 100rpx;
 	}
 
