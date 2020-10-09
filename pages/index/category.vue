@@ -33,13 +33,13 @@ export default {
 	},
 	data() {
 		return {
-			categoryType: 1, //1:快速购买,2:一级分类，3:二级分类，4:三级分类
+			categoryType: 0, //1:快速购买,2:一级分类，3:二级分类，4:三级分类
 			categoryId: 0 //分类Id
 		};
 	},
 	computed: {},
 	onLoad() {
-		// this.getCategory();
+		this.getCategory();
 		this.categoryId = Number(this.$Route.query.id);
 	},
 	methods: {
