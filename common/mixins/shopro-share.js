@@ -1,6 +1,6 @@
 /**
- * Wechat v1.0.0
- * @description shopro-wechat 1.0.1 wehcat全局分享组件
+ * Wechat v1.0.2
+ * @description shopro-wechat 1.0.2 wehcat全局分享组件
  * @Author llidongtony
  * @Date 2020-05-18
  * @Email lidongtony@qq.com
@@ -120,7 +120,7 @@ export default {
 					that.shareInfo.path = ''
 					let urlQuery = that.setPathQuery(scene.query);
 					// #ifdef MP-WEIXIN
-					that.shareInfo.path = '/pages/index/index' + urlQuery;
+					that.shareInfo.path = 'pages/index/index' + urlQuery;
 					that.shareInfo.copyLink = domain + urlQuery;
 					// #endif
 					// #ifndef MP-WEIXIN
@@ -176,6 +176,26 @@ export default {
 	// #ifdef MP-WEIXIN
 
 	onShareAppMessage(res) {
+		let that = this;
+		return {
+			title: that.shareInfo.title,
+			path: that.shareInfo.path,
+			imageUrl: that.shareInfo.imageUrl,
+			success(res) {
+				uni.showToast({
+					title: '分享成功'
+				})
+			},
+			fail(res) {
+				uni.showToast({
+					title: '分享失败',
+					icon: 'none'
+				})
+			},
+			complete() {}
+		}
+	},
+	onShareTimeline(res) {
 		let that = this;
 		return {
 			title: that.shareInfo.title,
