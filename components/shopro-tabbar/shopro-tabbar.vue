@@ -33,7 +33,9 @@ export default {
 	data() {
 		return {};
 	},
-	props: {},
+	props: {
+		queryObj: {}
+	},
 	computed: {
 		...mapState({
 			templateData: state => state.init.templateData.tabbar,
@@ -51,7 +53,7 @@ export default {
 		},
 		currentPath() {
 			let pages = getCurrentPages();
-			let query = this.$Route.query;
+			let query = this.queryObj ? this.queryObj : {};
 			let currPage = null;
 			if (pages.length) {
 				currPage = pages[pages.length - 1].route;
@@ -61,7 +63,6 @@ export default {
 				for (let key in query) {
 					params += '?' + key + '=' + query[key] + '&';
 				}
-
 				params = params.substring(0, params.length - 1);
 				return '/' + currPage + params;
 			}
@@ -69,12 +70,10 @@ export default {
 		},
 		showTabbar() {
 			if (this.tabbarData && this.tabbarData.list) {
-				//等同于this?.tabbarData?.list
 				let arr = [];
 				let path = '';
 				arr.push('/pages/index/index');
 				for (let item of this.tabbarData.list) {
-					// path = this.item.path;
 					arr.push(item.path);
 				}
 				return arr.includes(this.currentPath);
@@ -87,13 +86,6 @@ export default {
 		switchTabbar(tab, index) {
 			this.$tools.routerTo(tab.path, {}, true);
 		}
-		// getPath(path) {
-		// 	if (path.indexOf('?') !== -1) {
-		// 		let index = path.lastIndexOf('?');
-		// 		path = path.slice(0, index);
-		// 	}
-		// 	return path;
-		// }
 	}
 };
 </script>
