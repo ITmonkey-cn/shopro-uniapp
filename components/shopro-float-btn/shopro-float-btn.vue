@@ -86,6 +86,7 @@ export default {
 		},
 		// 保存图片
 		saveImg(img) {
+			let that = this;
 			uni.saveImageToPhotosAlbum({
 				filePath: img,
 				success: res => {
