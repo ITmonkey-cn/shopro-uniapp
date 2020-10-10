@@ -9,7 +9,7 @@
 		<!--直接购买，点餐 -->
 		<sh-takeout-catgory :categoryId="categoryId" v-if="categoryType === 1"></sh-takeout-catgory>
 		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
+		<shopro-tabbar v-if="queryObj.id" :queryObj="queryObj"></shopro-tabbar>
 		<!-- 关注弹窗 -->
 		<shopro-float-btn></shopro-float-btn>
 		<!-- 连续弹窗提醒 -->
@@ -34,11 +34,13 @@ export default {
 	data() {
 		return {
 			categoryType: 0, //1:快速购买,2:一级分类，3:二级分类，4:三级分类
-			categoryId: 0 //分类Id
+			categoryId: 0 ,//分类Id
+			queryObj:{}
 		};
 	},
 	computed: {},
-	onLoad() {
+	onLoad(options) {
+		this.queryObj = options;
 		this.getCategory();
 		this.categoryId = Number(this.$Route.query.id);
 	},
