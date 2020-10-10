@@ -83,9 +83,9 @@ export default {
 		//跳转优惠券详情
 		toCouponDetail(data) {
 			if (data.user_coupons_id) {
-				this.jump('/pages/app/coupon/detail', { couponId: data.id, userCouponId: data.user_coupons_id });
+				this.jump('/pages/app/coupon/detail', { id: data.id, userCouponId: data.user_coupons_id });
 			} else {
-				this.jump('/pages/app/coupon/detail', { couponId: data.id });
+				this.jump('/pages/app/coupon/detail', { id: data.id });
 			}
 		}
 	}

@@ -45,7 +45,7 @@
 								<uni-number-box
 									@change="changeNum"
 									:step="1"
-									:min="1"
+									:min="0"
 									:currentSkuPrice.sync="currentSkuPrice"
 									:goodsInfo="goodsInfo"
 									:value="goodsNum"

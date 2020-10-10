@@ -63,7 +63,8 @@ const actions = {
 				if (param.art === 'delete' && res.code === 1) {
 					store.dispatch('getCartList');
 				}
-
+				resolve(res)
+				commit('checkCartList');
 			}).catch(e => {
 				reject(e)
 			})

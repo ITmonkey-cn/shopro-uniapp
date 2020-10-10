@@ -12,7 +12,8 @@ const state = {
 	initData: {},
 	routes: [],
 	addons: uni.getStorageSync('addons') ? uni.getStorageSync('addons') : [], //插件列表
-	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {}
+	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {},
+	hasTemplate:true//是否有初始化数据
 }
 
 const actions = {
@@ -68,6 +69,9 @@ const actions = {
 			api('template', params).then(res => {
 				uni.setStorageSync('templateData', res.data);
 				commit('TEMPLATE_DATA', res.data);
+				if(res.code == 0){
+						commit('hasTemplate', false);
+				}
 				resolve(res)
 			}).catch(e => {
 				reject(e)
@@ -85,6 +89,9 @@ const mutations = {
 	},
 	[TEMPLATE_DATA](state, data) {
 		state.templateData = data
+	},
+	hasTemplate(state, data) {
+		state.hasTemplate = data
 	},
 	// 弹窗一次的话，关闭的时候删除数据。
 	delPopup(state, path) {

@@ -219,7 +219,7 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true,
+						"async": false,
 						"title": "门店信息",
 						"group": "用户"
 					}

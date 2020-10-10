@@ -94,7 +94,7 @@ export default {
 
 		onType(index) {
 			this.listId = index;
-			this.listParams.category_id = this.categoryData[index];
+			this.listParams.category_id = this.categoryData[index].id;
 			this.goodsList = [];
 			this.listParams.page = 1;
 			!this.isLoading && this.getGoodsList();

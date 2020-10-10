@@ -28,7 +28,7 @@
 						<block slot="goodsBottom">
 							<view class="x-bc price-box">
 								<view class="price">￥{{ g.sku_price.price }}</view>
-								<view class="num-step"><uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="1"></uni-number-box></view>
+								<view class="num-step"><uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="0"></uni-number-box></view>
 							</view>
 						</block>
 					</shopro-mini-card>
@@ -95,10 +95,14 @@ export default {
 	methods: {
 		...mapActions(['getCartList', 'changeCartList']),
 		// 更改商品数
-		onChangeNum(e, g, index) {
+		async onChangeNum(e, g, index) {
 			if (g.goods_num !== e) {
+				uni.showLoading({
+					mask: true
+				});
 				this.$set(this.cartList[index], 'goods_num', +e);
-				this.changeCartList({ ids: [g.id], goodsNum: e, art: 'change' });
+				await this.changeCartList({ ids: [g.id], goodsNum: e, art: 'change' });
+				await uni.hideLoading();
 			}
 		},
 		// 路由跳转

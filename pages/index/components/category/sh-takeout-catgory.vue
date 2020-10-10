@@ -4,7 +4,7 @@
 			<view class="scroll-box" style="background-color: #F6F6F6;">
 				<scroll-view
 					:style="takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'"
-					class="left left-scroll-box"
+					class="left left-scroll-box flex-sub"
 					:scroll-top="scrollLeftTop"
 					enable-back-to-top
 					scroll-y
@@ -24,11 +24,11 @@
 				</scroll-view>
 			</view>
 
-			<view style="height: 100vh;width: 100%;">
+			<view style="width: 100%;">
 				<scroll-view
 					:style="takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'"
 					scroll-y
-					class="scroll-box righ-scroll-box"
+					class="scroll-box righ-scroll-box flex-sub"
 					:scroll-top="scrollRightTop"
 					scroll-with-animation
 					@scroll="rightScroll"
@@ -60,10 +60,11 @@
 												<text class="cuIcon-roundaddfill" v-if="!isCart(mlist.id)" @tap="addCart(mlist.sku_price[0])"></text>
 												<view class="num-step" v-else>
 													<uni-number-box
-														@change="onChangeNum($event, mlist.sku_price[0])"
+														@change="onChangeNum($event, mlist.sku_price[0], index1)"
 														:value="checkCart[mlist.id].num"
 														:step="1"
 														:min="0"
+														:disabled="numberDisabled"
 													></uni-number-box>
 												</view>
 											</button>
@@ -78,11 +79,11 @@
 			</view>
 		</view>
 		<!-- 购物车 -->
-		<view class="cart-box x-f" v-show="takeoutTotalCount.totalNum">
+		<view class="cart-box x-f" v-show="takeoutTotalCount.totalNum" :style="isTabbar ? 'bottom:100rpx' : 'bottom:0'">
 			<view class="cart-left flex-sub x-f">
 				<view class="cart-img-box" @tap="onShowCartList">
 					<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
-					<view class="cu-tag badge" v-if="totalCount.totalNum">{{ totalCount.totalNum || takeoutTotalCount.totalNum }}</view>
+					<view class="cu-tag badge" v-if="totalCount.totalNum">{{ takeoutTotalCount.totalNum }}</view>
 				</view>
 				<view class="price-box x-f">
 					<text class="price">{{ totalCount.totalPrice.toFixed(2) }}</text>
@@ -113,7 +114,13 @@
 									<view class="x-bc price-box">
 										<view class="price">￥{{ g.sku_price.price }}</view>
 										<view class="num-step">
-											<uni-number-box @change="onChangeNum($event, g, index)" v-model="g.goods_num" :step="1" :min="0"></uni-number-box>
+											<uni-number-box
+												@change="onChangeNum($event, g, index)"
+												:disabled="numberDisabled"
+												v-model="g.goods_num"
+												:step="1"
+												:min="0"
+											></uni-number-box>
 										</view>
 									</view>
 								</block>
@@ -152,7 +159,8 @@ export default {
 			categoryData: {}, //商品分类数据
 			showSku: true, //是否显示规格弹窗
 			goodsInfo: {}, //点击商品详情
-			showCartList: false
+			showCartList: false,
+			numberDisabled: false //购物车计数器
 		};
 	},
 	props: {
@@ -165,9 +173,10 @@ export default {
 		...mapState({
 			cartNum: state => state.cart.cartNum,
 			cartList: state => state.cart.cartList,
-			allSel: ({ cart }) => cart.allSelected
+			allSel: ({ cart }) => cart.allSelected,
+			tabbarList: state => state.init.templateData.tabbar[0].content.list
 		}),
-		...mapGetters(['totalCount', 'takeoutTotalCount', 'isSel', 'totalCount']),
+		...mapGetters(['totalCount', 'takeoutTotalCount', 'isSel']),
 		// 购物车检测
 		checkCart() {
 			let obj = {};
@@ -178,6 +187,18 @@ export default {
 				};
 			});
 			return obj;
+		},
+		// 是否是底部导航页面
+		isTabbar() {
+			if (this.tabbarList.length) {
+				let arr = [];
+				let pages = getCurrentPages();
+				let currentPath = pages[pages.length - 1].$page.fullPath;
+				for (let item of this.tabbarList) {
+					arr.push(item.path);
+				}
+				return arr.includes(currentPath);
+			}
 		}
 	},
 	mounted() {
@@ -246,15 +267,33 @@ export default {
 				}
 			});
 		},
+		// 检测商品在购物车中的下标
+		checkGoodsIndex(id){
+			let cIndex=0;
+			this.cartList.forEach((item,index)=>{
+				if(id ==item.goods_id ){
+					cIndex = index
+				}
+			})
+			return cIndex
+		},
 		// 更改商品数
-		async onChangeNum(e, goods) {
+		async onChangeNum(e, goods, index) {
+			let gIndex = this.checkGoodsIndex(goods.goods_id)
 			if (e != this.checkCart[goods.goods_id].num) {
-				this.changeCartList({
-					ids: [this.checkCart[goods.goods_id].cartOrderId],
-					goodsNum: e,
-					art: 'change'
+				this.numberDisabled = true;
+				uni.showLoading({
+					mask: true
 				});
-				this.getCartList();
+				this.$set(this.cartList[gIndex], 'goods_num', +e);
+				await this.changeCartList({
+					ids: [this.checkCart[goods.goods_id].cartOrderId],
+					goodsNum: +e,
+					art: 'change'
+				}).then(() => {
+					this.numberDisabled = false;
+				});
+				await uni.hideLoading();
 			}
 		},
 		// 检测是否为购物车商品
@@ -390,7 +429,7 @@ export default {
 		// 获取一个目标元素的高度
 		getElRect(elClass, dataVal) {
 			new Promise((resolve, reject) => {
-				const query = uni.createSelectorQuery().in(this); //这个in(this),小程序自定义组件，一定要带。。。。。。。。。。
+				const query = uni.createSelectorQuery().in(this); //这个in(this),小程序自定义组件，一定要带
 				query
 					.select('.' + elClass)
 					.fields(
