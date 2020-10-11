@@ -155,7 +155,7 @@ export default {
 				if (url.indexOf('?') !== -1) {
 					url = `${url}&${queryArr.join('&')}`
 				} else {
-					url = `${url}/?${queryArr.join('&')}`
+					url = `${url}?${queryArr.join('&')}`
 				}
 			}
 			return url;
