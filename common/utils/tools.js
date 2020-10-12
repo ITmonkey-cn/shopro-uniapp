@@ -67,7 +67,9 @@ export default {
 		let ishttps = 'https:' == window.location.protocol ? true : false;
 		ishttps ? (pathArr[0] = 'https') : (pathArr[0] = 'http');
 		// #endif
+		// #ifdef MP-WEIXIN
 		pathArr[0] = 'https'
+		// #endif
 		newPath = pathArr.join('://');
 		return newPath;
 	},

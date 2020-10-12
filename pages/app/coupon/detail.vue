@@ -97,7 +97,9 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.couponDetail = res.data;
-					this.btnStataus = res.data.status_code;
+					if (res.data.status_code) {
+						this.btnStataus = res.data.status_code;
+					}
 				}
 			});
 		},

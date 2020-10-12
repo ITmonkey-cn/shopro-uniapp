@@ -132,7 +132,7 @@ export default class Wechat {
 	wxMiniProgramLogin(e) {
 		let that = this;
 		return new Promise((resolve, reject) => {
-			if(!uni.getStorageSync('session_key')) {
+			if (!uni.getStorageSync('session_key')) {
 				uni.showToast({
 					title: '未获取到session_key,请重启应用',
 					icon: 'none'
