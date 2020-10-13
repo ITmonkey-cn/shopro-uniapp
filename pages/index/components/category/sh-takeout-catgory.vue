@@ -1,15 +1,9 @@
 <template>
-	<view class="content_box">
-		<view class="x-f wrapper-box">
+	<view class="catgory-wrap">
+		<view class="x-f wrapper-box" :style="paddingBottom">
+			<!-- 左侧分类列表 -->
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view
-					:style="takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'"
-					class="left left-scroll-box flex-sub"
-					:scroll-top="scrollLeftTop"
-					enable-back-to-top
-					scroll-y
-					scroll-with-animation
-				>
+				<scroll-view class="left left-scroll-box flex-sub" :scroll-top="scrollLeftTop" enable-back-to-top scroll-y scroll-with-animation>
 					<view
 						class="type-list x-c"
 						:id="`left_${index}`"
@@ -23,16 +17,9 @@
 					</view>
 				</scroll-view>
 			</view>
-
-			<view style="width: 100%;">
-				<scroll-view
-					:style="takeoutTotalCount.totalNum ? 'padding-bottom:250rpx' : 'padding-bottom:170rpx'"
-					scroll-y
-					class="scroll-box righ-scroll-box flex-sub"
-					:scroll-top="scrollRightTop"
-					scroll-with-animation
-					@scroll="rightScroll"
-				>
+			<!-- 右侧商品列表 -->
+			<view class="right-wrap scroll-box">
+				<scroll-view scroll-y class="scroll-box righ-scroll-box flex-sub" :scroll-top="scrollRightTop" scroll-with-animation @scroll="rightScroll">
 					<view class="right" v-if="categoryData.length">
 						<view class="item-list" v-for="(item, index1) in categoryData" :key="index1" :id="`right_${index1}`">
 							<view class="type-box y-c">
@@ -77,56 +64,57 @@
 					</view>
 				</scroll-view>
 			</view>
-		</view>
-		<!-- 购物车 -->
-		<view class="cart-box x-f" v-show="takeoutTotalCount.totalNum" :style="isTabbar ? 'bottom:100rpx' : 'bottom:0'">
-			<view class="cart-left flex-sub x-f">
-				<view class="cart-img-box" @tap="onShowCartList">
-					<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
-					<view class="cu-tag badge" v-if="totalCount.totalNum">{{ takeoutTotalCount.totalNum }}</view>
-				</view>
-				<view class="price-box x-f">
-					<text class="price">{{ totalCount.totalPrice.toFixed(2) }}</text>
-				</view>
-			</view>
-			<button class="cu-btn pay-btn" @tap="onPay" :disabled="!isSel">去结算</button>
-			<!-- 购物车商品列表 -->
 
-			<view class="cart-list-box page_box" :class="showCartList ? '' : 'hide-cart-list'">
-				<view class="head_box x-bc cart-list__head px20">
-					<label class="check-all x-f" @tap="onAllSel">
-						<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
-						<text>全选</text>
-					</label>
-					<view class="delete-box" @tap="deleteAll">
-						<text class="cuIcon-delete"></text>
-						<text>删除商品</text>
+			<!-- 购物车 -->
+			<view class="cart-box x-f" v-show="takeoutTotalCount.totalNum" :style="isTabbar ? 'bottom:100rpx' : 'bottom:0'">
+				<view class="cart-left flex-sub x-f">
+					<view class="cart-img-box" @tap="onShowCartList">
+						<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
+						<view class="cu-tag badge" v-if="totalCount.totalNum">{{ takeoutTotalCount.totalNum }}</view>
+					</view>
+					<view class="price-box x-f">
+						<text class="price">{{ totalCount.totalPrice.toFixed(2) }}</text>
 					</view>
 				</view>
-				<view class="block cart-list">
-					<checkbox-group class="block" v-if="cartList.length">
-						<view class="collect-list x-start" v-for="(g, index) in cartList" :key="index">
-							<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
-								<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
-							</view>
-							<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'">
-								<block slot="goodsBottom">
-									<view class="x-bc price-box">
-										<view class="price">￥{{ g.sku_price.price }}</view>
-										<view class="num-step">
-											<uni-number-box
-												@change="onChangeNum($event, g, index)"
-												:disabled="numberDisabled"
-												v-model="g.goods_num"
-												:step="1"
-												:min="0"
-											></uni-number-box>
-										</view>
-									</view>
-								</block>
-							</shopro-mini-card>
+				<button class="cu-btn pay-btn" @tap="onPay" :disabled="!isSel">去结算</button>
+				<!-- 购物车商品列表 -->
+
+				<view class="cart-list-box page_box" :class="showCartList ? '' : 'hide-cart-list'">
+					<view class="head_box x-bc cart-list__head px20">
+						<label class="check-all x-f" @tap="onAllSel">
+							<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
+							<text>全选</text>
+						</label>
+						<view class="delete-box" @tap="deleteAll">
+							<text class="cuIcon-delete"></text>
+							<text>删除商品</text>
 						</view>
-					</checkbox-group>
+					</view>
+					<view class="block cart-list">
+						<checkbox-group class="block" v-if="cartList.length">
+							<view class="collect-list x-start" v-for="(g, index) in cartList" :key="index">
+								<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
+									<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
+								</view>
+								<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'">
+									<block slot="goodsBottom">
+										<view class="x-bc price-box">
+											<view class="price">￥{{ g.sku_price.price }}</view>
+											<view class="num-step">
+												<uni-number-box
+													@change="onChangeNum($event, g, index)"
+													:disabled="numberDisabled"
+													v-model="g.goods_num"
+													:step="1"
+													:min="0"
+												></uni-number-box>
+											</view>
+										</view>
+									</block>
+								</shopro-mini-card>
+							</view>
+						</checkbox-group>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -199,6 +187,17 @@ export default {
 				}
 				return arr.includes(currentPath);
 			}
+		},
+		paddingBottom() {
+			if (this.takeoutTotalCount.totalNum && !this.isTabbar) {
+				return 'padding-bottom:80rpx';
+			}
+			if (this.takeoutTotalCount.totalNum && this.isTabbar) {
+				return 'padding-bottom:180rpx';
+			}
+			if (!this.takeoutTotalCount.totalNum && this.isTabbar) {
+				return 'padding-bottom:100rpx';
+			}
 		}
 	},
 	mounted() {
@@ -268,18 +267,18 @@ export default {
 			});
 		},
 		// 检测商品在购物车中的下标
-		checkGoodsIndex(id){
-			let cIndex=0;
-			this.cartList.forEach((item,index)=>{
-				if(id ==item.goods_id ){
-					cIndex = index
+		checkGoodsIndex(id) {
+			let cIndex = 0;
+			this.cartList.forEach((item, index) => {
+				if (id == item.goods_id) {
+					cIndex = index;
 				}
-			})
-			return cIndex
+			});
+			return cIndex;
 		},
 		// 更改商品数
 		async onChangeNum(e, goods, index) {
-			let gIndex = this.checkGoodsIndex(goods.goods_id)
+			let gIndex = this.checkGoodsIndex(goods.goods_id);
 			if (e != this.checkCart[goods.goods_id].num) {
 				this.numberDisabled = true;
 				uni.showLoading({
@@ -387,7 +386,7 @@ export default {
 			}
 			setTimeout(() => {
 				timer = null;
-				let middleRightHeight = e.detail.scrollTop + this.rightHeight / 2;
+				let middleRightHeight = this.oldScrollTop + this.rightHeight / 2;
 				for (let i = 0; i < this.rightArr.length; i++) {
 					let h1 = this.rightArr[i];
 					let h2 = this.rightArr[i + 1];
@@ -462,6 +461,15 @@ export default {
 	background: rgba(#000, 0.3);
 	width: 100%;
 	height: 100%;
+}
+
+// 最外层结构包裹
+.catgory-wrap {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	height: 100%;
+	overflow: hidden;
 }
 
 .hide-cart-list {
@@ -561,11 +569,8 @@ export default {
 		}
 	}
 }
-
-// 购物车
 .cart-box {
 	position: absolute;
-	bottom: 100rpx;
 	z-index: 77;
 	height: 80rpx;
 	width: 750rpx;
@@ -627,31 +632,20 @@ export default {
 	}
 }
 
-.content_box {
-	margin-top: 1upx;
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-	overflow: hidden;
-	height: 100vh;
-	margin-bottom: 40px;
-}
-
 .wrapper-box {
 	flex: 1;
-	margin-top: 1upx;
-	height: 100vh;
+	height: 100%;
 }
 
 .scroll-box {
-	height: 100vh;
+	height: 100%;
 	flex: 1;
 	background: #fff;
 }
 
 .left {
 	width: 200upx;
-	height: 100vh;
+	height: 100%;
 	flex: 1;
 
 	.list-active {
@@ -685,7 +679,7 @@ export default {
 .right {
 	padding: 0 30upx;
 	flex: 1;
-	height: 100vh;
+	height: 100%;
 
 	.item-list {
 		.type-box {
