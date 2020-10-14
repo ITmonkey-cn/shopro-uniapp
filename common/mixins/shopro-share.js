@@ -45,6 +45,9 @@ export default {
 		}
 		// 2.保存推荐人信息
 		if (options.share_id) {
+			uni.showToast({
+				title: '获取到分享人' + options.share_id
+			})
 			uni.setStorageSync('share_id', options.share_id);
 			if (options.url) {
 				let url = options.url;
@@ -52,8 +55,8 @@ export default {
 			}
 			store.dispatch('getUserInfo'); //实时触发获取用户信息，添加推广记录
 		}
-		// 3.识别分享后跳转路径
-		if (options.url) {
+		// 3.识别分享后跳转路径 如果当前页面是首页才自动跳转 此处为了兼容小程序分享朋友圈时无脑跳转分享路径的情况，防止二次跳转落地页
+		if (options.url && getCurrentPages()[0].route == 'pages/index/index') {
 			let url = options.url;
 			uni.setStorageSync('url', url);
 			if (url.indexOf('-') > -1) {
@@ -136,7 +139,6 @@ export default {
 
 				}
 			})
-			console.log(that.shareInfo, 'shareInfo')
 		},
 		// 全局自定义url字符串拼接的方法
 		setPathQuery(query) {
@@ -197,9 +199,24 @@ export default {
 	},
 	onShareTimeline(res) {
 		let that = this;
+		let query = '';
+		//携带当前页面资源ID参数
+		let currentPage = getCurrentPages()[getCurrentPages().length - 1];
+		let options = currentPage.options;
+		if(JSON.stringify(options) != '{}' && options.id) {
+			query += `id=${options.id}`;
+		}
+		let shareInfoUrl = that.shareInfo.path.split('?');
+		if(shareInfoUrl.length > 1) {
+			if(query !== '') {
+				query += '&';
+			}
+			query += shareInfoUrl[1];
+		}
+		
 		return {
 			title: that.shareInfo.title,
-			path: that.shareInfo.path,
+			query: query,
 			imageUrl: that.shareInfo.imageUrl,
 			success(res) {
 				uni.showToast({

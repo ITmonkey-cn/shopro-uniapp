@@ -60,7 +60,6 @@ export default {
 				this.setTokenAndBack(token);
 				// #endif
 				// #ifdef MP-WEIXIN
-				wechat.checkMiniProgramUpdate();
 				wechat.login();
 				// #endif
 			}
@@ -72,6 +71,12 @@ export default {
 			uni.setStorageSync('screenShot', true);
 			uni.setStorageSync('shop_id', options.query.shop_id);
 		}
+		// #ifdef MP-WEIXIN
+		if(options.scene !== 1154) {
+			var wechat = new Wechat();
+			wechat.checkMiniProgramUpdate();	
+		}
+		// #endif
 		await this.setAppInfo();
 		await this.getTemplate(options);
 		let init = await this.getAppInit(options);
