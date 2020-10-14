@@ -1,4 +1,8 @@
-// .env.js 文件
+/**
+ *  Shopro全局配置文件
+ *  @version 1.1.2
+ */
+
 // 不同环境访问不同的路径
 import store from '@/common/store/index'
 // #ifdef H5

@@ -4,9 +4,9 @@
 			<image class="head-img" :src="item.avatar" mode=""></image>
 			<view class="list-content y-f">
 				<view class="title-box x-bc">
-					<text class="title one-t">{{ item.type_name }}-{{ item.title }}</text>
+					<text class="title one-t">{{ item.type_name }}{{ item.title ? '-' + item.title : '' }}</text>
 					<view class="money">
-						<text v-if="item.wallet>=0" class="add">+{{ item.wallet }}</text>
+						<text v-if="item.wallet >= 0" class="add">+{{ item.wallet }}</text>
 						<text v-else class="minus">{{ item.wallet }}</text>
 					</view>
 				</view>
