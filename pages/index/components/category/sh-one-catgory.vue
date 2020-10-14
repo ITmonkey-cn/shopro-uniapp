@@ -1,8 +1,8 @@
 <template>
 	<view class="content_box">
-		<view class="x-f wrapper-box">
+		<view class="x-f wrapper-box" :style="paddingBottom">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view class="left y-f" enable-back-to-top scroll-y style="padding-bottom: 100rpx;">
+				<scroll-view class="left y-f" enable-back-to-top scroll-y>
 					<view class="type-list x-c" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
 						<view class="line" :class="[{ 'line-active': listId == index }]"></view>
 						{{ item.name }}
@@ -10,7 +10,7 @@
 				</scroll-view>
 			</view>
 			<view style="height: 100%;width: 100%;">
-				<scroll-view style="padding-bottom: 100rpx;" @scrolltolower="loadMore" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
+				<scroll-view  @scrolltolower="loadMore" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
 						<view class="item-list">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -47,13 +48,35 @@ export default {
 			goodsList: [] //商品数据
 		};
 	},
-	props:{
-		categoryId:{
-			type:Number,
-			default:0
+	props: {
+		categoryId: {
+			type: Number,
+			default: 0
 		}
 	},
-	computed: {},
+	computed: {
+		...mapState({
+			tabbarList: state => state.init.templateData.tabbar[0].content.list
+		}),
+		// 是否是底部导航页面
+		isTabbar() {
+			if (this.tabbarList.length) {
+				let arr = [];
+				let pages = getCurrentPages();
+				let currentPath = pages[pages.length - 1].$page.fullPath;
+				for (let item of this.tabbarList) {
+					arr.push(item.path);
+				}
+				return arr.includes(currentPath);
+			}
+		},
+		paddingBottom() {
+			console.log(this.isTabbar);
+			if (this.isTabbar) {
+				return 'padding-bottom:100rpx';
+			}
+		}
+	},
 	created() {
 		this.getCategory();
 	},
@@ -180,12 +203,10 @@ export default {
 	.item-list {
 		.type-box {
 			height: 84rpx;
-
 			.type-title {
 				font-size: 28rpx;
 				font-weight: bold;
 			}
-
 			.more {
 				font-size: 26rpx;
 				color: #999;
@@ -194,10 +215,10 @@ export default {
 
 		.item-box {
 			flex-wrap: wrap;
-
+			width: 504rpx;
 			.goods-item {
-				margin-right: 14rpx;
-				margin-bottom: 14rpx;
+				margin-right: 12rpx;
+				margin-bottom: 12rpx;
 				background: #ffffff;
 				box-shadow: 0px 0px 20rpx 4rpx rgba(199, 199, 199, 0.22);
 				border-radius: 10rpx;

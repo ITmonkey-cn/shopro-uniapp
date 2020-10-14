@@ -121,7 +121,7 @@ const actions = {
 				typeName.forEach(item => {
 					obj[item] && arr.push(obj[item])
 				})
-				uni.requestSubscribeMessage({
+				arr.length && uni.requestSubscribeMessage({
 					tmplIds: arr,
 					success: (res) => {
 						console.log(res);

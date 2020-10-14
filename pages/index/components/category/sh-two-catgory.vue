@@ -1,6 +1,6 @@
 <template>
 	<view class="content_box">
-		<view class="x-f wrapper-box">
+		<view class="x-f wrapper-box" :style="paddingBottom">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
 				<scroll-view class="left y-f" enable-back-to-top scroll-y>
 					<view class="type-list x-f" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+	import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -46,7 +47,29 @@ export default {
 			categoryData: {}
 		};
 	},
-	computed: {},
+	computed: {
+		...mapState({
+			tabbarList: state => state.init.templateData.tabbar[0].content.list
+		}),
+		// 是否是底部导航页面
+		isTabbar() {
+			if (this.tabbarList.length) {
+				let arr = [];
+				let pages = getCurrentPages();
+				let currentPath = pages[pages.length - 1].$page.fullPath;
+				for (let item of this.tabbarList) {
+					arr.push(item.path);
+				}
+				return arr.includes(currentPath);
+			}
+		},
+		paddingBottom() {
+			console.log(this.isTabbar);
+			if (this.isTabbar) {
+				return 'padding-bottom:100rpx';
+			}
+		}
+	},
 	props: {
 		categoryId: {
 			type: Number,
@@ -92,7 +115,6 @@ export default {
 	flex: 1;
 	margin-top: 1upx;
 	height: 100%;
-	padding-bottom: 100rpx;
 }
 
 .scroll-box {
