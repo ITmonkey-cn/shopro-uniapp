@@ -114,7 +114,7 @@ import { mapMutations, mapActions, mapState } from 'vuex';
 
 // #ifdef H5
 import html2canvas from '@/common/utils/sdk/html2canvas.js';
-let listenMove = document.body;
+let listenMove = document.body; //禁止手机h5下拉刷新带动整个页面。
 let handle = function(e) {
 	e.preventDefault();
 };
@@ -164,7 +164,7 @@ export default {
 		...mapState({
 			initData: state => state.init.initData,
 			template: state => state.init.templateData?.home,
-			hasTemplate:state => state.init.hasTemplate,
+			hasTemplate: state => state.init.hasTemplate,
 			cartNum: state => state.cart.cartNum,
 			forceOauth: state => state.user.forceOauth
 		}),
