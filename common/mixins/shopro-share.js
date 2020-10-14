@@ -45,9 +45,6 @@ export default {
 		}
 		// 2.保存推荐人信息
 		if (options.share_id) {
-			uni.showToast({
-				title: '获取到分享人' + options.share_id
-			})
 			uni.setStorageSync('share_id', options.share_id);
 			if (options.url) {
 				let url = options.url;
