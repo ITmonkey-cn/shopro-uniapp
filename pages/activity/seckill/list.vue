@@ -125,7 +125,7 @@ export default {
 		loadMore() {
 			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
-				this.getbrowseList();
+				this.getGoodsList();
 			}
 		},
 		// 秒杀列表
