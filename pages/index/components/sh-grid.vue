@@ -4,6 +4,10 @@
 			<image class="tool-img" :src="menu.image" mode="aspectFill"></image>
 			<text class="item-title">{{ menu.name }}</text>
 		</view>
+		<view class="tool-item y-f" @tap="$Router.push('/pages/app/commission/index')">
+			<image class="tool-img" src="/static/imgs/app_icon/icon.png" mode="aspectFill"></image>
+			<text class="item-title">分销中心</text>
+		</view>
 	</view>
 </template>
 
