@@ -1,8 +1,8 @@
 {
     "name" : "Shopro",
-    "appid" : "__UNI__5B85585",
+    "appid" : "__UNI__5B8****",
     "description" : "",
-    "versionName" : "Shopro 1.0.7",
+    "versionName" : "Shopro 1.1.2",
     "versionCode" : 215,
     "transformPx" : false,
     "app-plus" : {
@@ -166,7 +166,7 @@
         "usingComponents" : {
             "subscribe" : "plugin-private://wx2b03c6e691cd7370/components/subscribe/subscribe"
         },
-        "appid" : "wx39cd0799d4567dd0",
+        "appid" : "wx39cd0799d456****",
         "setting" : {
             "urlCheck" : false,
             "es6" : false,
