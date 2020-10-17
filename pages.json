@@ -272,6 +272,80 @@
 						"auth": true,
 						"async": true
 					}
+				},
+				{
+					"path": "commission/commission-log",
+					"style": {
+						"navigationBarTitleText": "佣金明细"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
+				},
+				{
+					"path": "commission/wallet",
+					"style": {
+						"navigationBarTitleText": "我的钱包"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
+				},
+				{
+					"path": "commission/draw-money",
+					"style": {
+						"navigationBarTitleText": "提现",
+						"navigationStyle": "custom",
+						"navigationBarTextStyle": "white"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
+				},
+				{
+					"path": "commission/wallet-log",
+					"style": {
+						"navigationBarTitleText": "提现记录"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
+				},
+				{
+					"path": "commission/order",
+					"style": {
+						"navigationBarTitleText": "分销订单"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
+				},
+				{
+					"path": "commission/rankings",
+					"style": {
+						"navigationBarTitleText": "分销排行",
+						"navigationStyle": "custom",
+						"navigationBarTextStyle": "white"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
+				},
+				{
+					"path": "commission/goods",
+					"style": {
+						"navigationBarTitleText": "推广商品"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
 				}
 			]
 		},

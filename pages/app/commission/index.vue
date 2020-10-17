@@ -76,17 +76,17 @@ export default {
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon2.png',
 					title: '佣金明细',
-					path: ''
+					path: '/pages/app/commission/commission-log'
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon3.png',
 					title: '分销订单',
-					path: ''
+					path: '/pages/app/commission/order'
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon4.png',
 					title: '推广商品',
-					path: ''
+					path: '/pages/app/commission/goods'
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon5.png',
@@ -96,7 +96,7 @@ export default {
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon6.png',
 					title: '分销排行',
-					path: ''
+					path: '/pages/app/commission/rankings'
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon7.png',
