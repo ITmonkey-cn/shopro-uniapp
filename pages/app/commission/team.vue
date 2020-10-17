@@ -40,8 +40,6 @@
 					</view>
 				</view>
 			</view>
-		</view>
-		<view class="content_box">
 			<!-- 筛选 -->
 			<view class="filter-box x-f">
 				<view class="filter-item flex-sub" v-for="(filter, index) in filterList" :key="index" @tap="onFilter(index)">
@@ -50,12 +48,39 @@
 				</view>
 			</view>
 		</view>
+		<view class="content_box">
+			<!-- 团队列表 -->
+			<view class="team-box">
+				<view class="team-list" v-for="item in 6" :key="item" @tap="onTeamList(item)">
+					<sh-collapse-item>
+						<block slot="collapse-children" >
+							<view class="team-children x-f" v-for="item in 6" :key="item">
+								<image class="head-img" src="/static/imgs/app_icon/icon1.png" mode=""></image>
+								<view class="head-info">
+									<view class="name-box x-f">
+										<view class="name-text">会员昵称</view>
+										<view class="grade-tag tag-box x-f">
+											<image class="tag-img" src="/static/imgs/app_icon/icon1.png" mode=""></image>
+											<text class="tag-title">铜牌逍客</text>
+										</view>
+									</view>
+									<view class="head-time">2020年10月13日</view>
+								</view>
+							</view>
+						</block>
+					</sh-collapse-item>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+import shCollapseItem from '../children/sh-collapse-item.vue';
 export default {
-	components: {},
+	components: {
+		shCollapseItem
+	},
 	data() {
 		return {
 			filterCurrent: 0,
@@ -68,7 +93,9 @@ export default {
 		// 点击筛选项
 		onFilter(index) {
 			this.filterCurrent = index;
-		}
+		},
+		// 点击队员项
+		onTeamList(index) {}
 	}
 };
 </script>
@@ -149,6 +176,61 @@ export default {
 			width: 68rpx;
 			height: 4rpx;
 			border-radius: 2rpx;
+		}
+	}
+}
+// 团队列表
+.team-box {
+	margin-top: 20rpx;
+	.team-list {
+		.team-children {
+			margin-left: 80rpx;
+			margin-right: 20rpx;
+			height: 132rpx;
+			border-bottom: 1rpx solid #eee;
+			.head-img {
+				width: 60rpx;
+				height: 60rpx;
+				border-radius: 50%;
+				margin-right: 38rpx;
+			}
+			.head-info {
+				.head-time {
+					font-size: 22rpx;
+					font-weight: 400;
+					color: #999999;
+				}
+				.name-box {
+					margin-bottom: 12rpx;
+					.name-text {
+						font-size: 24rpx;
+						font-weight: 500;
+						color: #666;
+					}
+					.tag-box {
+						background: rgba(0, 0, 0, 0.2);
+						border-radius: 21rpx;
+						line-height: 30rpx;
+						padding-right: 10rpx;
+						margin-left: 10rpx;
+
+						.tag-img {
+							width: 34rpx;
+							height: 34rpx;
+							margin-right: 6rpx;
+							border-radius: 50%;
+						}
+
+						.tag-title {
+							font-size: 18rpx;
+							font-family: PingFang SC;
+							font-weight: 500;
+							color: rgba(255, 255, 255, 1);
+							line-height: 20rpx;
+						}
+					}
+				}
+			}
 		}
 	}
 }

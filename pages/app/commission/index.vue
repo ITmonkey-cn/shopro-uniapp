@@ -15,7 +15,10 @@
 						</view>
 					</view>
 					<view class="progress-box">
-						<view class="cu-progress round sm"><view class="progress--color" :style="[{ width: '20%' }]"></view></view>
+						<view class="cu-progress round sm">
+							<view class="progress--ing" :style="[{ width: '50%' }]"></view>
+							<view class="round-wrap"><view class="round-inner"></view></view>
+						</view>
 						<view class="progress-tip">距离下次升级还差100财富值</view>
 					</view>
 				</view>
@@ -36,8 +39,18 @@
 			</view>
 		</view>
 		<!-- 滚动明细 -->
-		<view class="commission-log"></view>
+		<view class="commission-log">
+			<scroll-view class="log-scroll" scroll-y="true">
+				<view class="log-item-box" v-for="item in 12" :key="item">
+					<view class="log-item x-f">
+						<image class="log-img" src="/static/imgs/app_icon/icon.png" mode=""></image>
+						<view class="log-text">139****2561 刚购买了家用小冰箱，还未付款</view>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
 		<!-- 功能菜单 -->
+		<image class="commission-bottom-bg" src="http://shopro.7wpp.com/imgs/commission/commission_bottom.png" mode="widthFix"></image>
 		<view class="menu-box flex">
 			<view class="menu-item y-f" v-for="(menu, index) in menuList" :key="index" @tap="jump(menu.path)">
 				<image class="item-img" :src="menu.img" mode=""></image>
@@ -56,42 +69,42 @@ export default {
 		return {
 			menuList: [
 				{
-					img: '/static/imgs/commission/commission_icon1.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon1.png',
 					title: '我的团队',
 					path: '/pages/app/commission/team'
 				},
 				{
-					img: '/static/imgs/commission/commission_icon2.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon2.png',
 					title: '佣金明细',
 					path: ''
 				},
 				{
-					img: '/static/imgs/commission/commission_icon3.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon3.png',
 					title: '分销订单',
 					path: ''
 				},
 				{
-					img: '/static/imgs/commission/commission_icon4.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon4.png',
 					title: '推广商品',
 					path: ''
 				},
 				{
-					img: '/static/imgs/commission/commission_icon5.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon5.png',
 					title: '申请分销商',
 					path: ''
 				},
 				{
-					img: '/static/imgs/commission/commission_icon6.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon6.png',
 					title: '分销排行',
 					path: ''
 				},
 				{
-					img: '/static/imgs/commission/commission_icon7.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon7.png',
 					title: '邀请海报',
 					path: ''
 				},
 				{
-					img: '/static/imgs/commission/commission_icon8.png',
+					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon8.png',
 					title: '分享记录',
 					path: ''
 				}
@@ -114,9 +127,12 @@ export default {
 
 <style lang="scss">
 .commission-wrap {
-	background: url('~@/static/imgs/commission/commission_bg.jpg') no-repeat;
-	background-size: 100% 100%;
+	background: url('http://shopro.7wpp.com/imgs/commission/commission_bg1.jpg') no-repeat;
+	background-size: cover;
 	height: 100%;
+	width: 100%;
+	background-position: center center;
+	overflow: hidden;
 	/deep/ .cu-back {
 		color: #fff;
 		font-size: 38rpx;
@@ -126,9 +142,10 @@ export default {
 .user-card {
 	width: 690rpx;
 	min-height: 332rpx;
-	background: rgba(94, 74, 195, 0.4);
-	border: 1rpx solid #865ac2;
+	background: rgba(94, 74, 195, 0.2);
+	border: 1rpx dashed #865ac2;
 	border-radius: 14rpx;
+	box-shadow: 0 0 20rpx rgba(#c1b9e6,0.5) inset;
 	margin: 30rpx;
 	.card-top {
 		margin: 40rpx;
@@ -188,6 +205,37 @@ export default {
 			font-weight: 500;
 			color: #8779cb;
 			line-height: 30rpx;
+			margin-top: 10rpx;
+		}
+		.cu-progress {
+			width: 150rpx;
+			height: 10rpx;
+			background: rgba(#fff, 0.1);
+			overflow: visible;
+			.progress--ing {
+				background: linear-gradient(90deg, #a36fff 0%, #5336ff 100%);
+				border-radius: 10rpx;
+			}
+			.round-wrap {
+				width: 30rpx;
+				height: 30rpx;
+				border: 2rpx solid #5c3cff;
+				background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
+				border-radius: 50%;
+				position: relative;
+				left: -15rpx;
+				.round-inner {
+					width: 20rpx;
+					height: 20rpx;
+					border: 2rpx solid #5c3cff;
+					background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
+					border-radius: 50%;
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+				}
+			}
 		}
 	}
 	.card-bottom {
@@ -214,7 +262,7 @@ export default {
 		.log-btn {
 			width: 83rpx;
 			height: 41rpx;
-			border: 1rpx solid #ffffff;
+			border: 1rpx solid rgba(#FFFFFF,0.33);
 			border-radius: 21rpx;
 			font-size: 22rpx;
 			font-weight: 400;
@@ -233,17 +281,56 @@ export default {
 // 滚动明细
 .commission-log {
 	min-height: 450rpx;
+	padding: 0 30rpx;
+	margin-top: 80rpx;
+	.log-scroll {
+		height: 300rpx;
+		.log-item-box {
+			position: relative;
+			height: 78rpx;
+		}
+		.log-item {
+			position: absolute;
+			height: 48rpx;
+			background: rgba(#5e49c3, 0.4);
+			border-radius: 24rpx;
+			padding-left: 6rpx;
+			padding-right: 20rpx;
+			margin-bottom: 20rpx;
+			.log-img {
+				width: 40rpx;
+				height: 40rpx;
+				border-radius: 50%;
+				margin-right: 10rpx;
+			}
+			.log-text {
+				font-size: 22rpx;
+				font-weight: 500;
+				color: #fefefe;
+			}
+		}
+	}
 }
 // 功能菜单
+.commission-bottom-bg {
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	z-index: 6;
+}
 .menu-box {
 	flex-wrap: wrap;
 	margin: 30rpx;
+	position: fixed;
+	width: 750rpx;
+	bottom: 0;
+	z-index: 10;
 	.menu-item {
 		width: (690rpx/4);
 		margin-bottom: 50rpx;
 		.item-img {
 			width: 68rpx;
-			height: 68rpx;
+			height: 74rpx;
 		}
 		.item-title {
 			font-size: 24rpx;

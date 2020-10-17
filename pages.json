@@ -251,7 +251,8 @@
 					"path": "commission/index",
 					"style": {
 						"navigationBarTitleText": "佣金中心",
-						"navigationStyle": "custom"
+						"navigationStyle": "custom",
+						"navigationBarTextStyle": "white"
 
 					},
 					"meta": {
@@ -263,8 +264,9 @@
 					"path": "commission/team",
 					"style": {
 						"navigationBarTitleText": "我的团队",
-						"navigationStyle": "custom"
-				
+						"navigationStyle": "custom",
+						"navigationBarTextStyle": "white"
+
 					},
 					"meta": {
 						"auth": true,
@@ -500,7 +502,8 @@
 					"path": "kefu/index",
 					"name": "kefu",
 					"style": {
-						"navigationBarTitleText": ""
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom"
 
 					},
 					"meta": {

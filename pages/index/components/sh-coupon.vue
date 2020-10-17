@@ -1,6 +1,6 @@
 <template>
 	<!-- 首页优惠券卡片 -->
-	<view class="coupon-category-box mb10 shopro-selector-rect" v-if="detail.ids">
+	<view class="coupon-category-box mb10 shopro-selector-rect" v-if="detail.ids && couponList.length">
 		<swiper class="coupon-swiper-box" @change="onSwiper" circular :autoplay="true" :interval="5000" :duration="2000">
 			<swiper-item class="swiper-item" v-for="(c, index) in couponList" :key="c.id">
 				<view class="tab-list x-c" @tap="jump('/pages/app/coupon/detail', { id: c.id })"><shopro-coupon :couponData="c" :state="0"></shopro-coupon></view>
