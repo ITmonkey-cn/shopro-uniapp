@@ -38,7 +38,7 @@
 													<text class="current-price--unit">￥</text>
 													{{ mlist.price }}
 												</view>
-												<view class="origin-price">
+												<view class="origin-price" v-if="!isCart(mlist.id)">
 													<text class="origin-price--unit">￥</text>
 													{{ mlist.original_price }}
 												</view>
