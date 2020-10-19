@@ -23,7 +23,7 @@
 					<view class="bottom y-start">
 						<view class="notice-item y-start">
 							<view class="notice-title">优惠券说明</view>
-							<text class="notice-detail">{{ couponDetail.description }}</text>
+							<view class="notice-detail">{{ couponDetail.description }}</view>
 						</view>
 					</view>
 				</view>
@@ -204,7 +204,7 @@ export default {
 		padding: 40rpx 30rpx;
 		.notice-item {
 			border-bottom: 1rpx solid #eeeeee;
-			height: 90rpx;
+			min-height: 90rpx;
 			width: 100%;
 			.notice-title {
 				font-weight: 500;
