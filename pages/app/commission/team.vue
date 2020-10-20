@@ -15,11 +15,11 @@
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">一级成员</view>
-							<view class="category-num">2000000</view>
+							<view class="category-num">20000.00</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">二级成员</view>
-							<view class="category-num">2000000</view>
+							<view class="category-num">20000.00</view>
 						</view>
 					</view>
 				</view>
@@ -31,11 +31,11 @@
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">我的业绩</view>
-							<view class="category-num">2000000</view>
+							<view class="category-num">20000.00</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">团队业绩</view>
-							<view class="category-num">2000000</view>
+							<view class="category-num">20000.00</view>
 						</view>
 					</view>
 				</view>
@@ -43,7 +43,10 @@
 			<!-- 筛选 -->
 			<view class="filter-box x-f">
 				<view class="filter-item flex-sub" v-for="(filter, index) in filterList" :key="index" @tap="onFilter(index)">
-					<text class="filter-title" :class="{ 'title-active': filterCurrent == index }">{{ filter.title }}</text>
+					<view class="x-f">
+						<text class="filter-title" :class="{ 'title-active': filterCurrent == index }">{{ filter.title }}</text>
+						<text v-show="index" class="cuIcon-unfold" :class="{ 'icon-active': filter.isUnfold }"></text>
+					</view>
 					<text class="underline" :class="{ 'underline-active': filterCurrent == index }"></text>
 				</view>
 			</view>
@@ -53,7 +56,7 @@
 			<view class="team-box">
 				<view class="team-list" v-for="item in 6" :key="item" @tap="onTeamList(item)">
 					<sh-collapse-item>
-						<block slot="collapse-children" >
+						<block slot="collapse-children">
 							<view class="team-children x-f" v-for="item in 6" :key="item">
 								<image class="head-img" src="/static/imgs/app_icon/icon1.png" mode=""></image>
 								<view class="head-info">
@@ -84,7 +87,7 @@ export default {
 	data() {
 		return {
 			filterCurrent: 0,
-			filterList: [{ title: '综合' }, { title: '等级' }, { title: '加入时间' }]
+			filterList: [{ title: '综合', isUnfold: false }, { title: '等级', isUnfold: false }, { title: '加入时间', isUnfold: false }]
 		};
 	},
 	computed: {},
@@ -93,6 +96,9 @@ export default {
 		// 点击筛选项
 		onFilter(index) {
 			this.filterCurrent = index;
+			if (this.filterCurrent == index) {
+				this.filterList[index].isUnfold = !this.filterList[index].isUnfold;
+			}
 		},
 		// 点击队员项
 		onTeamList(index) {}
@@ -103,7 +109,8 @@ export default {
 <style lang="scss">
 // 头部卡片
 .head_box {
-	background-color: #4d3cbe;
+	background: url('http://shopro.7wpp.com/imgs/commission/card_bg.png') no-repeat;
+	background-size: 100% auto;
 	/deep/ .cu-back {
 		color: #fff;
 		font-size: 40rpx;
@@ -159,6 +166,17 @@ export default {
 			font-weight: 500;
 			font-size: 28rpx;
 			line-height: 90rpx;
+		}
+		.cuIcon-unfold {
+			font-size: 24rpx;
+			color: #c4c4c4;
+			margin-left: 10rpx;
+			transition: all linear 0.3s;
+		}
+		.icon-active {
+			transform: rotate(180deg);
+			transform-origin: center center;
+			transition: all linear 0.3s;
 		}
 		.title-active {
 			color: #333;

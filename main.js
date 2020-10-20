@@ -9,8 +9,8 @@ import {
 	API_URL
 } from './env.js'
 
-// 引入全局uView
-import uView from '@/static/uview-ui'
+//引入全局uView
+import uView from 'uview-ui'
 Vue.use(uView)
 
 import shoproShare from '@/common/mixins/shopro-share'

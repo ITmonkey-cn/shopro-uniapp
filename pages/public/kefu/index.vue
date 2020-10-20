@@ -105,7 +105,7 @@
 			};
 		},
 		 onLoad() {
-			this.init()
+			// this.init()
 		},
 		methods: {
 			// 获取焦点

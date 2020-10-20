@@ -26,15 +26,18 @@
 			<view class="card-bottom x-f">
 				<view class="flex-sub y-start">
 					<view class="item-title">总收益</view>
-					<view class="item-detail">2999999.99</view>
+					<view class="item-detail">{{showMoney?'2999999.99':'***'}}</view>
 				</view>
 				<view class="flex-sub  y-start">
 					<view class="item-title">待入账佣金</view>
-					<view class="item-detail">2999999.99</view>
+					<view class="item-detail">{{showMoney?'2999999.99':'***'}}</view>
 				</view>
 				<view class="y-f">
-					<button class="cu-btn log-btn">明细</button>
-					<button class="cu-btn look-btn"><text class="cuIcon-attentionfill"></text></button>
+					<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
+					<button class="cu-btn look-btn" @tap="onEye">
+						<text v-if="showMoney" class="cuIcon-attentionfill"></text>
+						<text v-else class="cuIcon-attentionforbidfill"></text>
+					</button>
 				</view>
 			</view>
 		</view>
@@ -67,7 +70,9 @@ export default {
 	components: {},
 	data() {
 		return {
+			showMoney: true, //是否显示金额
 			menuList: [
+				//menu
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon1.png',
 					title: '我的团队',
@@ -91,7 +96,7 @@ export default {
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon5.png',
 					title: '申请分销商',
-					path: ''
+					path: '/pages/app/commission/apply'
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon6.png',
@@ -120,6 +125,11 @@ export default {
 				path: path,
 				query: query
 			});
+		},
+
+		// 是否显示金额
+		onEye() {
+			this.showMoney = !this.showMoney;
 		}
 	}
 };
@@ -141,12 +151,12 @@ export default {
 // 用户资料卡片
 .user-card {
 	width: 690rpx;
-	min-height: 332rpx;
-	background: rgba(94, 74, 195, 0.2);
-	border: 1rpx dashed #865ac2;
+	min-height: 350rpx;
 	border-radius: 14rpx;
-	box-shadow: 0 0 20rpx rgba(#c1b9e6,0.5) inset;
 	margin: 30rpx;
+	background: url('http://shopro.7wpp.com/imgs/commission/commission_card_bg.png') no-repeat;
+	background-size: 100% 100%;
+	padding-top: 10rpx;
 	.card-top {
 		margin: 40rpx;
 	}
@@ -203,17 +213,17 @@ export default {
 		.progress-tip {
 			font-size: 16rpx;
 			font-weight: 500;
-			color: #8779cb;
+			color: #c7b2ff;
 			line-height: 30rpx;
 			margin-top: 10rpx;
 		}
 		.cu-progress {
 			width: 150rpx;
 			height: 10rpx;
-			background: rgba(#fff, 0.1);
+			background: #503bae;
 			overflow: visible;
 			.progress--ing {
-				background: linear-gradient(90deg, #a36fff 0%, #5336ff 100%);
+				background: linear-gradient(180deg, #c6a6ff 0%, #7430ee 100%);
 				border-radius: 10rpx;
 			}
 			.round-wrap {
@@ -262,7 +272,7 @@ export default {
 		.log-btn {
 			width: 83rpx;
 			height: 41rpx;
-			border: 1rpx solid rgba(#FFFFFF,0.33);
+			border: 1rpx solid rgba(#ffffff, 0.33);
 			border-radius: 21rpx;
 			font-size: 22rpx;
 			font-weight: 400;
@@ -270,7 +280,12 @@ export default {
 		}
 		.look-btn {
 			color: #fff;
-			font-size: 50rpx;
+			font-size: 40rpx;
+			.cuIcon-attentionfill,
+			.cuIcon-attentionforbidfill {
+				line-height: 50rpx;
+				margin-top: 20rpx;
+			}
 			.cuIcon-attentionfill {
 				line-height: 50rpx;
 				margin-top: 20rpx;
@@ -282,7 +297,7 @@ export default {
 .commission-log {
 	min-height: 450rpx;
 	padding: 0 30rpx;
-	margin-top: 80rpx;
+	margin-top: 60rpx;
 	.log-scroll {
 		height: 300rpx;
 		.log-item-box {

@@ -94,7 +94,7 @@
 		<view v-if="storeOrderList.length" class="cu-load text-gray" :class="loadStatus"></view>
 
 		<!-- 日期选择 -->
-		<uni-calendar
+		<u-calendar
 			v-model="showCalendar"
 			:mode="mode"
 			:start-text="startText"
@@ -102,8 +102,9 @@
 			:range-color="rangeColor"
 			:range-bg-color="rangeBgColor"
 			:active-bg-color="activeBgColor"
+			btnType="success"
 			@change="selDate"
-		></uni-calendar>
+		></u-calendar>
 		<!-- 输码弹窗 -->
 		<shopro-modal v-model="showInputModal" style="z-index: 88;">
 			<block slot="modalContent">
@@ -598,14 +599,14 @@ export default {
 		font-size: 35rpx;
 		font-family: PingFang SC;
 		font-weight: bold;
-		color:#343434;
+		color: #343434;
 		line-height: 42rpx;
 	}
 
 	.inp {
 		width: 501rpx;
 		height: 78rpx;
-		border: 1rpx solid #E5E5E5;
+		border: 1rpx solid #e5e5e5;
 		margin: 60rpx auto 40rpx;
 		font-size: 28rpx;
 		font-family: PingFang SC;
@@ -613,7 +614,7 @@ export default {
 		color: #6d5028;
 
 		.pl-inp {
-			color: #9A9A9A;
+			color: #9a9a9a;
 		}
 	}
 	.post-btn {

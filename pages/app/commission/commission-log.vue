@@ -2,8 +2,8 @@
 <template>
 	<view class="page_box">
 		<view class="head_box x-bc">
-			<button class="cu-btn date-btn">
-				2020年10月
+			<button class="cu-btn date-btn" @tap="onFilterDate">
+				{{ selDateText }}
 				<text class="cuIcon-triangledownfill"></text>
 			</button>
 			<view class="total-box">收入￥2100 &emsp;支出￥2100</view>
@@ -24,6 +24,18 @@
 				</view>
 			</view>
 		</view>
+		<!-- 日期选择 -->
+		<u-calendar
+			v-model="showCalendar"
+			:mode="mode"
+			:start-text="startText"
+			:end-text="endText"
+			:range-color="rangeColor"
+			:range-bg-color="rangeBgColor"
+			:active-bg-color="activeBgColor"
+			btnType="success"
+			@change="selDate"
+		></u-calendar>
 	</view>
 </template>
 
@@ -31,11 +43,43 @@
 export default {
 	components: {},
 	data() {
-		return {};
+		return {
+			//日期选择
+			showCalendar: false,
+			mode: 'range',
+			result: '请选择日期',
+			startText: '开始',
+			endText: '结束',
+			rangeColor: '#4CB89D',
+			rangeBgColor: 'rgba(76,184,157,0.13)',
+			activeBgColor: '#4CB89D',
+			selDateText: ''
+		};
 	},
 	computed: {},
-	onLoad() {},
-	methods: {}
+	onLoad() {
+		this.getToday();
+	},
+	methods: {
+		// 点击日期选择
+		onFilterDate() {
+			this.showCalendar = true;
+		},
+
+		//  今日
+		getToday() {
+			let now = new Date();
+			this.year = now.getFullYear();
+			this.month = now.getMonth() + 1;
+			this.day = now.getDate();
+			this.selDateText = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+		},
+
+		// 选择日期
+		selDate(e) {
+			this.selDateText = `${e.startDate.replace(/-/g, ':')}-${e.endDate.replace(/-/g, ':')}`;
+		}
+	}
 };
 </script>
 

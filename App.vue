@@ -95,7 +95,7 @@ export default {
 @import 'static/colorui/icon.css';
 @import 'static/font/shopro-icon.css';
 
-@import 'static/uview-ui/index.scss';
+@import 'uview-ui/index.scss';
 
 // 其他scss集成在uni.scss,(变量,class,minix)
 
