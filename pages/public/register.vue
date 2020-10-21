@@ -101,12 +101,16 @@ export default {
 		register() {
 			let that = this;
 			if (this.isTcp) {
+				uni.showLoading({
+					mask: true
+				});
 				this.$api('user.register', {
 					mobile: this.mobile,
 					code: this.code.value,
 					password: this.password
 				}).then(res => {
 					if (res.code === 1) {
+						uni.hideLoading();
 						uni.showToast({
 							title: res.msg || '注册成功,请前往登录',
 							icon: 'success',

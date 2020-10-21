@@ -3,7 +3,7 @@
 	<view class="page_box commission-order-wrap">
 		<!-- 状态分类 -->
 		<view class="head_box x-f">
-			<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state">
+			<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state" @tap="onTab(index)">
 				<text class="state-title" :class="{ 'title-active': stateCurrent == index }">{{ state }}</text>
 				<text class="underline" :class="{ 'underline-active': stateCurrent == index }"></text>
 			</view>
@@ -54,7 +54,12 @@ export default {
 	},
 	computed: {},
 	onLoad() {},
-	methods: {}
+	methods: {
+		// 切换分类
+		onTab(index){
+			this.stateCurrent = index
+		}
+	}
 };
 </script>
 

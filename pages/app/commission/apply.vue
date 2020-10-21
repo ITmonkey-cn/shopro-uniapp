@@ -198,14 +198,14 @@ export default {
 		}
 	}
 	.save-btn {
-		width: 616rpx;
+		width: 690rpx;
 		height: 86rpx;
 		background: linear-gradient(90deg, #a36fff, #5336ff);
 		box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
 		border-radius: 43rpx;
 		font-weight: 500;
 		color: #ffffff;
-		margin: 30rpx 0;
+		margin: 30rpx auto;
 	}
 }
 </style>

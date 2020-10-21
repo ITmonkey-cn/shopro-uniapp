@@ -5,7 +5,7 @@
 		<!-- 用户资料 -->
 		<view class="user-card">
 			<view class="card-top x-f">
-				<view class="head-img-box"><image class="head-img" src="/static/imgs/app_icon/icon.png" mode="widthFix"></image></view>
+				<view class="head-img-box"><image class="head-img" src="/static/imgs/app_icon/icon1.png" mode="widthFix"></image></view>
 				<view class="y-start">
 					<view class="user-info-box x-f">
 						<view class="user-name">会员昵称</view>
@@ -26,12 +26,12 @@
 			<view class="card-bottom x-f">
 				<view class="flex-sub y-start">
 					<view class="item-title">总收益</view>
-					<view class="item-detail">{{showMoney?'2999999.99':'***'}}</view>
+					<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
 				</view>
 				<view class="flex-sub  y-start">
 					<view class="item-title">待入账佣金</view>
-					<view class="item-detail">{{showMoney?'2999999.99':'***'}}</view>
-				</view>
+					<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
+				</view> 
 				<view class="y-f">
 					<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
 					<button class="cu-btn look-btn" @tap="onEye">
@@ -106,12 +106,12 @@ export default {
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon7.png',
 					title: '邀请海报',
-					path: ''
+					path: '/pages/public/poster/index?posterType=user'
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon8.png',
 					title: '分享记录',
-					path: ''
+					path: '/pages/app/commission/share-log'
 				}
 			]
 		};
@@ -121,10 +121,7 @@ export default {
 	methods: {
 		// 跳转
 		jump(path, query) {
-			this.$Router.push({
-				path: path,
-				query: query
-			});
+			this.$tools.routerTo(path, query)
 		},
 
 		// 是否显示金额
@@ -166,7 +163,7 @@ export default {
 		height: 76rpx;
 		border-radius: 50px;
 		position: relative;
-		background: linear-gradient(0deg, #a470ff, #5436ff);
+		background: #fff;
 		padding: 10rpx;
 		background-clip: padding-box;
 		.head-img {
@@ -194,8 +191,8 @@ export default {
 			margin-left: 10rpx;
 
 			.tag-img {
-				width: 40rpx;
-				height: 40rpx;
+				width: 36rpx;
+				height: 36rpx;
 				margin-right: 6rpx;
 				border-radius: 50%;
 			}

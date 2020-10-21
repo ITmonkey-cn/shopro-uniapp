@@ -285,16 +285,6 @@
 					}
 				},
 				{
-					"path": "commission/wallet",
-					"style": {
-						"navigationBarTitleText": "我的钱包"
-					},
-					"meta": {
-						"auth": true,
-						"async": true
-					}
-				},
-				{
 					"path": "commission/draw-money",
 					"style": {
 						"navigationBarTitleText": "提现",
@@ -352,6 +342,18 @@
 					"path": "commission/apply",
 					"style": {
 						"navigationBarTitleText": "申请分销商",
+						"navigationStyle": "custom",
+						"navigationBarTextStyle": "white"
+					},
+					"meta": {
+						"auth": true,
+						"async": true
+					}
+				},
+				{
+					"path": "commission/share-log",
+					"style": {
+						"navigationBarTitleText": "分享记录",
 						"navigationStyle": "custom",
 						"navigationBarTextStyle": "white"
 					},

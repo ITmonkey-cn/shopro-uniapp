@@ -15,11 +15,11 @@
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">一级成员</view>
-							<view class="category-num">20000.00</view>
+							<view class="category-num">2000000</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">二级成员</view>
-							<view class="category-num">20000.00</view>
+							<view class="category-num">2000000</view>
 						</view>
 					</view>
 				</view>
@@ -31,11 +31,11 @@
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">我的业绩</view>
-							<view class="category-num">20000.00</view>
+							<view class="category-num">2000000</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">团队业绩</view>
-							<view class="category-num">20000.00</view>
+							<view class="category-num">2000000</view>
 						</view>
 					</view>
 				</view>

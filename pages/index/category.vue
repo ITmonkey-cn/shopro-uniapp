@@ -54,6 +54,7 @@ export default {
 				id: this.$Route.query.id
 			}).then(res => {
 				if (res.code === 1) {
+					// TODO，小程序运维中心报错
 					this.categoryType = parseInt(res.data.type);
 					uni.setNavigationBarTitle({
 						title: res.data.name

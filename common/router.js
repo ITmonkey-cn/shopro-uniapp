@@ -6,6 +6,8 @@ Vue.use(Router)
 //初始化
 const router = new Router({
 	APP: {
+		holdTabbar: false,
+		rewriteFun: false,
 		animation: {
 			animationType: 'pop-in',
 			animationDuration: 300
