@@ -11,7 +11,7 @@
 						<view class="user-name">会员昵称</view>
 						<view class="grade-tag tag-box x-f">
 							<image class="tag-img" src="/static/imgs/app_icon/icon.png" mode=""></image>
-							<text class="tag-title">铜牌逍客</text>
+							<text class="tag-title">铜牌销客</text>
 						</view>
 					</view>
 					<view class="progress-box">

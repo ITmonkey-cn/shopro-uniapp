@@ -10,11 +10,11 @@
 
 		<!-- 排行榜 -->
 		<view class="rankings-list-box">
-			<view class="ranking-list x-bc" v-for="item in 8" :key="item">
+			<view class="ranking-list x-bc" v-for="(item,index) in 8" :key="item">
 				<view class="list-left x-f">
 					<view class="tag-box x-c">
-						<text class="tag-text" v-if="item >= 4">{{ item }}</text>
-						<image v-else class="tag-icon" :src="rankingsIcon[item]" mode=""></image>
+						<text class="tag-text" v-if="index >= 3">{{ item }}</text>
+						<image v-else class="tag-icon" :src="rankingsIcon[index]" mode=""></image>
 					</view>
 					<image class="user-avatar" src="/static/imgs/app_icon/icon1.png" mode=""></image>
 					<view class="user-info">
@@ -37,9 +37,9 @@ export default {
 	data() {
 		return {
 			rankingsIcon: {
-				1: 'http://shopro.7wpp.com/imgs/commission/01.png',
-				2: 'http://shopro.7wpp.com/imgs/commission/02.png',
-				3: 'http://shopro.7wpp.com/imgs/commission/03.png'
+				0: 'http://shopro.7wpp.com/imgs/commission/01.png',
+				1: 'http://shopro.7wpp.com/imgs/commission/02.png',
+				2: 'http://shopro.7wpp.com/imgs/commission/03.png'
 			}
 		};
 	},
@@ -53,6 +53,8 @@ export default {
 .rankings-wrap {
 	background: url('http://shopro.7wpp.com/imgs/commission/rankings_bg.png') no-repeat;
 	background-size: 100% auto;
+	height: 100%;
+	overflow: hidden;
 }
 .nav-box {
 	/deep/ .cu-back {
@@ -70,6 +72,7 @@ export default {
 	background-color: #fff;
 	border-radius: 20rpx 20rpx 0px 0px;
 	width: 690rpx;
+	height: 100%;
 	margin: 60rpx auto 0;
 	.ranking-list {
 		height: 140rpx;

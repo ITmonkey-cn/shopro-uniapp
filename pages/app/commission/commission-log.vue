@@ -26,7 +26,7 @@
 						<view class="item-value">{{ showMoney ? '2999999.99' : '***' }}</view>
 					</view>
 				</view>
-				<button class="cu-btn draw-btn">提现</button>
+				<button class="cu-btn draw-btn" @tap="$Router.push({ path: '/pages/app/commission/draw-money' })">提现</button>
 			</view>
 			<!-- 消费 -->
 			<view class="x-bc">
@@ -130,7 +130,7 @@ export default {
 
 		// 选择日期
 		selDate(e) {
-			this.selDateText = `${e.startYear}.${e.startMonth}.${e.startDay}-${e.endYear}.${e.endMonth}${e.endDay}`;
+			this.selDateText = `${e.startYear}.${e.startMonth}.${e.startDay}-${e.endYear}.${e.endMonth}.${e.endDay}`;
 		}
 	}
 };

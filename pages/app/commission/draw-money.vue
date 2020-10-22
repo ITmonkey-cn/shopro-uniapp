@@ -11,7 +11,7 @@
 					<view class="num-title">可提现金额（元）</view>
 					<view class="wallet-num">81999.00</view>
 				</view>
-				<button class="cu-btn log-btn">提现记录</button>
+				<button class="cu-btn log-btn" @tap="$Router.push({path:'/pages/app/commission/wallet-log'})">提现记录</button>
 			</view>
 		</view>
 		<!-- 提现输入卡片-->
@@ -62,6 +62,7 @@ export default {
 .head-box {
 	background: url('http://shopro.7wpp.com/imgs/commission/draw_bg.png') no-repeat;
 	background-size: 100% auto;
+	height: 388rpx;
 	/deep/ .cu-back {
 		color: #fff;
 		font-size: 40rpx;
@@ -103,7 +104,7 @@ export default {
 	border-radius: 20rpx;
 	width: 690rpx;
 	min-height: 530rpx;
-	margin: -50rpx auto 0;
+	margin: -70rpx auto 0;
 	padding: 30rpx;
 	.card-title {
 		font-size: 30rpx;
@@ -136,7 +137,7 @@ export default {
 	.save-btn {
 		width: 616rpx;
 		height: 86rpx;
-		background: linear-gradient(90deg, #a36fff, #5336ff);
+		background: linear-gradient(-90deg, #a36fff, #5336ff);
 		box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
 		border-radius: 43rpx;
 		font-size: 30rpx;

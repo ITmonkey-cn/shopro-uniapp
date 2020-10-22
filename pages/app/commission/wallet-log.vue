@@ -9,14 +9,15 @@
 			</view>
 			<view class="status-box item x-bc">
 				<view class="x-f">
-					<text class="cuIcon-time item-icon"></text>
+					<text class="cuIcon-roundcheck item-icon"></text>
+
 					<text class="item-title">申请状态</text>
 				</view>
 				<view class="status-text">提现中</view>
 			</view>
 			<view class="time-box item x-bc">
 				<view class="x-f">
-					<text class="cuIcon-roundcheck item-icon"></text>
+					<text class="cuIcon-time item-icon"></text>
 					<text class="item-title">提现时间</text>
 				</view>
 				<view class="time">2020.04.22 20:05:15</view>
@@ -62,9 +63,9 @@ export default {
 	.item {
 		padding: 0 30rpx 10rpx;
 		.item-icon {
-			color: #f6f6f6;
+			color: #c0c0c0;
 			font-size: 36rpx;
-			marigin-right: 8rpx;
+			margin-right: 8rpx;
 		}
 		.item-title {
 			font-size: 24rpx;
