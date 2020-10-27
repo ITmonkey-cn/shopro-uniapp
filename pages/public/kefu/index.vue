@@ -1,70 +1,80 @@
 <!-- 客服 -->
 <template>
 	<view class="chat-wrap">
-		<cu-custom bgColor="bg-gradual-purple" :isBack="true"><block slot="backText">客服人员为您服务</block></cu-custom>
+		<cu-custom bgColor="bg-gradual-purple" :isBack="true">
+			<block slot="backText">{{ navTitle }}</block>
+		</cu-custom>
 		<u-notice-bar :autoplay="true" close-icon @close="closeNotice" :show="showNotice" type="warning" :list="noticeList" :volumeIcon="true" :isCircular="true"></u-notice-bar>
-		<scroll-view class="scroll-box chat-wrap" scroll-y="true" :scroll-with-animation="true" :enable-back-to-top="true" :show-scrollbar="false">
+		<scroll-view
+			class="scroll-box"
+			scroll-y="true"
+			:scroll-with-animation="true"
+			:enable-back-to-top="true"
+			:show-scrollbar="false"
+			:scroll-into-view="scrollInto"
+			@scrolltoupper="scrolltoupper"
+		>
 			<view class="cu-chat">
 				<block v-for="(chat, index) in chatList" :key="index">
-					<!-- 自己  -->
-					<view class="cu-item" :class="{ self: chat.identify === 'user' }" v-if="chat.message.message_type === 'text'">
-						<view class="main">
-							<view class="content bg-gradual-purple shadow"><u-parse :html="chat.message.message"></u-parse></view>
-						</view>
-						<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg);"></view>
-					</view>
-					<!-- 自己-订单-->
-					<view class="cu-item" :class="{ self: chat.identify === 'user' }" v-if="chat.message.message_type === 'order'">
-						<view class="main">
-							<view class="content shadow">
-								<view class="order-chat">
-									<view class="order-code mb20">订单编号：25689456336</view>
+					<!-- 时间 -->
+					<view class="cu-info" v-if="chat.type === 'system'">{{ chat.msg + chat.date }}</view>
+					<view class="" v-else>
+						<!-- 自己  -->
+						<view class="cu-item" :class="{ self: chat.identify === 'user' }">
+							<view
+								v-if="chat.identify !== 'user'"
+								class="cu-avatar round"
+								style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg);"
+							></view>
+							<view class="main">
+								<!-- 消息 -->
+								<view class="content bg-gradual-purple shadow" v-if="chat.type === 'text'">
+									<u-parse :html="chat.msg"></u-parse>
+									<text></text>
+									{{ chat.identify }}-{{ chat.type }}
+								</view>
+								<!-- 订单 -->
+								<view class="content shadow" v-if="chat.type === 'order'">
+									<view class="order-chat">
+										<view class="order-code mb20">订单编号：25689456336</view>
+										<view class="goods-card x-f">
+											<view class="img-wrap"><image class="goods-img" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
+											<view class="y-bc card-right">
+												<view class="goods-title more-t">Stradivarius 秋冬新款女士短款机车风夹克外套2019潮08820199004</view>
+
+												<view class="x-bc price-box">
+													<view class="goods-price">339.90</view>
+													<text class="goods-state">待发货</text>
+												</view>
+											</view>
+										</view>
+									</view>
+								</view>
+								<!-- 商品 -->
+								<view class="content shadow" v-if="chat.type === 'goods'">
 									<view class="goods-card x-f">
 										<view class="img-wrap"><image class="goods-img" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
 										<view class="y-bc card-right">
 											<view class="goods-title more-t">Stradivarius 秋冬新款女士短款机车风夹克外套2019潮08820199004</view>
-
 											<view class="x-bc price-box">
-												<view class="goods-price">339.90</view>
-												<text class="goods-state">待发货</text>
+												<view class="goods-price">111.90</view>
+												<text></text>
 											</view>
 										</view>
 									</view>
 								</view>
 							</view>
-						</view>
-						<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg);"></view>
-					</view>
-					<!-- 自己-商品 -->
-					<view class="cu-item" :class="{ self: chat.identify === 'user' }" v-if="chat.message.message_type === 'goods'">
-						<view class="main">
-							<view class="content shadow">
-								<view class="goods-card x-f">
-									<view class="img-wrap"><image class="goods-img" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
-									<view class="y-bc card-right">
-										<view class="goods-title more-t">Stradivarius 秋冬新款女士短款机车风夹克外套2019潮08820199004</view>
-										<view class="x-bc price-box">
-											<view class="goods-price">339.90</view>
-											<text></text>
-										</view>
-									</view>
-								</view>
-							</view>
-						</view>
-						<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg);"></view>
-					</view>
-
-					<!-- 时间 -->
-					<view class="cu-info">11:59</view>
-					<!-- 客服 -->
-					<view class="cu-item" :class="{ self: chat.identify === 'customer_service' }" v-if="chat.identify === 'customer_service'">
-						<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big143004.jpg);"></view>
-						<view class="main">
-							<view class="content shadow"><text>喵喵喵！喵喵喵！</text></view>
+							<view
+								v-if="chat.identify === 'user'"
+								class="cu-avatar round"
+								style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg);"
+							></view>
+							<view class="date">{{ chat.date }}</view>
 						</view>
 					</view>
 				</block>
 			</view>
+			<view class="scroll-bottom" id="scrollBottom"></view>
 		</scroll-view>
 		<!-- 底部功能栏，输入栏 -->
 		<view class="cu-bar foot input y-f" :style="[{ bottom: InputBottom + 'px' }]">
@@ -72,7 +82,6 @@
 			<view class="cu-bar flex-sub" style="width: 100%;">
 				<view class="input-wrap x-f">
 					<input v-model="msgText" :adjust-position="false" :focus="false" maxlength="300" cursor-spacing="10" @focus="InputFocus" @blur="InputBlur" @input="onInput" />
-					<view class="action"><text class="cuIcon-emoji text-grey"></text></view>
 				</view>
 				<button v-if="isFocus" class="cu-btn send-btn shadow" @tap.stop="onSend">发送</button>
 				<button v-else class="cu-btn more-btn" @tap.stop="onTools">
@@ -139,46 +148,24 @@
 </template>
 
 <script>
-let wsInitData = {
-	//初始化数据
-	url: 'ws://112.126.102.191:1818/',
-	connection_id: 0,
-	session_id: '',
-	token: '87c0e696-e70a-484c-b53f-8f7ae044b5ce',
-	identify: 'user',
-	isSocketOpen: false
-};
+import Socket from './chat.js';
 export default {
 	data() {
 		return {
-			initMsg: {
-				identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
-				type: '', //message:用户消息类型; message_list:请求消息列表
-				message: {
-					// 发送的消息   type 为 message 的时候必填
-					message_type: 'text', // 消息类型 text image 等
-					message: '' // 消息内容 文本，或者图片地址，或者商品 json 对象
-				},
-				data: {
-					// 额外参数，分页页码，分页条数等
-					page: 1, //默认
-					per_page: 10, //分页条数
-					last_id: 0 //第一页第一条的Id
-				}
-			},
+			socket: null, //socket服务
+			navTitle: '连接中...', //标题栏
+			scrollInto: '', //scrollBottom
+			lastId: '',
+			currentPage: 1,
+			lastPage: 1,
 			chatList: [
-				// {
-				// identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
-				// type: '', //message:用户消息类型; message_list:请求消息列表
-				// message: {
-				// 	// 发送的消息   type 为 message 的时候必填
-				// 	message_type: 'text', // 消息类型 text image 等
-				// 	message: '' // 消息内容 文本，或者图片地址，或者商品 json 对象
-				// }
-				// }
+				// identify: 'customer_service', // 用户发送的为 user; 客服发送的为 customer_service
+				// type: 'text', //message:用户消息类型; message_list:请求消息列表
+				// msg: message.message,
+				// date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
 			],
 			InputBottom: 0,
-			msgText: '',
+			msgText: '', //输入框内容
 			isFocus: false, //获取焦点
 			showNotice: true, //滚动提示
 			showTools: false, //工具栏显示
@@ -213,7 +200,102 @@ export default {
 	onLoad() {
 		this.init();
 	},
+	onHide() {
+		this.socket.close();
+	},
 	methods: {
+		init() {
+			this.socket = new Socket(20000, msg => {
+				this.parseMsgStatus(msg.data);
+			});
+		},
+
+		// 解析消息
+		parseMsgStatus(msgStr) {
+			let obj = JSON.parse(msgStr);
+			if (obj.code === 1) {
+				switch (obj.type) {
+					case 'init':
+						this.navTitle = '连接成功...';
+						this.chatLog();
+						break;
+					case 'waiting':
+						this.navTitle = '等待接入...';
+						break;
+					case 'access':
+						this.navTitle = obj.data.customer_service.name;
+						this.parseMsg(obj.data.message);
+						break;
+					case 'message':
+						this.navTitle = obj.data.customer_service.name;
+						this.parseMsg(obj.data.message);
+						break;
+					case 'message_list':
+						let msgList = obj.data.message_list.data;
+						this.lastId = msgList[0]?.id;
+						this.lastPage = obj.data.message_list.last_page;
+						msgList.forEach(item => {
+							this.chatList.unshift({
+								identify: item.message_type === 'system' ? '' : item.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
+								type: item.message_type, //message:用户消息类型; message_list:请求消息列表
+								msg: item.message,
+								date: this.$u.date(item.createtime, 'yyyy年mm月dd日 hh时MM分')
+							});
+						});
+						this.scrollInto = 'scrollBottom';
+						break;
+					default:
+						break;
+				}
+			} else {
+				this.$tools.toast('连接错误，正在重试~');
+			}
+		},
+
+		// 解析消息类型
+		parseMsg(message) {
+			switch (message.message_type) {
+				case 'system':
+					this.chatList.push({
+						identify: 'customer_service', // 用户发送的为 user; 客服发送的为 customer_service
+						type: 'system', //message:用户消息类型; message_list:请求消息列表
+						msg: message.message,
+						date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
+					});
+					break;
+
+				default:
+					this.chatList.push({
+						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
+						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
+						msg: message.message,
+						date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
+					});
+					break;
+			}
+		},
+
+		// 历史聊天记录
+		async chatLog() {
+			uni.showLoading({
+				title: '加载聊天记录中...'
+			});
+			let msg = {
+				identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
+				type: 'message_list', //message:用户消息类型; message_list:请求消息列表
+				data: {
+					// 额外参数，分页页码，分页条数等
+					page: this.currentPage, //默认
+					last_id: this.lastId //第一页第一条的Id
+				}
+			};
+			let strMsg = JSON.stringify(msg);
+			let res = await this.socket.send(strMsg);
+			if (res.errMsg === 'sendSocketMessage:ok') {
+				uni.hideLoading();
+			}
+		},
+
 		// 获取焦点
 		InputFocus(e) {
 			this.InputBottom = e.detail.height;
@@ -226,6 +308,16 @@ export default {
 		onInput() {
 			this.msgText ? (this.isFocus = true) : (this.isFocus = false);
 		},
+
+		// 滚动到顶部
+		scrolltoupper() {
+			console.log('top1111111111111111111', this.currentPage, this.lastPage);
+			if (this.currentPage < this.lastPage) {
+				this.currentPage += 1;
+				this.chatLog();
+			}
+		},
+
 		// 点击工具栏开关
 		onTools() {
 			this.showTools = !this.showTools;
@@ -268,42 +360,6 @@ export default {
 
 		// 发送消息
 		async onSend() {
-			let res = await this.sendWsMsg();
-			console.log(res);
-		},
-
-		// 初始化
-		async init() {
-			await this.connectWs();
-			await this.openWs();
-			await this.errWs();
-			await this.onWsMsg();
-		},
-
-		// 创建ws
-		async connectWs() {
-			let [error, res] = await uni.connectSocket({ url: `${wsInitData.url}?identify=${wsInitData.identify}&token=${wsInitData.token}&session_id=${wsInitData.session_id}` });
-		},
-
-		//连接ws
-		openWs() {
-			let that = this;
-			uni.onSocketOpen(function(res) {
-				wsInitData.isSocketOpen = true;
-				console.log(res);
-				console.log('连接接成功！');
-			});
-		},
-
-		//连接错误
-		errWs() {
-			uni.onSocketError(err => {
-				console.log('连接错误', err);
-			});
-		},
-
-		// 发送消息
-		async sendWsMsg() {
 			let msg = {
 				identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
 				type: 'message', //message:用户消息类型; message_list:请求消息列表
@@ -311,44 +367,18 @@ export default {
 					// 发送的消息   type 为 message 的时候必填
 					message_type: 'text', // 消息类型 text image 等
 					message: this.msgText // 消息内容 文本，或者图片地址，或者商品 json 对象
-				},
-				data: {
-					// 额外参数，分页页码，分页条数等
-					page: 1, //默认
-					per_page: 10, //分页条数
-					last_id: 0 //第一页第一条的Id
 				}
 			};
 			let strMsg = JSON.stringify(msg);
-			if (wsInitData.isSocketOpen) {
-				let [error, res] = await uni.sendSocketMessage({
-					data: strMsg
+			let res = await this.socket.send(strMsg);
+			if (res.errMsg === 'sendSocketMessage:ok') {
+				this.chatList.push({
+					identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
+					type: 'text', //message:用户消息类型; message_list:请求消息列表
+					msg: this.msgText,
+					date: this.$u.date(new Date().getTime(), 'yyyy年mm月dd日 hh时MM分')
 				});
-				if (res.errMsg === 'sendSocketMessage:ok') {
-					this.chatList.push(msg);
-				}
-				return Promise.resolve(res);
 			}
-		},
-
-		// 监听消息
-		onWsMsg() {
-			uni.onSocketMessage(res => {
-				console.log('收到服务器内容：' + res.data);
-			});
-		},
-
-		// 关闭连接
-		closeWs() {
-			wsInitData.isSocketOpen && uni.closeSocket();
-		},
-
-		// 监听关闭
-		onCloseWs() {
-			uni.onSocketClose(res => {
-				wsInitData.isSocketOpen = false;
-				console.log('WebSocket 已关闭！');
-			});
 		}
 	}
 };
@@ -356,10 +386,18 @@ export default {
 
 <style lang="scss">
 // 重置样式
+.scroll-bottom {
+	height: calc(100rpx + env(safe-area-inset-bottom) / 2);
+	width: 100%;
+}
 .chat-wrap {
-	padding-bottom: 100rpx;
-	height: 100%;
+	height: 100vh;
 	overflow-y: hidden;
+	flex: 1;
+	.scroll-box {
+		height: 100vh;
+		flex: 1;
+	}
 	.cu-chat {
 		.cu-info {
 			border-radius: 26rpx;

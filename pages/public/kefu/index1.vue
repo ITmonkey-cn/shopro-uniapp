@@ -972,14 +972,16 @@ export default {
 		build_url: function(type = 'ws', res_path) {
 			var that = this;
 			var protocol = Config.https_switch ? 'https://' : 'http://';
+			
 			switch (type) {
 				//websocket聊天
 				case 'ws':
 					let tokenStr = '&token=' + (that.tokenList.kefu_token ? that.tokenList.kefu_token : '');
 					let kefu_user = '&kefu_tourists_token=' + (that.tokenList.kefu_tourists_token ? that.tokenList.kefu_tourists_token : '');
+					let baseUrl = Config.baseURL.split(':')[0];
 					protocol = parseInt(that.config.wss_switch) == 1 ? 'wss://' : 'ws://';
 
-					return (protocol + Config.baseURL + ':' + that.config.websocket_port + '/?modulename=index' + tokenStr + kefu_user).replace(/\|/g, '~');
+					return (protocol + baseUrl + ':' + that.config.websocket_port + '/?modulename=index' + tokenStr + kefu_user).replace(/\|/g, '~');
 					break;
 				//初始化
 				case 'initialize':
