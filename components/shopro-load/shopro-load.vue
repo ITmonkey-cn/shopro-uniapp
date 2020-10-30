@@ -1,12 +1,16 @@
 <template>
 	<view class="cu-load load-modal" v-if="loadModal">
-		<!-- <view class="cuIcon-emojifill text-orange"></view> -->
 		<image class="load-img" src="/static/imgs//logo/logo.gif" mode="aspectFit"></image>
 		<view class="locad-text">加载中...</view>
 	</view>
 </template>
 
 <script>
+/**
+ * 一个简单的loading组件 图片是gif的
+ * @property {Boolean|String} value 用v-model控制的一个属性。 
+ */
+
 export default {
 	components: {},
 	data() {

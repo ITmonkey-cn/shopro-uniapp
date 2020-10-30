@@ -6,6 +6,9 @@
 </template>
 
 <script>
+	/**
+	 * 图片居家屏
+	 */
 export default {
 	name: 'shoproSkeletons',
 	components: {},

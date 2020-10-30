@@ -118,12 +118,9 @@
 
 <script>
 import shActivityCard from '../children/sh-activity-card.vue';
-
-import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
 export default {
 	components: {
-		shActivityCard,
-		shoproSku
+		shActivityCard
 	},
 	data() {
 		return {

@@ -12,11 +12,8 @@
 </template>
 
 <script>
-import shoproGoodsCard from '@/components/shopro-goods-card/shopro-goods-card.vue';
 export default {
-	components: {
-		shoproGoodsCard
-	},
+	components: {},
 	data() {
 		return {
 			listParams: {

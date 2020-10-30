@@ -7,6 +7,9 @@
 </template>
 
 <script>
+	/**
+	 * 指引
+	 */
 export default {
 	name: 'shoproShareGuide',
 	components: {},

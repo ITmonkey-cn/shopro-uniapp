@@ -7,15 +7,12 @@
 				<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
 			</view>
 			<view class="item-title" :style="{ width: wh + 'rpx' }">{{ detail.name }}</view>
-			<!-- 	<image v-if="detail.live_status == 101" class="like-img" src="http://shopro.7wpp.com/imgs/live/zan.gif" mode=""></image> -->
 		</view>
 		<view class="live-bottom" :style="{ width: wh + 'rpx' }">
 			<view class="live-info">
 				<view class="info-box">
-					<!-- 	<image class="info-avatar" :src="detail.anchor_img" mode=""></image> -->
 					<view class="info-name">{{ detail.anchor_name }}</view>
 				</view>
-				<!-- 	<text class="views">15W观看</text> -->
 			</view>
 			<slot name="liveGoods">
 				<view class="live-goods" v-if="detail.goods.length">
@@ -33,9 +30,15 @@
 </template>
 
 <script>
+/**
+ * 小程序直播显示卡片
+ * @property {Object} detail - 直播卡片显示数据
+ * @property {Number} wh = [345] - 直播卡片宽度
+ */
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
 let livePlayer = null;
+// 全局配置文件控制是否开启直播组件，没有此项功能的小程序，运行会报错。
 if (HAS_LIVE) {
 	livePlayer = requirePlugin('live-player-plugin');
 }

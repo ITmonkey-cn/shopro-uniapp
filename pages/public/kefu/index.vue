@@ -2,86 +2,107 @@
 <template>
 	<view class="chat-wrap">
 		<cu-custom bgColor="bg-gradual-purple" :isBack="true">
-			<block slot="backText">{{ navTitle }}</block>
+			<block slot="backText">
+				<view class="x-f head-box">
+					<text class="head-title">{{ navTitle.split('-')[0] }}</text>
+					<view v-if="navTitle.split('-')[1] === '在线'">
+						<text class="cuIcon-title text-green head-icon"></text>
+						<text class="head-state">在线</text>
+					</view>
+					<view v-if="navTitle.split('-')[1] === '离线'">
+						<text class="cuIcon-title text-gray head-icon"></text>
+						<text class="head-state">离线</text>
+					</view>
+				</view>
+			</block>
 		</cu-custom>
-		<u-notice-bar :autoplay="true" close-icon @close="closeNotice" :show="showNotice" type="warning" :list="noticeList" :volumeIcon="true" :isCircular="true"></u-notice-bar>
-		<scroll-view
-			class="scroll-box"
-			scroll-y="true"
-			:scroll-with-animation="true"
-			:enable-back-to-top="true"
-			:show-scrollbar="false"
-			:scroll-into-view="scrollInto"
-			@scrolltoupper="scrolltoupper"
-		>
+		<u-notice-bar
+			v-if="noticeList.length"
+			:autoplay="true"
+			close-icon
+			@close="closeNotice"
+			:show="showNotice"
+			type="warning"
+			:list="noticeList"
+			:volumeIcon="true"
+			:isCircular="true"
+		></u-notice-bar>
+		<scroll-view class="scroll-box" scroll-y="true" :scroll-with-animation="false" :enable-back-to-top="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
+			<u-loadmore :status="logStatus" :loadText="loadText" icon-type="circle" @loadmore="logLoadmore" />
+
 			<view class="cu-chat">
 				<block v-for="(chat, index) in chatList" :key="index">
-					<!-- 时间 -->
-					<view class="cu-info" v-if="chat.type === 'system'">{{ chat.msg + chat.date }}</view>
-					<view class="" v-else>
+					<!-- 系统消息-->
+					<view class="cu-info" v-if="chat.type === 'system'">{{ chat.msg }}</view>
+					<view class="" v-if="chat.type !== 'system' && chat.type !== 'template'">
 						<!-- 自己  -->
 						<view class="cu-item" :class="{ self: chat.identify === 'user' }">
-							<view
-								v-if="chat.identify !== 'user'"
-								class="cu-avatar round"
-								style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg);"
-							></view>
+							<view v-if="chat.identify !== 'user'" class="cu-avatar round" :style="'background-image:url(' + chat.server_avatar + ')'"></view>
 							<view class="main">
 								<!-- 消息 -->
-								<view class="content bg-gradual-purple shadow" v-if="chat.type === 'text'">
-									<u-parse :html="chat.msg"></u-parse>
-									<text></text>
-									{{ chat.identify }}-{{ chat.type }}
-								</view>
+								<view class="content bg-gradual-purple shadow" v-if="chat.type === 'text'"><u-parse :html="chat.msg"></u-parse></view>
 								<!-- 订单 -->
-								<view class="content shadow" v-if="chat.type === 'order'">
+								<view class="content shadow" v-if="chat.type === 'order'" @tap="jump('/pages/order/detail', { id: chat.msg.id })">
 									<view class="order-chat">
-										<view class="order-code mb20">订单编号：25689456336</view>
+										<view class="order-code mb20">单号：{{ chat.msg.order_sn }}</view>
 										<view class="goods-card x-f">
-											<view class="img-wrap"><image class="goods-img" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
+											<view class="img-wrap"><image class="goods-img" :src="chat.msg.image" mode=""></image></view>
 											<view class="y-bc card-right">
-												<view class="goods-title more-t">Stradivarius 秋冬新款女士短款机车风夹克外套2019潮08820199004</view>
+												<view class="goods-title more-t">{{ chat.msg.title }}</view>
 
 												<view class="x-bc price-box">
-													<view class="goods-price">339.90</view>
-													<text class="goods-state">待发货</text>
+													<view class="goods-price">{{ chat.msg.price }}</view>
+													<text class="goods-state">{{ chat.msg.status_name }}</text>
 												</view>
 											</view>
 										</view>
 									</view>
 								</view>
 								<!-- 商品 -->
-								<view class="content shadow" v-if="chat.type === 'goods'">
+								<view class="content shadow" v-if="chat.type === 'goods'" @tap="jump('/pages/goods/detail/index', { id: chat.msg.id })">
 									<view class="goods-card x-f">
-										<view class="img-wrap"><image class="goods-img" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
+										<view class="img-wrap"><image class="goods-img" :src="chat.msg.image" mode=""></image></view>
 										<view class="y-bc card-right">
-											<view class="goods-title more-t">Stradivarius 秋冬新款女士短款机车风夹克外套2019潮08820199004</view>
+											<view class="goods-title more-t">{{ chat.msg.title }}</view>
 											<view class="x-bc price-box">
-												<view class="goods-price">111.90</view>
+												<view class="goods-price">{{ chat.msg.price }}</view>
 												<text></text>
 											</view>
 										</view>
 									</view>
 								</view>
 							</view>
-							<view
-								v-if="chat.identify === 'user'"
-								class="cu-avatar round"
-								style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big107000.jpg);"
-							></view>
+							<view v-if="chat.identify === 'user'" class="cu-avatar round" :style="'background-image:url(' + userInfo.avatar + ')'"></view>
 							<view class="date">{{ chat.date }}</view>
 						</view>
 					</view>
+					<!-- 模板消息 -->
+					<view class="template-box" v-if="chat.type === 'template'">
+						<view class="template-title">猜你想问</view>
+						<view class="template-item" v-for="item in templateList" :key="item.id" @tap="onQuestion(item)">* {{ item.title }}</view>
+					</view>
 				</block>
 			</view>
-			<view class="scroll-bottom" id="scrollBottom"></view>
+			<view class="scroll-bottom" style="height: 300rpx;" id="scrollBottom"></view>
 		</scroll-view>
 		<!-- 底部功能栏，输入栏 -->
 		<view class="cu-bar foot input y-f" :style="[{ bottom: InputBottom + 'px' }]">
 			<!-- 输入栏 -->
 			<view class="cu-bar flex-sub" style="width: 100%;">
 				<view class="input-wrap x-f">
-					<input v-model="msgText" :adjust-position="false" :focus="false" maxlength="300" cursor-spacing="10" @focus="InputFocus" @blur="InputBlur" @input="onInput" />
+					<input
+						v-model="msgText"
+						placeholder-style="font-size:26rpx;color:#999"
+						placeholder="请输入您想咨询的问题~"
+						:adjust-position="false"
+						:focus="false"
+						maxlength="300"
+						cursor-spacing="10"
+						@focus="InputFocus"
+						@blur="InputBlur"
+						@input="onInput"
+					/>
+					<view class="action" @tap="selEmoji"><text class="cuIcon-emoji text-grey"></text></view>
 				</view>
 				<button v-if="isFocus" class="cu-btn send-btn shadow" @tap.stop="onSend">发送</button>
 				<button v-else class="cu-btn more-btn" @tap.stop="onTools">
@@ -97,6 +118,7 @@
 					:action="`${this.$API_URL}/index/upload`"
 					maxCount="9"
 					:customBtn="true"
+					:show-tips="false"
 					class="flex-sub tools-item"
 				>
 					<view class="tools-item flex-sub" slot="addBtn">
@@ -114,6 +136,23 @@
 					<text class="item-title">订单</text>
 				</view>
 			</view>
+			<!-- 表情栏 -->
+			<view class="emoji-box" v-if="showEmoji">
+				<swiper
+					class="emoji-swiper"
+					:indicator-dots="true"
+					circular
+					indicator-active-color="#7063D2"
+					indicator-color="rgba(235, 231, 255, 1)"
+					:autoplay="false"
+					:interval="3000"
+					:duration="1000"
+				>
+					<swiper-item>
+						<view class="swiper-item x-f"><image v-for="item in 20" class="emoji-img" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
+					</swiper-item>
+				</swiper>
+			</view>
 		</view>
 
 		<!-- 商品/订单 -->
@@ -123,39 +162,66 @@
 				<button class="cu-btn close-btn" @tap="closeToolsItem"><text class="cuIcon-roundclosefill"></text></button>
 			</view>
 			<view class="log-content">
-				<view class="log-item" v-for="item in 6" :key="item">
-					<view class="code-box x-bc">
-						<view class="code-text">订单编号：25689456336</view>
-						<view class="date-text">10-19 10:55</view>
-					</view>
-					<view class="x-f log-card">
-						<view class="img-wrap"><image class="goods-img" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
-						<view class="y-bc card-right">
-							<view class="goods-title more-t">Stradivarius 秋冬新款女士短款机车风夹克外套2019潮08820199004</view>
-							<view class="num-box">数量：2</view>
-							<view class="x-bc price-box">
-								<view class="goods-price">339.90</view>
-								<text class="goods-state">待发货</text>
+				<scroll-view class="card-scroll-box" scroll-y="true" :scroll-with-animation="true" :show-scrollbar="false" @scrolltolower="loadMore">
+					<!-- 订单 -->
+					<view class="log-item" v-for="(item, index) in orderList" :key="index" @tap="onOrderCard(item)" v-if="cardType === 'order'">
+						<view class="code-box x-bc">
+							<view class="code-text">订单编号：{{ item.order_sn }}</view>
+							<view class="date-text">{{ $u.timeFormat(item.createtime, 'mm-dd hh:MM') }}</view>
+						</view>
+						<view class="x-f log-card">
+							<view class="img-wrap"><image class="goods-img" :src="item.item[0].goods_image" mode=""></image></view>
+							<view class="y-bc card-right">
+								<view class="goods-title more-t">{{ item.item[0].goods_title }}</view>
+								<view class="num-box">数量：{{ item.item[0].goods_num }}</view>
+								<view class="x-bc price-box">
+									<view class="goods-price">{{ item.item[0].goods_price }}</view>
+									<text class="goods-state">{{ item.status_name }}</text>
+								</view>
 							</view>
 						</view>
 					</view>
-				</view>
+					<!-- 商品 -->
+					<view class="log-item" v-for="(item, index) in viewList" :key="index" @tap="onViewCard(item)" v-if="cardType === 'goods'">
+						<view class="x-f log-card">
+							<view class="img-wrap"><image class="goods-img" :src="item.goods.image" mode=""></image></view>
+							<view class="y-bc card-right">
+								<view class="goods-title more-t">{{ item.goods.title }}</view>
+								<view class="num-box">{{ item.goods.subtitle }}</view>
+								<view class="x-bc price-box">
+									<view class="goods-price">{{ item.goods.price }}</view>
+									<text class="goods-state"></text>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="cu-load text-gray" :class="loadStatus"></view>
+				</scroll-view>
 			</view>
 		</view>
 		<!-- 遮罩 -->
-		<view class="cu-modal" @tap="onMask" :class="{ show: showTools }" style="z-index: 1000;"></view>
+		<view class="cu-modal" @tap="onMask" :class="{ show: showTools || showEmoji }" style="z-index: 1000;"></view>
 	</view>
 </template>
 
 <script>
 import Socket from './chat.js';
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	data() {
 		return {
 			socket: null, //socket服务
 			navTitle: '连接中...', //标题栏
 			scrollInto: '', //scrollBottom
-			lastId: '',
+			lastId: '', //加载历史聊天记录用
+			templateList: [], //模板问题。
+			loadText: {
+				loadmore: '点击加载更多',
+				loading: '正在加载，请喝杯茶...',
+				nomore: '我也是有底线的'
+			},
+			logStatus: 'loadmore',
+			cardType: '', //卡片分类
 			currentPage: 1,
 			lastPage: 1,
 			chatList: [
@@ -166,11 +232,11 @@ export default {
 			],
 			InputBottom: 0,
 			msgText: '', //输入框内容
-			isFocus: false, //获取焦点
 			showNotice: true, //滚动提示
 			showTools: false, //工具栏显示
-			showLogBox: false, //商品记录栏
-			logTitle: '',
+			showLogBox: false, //商品订单栏
+			showEmoji: false, //表情显示
+			logTitle: '', //；栏目标题
 			toolsList: [
 				//工具栏列表
 				{
@@ -194,92 +260,165 @@ export default {
 					title: '文件'
 				}
 			],
-			noticeList: ['欢迎光临linda小店，为庆祝新店开业', '欢迎光临linda小店，为庆祝新店开业', '欢迎光临linda小店，为庆祝新店开业']
+			noticeList: [], //跑马灯提示。
+			// 订单商品,分页。
+			loadStatus: '', //loading,over分页
+			orderList: [],
+			viewList: [],
+			orderCurrentPage: 1,
+			viewCurrentPage: 1,
+			orderTotalPage: 1,
+			viewTotalPage: 1
 		};
 	},
-	onLoad() {
+	computed: {
+		isFocus() {
+			//检测输入框是否有信息
+			let isMsg = false;
+			this.msgText ? (isMsg = true) : (isMsg = false);
+			return isMsg;
+		},
+		...mapState({
+			userInfo: state => state.user.userInfo //用户数据
+		})
+	},
+	onShow() {
 		this.init();
+	},
+	beforeDestroy() {
+		this.socket.close();
 	},
 	onHide() {
 		this.socket.close();
 	},
 	methods: {
 		init() {
-			this.socket = new Socket(20000, msg => {
-				this.parseMsgStatus(msg.data);
+			let that = this;
+			that.$api('chat.init').then(res => {
+				if (res.code == 1) {
+					that.noticeList.push(res.data.config.basic.notice);
+					that.templateList = res.data.question;
+					that.socket = new Socket(
+						{
+							ping: 20000,
+							is_ssl: res.data.config.system.is_ssl
+						},
+						msg => {
+							that.parseMsgStatus(msg.data); //监听消息
+						}
+					);
+				}
+			});
+		},
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
 			});
 		},
 
-		// 解析消息
+		// 解析链接状态
 		parseMsgStatus(msgStr) {
 			let obj = JSON.parse(msgStr);
 			if (obj.code === 1) {
 				switch (obj.type) {
 					case 'init':
 						this.navTitle = '连接成功...';
-						this.chatLog();
+						this.chatLog().then(this.pushChat('', 'template'));
+						this.goBottom();
 						break;
 					case 'waiting':
-						this.navTitle = '等待接入...';
+						this.navTitle = '等待客服接入...';
+						this.pushChat(obj.data.message.message, 'system');
 						break;
 					case 'access':
-						this.navTitle = obj.data.customer_service.name;
-						this.parseMsg(obj.data.message);
+						this.navTitle = `${obj.data.customer_service.name}-在线`;
+						this.pushChat(obj.data.message.message, 'system');
+						break;
+					case 'customer_service_online ':
+						this.navTitle = `${obj.data.customer_service.name}-在线`;
+						this.pushChat(obj.data.message.message, 'system');
+						break;
+					case 'customer_service_offline  ':
+						this.navTitle = `${obj.data.customer_service.name}-离线`;
+						this.pushChat(obj.data.message.message, 'system');
 						break;
 					case 'message':
-						this.navTitle = obj.data.customer_service.name;
-						this.parseMsg(obj.data.message);
+						this.navTitle = `${obj.data.customer_service.name}-在线`;
+						this.chatList.push(this.parseMsg(obj.data.message, obj.data.message.identify));
+						this.goBottom();
 						break;
 					case 'message_list':
 						let msgList = obj.data.message_list.data;
-						this.lastId = msgList[0]?.id;
+						this.lastId = msgList[0].id;
 						this.lastPage = obj.data.message_list.last_page;
+
 						msgList.forEach(item => {
-							this.chatList.unshift({
-								identify: item.message_type === 'system' ? '' : item.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
-								type: item.message_type, //message:用户消息类型; message_list:请求消息列表
-								msg: item.message,
-								date: this.$u.date(item.createtime, 'yyyy年mm月dd日 hh时MM分')
-							});
+							this.chatList.unshift(this.parseMsg(item, item.identify));
 						});
-						this.scrollInto = 'scrollBottom';
 						break;
 					default:
-						break;
 				}
 			} else {
 				this.$tools.toast('连接错误，正在重试~');
 			}
 		},
 
-		// 解析消息类型
-		parseMsg(message) {
+		// 解析消息类型,接受数据时才用，发送数据时不用。
+		parseMsg(message, identify) {
+			let obj = null;
 			switch (message.message_type) {
 				case 'system':
-					this.chatList.push({
+					obj = {
 						identify: 'customer_service', // 用户发送的为 user; 客服发送的为 customer_service
 						type: 'system', //message:用户消息类型; message_list:请求消息列表
-						msg: message.message,
-						date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
-					});
+						msg: message.message
+					};
 					break;
-
-				default:
-					this.chatList.push({
+				case 'image':
+					obj = {
+						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
+						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
+						msg: `<img class="chat-img" style="width:60px;height:60px" src="${message.message}"/>`,
+						server_avatar: identify.avatar,
+						date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
+					};
+					break;
+				case 'goods':
+					obj = {
+						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
+						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
+						msg: JSON.parse(message.message),
+						server_avatar: identify.avatar,
+						date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
+					};
+					break;
+				case 'order':
+					obj = {
+						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
+						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
+						msg: JSON.parse(message.message),
+						server_avatar: identify.avatar,
+						date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
+					};
+					break;
+				case 'text':
+					obj = {
 						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
 						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
 						msg: message.message,
+						server_avatar: identify.avatar,
 						date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
-					});
+					};
+					break;
+				default:
 					break;
 			}
+			return obj;
 		},
 
-		// 历史聊天记录
+		// 获取历史聊天记录
 		async chatLog() {
-			uni.showLoading({
-				title: '加载聊天记录中...'
-			});
 			let msg = {
 				identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
 				type: 'message_list', //message:用户消息类型; message_list:请求消息列表
@@ -289,10 +428,13 @@ export default {
 					last_id: this.lastId //第一页第一条的Id
 				}
 			};
+			this.logStatus = 'loading';
 			let strMsg = JSON.stringify(msg);
 			let res = await this.socket.send(strMsg);
-			if (res.errMsg === 'sendSocketMessage:ok') {
-				uni.hideLoading();
+			if (res && res.errMsg === 'sendSocketMessage:ok') {
+				setTimeout(() => {
+					this.logStatus = 'loadmore';
+				}, 300);
 			}
 		},
 
@@ -306,51 +448,87 @@ export default {
 		},
 		// 输入
 		onInput() {
-			this.msgText ? (this.isFocus = true) : (this.isFocus = false);
+			// this.msgText ? (this.isFocus = true) : (this.isFocus = false);
 		},
 
 		// 滚动到顶部
-		scrolltoupper() {
-			console.log('top1111111111111111111', this.currentPage, this.lastPage);
+		logLoadmore() {
 			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
 				this.chatLog();
+			} else {
+				this.logStatus = 'nomore';
 			}
 		},
 
 		// 点击工具栏开关
 		onTools() {
+			this.showEmoji = false;
 			this.showTools = !this.showTools;
 		},
 		// 工具栏功能项
-		onToolItem(id) {
+		onToolItem(type) {
+			this.cardType = type;
 			let map = new Map();
 			map.set('order', () => {
 				this.logTitle = '我的订单';
 				this.showLogBox = true;
+				this.getOrderList();
 			});
 			map.set('goods', () => {
 				this.logTitle = '我的浏览';
 				this.showLogBox = true;
+				this.getbrowseList();
 			});
 			map.set('imgs', this.chooseImg);
 
-			map.get(id)();
+			map.get(type)();
+		},
+		// 点击商品卡片
+		onViewCard(goods) {
+			let goodsData = {
+				id: goods.goods.id,
+				title: goods.goods.title,
+				price: goods.goods.price,
+				image: goods.goods.image
+			};
+			let goodsStr = JSON.stringify(goodsData);
+			this.sendWs(goodsStr, 'goods');
+			this.pushChat(goodsData, 'goods');
+			this.onMask();
+		},
+		onOrderCard(order) {
+			let orderData = {
+				id: order.id,
+				title: order.item[0].goods_title,
+				price: order.item[0].goods_price,
+				num: order.item[0].goods_num,
+				order_sn: order.order_sn,
+				image: order.item[0].goods_image,
+				status_name: order.status_name
+			};
+			let orderStr = JSON.stringify(orderData);
+			this.sendWs(orderStr, 'order');
+			this.pushChat(orderData, 'order');
+			this.onMask();
 		},
 		// 关闭工具栏项
 		closeToolsItem() {
 			this.showLogBox = false;
 		},
 
-		// 发送图片
-		uploadSuccess(e) {
-			console.log('图片上传成功', e);
+		// 选择表情
+		selEmoji() {
+			this.showTools = false;
+			this.showLogBox = false;
+			this.showEmoji = !this.showEmoji;
 		},
 
 		// 点击遮罩
 		onMask() {
 			this.showTools = false;
 			this.showLogBox = false;
+			this.showEmoji = false;
 		},
 
 		//关闭滚动提示
@@ -358,27 +536,131 @@ export default {
 			this.showNotice = false;
 		},
 
-		// 发送消息
-		async onSend() {
+		// 滚动底部
+		goBottom() {
+			let timeout = null;
+			clearTimeout(timeout);
+			timeout = setTimeout(() => {
+				this.scrollInto = 'scrollBottom';
+			}, 100);
+			this.scrollInto = '';
+		},
+
+		// 发送图片
+		uploadSuccess(list) {
+			list.forEach(item => {
+				this.sendWs(item.response.data.url, 'image');
+				this.pushChat(`<img class="chat-img" style="width:60px;height:60px" src="${item.url}"/>`);
+				this.onMask();
+			});
+		},
+
+		// 发送问题
+		async onQuestion(question) {
+			this.pushChat(question.title);
 			let msg = {
 				identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
 				type: 'message', //message:用户消息类型; message_list:请求消息列表
 				message: {
 					// 发送的消息   type 为 message 的时候必填
 					message_type: 'text', // 消息类型 text image 等
-					message: this.msgText // 消息内容 文本，或者图片地址，或者商品 json 对象
+					message: question.title // 消息内容 文本，或者图片地址，或者商品 json 对象
+				},
+				data: {
+					question_id: question.id
 				}
 			};
 			let strMsg = JSON.stringify(msg);
 			let res = await this.socket.send(strMsg);
-			if (res.errMsg === 'sendSocketMessage:ok') {
-				this.chatList.push({
-					identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
-					type: 'text', //message:用户消息类型; message_list:请求消息列表
-					msg: this.msgText,
-					date: this.$u.date(new Date().getTime(), 'yyyy年mm月dd日 hh时MM分')
-				});
+		},
+
+		// 发送消息
+		onSend() {
+			this.sendWs(this.msgText);
+			this.pushChat(this.msgText);
+			this.msgText = '';
+		},
+
+		// 发送服务数据
+		async sendWs(data, type = 'text') {
+			let msg = {
+				identify: 'user', // 用户发送的为 user; 客服发送的为 customer_service
+				type: 'message', //message:用户消息类型; message_list:请求消息列表
+				message: {
+					// 发送的消息   type 为 message 的时候必填
+					message_type: type, // 消息类型 text image 等
+					message: data // 消息内容 文本，或者图片地址，或者商品 json 对象
+				}
+			};
+			let strMsg = JSON.stringify(msg);
+			let res = await this.socket.send(strMsg);
+		},
+		// 发送本地数据。
+		pushChat(data, type = 'text') {
+			this.chatList.push({
+				identify: 'user',
+				type: type,
+				msg: data,
+				date: this.$u.date(new Date().getTime(), 'yyyy年mm月dd日 hh时MM分')
+			});
+			this.goBottom();
+		},
+
+		// 加载更多
+		loadMore() {
+			if (this.cardType === 'goods') {
+				if (this.viewCurrentPage < this.viewTotalPage) {
+					this.viewCurrentPage += 1;
+					this.getbrowseList();
+				}
 			}
+			if (this.cardType === 'order') {
+				if (this.orderCurrentPage < this.orderTotalPage) {
+					this.orderCurrentPage += 1;
+					this.getOrderList();
+				}
+			}
+		},
+
+		// 订单列表
+		getOrderList() {
+			let that = this;
+			that.isLoading = true;
+			that.loadStatus = 'loading';
+			that.$api('order.index', {
+				type: 'all',
+				page: that.orderCurrentPage
+			}).then(res => {
+				if (res.code === 1) {
+					that.isLoading = false;
+					that.orderList = [...that.orderList, ...res.data.data];
+					that.orderTotalPage = res.data.last_page;
+					if (that.orderCurrentPage < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
+				}
+			});
+		},
+
+		// 历史记录
+		getbrowseList() {
+			let that = this;
+			that.loadStatus = 'loading';
+			that.$api('goods.viewList', {
+				page: that.viewCurrentPage
+			}).then(res => {
+				if (res.code === 1) {
+					that.viewList = [...that.viewList, ...res.data.data];
+					that.viewTotalPage = res.data.last_page;
+					if (that.viewCurrentPage < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
+				}
+			});
 		}
 	}
 };
@@ -386,17 +668,48 @@ export default {
 
 <style lang="scss">
 // 重置样式
-.scroll-bottom {
-	height: calc(100rpx + env(safe-area-inset-bottom) / 2);
-	width: 100%;
+page {
+	overflow: hidden;
 }
+// 标题栏
+.head-box {
+	.head-title {
+		font-size: 38rpx;
+	}
+	.head-icon {
+		font-size: 34rpx;
+	}
+	.head-state {
+		font-size: 28rpx;
+	}
+}
+// 模板消息
+.template-box {
+	width: 690rpx;
+	background: #ffffff;
+	border-radius: 10rpx;
+	margin: 0 auto;
+	padding: 20rpx 24rpx;
+	.template-title {
+		font-size: 26rpx;
+		font-weight: bold;
+		color: #333333;
+		line-height: 36rpx;
+		margin-bottom: 20rpx;
+	}
+	.template-item {
+		font-size: 24rpx;
+		font-weight: 500;
+		color: #603fff;
+		line-height: 46rpx;
+	}
+}
+// 聊天框
 .chat-wrap {
-	height: 100vh;
-	overflow-y: hidden;
-	flex: 1;
+	height: 100%;
+	overflow: hidden;
 	.scroll-box {
-		height: 100vh;
-		flex: 1;
+		height: 100%;
 	}
 	.cu-chat {
 		.cu-info {
@@ -406,7 +719,7 @@ export default {
 		}
 		.main {
 			margin: 0 20rpx;
-			max-width: calc(100% - 100px);
+			max-width: calc(100% - 80px);
 		}
 		.cu-item > .main .content {
 			&::after {
@@ -487,10 +800,12 @@ export default {
 		width: 330rpx;
 		height: 116rpx;
 		.goods-title {
+			width: 330rpx;
 			font-size: 26rpx;
 			font-weight: 500;
 			color: #333333;
 			line-height: 32rpx;
+			text-align: left;
 		}
 
 		.price-box {
@@ -557,7 +872,11 @@ export default {
 	}
 	.log-content {
 		flex: 1;
-		overflow-y: auto;
+		height: 100%;
+		overflow: hidden;
+		.card-scroll-box {
+			height: 100%;
+		}
 		.log-item {
 			width: 690rpx;
 			background-color: #fff;
@@ -585,11 +904,14 @@ export default {
 			.card-right {
 				width: 500rpx;
 				height: 140rpx;
+
 				.goods-title {
 					font-size: 26rpx;
 					font-weight: 500;
 					color: #333333;
 					line-height: 32rpx;
+					text-align: left;
+					width: 500rpx;
 				}
 				.num-box {
 					font-size: 24rpx;
@@ -617,6 +939,28 @@ export default {
 				}
 			}
 		}
+	}
+}
+// 表情栏
+.emoji-box {
+	width: 100%;
+	background-color: #fff;
+	height: 310rpx;
+	border-top: 1rpx solid #f6f6f6;
+	transition: all 0.3s ease-in-out 0s;
+	padding: 20rpx 0;
+	.emoji-swiper {
+		height: 280rpx;
+		.swiper-item {
+			flex-wrap: wrap;
+		}
+	}
+	.emoji-img {
+		width: 40rpx;
+		height: 40rpx;
+		border-radius: 50%;
+		display: inline-block;
+		margin: 10rpx;
 	}
 }
 </style>

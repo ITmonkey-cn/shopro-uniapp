@@ -10,11 +10,8 @@
 </template>
 
 <script>
-import shoproCoupon from '@/components/shopro-coupon/shopro-coupon.vue';
 export default {
-	components: {
-		shoproCoupon
-	},
+	components: {},
 	data() {
 		return {
 			categoryCurrent: 0, //分类轮播下标

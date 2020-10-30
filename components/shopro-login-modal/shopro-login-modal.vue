@@ -31,6 +31,11 @@
 </template>
 
 <script>
+	/**
+	 * 登录提示页
+	 * @property {Boolean} value=showLoginTip - 由v-model控制显示隐藏。
+	 * @property {Boolean} forceOauth - 小程序端特制的全屏登录提示。 
+	 */
 import Wechat from '@/common/wechat/wechat';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {

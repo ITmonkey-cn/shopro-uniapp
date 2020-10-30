@@ -14,6 +14,10 @@
 </template>
 
 <script>
+/**
+ * 广告模态框。连续弹窗和只弹一次。
+ * @property {Object} newPopupList  - vuex 初始化传过来的数据
+ */
 import { mapMutations, mapActions, mapState } from 'vuex';
 let timer = null;
 export default {
@@ -26,9 +30,7 @@ export default {
 			screenShot: uni.getStorageSync('screenShot')
 		};
 	},
-	props: {
-		detail: {}
-	},
+	props: {},
 	computed: {
 		...mapState({
 			templateData: state => state.init.templateData.popup,

@@ -37,14 +37,12 @@
 
 <script>
 import shFilter from './children/sh-filter.vue';
-import shoproGoodsCard from '@/components/shopro-goods-card/shopro-goods-card.vue';
 import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 let timer = null;
 export default {
 	components: {
 		shFilter,
-		shoproGoodsCard,
 		shoproEmpty
 	},
 	data() {

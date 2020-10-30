@@ -41,6 +41,11 @@
 </template>
 
 <script>
+/**
+ * 优惠券
+ * @property {Number} state - 0:立即领取，1：去使用，2：查看详情，3：已失效。
+ * @property {Object} couponData - 优惠劵数据。
+ */
 export default {
 	name: 'shoproCoupon',
 	components: {},
@@ -50,7 +55,7 @@ export default {
 		};
 	},
 	props: {
-		state: {}, //0:立即领取，1：去使用，2：查看详情，3：已失效。
+		state: 0, //0:立即领取，1：去使用，2：查看详情，3：已失效。
 		couponData: {}
 	},
 	computed: {},

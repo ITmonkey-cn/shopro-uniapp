@@ -15,7 +15,6 @@
 					<text class="status-text">{{ liveStatus[live.live_status].title }}</text>
 				</view>
 				<view class="item-title">{{ live.name }}</view>
-				<!-- <image v-if="live.live_status == 101" class="like-img" src="http://shopro.7wpp.com/imgs/live/zan.gif" mode=""></image> -->
 			</view>
 		</view>
 		<view class="content-two" v-if="detail.style == 2">

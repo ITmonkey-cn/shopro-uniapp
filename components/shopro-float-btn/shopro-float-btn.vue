@@ -24,6 +24,10 @@
 </template>
 
 <script>
+/**
+ * 悬浮按钮，悬浮菜单。全局通用，数据为vuex初始化导入。
+ * @property {Array} floatList - 悬浮按钮菜单数据列表
+ */
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
@@ -45,6 +49,7 @@ export default {
 				return this.template[0].content;
 			}
 		},
+		// 当前页面路径
 		currentPath() {
 			let pages = getCurrentPages();
 			let currPage = null;
@@ -53,6 +58,7 @@ export default {
 			}
 			return '/' + currPage;
 		},
+		// 悬浮按钮数据列表
 		floatList() {
 			if (this.floatData) {
 				let arr = this.floatData.list.filter(item => {
@@ -62,11 +68,7 @@ export default {
 			}
 		}
 	},
-	created() {
-		// setInterval(function(){
-		// 	console.log(this.template,123)
-		// 	}, 100);
-	},
+	created() {},
 	methods: {
 		hideModal() {
 			this.showModal = false;
@@ -74,6 +76,7 @@ export default {
 		hideBtnModal() {
 			this.showBtnList = false;
 		},
+		// 如果悬浮按钮数据为一条，按钮图片为唯一菜单项图片和标题
 		onBtnItem(item) {
 			if (item.style == 2) {
 				this.$tools.routerTo(item.path);

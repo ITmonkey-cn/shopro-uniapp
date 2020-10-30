@@ -3,8 +3,6 @@
  * 聊天配置,socket服务相关,心跳检测和重连
  */
 
-
-
 /**
  * socket
  * @param  {Object} config  - 初始化配置对象
@@ -17,20 +15,24 @@ import {
 
 const service = BASE_URL.split('://')[1];
 export default class Socket {
-	constructor(wait, callback) {
+	constructor(initData, callback) {
+		let {
+			ping,
+			is_ssl
+		} = initData;
 		this.config = {
-			url: `ws://${service}:1818/`,
+			url: `${is_ssl?'wss':'ws'}://${service}:1818/`,
 			session_id: '',
 			token: uni.getStorageSync('token'),
-			identify: 'user',
-			isSocketOpen: false
+			identify: 'user'
 		};
 		this.callback = callback; //onmsg回调
 		this.timeoutObj = null; //心跳检测定时器对象
 		this.lockReconnect = false; //检测次数锁
 		this.timer = null; // 检测定时器
 		this.limit = 0; //检测次数，默认最大12
-		this.timout = wait;
+		this.timout = ping;
+		uni.setStorageSync('isSocketOpen', false)
 		this.init()
 	}
 
@@ -41,7 +43,7 @@ export default class Socket {
 
 	// 连接
 	async connect() {
-		if (!this.config.isSocketOpen) {
+		if (!uni.getStorageSync('isSocketOpen')) {
 			let [error, res] = await uni.connectSocket({
 				url: `${this.config.url}?identify=${this.config.identify}&token=${this.config.token}&session_id=${this.config.session_id}`
 			});
@@ -53,7 +55,7 @@ export default class Socket {
 
 	// 发送消息
 	async send(msg = "") {
-		if (this.config.isSocketOpen) {
+		if (uni.getStorageSync('isSocketOpen')) {
 			let [error, res] = await uni.sendSocketMessage({
 				data: msg
 			});
@@ -74,13 +76,18 @@ export default class Socket {
 
 	// 关闭连接
 	close() {
-		this.config.isSocketOpen && uni.closeSocket();
+		uni.closeSocket();
+		uni.removeStorage({
+			key: 'isSocketOpen',
+			success: (res) => {
+				console.log('移除isSocketOpensuccess');
+			}
+		});
 		clearTimeout(this.timer);
 		clearTimeout(this.timeoutObj);
 	}
 
 	//心跳检测
-
 	start() {
 		clearTimeout(this.timeoutObj);
 		this.timeoutObj = setTimeout(() => {
@@ -98,8 +105,8 @@ export default class Socket {
 	// 监听事件集
 	initEventHandle() {
 		// 监听打开
-		uni.onSocketOpen((res) => {
-			this.config.isSocketOpen = true;
+		uni.onSocketOpen(res => {
+			uni.setStorageSync('isSocketOpen', true)
 			console.log('连接接成功！');
 			this.start()
 		});
@@ -110,13 +117,16 @@ export default class Socket {
 		// 监听错误
 		uni.onSocketError(err => {
 			console.log('连接错误', err);
-			this.reconnect()
 		});
+
 		// 监听关闭
 		uni.onSocketClose(res => {
-			this.config.isSocketOpen = false;
 			console.log('WebSocket 已关闭！');
-			// this.reconnect()
+			if (uni.getStorageSync('isSocketOpen')) {
+				this.reconnect()
+			}
+
+
 		});
 	}
 

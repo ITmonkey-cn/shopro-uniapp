@@ -596,7 +596,7 @@
 
 					},
 					"meta": {
-						"auth": false,
+						"auth": true,
 						"async": true,
 						"title": "客服",
 						"group": "通用"

@@ -65,6 +65,15 @@
 </template>
 
 <script>
+/**
+ * 多规格组件
+ * @property {Object} goodsInfo - 商品数据
+ * @property {Boolean} value = showModal - 显隐
+ * @property {String} buyType  - 购买方式
+ * @property {String} goodsType - 商品类别
+ * @property {String} grouponBuyType -拼团商品购买方式
+ * @property {Number} grouponId - 拼团ID,分享进入
+ */
 import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {

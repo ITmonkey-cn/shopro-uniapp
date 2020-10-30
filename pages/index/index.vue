@@ -52,9 +52,6 @@
 				</scroll-view>
 			</view>
 			<view class="foot_box"></view>
-
-			<!-- 骨架屏 -->
-			<shopro-skeleton :showSkeleton="!template"></shopro-skeleton>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
 			<!-- 自定义底部导航 -->
@@ -104,8 +101,6 @@ import shTitleCard from './components/sh-title-card.vue';
 import shOrder from './components/sh-order.vue';
 import shWallet from './components/sh-wallet.vue';
 
-import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
-import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
 import shLive from './components/sh-live.vue';
@@ -137,8 +132,6 @@ export default {
 		shGroupon,
 		shRichtext,
 		shNav,
-		shoproNoticeModal,
-		shoproSkeletons,
 		// #ifdef MP-WEIXIN
 		shLive
 		// #endif

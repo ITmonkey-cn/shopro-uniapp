@@ -9,6 +9,11 @@
 </template>
 
 <script>
+/**
+ * 数据为空页
+ * @property {Object} emptyData - 数据为空页页面数据。
+ * @property {Boolean} isFixed - 是否开启绝对定位,用于局部数据为空，整页数据为空。
+ */
 export default {
 	name: 'shoproEmpty',
 	components: {},

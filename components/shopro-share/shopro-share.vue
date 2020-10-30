@@ -49,6 +49,13 @@
 </template>
 
 <script>
+/**
+ * 分享弹窗
+ * @property {Boolean} value = showModal - v-model控制显隐
+ * @property {String} modalType - 模态框类别
+ * @property {String} posterType - 海报类别
+ * @property {Object} goodsInfo - 海报数据
+ */
 import shoproShareGuide from '@/components/shopro-share-guide/shopro-share-guide.vue';
 export default {
 	name: 'shoproShare',
@@ -57,7 +64,7 @@ export default {
 	},
 	data() {
 		return {
-			showShareGuide: false,
+			showShareGuide: false, //H5的指引。
 			shareData: {} //组装海报分享信息
 		};
 	},

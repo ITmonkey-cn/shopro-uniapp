@@ -11,17 +11,17 @@
 				<view class="current">{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</view>
 				<view class="sales miso-font">销量{{ detail.sales }}件</view>
 			</view>
-			<view class="x-f tag-box">
-				<!-- <view class="discount">新人礼</view>
-				<view class="discount">满100减60</view> -->
-			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+/**
+ * 商品列表卡片
+ * @property {Boolean} isTag - 是否显示商品标签，显示类别根据商品活动属性
+ * @property {Object} detail - 商品详情数据
+ */
 export default {
-	name: 'shoproGoodsCard',
 	components: {},
 	data() {
 		return {

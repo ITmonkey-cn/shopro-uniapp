@@ -11,6 +11,17 @@ export default {
 		// desc: '初始化数据',
 	},
 
+	/** 聊天 ↓ **/
+	chat: {
+		init: {
+			url: 'chat.index/init',
+			auth: false,
+			method: 'GET',
+			// desc: '初始化聊天配置',
+		}
+
+	},
+
 	/** 上传图片 ↓ **/
 	upload: {
 		url: 'index/upload',

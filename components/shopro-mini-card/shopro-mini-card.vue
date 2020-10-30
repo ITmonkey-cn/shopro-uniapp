@@ -52,6 +52,12 @@
 </template>
 
 <script>
+/**
+ * 商品小卡片
+ * @property {Object} detail - 卡片数据
+ * @property {Object} sku - 多规格卡片数据
+ * @property {String} type - 卡片种类。sku,favorite,order,其他。
+ */
 export default {
 	name: 'shoproMiniCard',
 	components: {},
@@ -141,7 +147,7 @@ export default {
 		font-weight: 400;
 		color: rgba(153, 153, 153, 1);
 		width: 450rpx;
-			margin-bottom: 20rpx;
+		margin-bottom: 20rpx;
 		.order-num {
 			margin-right: 10rpx;
 		}
@@ -149,7 +155,7 @@ export default {
 
 	.order-goods {
 		width: 480rpx;
-	
+
 		.status-btn {
 			background: none;
 			height: 32rpx;
@@ -161,7 +167,7 @@ export default {
 			color: rgba(168, 112, 13, 1);
 			padding: 0 10rpx;
 			margin-left: 20rpx;
-			background:rgba(233,183,102,0.16);
+			background: rgba(233, 183, 102, 0.16);
 		}
 		.order-price {
 			font-size: 26rpx;

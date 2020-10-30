@@ -10,6 +10,9 @@
 	</view>
 </template>
 <script>
+	/**
+	 * 插件市场的计步器，做了一些数据修改。
+	 */
 export default {
 	name: 'UniNumberBox',
 	props: {

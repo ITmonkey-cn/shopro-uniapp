@@ -24,13 +24,18 @@
 </template>
 
 <script>
+/**
+ * 多级下拉列表，省市区联动,数据为后台返回,用来计算运费。
+ * @property {Array} pickerValueDefault = [0,0,0] - 初始默认地址。
+ * @property {String} themeColor - 按钮颜色。
+ */
 export default {
 	data() {
 		return {
 			pickerValue: [0, 0, 0],
-			provinceDataList: [],
-			cityDataList: [],
-			areaDataList: [],
+			provinceDataList: [], //省
+			cityDataList: [], //市
+			areaDataList: [], //区
 			pcaData: {}, //省市区总数据
 			/* 是否显示控件 */
 			showPicker: false
@@ -47,7 +52,6 @@ export default {
 				return [0, 0, 0];
 			}
 		},
-		pickerData: {},
 		/* 主题色 */
 		themeColor: String
 	},

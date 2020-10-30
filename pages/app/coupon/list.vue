@@ -9,7 +9,9 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<view class="coupon-list" v-for="(c,index) in couponList" :key="index" @tap="toCouponDetail(c)"><shoprp-coupon :state="stateCurrent" :couponData="c"></shoprp-coupon></view>
+			<view class="coupon-list" v-for="(c, index) in couponList" :key="index" @tap="toCouponDetail(c)">
+				<shopro-coupon :state="stateCurrent" :couponData="c"></shopro-coupon>
+			</view>
 		</view>
 		<view class="foot_box"></view>
 		<!-- 自定义底部导航 -->
@@ -24,11 +26,8 @@
 </template>
 
 <script>
-import shoprpCoupon from '@/components/shopro-coupon/shopro-coupon.vue';
 export default {
-	components: {
-		shoprpCoupon
-	},
+	components: {},
 	data() {
 		return {
 			stateCurrent: 0,

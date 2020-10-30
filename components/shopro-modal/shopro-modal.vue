@@ -5,8 +5,12 @@
 </template>
 
 <script>
+	/**
+	 * 模态框
+	 * @property {Boolean} value = showModal - v-modle控制显隐
+	 * @property {String} modalType - 模态框显示位置。drawer-modal,bottom-modal,cu-dialog,对应colorUi的modal类型
+	 */
 export default {
-	name: 'shoproModal',
 	components: {},
 	data() {
 		return {};

@@ -74,16 +74,11 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
-import shoproModal from '@/components/shopro-modal/shopro-modal.vue';
 export default {
-	components: {
-		shoproMiniCard,
-		shoproModal
-	},
+	components: {},
 	data() {
 		return {
-			addons:uni.getStorageSync('addons'),
+			addons: uni.getStorageSync('addons'),
 			showModal: false,
 			imgList: [], //本地地址
 			orderId: 0, //订单ID

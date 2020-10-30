@@ -13,11 +13,8 @@
 </template>
 
 <script>
-import shoproCoupon from '@/components/shopro-coupon/shopro-coupon.vue';
 export default {
-	components: {
-		shoproCoupon
-	},
+	components: {},
 	data() {
 		return {
 			categoryCurrent: 0 //分类轮播下标
@@ -38,8 +35,7 @@ export default {
 </script>
 
 <style lang="scss">
-
-.category-box{
+.category-box {
 	padding-top: 20rpx;
 	background: #fff;
 }
@@ -49,7 +45,7 @@ export default {
 	height: 220rpx;
 	margin-bottom: 20rpx;
 	.tab-list {
-		/deep/.coupon-wrap{
+		/deep/.coupon-wrap {
 			width: 710rpx;
 		}
 	}

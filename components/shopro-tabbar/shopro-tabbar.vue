@@ -26,6 +26,11 @@
 </template>
 
 <script>
+	/**
+	 * 自定义底部导航
+	 * @property {Array} tabbarList - vuex初始化的底部导航数据
+	 * @property {String} currentPath -computed解析当前页面路径，还有携带参数。
+	 */
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	name: 'shoproTabbar',

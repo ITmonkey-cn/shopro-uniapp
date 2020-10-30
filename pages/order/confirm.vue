@@ -283,7 +283,6 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 import shPickerModal from './children/sh-picker-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 // #ifdef H5
@@ -294,7 +293,6 @@ import wxsdk from '@/common/wechat/sdk'
     // #endif
 export default {
 	components: {
-		shoproMiniCard,
 		shPickerModal
 	},
 	data() {

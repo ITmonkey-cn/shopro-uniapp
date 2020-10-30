@@ -163,8 +163,6 @@
 			<shopro-share v-model="showShare" :goodsInfo="goodsInfo" :posterType="'goods'"></shopro-share>
 			<!-- 登录提示 -->
 			<shopro-login-modal></shopro-login-modal>
-			<!-- 骨架屏 -->
-			<shopro-skeleton :showSkeleton="false"></shopro-skeleton>
 			<!-- 自定义底部导航 -->
 			<shopro-tabbar></shopro-tabbar>
 			<!-- 关注弹窗 -->
@@ -182,9 +180,6 @@ import shGroupon from './children/sh-groupon.vue';
 import shGrouponTip from './children/sh-groupon-tip.vue';
 import shCoupon from './children/sh-coupon.vue';
 import shComment from '../children/sh-comment.vue';
-import shoproSku from '@/components/shopro-sku/shopro-sku.vue';
-import shoproSkeletons from '@/components/shopro-skeletons/shopro-skeletons.vue';
-import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
@@ -193,10 +188,7 @@ export default {
 		shGroupon,
 		shCoupon,
 		shGrouponTip,
-		shoproSku,
-		shComment,
-		shoproSkeletons,
-		shoproEmpty
+		shComment
 	},
 	data() {
 		return {
