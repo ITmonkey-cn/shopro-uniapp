@@ -1,3 +1,4 @@
+<!-- 首页 -->
 <template>
 	<view class="page_box">
 		<!-- 空白页 -->

@@ -28,7 +28,10 @@
 </template>
 
 <script>
-import shoproLiveCard from '@/components/shopro-live-card/shopro-live-card.vue';
+/**
+ * 自定义之直播卡片
+ * @property {Object} detail - 直播信息
+ */
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
 let livePlayer = null;
@@ -38,9 +41,7 @@ if (HAS_LIVE) {
 //  #endif
 let timer = null;
 export default {
-	components: {
-		shoproLiveCard
-	},
+	components: {},
 	data() {
 		return {
 			liveList: [],

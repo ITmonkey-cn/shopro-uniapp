@@ -26,6 +26,12 @@
 </template>
 
 <script>
+/**
+ * 自定义之分类导航
+ * @property {Object} detail - 分类导航信息
+ * @property {Number} menu - 单行数量
+ * @property {Number} imgW  - 图片宽度
+ */
 export default {
 	components: {},
 	data() {

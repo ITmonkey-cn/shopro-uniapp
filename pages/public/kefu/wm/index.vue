@@ -87,17 +87,17 @@
 										<view class="head-img"><image class="head-img" v-if="message.sender == 'you'" src="/static/imgs/kefu/sys_head.png" mode=""></image></view>
 										<view v-if="message.message_type != 3" class="bubble" :class="message.sender == 'me' ? 'me' : 'you'">
 											<!-- 除了商品/订单卡片和图片，其他的都使用富文本 -->
-											<uni-parser
+											<u-parse
 												@imgtap="message_img_preview"
-												:tag-style="{ img: 'width:50rpx;height:50rpx;' }"
+												:tagStyle="{ img: 'width:50rpx;height:50rpx;' }"
 												v-if="message.message_type == 0"
 												:html="message.message"
-											></uni-parser>
+											></u-parse>
 
-											<uni-parser
+											<u-parse
 												v-if="message.message_type == 2"
 												:html="'<a target=_blank href=' + message.message + '>' + message.message + '</a>'"
-											></uni-parser>
+											></u-parse>
 
 											<image @tap="preview_img(message.message)" v-if="message.message_type == 1" :src="message.message" mode="widthFix"></image>
 

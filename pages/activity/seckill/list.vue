@@ -1,3 +1,4 @@
+<!-- 秒杀列表 -->
 <template>
 	<view class="page_box">
 		<view class="head_box">
@@ -47,11 +48,9 @@
 
 <script>
 import shActivityCard from '../children/sh-activity-card.vue';
-import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
-		shActivityCard,
-		shoproEmpty
+		shActivityCard
 	},
 	data() {
 		return {

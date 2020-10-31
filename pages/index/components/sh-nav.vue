@@ -13,6 +13,10 @@
 </template>
 
 <script>
+	/**
+	 * 自定义之功能列表
+	 * @property {Object} detail - 列表信息
+	 */
 export default {
 	components: {},
 	data() {

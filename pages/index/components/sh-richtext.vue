@@ -1,8 +1,12 @@
 <template>
-	<view class="sh-richtext-box mb10" v-if="richText.content"><uni-parser :html="richText.content"></uni-parser></view>
+	<view class="sh-richtext-box mb10" v-if="richText.content"><u-parse :html="richText.content"></u-parse></view>
 </template>
 
 <script>
+	/**
+	 * 自定义之富文本卡片 局部
+	 * @property {String} richText - 富文本信息
+	 */
 export default {
 	components: {
 	},

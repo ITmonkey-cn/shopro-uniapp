@@ -1,5 +1,4 @@
 <template>
-	<!-- 详情优惠券轮播 -->
 	<view class="category-box shopro-selector-rect">
 		<swiper class="swiper-box" @change="onSwiper" circular :autoplay="false" :interval="3000" :duration="1000">
 			<swiper-item v-for="(c, index) in couponList" :key="c.id">
@@ -13,6 +12,10 @@
 </template>
 
 <script>
+/**
+ * 	 详情优惠券轮播 - 详情专用
+ * @property {Object} couponList - 优惠劵列表
+ */
 export default {
 	components: {},
 	data() {

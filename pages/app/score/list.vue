@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import shScoreGoods from './children/sh-score-goods.vue';
+import shScoreGoods from '../children/sh-score-goods.vue';
 export default {
 	components: {
 		shScoreGoods

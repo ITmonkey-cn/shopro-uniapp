@@ -1,3 +1,4 @@
+<!-- 个人中心 -->
 <template>
 	<view class="wrap-box">
 		<view class="user-box">
@@ -75,8 +76,6 @@ import shOrder from './components/sh-order.vue';
 import shWallet from './components/sh-wallet.vue';
 import shGrid from './components/sh-grid.vue';
 import shTitleCard from './components/sh-title-card.vue';
-
-import shoproNoticeModal from '@/components/shopro-notice-modal/shopro-notice-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {
@@ -95,7 +94,6 @@ export default {
 		shWallet,
 		shGrid,
 		shTitleCard,
-		shoproNoticeModal
 	},
 	data() {
 		return {

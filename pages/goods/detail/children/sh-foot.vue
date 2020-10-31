@@ -1,6 +1,5 @@
 <template>
 	<view>
-		<!-- 积分商品foot -->
 		<view class="sh-foot-box x-f" v-if="!showSku && !showServe">
 			<view class="left x-f">
 				<view class="tools-item y-f" @tap="goHome">
@@ -16,6 +15,10 @@
 </template>
 
 <script>
+/**
+ * 积分商品详情底部
+ *
+ */
 export default {
 	components: {},
 	data() {

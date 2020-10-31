@@ -603,6 +603,33 @@
 					}
 				},
 				{
+					"path": "kefu/chat/index",
+					"name": "kefu",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false,
+						"title": "客服"
+					}
+				},
+				{
+					"path": "kefu/wm/index",
+					"name": "kefu",
+					"style": {
+						"navigationBarTitleText": "客服"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": false,
+						"title": "客服"
+					}
+				},
+				{
 					"path": "richtext",
 					"style": {
 						"navigationBarTitleText": "" //公共富文本

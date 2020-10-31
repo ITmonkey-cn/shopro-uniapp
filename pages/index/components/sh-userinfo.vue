@@ -57,6 +57,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之个人信息
+ * @property {Object} detail - 个人信息
+ */
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},

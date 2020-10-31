@@ -1,3 +1,4 @@
+<!-- 支付结果页 -->
 <template>
 	<view class="success-page">
 		<view class="success-box flex flex-direction align-center" v-if="orderDetail.total_fee">

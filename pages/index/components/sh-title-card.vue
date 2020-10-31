@@ -8,6 +8,10 @@
 </template>
 
 <script>
+	/**
+	 * 组件标题栏
+	 * @property {Object} detail - 各个卡片标题栏
+	 */
 export default {
 	components: {},
 	data() {

@@ -41,6 +41,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之秒杀样式组件
+ * @property {Object} detail - 秒杀商品信息
+ */
 import shActivityGoods from './sh-activity-goods.vue';
 export default {
 	components: {

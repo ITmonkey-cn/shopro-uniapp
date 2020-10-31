@@ -1,3 +1,4 @@
+<!-- 个人信息 -->
 <template>
 	<view class="container">
 		<view class="user-list x-bc">

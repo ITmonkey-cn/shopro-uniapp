@@ -21,6 +21,13 @@
 </template>
 
 <script>
+/**
+ * 用户列表项
+ * @property {String} avatar  - 头像
+ * @property {String} name  - 昵称
+ * @property {String} level  - 等级
+ * @property {String | Date} dateTime - 日期
+ */
 export default {
 	name: 'sh-collapse-item',
 	components: {},

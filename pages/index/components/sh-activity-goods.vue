@@ -15,6 +15,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之活动商品卡片
+ * @property {Object} detail - 活动商品信息
+ */
 export default {
 	components: {},
 	data() {

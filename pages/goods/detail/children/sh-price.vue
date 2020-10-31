@@ -92,6 +92,11 @@
 </template>
 
 <script>
+/**
+ * 商品详情价格卡片
+ * @property {Object} detail - 商品详情
+ * @property {String} type - 商品分类
+ */
 var timer = null;
 export default {
 	name: 'shPrice',

@@ -5,8 +5,6 @@
 		<view class="head-box">
 			<view class="nav-box"><cu-custom isBack></cu-custom></view>
 		</view>
-		<!-- 头部卡片 -->
-
 		<!-- 表单 -->
 		<view class="apply-form">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">

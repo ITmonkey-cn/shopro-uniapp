@@ -1,3 +1,4 @@
+<!-- 购物车 -->
 <template>
 	<view class="page_box">
 		<view class="head_box" v-if="cartList.length">
@@ -62,17 +63,10 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
-import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
-import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 let timer = null;
 export default {
-	components: {
-		shoproMiniCard,
-		uniNumberBox,
-		shoproEmpty
-	},
+	components: {},
 	data() {
 		return {
 			isTool: false,

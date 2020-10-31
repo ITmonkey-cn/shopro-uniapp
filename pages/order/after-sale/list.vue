@@ -1,3 +1,4 @@
+<!-- 售后列表 -->
 <template>
 	<view class="page_box">
 		<view class="head_box">
@@ -49,7 +50,6 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 export default {
 	components: {},
 	data() {

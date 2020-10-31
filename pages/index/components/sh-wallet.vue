@@ -24,6 +24,9 @@
 </template>
 
 <script>
+/**
+ * 钱包样式卡片
+ */
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},

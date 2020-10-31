@@ -1,3 +1,4 @@
+<!-- 门店列表 -->
 <template>
 	<view class="page_box store-list-wrap">
 		<view class="head_box"></view>

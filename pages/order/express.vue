@@ -1,3 +1,4 @@
+<!-- 物流信息 -->
 <template>
 	<view class="map-box">
 		<view class="express-wrap">
@@ -12,8 +13,6 @@
 							<text class="express-status">{{ firstGoods.status_name }}</text>
 						</view>
 						<view class="express-phone__box y-f">
-							<!-- 	<text class="cuIcon-phone"></text>
-							<text class="express-phone__text">物流电话</text> -->
 						</view>
 					</view>
 					<view class="express-sn x-f">

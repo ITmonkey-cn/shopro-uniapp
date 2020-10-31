@@ -1,3 +1,4 @@
+<!-- 修改密码 -->
 <template>
 	<view class="bank-wrap">
 		<view class="form-box">

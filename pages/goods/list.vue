@@ -1,3 +1,4 @@
+<!-- 商品列表 -->
 <template>
 	<view class="list-box">
 		<view class="head_box">
@@ -37,13 +38,11 @@
 
 <script>
 import shFilter from './children/sh-filter.vue';
-import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 let timer = null;
 export default {
 	components: {
-		shFilter,
-		shoproEmpty
+		shFilter
 	},
 	data() {
 		return {

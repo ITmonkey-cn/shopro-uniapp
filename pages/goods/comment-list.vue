@@ -1,8 +1,9 @@
+<!-- 评论列表 -->
 <template>
 	<view class="page_box">
 		<view class="head_box x-f">
 			<button :class="{ 'btn-active': typeCurrent === t.code }" class="cu-btn type-btn" @tap="selType(t.code)" v-for="t in commentTypeList" :key="t.code">
-				{{ t.name }}({{t.num}})
+				{{ t.name }}({{ t.num }})
 			</button>
 		</view>
 		<view class="content_box">
@@ -27,11 +28,9 @@
 
 <script>
 import shComment from './children/sh-comment.vue';
-import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
 	components: {
-		shComment,
-		shoproEmpty
+		shComment
 	},
 	data() {
 		return {

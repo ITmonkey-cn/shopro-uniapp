@@ -57,6 +57,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之广告魔方
+ * @property {Object} detail -广告魔方信息
+ */
 export default {
 	components: {},
 	data() {

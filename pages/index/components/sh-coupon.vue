@@ -10,6 +10,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之优惠券卡片
+ * @property {Object} detail - 优惠券信息
+ */
 export default {
 	components: {},
 	data() {

@@ -36,6 +36,10 @@
 </template>
 
 <script>
+	/**
+	 * 商品筛选组件
+	 * 
+	 */
 import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
 	components: {},

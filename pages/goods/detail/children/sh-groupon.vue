@@ -59,6 +59,10 @@
 </template>
 
 <script>
+/**
+ * 商品已拼团卡片
+ * @property {Object} grouponData - 商品已拼团信息
+ */
 let timer;
 export default {
 	components: {},
@@ -126,7 +130,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 // 弹窗
 .modal-box {
 	width: 750rpx;

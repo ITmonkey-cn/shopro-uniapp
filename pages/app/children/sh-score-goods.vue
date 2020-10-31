@@ -13,6 +13,10 @@
 </template>
 
 <script>
+/**
+ * 积分商品卡片
+ * @property {Object} scoreData  - 积分商品信息
+ */
 export default {
 	components: {},
 	data() {

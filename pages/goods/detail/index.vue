@@ -1,11 +1,10 @@
+<!-- 商品详情 -->
 <template>
 	<view class="box">
 		<view class="load-box" v-if="!goodsInfo.price"><shopro-skeletons :type="'detail'"></shopro-skeletons></view>
 		<view class="detail_box shopro-selector" v-else>
 			<view class="detail-content">
 				<view class="goodes_detail_swiper-box">
-					<!-- 拼团滚动提示 -->
-					<sh-groupon-tip v-if="false"></sh-groupon-tip>
 					<!-- 详情轮播 -->
 					<swiper class="carousel" circular @change="swiperChange" :autoplay="true">
 						<swiper-item @tap="tools.previewImage(goodsInfo.images, swiperCurrent)" v-for="(img, index) in goodsInfo.images" :key="index" class="carousel-item">
@@ -78,7 +77,7 @@
 						</view>
 					</view>
 					<view class="tab-detail pb20">
-						<view class="rich-box" v-show="tabCurrent === 'tab0'"><uni-parser :html="goodsInfo.content"></uni-parser></view>
+						<view class="rich-box" v-show="tabCurrent === 'tab0'"><u-parse :html="goodsInfo.content"></u-parse></view>
 						<view class="goods-size" v-if="tabCurrent === 'tab1'">
 							<view class="table-box" v-if="goodsInfo.params && goodsInfo.params.length">
 								<view class="t-tr x-f" v-for="t in goodsInfo.params" :key="t.title">
@@ -177,7 +176,6 @@
 import shPrice from './children/sh-price.vue';
 import shServe from './children/sh-serve.vue';
 import shGroupon from './children/sh-groupon.vue';
-import shGrouponTip from './children/sh-groupon-tip.vue';
 import shCoupon from './children/sh-coupon.vue';
 import shComment from '../children/sh-comment.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
@@ -187,7 +185,6 @@ export default {
 		shPrice,
 		shGroupon,
 		shCoupon,
-		shGrouponTip,
 		shComment
 	},
 	data() {

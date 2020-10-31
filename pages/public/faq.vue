@@ -1,3 +1,4 @@
+<!-- 常见问题 -->
 <template>
 	<view class="faq-box">
 		<view class="problem-item" v-for="(item, index) in faqList" :key="item.id" @tap="onProblem(index)">

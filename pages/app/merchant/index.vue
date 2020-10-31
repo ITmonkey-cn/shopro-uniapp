@@ -1,3 +1,4 @@
+<!-- 商家中心 -->
 <template>
 	<view class="">
 		<view class="mask" v-if="isShowDropDown" cathctouchmove @tap.stop="onHideDropDown"></view>

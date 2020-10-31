@@ -1,3 +1,4 @@
+<!-- 自提点 -->
 <template>
 	<view class="map-box">
 		<text class="cuIcon-back" @tap="$Router.back()"></text>
@@ -20,10 +21,6 @@
 						<image class="touch-jintou" v-if="!showCard" src="/static/imgs/order/arrows1.png" mode=""></image>
 						<image class="touch-jintou" v-if="showCard" src="/static/imgs/order/arrows2.png" mode=""></image>
 					</view>
-					<!-- <div class="search-box x-f">
-						<text class="cuIcon-search"></text>
-						<input class="search-inp" placeholder-class="search-pl" placeholder="输入地址寻找周边自提点" type="text" value="" />
-					</div> -->
 				</view>
 				<!-- #endif -->
 				<scroll-view class="oilStation-bottom" enable-back-to-top :scroll-y="scrollable" @scrolltoupper="scrolltoupper" @scroll="scroll" @scrolltolower="scrolltolower">

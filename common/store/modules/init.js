@@ -13,7 +13,7 @@ const state = {
 	routes: [],
 	addons: uni.getStorageSync('addons') ? uni.getStorageSync('addons') : [], //插件列表
 	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {},
-	hasTemplate:true//是否有初始化数据
+	hasTemplate: true //是否有初始化数据
 }
 
 const actions = {
@@ -26,7 +26,8 @@ const actions = {
 				commit('INIT_DATA', res.data);
 				uni.setStorageSync('sysInfo', res.data.info);
 				uni.setStorageSync('shareInfo', res.data.share);
-				uni.setStorageSync('addons', res.data.addons)
+				uni.setStorageSync('addons', res.data.addons);
+				uni.setStorageSync('chat', res.data.chat);
 				resolve(res)
 			}).catch(e => {
 				reject(e)
@@ -69,8 +70,8 @@ const actions = {
 			api('template', params).then(res => {
 				uni.setStorageSync('templateData', res.data);
 				commit('TEMPLATE_DATA', res.data);
-				if(res.code == 0){
-						commit('hasTemplate', false);
+				if (res.code == 0) {
+					commit('hasTemplate', false);
 				}
 				resolve(res)
 			}).catch(e => {

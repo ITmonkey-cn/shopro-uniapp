@@ -14,8 +14,11 @@
 </template>
 
 <script>
+/**
+ * 自定义之轮播卡片
+ * @property {Object} detail - 轮播信息
+ */
 import colorThief from 'miniapp-color-thief';
-
 export default {
 	components: {},
 	data() {

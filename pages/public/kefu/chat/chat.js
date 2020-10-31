@@ -108,6 +108,7 @@ export default class Socket {
 		uni.onSocketOpen(res => {
 			uni.setStorageSync('isSocketOpen', true)
 			console.log('连接接成功！');
+			this.lockReconnect = true;
 			this.start()
 		});
 
@@ -121,8 +122,8 @@ export default class Socket {
 
 		// 监听关闭
 		uni.onSocketClose(res => {
-			console.log('WebSocket 已关闭！');
 			if (uni.getStorageSync('isSocketOpen')) {
+				this.lockReconnect = false
 				this.reconnect()
 			}
 
@@ -133,12 +134,10 @@ export default class Socket {
 	// 重连
 	reconnect() {
 		if (this.lockReconnect) return;
-		this.lockReconnect = true;
 		clearTimeout(this.timer)
 		if (this.limit < 12) {
 			this.timer = setTimeout(() => {
 				this.init();
-				this.lockReconnect = false;
 			}, 5000);
 			this.limit += 1
 		}

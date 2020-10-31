@@ -1,3 +1,4 @@
+<!-- 钱包日志 -->
 <template>
 	<view class="container">
 		<view class="wallet-list x-f" v-for="item in walletList" :key="item.id">

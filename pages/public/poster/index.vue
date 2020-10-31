@@ -1,3 +1,4 @@
+<!-- 多个海报集成 -->
 <template>
 	<view>
 		<sh-invite-poster v-if="posterType === 'user'" :goodsId="goodsId" @getShareInfo="getShareInfo"></sh-invite-poster>

@@ -1,3 +1,4 @@
+<!-- 注册 -->
 <template>
 	<view class="container">
 		<!-- 背景图 -->

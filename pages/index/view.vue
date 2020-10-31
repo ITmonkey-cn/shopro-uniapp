@@ -1,3 +1,4 @@
+<!-- 自定义模板页 -->
 <template>
 	<view class="view-box">
 		<cu-custom :isBack="true" :bgColor="bgColor" :bgImage="bgImage">

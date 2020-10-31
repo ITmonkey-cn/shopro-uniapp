@@ -1,3 +1,4 @@
+<!-- 自提配送详情 -->
 <template>
 	<view class="page_box">
 		<view class="content_box">

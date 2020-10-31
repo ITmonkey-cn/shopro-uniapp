@@ -1,3 +1,4 @@
+<!-- 设置 -->
 <template>
 	<view class="set-box">
 		<view class="list x-bc" @tap="jump('/pages/public/feedback')">
@@ -16,26 +17,11 @@
 			<view class="title">关于我们</view>
 			<text class="cuIcon-right"></text>
 		</view>
-		<!-- 	<view class="list x-bc">
-			<view class="title">
-				消息推送
-			</view>
-			<text class="cuIcon-right"></text>
-		</view> -->
+		
 		<view class="list x-bc" @tap="onVersion">
 			<view class="title">当前版本</view>
 			<text class="cuIcon-right"></text>
 		</view>
-		<!-- <view class="list x-bc">
-			<view class="title">
-				清除缓存
-			</view>
-			<text class="cuIcon-right"></text>
-		</view> -->
-		<!-- <view class="list x-bc">
-			<view class="title">分享APP</view>
-			<text class="cuIcon-right"></text>
-		</view> -->
 		<view class="list x-bc" @tap="outLogin">
 			<view class="title">退出登录</view>
 			<text class="cuIcon-right"></text>

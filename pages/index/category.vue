@@ -1,3 +1,4 @@
+<!-- 分类 -->
 <template>
 	<view class="category-box">
 		<!-- 三级分类 -->

@@ -1,3 +1,4 @@
+<!-- 直播列表 -->
 <template>
 	<view class="page_box">
 		<view class="head_box">
@@ -10,7 +11,7 @@
 		</view>
 		<view class="content_box">
 			<scroll-view enable-back-to-top scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<uni-waterfall v-model="liveList" ref="uWaterfall">
+				<u-waterfall v-model="liveList" ref="uWaterfall">
 					<template v-slot:left="{ leftList }">
 						<view v-for="live in leftList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
 					</template>
@@ -19,7 +20,7 @@
 							<view v-for="live in rightList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
 						</view>
 					</template>
-				</uni-waterfall>
+				</u-waterfall>
 
 				<view v-if="liveList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
@@ -37,13 +38,8 @@
 </template>
 
 <script>
-import shoproLiveCard from '@/components/shopro-live-card/shopro-live-card.vue';
-import uniWaterfall from '@/components/uni-waterfall/uni-waterfall.vue';
 export default {
-	components: {
-		shoproLiveCard,
-		uniWaterfall
-	},
+	components: {},
 	data() {
 		return {
 			tabCur: 'all',

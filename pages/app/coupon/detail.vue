@@ -1,3 +1,4 @@
+<!-- 优惠劵详情 -->
 <template>
 	<view class="page_box">
 		<view class="head_box">
@@ -46,11 +47,8 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 export default {
-	components: {
-		shoproMiniCard
-	},
+	components: {},
 	data() {
 		return {
 			couponDetail: {},

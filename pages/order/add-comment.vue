@@ -1,3 +1,4 @@
+<!-- 添加评论 -->
 <template>
 	<view class="page_box">
 		<view class="head_box"></view>
@@ -25,11 +26,9 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 import shStar from './children/sh-star.vue';
 export default {
 	components: {
-		shoproMiniCard,
 		shStar
 	},
 	data() {

@@ -1,3 +1,4 @@
+<!-- 商家信息 -->
 <template>
 	<view class="merchant-info-box">
 		<label class="x-f form-item">

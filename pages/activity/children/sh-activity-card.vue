@@ -20,6 +20,15 @@
 </template>
 
 <script>
+/**
+ * 页面级功能组件。活动小商品卡片
+ * @property {Number} cardId  - 商品ID
+ * @property {String} img  - 商品图片
+ * @property {String} title  - 商品标题
+ * @property {String} subtitle  - 商品副标题
+ * @property {String} price  - 商品价格
+ * @property {String} originalPrice  - 商品原价
+ */
 export default {
 	name: 'shoproActivityCard',
 	components: {},

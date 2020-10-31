@@ -1,3 +1,4 @@
+<!-- 收藏列表 -->
 <template>
 	<view class="page_box">
 		<view class="head_box x-bc" v-if="favoriteList.length">
@@ -43,13 +44,8 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
-import shoproEmpty from '@/components/shopro-empty/shopro-empty.vue';
 export default {
-	components: {
-		shoproMiniCard,
-		shoproEmpty
-	},
+	components: {},
 	data() {
 		return {
 			isSel: false,

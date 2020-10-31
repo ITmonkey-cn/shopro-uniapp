@@ -8,6 +8,12 @@
 	</view>
 </template>
 <script>
+/**
+ * 评价星星
+ * @property {Number} maxStar - 最大星星数
+ * @property {Number} defaultStar - 默认星星数
+ * @property {Boolean} disabledStar - 是否禁用
+ */
 export default {
 	props: {
 		maxStar: {

@@ -1,3 +1,4 @@
+<!-- 配送自提详情 -->
 <template>
 	<view class="order-detail-wrap">
 		<!-- 订单卡片 -->

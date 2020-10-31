@@ -12,6 +12,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之宫格列表
+ * @property {Object} detail  - 宫格信息
+ */
 export default {
 	components: {},
 	data() {

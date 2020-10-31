@@ -1,3 +1,4 @@
+<!-- 确认订单 -->
 <template>
 	<view class="page_box">
 		<view class="head_box" v-if="orderPre.need_address" >

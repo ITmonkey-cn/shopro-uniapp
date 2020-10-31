@@ -1,3 +1,4 @@
+<!-- 修改手机号 -->
 <template>
 	<view class="bank-wrap">
 		<view class="form-box">

@@ -4,7 +4,6 @@
 		<view class="title-box x-bc" @tap="jump('/pages/activity/groupon/list')">
 			<text class="title">{{ detail.name }}</text>
 			<view class="group-people x-f">
-				<!-- <view class="head-box x-f"><image v-for="i in 3" class="head-img" src="" mode="" :key="i"></image></view> -->
 				<text class="tip">更多</text>
 				<text class="cuIcon-right"></text>
 			</view>
@@ -27,6 +26,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之拼团卡片
+ * @property {Object} detail - 拼团商品信息
+ */
 import shActivityGoods from './sh-activity-goods.vue';
 export default {
 	name: 'shGroupon',

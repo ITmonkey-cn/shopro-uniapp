@@ -30,6 +30,10 @@
 </template>
 
 <script>
+/**
+ * 评论信息卡片
+ * @property {Object} comment  - 评论信息
+ */
 export default {
 	components: {},
 	data() {

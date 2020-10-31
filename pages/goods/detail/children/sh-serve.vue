@@ -38,6 +38,11 @@
 </template>
 
 <script>
+/**
+ * 商品服务卡片
+ * @property {Object} serveList - 商品服务列表
+ * @property {Boolean} showModal- 显隐
+ */
 export default {
 	components: {},
 	data() {

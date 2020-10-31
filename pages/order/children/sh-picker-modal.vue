@@ -24,6 +24,12 @@
 </template>
 
 <script>
+	/**
+	 * 选择优惠券模态框
+	 * @property {Boolean} showModal - v-model="false" 显隐
+	 * @property {Object} pickerData - 可用优惠券列表数据
+	 * 
+	 */
 export default {
 	components: {},
 	data() {

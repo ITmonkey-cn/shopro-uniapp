@@ -1,3 +1,4 @@
+<!-- 忘记密码 -->
 <template>
 	<view class="container">
 		<!-- 背景图 -->

@@ -8,6 +8,11 @@
 </template>
 
 <script>
+/**
+ * 自定义之搜索样式卡片
+ * @property {Object} detail - 搜索信息
+ * @property {String} bgcolor - 背景颜色
+ */
 export default {
 	components: {},
 	data() {

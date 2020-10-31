@@ -1,3 +1,4 @@
+<!-- 绑定银行卡 -->
 <template>
 	<view class="bank-wrap">
 		<view class="form-box">

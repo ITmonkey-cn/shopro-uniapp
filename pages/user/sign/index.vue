@@ -1,3 +1,4 @@
+<!-- 签到 -->
 <template>
 	<view class="page_box">
 		<view class="head_box"></view>

@@ -34,7 +34,9 @@
 								<button v-if="orderBtn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: order.ext_arr.groupon_id })" class="cu-btn obtn2">
 									拼团详情
 								</button>
-								<button v-if="orderBtn === 'delete'" style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn1">删除</button>
+								<button v-if="orderBtn === 'delete'" style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(order.id, orderIndex)" class="cu-btn obtn1">
+									删除
+								</button>
 								<button v-if="orderBtn === 'express'" @tap.stop="onExpress(order.id, orderIndex)" class="cu-btn obtn1">查看物流</button>
 							</block>
 						</view>
@@ -59,11 +61,8 @@
 </template>
 
 <script>
-import shoproMiniCard from '@/components/shopro-mini-card/shopro-mini-card.vue';
 export default {
-	components: {
-		shoproMiniCard
-	},
+	components: {},
 	data() {
 		return {
 			routerTo: this.$Router,

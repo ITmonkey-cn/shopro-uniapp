@@ -12,6 +12,10 @@
 </template>
 
 <script>
+/**
+ * 自定义之为你推荐
+ * @property {Object} detail - 推荐商品信息
+ */
 export default {
 	components: {},
 	data() {
