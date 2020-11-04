@@ -1,6 +1,13 @@
 <!-- FastAdmin在线客服插件不是开源产品，所有文字、图片、样式、风格等版权归在线客服作者所有，如有复制、仿冒、抄袭、盗用，FastAdmin和在线客服作者将追究法律责任 -->
 <template>
 	<view>
+		<cu-custom bgColor="bg-white" :isBack="true">
+			<block slot="backText">
+				<view class="head-title">
+					{{headTitle}}
+				</view>
+			</block>
+		</cu-custom>
 		<view class="kefu_container">
 			<view v-if="errorTips" class="error_tips">{{ errorTips }}</view>
 			<view v-if="config.announcement && errorTips == ''" class="notice x-start">
@@ -14,7 +21,7 @@
 					<view class="form-group">
 						<label for="c-name" class="control-label">
 							<view class="label-title">姓名</view>
-							<input
+							<input 
 								type="text"
 								@input="leave_message"
 								name="name"
@@ -60,7 +67,7 @@
 
 			<!-- 主界面  -->
 			<!-- #ifdef H5 -->
-			<view class="content_wrapper" v-if="!showLeaveMessage" :style="{ height: 'calc(100vh - var(--window-top) - ' + writeBottom + 'px)' }">
+			<view class="content_wrapper" v-if="!showLeaveMessage" :style="{ height: 'calc(100vh - ' + writeBottom + 'px)' }">
 				<!-- #endif -->
 				<!-- #ifndef H5 -->
 				<view class="content_wrapper" v-if="!showLeaveMessage" :style="{ height: 'calc(100vh - ' + writeBottom + 'px)' }">
@@ -84,12 +91,12 @@
 										<text>{{ message.message }}</text>
 									</view>
 									<view class="message-item x-f" :class="message.sender == 'me' ? 'message__right' : 'message__left'">
-										<view class="head-img"><image class="head-img" v-if="message.sender == 'you'" src="/static/imgs/kefu/sys_head.png" mode=""></image></view>
+										<view class="head-img"><image class="head-img" v-if="message.sender == 'you'" src="http://shopro.7wpp.com/imgs/kefu/sys_head.png" mode=""></image></view>
 										<view v-if="message.message_type != 3" class="bubble" :class="message.sender == 'me' ? 'me' : 'you'">
 											<!-- 除了商品/订单卡片和图片，其他的都使用富文本 -->
 											<u-parse
 												@imgtap="message_img_preview"
-												:tagStyle="{ img: 'width:50rpx;height:50rpx;' }"
+												:tagStyle="{ img: 'width:50rpx;height:50rpx;'}"
 												v-if="message.message_type == 0"
 												:html="message.message"
 											></u-parse>
@@ -109,7 +116,7 @@
 														<view v-if="message.message.note" style="width: 280rpx;margin-right: -20rpx;" class="project_item_note one-t">{{message.message.note}}</view>
 													</view>
 													<view class="project_item_price">
-														<text class="price" v-if="message.message.price">￥{{ message.message.price }}</text>
+														<text class="price" v-if="message.message.price">{{ message.message.price }}</text>
 													<!-- 	<text class="unit" v-if="message.message.number">x{{message.message.number}}</text> -->
 													</view>
 												</view>
@@ -120,7 +127,7 @@
 								</block>
 							</block>
 
-							<view id="wrapper_footer"></view>
+							<view id="wrapper_footer" style="height: 160rpx;"></view>
 						</scroll-view>
 					</view>
 
@@ -170,15 +177,15 @@
 						<!-- 更多 -->
 						<view v-if="showTool == 'more'" class="toolbar">
 							<view @tap="show_select_model('order')" v-if="config.toolbar && config.toolbar.order" class="toolbar_item">
-								<image class="tool-img" src="/static/imgs/kefu/kefu_order.png"></image>
+								<image class="tool-img" src="http://shopro.7wpp.com/imgs/kefu/kefu_order.png"></image>
 								<view>{{ config.toolbar.order.title }}</view>
 							</view>
 							<view @tap="show_select_model('goods')" v-if="config.toolbar && config.toolbar.goods" class="toolbar_item">
-								<image class="tool-img" src="/static/imgs/kefu/kefu_goods.png"></image>
+								<image class="tool-img" src="http://shopro.7wpp.com/imgs/kefu/kefu_goods.png"></image>
 								<view>{{ config.toolbar.goods.title }}</view>
 							</view>
 							<view @tap="upload_file" v-if="config.toolbar && config.toolbar.file" class="toolbar_item">
-								<image class="tool-img" src="/static/imgs/kefu/kefu_file.png"></image>
+								<image class="tool-img" src="http://shopro.7wpp.com/imgs/kefu/kefu_file.png"></image>
 								<view>{{ config.toolbar.file.title }}</view>
 							</view>
 						</view>
@@ -233,6 +240,7 @@ export default {
 	components: {},
 	data() {
 		return {
+			headTitle:'客服',
 			leaveMessage: {
 				name: '',
 				contact: '',
@@ -279,13 +287,12 @@ export default {
 			userInfo: state => state.user.userInfo
 		})
 	},
-	onLoad(opt) {
-		fixedCsr = opt.fixed_csr ? opt.fixed_csr : fixedCsr;
-
-		// 微信小程序端onshow时再链接，并在onhide时关闭链接
-		// #ifndef MP-WEIXIN
+	props:{
+		options:null
+	},
+	created() {
+		fixedCsr = this.options?.fixed_csr ? this.options?.fixed_csr : fixedCsr;
 		this.load();
-		// #endif
 	},
 	onShow() {
 		if (!this.ws.pageHideCloseWs) {
@@ -303,7 +310,7 @@ export default {
 		}
 		// #endif
 	},
-	onUnload() {
+	beforeDestroy() {
 		if (this.ws.SocketTask && this.ws.socketOpen) {
 			console.log('页面卸载主动关闭链接');
 			this.ws.unloadCloseWs = true;
@@ -819,17 +826,15 @@ export default {
 					that.csr = msg.data.session.csr;
 					that.sessionId = msg.data.session.id;
 					that.showLeaveMessage = false;
-					uni.setNavigationBarTitle({
-						title: '客服 ' + msg.data.session.nickname + ' 为您服务'
-					});
+					that.headTitle = '客服 ' + msg.data.session.nickname + ' 为您服务'
+					
 				} else if (msg.code == 302) {
 					if (!that.csr) {
 						// 打开留言板
 						that.csr = 'none';
 						that.showLeaveMessage = true;
-						uni.setNavigationBarTitle({
-							title: '当前无客服在线哦~'
-						});
+						that.headTitle = '当前无客服在线哦~';
+						
 					} else {
 						uni.showToast({
 							title: '当前客服暂时离开,您可以直接发送离线消息~',
@@ -897,9 +902,7 @@ export default {
 				}
 			} else if (msg.msgtype == 'transfer_done') {
 				that.csr = msg.data.csr;
-				uni.setNavigationBarTitle({
-					title: '客服 ' + msg.data.nickname + ' 为您服务'
-				});
+				that.headTitle = '客服 ' + msg.data.nickname + ' 为您服务';
 			} else if (msg.msgtype == 'new_message') {
 				that.new_message_prompt();
 
@@ -1069,7 +1072,7 @@ export default {
 		// 显示/隐藏发送按钮-调整消息记录框高度
 		kefu_message_change: function() {
 			this.showSendButton = this.kefuMessage == '' ? false : true;
-			let write = uni.createSelectorQuery().select('.write');
+			let write = uni.createSelectorQuery().in(this).select('.write');
 			write
 				.fields(
 					{
@@ -1126,7 +1129,8 @@ page {
 }
 
 .kefu_container {
-	height: calc(100vh - var(--window-top));
+	// height: calc(100vh - var(--window-top));
+	height: 100%;
 	overflow: hidden;
 	background-color: #f8fbfb;
 }
@@ -1134,6 +1138,7 @@ page {
 .error_tips {
 	position: fixed;
 	top: var(--window-top);
+	// top: 80rpx;
 	width: 100%;
 	height: 80rpx;
 	font-size: 30rpx;
@@ -1147,6 +1152,7 @@ page {
 .notice {
 	position: fixed;
 	top: var(--window-top);
+	// top: 80rpx;
 	width: 100%;
 	font-size: 26rpx;
 	font-weight: 400;
@@ -1399,7 +1405,7 @@ page {
 }
 
 .chat_wrapper .bubble image {
-	max-height: 400rpx !important;
+	// max-height: 400rpx !important;
 	width: 200rpx;
 	vertical-align: bottom;
 }

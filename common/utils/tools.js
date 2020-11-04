@@ -53,7 +53,6 @@ export default {
 				query: objParams
 			})
 		}
-
 	},
 	/**
 	 * fn：检测图片协议，主要用于检测海报图片协议。

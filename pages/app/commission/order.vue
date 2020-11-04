@@ -18,13 +18,13 @@
 				<view class="order-from x-bc">
 					<view class="from-user x-f">
 						<text>下单人：</text>
-						<image class="user-avatar" src="/static/imgs/app_icon/icon1.png" mode=""></image>
+						<image class="user-avatar" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
 						<text class="user-name">清风一叶</text>
 					</view>
 					<view class="order-time">2020.10.22 17:00:00</view>
 				</view>
 				<view class="goods-card x-bc">
-					<view class="goods-img-box"><image class="goods-img" src="/static/imgs/user/shop_info.png" mode=""></image></view>
+					<view class="goods-img-box"><image class="goods-img" src="http://shopro.7wpp.com/imgs/user/shop_info.png" mode=""></image></view>
 					<view class="goods-info y-bc">
 						<view class="goods-title more-t">Stradivarius 秋冬新款女士短款机车风夹克外套2019潮08820199004</view>
 						<view class="goods-sku">数量: 1；白色 L</view>

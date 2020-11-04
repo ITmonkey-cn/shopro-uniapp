@@ -6,7 +6,7 @@
 				<view class="coupon-left y-start ">
 					<view class="sum-box">
 						<text class="unit">￥</text>
-						<text class="miso-font sum">{{ couponData.amount }}</text>
+						<text class=" sum">{{ couponData.amount }}</text>
 						<text class="sub">{{ couponData.name }}</text>
 					</view>
 					<view class="notice">满{{ couponData.enough }}元可用</view>
@@ -26,7 +26,7 @@
 				<view class="coupon-left y-start ">
 					<view class="sum-box">
 						<text class="unit">￥</text>
-						<text class="miso-font sum">{{ couponData.amount }}</text>
+						<text class=" sum">{{ couponData.amount }}</text>
 						<text class="sub">{{ couponData.name }}</text>
 					</view>
 					<view class="notice">有效期：{{ tools.timestamp(couponData.usetime.start) }} 至 {{ tools.timestamp(couponData.usetime.end) }}</view>

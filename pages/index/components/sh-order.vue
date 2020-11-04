@@ -19,9 +19,9 @@
 		</view>
 
 		<view class="order-item y-f all-order" @tap="jump('/pages/order/list', { type: 'all' })">
-			<image class="cut-off--line" src="/static/imgs/user/cut_off_line.png" mode=""></image>
+			<image class="cut-off--line" src="http://shopro.7wpp.com/imgs/user/cut_off_line.png" mode=""></image>
 			<view class="y-f item-box">
-				<image class="order-img" src="/static/imgs/user/all_order.png" mode="aspectFill"></image>
+				<image class="order-img" src="http://shopro.7wpp.com/imgs/user/all_order.png" mode="aspectFill"></image>
 				<text class="item-title">全部订单</text>
 				<!-- <view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view> -->
 			</view>

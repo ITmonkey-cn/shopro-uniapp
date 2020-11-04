@@ -4,12 +4,12 @@
 		<cu-custom bgColor="bg-gradual-purple" :isBack="true">
 			<block slot="backText">
 				<view class="x-f head-box">
-					<text class="head-title">{{ navTitle.split('-')[0] }}</text>
-					<view v-if="navTitle.split('-')[1] === '在线'">
+					<text class="head-title">{{ navTitle.split(',')[0] }}</text>
+					<view v-if="navTitle.split(',')[1] === '在线'">
 						<text class="cuIcon-title text-green head-icon"></text>
 						<text class="head-state">在线</text>
 					</view>
-					<view v-if="navTitle.split('-')[1] === '离线'">
+					<view v-if="navTitle.split(',')[1] === '离线'">
 						<text class="cuIcon-title text-gray head-icon"></text>
 						<text class="head-state">离线</text>
 					</view>
@@ -17,12 +17,11 @@
 			</block>
 		</cu-custom>
 		<u-notice-bar
-			v-if="noticeList.length"
 			:autoplay="true"
 			close-icon
 			@close="closeNotice"
 			:show="showNotice"
-			type="warning"
+			:type="noticeType"
 			:list="noticeList"
 			:volumeIcon="true"
 			:isCircular="true"
@@ -42,7 +41,7 @@
 							<view v-if="chat.identify !== 'user'" class="cu-avatar round" :style="'background-image:url(' + chat.server_avatar + ')'"></view>
 							<view class="main">
 								<!-- 消息 -->
-								<view class="content " style="max-width: 460rpx;" :class="chat.identify !== 'user' ? 'bg-white' : ' bg-gradual-purple'" v-if="chat.type === 'text'">
+								<view class="content " style="max-width: 480rpx;" :class="chat.identify !== 'user' ? 'bg-white' : ' bg-gradual-purple'" v-if="chat.type === 'text'">
 									<u-parse :html="chat.msg"></u-parse>
 								</view>
 								<!-- 订单 -->
@@ -87,7 +86,7 @@
 					</view>
 				</block>
 			</view>
-			<view class="scroll-bottom" style="height: 300rpx;" id="scrollBottom"></view>
+			<view class="scroll-bottom" style="height: 330rpx;" id="scrollBottom"></view>
 		</scroll-view>
 		<!-- 底部功能栏，输入栏 -->
 		<view class="cu-bar foot input y-f" :style="[{ bottom: InputBottom + 'px' }]">
@@ -99,12 +98,15 @@
 						placeholder-style="font-size:26rpx;color:#999"
 						placeholder="请输入您想咨询的问题~"
 						:adjust-position="false"
+						type="text"
+						confirm-type="发送"
 						:focus="false"
 						maxlength="300"
 						cursor-spacing="10"
 						@focus="InputFocus"
 						@blur="InputBlur"
 						@input="onInput"
+						@confirm="onSend"
 					/>
 					<view class="action" @tap="selEmoji"><text class="cuIcon-emoji text-grey"></text></view>
 				</view>
@@ -119,24 +121,25 @@
 					:showProgress="false"
 					:showUploadList="false"
 					@on-uploaded="uploadSuccess"
-					:action="`${this.$API_URL}/index/upload`"
+					@on-change="uploadChange"
+					:action="`${HTTP_API_URL}/index/upload`"
 					maxCount="9"
 					:customBtn="true"
 					:show-tips="false"
 					class="flex-sub tools-item"
 				>
 					<view class="tools-item flex-sub" slot="addBtn">
-						<image class="item-img" src="/static/imgs/chat/imgs_icon.png" mode=""></image>
+						<image class="item-img" src="http://shopro.7wpp.com/imgs/chat/imgs_icon.png" mode=""></image>
 						<text class="item-title">图片</text>
 					</view>
 				</u-upload>
 
 				<view class="tools-item flex-sub" @tap="onToolItem('goods')">
-					<image class="item-img" src="/static/imgs/chat/goods_icon.png" mode=""></image>
+					<image class="item-img" src="http://shopro.7wpp.com/imgs/chat/goods_icon.png" mode=""></image>
 					<text class="item-title">商品</text>
 				</view>
 				<view class="tools-item flex-sub" @tap="onToolItem('order')">
-					<image class="item-img" src="/static/imgs/chat/order_icon.png" mode=""></image>
+					<image class="item-img" src="http://shopro.7wpp.com/imgs/chat/order_icon.png" mode=""></image>
 					<text class="item-title">订单</text>
 				</view>
 			</view>
@@ -152,10 +155,10 @@
 					:interval="3000"
 					:duration="1000"
 				>
-					<swiper-item v-for="(memoji, index) in newEmojiList" :key="index">
+					<swiper-item v-for="(memoji, index) in newEmojiList">
 						<view class="swiper-item x-f">
-							<view class="emoji-img" v-for="(item, index) in memoji" :key="item.file" @tap="onEmoji(item)">
-								<image class="emoji-img" :src="`${EMOJI_BASE_URL}/assets/addons/shopro/img/emoji/${item.file}`" mode=""></image>
+							<view class="emoji-img" v-for="(memo, mindex) in memoji" @tap="onEmoji(memo)">
+								<image class="emoji-img" :src="`${EMOJI_BASE_URL}/assets/addons/shopro/img/emoji/${memo.file}`" mode=""></image>
 							</view>
 						</view>
 					</swiper-item>
@@ -214,12 +217,15 @@
 
 <script>
 import Socket from './chat.js';
-import { BASE_URL } from '@/env.js';
+import { BASE_URL, API_URL } from '@/env.js';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	data() {
 		return {
 			socket: null, //socket服务
+			isClose: false,
+			isPageHide: false,
+			HTTP_API_URL: API_URL,
 			EMOJI_BASE_URL: BASE_URL,
 			navTitle: '连接中...', //标题栏
 			scrollInto: '', //scrollBottom
@@ -246,6 +252,7 @@ export default {
 			InputBottom: 0,
 			msgText: '', //输入框内容
 			showNotice: true, //滚动提示
+			noticeType: 'warning',
 			showTools: false, //工具栏显示
 			showLogBox: false, //商品订单栏
 			showEmoji: false, //表情显示
@@ -254,22 +261,22 @@ export default {
 				//工具栏列表
 				{
 					id: 'imgs',
-					image: '/static/imgs/chat/imgs_icon.png',
+					image: 'http://shopro.7wpp.com/imgs/chat/imgs_icon.png',
 					title: '图片'
 				},
 				{
 					id: 'goods',
-					image: '/static/imgs/chat/goods_icon.png',
+					image: 'http://shopro.7wpp.com/imgs/chat/goods_icon.png',
 					title: '商品'
 				},
 				{
 					id: 'order',
-					image: '/static/imgs/chat/order_icon.png',
+					image: 'http://shopro.7wpp.com/imgs/chat/order_icon.png',
 					title: '订单'
 				},
 				{
 					id: 'file',
-					image: '/static/imgs/chat/file_icon.png',
+					image: 'http://shopro.7wpp.com/imgs/chat/file_icon.png',
 					title: '文件'
 				}
 			],
@@ -298,10 +305,20 @@ export default {
 	created() {
 		this.init();
 	},
-	beforeDestroy() {
-		this.socket.close();
+	onShow() {
+		// #ifdef MP-WEIXIN
+		this.init();
+		this.isPageHide = true;
+		// #endif
 	},
 	onHide() {
+		// #ifdef MP-WEIXIN
+		if (this.isPageHide) {
+			this.socket.close();
+		}
+		// #endif
+	},
+	beforeDestroy() {
 		this.socket.close();
 	},
 	methods: {
@@ -322,6 +339,12 @@ export default {
 							that.parseMsgStatus(msg.data); //监听消息
 						}
 					);
+					uni.onSocketError(res => {
+						this.socket.close();
+						this.isClose = true;
+						this.noticeType = 'error';
+						this.noticeList = ['连接错误，正在重试~'];
+					});
 				}
 			});
 		},
@@ -370,6 +393,7 @@ export default {
 				switch (obj.type) {
 					case 'init':
 						this.navTitle = '连接成功...';
+						uni.setStorageSync('chatSessionId', obj.data.session_id);
 						this.chatLog().then(this.pushChat('', 'template'));
 						this.goBottom();
 						break;
@@ -378,31 +402,31 @@ export default {
 						this.pushChat(obj.data.message.message, 'system');
 						break;
 					case 'access':
-						this.navTitle = `${obj.data.customer_service.name}-在线`;
+						this.navTitle = `客服-${obj.data.customer_service.name},在线`;
 						this.pushChat(obj.data.message.message, 'system');
 						break;
-					case 'customer_service_online ':
-						this.navTitle = `${obj.data.customer_service.name}-在线`;
+					case 'customer_service_online':
+						this.navTitle = `客服-${obj.data.customer_service.name},在线`;
 						this.pushChat(obj.data.message.message, 'system');
 						break;
-					case 'customer_service_offline  ':
-						this.navTitle = `${obj.data.customer_service.name}-离线`;
+					case 'customer_service_offline':
+						this.navTitle = `客服-${obj.data.customer_service.name},离线`;
 						this.pushChat(obj.data.message.message, 'system');
 						break;
 					case 'message':
-						this.navTitle = `${obj.data.customer_service.name}-在线`;
+						this.navTitle = `客服-${obj.data.customer_service.name},在线`;
 						this.chatList.push(this.parseMsg(obj.data.message, obj.data.message.identify));
 						this.goBottom();
 						break;
 					case 'message_list':
 						let msgList = obj.data.message_list.data;
 						this.logmsgList = obj.data.message_list.data;
-						this.lastId = msgList[0].id;
+						this.lastId = msgList[0]?.id;
 						this.lastPage = obj.data.message_list.last_page;
-
 						msgList.forEach(item => {
 							this.chatList.unshift(this.parseMsg(item, item.identify));
 						});
+
 						break;
 					default:
 				}
@@ -487,6 +511,7 @@ export default {
 
 		// 获取焦点
 		InputFocus(e) {
+			this.onMask();
 			this.InputBottom = e.detail.height;
 		},
 		// 失去焦点
@@ -588,20 +613,24 @@ export default {
 		// 滚动底部
 		goBottom() {
 			let timeout = null;
+			this.scrollInto = '';
 			clearTimeout(timeout);
 			timeout = setTimeout(() => {
 				this.scrollInto = 'scrollBottom';
-			}, 100);
-			this.scrollInto = '';
+			}, 300);
 		},
 
 		// 发送图片
 		uploadSuccess(list) {
 			list.forEach(item => {
 				this.sendWs(item.response.data.url, 'image');
-				this.pushChat(`<img class="chat-img" src="${item.url}"/>`);
+				console.log(item);
+				this.pushChat(`<img class="chat-img" src="${item.response.data.full_url}"/>`);
 				this.onMask();
 			});
+		},
+		uploadChange(e) {
+			// console.log('上传回调', e);
 		},
 
 		// 发送问题
@@ -648,6 +677,10 @@ export default {
 
 		// 发送本地数据。
 		pushChat(data, type = 'text') {
+			if (this.isClose) {
+				this.$tools.toast('服务断开了！请重试');
+				return;
+			}
 			this.chatList.push({
 				identify: 'user',
 				type: type,
@@ -915,10 +948,11 @@ page {
 	width: 100%;
 	.order-code {
 		font-size: 24rpx;
+		width: 100%;
 		font-weight: 400;
 		color: #999999;
 		border-bottom: 1rpx solid rgba(#dfdfdf, 0.5);
-		padding: 0 18rpx 10rpx;
+		padding: 0 0rpx 10rpx;
 	}
 }
 
@@ -956,14 +990,18 @@ page {
 	.log-content {
 		flex: 1;
 		height: 100%;
+		width: 100%;
 		overflow: hidden;
+		background: #f2f2f2;
 		.card-scroll-box {
 			height: 100%;
+			width: 100%;
+			background: #f2f2f2;
 		}
 		.log-item {
 			width: 690rpx;
-			background-color: #fff;
 			margin: 20rpx;
+			background-color: #fff;
 			border-radius: 20rpx;
 			.code-box {
 				border-bottom: 1rpx solid rgba(#dfdfdf, 0.5);

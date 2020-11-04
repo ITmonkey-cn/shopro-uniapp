@@ -1,41 +1,44 @@
 <!-- 客服兼容 -->
 <template>
-	<view class="chat-template-box">
-		<!-- <chat v-if="false"></chat>
-		<wm-chat v-else></wm-chat> -->
+	<view class="chat-template-box" v-if="showChat">
+		<Chat v-if="isShoproChat"></Chat>
+		<Wm v-if="!isShoproChat" :options="kefuOptions"></Wm>
+		<!-- 登录提示 -->
+		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
 <script>
-// import wmChat from './wm/wm.vue';
-// import Chat from './chat/chat.vue';
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
+import Chat from './chat/index.vue';
+import Wm from './wm/index.vue';
 export default {
 	components: {
-		// wmChat,
-		// Chat 
+		Chat,
+		Wm
 	},
 	data() {
-		return {};
+		return {
+			isShoproChat: false,
+			kefuOptions: null,
+			showChat: false
+		};
 	},
-	computed: {
-		...mapState({
-			chatData: state => state.init.initData.chat,
-			addonsData: state => state.init.initData.addonsData
-		}),
-		isShoproChat() {
-			if (this.chatData && this.chatData.type === 'shopro') {
-				return true;
-			} else {
-				if (this.addonsData && this.addonsData.includes('kefu')) {
-					return true;
-				}
+	computed: {},
+	onLoad(options) {
+		this.kefuOptions = options;
+		//判断客服;
+		let addonsData = uni.getStorageSync('addons');
+		let chatData = uni.getStorageSync('chat');
+		if (chatData && chatData.type === 'shopro') {
+			this.isShoproChat = true;
+		} else {
+			if (addonsData && addonsData.includes('kefu')) {
+				this.isShoproChat = false;
 			}
-
-			return false;
 		}
+		this.showChat = true;
 	},
-	onLoad() {},
 	methods: {}
 };
 </script>
@@ -44,5 +47,6 @@ export default {
 .chat-template-box {
 	height: 100%;
 	width: 100%;
+	overflow: hidden;
 }
 </style>

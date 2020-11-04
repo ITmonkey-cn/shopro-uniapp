@@ -67,7 +67,7 @@
 				<shopro-modal v-model="showPrivacy">
 					<block slot="modalContent">
 						<view class="service-contract-wrap">
-							<image class="service-head-img" src="/static/imgs/modal/servece_head.png" mode="widthFix"></image>
+							<image class="service-head-img" src="http://shopro.7wpp.com/imgs/modal/servece_head.png" mode="widthFix"></image>
 							<view class="service-title">用户隐私协议概况</view>
 							<view class="service-content ">
 								感谢您使用Shopro商城，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读

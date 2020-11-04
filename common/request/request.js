@@ -121,10 +121,6 @@ export default class Request {
 		// #ifdef APP-PLUS
 		options.sslVerify = options.sslVerify === undefined ? this.config.sslVerify : options.sslVerify
 		// #endif
-		// uni.showToast({
-		// 	icon: "loading",
-		// 	image: "/static/imgs//logo/logo.gif"
-		// })
 		return new Promise((resolve, reject) => {
 			let next = true
 			let handleRe = {}

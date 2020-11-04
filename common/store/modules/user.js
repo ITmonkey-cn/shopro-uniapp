@@ -164,6 +164,7 @@ const mutations = {
 		uni.removeStorageSync('token');
 		uni.removeStorageSync('userInfo');
 		uni.removeStorageSync('cartNum');
+		uni.removeStorageSync('chatSessionId');
 		store.commit('USER_INFO', {});
 		store.commit('CART_LIST', []);
 		store.commit('CART_NUM');

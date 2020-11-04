@@ -16,7 +16,7 @@
 						<view class="info-box">
 							<view class="x-f">
 								<view class="head-img-wrap">
-									<image class="head-img" @tap.stop="jump('/pages/user/info')" :src="userInfo.avatar || '/static/imgs/base_avatar.png'" mode="aspectFill"></image>
+									<image class="head-img" @tap.stop="jump('/pages/user/info')" :src="userInfo.avatar || 'http://shopro.7wpp.com/imgs/base_avatar.png'" mode="aspectFill"></image>
 									<block v-if="platform !== 'H5'">
 										<button v-if="platform === 'wxMiniProgram'" open-type="getUserInfo" @getuserinfo="refreshWechatUser" class="cu-btn refresh-btn x-c">
 											<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>

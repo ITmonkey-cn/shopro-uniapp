@@ -2,12 +2,12 @@
 	<view class="sh-collapse-box">
 		<view class="collapse-head x-bc">
 			<view class="x-f">
-				<image class="head-img" src="/static/imgs/app_icon/icon1.png" mode=""></image>
+				<image class="head-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
 				<view class="head-info">
 					<view class="name-box x-f">
 						<view class="name-text">会员昵称</view>
 						<view class="grade-tag tag-box x-f">
-							<image class="tag-img" src="/static/imgs/app_icon/icon1.png" mode=""></image>
+							<image class="tag-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
 							<text class="tag-title">铜牌逍客</text>
 						</view>
 					</view>

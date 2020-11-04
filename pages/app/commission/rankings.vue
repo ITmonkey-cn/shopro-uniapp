@@ -16,7 +16,7 @@
 						<text class="tag-text" v-if="index >= 3">{{ item }}</text>
 						<image v-else class="tag-icon" :src="rankingsIcon[index]" mode=""></image>
 					</view>
-					<image class="user-avatar" src="/static/imgs/app_icon/icon1.png" mode=""></image>
+					<image class="user-avatar" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
 					<view class="user-info">
 						<view class="name mb10">大卫</view>
 						<view class="date">2020年10月13日</view>

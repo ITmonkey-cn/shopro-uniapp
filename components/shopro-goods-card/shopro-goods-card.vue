@@ -9,7 +9,7 @@
 		<view class="price-box">
 			<view class="flex x-bc align-end">
 				<view class="current">{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</view>
-				<view class="sales miso-font">销量{{ detail.sales }}件</view>
+				<view class="sales">销量{{ detail.sales }}件</view>
 			</view>
 		</view>
 	</view>
@@ -26,8 +26,8 @@ export default {
 	data() {
 		return {
 			tagPath: {
-				groupon: '/static/imgs/groupon_tag.png',
-				seckill: '/static/imgs/seckill_tag.png'
+				groupon: 'http://shopro.7wpp.com/imgs/groupon_tag.png',
+				seckill: 'http://shopro.7wpp.com/imgs/seckill_tag.png'
 			}
 		};
 	},

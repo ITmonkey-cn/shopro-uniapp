@@ -5,12 +5,12 @@
 		<!-- 用户资料 -->
 		<view class="user-card">
 			<view class="card-top x-f">
-				<view class="head-img-box"><image class="head-img" src="/static/imgs/app_icon/icon1.png" mode="widthFix"></image></view>
+				<view class="head-img-box"><image class="head-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode="widthFix"></image></view>
 				<view class="y-start">
 					<view class="user-info-box x-f">
 						<view class="user-name">会员昵称</view>
 						<view class="grade-tag tag-box x-f">
-							<image class="tag-img" src="/static/imgs/app_icon/icon.png" mode=""></image>
+							<image class="tag-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
 							<text class="tag-title">铜牌销客</text>
 						</view>
 					</view>
@@ -46,7 +46,7 @@
 			<scroll-view class="log-scroll" scroll-y="true">
 				<view class="log-item-box" v-for="item in 12" :key="item">
 					<view class="log-item x-f">
-						<image class="log-img" src="/static/imgs/app_icon/icon.png" mode=""></image>
+						<image class="log-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
 						<view class="log-text">139****2561 刚购买了家用小冰箱，还未付款</view>
 					</view>
 				</view>

@@ -20,12 +20,12 @@
 		<view class="content_box">
 			<!-- 分享记录列表 -->
 			<view class="log-list x-f" v-for="item in 6" :key="item">
-				<view class="log-avatar-wrap"><image class="log-avatar" src="/static/imgs/app_icon/icon1.png" mode=""></image></view>
+				<view class="log-avatar-wrap"><image class="log-avatar" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image></view>
 
 				<view class="item-right">
 					<view class="name">旅游顾问-莉莉</view>
 					<view class="content x-f">
-						<view class="content-img-wrap"><image class="content-img" src="/static/imgs/user/shop_qrcode.png" mode=""></image></view>
+						<view class="content-img-wrap"><image class="content-img" src="http://shopro.7wpp.com/imgs/user/shop_qrcode.png" mode=""></image></view>
 
 						<view class="content-text">通过海报访问了商品“海蓝之谜活颜焕肤精华露”，进入商城</view>
 					</view>

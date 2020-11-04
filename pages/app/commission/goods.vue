@@ -2,7 +2,7 @@
 <template>
 	<view class="promotion-goods-wrap">
 		<view class="goods-list x-f" v-for="item in 4 " :key="item">
-			<view class="img-box"><image class="goods-img" src="/static/imgs/user/shop_qrcode.png" mode=""></image></view>
+			<view class="img-box"><image class="goods-img" src="/http://shopro.7wpp.com/imgs/user/shop_qrcode.png" mode=""></image></view>
 			<view class="goods-info y-bc">
 				<view class="goods-title one-t">泰国TSM防晒喷雾学生户外泰国TSM防晒喷雾学生户外</view>
 				<view class="goods-des one-t">高效防晒，清爽不油腻</view>

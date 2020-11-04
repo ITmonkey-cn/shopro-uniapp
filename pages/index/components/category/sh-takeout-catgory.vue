@@ -69,7 +69,7 @@
 			<view class="cart-box x-f" v-show="takeoutTotalCount.totalNum" :style="isTabbar ? 'bottom:100rpx' : 'bottom:0'">
 				<view class="cart-left flex-sub x-f">
 					<view class="cart-img-box" @tap="onShowCartList">
-						<image class="cart-img" src="/static/imgs/cart2.png" mode=""></image>
+						<image class="cart-img" src="http://shopro.7wpp.com/imgs/cart2.png" mode=""></image>
 						<view class="cu-tag badge" v-if="totalCount.totalNum">{{ takeoutTotalCount.totalNum }}</view>
 					</view>
 					<view class="price-box x-f">

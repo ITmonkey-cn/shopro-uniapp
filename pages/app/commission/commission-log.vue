@@ -62,7 +62,7 @@
 			<!-- 佣金明细列表 -->
 			<view class="log-item x-bc" v-for="item in 16" :key="item">
 				<view class="item-left x-f">
-					<image class="log-img" src="/static/imgs/app_icon/icon1.png" mode=""></image>
+					<image class="log-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
 					<view class="y-start">
 						<view class="log-name">这是昵称</view>
 						<view class="log-notice">成功邀请好友“小铃铛”注册</view>

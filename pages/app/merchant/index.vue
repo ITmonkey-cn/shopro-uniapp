@@ -28,7 +28,7 @@
 		<!-- 信息卡片 -->
 		<view class="info-card-box x-bc">
 			<view class="info-card">
-				<image class="card-bg" src="/static/imgs/user/shop_info.png" mode="aspectFill"></image>
+				<image class="card-bg" src="http://shopro.7wpp.com/imgs/user/shop_info.png" mode="aspectFill"></image>
 				<view class="card-content y-c">
 					<view class="card-title">输码核销</view>
 					<view class="x-f card-detail-box" @tap="onEditCode">
@@ -38,7 +38,7 @@
 				</view>
 			</view>
 			<view class="info-card" @tap="scanCode">
-				<image class="card-bg" src="/static/imgs/user/shop_qrcode.png" mode="aspectFill"></image>
+				<image class="card-bg" src="http://shopro.7wpp.com/imgs/user/shop_qrcode.png" mode="aspectFill"></image>
 				<view class="card-content y-c">
 					<view class="card-title">扫码核销</view>
 					<view class="x-f card-detail-box">
@@ -111,7 +111,7 @@
 			<block slot="modalContent">
 				<view class="modal-box">
 					<view class="modal-head">
-						<image class="modal-head-img" src="/static/imgs/modal/store_check.png" mode=""></image>
+						<image class="modal-head-img" src="http://shopro.7wpp.com/imgs/modal/store_check.png" mode=""></image>
 						<text class="modal-head-title">输码核销</text>
 					</view>
 					<input class="inp" type="number" v-model="qrcode" placeholder="在此输入核销码" placeholder-class="pl-inp" />

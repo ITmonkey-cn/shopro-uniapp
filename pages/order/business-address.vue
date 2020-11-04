@@ -18,8 +18,8 @@
 				<!-- #ifndef APP-PLUS -->
 				<view class="oilStation-top">
 					<view class="touch-guide x-c" @tap="onShowCard">
-						<image class="touch-jintou" v-if="!showCard" src="/static/imgs/order/arrows1.png" mode=""></image>
-						<image class="touch-jintou" v-if="showCard" src="/static/imgs/order/arrows2.png" mode=""></image>
+						<image class="touch-jintou" v-if="!showCard" src="http://shopro.7wpp.com/imgs/order/arrows1.png" mode=""></image>
+						<image class="touch-jintou" v-if="showCard" src="http://shopro.7wpp.com/imgs/order/arrows2.png" mode=""></image>
 					</view>
 				</view>
 				<!-- #endif -->
@@ -104,7 +104,7 @@ export default {
 						latitude: item.latitude,
 						longitude: item.longitude,
 						// #ifdef APP-PLUS
-						iconPath: '/static/imgs/order/e1.png',
+						iconPath: 'http://shopro.7wpp.com/imgs/order/e1.png',
 						width: 100,
 						height: 100
 						// #endif

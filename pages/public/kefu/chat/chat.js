@@ -22,7 +22,7 @@ export default class Socket {
 		} = initData;
 		this.config = {
 			url: `${is_ssl?'wss':'ws'}://${service}:1818/`,
-			session_id: '',
+			session_id: uni.getStorageSync('chatSessionId'),
 			token: uni.getStorageSync('token'),
 			identify: 'user'
 		};
@@ -137,7 +137,9 @@ export default class Socket {
 		clearTimeout(this.timer)
 		if (this.limit < 12) {
 			this.timer = setTimeout(() => {
+				console.log('重连中', this.limit);
 				this.init();
+				this.reconnect()
 			}, 5000);
 			this.limit += 1
 		}
