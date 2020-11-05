@@ -223,7 +223,6 @@ export default {
 	data() {
 		return {
 			socket: null, //socket服务
-			isClose: false,
 			isPageHide: false,
 			HTTP_API_URL: API_URL,
 			EMOJI_BASE_URL: BASE_URL,
@@ -298,6 +297,11 @@ export default {
 			this.msgText ? (isMsg = true) : (isMsg = false);
 			return isMsg;
 		},
+		isClose() {
+			if (this.socket) {
+				return this.socket.isClose;
+			}
+		},
 		...mapState({
 			userInfo: state => state.user.userInfo //用户数据
 		})
@@ -339,12 +343,6 @@ export default {
 							that.parseMsgStatus(msg.data); //监听消息
 						}
 					);
-					uni.onSocketError(res => {
-						this.socket.close();
-						this.isClose = true;
-						this.noticeType = 'error';
-						this.noticeList = ['连接错误，正在重试~'];
-					});
 				}
 			});
 		},
@@ -407,11 +405,9 @@ export default {
 						break;
 					case 'customer_service_online':
 						this.navTitle = `客服-${obj.data.customer_service.name},在线`;
-						this.pushChat(obj.data.message.message, 'system');
 						break;
 					case 'customer_service_offline':
 						this.navTitle = `客服-${obj.data.customer_service.name},离线`;
-						this.pushChat(obj.data.message.message, 'system');
 						break;
 					case 'message':
 						this.navTitle = `客服-${obj.data.customer_service.name},在线`;
@@ -533,6 +529,12 @@ export default {
 
 		// 点击工具栏开关
 		onTools() {
+			if (this.isClose) {
+				this.$tools.toast('您已掉线！请返回重试');
+				this.noticeType = 'error';
+				this.noticeList = ['您已掉线！请返回重试'];
+				return;
+			}
 			this.showEmoji = false;
 			this.showTools = !this.showTools;
 		},
@@ -678,7 +680,9 @@ export default {
 		// 发送本地数据。
 		pushChat(data, type = 'text') {
 			if (this.isClose) {
-				this.$tools.toast('服务断开了！请重试');
+				this.$tools.toast('您已掉线！请返回重试');
+				this.noticeType = 'error';
+				this.noticeList = ['您已掉线！请返回重试'];
 				return;
 			}
 			this.chatList.push({

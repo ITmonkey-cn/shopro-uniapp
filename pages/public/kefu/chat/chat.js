@@ -29,6 +29,7 @@ export default class Socket {
 		this.callback = callback; //onmsg回调
 		this.timeoutObj = null; //心跳检测定时器对象
 		this.lockReconnect = false; //检测次数锁
+		this.isClose = false; //链接断开
 		this.timer = null; // 检测定时器
 		this.limit = 0; //检测次数，默认最大12
 		this.timout = ping;
@@ -109,6 +110,7 @@ export default class Socket {
 			uni.setStorageSync('isSocketOpen', true)
 			console.log('连接接成功！');
 			this.lockReconnect = true;
+			this.isClose = false;
 			this.start()
 		});
 
@@ -118,10 +120,13 @@ export default class Socket {
 		// 监听错误
 		uni.onSocketError(err => {
 			console.log('连接错误', err);
+			uni.closeSocket();
 		});
 
 		// 监听关闭
 		uni.onSocketClose(res => {
+			console.log('关闭链接');
+			this.isClose = true;
 			if (uni.getStorageSync('isSocketOpen')) {
 				this.lockReconnect = false
 				this.reconnect()
