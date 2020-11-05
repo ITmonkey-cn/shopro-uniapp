@@ -1,67 +1,79 @@
 <!-- 佣金中心 -->
 <template>
-	<view class="commission-wrap">
-		<cu-custom isBack></cu-custom>
-		<!-- 用户资料 -->
-		<view class="user-card">
-			<view class="card-top x-f">
-				<view class="head-img-box"><image class="head-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode="widthFix"></image></view>
-				<view class="y-start">
-					<view class="user-info-box x-f">
-						<view class="user-name">会员昵称</view>
-						<view class="grade-tag tag-box x-f">
-							<image class="tag-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
-							<text class="tag-title">铜牌销客</text>
+	<view style="width:100%;height: 100%;">
+		<view class="commission-wrap" :class="{ blur: !hasAuth }">
+			<cu-custom isBack></cu-custom>
+			<!-- 用户资料 -->
+			<view class="user-card">
+				<view class="card-top x-f">
+					<view class="head-img-box"><image class="head-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode="widthFix"></image></view>
+					<view class="y-start">
+						<view class="user-info-box x-f">
+							<view class="user-name">会员昵称</view>
+							<view class="grade-tag tag-box x-f">
+								<image class="tag-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
+								<text class="tag-title">铜牌销客</text>
+							</view>
+						</view>
+						<view class="progress-box">
+							<view class="cu-progress round sm">
+								<view class="progress--ing" :style="[{ width: '50%' }]"></view>
+								<view class="round-wrap"><view class="round-inner"></view></view>
+							</view>
+							<view class="progress-tip">距离下次升级还差100财富值</view>
 						</view>
 					</view>
-					<view class="progress-box">
-						<view class="cu-progress round sm">
-							<view class="progress--ing" :style="[{ width: '50%' }]"></view>
-							<view class="round-wrap"><view class="round-inner"></view></view>
+				</view>
+				<view class="card-bottom x-f">
+					<view class="flex-sub y-start">
+						<view class="item-title">总收益</view>
+						<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
+					</view>
+					<view class="flex-sub  y-start">
+						<view class="item-title">待入账佣金</view>
+						<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
+					</view>
+					<view class="y-f">
+						<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
+						<button class="cu-btn look-btn" @tap="onEye">
+							<text v-if="showMoney" class="cuIcon-attentionfill"></text>
+							<text v-else class="cuIcon-attentionforbidfill"></text>
+						</button>
+					</view>
+				</view>
+			</view>
+			<!-- 滚动明细 -->
+			<view class="commission-log">
+				<scroll-view class="log-scroll" scroll-y="true">
+					<view class="log-item-box" v-for="item in 12" :key="item">
+						<view class="log-item x-f">
+							<image class="log-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
+							<view class="log-text">139****2561 刚购买了家用小冰箱，还未付款</view>
 						</view>
-						<view class="progress-tip">距离下次升级还差100财富值</view>
 					</view>
+				</scroll-view>
+			</view>
+			<!-- 功能菜单 -->
+			<image class="commission-bottom-bg" src="http://shopro.7wpp.com/imgs/commission/commission_bottom.png" mode="widthFix"></image>
+			<view class="menu-box flex">
+				<view class="menu-item y-f" v-for="(menu, index) in menuList" :key="index" @tap="jump(menu.path)">
+					<image class="item-img" :src="menu.img" mode=""></image>
+					<view class="item-title">{{ menu.title }}</view>
 				</view>
 			</view>
-			<view class="card-bottom x-f">
-				<view class="flex-sub y-start">
-					<view class="item-title">总收益</view>
-					<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
-				</view>
-				<view class="flex-sub  y-start">
-					<view class="item-title">待入账佣金</view>
-					<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
-				</view> 
-				<view class="y-f">
-					<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
-					<button class="cu-btn look-btn" @tap="onEye">
-						<text v-if="showMoney" class="cuIcon-attentionfill"></text>
-						<text v-else class="cuIcon-attentionforbidfill"></text>
-					</button>
-				</view>
+			<!-- 登录提示 -->
+			<shopro-login-modal></shopro-login-modal>
+		</view>
+		<!-- 佣金中心权限验证 -->
+		<view class="auth-box" v-if="!hasAuth">
+			<view class="notice-box">
+				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
+				<view class="notice-title">{{ authNotice.title }}</view>
+				<view class="notice-detail">{{ authNotice.detail }}</view>
+				<button class="cu-btn notice-btn" @tap="onAuthBtn">{{ authNotice.btnText }}</button>
+				<button class="cu-btn back-btn" @tap="onBack">返回</button>
 			</view>
 		</view>
-		<!-- 滚动明细 -->
-		<view class="commission-log">
-			<scroll-view class="log-scroll" scroll-y="true">
-				<view class="log-item-box" v-for="item in 12" :key="item">
-					<view class="log-item x-f">
-						<image class="log-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
-						<view class="log-text">139****2561 刚购买了家用小冰箱，还未付款</view>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<!-- 功能菜单 -->
-		<image class="commission-bottom-bg" src="http://shopro.7wpp.com/imgs/commission/commission_bottom.png" mode="widthFix"></image>
-		<view class="menu-box flex">
-			<view class="menu-item y-f" v-for="(menu, index) in menuList" :key="index" @tap="jump(menu.path)">
-				<image class="item-img" :src="menu.img" mode=""></image>
-				<view class="item-title">{{ menu.title }}</view>
-			</view>
-		</view>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
@@ -71,6 +83,14 @@ export default {
 	data() {
 		return {
 			showMoney: true, //是否显示金额
+			hasAuth: true, //是否有权限
+			authNotice: {
+				//权限提示内容
+				img: 'http://shopro.7wpp.com/imgs/commission/auth_check.png',
+				title: '正在审核中！',
+				detail: '请耐心等候',
+				btnText: '知道了'
+			},
 			menuList: [
 				//menu
 				{
@@ -117,16 +137,25 @@ export default {
 		};
 	},
 	computed: {},
-	onLoad() {},
+	onLoad() {
+		let pages = getCurrentPages();
+		console.log(pages[pages.length - 1]);
+	},
 	methods: {
 		// 跳转
 		jump(path, query) {
-			this.$tools.routerTo(path, query)
+			this.$tools.routerTo(path, query);
 		},
 
 		// 是否显示金额
 		onEye() {
 			this.showMoney = !this.showMoney;
+		},
+
+		// 权限
+		onAuthBtn() {},
+		onBack() {
+			this.$Router.back();
 		}
 	}
 };
@@ -143,6 +172,73 @@ export default {
 	/deep/ .cu-back {
 		color: #fff;
 		font-size: 38rpx;
+	}
+}
+// 佣金中心权限验证蒙层
+.blur {
+	filter: blur(20rpx);
+}
+.auth-box {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: fixed;
+	z-index: 99;
+	.notice-box {
+		position: fixed;
+		z-index: 1111;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: #fff;
+		top: 50%;
+		left: 50%;
+		width: 612rpx;
+		min-height: 658rpx;
+		background: #ffffff;
+		padding: 30rpx;
+		border-radius: 20rpx;
+		transform: translate(-50%, -50%);
+		.img-wrap {
+			margin-bottom: 50rpx;
+			.notice-img {
+				width: 180rpx;
+				height: 170rpx;
+			}
+		}
+		.notice-title {
+			font-size: 35rpx;
+			font-weight: bold;
+			color: #46351b;
+			margin-bottom: 28rpx;
+		}
+		.notice-detail {
+			font-size: 28rpx;
+			font-weight: 400;
+			color: #999999;
+			line-height: 36rpx;
+			margin-bottom: 50rpx;
+		}
+		.notice-btn {
+			width: 492rpx;
+			height: 70rpx;
+			background: linear-gradient(-90deg, #a36fff, #5336ff);
+			box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
+			border-radius: 35rpx;
+			font-size: 28rpx;
+			font-weight: 500;
+			color: #ffffff;
+			margin-bottom: 10rpx;
+		}
+		.back-btn {
+			width: 492rpx;
+			height: 70rpx;
+			font-size: 28rpx;
+			font-weight: 500;
+			color: #c5b8fb;
+			background: none;
+		}
 	}
 }
 // 用户资料卡片

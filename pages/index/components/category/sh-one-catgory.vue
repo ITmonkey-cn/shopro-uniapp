@@ -10,7 +10,7 @@
 				</scroll-view>
 			</view>
 			<view style="height: 100%;width: 100%;">
-				<scroll-view  @scrolltolower="loadMore" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
+				<scroll-view @scrolltolower="loadMore" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode=""></image>
 						<view class="item-list">
@@ -63,15 +63,14 @@ export default {
 			if (this.tabbarList.length) {
 				let arr = [];
 				let pages = getCurrentPages();
-				let currentPath = pages[pages.length - 1].$page.fullPath;
+				let currentPath = '/' + pages[pages.length - 1].route;
 				for (let item of this.tabbarList) {
-					arr.push(item.path);
+					arr.push(item.path.split('?')[0]);
 				}
 				return arr.includes(currentPath);
 			}
 		},
 		paddingBottom() {
-			console.log(this.isTabbar);
 			if (this.isTabbar) {
 				return 'padding-bottom:100rpx';
 			}

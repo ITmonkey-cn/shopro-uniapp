@@ -54,15 +54,14 @@ export default {
 			if (this.tabbarList.length) {
 				let arr = [];
 				let pages = getCurrentPages();
-				let currentPath = pages[pages.length - 1].$page.fullPath;
+				let currentPath = '/' + pages[pages.length - 1].route;
 				for (let item of this.tabbarList) {
-					arr.push(item.path);
+					arr.push(item.path.split('?')[0]);
 				}
 				return arr.includes(currentPath);
 			}
 		},
 		paddingBottom() {
-			console.log(this.isTabbar);
 			if (this.isTabbar) {
 				return 'padding-bottom:100rpx';
 			}

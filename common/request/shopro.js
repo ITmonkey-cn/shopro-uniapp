@@ -720,5 +720,15 @@ export default {
 		}
 	},
 
+	/** 分销 ↓ **/
+	commission: {
+		auth: {
+			url: 'commission.agent/index',
+			auth: true,
+			method: 'GET',
+			// desc: '分销身份鉴权',
+		}
+	}
+
 
 };
