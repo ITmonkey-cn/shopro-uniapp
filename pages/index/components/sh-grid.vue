@@ -4,66 +4,62 @@
 			<image class="tool-img" :src="menu.image" mode="aspectFill"></image>
 			<text class="item-title">{{ menu.name }}</text>
 		</view>
-		<view class="tool-item y-f" @tap="$Router.push('/pages/app/commission/index')">
-			<image class="tool-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode="aspectFill"></image>
-			<text class="item-title">分销中心</text>
-		</view>
 	</view>
 </template>
 
 <script>
-/**
- * 自定义之宫格列表
- * @property {Object} detail  - 宫格信息
- */
-export default {
-	components: {},
-	data() {
-		return {
-			routerTo: this.$tools.routerTo
-		};
-	},
-	computed: {},
-	props: {
-		detail: {
-			type: Object,
-			default: null
+	/**
+	 * 自定义之宫格列表
+	 * @property {Object} detail  - 宫格信息
+	 */
+	export default {
+		components: {},
+		data() {
+			return {
+				routerTo: this.$tools.routerTo
+			};
+		},
+		computed: {},
+		props: {
+			detail: {
+				type: Object,
+				default: null
+			}
+		},
+		methods: {
+			jump(data) {
+				this.$tools.routerTo(data.path);
+			}
 		}
-	},
-	methods: {
-		jump(data) {
-			this.$tools.routerTo(data.path);
-		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-// 宫格
-.sh-grid-box {
-	background: #fff;
-	display: flex;
-	flex-wrap: wrap;
-	padding-bottom: 40rpx;
+	// 宫格
+	.sh-grid-box {
+		background: #fff;
+		display: flex;
+		flex-wrap: wrap;
+		padding-bottom: 40rpx;
 
-	.tool-item {
-		width: (750rpx/4);
-		padding-top: 40rpx;
+		.tool-item {
+			width: (750rpx/4);
+			padding-top: 40rpx;
 
-		.tool-img {
-			width: 44rpx;
-			height: 44rpx;
-			// background: #ccc;
-		}
+			.tool-img {
+				width: 44rpx;
+				height: 44rpx;
+				// background: #ccc;
+			}
 
-		.item-title {
-			font-size: 24rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: rgba(153, 153, 153, 1);
-			line-height: 24rpx;
-			padding-top: 30rpx;
+			.item-title {
+				font-size: 24rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(153, 153, 153, 1);
+				line-height: 24rpx;
+				padding-top: 30rpx;
+			}
 		}
 	}
-}
 </style>

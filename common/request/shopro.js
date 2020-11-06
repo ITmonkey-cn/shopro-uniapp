@@ -723,10 +723,46 @@ export default {
 	/** 分销 ↓ **/
 	commission: {
 		auth: {
-			url: 'commission.agent/index',
+			url: 'commission.agent/info',
 			auth: true,
 			method: 'GET',
 			// desc: '分销身份鉴权',
+		},
+		goods: {
+			url: 'commission.goods/index',
+			auth: true,
+			method: 'GET',
+			// desc: '分销商品',
+		},
+		ranking: {
+			url: 'commission.agent/ranking',
+			auth: true,
+			method: 'GET',
+			// desc: '分销商排行榜',
+		},
+		form: {
+			url: 'commission.agent/agentForm',
+			auth: true,
+			method: 'GET',
+			// desc: '申请成为分销商表单',
+		},
+		apply: {
+			url: 'commission.agent/applyForm',
+			auth: true,
+			method: 'POST',
+			// desc: '申请成为分销商',
+		},
+		team: {
+			url: 'commission.agent/team',
+			auth: true,
+			method: 'GET',
+			// desc: '我的团队',
+		},
+		share: {
+			url: 'share/index',
+			auth: true,
+			method: 'GET',
+			// desc: '分享记录',
 		}
 	}
 

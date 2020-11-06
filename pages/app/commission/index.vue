@@ -5,14 +5,14 @@
 			<cu-custom isBack></cu-custom>
 			<!-- 用户资料 -->
 			<view class="user-card">
-				<view class="card-top x-f">
-					<view class="head-img-box"><image class="head-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode="widthFix"></image></view>
+				<view class="card-top x-f" v-if="commissionInfo">
+					<view class="head-img-box"><image class="head-img" :src="commissionInfo.avatar" mode="widthFix"></image></view>
 					<view class="y-start">
 						<view class="user-info-box x-f">
-							<view class="user-name">会员昵称</view>
-							<view class="grade-tag tag-box x-f">
-								<image class="tag-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
-								<text class="tag-title">铜牌销客</text>
+							<view class="user-name">{{ commissionInfo.nickname }}</view>
+							<view class="grade-tag tag-box x-f" v-if="commissionLv">
+								<image class="tag-img" :src="commissionLv.image" mode=""></image>
+								<text class="tag-title">{{ commissionLv.name }}</text>
 							</view>
 						</view>
 						<view class="progress-box">
@@ -24,10 +24,10 @@
 						</view>
 					</view>
 				</view>
-				<view class="card-bottom x-f">
+				<view class="card-bottom x-f" v-if="commissionWallet">
 					<view class="flex-sub y-start">
 						<view class="item-title">总收益</view>
-						<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
+						<view class="item-detail">{{ showMoney ? commissionWallet.total_income : '***' }}</view>
 					</view>
 					<view class="flex-sub  y-start">
 						<view class="item-title">待入账佣金</view>
@@ -70,7 +70,7 @@
 				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
 				<view class="notice-title">{{ authNotice.title }}</view>
 				<view class="notice-detail">{{ authNotice.detail }}</view>
-				<button class="cu-btn notice-btn" @tap="onAuthBtn">{{ authNotice.btnText }}</button>
+				<button class="cu-btn notice-btn" @tap="onAuthBtn(authNotice.btnPath)">{{ authNotice.btnText }}</button>
 				<button class="cu-btn back-btn" @tap="onBack">返回</button>
 			</view>
 		</view>
@@ -78,12 +78,16 @@
 </template>
 
 <script>
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {
 			showMoney: true, //是否显示金额
 			hasAuth: true, //是否有权限
+			commissionInfo: null, //分销商信息
+			commissionLv: null, //分销商等级
+			commissionWallet: null, //分销商钱包
 			authNotice: {
 				//权限提示内容
 				img: 'http://shopro.7wpp.com/imgs/commission/auth_check.png',
@@ -137,9 +141,8 @@ export default {
 		};
 	},
 	computed: {},
-	onLoad() {
-		let pages = getCurrentPages();
-		console.log(pages[pages.length - 1]);
+	onShow() {
+		this.getStatus();
 	},
 	methods: {
 		// 跳转
@@ -152,8 +155,78 @@ export default {
 			this.showMoney = !this.showMoney;
 		},
 
+		// 身份认证
+		getStatus() {
+			let that = this;
+			that.$api('commission.auth').then(res => {
+				if (res.code === 1) {
+					that.authStatus(res.data);
+					that.commissionInfo = res.data.user;
+					that.commissionWallet = res.data.data;
+					that.commissionLv = res.data.agent_level;
+				}
+			});
+		},
+		// 状态鉴权
+		authStatus(data) {
+			switch (data.status) {
+				case 'forbidden':
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_stop.png',
+						title: '抱歉！你的账户已被禁用',
+						detail: data.msg,
+						btnText: '联系客服',
+						btnPath: '/pages/public/kefu/index'
+					};
+					break;
+				case 'pending':
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_stop.png',
+						title: '正在审核中！',
+						detail: data.msg,
+						btnText: '知道了',
+						btnPath: ''
+					};
+					break;
+				case 'NULL':
+					break;
+				case 'needinfo':
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_perfect.png',
+						title: '待完善信息',
+						detail: data.msg,
+						btnText: '去完善',
+						btnPath: '/pages/app/commission/apply'
+					};
+					break;
+				case 'reject':
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_reject.png',
+						title: '申请驳回',
+						detail: data.msg,
+						btnText: '去申请',
+						btnPath: '/pages/app/commission/apply'
+					};
+					break;
+				default:
+					this.hasAuth = true;
+			}
+		},
+
 		// 权限
-		onAuthBtn() {},
+		onAuthBtn(path) {
+			if (path) {
+				this.$Router.push({
+					path: path
+				});
+			} else {
+				this.$Router.back();
+			}
+		},
 		onBack() {
 			this.$Router.back();
 		}

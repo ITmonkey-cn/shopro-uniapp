@@ -1,19 +1,21 @@
 <!-- 推广商品 -->
 <template>
 	<view class="promotion-goods-wrap">
-		<view class="goods-list x-f" v-for="item in 4 " :key="item">
-			<view class="img-box"><image class="goods-img" src="/http://shopro.7wpp.com/imgs/user/shop_qrcode.png" mode=""></image></view>
+		<view class="goods-list x-f" v-for="item in goodsList" :key="item.goods_id">
+			<view class="img-box"><image class="goods-img" :src="item.goods.image" mode=""></image></view>
 			<view class="goods-info y-bc">
-				<view class="goods-title one-t">泰国TSM防晒喷雾学生户外泰国TSM防晒喷雾学生户外</view>
-				<view class="goods-des one-t">高效防晒，清爽不油腻</view>
+				<view class="goods-title one-t">{{ item.goods.title }}</view>
+				<view class="goods-des one-t">{{ item.goods.subtitle }}</view>
 				<view class="goods-price x-f">
-					<view class="price">￥339</view>
-					<view class="origin-price">￥499</view>
+					<view class="price">￥{{ item.goods.price }}</view>
+					<view class="origin-price">￥{{ item.goods.original_price }}</view>
 				</view>
-				<view class="commission-num">预计佣金：￥60</view>
+				<view class="commission-num">预计佣金：￥{{ item.commission_money }}</view>
 			</view>
 			<button class="share-btn cu-btn">分享赚</button>
 		</view>
+		<!-- 更多 -->
+		<view v-if="goodsList.length" style="height: 3em;" class="cu-load text-gray" :class="loadStatus"></view>
 	</view>
 </template>
 
@@ -21,11 +23,42 @@
 export default {
 	components: {},
 	data() {
-		return {};
+		return {
+			goodsList: [], //分销商品
+			loadStatus: '', //loading,over
+			currentPage: 1,
+			lastPage: 1
+		};
 	},
 	computed: {},
-	onLoad() {},
-	methods: {}
+	onLoad() {
+		this.getGoodList();
+	},
+	onReachBottom() {
+		if (this.currentPage < this.lastPage) {
+			this.currentPage += 1;
+			this.getGoodList();
+		}
+	},
+	methods: {
+		getGoodList() {
+			let that = this;
+			that.loadStatus = 'loading';
+			that.$api('commission.goods', {
+				page: that.currentPage
+			}).then(res => {
+				if (res.code === 1) {
+					that.goodsList = [...that.goodsList, ...res.data.data];
+					that.lastPage = res.data.last_page;
+					if (that.currentPage < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
+				}
+			});
+		}
+	}
 };
 </script>
 

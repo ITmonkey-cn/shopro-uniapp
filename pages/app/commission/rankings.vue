@@ -10,20 +10,20 @@
 
 		<!-- 排行榜 -->
 		<view class="rankings-list-box">
-			<view class="ranking-list x-bc" v-for="(item,index) in 8" :key="item">
+			<view class="ranking-list x-bc" v-for="(item, index) in rankingsList" :key="index">
 				<view class="list-left x-f">
 					<view class="tag-box x-c">
-						<text class="tag-text" v-if="index >= 3">{{ item }}</text>
+						<text class="tag-text" v-if="index >= 3">{{ index }}</text>
 						<image v-else class="tag-icon" :src="rankingsIcon[index]" mode=""></image>
 					</view>
-					<image class="user-avatar" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
+					<image class="user-avatar" :src="item.user.avatar" mode=""></image>
 					<view class="user-info">
-						<view class="name mb10">大卫</view>
-						<view class="date">2020年10月13日</view>
+						<view class="name mb10">{{ item.user.nickname }}</view>
+						<view class="date">{{ $u.timeFormat(item.createtime, 'yyyy年mm月dd日') }}</view>
 					</view>
 				</view>
 				<view class="list-right y-end">
-					<view class="num mb10">15679.00</view>
+					<view class="num mb10">{{ item.total_income }}</view>
 					<view class="des">累计收益</view>
 				</view>
 			</view>
@@ -40,12 +40,24 @@ export default {
 				0: 'http://shopro.7wpp.com/imgs/commission/01.png',
 				1: 'http://shopro.7wpp.com/imgs/commission/02.png',
 				2: 'http://shopro.7wpp.com/imgs/commission/03.png'
-			}
+			},
+			rankingsList: [] //排行榜
 		};
 	},
 	computed: {},
-	onLoad() {},
-	methods: {}
+	onLoad() {
+		this.getRankings();
+	},
+	methods: {
+		getRankings() {
+			let that = this;
+			that.$api('commission.ranking').then(res => {
+				if (res.code === 1) {
+					that.rankingsList = res.data.data;
+				}
+			});
+		}
+	}
 };
 </script>
 

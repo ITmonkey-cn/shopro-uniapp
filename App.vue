@@ -72,9 +72,9 @@ export default {
 			uni.setStorageSync('shop_id', options.query.shop_id);
 		}
 		// #ifdef MP-WEIXIN
-		if(options.scene !== 1154) {
+		if (options.scene !== 1154) {
 			var wechat = new Wechat();
-			wechat.checkMiniProgramUpdate();	
+			wechat.checkMiniProgramUpdate();
 		}
 		// #endif
 		await this.setAppInfo();

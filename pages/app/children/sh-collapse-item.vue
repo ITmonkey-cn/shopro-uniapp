@@ -2,16 +2,16 @@
 	<view class="sh-collapse-box">
 		<view class="collapse-head x-bc">
 			<view class="x-f">
-				<image class="head-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
+				<image class="head-img" :src="avatar" mode=""></image>
 				<view class="head-info">
 					<view class="name-box x-f">
-						<view class="name-text">会员昵称</view>
+						<view class="name-text">{{name}}</view>
 						<view class="grade-tag tag-box x-f">
-							<image class="tag-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
-							<text class="tag-title">铜牌逍客</text>
+							<image class="tag-img" :src="level.image" mode=""></image>
+							<text class="tag-title">{{level.name}}</text>
 						</view>
 					</view>
-					<view class="head-time">2020年10月13日</view>
+					<view class="head-time">{{$u.timeFormat(dateTime, 'yyyy年mm月dd日') }}</view>
 				</view>
 			</view>
 			<button class="cu-btn arrow-btn" :class="{ 'arrow-active': isUnfold }" @tap="onArrow"><text class="cuIcon-unfold"></text></button>
@@ -35,6 +35,24 @@ export default {
 		return {
 			isUnfold: false
 		};
+	},
+	props: {
+		avatar: {
+			type: String,
+			default: ''
+		},
+		name: {
+			type: String,
+			default: ''
+		},
+		level: {
+			type: Object,
+			default: {}
+		},
+		dateTime: {
+			type: Number,
+			default: 0
+		}
 	},
 	computed: {},
 	methods: {
