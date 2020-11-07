@@ -10,38 +10,38 @@
 				<view class="data-card">
 					<view class="total-item">
 						<view class="item-title">团队总人数(人)</view>
-						<view class="total-num">12345678</view>
+						<view class="total-num">{{ userInfo.child_user_count }}</view>
 					</view>
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">一级成员</view>
-							<view class="category-num">2000000</view>
+							<view class="category-num">{{ userInfo.child_user_count_1 }}</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">二级成员</view>
-							<view class="category-num">2000000</view>
+							<view class="category-num">{{ twoTeamCount }}</view>
 						</view>
 					</view>
 				</view>
 				<view class="data-card">
 					<view class="total-item">
 						<view class="item-title">总业绩(元)</view>
-						<view class="total-num">123456.00</view>
+						<view class="total-num">{{ commissionInfo.order_money }}</view>
 					</view>
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">我的业绩</view>
-							<view class="category-num">20000.00</view>
+							<view class="category-num">{{ commissionInfo.self_order_money }}</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">团队业绩</view>
-							<view class="category-num">20000.00</view>
+							<view class="category-num">{{ commissionInfo.order_money_1 }}</view>
 						</view>
 					</view>
 				</view>
 			</view>
-			<!-- 筛选 -->
-			<view class="filter-box x-f">
+			<!-- 筛选 TODO -->
+			<view class="filter-box x-f" v-if="false">
 				<view class="filter-item flex-sub" v-for="(filter, index) in filterList" :key="index" @tap="onFilter(index)">
 					<view class="x-f">
 						<text class="filter-title" :class="{ 'title-active': filterCurrent == index }">{{ filter.title }}</text>
@@ -52,249 +52,369 @@
 			</view>
 		</view>
 		<view class="content_box">
-			<!-- 团队列表 -->
-			<view class="team-box">
-				<view class="team-list" v-for="item in teamList" :key="item.id" @tap="onTeamList(item)">
-					<sh-collapse-item :avatar="item.avatar" :dateTime="item.agent.createtime" :level="item.agent.level" :name="item.nickname">
-						<block slot="collapse-children">
-							<view class="team-children x-f" v-for="children in item.children" :key="children.id">
-								<image class="head-img" :src="children.avatar" mode=""></image>
-								<view class="head-info">
-									<view class="name-box x-f">
-										<view class="name-text">{{children.nicname}}</view>
-										<view class="grade-tag tag-box x-f">
-											<image class="tag-img" :src="children.agent.level.image" mode=""></image>
-											<text class="tag-title">{{ $u.timeFormat(children.agent.createtime, 'yyyy年mm月dd日') }}</text>
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+				<!-- 团队列表 -->
+				<view class="team-box">
+					<view class="team-list" v-for="(item, index) in teamList" :key="item.id" @tap="onTeamList(item.id, index)">
+						<sh-collapse-item
+							:avatar="item.avatar"
+							:dateTime="item.createtime"
+							:level="item.agent ? item.agent.level : null"
+							:name="item.nickname"
+							:isUnfold="item.isUnfold"
+						>
+							<view slot="collapse-children" v-if="childrenTeamList.length">
+								<view class="team-children x-f" v-for="children in childrenTeamList" :key="children.id">
+									<image class="head-img" :src="children.avatar" mode=""></image>
+									<view class="head-info">
+										<view class="name-box x-f">
+											<view class="name-text">{{ children.nickname }}</view>
+											<view class="grade-tag tag-box x-f" v-if="children.agent">
+												<image class="tag-img" :src="children.agent ? children.agent.level.image : ''" mode=""></image>
+												<text class="tag-title">{{ children.agent ? children.agent.level.name : '' }}</text>
+											</view>
 										</view>
+										<view class="head-time">{{ $u.timeFormat(children.createtime, 'yyyy年mm月dd日') }}</view>
 									</view>
-									<view class="head-time">2020年10月13日</view>
 								</view>
+								<button  class="cu-btn refresh-btn x-f" @tap.stop="childrenLoadMore(item.id)">
+									<text class="cuIcon-refresh" :class="{ 'refresh-active': isRefresh }"></text>
+									{{ childrenLoad ? '点击加载更多' : '没有更多~' }}
+								</button>
 							</view>
-						</block>
-					</sh-collapse-item>
+						</sh-collapse-item>
+					</view>
 				</view>
-			</view>
+				<!-- 更多 -->
+				<view v-if="teamList.length" style="height: 3em;" class="cu-load text-gray" :class="loadStatus"></view>
+			</scroll-view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import shCollapseItem from '../children/sh-collapse-item.vue';
-	export default {
-		components: {
-			shCollapseItem
-		},
-		data() {
-			return {
-				filterCurrent: 0,
-				filterList: [{
+import shCollapseItem from '../children/sh-collapse-item.vue';
+import { mapMutations, mapActions, mapState } from 'vuex';
+export default {
+	components: {
+		shCollapseItem
+	},
+	data() {
+		return {
+			twoTeamCount: 0, //二级成员
+			commissionInfo: uni.getStorageSync('commissionInfo'),
+			filterCurrent: 0,
+			filterList: [
+				{
 					title: '综合',
 					isUnfold: false
-				}, {
+				},
+				{
 					title: '等级',
 					isUnfold: false
-				}, {
+				},
+				{
 					title: '加入时间',
 					isUnfold: false
-				}],
-				teamList: [] //团队列表
-			};
-		},
-		computed: {},
-		onLoad() {
-			this.getTeam();
-		},
-		methods: {
-			// 点击筛选项
-			onFilter(index) {
-				this.filterCurrent = index;
-				if (this.filterCurrent == index) {
-					this.filterList[index].isUnfold = !this.filterList[index].isUnfold;
 				}
-			},
-			// 点击队员项
-			onTeamList(index) {},
+			],
+			teamList: [], //团队列表
+			loadStatus: '', //loading,over
+			currentPage: 1,
+			lastPage: 1,
+			// 二级
+			childrenTeamList: [],
+			childrenCurrentPage: 1,
+			childrenLastPage: 1,
+			childrenLoad: false,
+			isRefresh: false
+		};
+	},
+	computed: {
+		...mapState({
+			userInfo: state => state.user.userInfo
+		})
+	},
+	onLoad() {
+		this.getTeam();
+	},
+	methods: {
+		// 点击筛选项
+		onFilter(index) {
+			this.filterCurrent = index;
+			if (this.filterCurrent == index) {
+				this.filterList[index].isUnfold = !this.filterList[index].isUnfold;
+			}
+		},
+		// 点击队员项
+		onTeamList(id, ind) {
+			this.childrenTeamList = [];
+			this.childrenCurrentPage = 1;
+			this.childrenLastPage = 1;
+			this.childrenLoad = false;
+			this.isRefresh = false;
+			this.teamList.map((item, index) => {
+				if (index === ind) {
+					item.isUnfold ? (item.isUnfold = false) : (item.isUnfold = true);
+				} else {
+					item.isUnfold = false;
+				}
+			});
+			this.getChildrenTeam(id, ind);
+		},
 
-			// 团队列表
-			getTeam() {
-				let that = this;
-				that.$api('commission.team').then(res => {
-					if (res.code === 1) {
-						that.teamList = res.data.teams.data;
+		// 团队列表
+		getTeam() {
+			let that = this;
+			that.$api('commission.team', {
+				page: that.currentPage
+			}).then(res => {
+				if (res.code === 1) {
+					that.twoTeamCount = res.data.child_user_count_2;
+					let arr = res.data.teams.data;
+					arr.map(item => {
+						item.isUnfold = false;
+					});
+					that.teamList = [...that.teamList, ...arr];
+					that.lastPage = res.data.teams.last_page;
+					if (that.currentPage < res.data.teams.last_page) {
+						that.isLoadMore = '';
+					} else {
+						that.loadStatus = 'over';
 					}
-				});
+				}
+			});
+		},
+
+		// 二级队员
+		getChildrenTeam(id, index) {
+			let that = this;
+			that.$api('commission.team', {
+				id: id,
+				page: that.childrenCurrentPage
+			}).then(res => {
+				if (res.code === 1) {
+					that.childrenTeamList = [...that.childrenTeamList, ...res.data.teams.data];
+					that.childrenLastPage = res.data.teams.last_page;
+					if (that.childrenCurrentPage < res.data.teams.last_page) {
+						that.childrenLoad = true;
+					} else {
+						that.childrenLoad = false;
+					}
+				}
+			});
+		},
+
+		// 二级加载更多
+		childrenLoadMore(id) {
+			if (!this.isRefresh) {
+				// 加载更多
+				if (this.childrenCurrentPage < this.childrenLastPage) {
+					this.isRefresh = true;
+					this.childrenCurrentPage += 1;
+					this.getChildrenTeam(id);
+				}
+			}
+		},
+
+		// 加载更多
+		loadMore() {
+			if (this.currentPage < this.lastPage) {
+				this.currentPage += 1;
+				this.getTeam();
 			}
 		}
-	};
+	}
+};
 </script>
 
 <style lang="scss">
-	// 头部卡片
-	.head_box {
-		background: url('http://shopro.7wpp.com/imgs/commission/card_bg.png') no-repeat;
-		background-size: 100% auto;
+// 二级加载更多按钮
+.refresh-btn {
+	width: 100%;
+	line-height: 100rpx;
+	background: #ffffff;
+	border-radius: 25rpx;
+	font-size: 22rpx;
+	font-weight: 500;
+	color: #999999;
+	white-space: nowrap;
+	.cuIcon-refresh {
+		color: #dbdbdb;
+		margin-right: 12rpx;
+		font-size: 32rpx;
+	}
+}
+.refresh-active {
+	transform: rotate(360deg);
+	transition: all linear 0.5s;
+}
+// 头部卡片
+.head_box {
+	background: url('http://shopro.7wpp.com/imgs/commission/card_bg.png') no-repeat;
+	background-size: 100% auto;
 
-		/deep/ .cu-back {
-			color: #fff;
-			font-size: 40rpx;
-		}
-
-		.head-title {
-			font-size: 38rpx;
-			color: #fff;
-		}
+	/deep/ .cu-back {
+		color: #fff;
+		font-size: 40rpx;
 	}
 
-	// 团队信息总览
-	.team-data-box {
-		margin: 36rpx 20rpx;
-
-		.data-card {
-			width: 340rpx;
-			background: #ffffff;
-			border-radius: 20rpx;
-			padding: 20rpx;
-
-			.item-title {
-				font-size: 22rpx;
-				font-weight: 500;
-				color: #999999;
-				line-height: 30rpx;
-				margin-bottom: 10rpx;
-			}
-
-			.total-item {
-				margin-bottom: 20rpx;
-			}
-
-			.total-num {
-				font-size: 38rpx;
-				font-weight: 500;
-				color: #333333;
-			}
-
-			.category-num {
-				font-size: 26rpx;
-				font-weight: 500;
-				color: #333333;
-			}
-		}
+	.head-title {
+		font-size: 38rpx;
+		color: #fff;
 	}
+}
 
-	// 筛选
-	.filter-box {
-		width: 750rpx;
-		height: 95rpx;
+// 团队信息总览
+.team-data-box {
+	margin: 36rpx 20rpx;
+
+	.data-card {
+		width: 340rpx;
 		background: #ffffff;
+		border-radius: 20rpx;
+		padding: 20rpx;
 
-		.filter-item {
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
+		.item-title {
+			font-size: 22rpx;
+			font-weight: 500;
+			color: #999999;
+			line-height: 30rpx;
+			margin-bottom: 10rpx;
+		}
 
-			.filter-title {
-				color: #666;
-				font-weight: 500;
-				font-size: 28rpx;
-				line-height: 90rpx;
-			}
+		.total-item {
+			margin-bottom: 20rpx;
+		}
 
-			.cuIcon-unfold {
-				font-size: 24rpx;
-				color: #c4c4c4;
-				margin-left: 10rpx;
-				transition: all linear 0.3s;
-			}
+		.total-num {
+			font-size: 38rpx;
+			font-weight: 500;
+			color: #333333;
+		}
 
-			.icon-active {
-				transform: rotate(180deg);
-				transform-origin: center center;
-				transition: all linear 0.3s;
-			}
-
-			.title-active {
-				color: #333;
-			}
-
-			.underline {
-				display: block;
-				width: 68rpx;
-				height: 4rpx;
-				background: #fff;
-				border-radius: 2rpx;
-			}
-
-			.underline-active {
-				background: #5e49c3;
-				display: block;
-				width: 68rpx;
-				height: 4rpx;
-				border-radius: 2rpx;
-			}
+		.category-num {
+			font-size: 26rpx;
+			font-weight: 500;
+			color: #333333;
 		}
 	}
+}
 
-	// 团队列表
-	.team-box {
-		margin-top: 20rpx;
+// 筛选
+.filter-box {
+	width: 750rpx;
+	height: 95rpx;
+	background: #ffffff;
 
-		.team-list {
-			.team-children {
-				margin-left: 80rpx;
-				margin-right: 20rpx;
-				height: 132rpx;
-				border-bottom: 1rpx solid #eee;
+	.filter-item {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 
-				.head-img {
-					width: 60rpx;
-					height: 60rpx;
-					border-radius: 50%;
-					margin-right: 38rpx;
+		.filter-title {
+			color: #666;
+			font-weight: 500;
+			font-size: 28rpx;
+			line-height: 90rpx;
+		}
+
+		.cuIcon-unfold {
+			font-size: 24rpx;
+			color: #c4c4c4;
+			margin-left: 10rpx;
+			transition: all linear 0.3s;
+		}
+
+		.icon-active {
+			transform: rotate(180deg);
+			transform-origin: center center;
+			transition: all linear 0.3s;
+		}
+
+		.title-active {
+			color: #333;
+		}
+
+		.underline {
+			display: block;
+			width: 68rpx;
+			height: 4rpx;
+			background: #fff;
+			border-radius: 2rpx;
+		}
+
+		.underline-active {
+			background: #5e49c3;
+			display: block;
+			width: 68rpx;
+			height: 4rpx;
+			border-radius: 2rpx;
+		}
+	}
+}
+
+// 团队列表
+.team-box {
+	margin-top: 20rpx;
+
+	.team-list {
+		.team-children {
+			margin-left: 80rpx;
+			margin-right: 20rpx;
+			height: 132rpx;
+			border-bottom: 1rpx solid #eee;
+
+			.head-img {
+				width: 60rpx;
+				height: 60rpx;
+				border-radius: 50%;
+				margin-right: 38rpx;
+			}
+
+			.head-info {
+				.head-time {
+					font-size: 22rpx;
+					font-weight: 400;
+					color: #999999;
 				}
 
-				.head-info {
-					.head-time {
-						font-size: 22rpx;
-						font-weight: 400;
-						color: #999999;
+				.name-box {
+					margin-bottom: 12rpx;
+
+					.name-text {
+						font-size: 24rpx;
+						font-weight: 500;
+						color: #666;
 					}
 
-					.name-box {
-						margin-bottom: 12rpx;
+					.tag-box {
+						background: rgba(0, 0, 0, 0.2);
+						border-radius: 21rpx;
+						line-height: 30rpx;
+						padding-right: 10rpx;
+						margin-left: 10rpx;
 
-						.name-text {
-							font-size: 24rpx;
+						.tag-img {
+							width: 34rpx;
+							height: 34rpx;
+							margin-right: 6rpx;
+							border-radius: 50%;
+						}
+
+						.tag-title {
+							font-size: 18rpx;
+							font-family: PingFang SC;
 							font-weight: 500;
-							color: #666;
-						}
-
-						.tag-box {
-							background: rgba(0, 0, 0, 0.2);
-							border-radius: 21rpx;
-							line-height: 30rpx;
-							padding-right: 10rpx;
-							margin-left: 10rpx;
-
-							.tag-img {
-								width: 34rpx;
-								height: 34rpx;
-								margin-right: 6rpx;
-								border-radius: 50%;
-							}
-
-							.tag-title {
-								font-size: 18rpx;
-								font-family: PingFang SC;
-								font-weight: 500;
-								color: rgba(255, 255, 255, 1);
-								line-height: 20rpx;
-							}
+							color: rgba(255, 255, 255, 1);
+							line-height: 20rpx;
 						}
 					}
 				}
 			}
 		}
 	}
+}
 </style>

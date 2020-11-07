@@ -5,11 +5,11 @@
 			<cu-custom isBack></cu-custom>
 			<!-- 用户资料 -->
 			<view class="user-card">
-				<view class="card-top x-f" v-if="commissionInfo">
-					<view class="head-img-box"><image class="head-img" :src="commissionInfo.avatar" mode="widthFix"></image></view>
+				<view class="card-top x-f">
+					<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode="widthFix"></image></view>
 					<view class="y-start">
 						<view class="user-info-box x-f">
-							<view class="user-name">{{ commissionInfo.nickname }}</view>
+							<view class="user-name">{{ userInfo.nickname }}</view>
 							<view class="grade-tag tag-box x-f" v-if="commissionLv">
 								<image class="tag-img" :src="commissionLv.image" mode=""></image>
 								<text class="tag-title">{{ commissionLv.name }}</text>
@@ -31,7 +31,7 @@
 					</view>
 					<view class="flex-sub  y-start">
 						<view class="item-title">待入账佣金</view>
-						<view class="item-detail">{{ showMoney ? '2999999.99' : '***' }}</view>
+						<view class="item-detail">{{ showMoney ? waitingWalletMoney : '***' }}</view>
 					</view>
 					<view class="y-f">
 						<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
@@ -140,7 +140,11 @@ export default {
 			]
 		};
 	},
-	computed: {},
+	computed: {
+		...mapState({
+			userInfo: state => state.user.userInfo
+		})
+	},
 	onShow() {
 		this.getStatus();
 	},
@@ -161,9 +165,10 @@ export default {
 			that.$api('commission.auth').then(res => {
 				if (res.code === 1) {
 					that.authStatus(res.data);
-					that.commissionInfo = res.data.user;
 					that.commissionWallet = res.data.data;
+					that.waitingWalletMoney = res.data.waiting_commission_money;
 					that.commissionLv = res.data.agent_level;
+					uni.setStorageSync('commissionInfo', res.data.data);
 				}
 			});
 		},

@@ -5,18 +5,18 @@
 				<image class="head-img" :src="avatar" mode=""></image>
 				<view class="head-info">
 					<view class="name-box x-f">
-						<view class="name-text">{{name}}</view>
-						<view class="grade-tag tag-box x-f">
+						<view class="name-text">{{ name }}</view>
+						<view class="grade-tag tag-box x-f" v-if="level">
 							<image class="tag-img" :src="level.image" mode=""></image>
-							<text class="tag-title">{{level.name}}</text>
+							<text class="tag-title">{{ level.name }}</text>
 						</view>
 					</view>
-					<view class="head-time">{{$u.timeFormat(dateTime, 'yyyy年mm月dd日') }}</view>
+					<view class="head-time">{{ $u.timeFormat(dateTime, 'yyyy年mm月dd日') }}</view>
 				</view>
 			</view>
-			<button class="cu-btn arrow-btn" :class="{ 'arrow-active': isUnfold }" @tap="onArrow"><text class="cuIcon-unfold"></text></button>
+			<button class="cu-btn arrow-btn" :class="{ 'arrow-active': showUnfold }" @tap="onArrow"><text class="cuIcon-unfold"></text></button>
 		</view>
-		<slot v-if="isUnfold" name="collapse-children"></slot>
+		<slot v-if="showUnfold" name="collapse-children"></slot>
 	</view>
 </template>
 
@@ -32,9 +32,7 @@ export default {
 	name: 'sh-collapse-item',
 	components: {},
 	data() {
-		return {
-			isUnfold: false
-		};
+		return {};
 	},
 	props: {
 		avatar: {
@@ -47,14 +45,27 @@ export default {
 		},
 		level: {
 			type: Object,
-			default: {}
+			default: null
 		},
 		dateTime: {
 			type: Number,
 			default: 0
+		},
+		isUnfold: {
+			type: Boolean,
+			default: false
 		}
 	},
-	computed: {},
+	computed: {
+		showUnfold: {
+			get() {
+				return this.isUnfold;
+			},
+			set(val) {
+				return val;
+			}
+		}
+	},
 	methods: {
 		onArrow() {
 			this.isUnfold = !this.isUnfold;

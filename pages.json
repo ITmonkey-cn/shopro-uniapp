@@ -251,14 +251,16 @@
 				{
 					"path": "commission/index",
 					"style": {
-						"navigationBarTitleText": "佣金中心",
+						"navigationBarTitleText": "分销中心",
 						"navigationStyle": "custom",
 						"navigationBarTextStyle": "white"
 
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": true,
+						"title": "分销中心",
+						"group": "用户"
 					}
 				},
 				{
@@ -271,7 +273,9 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false,
+						"title": "我的团队",
+						"group": "用户"
 					}
 				},
 				{
@@ -281,7 +285,9 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false,
+						"title": "佣金明细",
+						"group": "用户"
 					}
 				},
 				{
@@ -293,7 +299,7 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false
 					}
 				},
 				{
@@ -303,7 +309,7 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false
 					}
 				},
 				{
@@ -313,7 +319,9 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false,
+						"title": "分销订单",
+						"group": "用户"
 					}
 				},
 				{
@@ -325,7 +333,9 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false,
+						"title": "分销排行",
+						"group": "用户"
 					}
 				},
 				{
@@ -335,7 +345,9 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false,
+						"title": "推广商品",
+						"group": "用户"
 					}
 				},
 				{
@@ -347,7 +359,9 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false,
+						"title": "申请分销商",
+						"group": "用户"
 					}
 				},
 				{
@@ -359,7 +373,9 @@
 					},
 					"meta": {
 						"auth": true,
-						"async": true
+						"async": false,
+						"title": "分享记录",
+						"group": "用户"
 					}
 				}
 			]

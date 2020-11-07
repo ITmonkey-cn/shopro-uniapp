@@ -110,6 +110,7 @@ export default {
 	computed: {},
 	onLoad() {
 		this.getToday();
+		this.getCommissionLog();
 	},
 	methods: {
 		// 点击日期选择
@@ -131,6 +132,14 @@ export default {
 		// 选择日期
 		selDate(e) {
 			this.selDateText = `${e.startYear}.${e.startMonth}.${e.startDay}-${e.endYear}.${e.endMonth}.${e.endDay}`;
+		},
+
+		// 佣金明细
+		getCommissionLog() {
+			that.$api('commission.rewardLog').then(res => {
+				if (res.code === 1) {
+				}
+			});
 		}
 	}
 };

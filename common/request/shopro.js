@@ -763,6 +763,18 @@ export default {
 			auth: true,
 			method: 'GET',
 			// desc: '分享记录',
+		},
+		order:{
+			url: 'commission.reward/order',
+			auth: true,
+			method: 'GET',
+			// desc: '分销订单',
+		},
+		rewardLog:{
+			url: 'commission.reward/index',
+			auth: true,
+			method: 'GET',
+			// desc: '佣金记录',
 		}
 	}
 
