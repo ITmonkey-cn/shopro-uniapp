@@ -3,9 +3,9 @@
 	<view class="page_box commission-order-wrap">
 		<!-- 状态分类 -->
 		<view class="head_box x-f">
-			<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state" @tap="onTab(index)">
-				<text class="state-title" :class="{ 'title-active': stateCurrent == index }">{{ state }}</text>
-				<text class="underline" :class="{ 'underline-active': stateCurrent == index }"></text>
+			<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state.value" @tap="onTab(state.value)">
+				<text class="state-title" :class="{ 'title-active': stateCurrent === state.value }">{{ state.name }}</text>
+				<text class="underline" :class="{ 'underline-active': stateCurrent === state.value }"></text>
 			</view>
 		</view>
 		<view class="content_box">
@@ -13,7 +13,7 @@
 			<view class="order-list" v-for="item in orderList" :key="item.id">
 				<view class="order-head x-bc">
 					<text class="order-code">订单编号：{{ item.order_sn }}</text>
-					<text class="order-state">{{ item.item_slim[0].reward.status_name }}</text>
+					<text class="order-state">{{ item.item_slim[0].agent_reward.status_name }}</text>
 				</view>
 				<view class="order-from x-bc">
 					<view class="from-user x-f">
@@ -32,13 +32,13 @@
 							<view class="goods-price">{{ goods.goods_price }}</view>
 							<view class="x-f">
 								<text class="name">佣金</text>
-								<text class="commission-num">{{ goods.reward.commission }}</text>
+								<text class="commission-num">{{ goods.agent_reward.commission }}</text>
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="total-box x-bc px20">
-					<view class="num-price">共{{item.item_slim.length}}件商品， 实付款:￥{{item.pay_fee}}</view>
+					<view class="num-price">共{{ item.item_slim.length }}件商品， 实付款:￥{{ item.pay_fee }}</view>
 					<view class="x-f"></view>
 				</view>
 			</view>
@@ -53,8 +53,25 @@ export default {
 	components: {},
 	data() {
 		return {
-			stateCurrent: 0, //默认
-			statusList: ['全部', '已入账', '待入账', '已退款'], //状态列表
+			stateCurrent: 'all', //默认
+			statusList: [
+				{
+					name: '全部',
+					value: 'all'
+				},
+				{
+					name: '待入账',
+					value: 'waiting'
+				},
+				{
+					name: '已入账',
+					value: 'entry'
+				},
+				{
+					name: '已退款',
+					value: 'back'
+				}
+			],
 			orderList: [], //分销订单
 			loadStatus: '', //loading,over
 			currentPage: 1,
@@ -67,15 +84,19 @@ export default {
 	},
 	methods: {
 		// 切换分类
-		onTab(index) {
-			this.stateCurrent = index;
+		onTab(state) {
+			this.orderList = [];
+			this.currentPage = 1;
+			this.lastPage = 1;
+			this.stateCurrent = state;
+			this.getOrderList();
 		},
 
 		// 分销订单
 		getOrderList() {
 			let that = this;
 			that.$api('commission.order', {
-				type: 'all'
+				type: that.stateCurrent
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderList = [...that.orderList, ...res.data.data];
@@ -93,7 +114,7 @@ export default {
 		loadMore() {
 			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
-				this.getShareLog();
+				this.getOrderList();
 			}
 		}
 	}

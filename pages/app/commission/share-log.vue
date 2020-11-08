@@ -10,9 +10,9 @@
 			</view>
 			<!-- 分类tab -->
 			<view class="tab-box x-f">
-				<view class="tab-item flex-sub " v-for="(tab, index) in tabsList" :key="tab" @tap="onTab(index)">
-					<text class="tab-title" :class="{ 'title-active': tabCurrent == index }">{{ tab }}</text>
-					<text class="underline" :class="{ 'underline-active': tabCurrent == index }"></text>
+				<view class="tab-item flex-sub " v-for="(tab, index) in tabsList" :key="tab.value" @tap="onTab(tab.value)">
+					<text class="tab-title" :class="{ 'title-active': tabCurrent === tab.value }">{{ tab.name }}</text>
+					<text class="underline" :class="{ 'underline-active': tabCurrent === tab.value }"></text>
 				</view>
 			</view>
 		</view>
@@ -25,14 +25,14 @@
 
 					<view class="item-right">
 						<view class="name">{{ item.user.nickname }}</view>
-						<view class="content x-f">
-							<view class="content-img-wrap"><image class="content-img" src="http://shopro.7wpp.com/imgs/user/shop_qrcode.png" mode=""></image></view>
+						<view class="content x-f" v-if="item.type_data">
+							<view class="content-img-wrap"><image class="content-img" :src="item.type_data.image" mode=""></image></view>
 
-							<view class="content-text">通过海报访问了商品“海蓝之谜活颜焕肤精华露”，进入商城</view>
+							<view class="content-text">通过{{ typeObj[item.type] }}访问了商品“{{ item.type_data.title }}”, 进入商城</view>
 						</view>
 						<view class="item-bottom x-bc">
-							<view class="time">10月18日 12:00</view>
-							<view class="from-text">来自商品分享</view>
+							<view class="time">{{ $u.timeFormat(item.createtime, 'yyyy年mm月dd日 hh:MM') }}</view>
+							<view class="from-text">来自{{ typeObj[item.type] }}分享</view>
 						</view>
 					</view>
 				</view>
@@ -50,8 +50,30 @@ export default {
 	data() {
 		return {
 			shareLogList: [], //分享记录
-			tabCurrent: 0, //默认
-			tabsList: ['全部', '名片', '商品', '拼团'], //分类列表
+			tabCurrent: 'all', //默认
+			tabsList: [
+				{
+					name: '全部',
+					value: 'all'
+				},
+				{
+					name: '名片',
+					value: 'index'
+				},
+				{
+					name: '商品',
+					value: 'goods'
+				},
+				{
+					name: '拼团',
+					value: 'groupon'
+				}
+			],
+			typeObj: {
+				index: '名片',
+				goods: '商品',
+				groupon: '拼团'
+			},
 			loadStatus: '', //loading,over
 			currentPage: 1,
 			lastPage: 1
@@ -63,15 +85,20 @@ export default {
 	},
 	methods: {
 		// 切换分类
-		onTab(index) {
-			this.tabCurrent = index;
+		onTab(type) {
+			this.tabCurrent = type;
+			this.currentPage = 1;
+			this.lastPage = 1;
+			this.shareLogList = [];
+			this.getShareLog();
 		},
 
 		// 分享记录数据
 		getShareLog() {
 			let that = this;
 			that.$api('commission.share', {
-				type: 'all'
+				type: that.tabCurrent,
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.shareLogList = [...that.shareLogList, ...res.data.data];
@@ -177,6 +204,7 @@ export default {
 	}
 
 	.item-right {
+		flex: 1;
 		.name {
 			font-size: 26rpx;
 			font-weight: 500;
@@ -209,6 +237,7 @@ export default {
 		}
 
 		.item-bottom {
+			width: 100%;
 			.time {
 				font-size: 22rpx;
 				font-weight: 500;

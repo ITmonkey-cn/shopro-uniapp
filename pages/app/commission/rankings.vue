@@ -10,23 +10,27 @@
 
 		<!-- 排行榜 -->
 		<view class="rankings-list-box">
-			<view class="ranking-list x-bc" v-for="(item, index) in rankingsList" :key="index">
-				<view class="list-left x-f">
-					<view class="tag-box x-c">
-						<text class="tag-text" v-if="index >= 3">{{ index }}</text>
-						<image v-else class="tag-icon" :src="rankingsIcon[index]" mode=""></image>
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+				<view class="ranking-list x-bc" v-for="(item, index) in rankingsList" :key="index">
+					<view class="list-left x-f">
+						<view class="tag-box x-c">
+							<text class="tag-text" v-if="index >= 3">{{ index }}</text>
+							<image v-else class="tag-icon" :src="rankingsIcon[index]" mode=""></image>
+						</view>
+						<image class="user-avatar" :src="item.user.avatar" mode=""></image>
+						<view class="user-info">
+							<view class="name mb10">{{ item.user.nickname }}</view>
+							<view class="date">{{ $u.timeFormat(item.createtime, 'yyyy年mm月dd日') }}</view>
+						</view>
 					</view>
-					<image class="user-avatar" :src="item.user.avatar" mode=""></image>
-					<view class="user-info">
-						<view class="name mb10">{{ item.user.nickname }}</view>
-						<view class="date">{{ $u.timeFormat(item.createtime, 'yyyy年mm月dd日') }}</view>
+					<view class="list-right y-end">
+						<view class="num mb10">{{ item.total_income }}</view>
+						<view class="des">累计收益</view>
 					</view>
 				</view>
-				<view class="list-right y-end">
-					<view class="num mb10">{{ item.total_income }}</view>
-					<view class="des">累计收益</view>
-				</view>
-			</view>
+				<!-- 更多 -->
+				<view v-if="rankingsList.length" class="cu-load text-gray" :class="loadStatus"></view>
+			</scroll-view>
 		</view>
 	</view>
 </template>
@@ -41,21 +45,38 @@ export default {
 				1: 'http://shopro.7wpp.com/imgs/commission/02.png',
 				2: 'http://shopro.7wpp.com/imgs/commission/03.png'
 			},
-			rankingsList: [] //排行榜
+			rankingsList: [], //排行榜
+			loadStatus: '', //loading,over
+			currentPage: 1,
+			lastPage: 1
 		};
 	},
 	computed: {},
 	onLoad() {
 		this.getRankings();
-	},
+	}, 
 	methods: {
 		getRankings() {
 			let that = this;
 			that.$api('commission.ranking').then(res => {
 				if (res.code === 1) {
-					that.rankingsList = res.data.data;
+					that.rankingsList = [...that.rankingsList, ...res.data.data];
+					that.lastPage = res.data.last_page;
+					if (that.currentPage < res.data.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
 				}
 			});
+		},
+
+		// 加载更多
+		loadMore() {
+			if (this.currentPage < 6) {
+				this.currentPage += 1;
+				this.getRankings();
+			}
 		}
 	}
 };

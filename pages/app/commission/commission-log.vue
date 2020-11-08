@@ -11,19 +11,19 @@
 						<text v-else class="cuIcon-attentionforbidfill"></text>
 					</button>
 				</view>
-				<view class="card-num">{{ showMoney ? '2999999.99' : '***' }}</view>
+				<view class="card-num">{{ showMoney ? agentInfo.total_income || '0.00' : '***' }}</view>
 				<view class="card-bottom x-bc">
 					<view class="card-item y-start">
 						<view class="item-title">待入账佣金</view>
-						<view class="item-value">{{ showMoney ? '2999999.99' : '***' }}</view>
+						<view class="item-value">{{ showMoney ? agentInfo.delay_money || '0.00' : '***' }}</view>
 					</view>
 					<view class="card-item y-start">
 						<view class="item-title">已提现佣金</view>
-						<view class="item-value">{{ showMoney ? '2999999.99' : '***' }}</view>
+						<view class="item-value">{{ showMoney ? agentInfo.total_withdraw || '0.00' : '***' }}</view>
 					</view>
 					<view class="card-item y-start">
 						<view class="item-title">可提现佣金</view>
-						<view class="item-value">{{ showMoney ? '2999999.99' : '***' }}</view>
+						<view class="item-value">{{ showMoney ? userInfo.money || '0.00' : '***' }}</view>
 					</view>
 				</view>
 				<button class="cu-btn draw-btn" @tap="$Router.push({ path: '/pages/app/commission/draw-money' })">提现</button>
@@ -34,14 +34,14 @@
 					<text class="cuIcon-goods item-icon"></text>
 					<view class="y-start">
 						<view class="item-title">我的消费</view>
-						<view class="item-value">22000.00</view>
+						<view class="item-value">{{ agentInfo.self_order_money || '0.00' }}</view>
 					</view>
 				</view>
 				<view class="consumption-item x-f">
 					<text class="cuIcon-vip item-icon"></text>
 					<view class="y-start">
 						<view class="item-title">团队消费</view>
-						<view class="item-value">22000.00</view>
+						<view class="item-value">{{ agentInfo.order_money_1 || '0.00' }}</view>
 					</view>
 				</view>
 			</view>
@@ -54,25 +54,29 @@
 					{{ selDateText }}
 					<text class="cuIcon-triangledownfill"></text>
 				</button>
-				<view class="total-box">收入￥2100 &emsp;支出￥2100</view>
+				<view class="total-box">收入￥{{ totalMoney || '0.00' }}</view>
 			</view>
 		</u-sticky>
 
 		<view class="content_box">
-			<!-- 佣金明细列表 -->
-			<view class="log-item x-bc" v-for="item in 16" :key="item">
-				<view class="item-left x-f">
-					<image class="log-img" src="http://shopro.7wpp.com/imgs/app_icon/icon1.png" mode=""></image>
-					<view class="y-start">
-						<view class="log-name">这是昵称</view>
-						<view class="log-notice">成功邀请好友“小铃铛”注册</view>
+			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
+				<!-- 佣金明细列表 -->
+				<view class="log-item x-bc" v-for="item in rewardLog" :key="item.id">
+					<view class="item-left x-f">
+						<image class="log-img" :src="item.buyer.avatar" mode=""></image>
+						<view class="y-start">
+							<view class="log-name">{{ item.buyer.nickname }}</view>
+							<!-- <view class="log-notice">成功邀请好友“小铃铛”注册</view> -->
+						</view>
+					</view>
+					<view class="item-right y-end">
+						<view class="log-num">+{{ item.commission }}</view>
+						<view class="log-date">{{ $u.timeFormat(item.createtime, 'yyyy.mm.dd') }}</view>
 					</view>
 				</view>
-				<view class="item-right y-end">
-					<view class="log-num">-50.00</view>
-					<view class="log-date">2020.04.22</view>
-				</view>
-			</view>
+				<!-- 更多 -->
+				<view v-if="rewardLog.length" class="cu-load text-gray" :class="loadStatus"></view>
+			</scroll-view>
 		</view>
 		<!-- 日期选择 -->
 		<u-calendar
@@ -94,6 +98,8 @@ export default {
 	components: {},
 	data() {
 		return {
+			agentInfo: uni.getStorageSync('agentInfo'),
+			userInfo: uni.getStorageSync('userInfo'),
 			showMoney: true, //是否显示金额
 			//日期选择
 			showCalendar: false,
@@ -104,7 +110,13 @@ export default {
 			rangeColor: '#4CB89D',
 			rangeBgColor: 'rgba(76,184,157,0.13)',
 			activeBgColor: '#4CB89D',
-			selDateText: ''
+			selDateText: '',
+			rewardLog: [], //佣金记录
+			propsDate: '', //日期参数
+			totalMoney: '', //收入
+			loadStatus: '', //loading,over
+			currentPage: 1,
+			lastPage: 1
 		};
 	},
 	computed: {},
@@ -127,19 +139,46 @@ export default {
 		getToday() {
 			let now = new Date();
 			this.selDateText = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`;
+			let dateText = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+			this.propsDate = `${dateText}-${dateText}`;
 		},
 
 		// 选择日期
 		selDate(e) {
+			this.rewardLog = [];
+			this.currentPage = 1;
+			this.lastPage = 1;
 			this.selDateText = `${e.startYear}.${e.startMonth}.${e.startDay}-${e.endYear}.${e.endMonth}.${e.endDay}`;
+			let dateText = `${e.startYear}/${e.startMonth}/${e.startDay}-${e.endYear}/${e.endMonth}/${e.endDay}`;
+			this.propsDate = dateText;
+			this.getCommissionLog();
 		},
 
 		// 佣金明细
 		getCommissionLog() {
-			that.$api('commission.rewardLog').then(res => {
+			let that = this;
+			that.$api('commission.rewardLog', {
+				date: that.propsDate
+			}).then(res => {
 				if (res.code === 1) {
+					that.totalMoney = res.data.total_money;
+					that.rewardLog = [...that.rewardLog, ...res.data.rewards.data];
+					that.lastPage = res.data.rewards.last_page;
+					if (that.currentPage < res.data.rewards.last_page) {
+						that.loadStatus = '';
+					} else {
+						that.loadStatus = 'over';
+					}
 				}
 			});
+		},
+
+		// 加载更多
+		loadMore() {
+			if (this.currentPage < this.lastPage) {
+				this.currentPage += 1;
+				this.getCommissionLog();
+			}
 		}
 	}
 };

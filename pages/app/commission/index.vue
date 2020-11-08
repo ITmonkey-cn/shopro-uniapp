@@ -27,11 +27,11 @@
 				<view class="card-bottom x-f" v-if="commissionWallet">
 					<view class="flex-sub y-start">
 						<view class="item-title">总收益</view>
-						<view class="item-detail">{{ showMoney ? commissionWallet.total_income : '***' }}</view>
+						<view class="item-detail">{{ showMoney ? commissionWallet.total_income || '0.00' : '***' }}</view>
 					</view>
 					<view class="flex-sub  y-start">
 						<view class="item-title">待入账佣金</view>
-						<view class="item-detail">{{ showMoney ? waitingWalletMoney : '***' }}</view>
+						<view class="item-detail">{{ showMoney ? commissionWallet.delay_money || '0.00' : '***' }}</view>
 					</view>
 					<view class="y-f">
 						<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
@@ -56,7 +56,7 @@
 			<!-- 功能菜单 -->
 			<image class="commission-bottom-bg" src="http://shopro.7wpp.com/imgs/commission/commission_bottom.png" mode="widthFix"></image>
 			<view class="menu-box flex">
-				<view class="menu-item y-f" v-for="(menu, index) in menuList" :key="index" @tap="jump(menu.path)">
+				<view class="menu-item y-f" v-for="(menu, index) in menuList" v-if="!menu.isAgentFrom" :key="index" @tap="jump(menu.path)">
 					<image class="item-img" :src="menu.img" mode=""></image>
 					<view class="item-title">{{ menu.title }}</view>
 				</view>
@@ -65,8 +65,8 @@
 			<shopro-login-modal></shopro-login-modal>
 		</view>
 		<!-- 佣金中心权限验证 -->
-		<view class="auth-box" v-if="!hasAuth">
-			<view class="notice-box">
+		<view class="auth-box cu-modal" :class="{ show: !hasAuth }">
+			<view class="notice-box cu-dialog">
 				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
 				<view class="notice-title">{{ authNotice.title }}</view>
 				<view class="notice-detail">{{ authNotice.detail }}</view>
@@ -85,9 +85,9 @@ export default {
 		return {
 			showMoney: true, //是否显示金额
 			hasAuth: true, //是否有权限
-			commissionInfo: null, //分销商信息
 			commissionLv: null, //分销商等级
 			commissionWallet: null, //分销商钱包
+			agentFrom: null, //是否显示我的资料
 			authNotice: {
 				//权限提示内容
 				img: 'http://shopro.7wpp.com/imgs/commission/auth_check.png',
@@ -119,8 +119,9 @@ export default {
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon5.png',
-					title: '申请分销商',
-					path: '/pages/app/commission/apply'
+					title: '我的资料',
+					path: '/pages/app/commission/apply',
+					isAgentFrom: true
 				},
 				{
 					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon6.png',
@@ -166,9 +167,13 @@ export default {
 				if (res.code === 1) {
 					that.authStatus(res.data);
 					that.commissionWallet = res.data.data;
-					that.waitingWalletMoney = res.data.waiting_commission_money;
 					that.commissionLv = res.data.agent_level;
-					uni.setStorageSync('commissionInfo', res.data.data);
+					that.menuList.map(item => {
+						if (item.title === '我的资料') {
+							item.isAgentFrom = !res.data.agent_form;
+						}
+					});
+					uni.setStorageSync('agentInfo', res.data.data);
 				}
 			});
 		},
@@ -246,6 +251,7 @@ export default {
 	height: 100%;
 	width: 100%;
 	background-position: center center;
+	transition: all 0.3s ease-in-out 0s;
 	overflow: hidden;
 	/deep/ .cu-back {
 		color: #fff;
@@ -255,13 +261,16 @@ export default {
 // 佣金中心权限验证蒙层
 .blur {
 	filter: blur(20rpx);
+	transition: all 0.3s ease-in-out 0s;
 }
+
 .auth-box {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
 	position: fixed;
 	z-index: 99;
+	background: none;
 	.notice-box {
 		position: fixed;
 		z-index: 1111;
@@ -318,6 +327,11 @@ export default {
 			background: none;
 		}
 	}
+}
+.show-auth-box {
+	opacity: 1 !important;
+	transform: scale(1) !important;
+	transition: all 0.3s ease-in-out 0s;
 }
 // 用户资料卡片
 .user-card {

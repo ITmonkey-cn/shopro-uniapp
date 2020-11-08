@@ -2,15 +2,15 @@
 <template>
 	<view class="promotion-goods-wrap">
 		<view class="goods-list x-f" v-for="item in goodsList" :key="item.goods_id">
-			<view class="img-box"><image class="goods-img" :src="item.goods.image" mode=""></image></view>
+			<view class="img-box"><image class="goods-img" :src="item.image" mode=""></image></view>
 			<view class="goods-info y-bc">
-				<view class="goods-title one-t">{{ item.goods.title }}</view>
-				<view class="goods-des one-t">{{ item.goods.subtitle }}</view>
+				<view class="goods-title one-t">{{ item.title }}</view>
+				<view class="goods-des one-t">{{ item.subtitle }}</view>
 				<view class="goods-price x-f">
-					<view class="price">￥{{ item.goods.price }}</view>
-					<view class="origin-price">￥{{ item.goods.original_price }}</view>
+					<view class="price">￥{{ item.price }}</view>
+					<view class="origin-price">￥{{ item.original_price }}</view>
 				</view>
-				<view class="commission-num">预计佣金：￥{{ item.commission_money }}</view>
+				<view class="commission-num">预计佣金：￥{{ item.commission.commission_money }}</view>
 			</view>
 			<button class="share-btn cu-btn">分享赚</button>
 		</view>
