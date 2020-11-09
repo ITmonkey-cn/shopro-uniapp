@@ -13,7 +13,7 @@
 			<view class="order-list" v-for="item in orderList" :key="item.id">
 				<view class="order-head x-bc">
 					<text class="order-code">订单编号：{{ item.order_sn }}</text>
-					<text class="order-state">{{ item.item_slim[0].agent_reward.status_name }}</text>
+					<text class="order-state">{{ item.status_name }}</text>
 				</view>
 				<view class="order-from x-bc">
 					<view class="from-user x-f">
@@ -29,7 +29,10 @@
 						<view class="goods-title more-t">{{ goods.goods_title }}</view>
 						<view class="goods-sku">数量: {{ goods.goods_num }}；{{ goods.goods_sku_text }}</view>
 						<view class="total-box x-bc">
-							<view class="goods-price">{{ goods.goods_price }}</view>
+							<view class="goods-price">
+								{{ goods.goods_price }}
+								<text class="goods-state">{{ goods.agent_reward.status_name }}</text>
+							</view>
 							<view class="x-f">
 								<text class="name">佣金</text>
 								<text class="commission-num">{{ goods.agent_reward.commission }}</text>
@@ -42,6 +45,8 @@
 					<view class="x-f"></view>
 				</view>
 			</view>
+			<!-- 缺省页 -->
+			<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
 			<!-- 更多 -->
 			<view v-if="orderList.length" class="cu-load text-gray" :class="loadStatus"></view>
 		</view>
@@ -75,7 +80,14 @@ export default {
 			orderList: [], //分销订单
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 1
+			lastPage: 1,
+			emptyData: {
+				show: false,
+				img: 'http://shopro.7wpp.com/imgs/empty/no_order.png',
+				tip: '暂无订单',
+				path: '',
+				pathText: ''
+			}
 		};
 	},
 	computed: {},
@@ -95,12 +107,17 @@ export default {
 		// 分销订单
 		getOrderList() {
 			let that = this;
+			that.loadStatus = 'loading';
+			that.emptyData.show = false;
 			that.$api('commission.order', {
 				type: that.stateCurrent
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderList = [...that.orderList, ...res.data.data];
 					that.lastPage = res.data.last_page;
+					if (!that.orderList.length) {
+						that.emptyData.show = true;
+					}
 					if (that.currentPage < res.data.last_page) {
 						that.loadStatus = '';
 					} else {
@@ -229,6 +246,16 @@ export default {
 				font-size: 30rpx;
 				font-weight: 500;
 				color: #333333;
+				.goods-state {
+					line-height: 30rpx;
+					padding: 0 10rpx;
+					background: #f1eeff;
+					border: 1rpx solid #603fff;
+					border-radius: 30rpx;
+					margin-left: 20rpx;
+					font-size: 20rpx;
+					color: #5e49c3;
+				}
 				&::before {
 					content: '￥';
 					font-size: 20rpx;

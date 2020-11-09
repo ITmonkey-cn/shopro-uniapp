@@ -96,6 +96,7 @@ export default {
 		// 分享记录数据
 		getShareLog() {
 			let that = this;
+			that.loadStatus = 'loading';
 			that.$api('commission.share', {
 				type: that.tabCurrent,
 				page: that.currentPage

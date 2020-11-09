@@ -207,7 +207,7 @@ export default {
 			swiperCurrent: 0, //轮播下标
 			tabCurrent: 'tab0',
 			emptyData: {
-				img: '/static/imgs/empty/comment_empty.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/comment_empty.png',
 				tip: '暂无评价~'
 			},
 			tabList: [

@@ -66,16 +66,18 @@
 						<image class="log-img" :src="item.buyer.avatar" mode=""></image>
 						<view class="y-start">
 							<view class="log-name">{{ item.buyer.nickname }}</view>
-							<!-- <view class="log-notice">成功邀请好友“小铃铛”注册</view> -->
+							<view class="log-notice">{{ $u.timeFormat(item.createtime, 'yyyy.mm.dd') }}</view>
 						</view>
 					</view>
 					<view class="item-right y-end">
 						<view class="log-num">+{{ item.commission }}</view>
-						<view class="log-date">{{ $u.timeFormat(item.createtime, 'yyyy.mm.dd') }}</view>
+						<view class="log-date"></view>
 					</view>
 				</view>
 				<!-- 更多 -->
 				<view v-if="rewardLog.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<!-- 缺省页 -->
+				<shopro-empty v-if="emptyData.show" :emptyData="emptyData" :isFixed="false"></shopro-empty>
 			</scroll-view>
 		</view>
 		<!-- 日期选择 -->
@@ -116,7 +118,14 @@ export default {
 			totalMoney: '', //收入
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 1
+			lastPage: 1,
+			emptyData: {
+				show: false,
+				img: 'http://shopro.7wpp.com/imgs/empty/no_data.png',
+				tip: '暂无数据',
+				path: '',
+				pathText: ''
+			}
 		};
 	},
 	computed: {},
@@ -157,6 +166,8 @@ export default {
 		// 佣金明细
 		getCommissionLog() {
 			let that = this;
+			that.loadStatus = 'loading';
+			that.emptyData.show = false;
 			that.$api('commission.rewardLog', {
 				date: that.propsDate
 			}).then(res => {
@@ -164,6 +175,9 @@ export default {
 					that.totalMoney = res.data.total_money;
 					that.rewardLog = [...that.rewardLog, ...res.data.rewards.data];
 					that.lastPage = res.data.rewards.last_page;
+					if (!that.rewardLog.length) {
+						that.emptyData.show = true;
+					}
 					if (that.currentPage < res.data.rewards.last_page) {
 						that.loadStatus = '';
 					} else {

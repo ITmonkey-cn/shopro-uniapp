@@ -73,7 +73,7 @@ export default {
 			lastPage: 1,
 			currentPage: 1,
 			emptyData: {
-				img: '/static/imgs/empty/empty_groupon.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/empty_groupon.png',
 				tip: '暂无此类拼团商品，更多拼团好货等着你噢~',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'

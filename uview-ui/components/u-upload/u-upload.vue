@@ -614,8 +614,8 @@ export default {
 
 .u-delete-icon {
 	position: absolute;
-	top: 10rpx;
-	right: 10rpx;
+	top: 0rpx;
+	right: 0rpx;
 	z-index: 10;
 	background-color: $u-type-error;
 	border-radius: 100rpx;

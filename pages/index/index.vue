@@ -149,7 +149,7 @@ export default {
 			triggered: false, //下拉刷新
 			_freshing: false, //下拉刷新状态
 			emptyData: {
-				img: '/static/imgs/empty/template_empty.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/template_empty.png',
 				tip: '暂未找到模板，赶快去装修吧~'
 			}
 		};

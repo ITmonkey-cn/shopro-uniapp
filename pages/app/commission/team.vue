@@ -55,13 +55,14 @@
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<!-- 团队列表 -->
 				<view class="team-box">
-					<view class="team-list" v-for="(item, index) in teamList" :key="item.id" @tap="onTeamList(item.id, index)">
+					<view class="team-list" v-for="(item, index) in teamList" :key="item.id">
 						<sh-collapse-item
 							:avatar="item.avatar"
 							:dateTime="item.createtime"
 							:level="item.agent ? item.agent.level : null"
 							:name="item.nickname"
 							:isUnfold="item.isUnfold"
+							@click="onTeamList(item.id, index)"
 						>
 							<view slot="collapse-children" v-if="childrenTeamList.length">
 								<view class="team-children x-f" v-for="children in childrenTeamList" :key="children.id">
@@ -77,7 +78,7 @@
 										<view class="head-time">{{ $u.timeFormat(children.createtime, 'yyyy年mm月dd日') }}</view>
 									</view>
 								</view>
-								<button  class="cu-btn refresh-btn x-f" @tap.stop="childrenLoadMore(item.id)">
+								<button class="cu-btn refresh-btn x-f" @tap.stop="childrenLoadMore(item.id)">
 									<text class="cuIcon-refresh" :class="{ 'refresh-active': isRefresh }"></text>
 									{{ childrenLoad ? '点击加载更多' : '没有更多~' }}
 								</button>
@@ -85,6 +86,8 @@
 						</sh-collapse-item>
 					</view>
 				</view>
+				<!-- 缺省页 -->
+				<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
 				<view v-if="teamList.length" style="height: 3em;" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
@@ -101,6 +104,13 @@ export default {
 	},
 	data() {
 		return {
+			emptyData: {
+				show: false,
+				img: 'http://shopro.7wpp.com/imgs/empty/no_team.png',
+				tip: '暂无团队人员',
+				path: '',
+				pathText: ''
+			},
 			twoTeamCount: 0, //二级成员
 			agentInfo: uni.getStorageSync('agentInfo'),
 			filterCurrent: 0,
@@ -166,6 +176,8 @@ export default {
 		// 团队列表
 		getTeam() {
 			let that = this;
+			that.emptyData.show = false;
+			that.loadStatus = 'loading';
 			that.$api('commission.team', {
 				page: that.currentPage
 			}).then(res => {
@@ -175,7 +187,11 @@ export default {
 					arr.map(item => {
 						item.isUnfold = false;
 					});
+
 					that.teamList = [...that.teamList, ...arr];
+					if (!that.teamList.length) {
+						that.emptyData.show = true;
+					}
 					that.lastPage = res.data.teams.last_page;
 					if (that.currentPage < res.data.teams.last_page) {
 						that.isLoadMore = '';

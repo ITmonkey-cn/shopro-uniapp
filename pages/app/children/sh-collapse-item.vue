@@ -27,6 +27,7 @@
  * @property {String} name  - 昵称
  * @property {String} level  - 等级
  * @property {String | Date} dateTime - 日期
+ * @event {Function} click - 点击箭头
  */
 export default {
 	name: 'sh-collapse-item',
@@ -68,7 +69,7 @@ export default {
 	},
 	methods: {
 		onArrow() {
-			this.isUnfold = !this.isUnfold;
+			this.$emit('click');
 		}
 	}
 };

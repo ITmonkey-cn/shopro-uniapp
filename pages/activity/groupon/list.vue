@@ -63,7 +63,7 @@ export default {
 	data() {
 		return {
 			emptyData: {
-				img: '/static/imgs/empty/empty_goods.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/empty_goods.png',
 				tip: '还没有拼团商品噢，去首页看看吧~',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'

@@ -200,7 +200,15 @@ export default {
 						btnPath: ''
 					};
 					break;
-				case 'NULL':
+				case 'null':
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_stop.png',
+						title: '抱歉！你的账户已被禁用',
+						detail: data.msg,
+						btnText: '联系客服',
+						btnPath: '/pages/public/kefu/index'
+					};
 					break;
 				case 'needinfo':
 					this.hasAuth = false;
@@ -218,8 +226,18 @@ export default {
 						img: 'http://shopro.7wpp.com/imgs/commission/auth_reject.png',
 						title: '申请驳回',
 						detail: data.msg,
-						btnText: '去申请',
+						btnText: '修改资料',
 						btnPath: '/pages/app/commission/apply'
+					};
+					break;
+				case 'close':
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_close.png',
+						title: '分销中心已关闭',
+						detail: data.msg,
+						btnText: '我知道了',
+						btnPath: ''
 					};
 					break;
 				default:
@@ -234,11 +252,15 @@ export default {
 					path: path
 				});
 			} else {
-				this.$Router.back();
+				uni.navigateBack({
+					delta: 1
+				});
 			}
 		},
 		onBack() {
-			this.$Router.back();
+			uni.navigateBack({
+				delta: 1
+			});
 		}
 	}
 };

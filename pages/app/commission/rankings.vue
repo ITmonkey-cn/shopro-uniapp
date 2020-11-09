@@ -58,6 +58,7 @@ export default {
 	methods: {
 		getRankings() {
 			let that = this;
+			that.loadStatus = 'loading';
 			that.$api('commission.ranking').then(res => {
 				if (res.code === 1) {
 					that.rankingsList = [...that.rankingsList, ...res.data.data];

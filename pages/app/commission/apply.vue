@@ -2,8 +2,9 @@
 <template>
 	<view class="apply-commission-wrap">
 		<!-- 标题栏 -->
-		<view class="head-box" :style="'background-image:url(' + formHeadImg + ')'">
+		<view class="head-box">
 			<view class="nav-box"><cu-custom isBack></cu-custom></view>
+			<image class="head-img" :src="formHeadImg" mode="widthFix"></image>
 		</view>
 		<!-- 表单 -->
 		<view class="apply-form">
@@ -29,6 +30,7 @@
 							:showProgress="false"
 							@on-uploaded="uploadSuccess($event, `value${index}`)"
 							@on-remove="uploadRemove($event, `value${index}`)"
+							:file-list="model[`valueList${index}`]"
 							:action="`${upLoadUrl}/index/upload`"
 							width="148"
 							height="148"
@@ -37,11 +39,14 @@
 					</u-form-item>
 				</block>
 
-				<view class="agreement x-f" v-if="protocol">
-					<u-checkbox v-model="model.agreement" activeColor="#A36FFF" shape="circle" @change="onAgreement"></u-checkbox>
-					<view class="agreement-text" @tap="Router.push({ path: '/pages/public/richtext', query: { id: protocol.richtext_id } })">{{ protocol.name }}</view>
+				<view class="agreement x-f" v-if="protocol && hasPostBtn">
+					<u-checkbox v-model="model.agreement" activeColor="#b095ff" shape="circle" @change="onAgreement"></u-checkbox>
+					<view class="agreement-text" @tap="Router.push({ path: '/pages/public/richtext', query: { id: protocol.richtext_id } })">
+						我已阅读并遵守
+						<text class="text-underline">{{ protocol.name }}</text>
+					</view>
 				</view>
-				<button class="cu-btn save-btn" @tap="onSubmit" :disabled="isFormEnd">
+				<button class="cu-btn save-btn" v-if="hasPostBtn" @tap="onSubmit" :disabled="isFormEnd">
 					<text v-if="isFormEnd" class="cuIcon-loading2 cuIconfont-spin"></text>
 					确认提交
 				</button>
@@ -61,6 +66,7 @@ export default {
 			formHeadImg: '', //表单头部背景
 			protocol: null, //协议
 			isFormEnd: false, //提交成功
+			hasPostBtn: false, //是否显示提交按钮
 			upLoadUrl: API_URL,
 			errorType: ['message'],
 			labelStyle: {
@@ -93,18 +99,14 @@ export default {
 	},
 	onReady() {},
 	methods: {
-		// 上传图片成功
+		// 上传图片成功-单图
 		uploadSuccess(e, value) {
-			let imgArr = [];
-			e.forEach(item => {
-				imgArr.push(item.response.data.url);
-			});
-			this.$set(this.model, value, imgArr);
+			this.model[value] = e[0].response.data.url;
 		},
 
 		// 移除图片
 		uploadRemove(index, value) {
-			this.model[value].splice(index, 1);
+			this.model[value] = '';
 		},
 
 		// 勾选同意
@@ -118,9 +120,10 @@ export default {
 			that.$api('commission.form').then(res => {
 				if (res.code === 1) {
 					that.protocol = res.data.apply_protocol; //表单协议同
-					that.formList = res.data.content; //表单
+					that.formList = res.data.apply_info; //表单
+					that.hasPostBtn = res.data.apply_status; //是否显示提交按钮
 					that.formHeadImg = res.data.background_image ? res.data.background_image : 'http://shopro.7wpp.com/imgs/commission/apply_bg.png'; //头部背景
-					that.initRules();
+					that.initRules(); //规则
 					that.$refs.uForm.setRules(that.rules);
 				}
 			});
@@ -133,7 +136,7 @@ export default {
 				that.model = {
 					...that.model,
 					...{
-						[`value${index}`]: null
+						[`value${index}`]: item.value ? item.value : null
 					}
 				}; //构造model数据
 				that.model.agreement = false;
@@ -147,6 +150,18 @@ export default {
 					};
 				}
 				if (item.type === 'image') {
+					if (item.value) {
+						let arr = [];
+						arr.push({ url: item.value });
+						that.model = {
+							...that.model,
+							...{
+								[`valueList${index}`]: arr
+							}
+						};
+						console.log(that.model);
+					}
+
 					that.rules = {
 						...that.rules,
 						...{
@@ -184,11 +199,7 @@ export default {
 					if (!this.model.agreement && this.protocol) return this.$u.toast('请勾选协议');
 					let formData = this.formList;
 					formData.map((item, index) => {
-						if (item.type === 'image') {
-							item.value = that.model[`value${index}`][0];
-						} else {
-							item.value = that.model[`value${index}`];
-						}
+						item.value = that.model[`value${index}`];
 					});
 					this.applyCommission(formData);
 				} else {
@@ -206,9 +217,14 @@ export default {
 	background-color: #fff;
 
 	.head-box {
-		background-repeat: no-repeat;
-		background-size: 100% auto;
-		height: 370rpx;
+		width: 100%;
+		position: relative;
+		.nav-box {
+			position: absolute;
+		}
+		.head-img {
+			width: 100%;
+		}
 	}
 }
 
@@ -232,7 +248,10 @@ export default {
 		.agreement-text {
 			font-size: 24rpx;
 			font-weight: 500;
-			color: #d0c1fb;
+			color: #b095ff;
+			.text-underline {
+				text-decoration: underline;
+			}
 		}
 	}
 

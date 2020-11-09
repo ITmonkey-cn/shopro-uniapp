@@ -47,7 +47,7 @@ export default {
 	data() {
 		return {
 			emptyData: {
-				img: '/static/imgs/empty/empty_goods.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/empty_goods.png',
 				tip: '暂无该商品，还有更多好货等着你噢~'
 			},
 			goodsList: [],

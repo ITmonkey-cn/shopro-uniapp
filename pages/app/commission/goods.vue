@@ -14,6 +14,8 @@
 			</view>
 			<button class="share-btn cu-btn">分享赚</button>
 		</view>
+		<!-- 缺省页 -->
+		<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
 		<!-- 更多 -->
 		<view v-if="goodsList.length" style="height: 3em;" class="cu-load text-gray" :class="loadStatus"></view>
 	</view>
@@ -27,7 +29,14 @@ export default {
 			goodsList: [], //分销商品
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 1
+			lastPage: 1,
+			emptyData: {
+				show: false,
+				img: 'http://shopro.7wpp.com/imgs/empty/no_data.png',
+				tip: '暂无数据',
+				path: '',
+				pathText: ''
+			}
 		};
 	},
 	computed: {},
@@ -44,12 +53,16 @@ export default {
 		getGoodList() {
 			let that = this;
 			that.loadStatus = 'loading';
+			that.emptyData.show = false;
 			that.$api('commission.goods', {
 				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.goodsList = [...that.goodsList, ...res.data.data];
 					that.lastPage = res.data.last_page;
+					if (!that.goodsList.length) {
+						that.emptyData.show = true;
+					}
 					if (that.currentPage < res.data.last_page) {
 						that.loadStatus = '';
 					} else {

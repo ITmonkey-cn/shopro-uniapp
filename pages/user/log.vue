@@ -49,7 +49,7 @@ export default {
 			routerTo: this.$Router,
 			selList: [],
 			emptyData: {
-				img: '/static/imgs/empty/empty_goods.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/empty_goods.png',
 				tip: '暂无浏览记录',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'

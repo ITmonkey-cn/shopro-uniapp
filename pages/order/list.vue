@@ -73,7 +73,7 @@ export default {
 			orderType: 'all',
 			orderList: [],
 			emptyData: {
-				img: '/static/imgs/empty/empty_groupon.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/empty_groupon.png',
 				tip: '暂无商品，还有更多好货等着你噢~'
 			},
 			orderState: [

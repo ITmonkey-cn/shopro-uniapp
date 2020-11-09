@@ -90,6 +90,7 @@ export default {
 		// 直播列表
 		getLiveList() {
 			let that = this;
+			that.loadStatus = 'loading';
 			that.$api('live', {
 				type: that.tabCur,
 				page: that.currentPage
