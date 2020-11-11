@@ -159,7 +159,6 @@ export default {
 								[`valueList${index}`]: arr
 							}
 						};
-						console.log(that.model);
 					}
 
 					that.rules = {

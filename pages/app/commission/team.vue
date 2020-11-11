@@ -26,16 +26,16 @@
 				<view class="data-card">
 					<view class="total-item">
 						<view class="item-title">总业绩(元)</view>
-						<view class="total-num">{{ agentInfo.order_money }}</view>
+						<view class="total-num">{{ agentInfo.child_order_money }}</view>
 					</view>
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">我的业绩</view>
-							<view class="category-num">{{ agentInfo.self_order_money }}</view>
+							<view class="category-num">{{ agentInfo.order_money }}</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">团队业绩</view>
-							<view class="category-num">{{ agentInfo.order_money_1 }}</view>
+							<view class="category-num">{{ agentInfo.child_order_money_1 }}</view>
 						</view>
 					</view>
 				</view>

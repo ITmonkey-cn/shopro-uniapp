@@ -1,7 +1,7 @@
 <!-- 推广商品 -->
 <template>
 	<view class="promotion-goods-wrap">
-		<view class="goods-list x-f" v-for="item in goodsList" :key="item.goods_id">
+		<view class="goods-list x-f" v-for="item in goodsList" :key="item.goods_id" @tap="jump('/pages/goods/detail/index', { id: item.id })">
 			<view class="img-box"><image class="goods-img" :src="item.image" mode=""></image></view>
 			<view class="goods-info y-bc">
 				<view class="goods-title one-t">{{ item.title }}</view>
@@ -12,7 +12,7 @@
 				</view>
 				<view class="commission-num">预计佣金：￥{{ item.commission.commission_money }}</view>
 			</view>
-			<button class="share-btn cu-btn">分享赚</button>
+			<button class="share-btn cu-btn" @tap.stop="jump('/pages/public/poster/index', { id: item.id, posterType: 'goods' })">分享赚</button>
 		</view>
 		<!-- 缺省页 -->
 		<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
@@ -50,6 +50,12 @@ export default {
 		}
 	},
 	methods: {
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 		getGoodList() {
 			let that = this;
 			that.loadStatus = 'loading';

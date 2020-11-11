@@ -11,7 +11,7 @@
 		</view>
 		<view class="content_box">
 			<scroll-view enable-back-to-top scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<u-waterfall v-model="liveList" ref="uWaterfall">
+				<u-waterfall v-model="liveList" ref="uWaterfall" v-if="liveList.length">
 					<template v-slot:left="{ leftList }">
 						<view v-for="live in leftList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
 					</template>

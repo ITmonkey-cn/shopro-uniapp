@@ -25,14 +25,17 @@
 					<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
 						<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
 					</view>
-					<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'">
-						<block slot="goodsBottom">
-							<view class="x-bc price-box">
-								<view class="price">￥{{ g.sku_price.price }}</view>
-								<view class="num-step"><uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="0"></uni-number-box></view>
-							</view>
-						</block>
-					</shopro-mini-card>
+					<view class="goods-wrap">
+						<view class="lose-box" v-if="g.is_invalid"><text class="iconfont icon-yishixiao"></text></view>
+						<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'">
+							<block slot="goodsBottom">
+								<view class="x-bc price-box">
+									<view class="price">￥{{ g.sku_price.price }}</view>
+									<view class="num-step"><uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="0"></uni-number-box></view>
+								</view>
+							</block>
+						</shopro-mini-card>
+					</view>
 				</view>
 			</checkbox-group>
 			<view class="empty-box x-c" v-else><shopro-empty :emptyData="emptyData"></shopro-empty></view>
@@ -71,7 +74,7 @@ export default {
 		return {
 			isTool: false,
 			emptyData: {
-				img: '/static/imgs/empty/emptyCart.png',
+				img: 'http://shopro.7wpp.com/imgs/empty/emptyCart.png',
 				tip: '购物车空空如也,快去逛逛吧~'
 			}
 		};
@@ -224,6 +227,27 @@ export default {
 
 	/deep/ .goods-title {
 		width: 420rpx !important;
+	}
+
+	// 商品卡片包裹
+	.goods-wrap {
+		position: relative;
+		.lose-box {
+			position: absolute;
+			z-index: 10;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(#fff, 0.8);
+			.icon-yishixiao{
+				position: absolute;
+				bottom: 0rpx;
+				right: 80rpx;
+				font-size: 140rpx;
+				line-height: 140rpx;
+				color: #dbdbdb;
+				transform: rotate(-30deg);
+			}
+		}
 	}
 
 	.tag-box {

@@ -26,7 +26,7 @@
 						<view class="item-value">{{ showMoney ? userInfo.money || '0.00' : '***' }}</view>
 					</view>
 				</view>
-				<button class="cu-btn draw-btn" @tap="$Router.push({ path: '/pages/app/commission/draw-money' })">提现</button>
+				<button class="cu-btn draw-btn" @tap="jump('/pages/user/wallet/index')">提现</button>
 			</view>
 			<!-- 消费 -->
 			<view class="x-bc">
@@ -34,14 +34,14 @@
 					<text class="cuIcon-goods item-icon"></text>
 					<view class="y-start">
 						<view class="item-title">我的消费</view>
-						<view class="item-value">{{ agentInfo.self_order_money || '0.00' }}</view>
+						<view class="item-value">{{ agentInfo.order_money || '0.00' }}</view>
 					</view>
 				</view>
 				<view class="consumption-item x-f">
 					<text class="cuIcon-vip item-icon"></text>
 					<view class="y-start">
 						<view class="item-title">团队消费</view>
-						<view class="item-value">{{ agentInfo.order_money_1 || '0.00' }}</view>
+						<view class="item-value">{{ agentInfo.child_order_money_1 || '0.00' }}</view>
 					</view>
 				</view>
 			</view>
@@ -134,6 +134,12 @@ export default {
 		this.getCommissionLog();
 	},
 	methods: {
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 		// 点击日期选择
 		onFilterDate() {
 			this.showCalendar = true;

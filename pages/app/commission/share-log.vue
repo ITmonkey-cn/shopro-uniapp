@@ -36,6 +36,8 @@
 						</view>
 					</view>
 				</view>
+				<!-- 缺省页 -->
+				<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
 				<view v-if="shareLogList.length" class="cu-load text-gray" :class="loadStatus"></view>
 			</scroll-view>
@@ -76,7 +78,14 @@ export default {
 			},
 			loadStatus: '', //loading,over
 			currentPage: 1,
-			lastPage: 1
+			lastPage: 1,
+			emptyData: {
+				show: false,
+				img: 'http://shopro.7wpp.com/imgs/empty/no_data.png',
+				tip: '暂无数据',
+				path: '',
+				pathText: ''
+			}
 		};
 	},
 	computed: {},
@@ -97,6 +106,7 @@ export default {
 		getShareLog() {
 			let that = this;
 			that.loadStatus = 'loading';
+			that.emptyData.show = false;
 			that.$api('commission.share', {
 				type: that.tabCurrent,
 				page: that.currentPage
@@ -104,6 +114,9 @@ export default {
 				if (res.code === 1) {
 					that.shareLogList = [...that.shareLogList, ...res.data.data];
 					that.lastPage = res.data.last_page;
+					if (!that.shareLogList.length) {
+						that.emptyData.show = true;
+					}
 					if (that.currentPage < res.data.last_page) {
 						that.loadStatus = '';
 					} else {
