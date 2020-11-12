@@ -123,6 +123,7 @@ export default {
 			}
 		}
 	},
+	// 下拉刷新
 	onPullDownRefresh() {
 		this.init();
 	},

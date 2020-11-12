@@ -11,10 +11,22 @@
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 				<block v-for="(form, index) in formList" :key="index">
 					<u-form-item v-if="form.type === 'input'" :labelStyle="labelStyle" 　 label-width="150" label-position="left" :label="form.name" :prop="`value${index}`">
-						<u-input :placeholder="`请输入${form.name}`" :placeholderStyle="placeholderStyle" v-model="model['value' + index]" type="text"></u-input>
+						<u-input
+							:disabled="!hasPostBtn"
+							:placeholder="`请输入${form.name}`"
+							:placeholderStyle="placeholderStyle"
+							v-model="model['value' + index]"
+							type="text"
+						></u-input>
 					</u-form-item>
 					<u-form-item v-if="form.type === 'number'" :labelStyle="labelStyle" label-position="left" :label="form.name" :prop="`value${index}`" label-width="150">
-						<u-input :placeholder="`请输入${form.name}`" :placeholderStyle="placeholderStyle" v-model="model['value' + index]" type="number"></u-input>
+						<u-input
+							:disabled="!hasPostBtn"
+							:placeholder="`请输入${form.name}`"
+							:placeholderStyle="placeholderStyle"
+							v-model="model['value' + index]"
+							type="number"
+						></u-input>
 					</u-form-item>
 					<u-form-item
 						v-if="form.type === 'image'"
@@ -26,6 +38,7 @@
 						:borderBottom="true"
 					>
 						<u-upload
+							:deletable="hasPostBtn"
 							:placeholderStyle="placeholderStyle"
 							:showProgress="false"
 							@on-uploaded="uploadSuccess($event, `value${index}`)"

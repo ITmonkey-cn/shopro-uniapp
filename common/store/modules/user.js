@@ -10,12 +10,14 @@ import {
 	ORDER_NUMBER,
 	MESSAGE_IDS,
 	OUT_LOGIN,
+	AGENT
 	// #ifdef MP-WEIXIN
 	FORCE_OAUTH,
 	// #endif
 } from '../types.js'
 const state = {
 	userInfo: uni.getStorageSync('userInfo') ? uni.getStorageSync('userInfo') : {},
+	agent: uni.getStorageSync('agent') ? uni.getStorageSync('agent') : {},
 	showLoginTip: false,
 	orderNum: {},
 	// #ifdef MP-WEIXIN
@@ -42,6 +44,23 @@ const actions = {
 		}
 	},
 
+	// 获取分销商身份信息
+	getAgent({
+		commit
+	}) {
+		return new Promise((resolve, reject) => {
+			api('commission.auth').then(res => {
+					commit('AGENT', res);
+					uni.setStorageSync('agent', res);
+					uni.setStorageSync('agentInfo', res.data.data);
+					resolve(res)
+			}).catch(e => {
+				reject(e)
+			});
+		})
+
+	},
+
 	// 获取用户信息
 	getUserInfo({
 		commit
@@ -53,20 +72,16 @@ const actions = {
 				commit('USER_INFO', res.data);
 				uni.setStorageSync('userInfo', res.data);
 				store.dispatch('getOrderNum');
-				//添加推广记录
+				//添加推广记录 TODO,测试分享锁定。
 				let share_id = uni.getStorageSync('share_id');
 				let url = uni.getStorageSync('url');
+				uni.removeStorageSync('share_id');
+				uni.removeStorageSync('url');
 				let shareParams = {};
-				// if(share_id && res.data.id >share_id) {
 				if (share_id) {
 					shareParams.share_id = share_id;
 					shareParams.url = url;
-					api('share.add', shareParams).then(res => {
-						if (res.code === 1) {
-							uni.removeStorageSync('share_id');
-							uni.removeStorageSync('url');
-						}
-					})
+					api('share.add', shareParams)
 				}
 				resolve(res)
 
@@ -140,6 +155,10 @@ const actions = {
 }
 
 const mutations = {
+	// 分销商信息
+	[AGENT](state, data) {
+		state.agent = data
+	},
 	// 小程序订阅消息模板ids
 	[MESSAGE_IDS](state, data) {
 		state.messageIds = data

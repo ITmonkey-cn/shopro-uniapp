@@ -24,8 +24,8 @@
 							<text class="all-unit">￥</text>
 							{{ order.discount_fee }} ，运费：
 							<text class="all-unit">￥</text>
-							{{ order.dispatch_amount }} ，需付款：
-							<view class="all-money">{{ order.pay_fee }}</view>
+							{{ order.dispatch_amount }} ，{{ order.status <= 0 ? '需付款' : '实付款' }}：
+							<view class="all-money">{{ order.total_fee }}</view>
 						</view>
 						<view class="btn-box x-f" v-if="order.btns.length">
 							<block v-for="orderBtn in order.btns" :key="orderBtn">

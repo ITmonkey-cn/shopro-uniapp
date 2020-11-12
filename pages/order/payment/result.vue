@@ -2,7 +2,7 @@
 <template>
 	<view class="success-page">
 		<view class="success-box flex flex-direction align-center" v-if="orderDetail.total_fee">
-			<image class="pay-img" :src="pay ? 'http://shopro.7wpp.com/imgs/pay_success.png' : 'http://shopro.7wpp.com/imgs/pay_fail.png'" mode=""></image>
+			<image class="pay-img" :src="pay ? 'http://shopro.7wpp.com/imgs/order/order_pay_success.gif' : 'http://shopro.7wpp.com/imgs/order/order_pay_fail.gif'" mode=""></image>
 			<text class="notice">{{ pay ? '支付成功' : '支付失败' }}</text>
 			<text class="pay-money" v-if="pay && orderDetail.total_fee">￥{{ orderDetail.total_fee }}</text>
 			<view class="btn-box flex justify-between">
@@ -94,8 +94,8 @@ export default {
 	width: 750rpx;
 	padding: 40rpx 0;
 	.pay-img {
-		width: 128rpx;
-		height: 76rpx;
+		width: 130rpx;
+		height: 130rpx;
 	}
 	.notice {
 		font-size: 30rpx;

@@ -149,7 +149,11 @@ export default {
 	onShow() {
 		this.getStatus();
 	},
+	onPullDownRefresh() {
+		this.getStatus();
+	},
 	methods: {
+		...mapActions(['getAgent']),
 		// 跳转
 		jump(path, query) {
 			this.$tools.routerTo(path, query);
@@ -163,17 +167,17 @@ export default {
 		// 身份认证
 		getStatus() {
 			let that = this;
-			that.$api('commission.auth').then(res => {
+			this.getAgent().then(res => {
+				uni.stopPullDownRefresh();
 				if (res.code === 1) {
 					that.authStatus(res.data);
 					that.commissionWallet = res.data.data;
-					that.commissionLv = res.data.agent_level;
+					that.commissionLv = res.data.data.agent_level;
 					that.menuList.map(item => {
 						if (item.title === '我的资料') {
 							item.isAgentFrom = !res.data.agent_form;
 						}
 					});
-					uni.setStorageSync('agentInfo', res.data.data);
 				}
 			});
 		},
@@ -238,6 +242,16 @@ export default {
 						detail: data.msg,
 						btnText: '我知道了',
 						btnPath: ''
+					};
+					break;
+				case 'freeze':
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_freeze.png',
+						title: '抱歉！你的账户已被冻结',
+						detail: data.msg,
+						btnText: '联系客服',
+						btnPath: '/pages/public/kefu/index'
 					};
 					break;
 				default:

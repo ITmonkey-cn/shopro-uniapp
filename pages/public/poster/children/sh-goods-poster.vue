@@ -42,6 +42,7 @@ import shoproShare from '@/common/mixins/shopro-share';
 import wxsdk from '@/common/wechat/sdk';
 // #endif
 import { mapMutations, mapActions, mapState } from 'vuex';
+let timer = null;
 export default {
 	components: {},
 	mixins: ['shoproShare'],
@@ -70,11 +71,10 @@ export default {
 				image: that.goodsInfo.image,
 				query: {
 					url: 'goods-' + that.$Route.query.id
-				},
-			
+				}
 			});
 			if (that.shareInfo) {
-				setTimeout(function() {
+				timer = setTimeout(function() {
 					that.$emit('getShareInfo', that.shareInfo);
 					console.log(that.shareInfo.path);
 					that.scene = encodeURIComponent(that.shareInfo.path.split('?')[1]);
@@ -91,17 +91,16 @@ export default {
 				title: '加载数据中'
 			});
 			return new Promise((resolve, reject) => {
-			that.$api('goods.detail', {
-				id: that.$Route.query.id
-			}).then(res => {
-				if (res.code === 1) {
-					uni.hideLoading();
-					that.goodsInfo = res.data;
-					resolve(that.goodsInfo);
-					
-				}
+				that.$api('goods.detail', {
+					id: that.$Route.query.id
+				}).then(res => {
+					if (res.code === 1) {
+						uni.hideLoading();
+						that.goodsInfo = res.data;
+						resolve(that.goodsInfo);
+					}
+				});
 			});
-			})
 		},
 		async shareFc() {
 			let that = this;
@@ -140,7 +139,7 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url:that.$tools.checkImgHttp (that.userInfo.avatar),
+									url: that.$tools.checkImgHttp(that.userInfo.avatar),
 									alpha: 1,
 									dx: bgObj.width * 0.06,
 									dy: bgObj.width * 0.06,
@@ -200,7 +199,7 @@ export default {
 								},
 								{
 									type: 'image', //商品图片
-									url:that.$tools.checkImgHttp( that.goodsInfo.image),
+									url: that.$tools.checkImgHttp(that.goodsInfo.image),
 									alpha: 1,
 									drawDelayTime: 800, //draw延时时间
 									dx: bgObj.width * 0.052,

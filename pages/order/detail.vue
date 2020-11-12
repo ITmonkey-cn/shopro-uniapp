@@ -134,7 +134,7 @@
 					<text class="detail">-{{ orderDetail.score_fee }}积分</text>
 				</view>
 				<view class="notice-item all-rpice-item x-f" style="width: 100%;">
-					<text class="title">实付款：</text>
+					<text class="title">{{ orderDetail.status <= 0 ? '需付款' : '实付款' }}：</text>
 					<text class="detail all-price">￥{{ orderDetail.total_fee }}</text>
 				</view>
 			</view>

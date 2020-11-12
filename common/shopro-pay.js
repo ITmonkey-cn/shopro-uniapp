@@ -207,6 +207,7 @@ export default class ShoproPay {
 				});
 			},
 			fail: function(err) {
+				console.log('支付取消或者失败:', err);
 				if (err.errMsg !== "requestPayment:fail cancel") {
 					Router.replace({
 						path: '/pages/order/payment/result',
@@ -294,6 +295,7 @@ export default class ShoproPay {
 					});
 				},
 				fail: function(err) {
+					console.log('支付取消或者失败:', err);
 					if (err.errMsg !== "requestPayment:fail cancel") {
 						Router.replace({
 							path: '/pages/order/payment/result',
@@ -327,6 +329,7 @@ export default class ShoproPay {
 					});
 				},
 				fail: function(err) {
+					console.log('支付取消或者失败:', err);
 					if (err.errMsg !== "requestPayment:fail cancel") {
 						Router.replace({
 							path: '/pages/order/payment/result',

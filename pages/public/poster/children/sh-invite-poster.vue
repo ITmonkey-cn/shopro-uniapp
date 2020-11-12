@@ -114,7 +114,7 @@ export default {
 								// },
 								{
 									type: 'image', //头像
-									url:that.$tools.checkImgHttp(that.userInfo.avatar),
+									url: that.$tools.checkImgHttp(that.userInfo.avatar),
 									alpha: 1,
 									dx: bgObj.width * 0.5 - (bgObj.width * 0.16) / 2,
 									dy: bgObj.width * 0.16,

@@ -10,7 +10,7 @@
 		</view>
 		<view class="content_box">
 			<!-- 订单列表 -->
-			<view class="order-list" v-for="item in orderList" :key="item.id" @tap.stop="jump('/pages/order/detail', { id: item.id })">
+			<view class="order-list" v-for="item in orderList" :key="item.id" >
 				<view class="order-head x-bc">
 					<text class="order-code">订单编号：{{ item.order_sn }}</text>
 					<text class="order-state">{{ item.status_name }}</text>

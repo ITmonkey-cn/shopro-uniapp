@@ -25,17 +25,17 @@
 				</view>
 				<view class="data-card">
 					<view class="total-item">
-						<view class="item-title">总业绩(元)</view>
-						<view class="total-num">{{ agentInfo.child_order_money }}</view>
+						<view class="item-title">团队分销商人数(人)</view>
+						<view class="total-num">{{ agentInfo.child_agent_count }}</view>
 					</view>
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
-							<view class="item-title">我的业绩</view>
-							<view class="category-num">{{ agentInfo.order_money }}</view>
+							<view class="item-title">一级分销商人数</view>
+							<view class="category-num">{{ agentInfo.child_agent_count_1 }}</view>
 						</view>
-						<view class="y-start flex-sub">
-							<view class="item-title">团队业绩</view>
-							<view class="category-num">{{ agentInfo.child_order_money_1 }}</view>
+						<view class="y-start ">
+							<!-- <view class="item-title">二级分销</view>
+							<view class="category-num">{{ agentInfo.child_order_money_1 }}</view> -->
 						</view>
 					</view>
 				</view>
@@ -147,8 +147,10 @@ export default {
 	},
 	onLoad() {
 		this.getTeam();
+		this.getAgent();
 	},
 	methods: {
+		...mapActions(['getAgent']),
 		// 点击筛选项
 		onFilter(index) {
 			this.filterCurrent = index;
