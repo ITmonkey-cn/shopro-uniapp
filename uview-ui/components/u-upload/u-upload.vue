@@ -296,6 +296,8 @@ export default {
 		// 选择图片
 		selectFile() {
 			if (this.disabled) return;
+			// #ifdef APP-VUE
+			// #endif
 			const { name = '', maxCount, multiple, maxSize, sizeType, lists, camera, compressed, maxDuration, sourceType } = this;
 			let chooseFile = null;
 			const newMaxCount = maxCount - lists.length;

@@ -58,7 +58,7 @@ export default {
 	components: {},
 	data() {
 		return {
-			addons:uni.getStorageSync('addons'),
+			addons: uni.getStorageSync('addons'),
 			imgList: [], //图片
 			type: '', //类型
 			content: '', //描述
@@ -107,15 +107,18 @@ export default {
 			this.type = e;
 		},
 		// 选择图片
-		onChooseImg() {
+		async onChooseImg() {
 			let that = this;
-			that.$tools.chooseImage(1).then(res => {
-				res.forEach(img => {
-					that.$tools.uploadImage('index/upload', img).then(res => {
-						that.imgList.push(res.full_url);
+			// #ifdef APP-VUE
+			// #endif
+			hasAuth &&
+				(await that.$tools.chooseImage(1).then(res => {
+					res.forEach(img => {
+						that.$tools.uploadImage('index/upload', img).then(res => {
+							that.imgList.push(res.full_url);
+						});
 					});
-				});
-			});
+				}));
 		},
 		DelImg(index) {
 			uni.showModal({

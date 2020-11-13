@@ -114,6 +114,8 @@ export default {
 			});
 		},
 		onChooseImg() {
+			// #ifdef APP-VUE
+			// #endif
 			let that = this;
 			that.$tools.chooseImage(1).then(res => {
 				that.$tools.uploadImage('index/upload', res[0]).then(res => {

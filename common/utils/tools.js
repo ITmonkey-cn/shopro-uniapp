@@ -2,6 +2,9 @@ import {
 	API_URL
 } from '@/env'
 import router from '@/common/router'
+// #ifdef APP-VUE
+import permision from "@/common/permission.js"
+// #endif
 export default {
 	/**
 	 * 跳转再封装，不支持复杂传参。
@@ -292,6 +295,34 @@ export default {
 			image: (options && options.image) || '',
 			mask: (options && options.mask) || true,
 		});
+	},
+
+	// #ifdef APP-VUE
+	/**
+	 * app检测获取相册权限
+	 * @return {String} status 1: 有权限。
+	 */
+	async checkAppAlbum() {
+		let status = permision.isIOS ? await permision.requestIOS('album') : await permision.requestAndroid(
+			'android.permission.READ_EXTERNAL_STORAGE');
+
+		if (status === null || status === 1) {
+			status = 1;
+		} else {
+			uni.showModal({
+				content: '需要获取读写手机存储（系统提示为访问设备上的照片、媒体内容和文件）权限。',
+				confirmText: '设置',
+				success: function(res) {
+					if (res.confirm) {
+						permision.gotoAppSetting();
+					}
+				}
+			});
+		}
+
+		return status;
 	}
+
+	// #endif
 
 }

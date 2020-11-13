@@ -1,7 +1,7 @@
 <!-- 确认订单 -->
 <template>
 	<view class="page_box">
-		<view class="head_box" v-if="orderPre.need_address" >
+		<view class="head_box" v-if="orderPre.need_address">
 			<view class="add-address-box flex-sub x-f" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
 				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
 				<view class="box-bg x-bc flex-sub pad">
@@ -41,17 +41,18 @@
 				<!-- 配送方式 -->
 				<view class="logistic item-list x-bc" @tap="onSelExpressType(g)">
 					<view class="x-f"><view class="item-title">配送方式</view></view>
-					<view class="x-f" >
-						<view class="detail">{{getCurGoodsExpress(g)}}</view>
+					<view class="x-f">
+						<view class="detail">{{ getCurGoodsExpress(g) }}</view>
 						<text class="cuIcon-right"></text>
 					</view>
 				</view>
 			</view>
-			
+
 			<!-- 备注 -->
 			<view class="remark-box x-f item-list">
 				<view class="item-title">备注</view>
-				<input class="item-input"  placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" ></input>
+				<input type="text" value="" />
+				<input class="item-input" placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
 			</view>
 			<view class="coupon x-bc item-list" v-if="!orderPre.activity_type && orderType !== 'score'">
 				<view class="item-title">优惠券</view>
@@ -106,12 +107,16 @@
 							@tap="changeExpressType(nav.value)"
 							v-if="inExpressType.includes(nav.value)"
 						>
-							<text class="head-nav__title" :class="{ 'head-nav__title--active':expressTypeCur === nav.value }">{{ nav.title }}</text>
+							<text class="head-nav__title" :class="{ 'head-nav__title--active': expressTypeCur === nav.value }">{{ nav.title }}</text>
 							<view :class="expressClass" v-show="expressTypeCur === nav.value"></view>
 						</view>
 					</view>
 					<view class="express-type__content content_box">
-						<view class="empty-address" v-if="!addressId && expressTypeCur !== 'selfetch' && expressTypeCur !== 'autosend'" @tap="jump('/pages/user/address/list', { from: 'order' })">
+						<view
+							class="empty-address"
+							v-if="!addressId && expressTypeCur !== 'selfetch' && expressTypeCur !== 'autosend'"
+							@tap="jump('/pages/user/address/list', { from: 'order' })"
+						>
 							请选择收货地址
 							<text class="cuIcon-right"></text>
 						</view>
@@ -148,15 +153,15 @@
 							</view>
 							<!-- 已定位 -->
 							<view class="" v-else>
-								<view class="express-top x-bc" @tap="jump('/pages/order/business-address', {goodsId:currentGoodsId,lat:lat,lng:lng,storeId:storeInfo.id })">
+								<view class="express-top x-bc" @tap="jump('/pages/order/business-address', { goodsId: currentGoodsId, lat: lat, lng: lng, storeId: storeInfo.id })">
 									<view class="">
 										<text class="tag1" v-if="address.is_default == 1">最近</text>
-										<text class="address">{{storeInfo.name || '暂无自提点'}}</text>
+										<text class="address">{{ storeInfo.name || '暂无自提点' }}</text>
 										<text class="cuIcon-right address-guide"></text>
 									</view>
 									<view class="address-location">
 										<image class="location-img" src="http://shopro.7wpp.com/imgs/order/e1.png" mode=""></image>
-										<text class="location-text">距您{{storeInfo.distance_text ||　0}}</text>
+										<text class="location-text">距您{{ storeInfo.distance_text || 0 }}</text>
 									</view>
 								</view>
 								<view class="express-content">
@@ -171,7 +176,7 @@
 									<view class="phone-box">
 										<text class="box-title">预留电话</text>
 										<view class="box-content x-f">
-											<input class="edit-phone" :focus="getFocus"  type="number" v-model="selfPhone " />
+											<input class="edit-phone" :focus="getFocus" type="number" v-model="selfPhone" />
 											<text class="cuIcon-write box-icon" @tap="onInput"></text>
 										</view>
 									</view>
@@ -186,7 +191,6 @@
 									</label>
 								</view>
 							</view>
-
 						</view>
 						<!-- 商家 -->
 						<view class="express-address" v-if="expressTypeCur == 'store' && addressId">
@@ -236,7 +240,7 @@
 						<button class="cu-btn cancel-btn" @tap="hideExpressType">取消</button>
 						<button class="cu-btn save-btn" @tap="saveExpressType">确定</button>
 					</view>
-					<view class="express-type__bottom x-bc" v-if="expressTypeCur == 'selfetch' &&  lat">
+					<view class="express-type__bottom x-bc" v-if="expressTypeCur == 'selfetch' && lat">
 						<button class="cu-btn cancel-btn" @tap="hideExpressType">取消</button>
 						<button class="cu-btn save-btn" @tap="saveExpressType">确定</button>
 					</view>
@@ -287,11 +291,11 @@
 import shPickerModal from './children/sh-picker-modal.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 // #ifdef H5
-import wxsdk from '@/common/wechat/sdk'
+import wxsdk from '@/common/wechat/sdk';
 // #endif
-  // #ifdef APP-PLUS
-    import permision from "@/common/permission.js"
-    // #endif
+// #ifdef APP-PLUS
+import permision from '@/common/permission.js';
+// #endif
 export default {
 	components: {
 		shPickerModal
@@ -307,19 +311,19 @@ export default {
 			address: {
 				is_default: 0
 			},
-			storeList:[],//门店列表
-			storeInfo:{
-				id:0
-			},//商家信息
+			storeList: [], //门店列表
+			storeInfo: {
+				id: 0
+			}, //商家信息
 			addressId: 0,
 			from: '',
 			orderType: '',
 			grouponBuyType: 'alone',
 			grouponId: 0,
-			goodsList: [],//传递过来的参数
-			perGoodsList:{},//确认单订单商品
-			currentGoodsId:0,//当前商品id.
-			currentSkuId:0,//商品的规格ID
+			goodsList: [], //传递过来的参数
+			perGoodsList: {}, //确认单订单商品
+			currentGoodsId: 0, //当前商品id.
+			currentSkuId: 0, //商品的规格ID
 			remark: '',
 			orderPre: {},
 			couponId: 0,
@@ -328,12 +332,11 @@ export default {
 			expressTypeCur: '',
 			showCheckTime: false, //配送时间弹窗。
 			inExpressType: [], //当前商品支持的配送方式。
-			expressTypeMap:{
-				express:'物流快递',
-				selfetch:'到店/自提',
-				store:'商家配送',
-				autosend:'自动发货'
-						
+			expressTypeMap: {
+				express: '物流快递',
+				selfetch: '到店/自提',
+				store: '商家配送',
+				autosend: '自动发货'
 			},
 			expressType: [
 				//快递方式
@@ -360,16 +363,15 @@ export default {
 			],
 			isProtocol: true, //自提协议。
 			selfPhone: 0, //编辑手机号
-			getFocus:false,//获取焦点。
+			getFocus: false, //获取焦点。
 			checkType: '自提',
-			checkTime:{},
+			checkTime: {},
 			checkTimeCur: 0, //默认选中时间。
-			checkTimeId: 'c1',//锚点用
-			checkDayCur: 0,//默认日期
-			hasLocation:false,//是否已经授权过
-			lat:0,
-			lng:0
-			
+			checkTimeId: 'c1', //锚点用
+			checkDayCur: 0, //默认日期
+			hasLocation: false, //是否已经授权过
+			lat: 0,
+			lng: 0
 		};
 	},
 	computed: {
@@ -384,7 +386,6 @@ export default {
 			}
 			return cl;
 		}
-		
 	},
 	watch: {
 		address(val, oldVal) {
@@ -401,9 +402,9 @@ export default {
 		this.grouponBuyType = this.$Route.query.grouponBuyType;
 		this.grouponId = this.$Route.query.grouponId;
 		// #ifdef MP-WEIXIN
-		this.getSetting()
+		this.getSetting();
 		// #endif
-		this.initDate()
+		this.initDate();
 		await this.init();
 	},
 	onShow() {},
@@ -418,93 +419,93 @@ export default {
 				query: parmas
 			});
 		},
-		initDate(){
-		let week = {
-			0:'周日',
-			1:'周一',
-			2:'周二',
-			3:'周三',
-			4:'周四',
-			5:'周五',
-			6:'周六'
-		}
-		let now = new Date().getTime();
-		let today = this.$tools.timestamp(now/1000);
-		let tomorrow = this.$tools.timestamp((now+86400000)/1000);
-		let aftertomorrow = this.$tools.timestamp((now+172800000)/1000);
-		let week1 = week[new Date().getDay()]
-		let week2 = week[new Date(now+86400000).getDay()]
-		let week3 = week[new Date(now+172800000).getDay()]
+		initDate() {
+			let week = {
+				0: '周日',
+				1: '周一',
+				2: '周二',
+				3: '周三',
+				4: '周四',
+				5: '周五',
+				6: '周六'
+			};
+			let now = new Date().getTime();
+			let today = this.$tools.timestamp(now / 1000);
+			let tomorrow = this.$tools.timestamp((now + 86400000) / 1000);
+			let aftertomorrow = this.$tools.timestamp((now + 172800000) / 1000);
+			let week1 = week[new Date().getDay()];
+			let week2 = week[new Date(now + 86400000).getDay()];
+			let week3 = week[new Date(now + 172800000).getDay()];
 			let obj = {
 				day: [
 					{
-						title:"今天（" +week1 +"）",
-						value:today
+						title: '今天（' + week1 + '）',
+						value: today
 					},
 					{
-					title:"明天（" +week2 +"）",
-						value:tomorrow
+						title: '明天（' + week2 + '）',
+						value: tomorrow
 					},
 					{
-					title:"后天（" +week3 +"）",
-						value:aftertomorrow
+						title: '后天（' + week3 + '）',
+						value: aftertomorrow
 					}
 				],
-				time: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00','14:00','15:00','16:00','17:00','18:00','19:00']
-			}
+				time: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00']
+			};
 			this.checkTime = obj;
 		},
-		   
+
 		// 开启定位
 		async getLocation() {
-		    // #ifdef APP-PLUS
-		    let status = await this.checkPermission();
-		    if (status !== 1) {
-		        return;
-		    }
-		    // #endif
-		    // #ifdef MP-WEIXIN || MP-TOUTIAO || MP-QQ
-		    let status = await this.getSetting();
-		    if (status === 1) {
-		       this.getStoreAddress()
-		        return;
-		    }else{
-				if(status === 2){
+			// #ifdef APP-PLUS
+			let status = await this.checkPermission();
+			if (status !== 1) {
+				return;
+			}
+			// #endif
+			// #ifdef MP-WEIXIN || MP-TOUTIAO || MP-QQ
+			let status = await this.getSetting();
+			if (status === 1) {
+				this.getStoreAddress();
+				return;
+			} else {
+				if (status === 2) {
 					this.openSetting();
 					return;
 				}
 			}
-		    // #endif
-		
-		    this.openLocation();
+			// #endif
+
+			this.openLocation();
 		},
-		openLocation(){
+		openLocation() {
 			let platform = uni.getStorageSync('platform');
-			if(platform == 'wxOfficialAccount'){
+			if (platform == 'wxOfficialAccount') {
 				// #ifdef H5
 				this.$wxsdk.getlocation(res => {
 					this.hasLocation = true;
-					this.lng =  res.longitude;
+					this.lng = res.longitude;
 					this.lat = res.latitude;
-					this.getStoreAddress()
-				})
+					this.getStoreAddress();
+				});
 				// #endif
-			}else{
+			} else {
 				uni.getLocation({
-				    type: platform == 'h5' ? 'wgs84' : 'gcj02',
-				    success: res => {
+					type: platform == 'h5' ? 'wgs84' : 'gcj02',
+					success: res => {
 						this.hasLocation = true;
-				        this.lng =  res.longitude;
-				       this.lat = res.latitude;
-					   this.getStoreAddress()
-				    },
-					fail:err => {
+						this.lng = res.longitude;
+						this.lat = res.latitude;
+						this.getStoreAddress();
+					},
+					fail: err => {
 						uni.chooseLocation({
 							success: res => {
 								this.hasLocation = true;
-								this.lng =  res.longitude;
+								this.lng = res.longitude;
 								this.lat = res.latitude;
-								this.getStoreAddress()
+								this.getStoreAddress();
 							},
 							fail: err => {
 								console.log(err);
@@ -515,94 +516,91 @@ export default {
 			}
 		},
 		getSetting: function() {
-		    return new Promise((resolve, reject) => {
-		        uni.getSetting({
-		            success: (res) => {
-		                if (res.authSetting['scope.userLocation'] === undefined) {
-							this.hasLocation = false
-		                    resolve(0);
-		                    return;
-		                }
-		                if (res.authSetting['scope.userLocation']) {
-							this.hasLocation = true
-		                    resolve(1);
-		                } else {
-		                    resolve(2);
-		                }
-		            }
-		        });
-		    });
+			return new Promise((resolve, reject) => {
+				uni.getSetting({
+					success: res => {
+						if (res.authSetting['scope.userLocation'] === undefined) {
+							this.hasLocation = false;
+							resolve(0);
+							return;
+						}
+						if (res.authSetting['scope.userLocation']) {
+							this.hasLocation = true;
+							resolve(1);
+						} else {
+							resolve(2);
+						}
+					}
+				});
+			});
 		},
 		openSetting: function() {
-		    uni.openSetting({
-		        success: (res) => {
-		            if (res.authSetting && res.authSetting['scope.userLocation']) {
-		                this.openLocation();
-		            }
-		        },
-		        fail: (err) => {}
-		    })
+			uni.openSetting({
+				success: res => {
+					if (res.authSetting && res.authSetting['scope.userLocation']) {
+						this.openLocation();
+					}
+				},
+				fail: err => {}
+			});
 		},
 		async checkPermission() {
-		    let status = permision.isIOS ? await permision.requestIOS('location') :
-		        await permision.requestAndroid('android.permission.ACCESS_FINE_LOCATION');
-		
-		    if (status === null || status === 1) {
+			let status = permision.isIOS ? await permision.requestIOS('location') : await permision.requestAndroid('android.permission.ACCESS_FINE_LOCATION');
+
+			if (status === null || status === 1) {
 				this.hasLocation = true;
-		        status = 1;
-		    } else if (status === 2) {
-		        uni.showModal({
-		            content: "系统定位已关闭",
-		            confirmText: "确定",
-		            showCancel: false,
-		            success: function(res) {
-		            }
-		        })
-		    } else if (status.code) {
-		        uni.showModal({
-		            content: status.message
-		        })
-		    } else {
-		        uni.showModal({
-		            content: "需要定位权限",
-		            confirmText: "设置",
-		            success: function(res) {
-		                if (res.confirm) {
-		                    permision.gotoAppSetting();
-		                }
-		            }
-		        })
-		    }
-		
-		    return status;
+				status = 1;
+			} else if (status === 2) {
+				uni.showModal({
+					content: '系统定位已关闭',
+					confirmText: '确定',
+					showCancel: false,
+					success: function(res) {}
+				});
+			} else if (status.code) {
+				uni.showModal({
+					content: status.message
+				});
+			} else {
+				uni.showModal({
+					content: '需要定位权限',
+					confirmText: '设置',
+					success: function(res) {
+						if (res.confirm) {
+							permision.gotoAppSetting();
+						}
+					}
+				});
+			}
+
+			return status;
 		},
 		// 编译预留手机号
-		onInput(){
+		onInput() {
 			this.getFocus = true;
-			this.selfPhone = '' ;
-			
+			this.selfPhone = '';
 		},
 		// 获取当前商品配送方式
-		getCurGoodsExpress(goods){
-			for( let item of this.goodsList){
-				if(item.goods_id == goods.goods_id &&  goods.sku_price_id == item.sku_price_id  ){
+		getCurGoodsExpress(goods) {
+			for (let item of this.goodsList) {
+				if (item.goods_id == goods.goods_id && goods.sku_price_id == item.sku_price_id) {
 					return this.expressTypeMap[item.dispatch_type];
 				}
 			}
 		},
 		// 获取商品支持的自提点。
-		getStoreAddress(){
+		getStoreAddress() {
 			let that = this;
-			that.$api('goods.storeAddress',{
-				id:that.currentGoodsId,
-				latitude:that.lat,
-				longitude:that.lng
-			}).then(res=>{
-				if(res.code == 1){
-					that.storeInfo = res.data[0]
+			that.$api('goods.storeAddress', {
+				id: that.currentGoodsId,
+				latitude: that.lat,
+				longitude: that.lng
+			}).then(res => {
+				if (res.code == 1) {
+					that.storeInfo = res.data[0];
 					that.storeList = res.data;
 				}
-			})
+			});
 		},
 		// 订单信息
 		getPre() {
@@ -618,19 +616,19 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderPre = res.data;
-					that.perGoodsList = res.data.new_goods_list
-					that.perGoodsList.map(item =>{
+					that.perGoodsList = res.data.new_goods_list;
+					that.perGoodsList.map(item => {
 						item.selType = item.dispatch_type;
-						that.goodsList.forEach(goods =>{
-							if(item.goods_id == goods.goods_id && item.sku_price_id == goods.sku_price_id){
+						that.goodsList.forEach(goods => {
+							if (item.goods_id == goods.goods_id && item.sku_price_id == goods.sku_price_id) {
 								goods.dispatch_type = item.dispatch_type;
-								
-								if(item.store_id){
+
+								if (item.store_id) {
 									goods.store_id = item.store_id;
 								}
 							}
-						})
-					})
+						});
+					});
 				}
 			});
 		},
@@ -677,15 +675,14 @@ export default {
 		},
 		// 初始地址
 		getDefaultAddress() {
-				this.$api('address.defaults').then(res => {
-					if (res.code === 1) {
-						if(res.data){
-							this.address = res.data;
-							this.selfPhone = res.data.phone
-						}
-					
+			this.$api('address.defaults').then(res => {
+				if (res.code === 1) {
+					if (res.data) {
+						this.address = res.data;
+						this.selfPhone = res.data.phone;
 					}
-				});
+				}
+			});
 		},
 		// 可用优惠券
 		getCoupons() {
@@ -722,71 +719,71 @@ export default {
 			}
 		},
 		// 显示配送方式弹窗
-	  async	onSelExpressType(goods) {
+		async onSelExpressType(goods) {
 			this.showExpressType = true;
 			this.inExpressType = goods.detail.dispatch_type_arr;
 			this.currentGoodsId = goods.goods_id;
 			this.currentSkuId = goods.sku_price_id;
-				this.goodsList.forEach(item => {
-					if(item.goods_id == this.currentGoodsId &&  this.currentSkuId == item.sku_price_id  ){
-						this.expressTypeCur = item.dispatch_type;
-						this.selfPhone =  item.dispatch_phone?item.dispatch_phone:this.address && this.address.phone;
-						this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0 ;
-						this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
-						if (this.expressTypeCur == 'selfetch') {
-								// #ifdef MP-WEIXIN
-							 this.getSetting().then(res =>{
-								 	 res == 1 && this.openLocation()
-							 });
-							 	// #endif
-							this.storeList.forEach(store => {
-								if(item.store_id == store.id ){
-									this.storeInfo = store;
-								}
-							})
-						}
+			this.goodsList.forEach(item => {
+				if (item.goods_id == this.currentGoodsId && this.currentSkuId == item.sku_price_id) {
+					this.expressTypeCur = item.dispatch_type;
+					this.selfPhone = item.dispatch_phone ? item.dispatch_phone : this.address && this.address.phone;
+					this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0;
+					this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
+					if (this.expressTypeCur == 'selfetch') {
+						// #ifdef MP-WEIXIN
+						this.getSetting().then(res => {
+							res == 1 && this.openLocation();
+						});
+						// #endif
+						this.storeList.forEach(store => {
+							if (item.store_id == store.id) {
+								this.storeInfo = store;
+							}
+						});
 					}
-				})
+				}
+			});
 		},
 		// 关闭配送方式弹窗
 		hideExpressType() {
 			this.showExpressType = false;
-			this.changeGoodsList()
+			this.changeGoodsList();
 		},
 		// 保存配送方式
-		saveExpressType(){
+		saveExpressType() {
 			this.showExpressType = false;
-			this.changeGoodsList()
+			this.changeGoodsList();
 			this.getPre();
 		},
 
-	// 更改提交数据
-		changeGoodsList(){
+		// 更改提交数据
+		changeGoodsList() {
 			this.goodsList.forEach(goods => {
-				if(goods.goods_id == this.currentGoodsId &&  this.currentSkuId == goods.sku_price_id  ){
-					goods.dispatch_type = this.expressTypeCur
-					goods.dispatch_phone =  this.selfPhone
-					goods.dispatch_date = this.checkTime['day'][this.checkDayCur].value + ' ' +  this.checkTime['time'][this.checkTimeCur]+':00'
-					if(this.expressTypeCur == 'selfetch'){
-						goods.store_id =  this.storeInfo.id ;
+				if (goods.goods_id == this.currentGoodsId && this.currentSkuId == goods.sku_price_id) {
+					goods.dispatch_type = this.expressTypeCur;
+					goods.dispatch_phone = this.selfPhone;
+					goods.dispatch_date = this.checkTime['day'][this.checkDayCur].value + ' ' + this.checkTime['time'][this.checkTimeCur] + ':00';
+					if (this.expressTypeCur == 'selfetch') {
+						goods.store_id = this.storeInfo.id;
 					}
 					goods.checkDayCur = this.checkDayCur;
 					goods.checkTimeCur = this.checkTimeCur;
 				}
-			})
+			});
 		},
 		// 选择快递方式
-	  async	changeExpressType(cur) {
+		async changeExpressType(cur) {
 			this.expressTypeCur = cur;
 			this.getFocus = false;
 			// #ifdef MP-WEIXIN
-			if(cur == 'selfetch' ){
-				let status =  await this.getSetting();
-				status == 1 && await this.openLocation()
-				}
+			if (cur == 'selfetch') {
+				let status = await this.getSetting();
+				status == 1 && (await this.openLocation());
+			}
 			// #endif
 		},
-	
+
 		// 格式日期
 		check(type, index) {
 			if (type == 'time') {
@@ -814,8 +811,7 @@ export default {
 					this.checkType = '自提';
 			}
 			this.showCheckTime = !this.showCheckTime;
-		},
-		
+		}
 	}
 };
 </script>
@@ -884,18 +880,18 @@ export default {
 }
 // 备注
 .remark-box {
-		margin-top: 20rpx;
-		background: #fff;
-		padding: 25rpx;
-		.item-input {
-			flex: 1;
-			text-align: end;
-			font-size: 28rpx;
-		}
-		.input-pl {
-			color: #c4c4c4;
-		}
+	margin-top: 20rpx;
+	background: #fff;
+	padding: 25rpx;
+	.item-input {
+		flex: 1;
+		text-align: end;
+		font-size: 28rpx;
 	}
+	.input-pl {
+		color: #c4c4c4;
+	}
+}
 // 商品卡片
 .goods-list {
 	background: #fff;
@@ -952,7 +948,7 @@ export default {
 .price-box,
 .remark-box,
 .score,
-.coupon{
+.coupon {
 	border-top: 1rpx solid rgba(#dfdfdf, 0.5);
 }
 .border-top {
@@ -999,7 +995,7 @@ export default {
 	.express-type__head {
 		width: 100%;
 		height: 74rpx;
-		background: #F8E3BD;
+		background: #f8e3bd;
 		@include flex($align: center);
 		border-radius: 20rpx 20rpx 0 0;
 		&-nav {
@@ -1112,40 +1108,40 @@ export default {
 			color: rgba(153, 153, 153, 1);
 		}
 		// 无定位
-	.location-box{
-		height: 500rpx;
-		justify-content: center;
-		.nolocation-img{
-			width: 74rpx;
-			height: 90rpx;
-			margin-bottom: 40rpx;
+		.location-box {
+			height: 500rpx;
+			justify-content: center;
+			.nolocation-img {
+				width: 74rpx;
+				height: 90rpx;
+				margin-bottom: 40rpx;
+			}
+			.location-title {
+				font-size: 35rpx;
+				font-family: PingFang SC;
+				font-weight: bold;
+				color: rgba(70, 53, 27, 1);
+				margin-bottom: 20rpx;
+			}
+			.location-tip {
+				font-size: 28rpx;
+				font-family: PingFang SC;
+				font-weight: 400;
+				color: rgba(153, 153, 153, 1);
+				margin-bottom: 40rpx;
+			}
+			.open-location {
+				width: 492rpx;
+				height: 70rpx;
+				background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
+				box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
+				border-radius: 35rpx;
+				font-size: 28rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(255, 255, 255, 1);
+			}
 		}
-		.location-title{
-			font-size:35rpx;
-			font-family:PingFang SC;
-			font-weight:bold;
-			color:rgba(70,53,27,1);
-			margin-bottom: 20rpx;
-		}
-		.location-tip{
-			font-size:28rpx;
-			font-family:PingFang SC;
-			font-weight:400;
-			color:rgba(153,153,153,1);
-			margin-bottom: 40rpx;
-		}
-		.open-location{
-			width:492rpx;
-			height:70rpx;
-			background:linear-gradient(90deg,rgba(233,180,97,1),rgba(238,204,137,1));
-			box-shadow:0px 7rpx 6rpx 0px rgba(229,138,0,0.22);
-			border-radius:35rpx;
-			font-size:28rpx;
-			font-family:PingFang SC;
-			font-weight:500;
-			color:rgba(255,255,255,1);
-		}
-	}
 		// 快递
 		.express-address {
 			position: relative;

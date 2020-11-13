@@ -140,6 +140,8 @@ export default {
 			this.$Router.push('/pages/public/kefu/index');
 		},
 		chooseImg() {
+			// #ifdef APP-VUE
+			// #endif
 			let that = this;
 			that.$tools.chooseImage(1).then(res => {
 				res.forEach(img => {

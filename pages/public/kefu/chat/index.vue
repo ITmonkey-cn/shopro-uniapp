@@ -76,7 +76,6 @@
 								</view>
 							</view>
 							<view v-if="chat.identify === 'user'" class="cu-avatar round" :style="'background-image:url(' + userInfo.avatar + ')'"></view>
-							<!-- <view class="date" v-if="showTime(chat.date, index)">{{ $u.timeFrom(chat.date) }}</view> -->
 						</view>
 					</view>
 					<!-- 模板消息 -->
@@ -89,7 +88,7 @@
 			<view class="scroll-bottom" style="height: 330rpx;" id="scrollBottom"></view>
 		</scroll-view>
 		<!-- 底部功能栏，输入栏 -->
-		<view class="cu-bar foot input y-f" :style="[{ bottom: InputBottom + 'px' }]">
+		<view class="cu-bar foot input y-f">
 			<!-- 输入栏 -->
 			<view class="cu-bar flex-sub" style="width: 100%;">
 				<view class="input-wrap x-f">
@@ -167,7 +166,7 @@
 		</view>
 
 		<!-- 商品/订单 -->
-		<view class="cu-bar log-box foot input y-f" v-if="showLogBox" :style="[{ bottom: InputBottom + 'px' }]">
+		<view class="cu-bar log-box foot input y-f" v-if="showLogBox">
 			<view class="log-head x-bc">
 				<view class="title-box">{{ logTitle }}</view>
 				<button class="cu-btn close-btn" @tap="closeToolsItem"><text class="cuIcon-roundclosefill"></text></button>
@@ -248,7 +247,6 @@ export default {
 				// msg: message.message,
 				// date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
 			],
-			InputBottom: 0,
 			msgText: '', //输入框内容
 			showNotice: true, //滚动提示
 			noticeType: 'warning',
@@ -508,12 +506,9 @@ export default {
 		// 获取焦点
 		InputFocus(e) {
 			this.onMask();
-			this.InputBottom = e.detail.height;
 		},
 		// 失去焦点
-		InputBlur(e) {
-			this.InputBottom = 0;
-		},
+		InputBlur(e) {},
 		// 输入
 		onInput(e) {},
 

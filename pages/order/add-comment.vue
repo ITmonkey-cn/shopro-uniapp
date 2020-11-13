@@ -76,6 +76,8 @@ export default {
 			this.star = e.curStar;
 		},
 		onChooseImg() {
+			// #ifdef APP-VUE
+			// #endif
 			let that = this;
 			that.$tools.chooseImage(1).then(res => {
 				res.forEach(img => {

@@ -516,6 +516,8 @@ export default {
 			});
 		},
 		upload_file: function() {
+			// #ifdef APP-VUE
+			// #endif
 			var that = this;
 			that.ws.pageHideCloseWs = false; // 页面hide不关闭链接
 			uni.chooseImage({

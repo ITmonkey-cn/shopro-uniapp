@@ -10,7 +10,7 @@ import {
 	ORDER_NUMBER,
 	MESSAGE_IDS,
 	OUT_LOGIN,
-	AGENT
+	AGENT,
 	// #ifdef MP-WEIXIN
 	FORCE_OAUTH,
 	// #endif

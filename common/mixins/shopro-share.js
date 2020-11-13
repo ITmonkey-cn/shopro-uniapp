@@ -12,7 +12,6 @@ import Router from '@/common/router'
 // #ifdef H5
 import wxsdk from '@/common/wechat/sdk'
 // #endif
-
 export default {
 	data() {
 		return {
@@ -169,7 +168,9 @@ export default {
 				}
 			}
 			return false;
-		}
+		},
+		
+		
 	},
 
 	// #ifdef MP-WEIXIN

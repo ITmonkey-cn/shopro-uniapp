@@ -90,14 +90,20 @@ export default {
 		// 保存图片
 		saveImg(img) {
 			let that = this;
-			uni.saveImageToPhotosAlbum({
-				filePath: img,
-				success: res => {
-					that.$tools.toast('保存成功');
-				},
-				fail: err => {
-					that.$tools.toast('保存失败');
-				}
+			uni.getImageInfo({
+				src: img
+			}).then(res => {
+				uni.saveImageToPhotosAlbum({
+					filePath: res[1].path,
+					success: res => {
+						that.$tools.toast('保存成功');
+						that.hideModal();
+					},
+					fail: err => {
+						that.$tools.toast('保存失败');
+						that.hideModal();
+					}
+				});
 			});
 		},
 		onBtn() {

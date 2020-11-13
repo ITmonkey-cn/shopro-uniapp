@@ -74,6 +74,45 @@
 				<button class="cu-btn back-btn" @tap="onBack">返回</button>
 			</view>
 		</view>
+		<!-- 成为分销商条件 -->
+		<view class="into-agent-modal cu-modal" :class="{ show: false }">
+			<view class="condition-box cu-dialog x-c">
+				<!-- 商品 -->
+				<view class="goods-condition y-bc" v-if="false">
+					<view class="card-box x-f">
+						<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
+						<view class="detail y-bc">
+							<view class="title more-t">累计消费</view>
+							<view class="sub one-t">高效防晒，清爽不油腻</view>
+						</view>
+					</view>
+					<view class="btn-box y-f">
+						<button class="cu-btn buy-btn">去购买</button>
+						<view class="tips">* 购买指定商品即可成为分销商</view>
+					</view>
+				</view>
+				<!-- 金额人数 -->
+				<view class="goods-condition y-bc" v-if="false">
+					<view class="card-wrap">
+						<view class="card-box x-f" v-for="item in 3" style="margin: 30rpx 0;">
+							<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
+							<view class="detail y-bc">
+								<view class="title more-t">黛珂Cosme Decorte保湿赋活精华眼霜15g</view>
+								<view class="progress-box">
+									<view class="cu-progress round sm">
+										<view class="progress--ing" :style="[{ width: '50%' }]"></view>
+										<view class="round-wrap"><view class="round-inner"></view></view>
+									</view>
+									<view class="progress-tip" style="font-size: 14rpx;">200</view>
+								</view>
+							</view>
+						</view>
+					</view>
+
+					<view class="btn-box y-f"><button class="cu-btn buy-btn">知道了</button></view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -294,6 +333,47 @@ export default {
 		font-size: 38rpx;
 	}
 }
+// 进度条
+.progress-box {
+	.progress-tip {
+		font-size: 16rpx;
+		font-weight: 500;
+		color: #c7b2ff;
+		line-height: 30rpx;
+		margin-top: 10rpx;
+	}
+	.cu-progress {
+		width: 150rpx;
+		height: 10rpx;
+		background: #503bae;
+		overflow: visible;
+		.progress--ing {
+			background: linear-gradient(180deg, #c6a6ff 0%, #7430ee 100%);
+			border-radius: 10rpx;
+		}
+		.round-wrap {
+			width: 30rpx;
+			height: 30rpx;
+			border: 2rpx solid #5c3cff;
+			background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
+			border-radius: 50%;
+			position: relative;
+			left: -15rpx;
+			.round-inner {
+				width: 20rpx;
+				height: 20rpx;
+				border: 2rpx solid #5c3cff;
+				background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
+				border-radius: 50%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+		}
+	}
+}
+
 // 佣金中心权限验证蒙层
 .blur {
 	filter: blur(20rpx);
@@ -369,6 +449,93 @@ export default {
 	transform: scale(1) !important;
 	transition: all 0.3s ease-in-out 0s;
 }
+
+// 成为分销商
+.into-agent-modal {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: fixed;
+	z-index: 99;
+	background: none;
+	.condition-box {
+		width: 640rpx;
+		height: 786rpx;
+		background: url('http://shopro.7wpp.com/imgs/commission/into_commission.png') no-repeat;
+		background-size: 100% 100%;
+		position: fixed;
+		z-index: 1111;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	.goods-condition {
+		width: 484rpx;
+		height: 580rpx;
+		padding: 60rpx 0 0rpx;
+		.card-wrap {
+			overflow-y: auto;
+			width: 484rpx;
+			height: 500rpx;
+			padding: 10rpx;
+			padding-bottom: 30rpx;
+		}
+		.card-box {
+			background: rgba(#c3b6ff, 0.3);
+			padding: 10rpx;
+			border-radius: 10rpx;
+			.img-wrap {
+				background: #fff;
+				width: 110rpx;
+				height: 110rpx;
+				border-radius: 10rpx;
+				margin-right: 20rpx;
+
+				.goods-img {
+					width: 110rpx;
+					height: 110rpx;
+					border-radius: 10rpx;
+				}
+			}
+			.detail {
+				height: 110rpx;
+				width: 280rpx;
+				align-items: flex-start;
+				.title {
+					font-size: 20rpx;
+					font-weight: 500;
+					color: #333333;
+					line-height: 35rpx;
+					text-align: left;
+				}
+				.sub {
+					font-size: 16rpx;
+					font-weight: 500;
+					color: #9281e2;
+					text-align: left;
+				}
+			}
+		}
+		.btn-box {
+			.buy-btn {
+				width: 390rpx;
+				height: 60rpx;
+				background: linear-gradient(-90deg, #a36fff, #5336ff);
+				box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
+				border-radius: 35rpx;
+				font-size: 24rpx;
+				font-weight: 500;
+				color: #ffffff;
+				margin-bottom: 40rpx;
+			}
+			.tips {
+				font-size: 20rpx;
+				font-weight: 500;
+				color: #9281e2;
+			}
+		}
+	}
+}
 // 用户资料卡片
 .user-card {
 	width: 690rpx;
@@ -427,45 +594,6 @@ export default {
 				font-weight: 500;
 				color: rgba(255, 255, 255, 1);
 				line-height: 20rpx;
-			}
-		}
-	}
-	.progress-box {
-		.progress-tip {
-			font-size: 16rpx;
-			font-weight: 500;
-			color: #c7b2ff;
-			line-height: 30rpx;
-			margin-top: 10rpx;
-		}
-		.cu-progress {
-			width: 150rpx;
-			height: 10rpx;
-			background: #503bae;
-			overflow: visible;
-			.progress--ing {
-				background: linear-gradient(180deg, #c6a6ff 0%, #7430ee 100%);
-				border-radius: 10rpx;
-			}
-			.round-wrap {
-				width: 30rpx;
-				height: 30rpx;
-				border: 2rpx solid #5c3cff;
-				background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
-				border-radius: 50%;
-				position: relative;
-				left: -15rpx;
-				.round-inner {
-					width: 20rpx;
-					height: 20rpx;
-					border: 2rpx solid #5c3cff;
-					background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
-					border-radius: 50%;
-					position: absolute;
-					top: 50%;
-					left: 50%;
-					transform: translate(-50%, -50%);
-				}
 			}
 		}
 	}
