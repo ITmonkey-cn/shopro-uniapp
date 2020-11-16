@@ -309,6 +309,7 @@ export default {
 		if (status === null || status === 1) {
 			status = 1;
 		} else {
+			status = 0;
 			uni.showModal({
 				content: '需要获取读写手机存储（系统提示为访问设备上的照片、媒体内容和文件）权限。',
 				confirmText: '设置',

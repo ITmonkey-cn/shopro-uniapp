@@ -113,15 +113,16 @@ export default {
 				}
 			});
 		},
-		onChooseImg() {
-			// #ifdef APP-VUE
-			// #endif
+		async onChooseImg() {
+			let state = null;
 			let that = this;
-			that.$tools.chooseImage(1).then(res => {
-				that.$tools.uploadImage('index/upload', res[0]).then(res => {
-					that.userData.avatar = res.full_url;
+			uni.getStorageSync('platform') === 'app' ? (state = await this.$checkAppAlbum()) : (state = 1);
+			state &&
+				that.$tools.chooseImage(1).then(res => {
+					that.$tools.uploadImage('index/upload', res[0]).then(res => {
+						that.userData.avatar = res.full_url;
+					});
 				});
-			});
 		}
 	}
 };

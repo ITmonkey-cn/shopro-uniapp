@@ -78,16 +78,16 @@
 		<view class="into-agent-modal cu-modal" :class="{ show: false }">
 			<view class="condition-box cu-dialog x-c">
 				<!-- 商品 -->
-				<view class="goods-condition y-bc" v-if="false">
-					<view class="card-box x-f">
+				<view class="goods-condition y-c" v-if="false">
+					<view class="card-box x-f mb30">
 						<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
 						<view class="detail y-bc">
 							<view class="title more-t">累计消费</view>
 							<view class="sub one-t">高效防晒，清爽不油腻</view>
 						</view>
 					</view>
-					<view class="btn-box y-f">
-						<button class="cu-btn buy-btn">去购买</button>
+					<view class="btn-box y-f py30">
+						<button class="cu-btn buy-btn mb30">去购买</button>
 						<view class="tips">* 购买指定商品即可成为分销商</view>
 					</view>
 				</view>
@@ -98,18 +98,21 @@
 							<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
 							<view class="detail y-bc">
 								<view class="title more-t">黛珂Cosme Decorte保湿赋活精华眼霜15g</view>
-								<view class="progress-box">
-									<view class="cu-progress round sm">
-										<view class="progress--ing" :style="[{ width: '50%' }]"></view>
-										<view class="round-wrap"><view class="round-inner"></view></view>
+								<view class="x-f modal-progress">
+									<view class="progress-box">
+										<view class="cu-progress round sm">
+											<view class="progress--ing" :style="[{ width: '20%' }]"></view>
+											<view class="round-wrap"><view class="round-inner"></view></view>
+										</view>
+										<view class="progress-tip" :style="[{ 'font-size': '14rpx' }, { width: '20%' }]"><text class="tip-text">200</text></view>
 									</view>
-									<view class="progress-tip" style="font-size: 14rpx;">200</view>
+									<text class="progress-tip">500</text>
 								</view>
 							</view>
 						</view>
 					</view>
 
-					<view class="btn-box y-f"><button class="cu-btn buy-btn">知道了</button></view>
+					<view class="btn-box y-f pt30"><button class="cu-btn buy-btn">知道了</button></view>
 				</view>
 			</view>
 		</view>
@@ -472,13 +475,46 @@ export default {
 	.goods-condition {
 		width: 484rpx;
 		height: 580rpx;
-		padding: 60rpx 0 0rpx;
+		padding: 70rpx 0 30rpx;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 		.card-wrap {
 			overflow-y: auto;
 			width: 484rpx;
 			height: 500rpx;
 			padding: 10rpx;
 			padding-bottom: 30rpx;
+		}
+		.modal-progress {
+			align-items: flex-start;
+			.progress-tip {
+				font-size: 16rpx;
+				font-weight: 500;
+				color: #c7b2ff;
+				line-height: 30rpx;
+				margin-top: 10rpx;
+				text-align: right;
+				.tip-text{
+					white-space: nowrap;
+					margin-right: -20rpx;
+				}
+			}
+			.progress-box {
+				margin-right: 20rpx;
+				.cu-progress {
+					width: 200rpx;
+					.round-wrap{
+						width: 20rpx;
+						height: 20rpx;
+					}
+					.round-inner{
+						width: 10rpx;
+						height: 10rpx;
+					}
+				}
+			}
 		}
 		.card-box {
 			background: rgba(#c3b6ff, 0.3);
@@ -517,6 +553,7 @@ export default {
 			}
 		}
 		.btn-box {
+			background-color: #fff;
 			.buy-btn {
 				width: 390rpx;
 				height: 60rpx;
@@ -526,7 +563,6 @@ export default {
 				font-size: 24rpx;
 				font-weight: 500;
 				color: #ffffff;
-				margin-bottom: 40rpx;
 			}
 			.tips {
 				font-size: 20rpx;

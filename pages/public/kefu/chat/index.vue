@@ -88,7 +88,7 @@
 			<view class="scroll-bottom" style="height: 330rpx;" id="scrollBottom"></view>
 		</scroll-view>
 		<!-- 底部功能栏，输入栏 -->
-		<view class="cu-bar foot input y-f">
+		<view class="cu-bar foot input y-f" :style="[{ bottom: InputBottom + 'px' }]">
 			<!-- 输入栏 -->
 			<view class="cu-bar flex-sub" style="width: 100%;">
 				<view class="input-wrap x-f">
@@ -222,6 +222,7 @@ export default {
 	data() {
 		return {
 			socket: null, //socket服务
+			InputBottom:0,
 			isPageHide: false,
 			HTTP_API_URL: API_URL,
 			EMOJI_BASE_URL: BASE_URL,
@@ -506,9 +507,12 @@ export default {
 		// 获取焦点
 		InputFocus(e) {
 			this.onMask();
+			this.InputBottom = e.detail.height;
 		},
 		// 失去焦点
-		InputBlur(e) {},
+		InputBlur(e) {
+			this.InputBottom = 0;
+		},
 		// 输入
 		onInput(e) {},
 
