@@ -58,7 +58,7 @@ export default {
 		},
 		currentPath() {
 			let pages = getCurrentPages();
-			let query = this.queryObj ? this.queryObj : {};
+			let query = this.queryObj ? this.queryObj : this.$Route.query;
 			let currPage = null;
 			if (pages.length) {
 				currPage = pages[pages.length - 1].route;

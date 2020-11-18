@@ -1,7 +1,7 @@
 <!-- 自定义模板页 -->
 <template>
 	<view class="view-box">
-		<cu-custom :isBack="true" :bgColor="bgColor" :bgImage="bgImage">
+		<cu-custom :isBack="!isTabbar" :bgColor="bgColor" :bgImage="bgImage">
 			<block slot="content">{{ customData.name }}</block>
 		</cu-custom>
 		<block v-if="viewData.length" v-for="(item, index) in viewData" :key="index">
@@ -44,7 +44,7 @@
 		<!-- 登录提示 -->
 		<shopro-login-modal></shopro-login-modal>
 		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
+		<shopro-tabbar :queryObj="query"></shopro-tabbar>
 		<!-- 关注弹窗 -->
 		<shopro-float-btn></shopro-float-btn>
 		<!-- 连续弹窗提醒 -->
@@ -104,12 +104,30 @@ export default {
 			viewId: 0,
 			bgColor: '',
 			bgImage: '',
-			customData: {}
+			customData: {},
+			query:{}
 		};
 	},
-	computed: {},
+	computed: {
+		...mapState({
+			tabbarList: state => state.init.templateData.tabbar[0].content.list
+		}),
+		// 是否是底部导航页面
+		isTabbar() {
+			if (this.tabbarList.length) {
+				let arr = [];
+				let pages = getCurrentPages();
+				let currentPath = '/' + pages[pages.length - 1].route;
+				for (let item of this.tabbarList) {
+					arr.push(item.path.split('?')[0]);
+				}
+				return arr.includes(currentPath);
+			}
+		},
+	},
 	onLoad() {
 		this.viewId = this.$Route.query.id;
+		this.query = this.$Route.query;
 	},
 	onShow() {
 		this.getViewData();

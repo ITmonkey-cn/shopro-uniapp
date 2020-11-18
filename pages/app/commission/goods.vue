@@ -10,7 +10,7 @@
 					<view class="price">￥{{ item.price }}</view>
 					<view class="origin-price">￥{{ item.original_price }}</view>
 				</view>
-				<view class="commission-num">预计佣金：￥{{ item.commission.commission_money }}</view>
+				<view class="commission-num">预计佣金：￥{{ item.commission_money }}</view>
 			</view>
 			<button class="share-btn cu-btn" @tap.stop="jump('/pages/public/poster/index', { id: item.id, posterType: 'goods' })">分享赚</button>
 		</view>
@@ -114,14 +114,16 @@ export default {
 	.goods-info {
 		align-items: flex-start;
 		height: 200rpx;
+
 		.goods-title {
-			width: 358rpx;
+			width: 400rpx;
 			font-size: 28rpx;
 			font-weight: 500;
 			color: #333333;
 			margin-bottom: 10rpx;
 		}
 		.goods-des {
+			width: 400rpx;
 			font-size: 22rpx;
 			font-weight: 500;
 			color: #a8700d;
