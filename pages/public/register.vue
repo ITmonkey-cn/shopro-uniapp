@@ -36,7 +36,12 @@
 				</view>
 			</view>
 			<!-- 登录按钮 -->
-			<view class="x-c y-f"><button class="cu-btn login-btn" @tap="register">立即注册</button></view>
+			<view class="x-c y-f">
+				<button :disabled="isLoading" class="cu-btn login-btn" @tap="register">
+					<text v-if="isLoading" class="cuIcon-loading2 cuIconfont-spin"></text>
+					立即注册
+				</button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -55,6 +60,7 @@ export default {
 			},
 			password: '',
 			isTcp: false, //协议
+			isLoading: false, //注册loading
 			sysInfo: uni.getStorageSync('sysInfo')
 		};
 	},
@@ -102,16 +108,14 @@ export default {
 		register() {
 			let that = this;
 			if (this.isTcp) {
-				uni.showLoading({
-					mask: true
-				});
+				this.isLoading = true;
 				this.$api('user.register', {
 					mobile: this.mobile,
 					code: this.code.value,
 					password: this.password
 				}).then(res => {
 					if (res.code === 1) {
-						uni.hideLoading();
+						this.isLoading = false;
 						uni.showToast({
 							title: res.msg || '注册成功,请前往登录',
 							icon: 'success',

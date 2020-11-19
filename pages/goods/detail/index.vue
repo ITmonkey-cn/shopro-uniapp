@@ -89,7 +89,7 @@
 						<view class="goods-comment" v-if="tabCurrent === 'tab2'">
 							<block v-for="comment in commentList" :key="comment.id"><sh-comment :comment="comment"></sh-comment></block>
 							<view class="empty-box x-c" v-if="!commentList.length"><shopro-empty :isFixed="false" :emptyData="emptyData"></shopro-empty></view>
-							<view class="more-box x-c" v-if="commentList.length">
+							<view class="more-box x-c" v-if="commentNum > 3">
 								<button class="cu-btn more-btn x-f" @tap="jump('/pages/goods/comment-list', { goodsId: goodsInfo.id })">
 									查看全部
 									<text class="cuIcon-right"></text>
@@ -315,6 +315,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.commentList = res.data.data;
+					console.log(that.commentList,1111111111);
 					that.commentNum = res.data.total;
 				}
 			});

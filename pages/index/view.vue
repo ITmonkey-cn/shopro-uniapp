@@ -105,7 +105,7 @@ export default {
 			bgColor: '',
 			bgImage: '',
 			customData: {},
-			query:{}
+			query: {}
 		};
 	},
 	computed: {
@@ -123,7 +123,7 @@ export default {
 				}
 				return arr.includes(currentPath);
 			}
-		},
+		}
 	},
 	onLoad() {
 		this.viewId = this.$Route.query.id;
