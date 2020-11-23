@@ -12,8 +12,7 @@ export default {
 		}
 	},
 	initJssdk: function(callback) {
-
-		var uri = encodeURIComponent(window.location.href); //获取当前url然后传递给后台获取授权和签名信息
+		let uri = encodeURIComponent(window.location.href); //获取当前url然后传递给后台获取授权和签名信息
 		api('wechat.jssdk', {
 			uri: uri
 		}).then(res => {
@@ -74,7 +73,7 @@ export default {
 			jweixin.ready(function() {
 				jweixin.scanQRCode({
 					needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-					scanType: ["qrCode","barCode"],// 可以指定扫二维码还是一维码，默认二者都有
+					scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 					success: function(res) {
 						callback(res)
 					},

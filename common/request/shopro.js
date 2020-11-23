@@ -728,6 +728,12 @@ export default {
 			method: 'GET',
 			// desc: '分销身份鉴权',
 		},
+		log: {
+			url: 'commission.log/index',
+			auth: true,
+			method: 'GET',
+			// desc: '分销动态',
+		},
 		goods: {
 			url: 'commission.goods/index',
 			auth: true,

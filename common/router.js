@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import Router from 'uni-simple-router'
 import store from '@/common/store'
+// #ifdef H5
+import wxsdk from '@/common/wechat/sdk'
+// #endif
+import {
+	BASE_URL
+} from '@/env'
+
 
 Vue.use(Router)
 //初始化

@@ -93,7 +93,7 @@ export default {
 		shOrder,
 		shWallet,
 		shGrid,
-		shTitleCard,
+		shTitleCard
 	},
 	data() {
 		return {

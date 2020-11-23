@@ -1,6 +1,6 @@
 <!-- 佣金中心 -->
 <template>
-	<view style="width:100%;height: 100%;">
+	<view style="Gwidth:100%;height: 100%;">
 		<view class="commission-wrap" :class="{ blur: !hasAuth }">
 			<cu-custom isBack></cu-custom>
 			<!-- 用户资料 -->
@@ -42,17 +42,24 @@
 					</view>
 				</view>
 			</view>
+
 			<!-- 滚动明细 -->
 			<view class="commission-log">
-				<scroll-view class="log-scroll" scroll-y="true">
-					<view class="log-item-box" v-for="item in 12" :key="item">
+				<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box log-scroll">
+					<view class="log-item-box x-bc" v-for="item in commissionLog" :key="item.id">
 						<view class="log-item x-f">
-							<image class="log-img" src="http://shopro.7wpp.com/imgs/app_icon/icon.png" mode=""></image>
-							<view class="log-text">139****2561 刚购买了家用小冰箱，还未付款</view>
+							<image class="log-img" :src="item.oper_type !== 'user' ? logMap[item.oper_type] : item.oper ? item.oper.avatar : logMap['admin']" mode=""></image>
+							<view class="log-text">
+								{{ item.remark }}
+								<text class="log-time">{{ $u.timeFrom(item.create) }}</text>
+							</view>
 						</view>
 					</view>
+					<!-- 更多 -->
+					<u-loadmore :status="loadStatus" icon-type="flower" color="#f6f6f6" />
 				</scroll-view>
 			</view>
+
 			<!-- 功能菜单 -->
 			<image class="commission-bottom-bg" src="http://shopro.7wpp.com/imgs/commission/commission_bottom.png" mode="widthFix"></image>
 			<view class="menu-box flex">
@@ -130,6 +137,14 @@ export default {
 			commissionLv: null, //分销商等级
 			commissionWallet: null, //分销商钱包
 			agentFrom: null, //是否显示我的资料
+			commissionLog: [], //动态
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
+			currentPage: 1,
+			lastPage: 1,
+			logMap: {
+				system: 'http://shopro.7wpp.com/imgs/commission/commission_base_notice.png',
+				admin: 'http://shopro.7wpp.com/imgs/commission/commission_base_avatar.png'
+			},
 			authNotice: {
 				//权限提示内容
 				img: 'http://shopro.7wpp.com/imgs/commission/auth_check.png',
@@ -191,6 +206,9 @@ export default {
 	onShow() {
 		this.getStatus();
 	},
+	onLoad() {
+		this.getLog();
+	},
 	onPullDownRefresh() {
 		this.getStatus();
 	},
@@ -214,7 +232,7 @@ export default {
 				if (res.code === 1) {
 					that.authStatus(res.data);
 					that.commissionWallet = res.data.data;
-					that.commissionLv = res.data.data.agent_level;
+					that.commissionLv = res.data.data?.agent_level;
 					that.menuList.map(item => {
 						if (item.title === '我的资料') {
 							item.isAgentFrom = !res.data.agent_form;
@@ -223,6 +241,35 @@ export default {
 				}
 			});
 		},
+
+		// 分销动态
+		getLog() {
+			let that = this;
+			that.loadStatus = 'loading';
+			this.$api('commission.log', {
+				page: that.currentPage,
+				per_page: 5
+			}).then(res => {
+				if (res.code === 1) {
+					that.commissionLog = [...that.commissionLog, ...res.data.data];
+					that.lastPage = res.data.last_page;
+					if (that.currentPage < res.data.last_page) {
+						that.loadStatus = 'loadmore';
+					} else {
+						that.loadStatus = 'nomore';
+					}
+				}
+			});
+		},
+
+		// 加载更多
+		loadMore() {
+			if (this.currentPage < this.lastPage) {
+				this.currentPage += 1;
+				this.getLog();
+			}
+		},
+
 		// 状态鉴权
 		authStatus(data) {
 			switch (data.status) {
@@ -496,7 +543,7 @@ export default {
 				line-height: 30rpx;
 				margin-top: 10rpx;
 				text-align: right;
-				.tip-text{
+				.tip-text {
 					white-space: nowrap;
 					margin-right: -20rpx;
 				}
@@ -505,11 +552,11 @@ export default {
 				margin-right: 20rpx;
 				.cu-progress {
 					width: 200rpx;
-					.round-wrap{
+					.round-wrap {
 						width: 20rpx;
 						height: 20rpx;
 					}
-					.round-inner{
+					.round-inner {
 						width: 10rpx;
 						height: 10rpx;
 					}
@@ -707,6 +754,12 @@ export default {
 				font-size: 22rpx;
 				font-weight: 500;
 				color: #fefefe;
+				.log-time {
+					margin-left: 30rpx;
+					font-size: 22rpx;
+					font-weight: 500;
+					color: #fefefe;
+				}
 			}
 		}
 	}
@@ -730,7 +783,7 @@ export default {
 		margin-bottom: 50rpx;
 		.item-img {
 			width: 68rpx;
-			height: 74rpx;
+			height: 68rpx;
 		}
 		.item-title {
 			font-size: 24rpx;

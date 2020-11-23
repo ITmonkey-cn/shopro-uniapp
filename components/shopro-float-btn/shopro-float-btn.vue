@@ -15,7 +15,7 @@
 		<view class="cu-modal" :class="{ show: showModal }" cathctouchmove @tap="hideModal" v-if="showModal">
 			<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
 				<view class="img-box">
-					<view class="img-wrap"><image class="modal-img" :src="modalImg" mode="widthFix" @longtap="saveImg(modalImg)"></image></view>
+					<view class="img-wrap"><image class="modal-img" :src="modalImg" mode="widthFix" @tap="saveImage(modalImg)"></image></view>
 					<text class="cuIcon-roundclose" @tap="hideModal"></text>
 				</view>
 			</view>
@@ -89,23 +89,22 @@ export default {
 			}
 		},
 		// 保存图片
-		saveImg(img) {
+		saveImage(path) {
 			let that = this;
-			uni.getImageInfo({
-				src: img
-			}).then(res => {
+			let platform = uni.getStorageSync('platform');
+			if (platform === 'wxOfficialAccount') {
+				that.$tools.toast('长按图片保存');
+			} else {
 				uni.saveImageToPhotosAlbum({
-					filePath: res[1].path,
+					filePath: path,
 					success: res => {
 						that.$tools.toast('保存成功');
-						that.hideModal();
 					},
 					fail: err => {
 						that.$tools.toast('保存失败');
-						that.hideModal();
 					}
 				});
-			});
+			}
 		},
 		onBtn() {
 			if (this.floatList.length == 1) {
@@ -182,7 +181,7 @@ export default {
 	}
 }
 
-.cu-dialog{
+.cu-dialog {
 	width: 610rpx;
 }
 .img-box {

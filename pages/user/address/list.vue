@@ -46,6 +46,15 @@ export default {
 		if (this.$Route.query.from) {
 			this.from = this.$Route.query.from;
 		}
+		// #ifdef H5
+		if (uni.getStorageSync('platform') === 'wxOfficialAccount' && uni.getSystemInfoSync().platform === 'ios' && !uni.getStorageSync('sdkReload')) {
+			//IOS sdk 校验
+			uni.setStorageSync('sdkReload', true);
+			window.location.reload();
+			throw 'stop';
+		}
+		uni.removeStorageSync('sdkReload');
+		// #endif
 	},
 	onShow() {
 		this.init();
