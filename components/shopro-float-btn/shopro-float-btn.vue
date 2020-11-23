@@ -12,10 +12,10 @@
 				</view>
 			</view>
 		</view>
-		<view class="cu-modal" :class="{ show: showModal }" cathctouchmove @tap="hideModal">
+		<view class="cu-modal" :class="{ show: showModal }" cathctouchmove @tap="hideModal" v-if="showModal">
 			<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
 				<view class="img-box">
-					<image class="modal-img" :src="modalImg" mode="widthFix" @longtap="saveImg(modalImg)"></image>
+					<view class="img-wrap"><image class="modal-img" :src="modalImg" mode="widthFix" @longtap="saveImg(modalImg)"></image></view>
 					<text class="cuIcon-roundclose" @tap="hideModal"></text>
 				</view>
 			</view>
@@ -72,6 +72,7 @@ export default {
 	methods: {
 		hideModal() {
 			this.showModal = false;
+			this.showBtnList = false;
 		},
 		hideBtnModal() {
 			this.showBtnList = false;
@@ -180,12 +181,15 @@ export default {
 		}
 	}
 }
-.modal-img {
+
+.cu-dialog{
 	width: 610rpx;
 }
 .img-box {
 	position: relative;
-
+	.modal-img {
+		width: 100%;
+	}
 	.cuIcon-roundclose {
 		position: absolute;
 		left: 50%;
