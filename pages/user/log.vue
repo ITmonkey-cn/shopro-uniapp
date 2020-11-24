@@ -16,7 +16,7 @@
 				<!-- 缺省页 -->
 				<shopro-empty v-if="!browseList.length" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
-				<view v-if="browseList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="browseList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box ">
@@ -55,7 +55,7 @@ export default {
 				pathText: '去首页逛逛'
 			},
 			browseList: [],
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -64,9 +64,6 @@ export default {
 	async created() {
 		this.init();
 	},
-	//  onLoad() {
-	//   	this.init();
-	// },
 	methods: {
 		// init
 		init() {
@@ -111,9 +108,9 @@ export default {
 					that.browseList = [...that.browseList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

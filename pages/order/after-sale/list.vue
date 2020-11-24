@@ -42,7 +42,7 @@
 				<!-- 缺省页 -->
 				<shopro-empty v-if="!orderList.length" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
-				<view v-if="orderList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="orderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
@@ -56,7 +56,7 @@ export default {
 		return {
 			orderType: 'all', //分类id
 			orderList: [], //售后列表
-			loadStatus: '', //loading,over分页
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
 			emptyData: {
@@ -128,9 +128,9 @@ export default {
 					that.orderList = [...that.orderList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

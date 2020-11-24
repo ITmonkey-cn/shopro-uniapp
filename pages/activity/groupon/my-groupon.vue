@@ -42,7 +42,7 @@
 				<!-- 空白页 -->
 				<shopro-empty v-if="!myGrouponList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 				<!-- 加载更多 -->
-				<view v-if="myGrouponList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="myGrouponList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 				<!-- loading -->
 				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
@@ -69,7 +69,7 @@ export default {
 		return {
 			isLoading: true,
 			isTriggered: false, //下拉刷新状态，是否被触发。
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore:加载前的状态，loading:加载中的状态，nomore-没有更多的状态
 			lastPage: 1,
 			currentPage: 1,
 			emptyData: {
@@ -154,9 +154,9 @@ export default {
 					that.myGrouponList = [...that.myGrouponList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

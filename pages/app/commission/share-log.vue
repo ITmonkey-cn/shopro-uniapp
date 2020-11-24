@@ -39,7 +39,7 @@
 				<!-- 缺省页 -->
 				<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
-				<view v-if="shareLogList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="shareLogList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
@@ -76,7 +76,7 @@ export default {
 				goods: '商品',
 				groupon: '拼团'
 			},
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
 			emptyData: {
@@ -118,9 +118,9 @@ export default {
 						that.emptyData.show = true;
 					}
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

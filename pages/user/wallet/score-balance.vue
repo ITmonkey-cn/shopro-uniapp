@@ -27,7 +27,8 @@
 					<view class="num" v-if="log.wallet >= 0">{{ log.wallet }}</view>
 					<view class="num" v-else>{{ log.wallet }}</view>
 				</view>
-				<view v-if="scoreLog.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<!-- 更多 -->
+				<u-loadmore v-if="scoreLog.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
@@ -49,7 +50,7 @@ export default {
 			tabDot: 'all',
 			scoreLog: [],
 			timestamp: this.$tools.timestamp,
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -88,9 +89,9 @@ export default {
 					that.scoreLog = [...that.scoreLog, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

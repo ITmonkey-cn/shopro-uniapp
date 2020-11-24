@@ -92,7 +92,7 @@
 		</view>
 
 		<!-- 更多 -->
-		<view v-if="storeOrderList.length" class="cu-load text-gray" :class="loadStatus"></view>
+		<u-loadmore v-if="storeOrderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 
 		<!-- 日期选择 -->
 		<u-calendar
@@ -176,7 +176,7 @@ export default {
 					{ title: '已完成', value: 'finish', isChecked: true }
 				]
 			},
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -302,9 +302,9 @@ export default {
 					that.orderInfo = res.data;
 					that.lastPage = res.data.result.last_page;
 					if (that.currentPage < res.data.result.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

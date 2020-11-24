@@ -14,7 +14,8 @@
 			</view>
 			<view class="detail" v-if="item.checked">{{ item.content }}</view>
 		</view>
-		<view v-if="faqList.length" class="cu-load text-gray" :class="loadStatus"></view>
+		<!-- 更多 -->
+		<u-loadmore v-if="faqList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 		<!-- 自定义底部导航 -->
 		<shopro-tabbar></shopro-tabbar>
 		<!-- 关注弹窗 -->
@@ -32,7 +33,7 @@ export default {
 	data() {
 		return {
 			faqList: [],
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -42,10 +43,10 @@ export default {
 		this.getFaqList();
 	},
 	onReachBottom() {
-	if (this.currentPage < this.lastPage) {
-		this.currentPage += 1;
-		this.getFaqList();
-	}
+		if (this.currentPage < this.lastPage) {
+			this.currentPage += 1;
+			this.getFaqList();
+		}
 	},
 	methods: {
 		onProblem(index) {
@@ -69,9 +70,9 @@ export default {
 					that.faqList = [...that.faqList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

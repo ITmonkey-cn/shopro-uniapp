@@ -17,7 +17,8 @@
 				</view>
 			</view>
 		</view>
-		<view v-if="walletList.length" class="cu-load text-gray" :class="loadStatus"></view>
+		<!-- 更多 -->
+		<u-loadmore v-if="walletList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 	</view>
 </template>
 
@@ -35,7 +36,7 @@ export default {
 				consume: '消费',
 				transfer: '余额互转'
 			},
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -63,9 +64,9 @@ export default {
 					that.walletList = [...that.walletList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

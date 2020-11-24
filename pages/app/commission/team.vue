@@ -89,7 +89,7 @@
 				<!-- 缺省页 -->
 				<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
 				<!-- 更多 -->
-				<view v-if="teamList.length" style="height: 3em;" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="teamList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 	</view>
@@ -129,7 +129,7 @@ export default {
 				}
 			],
 			teamList: [], //团队列表
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
 			// 二级
@@ -196,9 +196,9 @@ export default {
 					}
 					that.lastPage = res.data.teams.last_page;
 					if (that.currentPage < res.data.teams.last_page) {
-						that.isLoadMore = '';
+						that.isLoadMore = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

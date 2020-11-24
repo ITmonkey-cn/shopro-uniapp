@@ -21,7 +21,8 @@
 			<!-- 空白页 -->
 			<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 			<!-- 加载更多 -->
-			<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
+			<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
+
 			<!-- load -->
 			<shopro-load v-model="isLoading"></shopro-load>
 		</view>
@@ -58,7 +59,7 @@ export default {
 				page: 1
 			},
 			isLoading: true, //loading和空白页。
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			lastPage: 1
 		};
 	},
@@ -131,9 +132,9 @@ export default {
 					that.goodsList = [...that.goodsList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.listParams.page < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

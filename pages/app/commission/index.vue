@@ -47,21 +47,26 @@
 			<view class="commission-log">
 				<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box log-scroll">
 					<view class="log-item-box x-bc" v-for="item in commissionLog" :key="item.id">
-						<view class="log-item x-f">
-							<image class="log-img" :src="item.oper_type !== 'user' ? logMap[item.oper_type] : item.oper ? item.oper.avatar : logMap['admin']" mode=""></image>
-							<view class="log-text">
-								{{ item.remark }}
-								<text class="log-time">{{ $u.timeFrom(item.create) }}</text>
+						<view class="log-item-wrap">
+							<view class="log-item x-f one-t">
+								<view class="">
+									<image
+										class="log-img"
+										:src="item.oper_type !== 'user' ? logMap[item.oper_type] : item.oper ? item.oper.avatar : logMap['admin']"
+										mode=""
+									></image>
+								</view>
+								<view class="log-text">{{ item.remark }}</view>
 							</view>
 						</view>
+						<text class="log-time">{{ $u.timeFrom(item.createtime) }}</text>
 					</view>
 					<!-- 更多 -->
-					<u-loadmore :status="loadStatus" icon-type="flower" color="#f6f6f6" />
+					<view class="loadmore-wrap"><u-loadmore :status="loadStatus" icon-type="flower" color="#f6f6f6" /></view>
 				</scroll-view>
 			</view>
 
 			<!-- 功能菜单 -->
-			<image class="commission-bottom-bg" src="http://shopro.7wpp.com/imgs/commission/commission_bottom.png" mode="widthFix"></image>
 			<view class="menu-box flex">
 				<view class="menu-item y-f" v-for="(menu, index) in menuList" v-if="!menu.isAgentFrom" :key="index" @tap="jump(menu.path)">
 					<image class="item-img" :src="menu.img" mode=""></image>
@@ -344,7 +349,14 @@ export default {
 					};
 					break;
 				default:
-					this.hasAuth = true;
+					this.hasAuth = false;
+					this.authNotice = {
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_perfect.png',
+						title: '待完善信息',
+						detail: data.msg,
+						btnText: '去完善',
+						btnPath: '/pages/app/commission/apply'
+					};
 			}
 		},
 
@@ -731,19 +743,33 @@ export default {
 	padding: 0 30rpx;
 	margin-top: 60rpx;
 	.log-scroll {
-		height: 300rpx;
+		height: 380rpx;
 		.log-item-box {
 			position: relative;
 			height: 78rpx;
+			.log-time {
+				margin-left: 30rpx;
+				font-size: 22rpx;
+				font-weight: 500;
+				color: #fefefe;
+				text-align: right;
+			}
+		}
+		.loadmore-wrap {
+			line-height: 80rpx;
+		}
+		.log-item-wrap {
+			position: relative;
 		}
 		.log-item {
 			position: absolute;
+			width: 500rpx;
 			height: 48rpx;
 			background: rgba(#5e49c3, 0.4);
 			border-radius: 24rpx;
 			padding-left: 6rpx;
 			padding-right: 20rpx;
-			margin-bottom: 20rpx;
+			transform: translateY(-50%);
 			.log-img {
 				width: 40rpx;
 				height: 40rpx;
@@ -754,12 +780,6 @@ export default {
 				font-size: 22rpx;
 				font-weight: 500;
 				color: #fefefe;
-				.log-time {
-					margin-left: 30rpx;
-					font-size: 22rpx;
-					font-weight: 500;
-					color: #fefefe;
-				}
 			}
 		}
 	}

@@ -47,7 +47,7 @@
 				<!-- load -->
 				<shopro-load v-model="isLoading"></shopro-load>
 				<!-- 更多 -->
-				<view v-if="orderList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="orderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
@@ -67,7 +67,7 @@ export default {
 		return {
 			routerTo: this.$Router,
 			isLoading: true,
-			loadStatus: '', //loading,over分页
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
 			orderType: 'all',
@@ -112,9 +112,7 @@ export default {
 		}
 		this.getOrderList();
 	},
-	onShow() {
-		// this.orderList = [];
-	},
+	onShow() {},
 	methods: {
 		jump(path, parmas) {
 			this.$Router.push({
@@ -142,9 +140,9 @@ export default {
 					that.orderList = [...that.orderList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

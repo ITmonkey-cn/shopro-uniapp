@@ -11,7 +11,9 @@
 				<view class="comment-list">
 					<block v-for="comment in commentList" :key="comment.id"><sh-comment :comment="comment"></sh-comment></block>
 				</view>
-				<view class="cu-load text-gray" :class="loadStatus"></view>
+
+				<!-- 加载更多 -->
+				<u-loadmore v-if="commentList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
@@ -37,7 +39,7 @@ export default {
 			typeCurrent: 'all',
 			commentList: [],
 			commentTypeList: [],
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -79,9 +81,9 @@ export default {
 					that.commentList = [...that.commentList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

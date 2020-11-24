@@ -6,10 +6,11 @@
 				<view class="goods-box">
 					<view class="goods-list" v-if="goods" v-for="goods in scoreList" :key="goods.id"><sh-score-goods :scoreData="goods"></sh-score-goods></view>
 				</view>
+
 				<!-- 空白页 -->
 				<shopro-empty v-if="!scoreList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 				<!-- 加载更多 -->
-				<view v-if="scoreList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="scoreList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 				<!-- load -->
 				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
@@ -41,7 +42,7 @@ export default {
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'
 			},
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
 			isLoading: true
@@ -71,9 +72,9 @@ export default {
 					that.scoreList = [...that.scoreList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

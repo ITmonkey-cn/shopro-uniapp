@@ -29,7 +29,7 @@
 				<!-- 空白 -->
 				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
 				<!-- 加载更多 -->
-				<view v-if="goodsList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 				<!-- loading -->
 				<shopro-load v-model="isLoading"></shopro-load>
 			</scroll-view>
@@ -59,7 +59,7 @@ export default {
 				tip: '暂无秒杀商品，敬请期待~'
 			},
 			isLoading: true,
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			lastPage: 1,
 			currentPage: 1,
 			tabCurrent: 'ing',
@@ -141,9 +141,9 @@ export default {
 					that.goodsList = [...that.goodsList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

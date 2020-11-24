@@ -20,6 +20,7 @@
 						<view class="time" v-if="couponDetail.usetime">
 							有效期：{{ tools.timestamp(couponDetail.usetime.start) }} 至 {{ tools.timestamp(couponDetail.usetime.end) }}
 						</view>
+						<view class="coupon-line"></view>
 					</view>
 					<view class="bottom y-start">
 						<view class="notice-item y-start">
@@ -144,8 +145,17 @@ export default {
 		background-image: radial-gradient(circle at bottom left, #f0c785, #f0c785 16rpx, transparent 17rpx),
 			radial-gradient(circle at bottom right, #f0c785, #f0c785 16rpx, transparent 17rpx);
 		padding: 110rpx 0 40rpx 0;
-		border-bottom: 1rpx dashed #f3ce90;
 		position: relative;
+		z-index: 5;
+		.coupon-line {
+			width: 95%;
+			border-bottom: 2rpx dashed #f3ce90;
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 6;
+		}
 		.img-box {
 			width: 140rpx;
 			height: 140rpx;
@@ -212,6 +222,7 @@ export default {
 				font-size: 24rpx;
 				color: #666;
 				margin-top: 10rpx;
+				padding-bottom: 10rpx;
 			}
 		}
 	}

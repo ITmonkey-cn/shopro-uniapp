@@ -205,7 +205,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="cu-load text-gray" :class="loadStatus"></view>
+					<u-loadmore height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 				</scroll-view>
 			</view>
 		</view>
@@ -222,7 +222,7 @@ export default {
 	data() {
 		return {
 			socket: null, //socket服务
-			InputBottom:0,
+			InputBottom: 0,
 			isPageHide: false,
 			HTTP_API_URL: API_URL,
 			EMOJI_BASE_URL: BASE_URL,
@@ -280,7 +280,7 @@ export default {
 			],
 			noticeList: [], //跑马灯提示。
 			// 订单商品,分页。
-			loadStatus: '', //loading,over分页
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			orderList: [],
 			viewList: [],
 			orderCurrentPage: 1,
@@ -751,9 +751,9 @@ export default {
 					that.orderList = [...that.orderList, ...res.data.data];
 					that.orderTotalPage = res.data.last_page;
 					if (that.orderCurrentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});
@@ -770,9 +770,9 @@ export default {
 					that.viewList = [...that.viewList, ...res.data.data];
 					that.viewTotalPage = res.data.last_page;
 					if (that.viewCurrentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

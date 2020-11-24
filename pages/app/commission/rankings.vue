@@ -29,7 +29,7 @@
 					</view>
 				</view>
 				<!-- 更多 -->
-				<view v-if="rankingsList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<u-loadmore v-if="rankingsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 	</view>
@@ -46,7 +46,7 @@ export default {
 				2: 'http://shopro.7wpp.com/imgs/commission/03.png'
 			},
 			rankingsList: [], //排行榜
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -54,7 +54,7 @@ export default {
 	computed: {},
 	onLoad() {
 		this.getRankings();
-	}, 
+	},
 	methods: {
 		getRankings() {
 			let that = this;
@@ -64,9 +64,9 @@ export default {
 					that.rankingsList = [...that.rankingsList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

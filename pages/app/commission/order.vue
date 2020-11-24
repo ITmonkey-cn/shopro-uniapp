@@ -10,7 +10,7 @@
 		</view>
 		<view class="content_box">
 			<!-- 订单列表 -->
-			<view class="order-list" v-for="item in orderList" :key="item.id" >
+			<view class="order-list" v-for="item in orderList" :key="item.id">
 				<view class="order-head x-bc">
 					<text class="order-code">订单编号：{{ item.order_sn }}</text>
 					<text class="order-state">{{ item.status_name }}</text>
@@ -48,7 +48,7 @@
 			<!-- 缺省页 -->
 			<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
 			<!-- 更多 -->
-			<view v-if="orderList.length" class="cu-load text-gray" :class="loadStatus"></view>
+			<u-loadmore v-if="orderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 		</view>
 	</view>
 </template>
@@ -78,7 +78,7 @@ export default {
 				}
 			],
 			orderList: [], //分销订单
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
 			emptyData: {
@@ -125,9 +125,9 @@ export default {
 						that.emptyData.show = true;
 					}
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});

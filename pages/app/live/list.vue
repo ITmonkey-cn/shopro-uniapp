@@ -22,7 +22,8 @@
 					</template>
 				</u-waterfall>
 
-				<view v-if="liveList.length" class="cu-load text-gray" :class="loadStatus"></view>
+				<!-- 更多 -->
+				<u-loadmore v-if="liveList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box"></view>
@@ -62,7 +63,7 @@ export default {
 				}
 			],
 			liveList: [],
-			loadStatus: '', //loading,over
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
 		};
@@ -99,9 +100,9 @@ export default {
 					that.liveList = [...that.liveList, ...res.data.data];
 					that.lastPage = res.data.last_page;
 					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = '';
+						that.loadStatus = 'loadmore';
 					} else {
-						that.loadStatus = 'over';
+						that.loadStatus = 'nomore';
 					}
 				}
 			});
