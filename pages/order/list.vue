@@ -16,7 +16,7 @@
 						<text class="state">{{ order.status_name }}</text>
 					</view>
 					<view class="goods-order" v-for="goods in order.item" :key="goods.id">
-						<view class="order-content"><shopro-mini-card :type="'order'" :detail="goods"></shopro-mini-card></view>
+						<view class="order-content"><shopro-mini-card :type="'order'" :detail="goods" :orderType="order.type"></shopro-mini-card></view>
 					</view>
 					<view class="order-bottom">
 						<view class="all-msg x-f">

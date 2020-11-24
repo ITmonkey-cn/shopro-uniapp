@@ -77,7 +77,7 @@
 			<shopro-login-modal></shopro-login-modal>
 		</view>
 		<!-- 佣金中心权限验证 -->
-		<view class="auth-box cu-modal" :class="{ show: !hasAuth }">
+		<view class="auth-box cu-modal" :class="{ show: !hasAuth && authNotice.title }">
 			<view class="notice-box cu-dialog">
 				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
 				<view class="notice-title">{{ authNotice.title }}</view>
@@ -152,10 +152,10 @@ export default {
 			},
 			authNotice: {
 				//权限提示内容
-				img: 'http://shopro.7wpp.com/imgs/commission/auth_check.png',
-				title: '正在审核中！',
-				detail: '请耐心等候',
-				btnText: '知道了'
+				// img: 'http://shopro.7wpp.com/imgs/commission/auth_check.png',
+				// title: '正在审核中！',
+				// detail: '请耐心等候',
+				// btnText: '知道了'
 			},
 			menuList: [
 				//menu
@@ -298,16 +298,6 @@ export default {
 						btnPath: ''
 					};
 					break;
-				case 'null':
-					this.hasAuth = false;
-					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_stop.png',
-						title: '抱歉！你的账户已被禁用',
-						detail: data.msg,
-						btnText: '联系客服',
-						btnPath: '/pages/public/kefu/index'
-					};
-					break;
 				case 'needinfo':
 					this.hasAuth = false;
 					this.authNotice = {
@@ -348,15 +338,18 @@ export default {
 						btnPath: '/pages/public/kefu/index'
 					};
 					break;
-				default:
+				case null:
 					this.hasAuth = false;
 					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_perfect.png',
-						title: '待完善信息',
+						img: 'http://shopro.7wpp.com/imgs/commission/auth_freeze.png',
+						title: '123',
 						detail: data.msg,
-						btnText: '去完善',
-						btnPath: '/pages/app/commission/apply'
+						btnText: '联系客服',
+						btnPath: '/pages/public/kefu/index'
 					};
+					break;
+				default:
+					this.hasAuth = false;
 			}
 		},
 

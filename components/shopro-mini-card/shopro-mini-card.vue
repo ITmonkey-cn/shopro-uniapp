@@ -34,10 +34,16 @@
 			</view>
 		</view>
 		<view class="goods-box x-start" v-if="type === 'order'">
-			<image v-if="detail.activity_type" class="order-goods__tag" :src="orderStatus[detail.activity_type]" mode=""></image>
+			<view class="order-goods__tag">
+				<image v-if="detail.activity_type" class="tag-img" :src="orderStatus[detail.activity_type]" mode=""></image>
+				<image v-if="orderType === 'score'" class="tag-img" :src="orderStatus[orderType]" mode=""></image>
+			</view>
 			<image class="goods-img" :src="detail.goods_image || ''" mode="aspectFill"></image>
 			<view class="y-start order-right">
-				<view class="goods-title more-t">{{ detail.goods_title || '' }}</view>
+				<view class="goods-title more-t">
+					{{ detail.goods_title || '' }}
+					<text>{{ detail.type }}</text>
+				</view>
 				<view class="order-tip one-t">
 					<text class="order-num">数量:{{ detail.goods_num || 0 }};</text>
 					{{ detail.goods_sku_text ? detail.goods_sku_text : '' }}
@@ -66,14 +72,16 @@ export default {
 			routerTo: this.$Router,
 			orderStatus: {
 				seckill: 'http://shopro.7wpp.com/imgs/seckill_tag.png',
-				groupon: 'http://shopro.7wpp.com/imgs/groupon_tag.png'
+				groupon: 'http://shopro.7wpp.com/imgs/groupon_tag.png',
+				score: 'http://shopro.7wpp.com/imgs/score_tag.png'
 			}
 		};
 	},
 	props: {
 		detail: {},
 		sku: {},
-		type: ''
+		type: '',
+		orderType: ''
 	},
 	computed: {},
 	created() {},
@@ -102,9 +110,11 @@ export default {
 		position: absolute;
 		top: 0;
 		left: 0;
-		z-index: 3;
-		width: 60rpx;
-		height: 30rpx;
+		z-index: 5;
+		.tag-img {
+			width: 60rpx;
+			height: 30rpx;
+		}
 	}
 	.goods-title {
 		font-size: 28rpx;

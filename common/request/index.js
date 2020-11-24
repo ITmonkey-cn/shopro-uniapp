@@ -11,7 +11,7 @@ export default function api(url, data = {}) {
 			if (!token) {
 				store.commit('LOGIN_TIP', true)
 				store.commit('OUT_LOGIN');
-				throw('暂未登录,已阻止此次API请求~');
+				throw ('暂未登录,已阻止此次API请求~');
 			}
 		}
 		if (uni.getStorageSync('token')) {

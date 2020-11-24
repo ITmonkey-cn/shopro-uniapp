@@ -25,7 +25,7 @@
 				<!-- 订单信息 -->
 				<view class="order-list" v-for="order in orderDetail.item" :key="order.id">
 					<view class="order-card" @tap="jump('/pages/goods/detail/index', { id: order.goods_id })">
-						<shopro-mini-card :type="'order'" :detail="order"></shopro-mini-card>
+						<shopro-mini-card :type="'order'" :detail="order" :orderType="orderDetail.type"></shopro-mini-card>
 					</view>
 					<!-- 配送方式 -->
 					<view class="express-type-box x-bc">

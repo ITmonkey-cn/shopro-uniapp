@@ -315,7 +315,6 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.commentList = res.data.data;
-					console.log(that.commentList,1111111111);
 					that.commentNum = res.data.total;
 				}
 			});
