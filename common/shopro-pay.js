@@ -105,11 +105,11 @@ export default class ShoproPay {
 			api('pay.prepay', params).then(res => {
 				if (res.code === 1) {
 					if (res.data === 'no_openid') {
+						uni.hideLoading();
 						uni.showModal({
 							title: '微信支付',
 							content: '点击确定后请再次使用微信支付',
 							success: function(res) {
-
 								if (res.confirm) {
 									//静默获取openid
 									let wechat = new Wechat();

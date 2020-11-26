@@ -12,7 +12,13 @@ export default {
 		}
 	},
 	initJssdk: function(callback) {
-		let uri = encodeURIComponent(window.location.href); //获取当前url然后传递给后台获取授权和签名信息
+		let uri = '';
+		if (uni.getStorageSync('platform') === 'wxOfficialAccount' && uni.getSystemInfoSync().platform === 'ios') {
+			uri = encodeURIComponent(window.location.href.split('/pages')[0] + window.entryURL)
+		} else {
+			uri = encodeURIComponent(window.location.href); //获取当前url然后传递给后台获取授权和签名信息
+		}
+
 		api('wechat.jssdk', {
 			uri: uri
 		}).then(res => {

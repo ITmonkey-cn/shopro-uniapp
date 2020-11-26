@@ -37,5 +37,17 @@ router.beforeEach((to, from, next) => {
 
 })
 // 全局路由后置守卫
-router.afterEach((to, from) => {})
+router.afterEach((to, from) => {
+	// #ifdef H5
+	if (uni.getStorageSync('platform') === 'wxOfficialAccount' && uni.getSystemInfoSync().platform === 'ios' && !window.entryURL) {
+		//IOS sdk 校验
+		if (from.path === '/pages/index/index') {
+			window.entryURL = '/'
+		} else {
+			window.entryURL = from.path;
+		}
+		wxsdk.initJssdk();
+	}
+	// #endif
+})
 export default router;
