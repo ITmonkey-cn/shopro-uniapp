@@ -60,7 +60,7 @@ export default {
 
 <style lang="scss">
 .head-box {
-	background: url('http://shopro.7wpp.com/imgs/commission/draw_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/commission/draw_bg.png') no-repeat;
 	background-size: 100% auto;
 	height: 388rpx;
 	/deep/ .cu-back {

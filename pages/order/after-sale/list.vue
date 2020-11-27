@@ -60,7 +60,7 @@ export default {
 			currentPage: 1,
 			lastPage: 1,
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/empty_groupon.png',
+				img: this.$IMG_URL + '/imgs/empty/empty_groupon.png',
 				tip: '暂无相关记录~'
 			},
 			itemStatus: {

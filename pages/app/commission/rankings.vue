@@ -41,9 +41,9 @@ export default {
 	data() {
 		return {
 			rankingsIcon: {
-				0: 'http://shopro.7wpp.com/imgs/commission/01.png',
-				1: 'http://shopro.7wpp.com/imgs/commission/02.png',
-				2: 'http://shopro.7wpp.com/imgs/commission/03.png'
+				0: this.$IMG_URL + '/imgs/commission/01.png',
+				1: this.$IMG_URL + '/imgs/commission/02.png',
+				2: this.$IMG_URL + '/imgs/commission/03.png'
 			},
 			rankingsList: [], //排行榜
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
@@ -85,7 +85,7 @@ export default {
 
 <style lang="scss">
 .rankings-wrap {
-	background: url('http://shopro.7wpp.com/imgs/commission/rankings_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/commission/rankings_bg.png') no-repeat;
 	background-size: 100% auto;
 	height: 100%;
 	overflow: hidden;

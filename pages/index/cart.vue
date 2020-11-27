@@ -74,7 +74,7 @@ export default {
 		return {
 			isTool: false,
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/emptyCart.png',
+				img: this.$IMG_URL + '/imgs/empty/emptyCart.png',
 				tip: '购物车空空如也,快去逛逛吧~'
 			}
 		};
@@ -238,7 +238,7 @@ export default {
 			width: 100%;
 			height: 100%;
 			background-color: rgba(#fff, 0.8);
-			.icon-yishixiao{
+			.icon-yishixiao {
 				position: absolute;
 				bottom: 0rpx;
 				right: 80rpx;

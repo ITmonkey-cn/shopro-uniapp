@@ -1,7 +1,7 @@
 <template>
 	<view class="cu-modal" :class="[{ show: showModal }]" cathctouchmove @tap="hideModal">
 		<view class="cu-dialog cu-dialog1" @tap.stop style="background: none;overflow: visible;">
-			<image class="guide-img" src="http://shopro.7wpp.com/imgs/modal/share_guide.png" mode=""></image>
+			<image class="guide-img"  :src="$IMG_URL + '/imgs/modal/share_guide.png'" mode=""></image>
 		</view>
 	</view>
 </template>

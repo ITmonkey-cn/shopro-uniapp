@@ -51,7 +51,7 @@
 			<block slot="modalContent">
 				<view class="modal-box">
 					<view class="modal-head">
-						<image class="modal-head-img" src="http://shopro.7wpp.com/imgs/modal_bg.png" mode=""></image>
+						<image class="modal-head-img"  :src="$IMG_URL + '/imgs/modal_bg.png'" mode=""></image>
 						<text class="modal-head-title">提现金额</text>
 					</view>
 					<input class="inp" type="number" @input="onInput" v-model="money" placeholder="在此输入提现金额" placeholder-class="pl-inp" />
@@ -222,7 +222,7 @@ export default {
 		width: 695rpx;
 		height: 298rpx;
 		padding: 40rpx;
-		background: url('http://shopro.7wpp.com/imgs/money_wallet_bg.png') no-repeat;
+		background: url($IMG_URL+'/imgs/money_wallet_bg.png') no-repeat;
 		background-size: 100% 100%;
 		box-shadow: 0px 0px 12rpx 9rpx rgba(#f8dca5, 0.82);
 		border-radius: 30rpx;

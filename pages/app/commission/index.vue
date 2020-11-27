@@ -1,6 +1,6 @@
 <!-- 佣金中心 -->
 <template>
-	<view style="Gwidth:100%;height: 100%;">
+	<view style="width:100%;height: 100%;">
 		<view class="commission-wrap" :class="{ blur: !hasAuth }">
 			<cu-custom isBack></cu-custom>
 			<!-- 用户资料 -->
@@ -147,12 +147,12 @@ export default {
 			currentPage: 1,
 			lastPage: 1,
 			logMap: {
-				system: 'http://shopro.7wpp.com/imgs/commission/commission_base_notice.png',
-				admin: 'http://shopro.7wpp.com/imgs/commission/commission_base_avatar.png'
+				system: this.$IMG_URL + '/imgs/commission/commission_base_notice.png',
+				admin: this.$IMG_URL + '/imgs/commission/commission_base_avatar.png'
 			},
 			authNotice: {
 				//权限提示内容
-				// img: 'http://shopro.7wpp.com/imgs/commission/auth_check.png',
+				// img: this.$IMG_URL + '/imgs/commission/auth_check.png',
 				// title: '正在审核中！',
 				// detail: '请耐心等候',
 				// btnText: '知道了'
@@ -160,43 +160,43 @@ export default {
 			menuList: [
 				//menu
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon1.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon1.png',
 					title: '我的团队',
 					path: '/pages/app/commission/team'
 				},
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon2.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon2.png',
 					title: '佣金明细',
 					path: '/pages/app/commission/commission-log'
 				},
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon3.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon3.png',
 					title: '分销订单',
 					path: '/pages/app/commission/order'
 				},
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon4.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon4.png',
 					title: '推广商品',
 					path: '/pages/app/commission/goods'
 				},
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon5.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon5.png',
 					title: '我的资料',
 					path: '/pages/app/commission/apply',
 					isAgentFrom: true
 				},
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon6.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon6.png',
 					title: '分销排行',
 					path: '/pages/app/commission/rankings'
 				},
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon7.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon7.png',
 					title: '邀请海报',
 					path: '/pages/public/poster/index?posterType=user'
 				},
 				{
-					img: 'http://shopro.7wpp.com/imgs/commission/commission_icon8.png',
+					img: this.$IMG_URL + '/imgs/commission/commission_icon8.png',
 					title: '分享记录',
 					path: '/pages/app/commission/share-log'
 				}
@@ -281,7 +281,7 @@ export default {
 				case 'forbidden':
 					this.hasAuth = false;
 					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_stop.png',
+						img: this.$IMG_URL + '/imgs/commission/auth_stop.png',
 						title: '抱歉！你的账户已被禁用',
 						detail: data.msg,
 						btnText: '联系客服',
@@ -291,7 +291,7 @@ export default {
 				case 'pending':
 					this.hasAuth = false;
 					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_stop.png',
+						img: this.$IMG_URL + '/imgs/commission/auth_stop.png',
 						title: '正在审核中！',
 						detail: data.msg,
 						btnText: '知道了',
@@ -301,7 +301,7 @@ export default {
 				case 'needinfo':
 					this.hasAuth = false;
 					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_perfect.png',
+						img: this.$IMG_URL + '/imgs/commission/auth_perfect.png',
 						title: '待完善信息',
 						detail: data.msg,
 						btnText: '去完善',
@@ -311,7 +311,7 @@ export default {
 				case 'reject':
 					this.hasAuth = false;
 					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_reject.png',
+						img: this.$IMG_URL + '/imgs/commission/auth_reject.png',
 						title: '申请驳回',
 						detail: data.msg,
 						btnText: '修改资料',
@@ -321,7 +321,7 @@ export default {
 				case 'close':
 					this.hasAuth = false;
 					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_close.png',
+						img: this.$IMG_URL + '/imgs/commission/auth_close.png',
 						title: '分销中心已关闭',
 						detail: data.msg,
 						btnText: '我知道了',
@@ -331,7 +331,7 @@ export default {
 				case 'freeze':
 					this.hasAuth = false;
 					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_freeze.png',
+						img: this.$IMG_URL + '/imgs/commission/auth_freeze.png',
 						title: '抱歉！你的账户已被冻结',
 						detail: data.msg,
 						btnText: '联系客服',
@@ -339,17 +339,17 @@ export default {
 					};
 					break;
 				case null:
-					this.hasAuth = false;
-					this.authNotice = {
-						img: 'http://shopro.7wpp.com/imgs/commission/auth_freeze.png',
-						title: '123',
-						detail: data.msg,
-						btnText: '联系客服',
-						btnPath: '/pages/public/kefu/index'
-					};
+					this.hasAuth = true;
+					// this.authNotice = {
+					// 	img: this.$IMG_URL + '/imgs/commission/auth_freeze.png',
+					// 	title: '123',
+					// 	detail: data.msg,
+					// 	btnText: '联系客服',
+					// 	btnPath: '/pages/public/kefu/index'
+					// };
 					break;
 				default:
-					this.hasAuth = false;
+					this.hasAuth = true;
 			}
 		},
 
@@ -376,7 +376,7 @@ export default {
 
 <style lang="scss">
 .commission-wrap {
-	background: url('http://shopro.7wpp.com/imgs/commission/commission_bg1.jpg') no-repeat;
+	background: url($IMG_URL+'/imgs/commission/commission_bg1.jpg') no-repeat;
 	background-size: cover;
 	height: 100%;
 	width: 100%;
@@ -516,7 +516,7 @@ export default {
 	.condition-box {
 		width: 640rpx;
 		height: 786rpx;
-		background: url('http://shopro.7wpp.com/imgs/commission/into_commission.png') no-repeat;
+		background: url($IMG_URL+'/imgs/commission/into_commission.png') no-repeat;
 		background-size: 100% 100%;
 		position: fixed;
 		z-index: 1111;
@@ -630,7 +630,7 @@ export default {
 	min-height: 350rpx;
 	border-radius: 14rpx;
 	margin: 30rpx;
-	background: url('http://shopro.7wpp.com/imgs/commission/commission_card_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/commission/commission_card_bg.png') no-repeat;
 	background-size: 100% 100%;
 	padding-top: 10rpx;
 	.card-top {
@@ -800,11 +800,11 @@ export default {
 		}
 		.item-title {
 			font-size: 24rpx;
-			font-weight: 500;
-			color: #4e7fa0;
+			font-weight: 600;
+			color: #fff;
 			line-height: 30rpx;
 			margin-top: 16rpx;
-			text-shadow: 0 0 10rpx #fff, 0 0 10rpx #fff, 0 0 10rpx #fff, 0 0 10rpx #fff;
+			// text-shadow: 0 0 10rpx #fff, 0 0 10rpx #fff, 0 0 10rpx #fff, 0 0 10rpx #fff;
 		}
 	}
 }

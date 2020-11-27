@@ -91,7 +91,7 @@
 										<text>{{ message.message }}</text>
 									</view>
 									<view class="message-item x-f" :class="message.sender == 'me' ? 'message__right' : 'message__left'">
-										<view class="head-img"><image class="head-img" v-if="message.sender == 'you'" src="http://shopro.7wpp.com/imgs/kefu/sys_head.png" mode=""></image></view>
+										<view class="head-img"><image class="head-img" v-if="message.sender == 'you'"  :src="$IMG_URL + '/imgs/kefu/sys_head.png'" mode=""></image></view>
 										<view v-if="message.message_type != 3" class="bubble" :class="message.sender == 'me' ? 'me' : 'you'">
 											<!-- 除了商品/订单卡片和图片，其他的都使用富文本 -->
 											<u-parse
@@ -177,15 +177,15 @@
 						<!-- 更多 -->
 						<view v-if="showTool == 'more'" class="toolbar">
 							<view @tap="show_select_model('order')" v-if="config.toolbar && config.toolbar.order" class="toolbar_item">
-								<image class="tool-img" src="http://shopro.7wpp.com/imgs/kefu/kefu_order.png"></image>
+								<image class="tool-img"  :src="$IMG_URL + '/imgs/kefu/kefu_order.png'"></image>
 								<view>{{ config.toolbar.order.title }}</view>
 							</view>
 							<view @tap="show_select_model('goods')" v-if="config.toolbar && config.toolbar.goods" class="toolbar_item">
-								<image class="tool-img" src="http://shopro.7wpp.com/imgs/kefu/kefu_goods.png"></image>
+								<image class="tool-img" :src="$IMG_URL + '/imgs/kefu/kefu_goods.png'"></image>
 								<view>{{ config.toolbar.goods.title }}</view>
 							</view>
 							<view @tap="upload_file" v-if="config.toolbar && config.toolbar.file" class="toolbar_item">
-								<image class="tool-img" src="http://shopro.7wpp.com/imgs/kefu/kefu_file.png"></image>
+								<image class="tool-img"  :src="$IMG_URL + '/imgs/kefu/kefu_file.png'"></image>
 								<view>{{ config.toolbar.file.title }}</view>
 							</view>
 						</view>

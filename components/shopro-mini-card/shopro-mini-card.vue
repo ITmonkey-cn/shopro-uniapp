@@ -71,9 +71,9 @@ export default {
 		return {
 			routerTo: this.$Router,
 			orderStatus: {
-				seckill: 'http://shopro.7wpp.com/imgs/seckill_tag.png',
-				groupon: 'http://shopro.7wpp.com/imgs/groupon_tag.png',
-				score: 'http://shopro.7wpp.com/imgs/score_tag.png'
+				seckill: this.$IMG_URL + '/imgs/seckill_tag.png',
+				groupon: this.$IMG_URL + '/imgs/groupon_tag.png',
+				score: this.$IMG_URL + '/imgs/score_tag.png'
 			}
 		};
 	},

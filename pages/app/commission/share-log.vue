@@ -81,7 +81,7 @@ export default {
 			lastPage: 1,
 			emptyData: {
 				show: false,
-				img: 'http://shopro.7wpp.com/imgs/empty/no_data.png',
+				img: this.$IMG_URL + '/imgs/empty/no_data.png',
 				tip: '暂无数据',
 				path: '',
 				pathText: ''
@@ -141,7 +141,7 @@ export default {
 // nav
 .head_box {
 	height: 230rpx;
-	background: url('http://shopro.7wpp.com/imgs/commission/share_head_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/commission/share_head_bg.png') no-repeat;
 	background-size: 100% auto;
 	position: relative;
 

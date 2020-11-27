@@ -3,7 +3,7 @@
 	<view class="cu-modal" v-if="showLogin && !screenShot" :class="[{ show: showLogin }, modalType]" cathctouchmove @tap="hideModal">
 		<view class="cu-dialog" @tap.stop style="background: none;overflow: visible;">
 			<view class="modal-box">
-				<image class="head-bg" src="http://shopro.7wpp.com/imgs/nologin_bg.png" mode=""></image>
+				<image class="head-bg"  :src="$IMG_URL + '/imgs/nologin_bg.png'" mode=""></image>
 				<view class="detail">
 					<view class="title1">您还没有登录</view>
 					<view class="title2">登录即刻开启品质生活</view>
@@ -18,7 +18,7 @@
 	<!-- #endif  -->
 	<!-- #ifdef MP-WEIXIN  -->
 	<view class="force-login-wrap" v-if="forceOauth || showLogin">
-		<image class="logo-bg" src="http://shopro.7wpp.com/imgs/logo_bg.png" mode="aspectFill"></image>
+		<image class="logo-bg"  :src="$IMG_URL + '/imgs/logo_bg.png'" mode="aspectFill"></image>
 		<view class="force-login__content y-f">
 			<open-data class="user-avatar" type="userAvatarUrl"></open-data>
 			<open-data class="user-name" type="userNickName"></open-data>

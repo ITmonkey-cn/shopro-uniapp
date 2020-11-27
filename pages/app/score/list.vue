@@ -37,7 +37,7 @@ export default {
 		return {
 			scoreList: [],
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/empty_goods.png',
+				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
 				tip: '暂无积分商品',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'

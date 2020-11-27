@@ -83,7 +83,7 @@ export default {
 			lastPage: 1,
 			emptyData: {
 				show: false,
-				img: 'http://shopro.7wpp.com/imgs/empty/no_order.png',
+				img: this.$IMG_URL + '/imgs/empty/no_order.png',
 				tip: '暂无订单',
 				path: '',
 				pathText: ''

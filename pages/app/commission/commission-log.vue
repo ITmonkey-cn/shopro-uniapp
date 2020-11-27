@@ -121,7 +121,7 @@ export default {
 			lastPage: 1,
 			emptyData: {
 				show: false,
-				img: 'http://shopro.7wpp.com/imgs/empty/no_data.png',
+				img: this.$IMG_URL + '/imgs/empty/no_data.png',
 				tip: '暂无数据',
 				path: '',
 				pathText: ''
@@ -213,7 +213,7 @@ export default {
 .wallet-card {
 	width: 690rpx;
 	height: 301rpx;
-	background: url('http://shopro.7wpp.com/imgs/commission/commission_card_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/commission/commission_card_bg.png') no-repeat;
 	background-size: 100% 100%;
 	border-radius: 20rpx;
 	padding: 30rpx;

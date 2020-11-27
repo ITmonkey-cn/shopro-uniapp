@@ -6,7 +6,7 @@
 				<block slot="backText">积分余额</block>
 				<block slot="content"></block>
 			</cu-custom>
-			<image class="bg" src="http://shopro.7wpp.com/imgs/user/integral_bg.png" mode=""></image>
+			<image class="bg"  :src="$IMG_URL + '/imgs/user/integral_bg.png'" mode=""></image>
 			<view class="all-box x-c">
 				<text class="all-num">{{ score }}</text>
 				<text class="all-title">当前积分</text>

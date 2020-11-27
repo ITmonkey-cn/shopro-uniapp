@@ -71,7 +71,7 @@
 						<view class="tag" v-if="index == 0">团长</view>
 						<image class="avatar" :class="{ leader: index == 0 }" :src="team.user_avatar" mode="aspectFill"></image>
 					</view>
-					<view class="img-box" v-for="base in surplusNum" :key="base"><image class="avatar" src="http://shopro.7wpp.com/imgs/groupon/base_groupon.png" mode="aspectFill"></image></view>
+					<view class="img-box" v-for="base in surplusNum" :key="base"><image class="avatar"  :src="$IMG_URL + '/imgs/groupon/base_groupon.png'" mode="aspectFill"></image></view>
 				</view>
 				<view class="btn-box x-c">
 					<!-- 拼团中 -->
@@ -201,7 +201,7 @@ export default {
 
 <style lang="scss">
 .head_box {
-	background: url('http://shopro.7wpp.com/imgs/group_detail_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/group_detail_bg.png') no-repeat;
 	background-size: 100% 316rpx;
 	padding: 60rpx 20rpx 20rpx;
 	.goods-card {

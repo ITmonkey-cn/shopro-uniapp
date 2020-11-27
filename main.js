@@ -6,7 +6,8 @@ import router from '@/common/router'
 import tools from '@/common/utils/tools'
 import '@/common/utils/sdk/sdk-h5.js'
 import {
-	API_URL
+	API_URL,
+	IMG_URL
 } from './env.js'
 
 //引入全局uView
@@ -25,6 +26,7 @@ Vue.prototype.$store = store;
 Vue.prototype.$api = api;
 Vue.prototype.$tools = tools;
 Vue.prototype.$API_URL = API_URL;
+Vue.prototype.$IMG_URL = IMG_URL;
 
 Vue.component('cu-custom', cuCustom);
 Vue.config.productionTip = false;

@@ -106,7 +106,7 @@ export default {
 		return {
 			emptyData: {
 				show: false,
-				img: 'http://shopro.7wpp.com/imgs/empty/no_team.png',
+				img:this.$IMG_URL + '/imgs/empty/no_team.png',
 				tip: '暂无团队人员',
 				path: '',
 				pathText: ''
@@ -269,7 +269,7 @@ export default {
 }
 // 头部卡片
 .head_box {
-	background: url('http://shopro.7wpp.com/imgs/commission/card_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/commission/card_bg.png') no-repeat;
 	background-size: 100% auto;
 
 	/deep/ .cu-back {

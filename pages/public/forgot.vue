@@ -2,7 +2,7 @@
 <template>
 	<view class="container">
 		<!-- 背景图 -->
-		<view class="x-c"><image class="logo-bg" src="http://shopro.7wpp.com/imgs/logo_bg.png" mode=""></image></view>
+		<view class="x-c"><image class="logo-bg"  :src="$IMG_URL + '/imgs/logo_bg.png'" mode=""></image></view>
 		<!-- titleview -->
 		<view class="head-box"><cu-custom :isBack="true"></cu-custom></view>
 		<view class="wrapper">

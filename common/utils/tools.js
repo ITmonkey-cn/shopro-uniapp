@@ -288,7 +288,7 @@ export default {
 	 *options(其它参数)
 	 */
 	toast(title, icon = 'none', options) {
-		wx.showToast({
+		uni.showToast({
 			title: title || '',
 			icon: icon,
 			duration: (options && options.duration) || 1500,

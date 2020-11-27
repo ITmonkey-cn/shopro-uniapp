@@ -16,8 +16,8 @@
 			</view>
 		</view>
 		<view class="wallet-item y-f wallet-right" @tap="jump('/pages/user/wallet/index')">
-			<image class="cut-off--line" src="http://shopro.7wpp.com/imgs/user/cut_off_line.png" mode=""></image>
-			<image class="wallet-img" src="http://shopro.7wpp.com/imgs/user/wallet.png" mode="aspectFill"></image>
+			<image class="cut-off--line"  :src="$IMG_URL + '/imgs/user/cut_off_line.png'" mode=""></image>
+			<image class="wallet-img"  :src="$IMG_URL + '/imgs/user/wallet.png'" mode="aspectFill"></image>
 			<text class="wallet-item__title">我的钱包</text>
 		</view>
 	</view>

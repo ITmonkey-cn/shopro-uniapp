@@ -3,14 +3,14 @@
 	<view class="page_box">
 		<view class="head_box" v-if="orderPre.need_address">
 			<view class="add-address-box flex-sub x-f" v-if="!addressId" @tap="jump('/pages/user/address/list', { from: 'order' })">
-				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
+				<image class="address-bg"  :src="$IMG_URL + '/imgs/address_line.png'" mode=""></image>
 				<view class="box-bg x-bc flex-sub pad">
 					<text class="select-notice">请选择收货地址</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
 			<view class="address-list" v-else @tap="jump('/pages/user/address/list', { from: 'order' })">
-				<image class="address-bg" src="http://shopro.7wpp.com/imgs/address_line.png" mode=""></image>
+				<image class="address-bg"  :src="$IMG_URL + '/imgs/address_line.png'" mode=""></image>
 				<view class="top x-f">
 					<text class="name">{{ address.consignee }}</text>
 					<text class="phone">{{ address.phone }}</text>
@@ -130,7 +130,7 @@
 								</view>
 
 								<view class="address-location">
-									<image class="location-img" src="http://shopro.7wpp.com/imgs/order/e0.png" mode=""></image>
+									<image class="location-img"  :src="$IMG_URL + '/imgs/order/e0.png'" mode=""></image>
 									<text class="location-text">物流快递</text>
 								</view>
 							</view>
@@ -146,7 +146,7 @@
 						<view class="express-address" v-if="expressTypeCur == 'selfetch'">
 							<!-- 定位 -->
 							<view class="y-f location-box" v-if="!hasLocation">
-								<image class="nolocation-img" src="http://shopro.7wpp.com/imgs/order/location.png" mode=""></image>
+								<image class="nolocation-img"  :src="$IMG_URL + '/imgs/order/location.png'" mode=""></image>
 								<text class="location-title">开启定位服务</text>
 								<text class="location-tip">为你推荐更精准的位置信息噢~</text>
 								<button class="cu-btn open-location" @tap="getLocation">去开启</button>
@@ -160,7 +160,7 @@
 										<text class="cuIcon-right address-guide"></text>
 									</view>
 									<view class="address-location">
-										<image class="location-img" src="http://shopro.7wpp.com/imgs/order/e1.png" mode=""></image>
+										<image class="location-img"  :src="$IMG_URL + '/imgs/order/e1.png'" mode=""></image>
 										<text class="location-text">距您{{ storeInfo.distance_text || 0 }}</text>
 									</view>
 								</view>
@@ -202,7 +202,7 @@
 								</view>
 
 								<view class="address-location">
-									<image class="location-img" src="http://shopro.7wpp.com/imgs/order/e2.png" mode=""></image>
+									<image class="location-img"  :src="$IMG_URL + '/imgs/order/e2.png'" mode=""></image>
 									<text class="location-text">商家配送</text>
 								</view>
 							</view>
@@ -230,7 +230,7 @@
 							<view class="express-top x-bc">
 								<text class="dispatch-notice">订单支付完成后，请在订单详情页查看发货信息</text>
 								<view class="address-location">
-									<image class="location-img" src="http://shopro.7wpp.com/imgs/order/e3.png" mode=""></image>
+									<image class="location-img"  :src="$IMG_URL + '/imgs/order/e3.png'" mode=""></image>
 									<text class="location-text">自动发货</text>
 								</view>
 							</view>
@@ -1146,7 +1146,7 @@ export default {
 		.express-address {
 			position: relative;
 			padding: 30rpx 25rpx;
-			background: url('http://shopro.7wpp.com/imgs/address_bg.png') no-repeat;
+			background: url($IMG_URL+'/imgs/address_bg.png') no-repeat;
 			background-size: 430rpx 300rpx;
 			background-position: top right;
 			.express-top {

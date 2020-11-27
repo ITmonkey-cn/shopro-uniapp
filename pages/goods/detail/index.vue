@@ -103,7 +103,7 @@
 			<view class="score-foot-box x-f" v-if="!showSku && !showServe && detailType === 'score'">
 				<view class="left x-f">
 					<view class="tools-item y-f" @tap="goHome">
-						<image class="tool-img" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
+						<image class="tool-img" :src="$IMG_URL + '/imgs/tabbar/tab_home_sel.png'" mode=""></image>
 						<text class="tool-title">首页</text>
 					</view>
 				</view>
@@ -115,19 +115,15 @@
 			<view class="detail-foot_box  x-f" v-if="!showSku && !showServe && detailType !== 'score'">
 				<view class="left x-f">
 					<view class="tools-item y-f" @tap="goHome">
-						<image class="tool-img shopro-selector-circular" src="http://shopro.7wpp.com/imgs/tabbar/tab_home_sel.png" mode=""></image>
+						<image class="tool-img shopro-selector-circular" :src="$IMG_URL + '/imgs/tabbar/tab_home_sel.png'" mode=""></image>
 						<text class="tool-title shopro-selector-rect">首页</text>
 					</view>
 					<view class="tools-item y-f" @tap="onFavorite(goodsInfo.id)">
-						<image
-							class="tool-img"
-							:src="Boolean(goodsInfo.favorite) ? 'http://shopro.7wpp.com/imgs/favorite_end.png' : 'http://shopro.7wpp.com/imgs/favorite.png'"
-							mode=""
-						></image>
+						<image class="tool-img" :src="Boolean(goodsInfo.favorite) ? $IMG_URL + '/imgs/favorite_end.png' : $IMG_URL + '/imgs/favorite.png'" mode=""></image>
 						<text class="tool-title">收藏</text>
 					</view>
 					<view class="tools-item y-f" @tap="onShare">
-						<image class="tool-img" src="http://shopro.7wpp.com/imgs/share.png" mode=""></image>
+						<image class="tool-img" :src="$IMG_URL + '/imgs/share.png'" mode=""></image>
 						<text class="tool-title">分享</text>
 					</view>
 				</view>
@@ -207,7 +203,7 @@ export default {
 			swiperCurrent: 0, //轮播下标
 			tabCurrent: 'tab0',
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/comment_empty.png',
+				img: this.$IMG_URL + '/imgs/empty/comment_empty.png',
 				tip: '暂无评价~'
 			},
 			tabList: [

@@ -11,7 +11,7 @@
 			</view>
 			<view class="order-item y-f" @tap="jump('/pages/order/after-sale/list')">
 				<view class="y-f item-box">
-					<image class="order-img" src="http://shopro.7wpp.com/imgs/user/tab55.png" mode=""></image>
+					<image class="order-img"  :src="$IMG_URL + '/imgs/user/tab55.png'" mode=""></image>
 					<text class="item-title">退换货</text>
 					<!-- <view class="cu-tag badge"></view> -->
 				</view>
@@ -19,9 +19,9 @@
 		</view>
 
 		<view class="order-item y-f all-order" @tap="jump('/pages/order/list', { type: 'all' })">
-			<image class="cut-off--line" src="http://shopro.7wpp.com/imgs/user/cut_off_line.png" mode=""></image>
+			<image class="cut-off--line"  :src="$IMG_URL + '/imgs/user/cut_off_line.png'" mode=""></image>
 			<view class="y-f item-box">
-				<image class="order-img" src="http://shopro.7wpp.com/imgs/user/all_order.png" mode="aspectFill"></image>
+				<image class="order-img"  :src="$IMG_URL + '/imgs/user/all_order.png'" mode="aspectFill"></image>
 				<text class="item-title">全部订单</text>
 				<!-- <view class="cu-tag badge" v-if="orderNum[order.type]">{{ orderNum[order.type] }}</view> -->
 			</view>
@@ -43,31 +43,31 @@ export default {
 				{
 					id: 1,
 					title: '待付款',
-					img: 'http://shopro.7wpp.com/imgs/user/tab11.png',
+					img: this.$IMG_URL + '/imgs/user/tab11.png',
 					type: 'nopay'
 				},
 				// {
 				// 	id: 2,
 				// 	title: '待发货',
-				// 	img: 'http://shopro.7wpp.com/imgs/user/tab22.png',
+				// 	img: this.$IMG_URL + '/imgs/user/tab22.png',
 				// 	type: 'nosend'
 				// },
 				{
 					id: 3,
 					title: '待收货',
-					img: 'http://shopro.7wpp.com/imgs/user/tab33.png',
+					img: this.$IMG_URL + '/imgs/user/tab33.png',
 					type: 'noget'
 				},
 				{
 					id: 4,
 					title: '待评价',
-					img: 'http://shopro.7wpp.com/imgs/user/tab44.png',
+					img: this.$IMG_URL + '/imgs/user/tab44.png',
 					type: 'nocomment'
 				}
 				// {
 				// 	id: 5,
 				// 	title: '退换货',
-				// 	img: 'http://shopro.7wpp.com/imgs/user/tab55.png',
+				// 	img: this.$IMG_URL + '/imgs/user/tab55.png',
 				// 	type: 'aftersale'
 				// }
 			]

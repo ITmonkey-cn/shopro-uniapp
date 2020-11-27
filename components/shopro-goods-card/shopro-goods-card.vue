@@ -26,8 +26,8 @@ export default {
 	data() {
 		return {
 			tagPath: {
-				groupon: 'http://shopro.7wpp.com/imgs/groupon_tag.png',
-				seckill: 'http://shopro.7wpp.com/imgs/seckill_tag.png'
+				groupon: this.$IMG_URL + '/imgs/groupon_tag.png',
+				seckill: this.$IMG_URL + '/imgs/seckill_tag.png'
 			}
 		};
 	},

@@ -53,7 +53,7 @@ export default {
 			routerTo: this.$Router,
 			selList: [],
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/empty_goods.png',
+				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
 				tip: '暂无收藏商品，赶紧去收藏好货吧~'
 			},
 			favoriteList: [],

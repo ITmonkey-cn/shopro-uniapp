@@ -32,7 +32,7 @@ export default {
 			lastPage: 1,
 			emptyData: {
 				show: false,
-				img: 'http://shopro.7wpp.com/imgs/empty/no_data.png',
+				img: this.$IMG_URL + '/imgs/empty/no_data.png',
 				tip: '暂无数据',
 				path: '',
 				pathText: ''

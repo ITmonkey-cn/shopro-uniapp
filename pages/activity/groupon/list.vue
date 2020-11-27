@@ -63,7 +63,7 @@ export default {
 	data() {
 		return {
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/empty_goods.png',
+				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
 				tip: '还没有拼团商品噢，去首页看看吧~',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'
@@ -121,7 +121,7 @@ export default {
 
 <style lang="scss">
 .group-wrap {
-	background: url('http://shopro.7wpp.com/imgs/group_list_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/group_list_bg.png') no-repeat;
 	background-size: 100% 374rpx;
 }
 .group-head {

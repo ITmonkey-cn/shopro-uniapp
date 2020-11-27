@@ -6,7 +6,7 @@
 			<!-- 订单状态 -->
 			<view class="detail-head" :style="orderDetail.consignee ? '' : 'height:120rpx'">
 				<view class="state-box x-f">
-					<image class="state-img" src="http://shopro.7wpp.com/imgs/order_state1.png" mode=""></image>
+					<image class="state-img"  :src="$IMG_URL + '/imgs/order_state1.png'" mode=""></image>
 					<text>{{ orderDetail.status_desc }}</text>
 				</view>
 			</view>

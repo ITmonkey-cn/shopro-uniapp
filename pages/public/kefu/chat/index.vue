@@ -128,17 +128,17 @@
 					class="flex-sub tools-item"
 				>
 					<view class="tools-item flex-sub" slot="addBtn">
-						<image class="item-img" src="http://shopro.7wpp.com/imgs/chat/imgs_icon.png" mode=""></image>
+						<image class="item-img"  :src="$IMG_URL + '/imgs/chat/imgs_icon.png'" mode=""></image>
 						<text class="item-title">图片</text>
 					</view>
 				</u-upload>
 
 				<view class="tools-item flex-sub" @tap="onToolItem('goods')">
-					<image class="item-img" src="http://shopro.7wpp.com/imgs/chat/goods_icon.png" mode=""></image>
+					<image class="item-img"  :src="$IMG_URL + '/imgs/chat/goods_icon.png'" mode=""></image>
 					<text class="item-title">商品</text>
 				</view>
 				<view class="tools-item flex-sub" @tap="onToolItem('order')">
-					<image class="item-img" src="http://shopro.7wpp.com/imgs/chat/order_icon.png" mode=""></image>
+					<image class="item-img"  :src="$IMG_URL + '/imgs/chat/order_icon.png'" mode=""></image>
 					<text class="item-title">订单</text>
 				</view>
 			</view>
@@ -259,22 +259,22 @@ export default {
 				//工具栏列表
 				{
 					id: 'imgs',
-					image: 'http://shopro.7wpp.com/imgs/chat/imgs_icon.png',
+					image: this.$IMG_URL + '/imgs/chat/imgs_icon.png',
 					title: '图片'
 				},
 				{
 					id: 'goods',
-					image: 'http://shopro.7wpp.com/imgs/chat/goods_icon.png',
+					image: this.$IMG_URL + '/imgs/chat/goods_icon.png',
 					title: '商品'
 				},
 				{
 					id: 'order',
-					image: 'http://shopro.7wpp.com/imgs/chat/order_icon.png',
+					image: this.$IMG_URL + '/imgs/chat/order_icon.png',
 					title: '订单'
 				},
 				{
 					id: 'file',
-					image: 'http://shopro.7wpp.com/imgs/chat/file_icon.png',
+					image: this.$IMG_URL + '/imgs/chat/file_icon.png',
 					title: '文件'
 				}
 			],

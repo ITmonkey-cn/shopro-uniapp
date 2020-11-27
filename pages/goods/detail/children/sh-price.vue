@@ -19,7 +19,7 @@
 		<!-- 积分商品 -->
 		<view class="score-price-card" v-if="type === 'score'">
 			<view class="x-f">
-				<image class="score-img" src="http://shopro.7wpp.com/imgs/score.png" mode=""></image>
+				<image class="score-img" :src="$IMG_URL + '/imgs/score.png'" mode=""></image>
 				<text class="price">{{ detail.price }}</text>
 			</view>
 			<view class="x-bc price-bottom-box">
@@ -186,7 +186,7 @@ export default {
 // 正常商品
 .normal-price-box {
 	padding: 20rpx;
-	background: url('http://shopro.7wpp.com/imgs/price_normal_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/price_normal_bg.png') no-repeat;
 	background-size: 100% 100%;
 	.unit,
 	.notice {
@@ -222,7 +222,7 @@ export default {
 // 团购商品
 .groupon-price-box {
 	padding: 20rpx;
-	background: url('http://shopro.7wpp.com/imgs/group_price_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/group_price_bg.png') no-repeat;
 	background-size: 100% 100%;
 	.unit,
 	.notice {
@@ -264,7 +264,7 @@ export default {
 // 积分商品价格卡片
 .score-price-card {
 	padding: 20rpx;
-	background: url('http://shopro.7wpp.com/imgs/detail/671e3bc4581f0b35791f382e4b5c2a8.png') no-repeat;
+	background: url($IMG_URL+'/imgs/detail/671e3bc4581f0b35791f382e4b5c2a8.png') no-repeat;
 	background-size: 100% 100%;
 	width: 750rpx;
 	.notice {
@@ -301,11 +301,11 @@ export default {
 }
 // 秒杀商品
 .seckill-bg {
-	background: url('http://shopro.7wpp.com/imgs/price_seckill_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/price_seckill_bg.png') no-repeat;
 	background-size: 100% 100%;
 }
 .seckilled-bg {
-	background: url('http://shopro.7wpp.com/imgs/price_seckilled_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/price_seckilled_bg.png') no-repeat;
 	background-size: 100% 100%;
 }
 .seckill-price-box {

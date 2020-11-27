@@ -55,7 +55,7 @@ export default {
 	data() {
 		return {
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/empty_goods.png',
+				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
 				tip: '暂无秒杀商品，敬请期待~'
 			},
 			isLoading: true,

@@ -47,31 +47,31 @@ export default {
 			liveList: [],
 			liveStatus: {
 				'101': {
-					img: 'http://shopro.7wpp.com/imgs/live/live.png',
+					img: this.$IMG_URL + '/imgs/live/live.png',
 					title: '直播中'
 				},
 				'102': {
-					img: 'http://shopro.7wpp.com/imgs/live/prevue.png',
+					img: this.$IMG_URL + '/imgs/live/prevue.png',
 					title: '未开始'
 				},
 				'103': {
-					img: 'http://shopro.7wpp.com/imgs/live/playback.png',
+					img: this.$IMG_URL + '/imgs/live/playback.png',
 					title: '已结束'
 				},
 				'104': {
-					img: 'http://shopro.7wpp.com/imgs/live/104.png',
+					img: this.$IMG_URL + '/imgs/live/104.png',
 					title: '禁播'
 				},
 				'105': {
-					img: 'http://shopro.7wpp.com/imgs/live/105.png',
+					img: this.$IMG_URL + '/imgs/live/105.png',
 					title: '暂停中'
 				},
 				'106': {
-					img: 'http://shopro.7wpp.com/imgs/live/106.png',
+					img: this.$IMG_URL + '/imgs/live/106.png',
 					title: '异常'
 				},
 				'107': {
-					img: 'http://shopro.7wpp.com/imgs/live/past.png',
+					img: this.$IMG_URL + '/imgs/live/past.png',
 					title: '已过期'
 				}
 			}

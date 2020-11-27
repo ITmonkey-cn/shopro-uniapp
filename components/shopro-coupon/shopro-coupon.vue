@@ -78,7 +78,7 @@ export default {
 <style lang="scss">
 // 未领取，已领取
 .coupon-wrap {
-	background: url('http://shopro.7wpp.com/imgs/coupon_bg1.png') no-repeat;
+	background: url($IMG_URL+'/imgs/coupon_bg1.png') no-repeat;
 	background-size: 100% 100%;
 	position: relative;
 	border-radius: 10rpx;
@@ -152,7 +152,7 @@ export default {
 .close-wrap {
 	position: relative;
 	border-radius: 10rpx;
-	background: url('http://shopro.7wpp.com/imgs/coupon_bg2.png') no-repeat;
+	background: url($IMG_URL+'/imgs/coupon_bg2.png') no-repeat;
 	background-size: 100% 100%;
 
 	.coupon-item {

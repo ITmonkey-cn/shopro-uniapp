@@ -135,7 +135,7 @@ export default {
 					that.protocol = res.data.apply_protocol; //表单协议同
 					that.formList = res.data.apply_info; //表单
 					that.hasPostBtn = res.data.apply_status; //是否显示提交按钮
-					that.formHeadImg = res.data.background_image ? res.data.background_image : 'http://shopro.7wpp.com/imgs/commission/apply_bg.png'; //头部背景
+					that.formHeadImg = res.data.background_image ? res.data.background_image : this.$IMG_URL + '/imgs/commission/apply_bg.png'; //头部背景
 					that.initRules(); //规则
 					that.$refs.uForm.setRules(that.rules);
 				}

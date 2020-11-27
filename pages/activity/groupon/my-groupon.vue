@@ -73,7 +73,7 @@ export default {
 			lastPage: 1,
 			currentPage: 1,
 			emptyData: {
-				img: 'http://shopro.7wpp.com/imgs/empty/empty_groupon.png',
+				img: this.$IMG_URL + '/imgs/empty/empty_groupon.png',
 				tip: '暂无此类拼团商品，更多拼团好货等着你噢~',
 				path: '/pages/index/index',
 				pathText: '去首页逛逛'
@@ -81,9 +81,9 @@ export default {
 			showShare: false,
 			stateId: 'all',
 			grouponStatus: {
-				finish: 'http://shopro.7wpp.com/imgs/group_state_succeed.png',
-				'finish-fictitious': 'http://shopro.7wpp.com/imgs/group_state_succeed.png',
-				invalid: 'http://shopro.7wpp.com/imgs/group_state_failed.png'
+				finish: this.$IMG_URL + '/imgs/group_state_succeed.png',
+				'finish-fictitious': this.$IMG_URL + '/imgs/group_state_succeed.png',
+				invalid: this.$IMG_URL + '/imgs/group_state_failed.png'
 			},
 			myGrouponList: [], //我的拼团列表。
 			shareGoodsInfo: {}, //分享海报信息。

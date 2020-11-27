@@ -6,13 +6,13 @@
 					<view class="share-list-box x-f">
 						<!-- #ifdef MP-WEIXIN -->
 						<button class="share-item share-btn y-f" open-type="share">
-							<image class="share-img" src="http://shopro.7wpp.com/imgs/share_wx.png" mode=""></image>
+							<image class="share-img"  :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
 							<text class="share-title">微信好友</text>
 						</button>
 						<!-- #endif -->
 						<!-- #ifndef MP-WEIXIN  -->
 						<view class="share-item y-f" @tap="share">
-							<image class="share-img" src="http://shopro.7wpp.com/imgs/share_wx.png" mode=""></image>
+							<image class="share-img"  :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
 							<text class="share-title">微信好友</text>
 						</view>
 						<!-- #endif -->
@@ -30,12 +30,12 @@
 								})
 							"
 						>
-							<image class="share-img" src="http://shopro.7wpp.com/imgs/share_poster.png" mode=""></image>
+							<image class="share-img"  :src="$IMG_URL + '/imgs/share_poster.png'" mode=""></image>
 							<text class="share-title">分享海报</text>
 						</view>
 
 						<view class="share-item y-f" @tap="copySharePath">
-							<image class="share-img" src="http://shopro.7wpp.com/imgs/share_link.png" mode=""></image>
+							<image class="share-img"  :src="$IMG_URL + '/imgs/share_link.png'" mode=""></image>
 							<text class="share-title">复制链接</text>
 						</view>
 					</view>
