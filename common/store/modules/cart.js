@@ -153,7 +153,26 @@ const getters = {
 			}
 		})
 		return isSel
+	},
+
+	// 活动商品唯一选中可以结算
+	isActivityPay() {
+		let num = 0
+		let activityNum = 0
+		state.cartList.map(item => {
+			if (item.checked) {
+				num += 1
+				if (item.cart_type === 'activity') {
+					activityNum += 1
+				}
+			}
+		})
+		if ((num === 1 && activityNum === 1) || activityNum === 0) {
+			return true
+		}
+		return false
 	}
+
 }
 
 export default {

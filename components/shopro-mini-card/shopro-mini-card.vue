@@ -12,6 +12,7 @@
 			</view>
 		</view>
 		<view class="goods-box x-start" v-if="type === 'sku'" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
+			<view class="order-goods__tag"><image v-if="orderType" class="tag-img" :src="orderStatus[orderType]" mode=""></image></view>
 			<image class="goods-img" :src="sku.image ? sku.image : detail.image" mode=""></image>
 			<view class="y-start">
 				<view class="goods-title more-t">{{ detail.title }}</view>

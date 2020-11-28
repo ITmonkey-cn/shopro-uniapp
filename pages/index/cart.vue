@@ -26,8 +26,11 @@
 						<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
 					</view>
 					<view class="goods-wrap">
-						<view class="lose-box" v-if="g.is_invalid"><text class="iconfont icon-yishixiao"></text></view>
-						<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'">
+						<view class="lose-box" v-if="g.cart_type === 'invalid' || (g.cart_type === 'activity' && !isActivityPay)">
+							<text v-if="g.cart_type === 'invalid'" class="iconfont icon-yishixiao"></text>
+							<view v-if="g.cart_type === 'activity' && !isActivityPay" class="invalid-tips x-c">活动商品,仅支持单独购买</view>
+						</view>
+						<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'" :orderType="g.activity_type">
 							<block slot="goodsBottom">
 								<view class="x-bc price-box">
 									<view class="price">￥{{ g.sku_price.price }}</view>
@@ -84,7 +87,7 @@ export default {
 			cartList: ({ cart }) => cart.cartList,
 			allSel: ({ cart }) => cart.allSelected
 		}),
-		...mapGetters(['totalCount', 'isSel'])
+		...mapGetters(['totalCount', 'isSel', 'isActivityPay'])
 	},
 	onLoad() {
 		this.getCartList();
@@ -246,6 +249,19 @@ export default {
 				line-height: 140rpx;
 				color: #dbdbdb;
 				transform: rotate(-30deg);
+			}
+			.invalid-tips {
+				position: absolute;
+				top: 0;
+				right: 0;
+				left: 0;
+				bottom: 0;
+				margin: auto;
+				width: 400rpx;
+				height: 60rpx;
+				border-radius: 30rpx;
+				color: #fff;
+				background-color: rgba(#000, 0.35);
 			}
 		}
 	}
