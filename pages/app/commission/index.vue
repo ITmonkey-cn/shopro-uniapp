@@ -7,7 +7,7 @@
 			<view class="user-card">
 				<view class="card-top x-f">
 					<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode="widthFix"></image></view>
-					<view class="y-start">
+					<view class="y-start" @tap="jump('/pages/app/commission/level')">
 						<view class="user-info-box x-f">
 							<view class="user-name">{{ userInfo.nickname }}</view>
 							<view class="grade-tag tag-box x-f" v-if="commissionLv">
@@ -396,6 +396,7 @@ export default {
 		color: #c7b2ff;
 		line-height: 30rpx;
 		margin-top: 10rpx;
+		white-space: nowrap;
 	}
 	.cu-progress {
 		width: 150rpx;

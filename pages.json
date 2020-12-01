@@ -267,6 +267,20 @@
 					}
 				},
 				{
+					"path": "commission/level",
+					"style": {
+						"navigationBarTitleText": "分销等级",
+						"navigationStyle": "custom",
+						"navigationBarTextStyle": "white"
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "分销等级",
+						"group": "用户"
+					}
+				},
+				{
 					"path": "commission/team",
 					"style": {
 						"navigationBarTitleText": "我的团队",
