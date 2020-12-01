@@ -56,7 +56,12 @@ export default {
 			if (this.tabbarList.length) {
 				let arr = [];
 				let pages = getCurrentPages();
-				let currentPath = '/' + pages[pages.length - 1].route;
+				// #ifdef H5
+				let currentPath = '/' + pages[pages.length - 1].__page__.fullPath;
+				// #endif
+				// #ifdef MP-WEIXIN || APP-VUE
+				let currentPath = '/' + pages[pages.length - 1].$page.fullPath;
+				// #endif
 				for (let item of this.tabbarList) {
 					arr.push(item.path.split('?')[0]);
 				}
@@ -80,7 +85,7 @@ export default {
 	},
 	methods: {
 		getCategory() {
-			this.$api('category', {
+			this.$api('category.detail', {
 				id: this.categoryId
 			}).then(res => {
 				if (res.code === 1) {

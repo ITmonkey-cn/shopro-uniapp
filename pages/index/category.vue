@@ -51,7 +51,7 @@ export default {
 		 *  type4:三级分类， type3:二级分类 ,type2:一级分类,type1:快速购买
 		 */
 		getCategory() {
-			this.$api('category', {
+			this.$api('category.info', {
 				id: this.$Route.query.id
 			}).then(res => {
 				if (res.code === 1) {

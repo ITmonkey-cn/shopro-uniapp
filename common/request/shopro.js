@@ -130,19 +130,26 @@ export default {
 		// desc: '富文本数据',
 	},
 
-	/** 三级分类 ↓ **/
+	/** 分类 ↓ **/
 	category: {
-		url: 'category',
-		auth: false,
-		method: 'GET',
-		// desc: '三级分类',
-	},
-	/** 二级分类 ↓ **/
-	categoryGoods: {
-		url: 'category/goods',
-		auth: false,
-		method: 'GET',
-		// desc: '点餐用',
+		info: {
+			url: 'category/detail',
+			auth: false,
+			method: 'GET',
+			// desc: '分类类别',
+		},
+		detail: {
+			url: 'category',
+			auth: false,
+			method: 'GET',
+			// desc: '分类详情',
+		},
+		goods: {
+			url: 'category/goods',
+			auth: false,
+			method: 'GET',
+			// desc: '点餐用',
+		}
 	},
 
 	/** 积分商城 ↓ **/
@@ -770,13 +777,13 @@ export default {
 			method: 'GET',
 			// desc: '分享记录',
 		},
-		order:{
+		order: {
 			url: 'commission.reward/order',
 			auth: true,
 			method: 'GET',
 			// desc: '分销订单',
 		},
-		rewardLog:{
+		rewardLog: {
 			url: 'commission.reward/index',
 			auth: true,
 			method: 'GET',
