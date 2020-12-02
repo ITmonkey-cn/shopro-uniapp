@@ -4,7 +4,7 @@
 		<view class="mask" v-if="isShowDropDown" cathctouchmove @tap.stop="onHideDropDown"></view>
 		<!-- 商家信息 -->
 		<view class="shopinfo-box">
-			<image class="user-bg"  :src="$IMG_URL + '/imgs/shop_headbg.png'" mode=""></image>
+			<image class="user-bg" :src="$IMG_URL + '/imgs/shop_headbg.png'" mode=""></image>
 			<view class="head-wrap">
 				<view class="titleNav pad">
 					<view class="status-bar"></view>
@@ -28,7 +28,7 @@
 		<!-- 信息卡片 -->
 		<view class="info-card-box x-bc">
 			<view class="info-card">
-				<image class="card-bg"  :src="$IMG_URL + '/imgs/user/shop_info.png'" mode="aspectFill"></image>
+				<image class="card-bg" :src="$IMG_URL + '/imgs/user/shop_info.png'" mode="aspectFill"></image>
 				<view class="card-content y-c">
 					<view class="card-title">输码核销</view>
 					<view class="x-f card-detail-box" @tap="onEditCode">
@@ -38,7 +38,7 @@
 				</view>
 			</view>
 			<view class="info-card" @tap="scanCode">
-				<image class="card-bg"  :src="$IMG_URL + '/imgs/user/shop_qrcode.png'" mode="aspectFill"></image>
+				<image class="card-bg" :src="$IMG_URL + '/imgs/user/shop_qrcode.png'" mode="aspectFill"></image>
 				<view class="card-content y-c">
 					<view class="card-title">扫码核销</view>
 					<view class="x-f card-detail-box">
@@ -72,8 +72,8 @@
 			</view>
 			<!-- 销量 -->
 			<view class="sales-volume-box x-bc pa30">
-				<view class="sales-volume x-c">订单量(单)：{{ orderInfo.total_num }}</view>
-				<view class="sales-volume x-c">交易额(元)：{{ orderInfo.total_money }}</view>
+				<view class="sales-volume x-c">订单量(单)：{{ orderInfo.total_num || 0 }}</view>
+				<view class="sales-volume x-c">交易额(元)：{{ orderInfo.total_money || 0 }}</view>
 			</view>
 		</view>
 		<!-- 订单列表 -->
@@ -111,7 +111,7 @@
 			<block slot="modalContent">
 				<view class="modal-box">
 					<view class="modal-head">
-						<image class="modal-head-img"  :src="$IMG_URL + '/imgs/modal/store_check.png'" mode=""></image>
+						<image class="modal-head-img" :src="$IMG_URL + '/imgs/modal/store_check.png'" mode=""></image>
 						<text class="modal-head-title">输码核销</text>
 					</view>
 					<input class="inp" type="number" v-model="qrcode" placeholder="在此输入核销码" placeholder-class="pl-inp" />
