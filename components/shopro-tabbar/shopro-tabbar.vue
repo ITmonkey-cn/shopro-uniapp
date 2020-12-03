@@ -59,19 +59,16 @@ export default {
 		currentPath() {
 			let pages = getCurrentPages();
 			let query = this.queryObj ? this.queryObj : this.$Route.query;
-			let currPage = null;
-			if (pages.length) {
-				currPage = pages[pages.length - 1].route;
-			}
+			let currPage = this.$Route.path;
 			if (Object.keys(query).length) {
 				let params = '';
 				for (let key in query) {
 					params += '?' + key + '=' + query[key] + '&';
 				}
 				params = params.substring(0, params.length - 1);
-				return '/' + currPage + params;
+				return currPage + params;
 			}
-			return '/' + currPage;
+			return currPage;
 		},
 		showTabbar() {
 			if (this.tabbarData && this.tabbarData.list) {

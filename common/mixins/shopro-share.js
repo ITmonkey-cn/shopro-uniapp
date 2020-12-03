@@ -169,8 +169,8 @@ export default {
 			}
 			return false;
 		},
-		
-		
+
+
 	},
 
 	// #ifdef MP-WEIXIN
@@ -201,17 +201,17 @@ export default {
 		//携带当前页面资源ID参数
 		let currentPage = getCurrentPages()[getCurrentPages().length - 1];
 		let options = currentPage.options;
-		if(JSON.stringify(options) != '{}' && options.id) {
+		if (JSON.stringify(options) != '{}' && options.id) {
 			query += `id=${options.id}`;
 		}
 		let shareInfoUrl = that.shareInfo.path.split('?');
-		if(shareInfoUrl.length > 1) {
-			if(query !== '') {
+		if (shareInfoUrl.length > 1) {
+			if (query !== '') {
 				query += '&';
 			}
 			query += shareInfoUrl[1];
 		}
-		
+
 		return {
 			title: that.shareInfo.title,
 			query: query,

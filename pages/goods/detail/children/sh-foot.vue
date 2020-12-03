@@ -3,7 +3,7 @@
 		<view class="sh-foot-box x-f" v-if="!showSku && !showServe">
 			<view class="left x-f">
 				<view class="tools-item y-f" @tap="goHome">
-					<image class="tool-img"  :src="$IMG_URL + '/imgs/tabbar/tab_home_sel.png'" mode=""></image>
+					<image class="tool-img" :src="$IMG_URL + '/imgs/tabbar/tab_home_sel.png'" mode=""></image>
 					<text class="tool-title">首页</text>
 				</view>
 			</view>
@@ -28,7 +28,9 @@ export default {
 	methods: {
 		// 回到首页
 		goHome() {
-			this.$tools.routerTo('/pages/index/index');
+			this.$Router.replaceAll({
+				path: '/pages/index/index'
+			});
 		},
 		// 去支付
 		goPay() {
