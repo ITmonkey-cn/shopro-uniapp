@@ -215,6 +215,20 @@
 					}
 				},
 				{
+					"path": "merchant/apply",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "门店入驻",
+						"group": "用户"
+					}
+				},
+				{
 					"path": "merchant/info",
 					"style": {
 						"navigationBarTitleText": "门店信息"
