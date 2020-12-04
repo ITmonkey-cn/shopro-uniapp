@@ -16,9 +16,7 @@
 						<view v-for="live in leftList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
 					</template>
 					<template v-slot:right="{ rightList }">
-						<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
-							<view v-for="live in rightList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
-						</view>
+						<view v-for="live in rightList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
 					</template>
 				</u-waterfall>
 
