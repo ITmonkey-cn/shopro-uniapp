@@ -57,7 +57,7 @@ export default {
 		loadMore() {
 			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
-				this.scoreList();
+				this.getScoreShopsList();
 			}
 		},
 		//积分商品列表
