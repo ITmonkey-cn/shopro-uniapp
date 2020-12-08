@@ -457,6 +457,9 @@ export default {
 			that.$api('store.apply', that.model).then(res => {
 				if (res.code === 1) {
 					this.isFormEnd = true;
+					//  #ifdef MP-WEIXIN
+					this.$store.dispatch('getMessageIds', 'storeApply');
+					//  #endif
 					uni.showToast({
 						title: res.msg,
 						success: () => {

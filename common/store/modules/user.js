@@ -129,6 +129,9 @@ const actions = {
 					case 'store': //门店新订单通知
 						typeName = ['store_order_new']
 						break;
+					case 'storeApply': //门店申请通知
+						typeName = ['store_apply']
+						break;
 					default:
 						typeName = []
 						break;
