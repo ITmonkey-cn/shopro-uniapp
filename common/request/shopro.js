@@ -206,6 +206,18 @@ export default {
 			method: 'POST',
 			// desc: '核销订单',
 		},
+		apply: {
+			url: 'store.apply/apply',
+			auth: true,
+			method: 'POST',
+			// desc: '申请门店',
+		},
+		shopInfo: {
+			url: 'store.apply/info',
+			auth: true,
+			method: 'POST',
+			// desc: '门店信息',
+		}
 	},
 
 	/** 商品评论 ↓ **/

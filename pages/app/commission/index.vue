@@ -500,11 +500,7 @@ export default {
 		}
 	}
 }
-.show-auth-box {
-	opacity: 1 !important;
-	transform: scale(1) !important;
-	transition: all 0.3s ease-in-out 0s;
-}
+
 
 // 成为分销商
 .into-agent-modal {

@@ -115,7 +115,6 @@ export default {
 		chooseLocation() {
 			uni.chooseLocation({
 				success: res => {
-					console.log(res);
 					this.chooseAddress = res.address;
 					this.addressData.latitude = res.latitude;
 					this.addressData.longitude = res.longitude;
