@@ -58,13 +58,15 @@
 					></u-input>
 				</u-form-item>
 				<view class="agreement x-f">
-					<u-checkbox v-model="model.agreement" activeColor="#4CB89D" shape="circle" @tap="onAgreement"></u-checkbox>
-					<view class="agreement-text">勾选代表同意申请分销商协议</view>
+					<u-checkbox v-model="model.agreement" activeColor="#4CB89D" shape="circle" @change="onAgreement"></u-checkbox>
+					<view class="agreement-text" @tap="jump('/pages/public/richtext', { id: protocolId })">勾选代表同意申请分销商协议</view>
 				</view>
-				<button class="cu-btn save-btn" @tap="onSubmit" :disabled="isFormEnd">
-					<text v-if="isFormEnd" class="cuIcon-loading2 cuIconfont-spin"></text>
-					确认提交
-				</button>
+				<view class="x-c">
+					<button class="cu-btn save-btn" @tap="onSubmit" :disabled="isFormEnd">
+						<text v-if="isFormEnd" class="cuIcon-loading2 cuIconfont-spin"></text>
+						确认提交
+					</button>
+				</view>
 			</u-form>
 		</view>
 		<u-select :mode="selectMode" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
@@ -103,6 +105,7 @@ export default {
 		return {
 			upLoadUrl: API_URL,
 			showNotice: false,
+			protocolId: 0,
 			showWeeksModal: false,
 			isFormEnd: false,
 			weekcheckbox: [
@@ -376,7 +379,7 @@ export default {
 
 		// 勾选同意
 		onAgreement(e) {
-			this.model.agreement = !this.model.agreement;
+			this.model.agreement = e.value;
 		},
 
 		// 门店详情
@@ -384,7 +387,8 @@ export default {
 			let that = this;
 			that.$api('store.shopInfo').then(res => {
 				if (res.code === 1) {
-					this.authStatus(res.data);
+					res.data.apply && this.authStatus(res.data.apply);
+					this.protocolId = res.data.config.protocol;
 				}
 			});
 		},
@@ -397,6 +401,7 @@ export default {
 			this.weekcheckbox.forEach(item => {
 				if (weeksArr.includes(item.value)) {
 					weekTextArr.push(item.name);
+					item.checked = true;
 				}
 			});
 			this.model.weeks = weekTextArr.join(',');
@@ -480,6 +485,12 @@ export default {
 				} else {
 					this.$u.toast('请完善表单');
 				}
+			});
+		},
+		jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
 			});
 		}
 	}
