@@ -21,7 +21,12 @@
 				</view>
 			</view>
 		</view>
-		<view class="foot_box x-c"><button class="cu-btn post-btn" @tap="subComment">发布</button></view>
+		<view class="foot_box x-c">
+			<button class="cu-btn post-btn" :disabled="isFormEnd" @tap="subComment">
+				<text v-if="isFormEnd" class="cuIcon-loading2 cuIconfont-spin"></text>
+				发布
+			</button>
+		</view>
 	</view>
 </template>
 
@@ -37,7 +42,8 @@ export default {
 			uploadImgList: [],
 			star: 5,
 			message: '',
-			goodsDetail: {}
+			goodsDetail: {},
+			isFormEnd: false
 		};
 	},
 	computed: {
@@ -103,6 +109,7 @@ export default {
 		},
 		subComment() {
 			let that = this;
+			this.isFormEnd = false;
 			that.$api('order.comment', {
 				id: that.$Route.query.orderId,
 				order_item_id: that.goodsDetail.id,
@@ -111,6 +118,7 @@ export default {
 				images: that.uploadImgList
 			}).then(res => {
 				if (res.code === 1) {
+					this.isFormEnd = true;
 					that.$tools.toast('评论发表成功');
 					setTimeout(() => {
 						that.$Router.back();
