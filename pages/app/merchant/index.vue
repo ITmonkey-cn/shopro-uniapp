@@ -280,6 +280,7 @@ export default {
 				if (res.code === 1) {
 					that.$tools.toast(res.msg);
 					that.scanCodes = [];
+					that.storeOrderList = [];
 					that.qrcode = '';
 					that.getStoreOrder();
 				}
