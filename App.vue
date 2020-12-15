@@ -81,7 +81,9 @@ export default {
 		await this.getTemplate(options);
 		let init = await this.getAppInit(options);
 		await this.autoLogin(init.data);
-		await this.getRoutes();
+		if (process.env.NODE_ENV === 'development') {
+			await this.getRoutes();
+		}
 	},
 	onShow: function() {
 		this.$store.commit('CART_NUM');
