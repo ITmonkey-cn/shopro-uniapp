@@ -51,7 +51,7 @@
 			<!-- 备注 -->
 			<view class="remark-box x-f item-list">
 				<view class="item-title">备注</view>
-				<input class="item-input" placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
+				<input class="item-input px30"  placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
 			</view>
 			<view class="coupon x-bc item-list" v-if="!orderPre.activity_type && orderType !== 'score'">
 				<view class="item-title">优惠券</view>

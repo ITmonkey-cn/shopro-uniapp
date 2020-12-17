@@ -62,7 +62,7 @@
 						<text class="log-time">{{ $u.timeFrom(item.createtime) }}</text>
 					</view>
 					<!-- 更多 -->
-					<view class="loadmore-wrap"><u-loadmore :status="loadStatus" icon-type="flower" color="#f6f6f6" /></view>
+					<view class="loadmore-wrap" v-if="commissionLog.length"><u-loadmore :status="loadStatus" icon-type="flower" color="#f6f6f6" /></view>
 				</scroll-view>
 			</view>
 
@@ -211,9 +211,7 @@ export default {
 	onShow() {
 		this.getStatus();
 	},
-	onLoad() {
-		this.getLog();
-	},
+	onLoad() {},
 	onPullDownRefresh() {
 		this.getStatus();
 	},
@@ -243,6 +241,7 @@ export default {
 							item.isAgentFrom = !res.data.agent_form;
 						}
 					});
+					that.commissionWallet && that.getLog();
 				}
 			});
 		},
@@ -500,7 +499,6 @@ export default {
 		}
 	}
 }
-
 
 // 成为分销商
 .into-agent-modal {

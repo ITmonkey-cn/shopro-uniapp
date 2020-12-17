@@ -172,7 +172,7 @@
         "appid" : "wx39cd0799d4567dd0",
         "setting" : {
             "urlCheck" : false,
-            "es6" : false,
+            "es6" : true,
             "minified" : true,
             "postcss" : true,
             "checkSiteMap" : false // 关闭页面索引检测

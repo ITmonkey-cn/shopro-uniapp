@@ -6,18 +6,16 @@
 </template>
 
 <script>
-	/**
-	 * 图片居家屏
-	 */
+/**
+ * 图片居家屏
+ */
 export default {
 	name: 'shoproSkeletons',
 	components: {},
 	data() {
 		return {
 			skeletonsDot: {
-				index: '/static/imgs/skeleton_screen/index.jpg',
-				detail: '/static/imgs/skeleton_screen/detail.jpg',
-				goodsList: '/static/imgs/skeleton_screen/list.jpg'
+				detail: '/static/imgs/skeleton_screen/detail.jpg'
 			}
 		};
 	},

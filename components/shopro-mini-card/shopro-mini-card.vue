@@ -41,10 +41,7 @@
 			</view>
 			<image class="goods-img" :src="detail.goods_image || ''" mode="aspectFill"></image>
 			<view class="y-start order-right">
-				<view class="goods-title more-t">
-					{{ detail.goods_title || '' }}
-					<text>{{ detail.type }}</text>
-				</view>
+				<view class="goods-title more-t">{{ detail.goods_title || '' }}</view>
 				<view class="order-tip one-t">
 					<text class="order-num">数量:{{ detail.goods_num || 0 }};</text>
 					{{ detail.goods_sku_text ? detail.goods_sku_text : '' }}

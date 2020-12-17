@@ -27,7 +27,7 @@
 					<view class="goods-img-box"><image class="goods-img" :src="goods.goods_image" mode=""></image></view>
 					<view class="goods-info y-bc">
 						<view class="goods-title more-t">{{ goods.goods_title }}</view>
-						<view class="goods-sku">数量: {{ goods.goods_num }}；{{ goods.goods_sku_text }}</view>
+						<view class="goods-sku">数量: {{ goods.goods_num }}；{{ goods.goods_sku_text || '' }}</view>
 						<view class="total-box x-bc">
 							<view class="goods-price">
 								{{ goods.goods_price }}
