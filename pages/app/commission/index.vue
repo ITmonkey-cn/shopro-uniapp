@@ -15,10 +15,10 @@
 								<text class="tag-title">{{ commissionLv.name }}</text>
 							</view>
 						</view>
-						<view class="progress-box">
+						<view class="progress-box" v-if="showLv">
 							<view class="cu-progress round sm">
 								<view class="progress--ing" :style="[{ width: '50%' }]"></view>
-								<view class="round-wrap"><view class="round-inner"></view></view>
+								<view class="round-wrap" style="bottom: -25rpx;"><view class="round-inner"></view></view>
 							</view>
 							<view class="progress-tip">距离下次升级还差100财富值</view>
 						</view>
@@ -87,44 +87,55 @@
 			</view>
 		</view>
 		<!-- 成为分销商条件 -->
-		<view class="into-agent-modal cu-modal" :class="{ show: false }">
+		<view class="into-agent-modal cu-modal" :class="{ show: showTerm }">
 			<view class="condition-box cu-dialog x-c">
 				<!-- 商品 -->
-				<view class="goods-condition y-c" v-if="false">
-					<view class="card-box x-f mb30">
-						<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
-						<view class="detail y-bc">
-							<view class="title more-t">累计消费</view>
-							<view class="sub one-t">高效防晒，清爽不油腻</view>
+				<view class="goods-condition y-c" v-if="showGoodsTerm">
+					<scroll-view class="card-wrap" scroll-y="true">
+						<view
+							class="card-box x-f mb30"
+							v-for="item in goodsTermList"
+							:key="item.id"
+							style="margin: 30rpx 0;"
+							@tap="jump('/pages/goods/detail/index', { id: item.id })"
+						>
+							<view class="img-wrap"><image class="goods-img" :src="item.image" mode=""></image></view>
+							<view class="detail y-bc">
+								<view class="title more-t">{{ item.title }}</view>
+								<view class="sub one-t">{{ item.subtitle }}</view>
+							</view>
 						</view>
-					</view>
-					<view class="btn-box y-f py30">
-						<button class="cu-btn buy-btn mb30">去购买</button>
+						<view class="hack" style="height: 100rpx;"></view>
+					</scroll-view>
+					<view class="btn-box y-f py20">
+						<button class="cu-btn buy-btn mb10" @tap="$Router.back()">知道了</button>
 						<view class="tips">* 购买指定商品即可成为分销商</view>
 					</view>
 				</view>
 				<!-- 金额人数 -->
-				<view class="goods-condition y-bc" v-if="false">
-					<view class="card-wrap">
-						<view class="card-box x-f" v-for="item in 3" style="margin: 30rpx 0;">
+				<view class="goods-condition y-bc" v-if="showMoneyTerm">
+					<scroll-view class="card-wrap" scroll-y="true">
+						<view class="card-box x-f" style="margin: 30rpx 0;">
 							<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
-							<view class="detail y-bc">
-								<view class="title more-t">黛珂Cosme Decorte保湿赋活精华眼霜15g</view>
+							<view class="detail">
+								<view class="title more-t">满足以下消费金额</view>
 								<view class="x-f modal-progress">
-									<view class="progress-box">
+									<view class="progress-box ml20">
 										<view class="cu-progress round sm">
-											<view class="progress--ing" :style="[{ width: '20%' }]"></view>
-											<view class="round-wrap"><view class="round-inner"></view></view>
+											<view class="progress--ing" :style="[{ width: getProgress(userInfo.total_consume, moneyTermNum) }]"></view>
+											<view class="round-wrap" :style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]"><view class="round-inner"></view></view>
+											<view class="progress-num" :style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]">{{ userInfo.total_consume }}</view>
 										</view>
-										<view class="progress-tip" :style="[{ 'font-size': '14rpx' }, { width: '20%' }]"><text class="tip-text">200</text></view>
 									</view>
-									<text class="progress-tip">500</text>
+									<view class="progress-tip">{{ moneyTermNum }}</view>
 								</view>
 							</view>
 						</view>
+					</scroll-view>
+					<view class="btn-box y-f py20">
+						<button class="cu-btn buy-btn mb10" @tap="$Router.back()">知道了</button>
+						<view class="tips">* 满足指定消费金额即可成为分销商</view>
 					</view>
-
-					<view class="btn-box y-f pt30"><button class="cu-btn buy-btn">知道了</button></view>
 				</view>
 			</view>
 		</view>
@@ -142,6 +153,7 @@ export default {
 			commissionLv: null, //分销商等级
 			commissionWallet: null, //分销商钱包
 			agentFrom: null, //是否显示我的资料
+			showLv: true,
 			commissionLog: [], //动态
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
@@ -150,6 +162,11 @@ export default {
 				system: this.$IMG_URL + '/imgs/commission/commission_base_notice.png',
 				admin: this.$IMG_URL + '/imgs/commission/commission_base_avatar.png'
 			},
+			showTerm: false, //条件弹窗
+			showGoodsTerm: false, //商品条件
+			showMoneyTerm: false, //金额条件
+			goodsTermList: [],
+			moneyTermNum: 0,
 			authNotice: {
 				//权限提示内容
 				// img: this.$IMG_URL + '/imgs/commission/auth_check.png',
@@ -205,7 +222,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			userInfo: state => state.user.userInfo
+			userInfo: state => state.user.userInfo,
+			agentInfo: state => state.user.agentInfo
 		})
 	},
 	onShow() {
@@ -222,6 +240,18 @@ export default {
 			this.$tools.routerTo(path, query);
 		},
 
+		// 百分比
+		getProgress(sales, stock) {
+			let unit = '';
+			if (stock + sales > 0) {
+				let num = (sales / stock) * 100;
+				unit = num.toFixed(2) + '%';
+			} else {
+				unit = '0%';
+			}
+			return unit;
+		},
+
 		// 是否显示金额
 		onEye() {
 			this.showMoney = !this.showMoney;
@@ -236,6 +266,7 @@ export default {
 					that.authStatus(res.data);
 					that.commissionWallet = res.data.data;
 					that.commissionLv = res.data.data?.agent_level;
+					that.showLv = res.data.upgrade_display;
 					that.menuList.map(item => {
 						if (item.title === '我的资料') {
 							item.isAgentFrom = !res.data.agent_form;
@@ -338,18 +369,34 @@ export default {
 					};
 					break;
 				case null:
-					this.hasAuth = true;
-					// this.authNotice = {
-					// 	img: this.$IMG_URL + '/imgs/commission/auth_freeze.png',
-					// 	title: '123',
-					// 	detail: data.msg,
-					// 	btnText: '联系客服',
-					// 	btnPath: '/pages/public/kefu/index'
-					// };
+					this.hasAuth = false;
+					this.showTerm = true;
+					if (data.become_agent) {
+						if (data.become_agent.type === 'goods') {
+							this.showGoodsTerm = true;
+							this.getGoodsTermList(data.become_agent.value);
+						}
+						if (data.become_agent.type === 'consume') {
+							this.showMoneyTerm = true;
+							this.moneyTermNum = data.become_agent.value;
+						}
+					}
 					break;
 				default:
 					this.hasAuth = true;
 			}
+		},
+
+		// 成为分销商，商品列表
+		getGoodsTermList(ids) {
+			let that = this;
+			that.$api('goods.lists', {
+				goods_ids: ids
+			}).then(res => {
+				if (res.code === 1) {
+					that.goodsTermList = res.data.data;
+				}
+			});
 		},
 
 		// 权限
@@ -397,11 +444,19 @@ export default {
 		margin-top: 10rpx;
 		white-space: nowrap;
 	}
+	.progress-num {
+		font-size: 14rpx;
+		position: absolute;
+		color: #c7b2ff;
+		bottom: -30rpx;
+		white-space: nowrap;
+	}
 	.cu-progress {
 		width: 150rpx;
 		height: 10rpx;
 		background: #503bae;
 		overflow: visible;
+		position: relative;
 		.progress--ing {
 			background: linear-gradient(180deg, #c6a6ff 0%, #7430ee 100%);
 			border-radius: 10rpx;
@@ -412,8 +467,11 @@ export default {
 			border: 2rpx solid #5c3cff;
 			background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
 			border-radius: 50%;
-			position: relative;
-			left: -15rpx;
+			position: absolute;
+			bottom: -15rpx;
+			transform: translateY(-50%);
+			left: 0;
+			margin-left: -15rpx;
 			.round-inner {
 				width: 20rpx;
 				height: 20rpx;
@@ -527,8 +585,8 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		position: relative;
 		.card-wrap {
-			overflow-y: auto;
 			width: 484rpx;
 			height: 500rpx;
 			padding: 10rpx;
@@ -543,13 +601,9 @@ export default {
 				line-height: 30rpx;
 				margin-top: 10rpx;
 				text-align: right;
-				.tip-text {
-					white-space: nowrap;
-					margin-right: -20rpx;
-				}
 			}
 			.progress-box {
-				margin-right: 20rpx;
+				margin-right: 10rpx;
 				.cu-progress {
 					width: 200rpx;
 					.round-wrap {
@@ -596,11 +650,15 @@ export default {
 					font-weight: 500;
 					color: #9281e2;
 					text-align: left;
+					width: 280rpx;
 				}
 			}
 		}
 		.btn-box {
 			background-color: #fff;
+			width: 100%;
+			position: absolute;
+			bottom: 0;
 			.buy-btn {
 				width: 390rpx;
 				height: 60rpx;

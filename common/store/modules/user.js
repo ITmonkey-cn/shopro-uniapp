@@ -10,14 +10,14 @@ import {
 	ORDER_NUMBER,
 	MESSAGE_IDS,
 	OUT_LOGIN,
-	AGENT,
+	AGENT_INFO,
 	// #ifdef MP-WEIXIN
 	FORCE_OAUTH,
 	// #endif
 } from '../types.js'
 const state = {
 	userInfo: uni.getStorageSync('userInfo') ? uni.getStorageSync('userInfo') : {},
-	agent: uni.getStorageSync('agent') ? uni.getStorageSync('agent') : {},
+	agentInfo: uni.getStorageSync('agentInfo') ? uni.getStorageSync('agentInfo') : {},
 	showLoginTip: false,
 	orderNum: {},
 	// #ifdef MP-WEIXIN
@@ -50,8 +50,7 @@ const actions = {
 	}) {
 		return new Promise((resolve, reject) => {
 			api('commission.auth').then(res => {
-					commit('AGENT', res);
-					uni.setStorageSync('agent', res);
+					commit('AGENT_INFO',  res.data.data);
 					uni.setStorageSync('agentInfo', res.data.data);
 					resolve(res)
 			}).catch(e => {
@@ -159,8 +158,8 @@ const actions = {
 
 const mutations = {
 	// 分销商信息
-	[AGENT](state, data) {
-		state.agent = data
+	[AGENT_INFO](state, data) {
+		state.agentInfo = data
 	},
 	// 小程序订阅消息模板ids
 	[MESSAGE_IDS](state, data) {

@@ -6,6 +6,8 @@ module.exports = {
 	data() {
 		return {
 			$IMG_URL: IMG_URL, //解决小程序端template中无法使用vue挂载变量
+			$Router: this.$Router, //解决小程序端template中无法使用vue挂载变量
+			$tools: this.$tools
 		}
 	},
 	async onLoad() {
