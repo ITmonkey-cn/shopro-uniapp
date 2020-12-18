@@ -6,27 +6,27 @@
 				<block slot="backText"><text class="nav-text">我的分销等级</text></block>
 			</cu-custom>
 			<view class="lg-tag-box x-c">
-				<image class="lg-tag-img" :src="$IMG_URL + '/imgs/commission/lv1.png'" mode=""></image>
-				<view class="lg-tag-text">普通会员</view>
+				<image class="lg-tag-img" :src="agentInfo.agent_level.image" mode=""></image>
+				<view class="lg-tag-text">{{ agentInfo.agent_level.name }}</view>
 			</view>
 			<!-- 等级步骤条 -->
 			<view class="mini-tag-box">
 				<scroll-view scroll-x class="nav flex" scroll-with-animation :scroll-left="scrollLeft">
 					<view class="step-item"></view>
-					<view class="tag-step-item " v-for="(item, index) in 10" :key="index" @tap="stepSelect(index)">
+					<view class="tag-step-item " v-for="(item, index) in lvInfo" :key="index" @tap="stepSelect(index)">
 						<view class="tag-box y-f">
-							<view class="mini-img-wrap x-c"><image class="mini-img" :src="$IMG_URL + '/imgs/commission/lv1.png'" mode=""></image></view>
-							<view class="mini-tag-text" :class="{ 'title-active': stepCur === index }">普通会员{{ item }}</view>
+							<view class="mini-img-wrap x-c"><image class="mini-img" :src="item.image" mode=""></image></view>
+							<view class="mini-tag-text" :class="{ 'title-active': stepCur === index }">{{ item.name }}</view>
 							<view class="tag-index cuIcon-triangleupfill" :class="{ 'icon-opactiy': stepCur !== index }"></view>
 						</view>
-						<view class="tag-line" v-if="item < 10"></view>
+						<view class="tag-line" v-if="index < lvInfo.length - 1"></view>
 					</view>
 				</scroll-view>
 			</view>
 		</view>
 		<view class="content_box">
 			<!-- 佣金比例 -->
-			<view class="scale-box mb30">
+			<view class="scale-box mb30" v-if="curLvInfo.commission_rules">
 				<view class="scale-title mb30">佣金比例</view>
 				<view class="scale-content">
 					<view class="table-box">
@@ -34,38 +34,48 @@
 							<view class="th x-c">佣金级别</view>
 							<view class="th x-c">佣金比例</view>
 						</view>
-						<view class="tr x-f t-item">
+						<view class="tr x-f t-item" v-if="commissionLv >= 1">
 							<view class="td x-c">一级佣金比例</view>
-							<view class="td x-c">6%</view>
+							<view class="td x-c">{{ curLvInfo.commission_rules.commission_1 }}%</view>
 						</view>
-						<view class="tr x-f t-item">
+						<view class="tr x-f t-item" v-if="commissionLv >= 2">
 							<view class="td x-c">二级佣金比例</view>
-							<view class="td x-c">4%</view>
+							<view class="td x-c">{{ curLvInfo.commission_rules.commission_2 }}%</view>
+						</view>
+						<view class="tr x-f t-item" v-if="commissionLv >= 3">
+							<view class="td x-c">三级佣金比例</view>
+							<view class="td x-c">{{ curLvInfo.commission_rules.commission_3 }}%</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<!-- 升级条件 -->
-			<view class="ask-box">
-				<view class="ask-title">升级条件</view>
-				<view class="card-wrap x-bc my20" v-for="item in 3">
+			<view class="ask-box" v-show="curLvInfo.level > 1">
+				<view class="ask-title x-bc">
+					<text>升级条件</text>
+					<text v-show="curLvInfo.upgrade_type === 0" class="ask-sub-title">满足以下任意条件</text>
+					<text v-show="curLvInfo.upgrade_type === 1" class="ask-sub-title">满足以下全部条件</text>
+				</view>
+				<view class="card-wrap x-bc my20" v-for="(item, index) in curLvInfo.arr" :key="index">
 					<view class="card-box x-f">
-						<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
+						<view class="img-wrap"><image class="goods-img" :src="item.img" mode=""></image></view>
 						<view class="detail">
-							<view class="title more-t">累计消费满</view>
+							<view class="title more-t">{{ item.title }}({{ item.unit }})</view>
 							<view class="x-f modal-progress">
 								<view class="progress-box">
 									<view class="cu-progress round sm">
 										<view class="progress--ing" :style="[{ width: '20%' }]"></view>
 										<view class="round-wrap"><view class="round-inner"></view></view>
 									</view>
-									<view class="mini-progress-tip" :style="[{ 'font-size': '14rpx' }, { width: '20%' }]"><text class="tip-text">200</text></view>
+									<view class="mini-progress-tip" :style="[{ 'font-size': '14rpx' }, { width: '20%' }]">
+										<text class="tip-text">{{ item.value }}</text>
+									</view>
 								</view>
-								<view class="ml-progress-tip">500</view>
+								<view class="ml-progress-tip">{{ item.total }}</view>
 							</view>
 						</view>
 					</view>
-					<button class="cu-btn card-btn">去完成</button>
+					<button class="cu-btn card-btn" @tap="$tools.routerTo('/pages/index/index')">去完成</button>
 				</view>
 			</view>
 		</view>
@@ -74,21 +84,171 @@
 </template>
 
 <script>
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {
 			scrollLeft: 0, //步骤滚动
-			stepCur: 0 //当前步骤
+			stepCur: 0, //当前步骤
+			lvInfo: [],
+			curLvInfo: {},
+			commissionLv: 1, //佣金级数
+			agentInfo: uni.getStorageSync('agentInfo'),
+			lvMap: {},
+			lvTaskMap: {
+				child_agent_count: {
+					title: '团队分销商人数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_team1.png`,
+					unit: '人'
+				},
+				child_agent_count_1: {
+					title: '一级分销商人数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_team2.png`,
+					unit: '人'
+				},
+				child_agent_count_2: {
+					title: '二级分销商人数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_team3.png`,
+					unit: '人'
+				},
+				child_order_count: {
+					title: '团队分销订单数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_order3.png`,
+					unit: '单'
+				},
+				child_order_count_1: {
+					title: '一级分销商订单数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_order2.png`,
+					unit: '单'
+				},
+				child_order_count_2: {
+					title: '二级分销商订单数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_order1.png`,
+					unit: '单'
+				},
+				child_order_money: {
+					title: '团队分销订单金额',
+					img: `${this.$IMG_URL}/imgs/commission/lv_order3.png`,
+					unit: '元'
+				},
+				child_order_money_1: {
+					title: '一级分销订单金额',
+					img: `${this.$IMG_URL}/imgs/commission/lv_order1.png`,
+					unit: '元'
+				},
+				child_order_money_2: {
+					title: '二级分销订单金额',
+					img: `${this.$IMG_URL}/imgs/commission/lv_order2.png`,
+					unit: '元'
+				},
+				child_user_count: {
+					title: '团队用户人数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_p_team1.png`,
+					unit: '人'
+				},
+				child_user_count_1: {
+					title: '一级用户人数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_p_team2.png`,
+					unit: '人'
+				},
+				child_user_count_2: {
+					title: '二级用户人数',
+					img: `${this.$IMG_URL}/imgs/commission/lv_p_team3.png`,
+					unit: '人'
+				},
+				order_count: {
+					title: '直推分销订单数量',
+					img: `${this.$IMG_URL}/imgs/commission/lv_order3.png`,
+					unit: '单'
+				},
+				order_money: {
+					title: '直推分销订单金额',
+					img: `${this.$IMG_URL}/imgs/commission/lv_z_order.png`,
+					unit: '元'
+				},
+				total_consume: {
+					title: '累计消费金额',
+					img: `${this.$IMG_URL}/imgs/commission/lv_money.png`,
+					unit: '元'
+				}
+			}
 		};
 	},
-	computed: {},
-	onLoad() {},
+	computed: {
+		...mapState({
+			userInfo: state => state.user.userInfo
+		})
+	},
+	onLoad() {
+		this.getCommissionLv();
+	},
 	methods: {
 		// 点击步骤条
 		stepSelect(index) {
 			this.stepCur = index;
+			this.curLvInfo = this.lvInfo[index];
 			this.scrollLeft = (index - 1) * 100;
+			console.log(this.curLvInfo.arr);
+		},
+		// 构造升级条件数据
+		editLvInfoMap() {
+			let that = this;
+			this.lvInfo.forEach(item => {
+				item.arr = [];
+				that.lvMap = {
+					...that.lvMap,
+					[item.level]: {
+						title: `${item.name}需要人数`,
+						unit: '人',
+						img: item.image
+					}
+				};
+				for (let rule in item.upgrade_rules) {
+					if (rule != 'child_agent_level' && rule != 'child_agent_level_1') {
+						item.arr.push({
+							name: rule,
+							total: item.upgrade_rules[rule],
+							value: that.agentInfo[rule],
+							...that.lvTaskMap[rule]
+						});
+					} else {
+						if (rule === 'child_agent_level') {
+							item.upgrade_rules['child_agent_level'].forEach(m => {
+								item.arr.push({
+									total: m.count,
+									value: 12222,
+									lv: m.level,
+									...that.lvMap[m.level]
+								});
+							});
+						}
+						if (rule === 'child_agent_level_1') {
+							item.upgrade_rules['child_agent_level_1'].forEach(m => {
+								item.arr.push({
+									total: m.count,
+									value: 12222,
+									lv: m.level,
+									...that.lvMap[m.level]
+								});
+							});
+						}
+					}
+				}
+			});
+		},
+
+		// 等级
+		getCommissionLv() {
+			let that = this;
+			that.$api('commission.lv').then(res => {
+				if (res.code === 1) {
+					that.commissionLv = res.data.commission_level;
+					that.lvInfo = res.data.level;
+					that.editLvInfoMap();
+					that.curLvInfo = res.data.level[0];
+				}
+			});
 		}
 	}
 };
@@ -239,7 +399,6 @@ export default {
 	font-weight: 500;
 	color: #c7b2ff;
 	white-space: nowrap;
-	margin-top: -1.5em;
 	margin-left: 10rpx;
 }
 .progress-box {
@@ -289,6 +448,11 @@ export default {
 		font-size: 30rpx;
 		font-weight: bold;
 		color: #333333;
+		.ask-sub-title {
+			font-size: 26rpx;
+			font-weight: 500;
+			color: #999999;
+		}
 	}
 }
 .card-wrap {

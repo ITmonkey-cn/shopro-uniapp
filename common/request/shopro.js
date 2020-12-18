@@ -800,6 +800,12 @@ export default {
 			auth: true,
 			method: 'GET',
 			// desc: '佣金记录',
+		},
+		lv: {
+			url: 'commission.agent/level',
+			auth: true,
+			method: 'GET',
+			// desc: '佣金记录',
 		}
 	}
 

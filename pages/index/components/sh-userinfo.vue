@@ -16,7 +16,12 @@
 						<view class="info-box">
 							<view class="x-f">
 								<view class="head-img-wrap">
-									<image class="head-img" @tap.stop="jump('/pages/user/info')" :src="userInfo.avatar || $IMG_URL+'/imgs/base_avatar.png'" mode="aspectFill"></image>
+									<image
+										class="head-img"
+										@tap.stop="jump('/pages/user/info')"
+										:src="userInfo.avatar || $IMG_URL + '/imgs/base_avatar.png'"
+										mode="aspectFill"
+									></image>
 									<block v-if="platform !== 'H5'">
 										<button v-if="platform === 'wxMiniProgram'" open-type="getUserInfo" @getuserinfo="refreshWechatUser" class="cu-btn refresh-btn x-c">
 											<text class="cuIcon-refresh" :class="{ 'refresh-rotate': isRefresh }"></text>
@@ -26,7 +31,7 @@
 										</button>
 									</block>
 								</view>
-								<text @tap.stop="jump('/pages/user/info')" class="user-name one-t">{{ userInfo.nickname || '请登录~' }}</text>
+								<text @tap.stop="jump('/pages/user/info')" class="user-name">{{ userInfo.nickname || '请登录~' }}</text>
 							</view>
 						</view>
 						<view class="grade-tag tag-box x-f" v-if="userInfo.group">
@@ -212,7 +217,6 @@ export default {
 				font-weight: 500;
 				color: #fff;
 				line-height: 30rpx;
-				width: 130rpx;
 			}
 		}
 		.tag-box {
@@ -249,7 +253,7 @@ export default {
 		}
 		.merchant-btn {
 			padding: 0;
-			width: 136rpx;
+			width: 160rpx;
 			height: 46rpx;
 			background: rgba(255, 255, 255, 1);
 			border-radius: 23rpx 0px 0px 23rpx;
@@ -257,6 +261,7 @@ export default {
 			font-family: PingFang SC;
 			font-weight: 500;
 			color: rgba(168, 112, 13, 1);
+			white-space: nowrap;
 		}
 	}
 	.wallet {

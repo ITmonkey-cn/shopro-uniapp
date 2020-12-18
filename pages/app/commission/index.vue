@@ -7,20 +7,14 @@
 			<view class="user-card">
 				<view class="card-top x-f">
 					<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode="widthFix"></image></view>
-					<view class="y-start" @tap="jump('/pages/app/commission/level')">
+					<view class="y-start">
 						<view class="user-info-box x-f">
 							<view class="user-name">{{ userInfo.nickname }}</view>
-							<view class="grade-tag tag-box x-f" v-if="commissionLv">
+							<view class="grade-tag tag-box x-f" v-if="commissionLv" @tap="toLv">
 								<image class="tag-img" :src="commissionLv.image" mode=""></image>
 								<text class="tag-title">{{ commissionLv.name }}</text>
+								<text class="cuIcon-right" v-if="showLv" style="color: #fff; font-size: 26rpx;"></text>
 							</view>
-						</view>
-						<view class="progress-box" v-if="showLv">
-							<view class="cu-progress round sm">
-								<view class="progress--ing" :style="[{ width: '50%' }]"></view>
-								<view class="round-wrap" style="bottom: -25rpx;"><view class="round-inner"></view></view>
-							</view>
-							<view class="progress-tip">距离下次升级还差100财富值</view>
 						</view>
 					</view>
 				</view>
@@ -56,7 +50,7 @@
 										mode=""
 									></image>
 								</view>
-								<view class="log-text">{{ item.remark }}</view>
+								<view class="log-text one-t">{{ item.remark }}</view>
 							</view>
 						</view>
 						<text class="log-time">{{ $u.timeFrom(item.createtime) }}</text>
@@ -115,19 +109,31 @@
 				<!-- 金额人数 -->
 				<view class="goods-condition y-bc" v-if="showMoneyTerm">
 					<scroll-view class="card-wrap" scroll-y="true">
-						<view class="card-box x-f" style="margin: 30rpx 0;">
-							<view class="img-wrap"><image class="goods-img" src="/static/imgs/tabbar/tab_type_sel.png" mode=""></image></view>
+						<view class="card-box x-f" style="margin: 30rpx 0;" :class="{ 'filter-card': userInfo.total_consume == moneyTermNum }">
+							<view class="img-wrap"><image class="goods-img" :src="$IMG_URL + '/imgs/user/commission_task_card.png'" mode=""></image></view>
 							<view class="detail">
-								<view class="title more-t">满足以下消费金额</view>
+								<view class="title more-t ml10">满足以下消费金额</view>
 								<view class="x-f modal-progress">
 									<view class="progress-box ml20">
 										<view class="cu-progress round sm">
 											<view class="progress--ing" :style="[{ width: getProgress(userInfo.total_consume, moneyTermNum) }]"></view>
-											<view class="round-wrap" :style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]"><view class="round-inner"></view></view>
-											<view class="progress-num" :style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]">{{ userInfo.total_consume }}</view>
+											<view
+												class="round-wrap"
+												v-if="userInfo.total_consume != moneyTermNum"
+												:style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]"
+											>
+												<view class="round-inner"></view>
+											</view>
+											<view
+												class="progress-num"
+												v-if="userInfo.total_consume != moneyTermNum"
+												:style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]"
+											>
+												{{ userInfo.total_consume }}
+											</view>
 										</view>
 									</view>
-									<view class="progress-tip">{{ moneyTermNum }}</view>
+									<view class="progress-tip" v-if="userInfo.total_consume != moneyTermNum">{{ moneyTermNum }}</view>
 								</view>
 							</view>
 						</view>
@@ -240,6 +246,9 @@ export default {
 			this.$tools.routerTo(path, query);
 		},
 
+		toLv() {
+			this.showLv && this.jump('/pages/app/commission/level');
+		},
 		// 百分比
 		getProgress(sales, stock) {
 			let unit = '';
@@ -654,6 +663,10 @@ export default {
 				}
 			}
 		}
+		.filter-card {
+			filter: grayscale(100%);
+			filter: gray;
+		}
 		.btn-box {
 			background-color: #fff;
 			width: 100%;
@@ -791,7 +804,6 @@ export default {
 	.log-scroll {
 		height: 380rpx;
 		.log-item-box {
-			position: relative;
 			height: 78rpx;
 			.log-time {
 				margin-left: 30rpx;
@@ -804,18 +816,12 @@ export default {
 		.loadmore-wrap {
 			line-height: 80rpx;
 		}
-		.log-item-wrap {
-			position: relative;
-		}
 		.log-item {
-			position: absolute;
-			width: 500rpx;
 			height: 48rpx;
 			background: rgba(#5e49c3, 0.4);
 			border-radius: 24rpx;
 			padding-left: 6rpx;
 			padding-right: 20rpx;
-			transform: translateY(-50%);
 			.log-img {
 				width: 40rpx;
 				height: 40rpx;
@@ -826,6 +832,7 @@ export default {
 				font-size: 22rpx;
 				font-weight: 500;
 				color: #fefefe;
+				max-width: 500rpx;
 			}
 		}
 	}
@@ -857,7 +864,6 @@ export default {
 			color: #fff;
 			line-height: 30rpx;
 			margin-top: 16rpx;
-			// text-shadow: 0 0 10rpx #fff, 0 0 10rpx #fff, 0 0 10rpx #fff, 0 0 10rpx #fff;
 		}
 	}
 }
