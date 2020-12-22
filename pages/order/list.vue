@@ -124,7 +124,7 @@ export default {
 			this.orderType = id;
 			this.orderList = [];
 			this.currentPage = 1;
-			!this.isLoading && this.getOrderList();
+			this.$u.debounce(this.getOrderList);
 		},
 		// 订单列表
 		getOrderList() {

@@ -6,18 +6,18 @@
 				<view class="share-list-box x-f">
 					<!-- #ifdef MP-WEIXIN -->
 					<button class="share-item share-btn y-f" open-type="share">
-						<image class="share-img"  :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
+						<image class="share-img" :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
 						<text class="share-title">微信好友</text>
 					</button>
 					<!-- #endif -->
 					<!-- #ifndef MP-WEIXIN || H5 -->
 					<view class="share-item y-f" @tap="share">
-						<image class="share-img"  :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
+						<image class="share-img" :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
 						<text class="share-title">微信好友</text>
 					</view>
 					<!-- #endif -->
 					<view class="share-item y-f" @tap="saveImage">
-						<image class="share-img"  :src="$IMG_URL + '/imgs/save_img.png'" mode=""></image>
+						<image class="share-img" :src="$IMG_URL + '/imgs/save_img.png'" mode=""></image>
 						<text class="share-title">保存图片</text>
 					</view>
 					<view class="share-item y-f" @tap="copyLink">
@@ -331,12 +331,13 @@ export default {
 			}
 		},
 		// 保存图片
-		saveImage() {
+		async saveImage() {
 			let that = this;
 			let platform = uni.getStorageSync('platform');
+			let checkPermission = await that.$tools.checkAppAlbum();
 			if (platform === 'wxOfficialAccount') {
 				that.$tools.toast('长按图片保存');
-			} else {
+			} else if (checkPermission) {
 				uni.saveImageToPhotosAlbum({
 					filePath: that.poster.finalPath,
 					success: res => {

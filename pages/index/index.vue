@@ -169,6 +169,13 @@ export default {
 		},
 		info() {
 			if (this.initData.info) {
+				// #ifndef MP-WEIXIN
+				if (this.initData.info && this.initData.info.name) {
+					uni.setNavigationBarTitle({
+						title: this.initData.info.name
+					});
+				}
+				// #endif
 				return this.initData.info;
 			}
 		}
@@ -194,14 +201,6 @@ export default {
 	},
 	onShow() {
 		this.$store.commit('CART_NUM', this.cartNum);
-
-		// #ifndef MP-WEIXIN
-		if (this.info && this.info.name) {
-			uni.setNavigationBarTitle({
-				title: this.info.name
-			});
-		}
-		// #endif
 	},
 	methods: {
 		...mapMutations(['CART_NUM']),

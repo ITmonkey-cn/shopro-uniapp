@@ -77,7 +77,8 @@
 				<view class="notice-title">{{ authNotice.title }}</view>
 				<view class="notice-detail">{{ authNotice.detail }}</view>
 				<button class="cu-btn notice-btn" @tap="onAuthBtn(authNotice.btnPath)">{{ authNotice.btnText }}</button>
-				<button class="cu-btn back-btn" @tap="onBack">返回</button>
+				<button class="cu-btn back-btn" @tap="onBack" v-if="!authNotice.hideBtn">返回</button>
+				<button class="cu-btn back-btn" @tap="hideAuth" v-else>取消</button>
 			</view>
 		</view>
 		<!-- 成为分销商条件 -->
@@ -235,6 +236,9 @@ export default {
 	onShow() {
 		this.getStatus();
 	},
+	onHide() {
+		this.commissionLog = [];
+	},
 	onLoad() {},
 	onPullDownRefresh() {
 		this.getStatus();
@@ -374,7 +378,8 @@ export default {
 						title: '抱歉！你的账户已被冻结',
 						detail: data.msg,
 						btnText: '联系客服',
-						btnPath: '/pages/public/kefu/index'
+						btnPath: '/pages/public/kefu/index',
+						hideBtn: true
 					};
 					break;
 				case null:
@@ -424,6 +429,9 @@ export default {
 			uni.navigateBack({
 				delta: 1
 			});
+		},
+		hideAuth() {
+			this.hasAuth = true;
 		}
 	}
 };
@@ -832,7 +840,7 @@ export default {
 				font-size: 22rpx;
 				font-weight: 500;
 				color: #fefefe;
-				max-width: 500rpx;
+				max-width: 480rpx;
 			}
 		}
 	}

@@ -111,14 +111,13 @@ export default {
 			let that = this;
 			// #ifdef APP-VUE
 			// #endif
-			hasAuth &&
-				(await that.$tools.chooseImage(1).then(res => {
-					res.forEach(img => {
-						that.$tools.uploadImage('index/upload', img).then(res => {
-							that.imgList.push(res.full_url);
-						});
+			that.$tools.chooseImage(1).then(res => {
+				res.forEach(img => {
+					that.$tools.uploadImage('index/upload', img).then(res => {
+						that.imgList.push(res.full_url);
 					});
-				}));
+				});
+			});
 		},
 		DelImg(index) {
 			uni.showModal({

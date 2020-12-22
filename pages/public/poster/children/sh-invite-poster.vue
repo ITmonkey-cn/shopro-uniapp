@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<image class="bg_img"  :src="$IMG_URL + '/imgs/poster/invite_poster.png'" mode=""></image>
+		<image class="bg_img" :src="$IMG_URL + '/imgs/poster/invite_poster.png'" mode=""></image>
 		<view class="poster-box y-f">
 			<image :src="poster.finalPath" mode="widthFix" class="posterImage"></image>
 			<view class="share-box" v-if="poster.finalPath">
@@ -13,16 +13,16 @@
 					<!-- #endif -->
 					<!-- #ifndef MP-WEIXIN -->
 					<view class="share-item y-f" @tap="share">
-						<image class="share-img"  :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
+						<image class="share-img" :src="$IMG_URL + '/imgs/share_wx.png'" mode=""></image>
 						<text class="share-title">微信好友</text>
 					</view>
 					<!-- #endif -->
 					<view class="share-item y-f" @tap="saveImage">
-						<image class="share-img"  :src="$IMG_URL + '/imgs/share_poster.png'" mode=""></image>
+						<image class="share-img" :src="$IMG_URL + '/imgs/share_poster.png'" mode=""></image>
 						<text class="share-title">保存图片</text>
 					</view>
 					<view class="share-item y-f" @tap="copyLink">
-						<image class="share-img"  :src="$IMG_URL + '/imgs/share_link.png'" mode=""></image>
+						<image class="share-img" :src="$IMG_URL + '/imgs/share_link.png'" mode=""></image>
 						<text class="share-title">复制链接</text>
 					</view>
 				</view>
@@ -199,12 +199,13 @@ export default {
 				console.log(JSON.stringify(e));
 			}
 		},
-		saveImage() {
+		async saveImage() {
 			let that = this;
 			let platform = uni.getStorageSync('platform');
+			let checkPermission = await that.$tools.checkAppAlbum();
 			if (platform === 'wxOfficialAccount') {
 				that.$tools.toast('长按图片保存');
-			} else {
+			} else if (checkPermission) {
 				uni.saveImageToPhotosAlbum({
 					filePath: that.poster.finalPath,
 					success: res => {

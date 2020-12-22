@@ -53,7 +53,7 @@ export default {
 			this.typeCurrent = id;
 			this.commentList = [];
 			this.currentPage = 1;
-			this.getCommentList();
+			this.$u.debounce(this.getCommentList);
 		},
 		// 评价类型
 		getCommentType() {

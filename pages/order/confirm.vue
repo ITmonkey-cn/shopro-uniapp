@@ -51,7 +51,7 @@
 			<!-- 备注 -->
 			<view class="remark-box x-f item-list">
 				<view class="item-title">备注</view>
-				<input class="item-input px30"  placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
+				<input class="item-input px30" placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
 			</view>
 			<view class="coupon x-bc item-list" v-if="!orderPre.activity_type && orderType !== 'score'">
 				<view class="item-title">优惠券</view>
@@ -460,6 +460,15 @@ export default {
 			// #ifdef APP-PLUS
 			let status = await this.checkPermission();
 			if (status !== 1) {
+				uni.showModal({
+					content: '需要定位权限',
+					confirmText: '设置',
+					success: function(res) {
+						if (res.confirm) {
+							permision.gotoAppSetting();
+						}
+					}
+				});
 				return;
 			}
 			// #endif
@@ -514,6 +523,7 @@ export default {
 				});
 			}
 		},
+		// 微信权限判断
 		getSetting: function() {
 			return new Promise((resolve, reject) => {
 				uni.getSetting({
@@ -533,6 +543,7 @@ export default {
 				});
 			});
 		},
+		// 微信打开权限设置
 		openSetting: function() {
 			uni.openSetting({
 				success: res => {
@@ -540,38 +551,12 @@ export default {
 						this.openLocation();
 					}
 				},
-				fail: err => {}
+				fail: err => {} 
 			});
 		},
+		// app权限判断
 		async checkPermission() {
-			let status = permision.isIOS ? await permision.requestIOS('location') : await permision.requestAndroid('android.permission.ACCESS_FINE_LOCATION');
-
-			if (status === null || status === 1) {
-				this.hasLocation = true;
-				status = 1;
-			} else if (status === 2) {
-				uni.showModal({
-					content: '系统定位已关闭',
-					confirmText: '确定',
-					showCancel: false,
-					success: function(res) {}
-				});
-			} else if (status.code) {
-				uni.showModal({
-					content: status.message
-				});
-			} else {
-				uni.showModal({
-					content: '需要定位权限',
-					confirmText: '设置',
-					success: function(res) {
-						if (res.confirm) {
-							permision.gotoAppSetting();
-						}
-					}
-				});
-			}
-
+			let status = permision.isIOS ? await permision.requestIOS('location') : await permision.requestAndroid(['android.permission.ACCESS_FINE_LOCATION']);
 			return status;
 		},
 		// 编译预留手机号

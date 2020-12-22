@@ -3,13 +3,12 @@
 		<view class="sh-userinfo-box" :style="{ backgroundColor: detail.color }">
 			<image class="user-bg" :src="detail.image" mode=""></image>
 			<view class="head-wrap">
-				<view class="titleNav pad">
-					<view class="status-bar"></view>
-					<text class="nav-title x-f">
-						我的
-						<!-- <text @tap="onService" class="cuIcon-servicefill"></text> -->
-					</text>
+				<view class="head-nav">
+					<cu-custom :isBack="true" :showBackIcon="false">
+						<block slot="backText"><text class="nav-title">我的</text></block>
+					</cu-custom>
 				</view>
+
 				<view class="user-head x-bc">
 					<view class="x-f">
 						<!-- 微信小程序 -->
@@ -31,7 +30,7 @@
 										</button>
 									</block>
 								</view>
-								<text @tap.stop="jump('/pages/user/info')" class="user-name">{{ userInfo.nickname || '请登录~' }}</text>
+								<text @tap.stop="jump('/pages/user/info')" class="user-name one-t">{{ userInfo.nickname || '请登录~' }}</text>
 							</view>
 						</view>
 						<view class="grade-tag tag-box x-f" v-if="userInfo.group">
@@ -149,30 +148,12 @@ export default {
 		width: 100%;
 		z-index: 9;
 		top: 0;
-
 		.nav-title {
 			font-size: 38rpx;
 			font-family: PingFang SC;
 			font-weight: 500;
 			color: #fff;
 			position: relative;
-			.cuIcon-servicefill {
-				position: absolute;
-				z-index: 7;
-				color: #fff;
-				top: 0rpx;
-				right: 30rpx;
-				font-size: 50rpx;
-			}
-		}
-		.status-bar {
-			// #ifndef H5
-			height: var(--status-bar-height);
-			// #endif
-			// #ifdef H5
-			height: 50rpx;
-			// #endif
-			width: 750rpx;
 		}
 	}
 
@@ -217,6 +198,7 @@ export default {
 				font-weight: 500;
 				color: #fff;
 				line-height: 30rpx;
+				width: 180rpx;
 			}
 		}
 		.tag-box {

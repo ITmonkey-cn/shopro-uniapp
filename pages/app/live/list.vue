@@ -77,7 +77,7 @@ export default {
 			this.tabCur = cur;
 			this.liveList = [];
 			this.currentPage = 1;
-			this.getLiveList();
+			this.$u.debounce(this.getLiveList);
 		},
 		// 加载更多
 		loadMore() {

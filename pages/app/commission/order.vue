@@ -107,7 +107,7 @@ export default {
 			this.currentPage = 1;
 			this.lastPage = 1;
 			this.stateCurrent = state;
-			this.getOrderList();
+			this.$u.debounce(this.getOrderList);
 		},
 
 		// 分销订单

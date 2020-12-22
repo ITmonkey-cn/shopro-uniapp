@@ -363,9 +363,9 @@ function drawShareImage(obj) { //绘制海报方法
 						y: 0,
 						width: Number(bgObj.width),
 						height: Number(bgObj.height),
-						destWidth: Number(bgObj.width) * 0.7, // 若H5使用这里请不要乘以二
-						destHeight: Number(bgObj.height) * 0.7, // 若H5使用这里请不要乘以二
-						quality: .6,
+						destWidth: Number(bgObj.width), // 若H5使用这里请不要乘以二
+						destHeight: Number(bgObj.height), // 若H5使用这里请不要乘以二
+						quality: 1,
 						fileType: 'jpg',
 						...setObj
 					};

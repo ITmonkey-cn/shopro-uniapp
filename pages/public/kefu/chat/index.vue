@@ -88,7 +88,7 @@
 			<view class="scroll-bottom" style="height: 330rpx;" id="scrollBottom"></view>
 		</scroll-view>
 		<!-- 底部功能栏，输入栏 -->
-		<view class="cu-bar foot input y-f" :style="[{ bottom: InputBottom + 'px' }]">
+		<view class="cu-bar foot input y-f">
 			<!-- 输入栏 -->
 			<view class="cu-bar flex-sub" style="width: 100%;">
 				<view class="input-wrap x-f">
@@ -96,7 +96,6 @@
 						v-model="msgText"
 						placeholder-style="font-size:26rpx;color:#999"
 						placeholder="请输入您想咨询的问题~"
-						:adjust-position="false"
 						type="text"
 						confirm-type="发送"
 						:focus="false"
@@ -128,17 +127,17 @@
 					class="flex-sub tools-item"
 				>
 					<view class="tools-item flex-sub" slot="addBtn">
-						<image class="item-img"  :src="$IMG_URL + '/imgs/chat/imgs_icon.png'" mode=""></image>
+						<image class="item-img" :src="$IMG_URL + '/imgs/chat/imgs_icon.png'" mode=""></image>
 						<text class="item-title">图片</text>
 					</view>
 				</u-upload>
 
 				<view class="tools-item flex-sub" @tap="onToolItem('goods')">
-					<image class="item-img"  :src="$IMG_URL + '/imgs/chat/goods_icon.png'" mode=""></image>
+					<image class="item-img" :src="$IMG_URL + '/imgs/chat/goods_icon.png'" mode=""></image>
 					<text class="item-title">商品</text>
 				</view>
 				<view class="tools-item flex-sub" @tap="onToolItem('order')">
-					<image class="item-img"  :src="$IMG_URL + '/imgs/chat/order_icon.png'" mode=""></image>
+					<image class="item-img" :src="$IMG_URL + '/imgs/chat/order_icon.png'" mode=""></image>
 					<text class="item-title">订单</text>
 				</view>
 			</view>
@@ -320,6 +319,7 @@ export default {
 			this.socket.close();
 		}
 		// #endif
+		uni.hideKeyboard();
 	},
 	beforeDestroy() {
 		this.socket.close();
@@ -446,7 +446,7 @@ export default {
 						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
 						type: 'text', //message:用户消息类型; message_list:请求消息列表
 						msg: `<img class="chat-img" src="${message.message}"/>`,
-						server_avatar: identify.avatar,
+						server_avatar: identify?.avatar,
 						date: message.createtime
 					};
 					break;
@@ -455,7 +455,7 @@ export default {
 						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
 						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
 						msg: JSON.parse(message.message),
-						server_avatar: identify.avatar,
+						server_avatar: identify?.avatar,
 						date: message.createtime
 					};
 					break;
@@ -464,7 +464,7 @@ export default {
 						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
 						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
 						msg: JSON.parse(message.message),
-						server_avatar: identify.avatar,
+						server_avatar: identify?.avatar,
 						date: message.createtime
 					};
 					break;
@@ -473,7 +473,7 @@ export default {
 						identify: message.sender_identify, // 用户发送的为 user; 客服发送的为 customer_service
 						type: message.message_type, //message:用户消息类型; message_list:请求消息列表
 						msg: this.replaceEmoji(message.message),
-						server_avatar: identify.avatar,
+						server_avatar: identify?.avatar,
 						date: message.createtime
 					};
 					break;
@@ -507,7 +507,6 @@ export default {
 		// 获取焦点
 		InputFocus(e) {
 			this.onMask();
-			this.InputBottom = e.detail.height;
 		},
 		// 失去焦点
 		InputBlur(e) {

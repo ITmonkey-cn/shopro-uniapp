@@ -107,7 +107,7 @@ export default {
 			this.tabCurrent = id;
 			this.goodsList = [];
 			this.currentPage = 1;
-			this.getGoodsList();
+			this.$u.debounce(this.getGoodsList);
 		},
 		// 百分比
 		getProgress(sales, stock) {

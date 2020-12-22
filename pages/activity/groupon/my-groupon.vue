@@ -120,7 +120,7 @@ export default {
 			this.stateId = id;
 			this.myGrouponList = [];
 			this.currentPage = 1;
-			this.getMyGroupon();
+			this.$u.debounce(this.getMyGroupon);
 		},
 		jump(path, parmas) {
 			this.$Router.push({

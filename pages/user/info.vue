@@ -114,15 +114,12 @@ export default {
 			});
 		},
 		async onChooseImg() {
-			let state = null;
 			let that = this;
-			uni.getStorageSync('platform') === 'app' ? (state = await this.$checkAppAlbum()) : (state = 1);
-			state &&
-				that.$tools.chooseImage(1).then(res => {
-					that.$tools.uploadImage('index/upload', res[0]).then(res => {
-						that.userData.avatar = res.full_url;
-					});
+			that.$tools.chooseImage(1).then(res => {
+				that.$tools.uploadImage('index/upload', res[0]).then(res => {
+					that.userData.avatar = res.full_url;
 				});
+			});
 		}
 	}
 };

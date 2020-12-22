@@ -10,27 +10,9 @@ module.exports = {
 			$tools: this.$tools
 		}
 	},
-	async onLoad() {
+	onLoad() {
 		// getRect挂载到$u上，因为这方法需要使用in(this)，所以无法把它独立成一个单独的文件导出
 		this.$u.getRect = this.$uGetRect
-
-		// app存储权限检测，开启。
-		// #ifdef APP-PLUS
-		let status = permision.isIOS ? await permision.requestIOS('camera') : await permision.requestAndroid([
-			'android.permission.READ_EXTERNAL_STORAGE', 'android.permission.WRITE_EXTERNAL_STORAGE'
-		]);
-		if (status === 0) {
-			uni.showModal({
-				content: '需要相册读写权限',
-				confirmText: '设置',
-				success: function(res) {
-					if (res.confirm) {
-						permision.gotoAppSetting();
-					}
-				}
-			});
-		}
-		// #endif
 	},
 	methods: {
 		// 查询节点信息

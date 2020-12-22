@@ -114,7 +114,7 @@ export default {
 		onNav(type) {
 			this.orderType = type;
 			this.orderList = [];
-			this.getAftersaleList();
+			this.$u.debounce(this.getAftersaleList);
 		},
 		// 售后列表
 		getAftersaleList() {

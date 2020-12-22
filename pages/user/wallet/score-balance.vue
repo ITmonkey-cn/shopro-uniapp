@@ -6,7 +6,7 @@
 				<block slot="backText">积分余额</block>
 				<block slot="content"></block>
 			</cu-custom>
-			<image class="bg"  :src="$IMG_URL + '/imgs/user/integral_bg.png'" mode=""></image>
+			<image class="bg" :src="$IMG_URL + '/imgs/user/integral_bg.png'" mode=""></image>
 			<view class="all-box x-c">
 				<text class="all-num">{{ score }}</text>
 				<text class="all-title">当前积分</text>
@@ -74,7 +74,7 @@ export default {
 			this.tabDot = type;
 			this.scoreLog = [];
 			this.currentPage = 1;
-			this.getScoreLog();
+			this.$u.debounce(this.getScoreLog);
 		},
 		// 积分明细
 		getScoreLog(type) {

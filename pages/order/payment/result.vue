@@ -1,12 +1,12 @@
 <!-- 支付结果页 -->
 <template>
 	<view class="success-page">
-		<view class="success-box flex flex-direction align-center" v-if="orderDetail.total_fee">
-			<image class="pay-img" :src="pay ? $IMG_URL+'/imgs/order/order_pay_success.gif' : $IMG_URL+'/imgs/order/order_pay_fail.gif'" mode=""></image>
-			<text class="notice">{{ pay ? '支付成功' : '支付失败' }}</text>
-			<text class="pay-money" v-if="pay && orderDetail.total_fee">￥{{ orderDetail.total_fee }}</text>
+		<view class="success-box flex flex-direction align-center">
+			<image class="pay-img" :src="payImg[payState]" mode=""></image>
+			<text class="notice">{{ payText[payState] }}</text>
+			<text class="pay-money" v-if="payState === 'success' && orderDetail.total_fee">￥{{ orderDetail.total_fee }}</text>
 			<view class="btn-box flex justify-between">
-				<block v-if="pay && orderDetail.activity_type === 'groupon' && orderDetail.ext_arr.buy_type === 'groupon'">
+				<block v-if="payState === 'success' && orderDetail.activity_type === 'groupon' && orderDetail.ext_arr.buy_type === 'groupon'">
 					<button
 						class="cu-btn base-btn"
 						v-if="orderDetail.ext_arr.groupon_id > 0"
@@ -18,8 +18,8 @@
 				</block>
 
 				<button class="cu-btn base-btn" v-else @tap="routerTo.push('/pages/index/index')">返回首页</button>
-				<button class="cu-btn base-btn" @tap="onOrder">查看订单</button>
-				<button class="again-pay cu-btn" v-if="!pay" @tap="onPay">重新支付</button>
+				<button class="cu-btn base-btn mx10" @tap="onOrder">查看订单</button>
+				<button class="again-pay cu-btn" v-if="payState === 'fail'" @tap="onPay">重新支付</button>
 			</view>
 		</view>
 		<!-- 登录提示 -->
@@ -30,22 +30,46 @@
 <script>
 import ShoproPay from '@/common/shopro-pay';
 import { mapMutations, mapActions, mapState } from 'vuex';
+let payTimer = null;
+const payCount = 5;
 export default {
 	components: {},
 	data() {
 		return {
 			routerTo: this.$Router,
 			orderDetail: {},
-			pay: null
+			payStatusMap: {
+				'0': 'fail',
+				'1': 'success',
+				undefined: 'paying'
+			},
+			payText: {
+				fail: '支付失败',
+				success: '支付成功',
+				paying: '查询中...'
+			},
+			payImg: {
+				fail: this.$IMG_URL + '/imgs/order/order_pay_fail.gif',
+				success: this.$IMG_URL + '/imgs/order/order_pay_success.gif',
+				paying: this.$IMG_URL + '/imgs/base_loading.gif'
+			},
+			payState: null
 		};
 	},
 	computed: {},
-	onLoad() {
-		this.pay = +this.$Route.query.pay;
-		if (this.pay) {
-			this.getCartList();
+	onLoad(options) {
+		if (String(options.pay) !== 'undefined') {
+			if (options.pay) {
+				this.getCartList();
+			}
+			this.payState = this.payStatusMap[String(options.pay)];
+		} else {
+			this.checkTimer();
 		}
 		this.getOrderDetail();
+	},
+	onHide() {
+		clearInterval(payTimer);
 	},
 	methods: {
 		...mapActions(['getCartList']),
@@ -78,6 +102,35 @@ export default {
 					that.orderDetail = res.data;
 				}
 			});
+		},
+		checkTimer() {
+			let that = this;
+			let count = 0;
+			that.payState = 'paying';
+			payTimer = setInterval(() => {
+				count++;
+				if (count < payCount) {
+					that.checkPay();
+				} else {
+					clearInterval(payTimer);
+					that.payState = 'fail';
+				}
+			}, 800);
+		},
+		// 检测支付
+		async checkPay() {
+			let that = this;
+			let res = await that.$api(
+				'order.detail',
+				{
+					order_sn: that.$Route.query.orderSn
+				},
+				false
+			);
+			if (res.code === 1 && res.data.status > 0) {
+				that.payState = 'success';
+				clearInterval(payTimer);
+			}
 		},
 		// 重新支付
 		onPay() {

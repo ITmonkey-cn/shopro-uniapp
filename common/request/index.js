@@ -2,7 +2,7 @@ import Request from './request'
 import apiList from './shopro'
 import store from '@/common/store/index.js'
 
-export default function api(url, data = {}) {
+export default function api(url, data = {}, showToast = true) {
 	const request = new Request();
 	let api = getApiObj(url);
 	request.interceptor.request((config, cancel) => { /* 请求之前拦截器 */
@@ -22,12 +22,15 @@ export default function api(url, data = {}) {
 
 	request.interceptor.response((response) => { /* 请求之后拦截器 */
 		if (response.data.code === 0) { // 服务端返回的状态码不等于200，则reject()
-			uni.showToast({
-				title: response.data.msg || '请求出错,稍后重试',
-				icon: 'none',
-				duration: 1000,
-				mask: true
-			});
+			if (showToast) {
+				uni.showToast({
+					title: response.data.msg || '请求出错,稍后重试',
+					icon: 'none',
+					duration: 1000,
+					mask: true
+				});
+			}
+
 		}
 
 		if (response.data.code === 401) { // 服务端返回的状态码不等于200，则reject()

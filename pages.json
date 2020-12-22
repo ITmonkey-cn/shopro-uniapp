@@ -640,8 +640,11 @@
 					"style": {
 						"navigationBarTitleText": "",
 						"navigationStyle": "custom",
-						"navigationBarTextStyle": "white"
-
+						"navigationBarTextStyle": "white",
+						"app-plus": {
+							"softinputNavBar": "none",
+							"softinputMode": "adjustResize"
+						}
 					},
 					"meta": {
 						"auth": true,

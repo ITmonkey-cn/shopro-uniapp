@@ -89,12 +89,13 @@ export default {
 			}
 		},
 		// 保存图片
-		saveImage(path) {
+		async saveImage(path) {
 			let that = this;
 			let platform = uni.getStorageSync('platform');
+			let checkPermission = await that.$tools.checkAppAlbum();
 			if (platform === 'wxOfficialAccount') {
 				that.$tools.toast('长按图片保存');
-			} else {
+			} else if (checkPermission) {
 				uni.saveImageToPhotosAlbum({
 					filePath: path,
 					success: res => {

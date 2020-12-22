@@ -294,57 +294,61 @@ export default {
 			this.uploadFile();
 		},
 		// 选择图片
-		selectFile() {
-			if (this.disabled) return;
-			// #ifdef APP-VUE
-			// #endif
-			const { name = '', maxCount, multiple, maxSize, sizeType, lists, camera, compressed, maxDuration, sourceType } = this;
-			let chooseFile = null;
-			const newMaxCount = maxCount - lists.length;
-			// 设置为只选择图片的时候使用 chooseImage 来实现
-			chooseFile = new Promise((resolve, reject) => {
-				uni.chooseImage({
-					count: multiple ? (newMaxCount > 9 ? 9 : newMaxCount) : 1,
-					sourceType: sourceType,
-					sizeType,
-					success: resolve,
-					fail: reject
-				});
-			});
-			chooseFile
-				.then(res => {
-					let file = null;
-					let listOldLength = this.lists.length;
-					res.tempFiles.map((val, index) => {
-						// 检查文件后缀是否允许，如果不在this.limitType内，就会返回false
-						if (!this.checkFileExt(val)) return;
-
-						// 如果是非多选，index大于等于1或者超出最大限制数量时，不处理
-						if (!multiple && index >= 1) return;
-						if (val.size > maxSize) {
-							this.$emit('on-oversize', val, this.lists, this.index);
-							this.showToast('超出允许的文件大小');
-						} else {
-							if (maxCount <= lists.length) {
-								this.$emit('on-exceed', val, this.lists, this.index);
-								this.showToast('超出最大允许的文件个数');
-								return;
-							}
-							lists.push({
-								url: val.path,
-								progress: 0,
-								error: false,
-								file: val
-							});
-						}
+		async selectFile() {
+			let that = this;
+			let checkPermission = await that.$tools.checkAppAlbum();
+			if (checkPermission) {
+				if (this.disabled) return;
+				// #ifdef APP-VUE
+				// #endif
+				const { name = '', maxCount, multiple, maxSize, sizeType, lists, camera, compressed, maxDuration, sourceType } = this;
+				let chooseFile = null;
+				const newMaxCount = maxCount - lists.length;
+				// 设置为只选择图片的时候使用 chooseImage 来实现
+				chooseFile = new Promise((resolve, reject) => {
+					uni.chooseImage({
+						count: multiple ? (newMaxCount > 9 ? 9 : newMaxCount) : 1,
+						sourceType: sourceType,
+						sizeType,
+						success: resolve,
+						fail: reject
 					});
-					// 每次图片选择完，抛出一个事件，并将当前内部选择的图片数组抛出去
-					this.$emit('on-choose-complete', this.lists, this.index);
-					if (this.autoUpload) this.uploadFile(listOldLength);
-				})
-				.catch(error => {
-					this.$emit('on-choose-fail', error);
 				});
+				chooseFile
+					.then(res => {
+						let file = null;
+						let listOldLength = this.lists.length;
+						res.tempFiles.map((val, index) => {
+							// 检查文件后缀是否允许，如果不在this.limitType内，就会返回false
+							if (!this.checkFileExt(val)) return;
+
+							// 如果是非多选，index大于等于1或者超出最大限制数量时，不处理
+							if (!multiple && index >= 1) return;
+							if (val.size > maxSize) {
+								this.$emit('on-oversize', val, this.lists, this.index);
+								this.showToast('超出允许的文件大小');
+							} else {
+								if (maxCount <= lists.length) {
+									this.$emit('on-exceed', val, this.lists, this.index);
+									this.showToast('超出最大允许的文件个数');
+									return;
+								}
+								lists.push({
+									url: val.path,
+									progress: 0,
+									error: false,
+									file: val
+								});
+							}
+						});
+						// 每次图片选择完，抛出一个事件，并将当前内部选择的图片数组抛出去
+						this.$emit('on-choose-complete', this.lists, this.index);
+						if (this.autoUpload) this.uploadFile(listOldLength);
+					})
+					.catch(error => {
+						this.$emit('on-choose-fail', error);
+					});
+			}
 		},
 		// 提示用户消息
 		showToast(message, force = false) {

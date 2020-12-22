@@ -99,7 +99,7 @@ export default {
 			this.currentPage = 1;
 			this.lastPage = 1;
 			this.shareLogList = [];
-			this.getShareLog();
+			this.$u.debounce(this.getShareLog);
 		},
 
 		// 分享记录数据

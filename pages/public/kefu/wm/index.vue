@@ -135,7 +135,6 @@
 					<view class="write" :style="{ bottom: writeBottom + 'px' }">
 							<label class="widget_textarea" v-if="!selectModel">
 								<textarea
-									:adjust-position="false"
 									:show-confirm-bar="false"
 									:fixed="true"
 									:focus="kefuMessageFocus"
@@ -225,7 +224,6 @@
 					<view class="select_model_no_data" v-if="selectModelData.length <= 0"><text>没有更多记录了...</text></view>
 				</view>
 			</view>
-			
 		</view>
 	</view>
 </template>
@@ -309,6 +307,7 @@ export default {
 			uni.closeSocket();
 		}
 		// #endif
+		uni.hideKeyboard();
 	},
 	beforeDestroy() {
 		if (this.ws.SocketTask && this.ws.socketOpen) {
@@ -407,17 +406,17 @@ export default {
 						// 链接ws
 						that.connect_socket();
 					} else {
-						uni.showModal({
-							content: res.data.msg,
-							showCancel: false,
-							success: res => {
-								if (res.confirm) {
-									uni.navigateBack({
-										delta: 1
-									});
-								}
-							}
-						});
+						// uni.showModal({
+						// 	content: res.data.msg,
+						// 	showCancel: false,
+						// 	success: res => {
+						// 		if (res.confirm) {
+						// 			uni.navigateBack({
+						// 				delta: 1
+						// 			});
+						// 		}
+						// 	}
+						// });
 					}
 				},
 				fail: res => {
@@ -515,59 +514,62 @@ export default {
 				urls: [src]
 			});
 		},
-		upload_file: function() {
-			// #ifdef APP-VUE
-			// #endif
-			var that = this;
-			that.ws.pageHideCloseWs = false; // 页面hide不关闭链接
-			uni.chooseImage({
-				success: res => {
-					const tempFilePaths = res.tempFilePaths;
-
-					uni.showLoading({
-						title: '正在上传...'
-					});
-
-					const uploadTask = uni.uploadFile({
-						url: that.build_url('upload'),
-						// #ifdef APP-PLUS || H5
-						file: res.tempFiles[0],
-						// #endif
-						filePath: tempFilePaths[0],
-						name: 'file',
-						formData: {
-							token: uni.getStorageSync('token')
-						},
-						success: res => {
-							uni.hideLoading();
-							that.ws.pageHideCloseWs = true;
-							res = JSON.parse(res.data);
-							if (res.code == 1) {
-								that.send_message(res.data.url, 1);
-								that.switch_show_tool(false);
-								that.kefuMessageFocus = true;
-							} else {
-								uni.showModal({
-									title: '温馨提示',
-									content: res.msg,
-									showCancel: false
-								});
-							}
-						},
-						complete: res => {
-							uni.hideLoading();
-						}
-					});
-
-					// #ifndef APP-PLUS
-					uploadTask.onProgressUpdate(res => {
-						uni.showLoading({
-							title: res.progress + '%'
-						});
-					});
-					// #endif
-				}
-			});
+		async upload_file() {
+			let checkPermission = await that.$tools.checkAppAlbum();
+			if(checkPermission){
+				// #ifdef APP-VUE
+							// #endif
+							var that = this;
+							that.ws.pageHideCloseWs = false; // 页面hide不关闭链接
+							uni.chooseImage({
+								success: res => {
+									const tempFilePaths = res.tempFilePaths;
+				
+									uni.showLoading({
+										title: '正在上传...'
+									});
+				
+									const uploadTask = uni.uploadFile({
+										url: that.build_url('upload'),
+										// #ifdef APP-PLUS || H5
+										file: res.tempFiles[0],
+										// #endif
+										filePath: tempFilePaths[0],
+										name: 'file',
+										formData: {
+											token: uni.getStorageSync('token')
+										},
+										success: res => {
+											uni.hideLoading();
+											that.ws.pageHideCloseWs = true;
+											res = JSON.parse(res.data);
+											if (res.code == 1) {
+												that.send_message(res.data.url, 1);
+												that.switch_show_tool(false);
+												that.kefuMessageFocus = true;
+											} else {
+												uni.showModal({
+													title: '温馨提示',
+													content: res.msg,
+													showCancel: false
+												});
+											}
+										},
+										complete: res => {
+											uni.hideLoading();
+										}
+									});
+				
+									// #ifndef APP-PLUS
+									uploadTask.onProgressUpdate(res => {
+										uni.showLoading({
+											title: res.progress + '%'
+										});
+									});
+									// #endif
+								}
+							});
+			}
 		},
 		connect_socket: function() {
 			var that = this;
@@ -1064,7 +1066,7 @@ export default {
 			var that = this;
 			this.showTool = false;
 			console.log('获取焦点',e)
-			that.writeBottom = e.detail.height ? e.detail.height : 0;
+			// that.writeBottom = e.detail.height ? e.detail.height : 0;
 		},
 		// 输入框输入
 		textarea_input: function(e) {

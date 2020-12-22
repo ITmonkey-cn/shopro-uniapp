@@ -86,19 +86,23 @@ export default {
 		});
 	},
 	// 图片处理-选择图片
-	chooseImage(count = 1) {
-		return new Promise((resolve, reject) => {
-			uni.chooseImage({
-				count: count, //默认9
-				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-				sourceType: ['album'], //从相册选择
-				success: res => {
-					resolve(res.tempFilePaths);
-				}
-			});
-		}).catch(e => {
-			reject(e)
-		})
+	async chooseImage(count = 1) {
+		let checkPermission = await this.checkAppAlbum();
+		if (checkPermission) {
+			return new Promise((resolve, reject) => {
+				uni.chooseImage({
+					count: count, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album'], //从相册选择
+					success: res => {
+						resolve(res.tempFilePaths);
+					}
+				});
+			}).catch(e => {
+				reject(e)
+			})
+		}
+
 	},
 	// 图片处理-上传图片
 	uploadImage(api, url) {
@@ -297,21 +301,18 @@ export default {
 		});
 	},
 
-	// #ifdef APP-VUE
 	/**
 	 * app检测获取相册权限
 	 * @return {String} status 1: 有权限。
 	 */
 	async checkAppAlbum() {
-		let status = permision.isIOS ? await permision.requestIOS('album') : await permision.requestAndroid(
-			'android.permission.READ_EXTERNAL_STORAGE');
-
-		if (status === null || status === 1) {
-			status = 1;
-		} else {
-			status = 0;
+		// #ifdef APP-VUE
+		let status = permision.isIOS ? await permision.requestIOS('album') : await permision.requestAndroid([
+			'android.permission.READ_EXTERNAL_STORAGE', 'android.permission.WRITE_EXTERNAL_STORAGE'
+		]);
+		if (status !== 1) {
 			uni.showModal({
-				content: '需要获取读写手机存储（系统提示为访问设备上的照片、媒体内容和文件）权限。',
+				content: '需要相册读写权限',
 				confirmText: '设置',
 				success: function(res) {
 					if (res.confirm) {
@@ -319,11 +320,17 @@ export default {
 					}
 				}
 			});
-		}
+			return false
 
-		return status;
+		} else {
+			return true
+		}
+		// #endif
+		// #ifndef APP-VUE
+		return true
+		// #endif
+
 	}
 
-	// #endif
 
 }

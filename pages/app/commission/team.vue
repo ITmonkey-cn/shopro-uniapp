@@ -172,7 +172,7 @@ export default {
 					item.isUnfold = false;
 				}
 			});
-			this.getChildrenTeam(id, ind);
+			!this.isLoading && this.getChildrenTeam(id, ind);
 		},
 
 		// 团队列表
@@ -180,10 +180,12 @@ export default {
 			let that = this;
 			that.emptyData.show = false;
 			that.loadStatus = 'loading';
+			that.isLoading = true;
 			that.$api('commission.team', {
 				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
+					that.isLoading = false;
 					that.twoTeamCount = res.data.child_user_count_2;
 					let arr = res.data.teams.data;
 					arr.map(item => {

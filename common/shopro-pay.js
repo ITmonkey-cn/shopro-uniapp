@@ -180,7 +180,7 @@ export default class ShoproPay {
 			let newUrl = url[1].replace(reg, '&');
 			let domain = uni.getStorageSync('sysInfo').domain; //域名需要https
 			let params = encodeURIComponent(
-				`${domain}/pages/order/payment/result?orderSn=${that.order.order_sn}&type=${that.payment}&pay=1`)
+				`${domain}/pages/order/payment/result?orderSn=${that.order.order_sn}&type=${that.payment}`)
 			window.location.href = newUrl + '&redirect_url=' + params;
 		}
 	}

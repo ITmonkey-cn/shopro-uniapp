@@ -15,6 +15,10 @@
             "autoclose" : true,
             "delay" : 3000
         },
+        /* 软键盘弹出方式 */
+        "softinput" : {
+            "mode" : "adjustPan"
+        },
         /* 5+App特有相关 */
         "modules" : {
             "OAuth" : {},
@@ -28,6 +32,15 @@
         "distribute" : {
             /* 应用发布信息 */
             "android" : {
+                /* 权限请求 */
+                "permissionExternalStorage" : {
+                    "request" : "none",
+                    "prompt" : "应用保存运行状态等信息，需要获取读写手机存储（系统提示为访问设备上的照片、媒体内容和文件）权限，请允许。"
+                },
+                "permissionPhoneState" : {
+                    "request" : "none",
+                    "prompt" : "为保证您正常、安全地使用，需要获取设备识别码（部分手机提示为获取手机号码）使用权限，请允许。"
+                },
                 /* android打包配置 */
                 "permissions" : [
                     "<uses-feature android:name=\"android.hardware.camera\"/>",
