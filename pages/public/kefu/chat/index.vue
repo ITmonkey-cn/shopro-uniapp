@@ -3,15 +3,15 @@
 	<view class="chat-wrap">
 		<cu-custom bgColor="bg-gradual-purple" :isBack="true">
 			<block slot="backText">
-				<view class="x-f head-box">
-					<text class="head-title">{{ navTitle.split(',')[0] }}</text>
-					<view v-if="navTitle.split(',')[1] === '在线'">
-						<text class="cuIcon-title text-green head-icon"></text>
-						<text class="head-state">在线</text>
+				<view class="x-f head-box x-f">
+					<view class="head-title mr20">{{ navTitle.split(',')[0] }}</view>
+					<view v-if="navTitle.split(',')[1] === '在线'" class="x-f">
+						<view class="cuIcon-title text-green head-icon"></view>
+						<view class="head-state">在线</view>
 					</view>
-					<view v-if="navTitle.split(',')[1] === '离线'">
-						<text class="cuIcon-title text-gray head-icon"></text>
-						<text class="head-state">离线</text>
+					<view v-if="navTitle.split(',')[1] === '离线'" class="x-f">
+						<view class="cuIcon-title text-gray head-icon"></view>
+						<view class="head-state">离线</view>
 					</view>
 				</view>
 			</block>
@@ -793,12 +793,15 @@ page {
 .head-box {
 	.head-title {
 		font-size: 38rpx;
+		line-height: 38rpx;
 	}
 	.head-icon {
 		font-size: 34rpx;
+		line-height: 38rpx;
 	}
 	.head-state {
 		font-size: 28rpx;
+		line-height: 38rpx;
 	}
 }
 // 模板消息
