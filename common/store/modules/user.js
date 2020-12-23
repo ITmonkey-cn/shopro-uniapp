@@ -71,7 +71,6 @@ const actions = {
 				commit('USER_INFO', res.data);
 				uni.setStorageSync('userInfo', res.data);
 				store.dispatch('getOrderNum');
-				//添加推广记录 TODO,测试分享锁定。
 				let share_id = uni.getStorageSync('share_id');
 				let url = uni.getStorageSync('url');
 				uni.removeStorageSync('share_id');

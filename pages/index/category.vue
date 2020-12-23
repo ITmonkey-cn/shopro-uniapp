@@ -35,15 +35,15 @@ export default {
 	data() {
 		return {
 			categoryType: 0, //1:快速购买,2:一级分类，3:二级分类，4:三级分类
-			categoryId: 0 ,//分类Id
-			queryObj:{}
+			categoryId: 0, //分类Id
+			queryObj: {}
 		};
 	},
 	computed: {},
 	onLoad(options) {
 		this.queryObj = options;
-		this.getCategory();
 		this.categoryId = Number(this.$Route.query.id);
+		this.getCategory();
 	},
 	methods: {
 		/**
@@ -55,8 +55,9 @@ export default {
 				id: this.$Route.query.id
 			}).then(res => {
 				if (res.code === 1) {
-					// TODO，小程序运维中心报错
-					this.categoryType = parseInt(res.data.type);
+					if (res.data.type) {
+						this.categoryType = Number(res.data.type);
+					}
 					uni.setNavigationBarTitle({
 						title: res.data.name
 					});

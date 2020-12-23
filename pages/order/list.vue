@@ -194,7 +194,7 @@ export default {
 				url: `/pages/order/payment/method?orderId=${id}`
 			});
 		},
-		// 查看物流,Todo
+		// 查看物流
 		onExpress(orderId) {
 			let that = this;
 			that.$api('order.expressList', {

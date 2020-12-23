@@ -311,7 +311,7 @@ export default {
 		onComment(orderId, orderItemId) {
 			this.jump('/pages/order/add-comment', { orderId: orderId, orderItemId: orderItemId });
 		},
-		// 查看物流,Todo
+		// 查看物流
 		onExpress(orderId, orderItemId) {
 			let that = this;
 			that.$api('order.expressList', {
