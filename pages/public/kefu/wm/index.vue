@@ -1065,7 +1065,6 @@ export default {
 		textarea_focus: function(e) {
 			var that = this;
 			this.showTool = false;
-			console.log('获取焦点',e)
 			// that.writeBottom = e.detail.height ? e.detail.height : 0;
 		},
 		// 输入框输入

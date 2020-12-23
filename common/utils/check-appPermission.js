@@ -1,7 +1,6 @@
 /**
  *app权限检测
  */
-
 // #ifdef APP-VUE
 import permision from "@/common/permission.js"
 // #endif
