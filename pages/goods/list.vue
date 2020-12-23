@@ -86,7 +86,7 @@ export default {
 			this.listParams.order = e;
 			this.goodsList = [];
 			this.listParams.page = 1;
-			this.getGoodsList();
+			this.$u.debounce(this.getGoodsList);
 		},
 		// 键盘搜索
 		onSearch() {

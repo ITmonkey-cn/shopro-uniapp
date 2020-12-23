@@ -1,5 +1,5 @@
 <template>
-	<view class="cu-load load-modal" v-show="loadModal">
+	<view class="cu-load load-modal" v-if="loadModal">
 		<image class="load-img" src="/static/imgs//logo/logo.gif" mode="aspectFit"></image>
 		<view class="locad-text">加载中...</view>
 	</view>

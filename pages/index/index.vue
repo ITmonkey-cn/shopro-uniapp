@@ -6,7 +6,7 @@
 		<view v-else class="page_box shopro-selector">
 			<!-- 导航栏 -->
 			<view class="head_box active" :style="{ background: bgcolor }">
-				<cu-custom :isBack="true" v-if="info && info.name">
+				<cu-custom :isBack="true" :showBackIcon="false" v-if="info && info.name">
 					<block slot="backText">
 						<text class="nav-title shopro-selector-rect">{{ info.name || '商城' }}</text>
 					</block>
