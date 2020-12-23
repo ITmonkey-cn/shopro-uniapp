@@ -10,7 +10,7 @@
 					<view class="y-start">
 						<view class="user-info-box x-f">
 							<view class="user-name">{{ userInfo.nickname }}</view>
-							<view class="grade-tag tag-box x-f" v-if="commissionLv" @tap="toLv">
+							<view class="grade-tag tag-box x-f" v-if="commissionLv">
 								<image class="tag-img" :src="commissionLv.image" mode=""></image>
 								<text class="tag-title">{{ commissionLv.name }}</text>
 								<text class="cuIcon-right" v-if="showLv" style="color: #fff; font-size: 26rpx;"></text>
@@ -248,10 +248,6 @@ export default {
 		// 跳转
 		jump(path, query) {
 			this.$tools.routerTo(path, query);
-		},
-
-		toLv() {
-			this.showLv && this.jump('/pages/app/commission/level');
 		},
 		// 百分比
 		getProgress(sales, stock) {

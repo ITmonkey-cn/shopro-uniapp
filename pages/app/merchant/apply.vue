@@ -99,6 +99,9 @@
 
 <script>
 import { API_URL } from '@/env.js';
+// #ifdef APP-PLUS
+import permision from '@/common/permission.js';
+// #endif
 export default {
 	components: {},
 	data() {
@@ -326,9 +329,29 @@ export default {
 					return;
 			}
 		},
+		// app权限判断
+		async checkPermission() {
+			let status = permision.isIOS ? await permision.requestIOS('location') : await permision.requestAndroid(['android.permission.ACCESS_FINE_LOCATION']);
+			return status;
+		},
 
 		// 地址选择
-		chooseLocation() {
+		async chooseLocation() {
+			// #ifdef APP-PLUS
+			let status = await this.checkPermission();
+			if (status !== 1) {
+				uni.showModal({
+					content: '需要定位权限',
+					confirmText: '设置',
+					success: function(res) {
+						if (res.confirm) {
+							permision.gotoAppSetting();
+						}
+					}
+				});
+				return;
+			}
+			// #endif
 			uni.chooseLocation({
 				success: res => {
 					this.model.address = res.address;

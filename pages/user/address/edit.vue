@@ -56,6 +56,9 @@
 </template>
 
 <script>
+	// #ifdef APP-PLUS
+	import permision from '@/common/permission.js';
+	// #endif
 export default {
 	components: {},
 	data() {
@@ -112,7 +115,22 @@ export default {
 	},
 	methods: {
 		// 地图选择地址
-		chooseLocation() {
+		async chooseLocation() {
+			// #ifdef APP-PLUS
+			let status = await this.checkPermission();
+			if (status !== 1) {
+				uni.showModal({
+					content: '需要定位权限',
+					confirmText: '设置',
+					success: function(res) {
+						if (res.confirm) {
+							permision.gotoAppSetting();
+						}
+					}
+				});
+				return;
+			}
+			// #endif
 			uni.chooseLocation({
 				success: res => {
 					this.chooseAddress = res.address;
@@ -136,6 +154,11 @@ export default {
 				}
 			});
 			// #endif
+		},
+		// app权限判断
+		async checkPermission() {
+			let status = permision.isIOS ? await permision.requestIOS('location') : await permision.requestAndroid(['android.permission.ACCESS_FINE_LOCATION']);
+			return status;
 		},
 		onSwitch() {
 			this.addressData.is_default = !this.addressData.is_default;

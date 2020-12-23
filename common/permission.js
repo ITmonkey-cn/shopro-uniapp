@@ -233,13 +233,34 @@ function gotoAppPermissionSetting() {
 	}
 }
 
+// 系统本身位置服务是否开启
+function checkSystemEnableLocation() {
+	if (isIos) {
+		var result = false;
+		var cllocationManger = plus.ios.import("CLLocationManager");
+		var result = cllocationManger.locationServicesEnabled();
+		console.log("系统定位开启:" + result);
+		plus.ios.deleteObject(cllocationManger);
+		return result;
+	} else {
+		var context = plus.android.importClass("android.content.Context");
+		var locationManager = plus.android.importClass("android.location.LocationManager");
+		var main = plus.android.runtimeMainActivity();
+		var mainSvr = main.getSystemService(context.LOCATION_SERVICE);
+		var result = mainSvr.isProviderEnabled(locationManager.GPS_PROVIDER);
+		console.log("系统定位开启:" + result);
+		return result
+	}
+}
+
 const permission = {
 	get isIOS() {
 		return typeof isIOS === 'boolean' ? isIOS : (isIOS = uni.getSystemInfoSync().platform === 'ios')
 	},
 	requestIOS: requestIOS,
 	requestAndroid: requestAndroid,
-	gotoAppSetting: gotoAppPermissionSetting
+	gotoAppSetting: gotoAppPermissionSetting,
+	checkSystemEnableLocation: checkSystemEnableLocation
 }
 
 module.exports = permission
