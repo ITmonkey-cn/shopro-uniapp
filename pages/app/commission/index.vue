@@ -6,7 +6,7 @@
 			<!-- 用户资料 -->
 			<view class="user-card">
 				<view class="card-top x-f">
-					<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode="widthFix"></image></view>
+					<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode=""></image></view>
 					<view class="y-start">
 						<view class="user-info-box x-f">
 							<view class="user-name">{{ userInfo.nickname }}</view>
@@ -241,6 +241,7 @@ export default {
 	},
 	onLoad() {},
 	onPullDownRefresh() {
+		this.commissionLog = [];
 		this.getStatus();
 	},
 	methods: {

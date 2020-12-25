@@ -60,7 +60,7 @@ export default {
 			let pages = getCurrentPages();
 			let query = this.queryObj ? this.queryObj : this.$Route.query;
 			let currPage = this.$Route.path;
-			if (Object.keys(query).length) {
+			if (Object.keys(query).length && currPage !== '/pages/index/index') {
 				let params = '';
 				for (let key in query) {
 					params += '?' + key + '=' + query[key] + '&';

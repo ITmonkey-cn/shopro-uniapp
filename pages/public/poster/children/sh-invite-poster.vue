@@ -116,7 +116,6 @@ export default {
 									type: 'image', //头像
 									url: that.$tools.checkImgHttp(that.userInfo.avatar),
 									alpha: 1,
-									dx: bgObj.width * 0.5 - (bgObj.width * 0.16) / 2,
 									dy: bgObj.width * 0.16,
 									infoCallBack(imageInfo) {
 										let scale = (bgObj.width * 0.16) / imageInfo.height;
@@ -127,7 +126,9 @@ export default {
 												r: (bgObj.width * 0.16) / 2
 											}, // 圆形图片 , 若circleSet与roundRectSet一同设置 优先circleSet设置
 											dWidth: imageInfo.width * scale, // 因为设置了圆形图片 所以要乘以2
-											dHeight: bgObj.width * 0.16
+											dHeight: bgObj.width * 0.16,
+											dx: bgObj.width * 0.5 - imageInfo.width * 0.5 * scale
+
 											/* roundRectSet: { // 圆角矩形
 													r: imageInfo.width * .1
 												} */
