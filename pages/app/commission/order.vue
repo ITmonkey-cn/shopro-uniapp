@@ -1,11 +1,66 @@
 <!-- 分销订单 -->
 <template>
 	<view class="page_box commission-order-wrap">
-		<!-- 状态分类 -->
-		<view class="head_box x-f">
-			<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state.value" @tap="onTab(state.value)">
-				<text class="state-title" :class="{ 'title-active': stateCurrent === state.value }">{{ state.name }}</text>
-				<text class="underline" :class="{ 'underline-active': stateCurrent === state.value }"></text>
+		<view class="head_box">
+			<!-- 标题 -->
+			<cu-custom isBack>
+				<block slot="backText"><text class="head-title">分销订单</text></block>
+			</cu-custom>
+
+			<!-- 团队数据总览 -->
+			<view class="team-data-box x-bc">
+				<view class="data-card">
+					<view class="total-item">
+						<view class="item-title">团队订单数量（单）</view>
+						<view class="total-num">{{ agentInfo.child_order_count || 0 }}</view>
+					</view>
+					<view class="category-item x-f">
+						<view class="y-start flex-sub">
+							<view class="item-title">一级订单</view>
+							<view class="category-num">{{ agentInfo.child_order_count_1 || 0 }}</view>
+						</view>
+						<view class="y-start flex-sub">
+							<view class="item-title">二级订单</view>
+							<view class="category-num">{{ agentInfo.child_order_count_2 || 0 }}</view>
+						</view>
+					</view>
+				</view>
+				<view class="data-card">
+					<view class="total-item">
+						<view class="item-title">团队订单金额（元）</view>
+						<view class="total-num">{{ agentInfo.child_order_money || '0.00' }}</view>
+					</view>
+					<view class="category-item x-f">
+						<view class="y-start flex-sub">
+							<view class="item-title">一级订单</view>
+							<view class="category-num">{{ agentInfo.child_order_money_1 || '0.00' }}</view>
+						</view>
+						<view class="y-start ">
+							<view class="item-title">二级订单</view>
+							<view class="category-num">{{ agentInfo.child_order_money_2 || '0.00' }}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<!-- 直推 -->
+			<view class="direct-box x-bc">
+				<view class="direct-item ">
+					<view class="item-title">直推分销订单数量（单）</view>
+					<view class="item-value">{{ agentInfo.order_count }}</view>
+				</view>
+				<view class="direct-item">
+					<view class="item-title">直推分销订单金额（元）</view>
+					<view class="item-value">{{ agentInfo.order_money }}</view>
+				</view>
+			</view>
+
+			<!-- 状态分类 -->
+			<view class="x-f nav-box">
+				<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state.value" @tap="onTab(state.value)">
+					<text class="state-title" :class="{ 'title-active': stateCurrent === state.value }">{{ state.name }}</text>
+					<text class="underline" :class="{ 'underline-active': stateCurrent === state.value }"></text>
+				</view>
 			</view>
 		</view>
 		<view class="content_box">
@@ -46,7 +101,7 @@
 				</view>
 			</view>
 			<!-- 缺省页 -->
-			<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
+			<shopro-empty style="margin-top: 100rpx;" v-if="emptyData.show" :isFixed="false" :emptyData="emptyData"></shopro-empty>
 			<!-- 更多 -->
 			<u-loadmore v-if="orderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 		</view>
@@ -54,11 +109,13 @@
 </template>
 
 <script>
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {
 			stateCurrent: 'all', //默认
+			agentInfo: uni.getStorageSync('agentInfo'),
 			statusList: [
 				{
 					name: '全部',
@@ -90,7 +147,11 @@ export default {
 			}
 		};
 	},
-	computed: {},
+	computed: {
+		...mapState({
+			userInfo: state => state.user.userInfo
+		})
+	},
 	onLoad() {
 		this.getOrderList();
 	},
@@ -145,11 +206,79 @@ export default {
 </script>
 
 <style lang="scss">
+// 直推
+.direct-box {
+	margin: 20rpx;
+	.direct-item {
+		width: 341rpx;
+		height: 117rpx;
+		background: #ffffff;
+		border-radius: 20rpx;
+		padding: 20rpx;
+		.item-title {
+			font-size: 22rpx;
+			font-weight: 500;
+			color: #999999;
+			margin-bottom: 6rpx;
+		}
+		.item-value {
+			font-size: 38rpx;
+			font-weight: 600;
+			color: #333333;
+		}
+	}
+}
+// 团队信息总览
+.team-data-box {
+	margin: 20rpx;
+	.data-card {
+		width: 340rpx;
+		background: #ffffff;
+		border-radius: 20rpx;
+		padding: 20rpx;
+
+		.item-title {
+			font-size: 22rpx;
+			font-weight: 500;
+			color: #999999;
+			line-height: 30rpx;
+			margin-bottom: 10rpx;
+		}
+
+		.total-item {
+			margin-bottom: 20rpx;
+		}
+
+		.total-num {
+			font-size: 38rpx;
+			font-weight: 600;
+			color: #333333;
+		}
+
+		.category-num {
+			font-size: 26rpx;
+			font-weight: 600;
+			color: #333333;
+		}
+	}
+}
+
 // 状态分类
 .head_box {
 	width: 750rpx;
-	height: 95rpx;
-	background: #ffffff;
+	background: url($IMG_URL+'/imgs/commission/card_bg.png') no-repeat;
+	/deep/ .cu-back {
+		color: #fff;
+		font-size: 40rpx;
+	}
+
+	.head-title {
+		font-size: 38rpx;
+		color: #fff;
+	}
+}
+.nav-box {
+	background-color: #fff;
 }
 .state-item {
 	height: 100%;

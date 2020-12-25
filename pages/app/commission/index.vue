@@ -5,16 +5,27 @@
 			<cu-custom isBack></cu-custom>
 			<!-- 用户资料 -->
 			<view class="user-card">
-				<view class="card-top x-f">
-					<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode=""></image></view>
-					<view class="y-start">
-						<view class="user-info-box x-f">
+				<view class="card-top x-bc">
+					<view class="x-f">
+						<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode=""></image></view>
+						<view class="y-start">
 							<view class="user-name">{{ userInfo.nickname }}</view>
-							<view class="grade-tag tag-box x-f" v-if="commissionLv">
-								<image class="tag-img" :src="commissionLv.image" mode=""></image>
-								<text class="tag-title">{{ commissionLv.name }}</text>
-								<text class="cuIcon-right" v-if="showLv" style="color: #fff; font-size: 26rpx;"></text>
+							<view class="user-info-box x-f">
+								<view class="grade-tag tag-box x-f" v-if="commissionLv">
+									<image class="tag-img" :src="commissionLv.image" mode=""></image>
+									<text class="tag-title">{{ commissionLv.name }}</text>
+									<text class="cuIcon-right" v-if="showLv" style="color: #fff; font-size: 26rpx;"></text>
+								</view>
 							</view>
+						</view>
+					</view>
+					<view class="y-start">
+						<view class="y-f">
+							<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
+							<button class="cu-btn look-btn" @tap="onEye">
+								<text v-if="showMoney" class="cuIcon-attentionfill"></text>
+								<text v-else class="cuIcon-attentionforbidfill"></text>
+							</button>
 						</view>
 					</view>
 				</view>
@@ -23,16 +34,13 @@
 						<view class="item-title">总收益</view>
 						<view class="item-detail">{{ showMoney ? commissionWallet.total_income || '0.00' : '***' }}</view>
 					</view>
-					<view class="flex-sub  y-start">
+					<view class="flex-sub y-start" style="align-items: center;">
 						<view class="item-title">待入账佣金</view>
 						<view class="item-detail">{{ showMoney ? commissionWallet.delay_money || '0.00' : '***' }}</view>
 					</view>
-					<view class="y-f">
-						<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
-						<button class="cu-btn look-btn" @tap="onEye">
-							<text v-if="showMoney" class="cuIcon-attentionfill"></text>
-							<text v-else class="cuIcon-attentionforbidfill"></text>
-						</button>
+					<view class="flex-sub y-start" style="align-items: flex-end;">
+						<view class="item-title">我的消费</view>
+						<view class="item-detail">{{ showMoney ? userInfo.total_consume || '0.00' : '***' }}</view>
 					</view>
 				</view>
 			</view>
@@ -705,7 +713,42 @@ export default {
 	background-size: 100% 100%;
 	padding-top: 10rpx;
 	.card-top {
-		margin: 40rpx;
+		padding: 40rpx 40rpx 30rpx;
+		margin-bottom: 30rpx;
+		border-bottom: 1px solid rgba(#fff, 0.12);
+		.user-name {
+			font-size: 26rpx;
+			font-weight: 500;
+			color: #ffffff;
+			line-height: 30rpx;
+			margin-bottom: 20rpx;
+		}
+		.cu-btn {
+			padding: 0;
+			background: none;
+		}
+		.log-btn {
+			width: 83rpx;
+			height: 41rpx;
+			border: 1rpx solid rgba(#ffffff, 0.33);
+			border-radius: 21rpx;
+			font-size: 22rpx;
+			font-weight: 400;
+			color: #ffffff;
+		}
+		.look-btn {
+			color: #fff;
+			font-size: 40rpx;
+			.cuIcon-attentionfill,
+			.cuIcon-attentionforbidfill {
+				line-height: 50rpx;
+				margin-top: 20rpx;
+			}
+			.cuIcon-attentionfill {
+				line-height: 50rpx;
+				margin-top: 20rpx;
+			}
+		}
 	}
 	.head-img-box {
 		margin-right: 26rpx;
@@ -727,18 +770,11 @@ export default {
 		}
 	}
 	.user-info-box {
-		.user-name {
-			font-size: 26rpx;
-			font-weight: 500;
-			color: #ffffff;
-			line-height: 30rpx;
-		}
 		.tag-box {
 			background: rgba(0, 0, 0, 0.2);
 			border-radius: 21rpx;
 			line-height: 38rpx;
 			padding-right: 10rpx;
-			margin-left: 10rpx;
 
 			.tag-img {
 				width: 36rpx;
@@ -772,32 +808,6 @@ export default {
 			color: #fefefe;
 			line-height: 30rpx;
 			margin-top: 30rpx;
-		}
-		.cu-btn {
-			padding: 0;
-			background: none;
-		}
-		.log-btn {
-			width: 83rpx;
-			height: 41rpx;
-			border: 1rpx solid rgba(#ffffff, 0.33);
-			border-radius: 21rpx;
-			font-size: 22rpx;
-			font-weight: 400;
-			color: #ffffff;
-		}
-		.look-btn {
-			color: #fff;
-			font-size: 40rpx;
-			.cuIcon-attentionfill,
-			.cuIcon-attentionforbidfill {
-				line-height: 50rpx;
-				margin-top: 20rpx;
-			}
-			.cuIcon-attentionfill {
-				line-height: 50rpx;
-				margin-top: 20rpx;
-			}
 		}
 	}
 }

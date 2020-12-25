@@ -332,7 +332,8 @@
 				{
 					"path": "commission/order",
 					"style": {
-						"navigationBarTitleText": "分销订单"
+						"navigationBarTitleText": "分销订单",
+						"navigationStyle": "custom"
 					},
 					"meta": {
 						"auth": true,

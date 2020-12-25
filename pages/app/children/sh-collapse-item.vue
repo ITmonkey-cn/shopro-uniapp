@@ -11,10 +11,13 @@
 							<text class="tag-title">{{ level.name }}</text>
 						</view>
 					</view>
-					<view class="head-time">{{ $u.timeFormat(dateTime, 'yyyy年mm月dd日') }}</view>
+					<view class="x-f">
+						<view class="head-time">{{ $u.timeFormat(dateTime, 'yyyy年mm月dd日') }}</view>
+						<view class="child-num ml30">下级成员：{{ childNum }}人</view>
+					</view>
 				</view>
 			</view>
-			<button class="cu-btn arrow-btn" :class="{ 'arrow-active': showUnfold }" @tap="onArrow"><text class="cuIcon-unfold"></text></button>
+			<button v-if="childNum" class="cu-btn arrow-btn" :class="{ 'arrow-active': showUnfold }" @tap="onArrow"><text class="cuIcon-unfold"></text></button>
 		</view>
 		<slot v-if="showUnfold" name="collapse-children"></slot>
 	</view>
@@ -55,6 +58,10 @@ export default {
 		isUnfold: {
 			type: Boolean,
 			default: false
+		},
+		childNum: {
+			type: Number,
+			default: 0
 		}
 	},
 	computed: {
@@ -100,7 +107,8 @@ export default {
 			transition: all linear 0.3s;
 		}
 		.head-info {
-			.head-time {
+			.head-time,
+			.child-num {
 				font-size: 24rpx;
 				font-weight: 400;
 				color: #999999;

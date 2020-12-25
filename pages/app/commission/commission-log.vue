@@ -17,10 +17,7 @@
 						<view class="item-title">待入账佣金</view>
 						<view class="item-value">{{ showMoney ? agentInfo.delay_money || '0.00' : '***' }}</view>
 					</view>
-					<view class="card-item y-start">
-						<view class="item-title">已提现佣金</view>
-						<view class="item-value">{{ showMoney ? agentInfo.total_withdraw || '0.00' : '***' }}</view>
-					</view>
+					
 					<view class="card-item y-start">
 						<view class="item-title">可提现佣金</view>
 						<view class="item-value">{{ showMoney ? userInfo.money || '0.00' : '***' }}</view>
@@ -29,7 +26,7 @@
 				<button class="cu-btn draw-btn" @tap="jump('/pages/user/wallet/index')">提现</button>
 			</view>
 			<!-- 消费 -->
-			<view class="x-bc">
+			<view class="x-bc" v-if="false">
 				<view class="consumption-item x-f">
 					<text class="cuIcon-goods item-icon"></text>
 					<view class="y-start">
@@ -219,7 +216,6 @@ export default {
 	padding: 30rpx;
 	position: relative;
 	box-shadow: 1rpx 5rpx 16rpx 0px rgba(94, 73, 195, 0.81);
-	margin-bottom: 40rpx;
 	.head-box {
 		margin-bottom: 20rpx;
 		.head-title {

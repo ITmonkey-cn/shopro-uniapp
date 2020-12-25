@@ -10,32 +10,32 @@
 				<view class="data-card">
 					<view class="total-item">
 						<view class="item-title">团队总人数(人)</view>
-						<view class="total-num">{{ userInfo.child_user_count }}</view>
+						<view class="total-num">{{ userInfo.child_user_count || 0 }}</view>
 					</view>
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
 							<view class="item-title">一级成员</view>
-							<view class="category-num">{{ userInfo.child_user_count_1 }}</view>
+							<view class="category-num">{{ userInfo.child_user_count_1 || 0 }}</view>
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">二级成员</view>
-							<view class="category-num">{{ twoTeamCount }}</view>
+							<view class="category-num">{{ twoTeamCount || 0 }}</view>
 						</view>
 					</view>
 				</view>
 				<view class="data-card">
 					<view class="total-item">
 						<view class="item-title">团队分销商人数(人)</view>
-						<view class="total-num">{{ agentInfo.child_agent_count }}</view>
+						<view class="total-num">{{ agentInfo.child_agent_count || 0 }}</view>
 					</view>
 					<view class="category-item x-f">
 						<view class="y-start flex-sub">
-							<view class="item-title">一级分销商人数</view>
-							<view class="category-num">{{ agentInfo.child_agent_count_1 }}</view>
+							<view class="item-title">一级分销商</view>
+							<view class="category-num">{{ agentInfo.child_agent_count_1 || 0 }}</view>
 						</view>
 						<view class="y-start ">
-							<!-- <view class="item-title">二级分销</view>
-							<view class="category-num">{{ agentInfo.child_order_money_1 }}</view> -->
+							<view class="item-title">二级分销商</view>
+							<view class="category-num">{{ agentInfo.child_agent_count_2 || 0 }}</view>
 						</view>
 					</view>
 				</view>
@@ -62,6 +62,7 @@
 							:level="item.agent ? item.agent.level : null"
 							:name="item.nickname"
 							:isUnfold="item.isUnfold"
+							:childNum="item.child_user_count_1"
 							@click="onTeamList(item.id, index)"
 						>
 							<view slot="collapse-children" v-if="childrenTeamList.length">
@@ -106,7 +107,7 @@ export default {
 		return {
 			emptyData: {
 				show: false,
-				img:this.$IMG_URL + '/imgs/empty/no_team.png',
+				img: this.$IMG_URL + '/imgs/empty/no_team.png',
 				tip: '暂无团队人员',
 				path: '',
 				pathText: ''
