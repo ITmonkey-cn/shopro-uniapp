@@ -242,7 +242,7 @@ export default {
 		})
 	},
 	onShow() {
-		this.getStatus();
+		this.init();
 	},
 	onHide() {
 		this.commissionLog = [];
@@ -250,10 +250,15 @@ export default {
 	onLoad() {},
 	onPullDownRefresh() {
 		this.commissionLog = [];
-		this.getStatus();
+		this.init();
 	},
 	methods: {
-		...mapActions(['getAgent']),
+		...mapActions(['getAgent', 'getUserInfo']),
+		init() {
+			return Promise.all([this.getStatus(), this.getUserInfo()]).then(() => {
+				uni.stopPullDownRefresh();
+			});
+		},
 		// 跳转
 		jump(path, query) {
 			this.$tools.routerTo(path, query);
