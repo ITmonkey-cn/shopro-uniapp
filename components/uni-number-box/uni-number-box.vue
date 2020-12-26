@@ -118,6 +118,7 @@ export default {
 			}
 
 			this.inputValue = String(value / scale);
+			this.$emit('changeMinus',this.inputValue)
 			
 		},
 		_getDecimalScale() {

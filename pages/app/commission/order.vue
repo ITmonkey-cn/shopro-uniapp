@@ -95,10 +95,10 @@
 						</view>
 					</view>
 				</view>
-				<view class="total-box x-bc px20">
+				<!-- <view class="total-box x-bc px20">
 					<view class="num-price">共{{ item.item_slim.length }}件商品， 实付款:￥{{ item.pay_fee }}</view>
 					<view class="x-f"></view>
-				</view>
+				</view> -->
 			</view>
 			<!-- 缺省页 -->
 			<shopro-empty style="margin-top: 100rpx;" v-if="emptyData.show" :isFixed="false" :emptyData="emptyData"></shopro-empty>
@@ -354,7 +354,7 @@ export default {
 	}
 	.goods-card {
 		padding: 30rpx 20rpx;
-		border-bottom: 1rpx solid #dfdfdf;
+		// border-bottom: 1rpx solid #dfdfdf;
 		.goods-img-box {
 			margin-right: 30rpx;
 			.goods-img {

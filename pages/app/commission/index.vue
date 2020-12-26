@@ -123,7 +123,7 @@
 							<view class="detail">
 								<view class="title more-t ml10">满足以下消费金额</view>
 								<view class="x-f modal-progress">
-									<view class="progress-box ml20">
+									<view class="progress-box ml20 x-f">
 										<view class="cu-progress round sm">
 											<view class="progress--ing" :style="[{ width: getProgress(userInfo.total_consume, moneyTermNum) }]"></view>
 											<view
@@ -246,10 +246,12 @@ export default {
 	},
 	onHide() {
 		this.commissionLog = [];
+		this.currentPage = 1;
 	},
 	onLoad() {},
 	onPullDownRefresh() {
 		this.commissionLog = [];
+		this.currentPage = 1;
 		this.init();
 	},
 	methods: {
@@ -464,15 +466,14 @@ export default {
 // 进度条
 .progress-box {
 	.progress-tip {
-		font-size: 16rpx;
+		font-size: 24rpx;
 		font-weight: 500;
 		color: #c7b2ff;
-		line-height: 30rpx;
-		margin-top: 10rpx;
+		line-height: 24rpx;
 		white-space: nowrap;
 	}
 	.progress-num {
-		font-size: 14rpx;
+		font-size: 24rpx;
 		position: absolute;
 		color: #c7b2ff;
 		bottom: -30rpx;
@@ -620,13 +621,11 @@ export default {
 			padding-bottom: 30rpx;
 		}
 		.modal-progress {
-			align-items: flex-start;
 			.progress-tip {
-				font-size: 16rpx;
+				font-size: 24rpx;
 				font-weight: 500;
 				color: #c7b2ff;
 				line-height: 30rpx;
-				margin-top: 10rpx;
 				text-align: right;
 			}
 			.progress-box {

@@ -136,16 +136,17 @@ export default {
 <style lang="scss">
 .sh-userinfo-box {
 	position: relative;
-	height: 320rpx;
+	height: calc(var(--status-bar-height) + 300rpx);
 	.user-bg {
 		width: 100%;
-		height: 320rpx;
+		height: calc(var(--status-bar-height) + 300rpx);
 	}
 	.head-wrap {
 		position: absolute;
 		left: 50%;
 		transform: translateX(-50%);
 		width: 100%;
+		height: 100%;
 		z-index: 9;
 		top: 0;
 		.nav-title {
@@ -158,7 +159,8 @@ export default {
 	}
 
 	.user-head {
-		padding-top: 50rpx;
+		width: 100%;
+		padding-top: 30rpx;
 		.info-box {
 			padding-left: 30rpx;
 			.head-img-wrap {

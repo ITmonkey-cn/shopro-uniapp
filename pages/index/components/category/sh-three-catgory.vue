@@ -55,13 +55,13 @@ export default {
 				let arr = [];
 				let pages = getCurrentPages();
 				// #ifdef H5
-				let currentPath = '/' + pages[pages.length - 1].__page__.fullPath;
+				let currentPath = pages[pages.length - 1].__page__.fullPath;
 				// #endif
 				// #ifdef MP-WEIXIN || APP-VUE
-				let currentPath = '/' + pages[pages.length - 1].$page.fullPath;
+				let currentPath = pages[pages.length - 1].$page.fullPath;
 				// #endif
 				for (let item of this.tabbarList) {
-					arr.push(item.path.split('?')[0]);
+					arr.push(item.path);
 				}
 				return arr.includes(currentPath);
 			}

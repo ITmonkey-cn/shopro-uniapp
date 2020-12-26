@@ -19,7 +19,7 @@
 						</view>
 						<view class="y-start flex-sub">
 							<view class="item-title">二级成员</view>
-							<view class="category-num">{{ twoTeamCount || 0 }}</view>
+							<view class="category-num">{{ userInfo.child_user_count_2 || 0 }}</view>
 						</view>
 					</view>
 				</view>
@@ -187,7 +187,6 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
-					that.twoTeamCount = res.data.child_user_count_2;
 					let arr = res.data.teams.data;
 					arr.map(item => {
 						item.isUnfold = false;

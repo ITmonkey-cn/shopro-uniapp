@@ -140,7 +140,7 @@ export default {
 <style lang="scss">
 // nav
 .head_box {
-	height: 230rpx;
+	height: 280rpx;
 	background: url($IMG_URL+'/imgs/commission/share_head_bg.png') no-repeat;
 	background-size: 100% auto;
 	position: relative;
