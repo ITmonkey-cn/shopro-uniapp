@@ -1,5 +1,5 @@
 <template>
-	<view class="popup-box" v-if="!screenShot">
+	<view class="popup-box" v-if="!screenShot && !showLoginTip">
 		<view v-for="(p, index) in newPopupList" :key="index">
 			<view class="cu-modal" :class="{ show: showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
 				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
