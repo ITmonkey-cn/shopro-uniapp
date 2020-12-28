@@ -5,6 +5,12 @@
 			<cu-custom isBack>
 				<block slot="backText"><text class="head-title">我的团队</text></block>
 			</cu-custom>
+			<!-- 推荐人 -->
+			<view class="referrer-box x-f px30 ">
+				推荐人：
+				<image class="referrer-avatar" :src="referrerInfo.avatar" mode=""></image>
+				{{ referrerInfo.nickname }}
+			</view>
 			<!-- 团队数据总览 -->
 			<view class="team-data-box x-bc">
 				<view class="data-card">
@@ -112,6 +118,7 @@ export default {
 				path: '',
 				pathText: ''
 			},
+			referrerInfo: {}, //推荐人信息
 			twoTeamCount: 0, //二级成员
 			agentInfo: uni.getStorageSync('agentInfo'),
 			filterCurrent: 0,
@@ -187,6 +194,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.isLoading = false;
+					this.referrerInfo = res.data.parent_user;
 					let arr = res.data.teams.data;
 					arr.map(item => {
 						item.isUnfold = false;
@@ -249,6 +257,18 @@ export default {
 </script>
 
 <style lang="scss">
+// 推荐人
+.referrer-box {
+	font-size: 28rpx;
+	font-weight: 500;
+	color: #ffffff;
+	margin-top: 10rpx;
+	.referrer-avatar {
+		width: 34rpx;
+		height: 34rpx;
+		border-radius: 50%;
+	}
+}
 // 二级加载更多按钮
 .refresh-btn {
 	width: 100%;
@@ -287,7 +307,7 @@ export default {
 
 // 团队信息总览
 .team-data-box {
-	margin: 36rpx 20rpx;
+	margin: 30rpx 20rpx;
 
 	.data-card {
 		width: 340rpx;
