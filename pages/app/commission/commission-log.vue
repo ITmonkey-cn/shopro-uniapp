@@ -17,11 +17,12 @@
 						<view class="item-title">待入账佣金</view>
 						<view class="item-value">{{ showMoney ? agentInfo.delay_money || '0.00' : '***' }}</view>
 					</view>
-					
+
 					<view class="card-item y-start">
 						<view class="item-title">可提现佣金</view>
 						<view class="item-value">{{ showMoney ? userInfo.money || '0.00' : '***' }}</view>
 					</view>
+					<view class=""></view>
 				</view>
 				<button class="cu-btn draw-btn" @tap="jump('/pages/user/wallet/index')">提现</button>
 			</view>
@@ -53,29 +54,34 @@
 				</button>
 				<view class="total-box">收入￥{{ totalMoney || '0.00' }}</view>
 			</view>
+			<!-- 状态分类 -->
+			<view class="x-f nav-box">
+				<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state.value" @tap="onTab(state.value)">
+					<text class="state-title" :class="{ 'title-active': stateCurrent === state.value }">{{ state.name }}</text>
+					<text class="underline" :class="{ 'underline-active': stateCurrent === state.value }"></text>
+				</view>
+			</view>
 		</u-sticky>
 
-		<view class="content_box">
-			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<!-- 佣金明细列表 -->
-				<view class="log-item x-bc" v-for="item in rewardLog" :key="item.id">
-					<view class="item-left x-f">
-						<image class="log-img" :src="item.buyer.avatar" mode=""></image>
-						<view class="y-start">
-							<view class="log-name">{{ item.buyer.nickname }}</view>
-							<view class="log-notice">{{ $u.timeFormat(item.createtime, 'yyyy.mm.dd') }}</view>
-						</view>
-					</view>
-					<view class="item-right y-end">
-						<view class="log-num">+{{ item.commission }}</view>
-						<view class="log-date"></view>
+		<view class="item-box">
+			<!-- 佣金明细列表 -->
+			<view class="log-item x-bc" v-for="item in rewardLog" :key="item.id">
+				<view class="item-left x-f">
+					<image class="log-img" :src="item.buyer.avatar" mode=""></image>
+					<view class="y-start">
+						<view class="log-name">{{ item.buyer.nickname }}</view>
+						<view class="log-notice">{{ $u.timeFormat(item.createtime, 'yyyy.mm.dd') }}</view>
 					</view>
 				</view>
-				<!-- 更多 -->
-				<u-loadmore v-if="rewardLog.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-				<!-- 缺省页 -->
-				<shopro-empty v-if="emptyData.show" :emptyData="emptyData" :isFixed="false"></shopro-empty>
-			</scroll-view>
+				<view class="item-right y-end">
+					<view class="log-num" :style="{ color: classType[item.status_name] }">+{{ item.commission }}</view>
+					<view class="log-date"></view>
+				</view>
+			</view>
+			<!-- 更多 -->
+			<u-loadmore v-if="rewardLog.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
+			<!-- 缺省页 -->
+			<shopro-empty v-if="emptyData.show" :emptyData="emptyData" :isFixed="false"></shopro-empty>
 		</view>
 		<!-- 日期选择 -->
 		<u-calendar
@@ -99,6 +105,30 @@ export default {
 		return {
 			agentInfo: uni.getStorageSync('agentInfo'),
 			userInfo: uni.getStorageSync('userInfo'),
+			stateCurrent: 'all', //默认
+			classType: {
+				已退回: '#EB2B3D',
+				待入账: '#05C3A1',
+				已入账: '#7063D2'
+			},
+			statusList: [
+				{
+					name: '全部',
+					value: 'all'
+				},
+				{
+					name: '待入账',
+					value: 'waiting'
+				},
+				{
+					name: '已入账',
+					value: 'entry'
+				},
+				{
+					name: '已退回',
+					value: 'back'
+				}
+			],
 			showMoney: true, //是否显示金额
 			//日期选择
 			showCalendar: false,
@@ -130,12 +160,26 @@ export default {
 		this.getToday();
 		this.getCommissionLog();
 	},
+	onReachBottom() {
+		if (this.currentPage < this.lastPage) {
+			this.currentPage += 1;
+			this.getCommissionLog();
+		}
+	},
 	methods: {
 		jump(path, parmas) {
 			this.$Router.push({
 				path: path,
 				query: parmas
 			});
+		},
+		// 切换分类
+		onTab(state) {
+			this.rewardLog = [];
+			this.currentPage = 1;
+			this.lastPage = 1;
+			this.stateCurrent = state;
+			this.$u.debounce(this.getCommissionLog);
 		},
 		// 点击日期选择
 		onFilterDate() {
@@ -172,7 +216,9 @@ export default {
 			that.loadStatus = 'loading';
 			that.emptyData.show = false;
 			that.$api('commission.rewardLog', {
-				date: that.propsDate
+				date: that.propsDate,
+				type: that.stateCurrent,
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.totalMoney = res.data.total_money;
@@ -202,6 +248,39 @@ export default {
 </script>
 
 <style lang="scss">
+// 分类
+.state-item {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff;
+	border-bottom: 1rpx solid rgba(#999, 0.5);
+	.state-title {
+		color: #666;
+		font-weight: 500;
+		font-size: 28rpx;
+		line-height: 90rpx;
+	}
+	.title-active {
+		color: #333;
+	}
+	.underline {
+		display: block;
+		width: 68rpx;
+		height: 4rpx;
+		background: #fff;
+		border-radius: 2rpx;
+	}
+	.underline-active {
+		background: #5e49c3;
+		display: block;
+		width: 68rpx;
+		height: 4rpx;
+		border-radius: 2rpx;
+	}
+}
 // 钱包卡片
 .wallet-wrap {
 	background-color: #fff;
@@ -320,6 +399,9 @@ export default {
 	}
 }
 // 佣金明细列表
+.item-box {
+	margin: 20rpx 0;
+}
 .log-item {
 	height: 142rpx;
 	background-color: #fff;
