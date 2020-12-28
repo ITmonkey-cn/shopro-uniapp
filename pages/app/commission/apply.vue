@@ -191,8 +191,8 @@ export default {
 			that.$api('commission.apply', {
 				data: data
 			}).then(res => {
+				that.isFormEnd = false;
 				if (res.code === 1) {
-					that.isFormEnd = false;
 					uni.showToast({
 						title: res.msg,
 						success: () => {

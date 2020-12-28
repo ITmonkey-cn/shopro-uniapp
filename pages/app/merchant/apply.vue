@@ -483,8 +483,8 @@ export default {
 			let that = this;
 			this.isFormEnd = false;
 			that.$api('store.apply', that.model).then(res => {
+				this.isFormEnd = true;
 				if (res.code === 1) {
-					this.isFormEnd = true;
 					//  #ifdef MP-WEIXIN
 					this.$store.dispatch('getMessageIds', 'storeApply');
 					//  #endif

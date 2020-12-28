@@ -117,8 +117,8 @@ export default {
 				content: that.message,
 				images: that.uploadImgList
 			}).then(res => {
+				this.isFormEnd = true;
 				if (res.code === 1) {
-					this.isFormEnd = true;
 					that.$tools.toast('评论发表成功');
 					setTimeout(() => {
 						that.$Router.back();
