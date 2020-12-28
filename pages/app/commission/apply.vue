@@ -4,7 +4,7 @@
 		<!-- 标题栏 -->
 		<view class="head-box">
 			<view class="nav-box"><cu-custom isBack></cu-custom></view>
-			<image class="head-img" :src="formHeadImg" mode="widthFix"></image>
+			<view class="head-img-wrap"><image class="head-img" :src="formHeadImg" mode="widthFix"></image></view>
 		</view>
 		<!-- 表单 -->
 		<view class="apply-form">
@@ -234,8 +234,13 @@ export default {
 		.nav-box {
 			position: absolute;
 		}
-		.head-img {
-			width: 100%;
+		.head-img-wrap {
+			width: 750rpx;
+			height: 400rpx;
+			overflow: hidden;
+			.head-img {
+				width: 100%;
+			}
 		}
 	}
 }

@@ -5,8 +5,8 @@
 
 
 const ENV_BASE_URL = {
-	development: 'http://dev.7wpp.com', //开发环境
-	production: 'http://dev.7wpp.com', //生产环境
+	development: 'http://peitong.test.7wpp.com', //开发环境
+	production: 'http://peitong.test.7wpp.com', //生产环境
 }
 const ENV_API_URL = {
 	development: `${ENV_BASE_URL.development}/addons/shopro/`, //开发环境

@@ -335,6 +335,7 @@ export default {
 			switch (data.status) {
 				case 'forbidden':
 					this.hasAuth = false;
+					this.showTerm = false;
 					this.authNotice = {
 						img: this.$IMG_URL + '/imgs/commission/auth_stop.png',
 						title: '抱歉！你的账户已被禁用',
@@ -345,6 +346,7 @@ export default {
 					break;
 				case 'pending':
 					this.hasAuth = false;
+					this.showTerm = false;
 					this.authNotice = {
 						img: this.$IMG_URL + '/imgs/commission/auth_stop.png',
 						title: '正在审核中！',
@@ -365,6 +367,7 @@ export default {
 					break;
 				case 'reject':
 					this.hasAuth = false;
+					this.showTerm = false;
 					this.authNotice = {
 						img: this.$IMG_URL + '/imgs/commission/auth_reject.png',
 						title: '申请驳回',
@@ -375,6 +378,7 @@ export default {
 					break;
 				case 'close':
 					this.hasAuth = false;
+					this.showTerm = false;
 					this.authNotice = {
 						img: this.$IMG_URL + '/imgs/commission/auth_close.png',
 						title: '分销中心已关闭',
@@ -385,6 +389,7 @@ export default {
 					break;
 				case 'freeze':
 					this.hasAuth = false;
+					this.showTerm = false;
 					this.authNotice = {
 						img: this.$IMG_URL + '/imgs/commission/auth_freeze.png',
 						title: '抱歉！你的账户已被冻结',
@@ -410,6 +415,7 @@ export default {
 					break;
 				default:
 					this.hasAuth = true;
+					this.showTerm = false;
 			}
 		},
 
