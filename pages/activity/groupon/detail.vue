@@ -71,7 +71,7 @@
 						<view class="tag" v-if="index == 0">团长</view>
 						<image class="avatar" :class="{ leader: index == 0 }" :src="team.user_avatar" mode="aspectFill"></image>
 					</view>
-					<view class="img-box" v-for="base in surplusNum" :key="base"><image class="avatar"  :src="$IMG_URL + '/imgs/groupon/base_groupon.png'" mode="aspectFill"></image></view>
+					<view class="img-box" v-for="base in surplusNum" :key="base+'base'"><image class="avatar"  :src="$IMG_URL + '/imgs/groupon/base_groupon.png'" mode="aspectFill"></image></view>
 				</view>
 				<view class="btn-box x-c">
 					<!-- 拼团中 -->
