@@ -14,14 +14,17 @@ import {
 } from '@/env.js'
 
 const service = BASE_URL.split('://')[1];
+cosnt
+
 export default class Socket {
 	constructor(initData, callback) {
 		let {
 			ping,
-			is_ssl
+			is_ssl,
+			gateway_port
 		} = initData;
 		this.config = {
-			url: `${is_ssl?'wss':'ws'}://${service}:1818/`,
+			url: `${is_ssl?'wss':'ws'}://${service}:${gateway_port}/`,
 			session_id: uni.getStorageSync('chatSessionId'),
 			token: uni.getStorageSync('token'),
 			identify: 'user'

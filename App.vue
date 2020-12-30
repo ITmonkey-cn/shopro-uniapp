@@ -85,14 +85,6 @@ export default {
 		if (process.env.NODE_ENV === 'development') {
 			await this.getRoutes();
 		}
-		// #ifdef APP-PLUS
-		// 监听设备网络状态变化事件，接口ios市场首次安装网络切换问题
-		plus.globalEvent.addEventListener('netchange', function() {
-			var nt = plus.networkinfo.getCurrentType(); //网络状态
-			that.getTemplate();
-			that.getAppInit();
-		});
-		// #endif
 	},
 	onShow: function() {
 		this.$store.commit('CART_NUM');

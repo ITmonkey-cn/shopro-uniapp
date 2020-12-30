@@ -336,7 +336,8 @@ export default {
 					that.socket = new Socket(
 						{
 							ping: 20000,
-							is_ssl: res.data.config.system.is_ssl
+							is_ssl: res.data.config.system.is_ssl,
+							gateway_port: res.data.config.system.gateway_port
 						},
 						msg => {
 							that.parseMsgStatus(msg.data); //监听消息

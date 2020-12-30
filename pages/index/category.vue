@@ -42,7 +42,6 @@ export default {
 	computed: {},
 	onLoad(options) {
 		this.queryObj = options;
-		this.categoryId = Number(this.$Route.query.id);
 		this.getCategory();
 	},
 	methods: {
@@ -52,11 +51,12 @@ export default {
 		 */
 		getCategory() {
 			this.$api('category.info', {
-				id: this.$Route.query.id
+				id: this.$Route.query.id ? this.$Route.query.id : 0
 			}).then(res => {
 				if (res.code === 1) {
 					if (res.data.type) {
 						this.categoryType = Number(res.data.type);
+						this.categoryId = Number(res.data.id);
 					}
 					uni.setNavigationBarTitle({
 						title: res.data.name

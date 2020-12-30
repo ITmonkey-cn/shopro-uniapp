@@ -151,7 +151,8 @@ export default {
 			emptyData: {
 				img: this.$IMG_URL + '/imgs/empty/template_empty.png',
 				tip: '暂未找到模板，赶快去装修吧~'
-			}
+			},
+			netEmptyData: {}
 		};
 	},
 	computed: {
@@ -190,6 +191,12 @@ export default {
 			this.showPrivacy = true;
 			this.showNoticeModal = false;
 		}
+		// 监听设备网络状态变化事件，接口ios市场首次安装网络切换问题
+		plus.globalEvent.addEventListener('netchange', function() {
+			var nt = plus.networkinfo.getCurrentType(); //网络状态
+			console.log(nt,11111);
+		
+		});
 		// #endif
 	},
 	mounted() {
