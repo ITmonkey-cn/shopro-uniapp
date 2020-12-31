@@ -14,7 +14,6 @@ import {
 } from '@/env.js'
 
 const service = BASE_URL.split('://')[1];
-cosnt
 
 export default class Socket {
 	constructor(initData, callback) {
