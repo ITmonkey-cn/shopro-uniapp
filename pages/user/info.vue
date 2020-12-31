@@ -19,7 +19,7 @@
 			<view class="user-list x-bc">
 				<text class="list-name">生日</text>
 				<view class="x-f">
-					<text class="list-val">{{ userData.birthday || startDate }}</text>
+					<text class="list-val">{{ userData.birthday || '请选择生日~' }}</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>

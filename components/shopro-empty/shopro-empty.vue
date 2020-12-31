@@ -2,8 +2,8 @@
 	<view class="y-f" :class="{ 'shopro-empty': isFixed }">
 		<image class="empty-img" :src="emptyData.img" mode="aspectFill"></image>
 		<view class="empty-text">{{ emptyData.tip }}</view>
-		<view class="btn-box" v-if="emptyData.path">
-			<button class="cu-btn empty-btn" @tap="tools.routerTo(emptyData.path)">{{ emptyData.pathText }}</button>
+		<view class="btn-box" v-if="emptyData.path || emptyData.type === 'netWork'">
+			<button class="cu-btn empty-btn" @tap="jump">{{ emptyData.pathText }}</button>
 		</view>
 	</view>
 </template>
@@ -36,7 +36,15 @@ export default {
 		}
 	},
 	computed: {},
-	methods: {}
+	methods: {
+		jump() {
+			if (this.emptyData.type === 'netWork') {
+				this.$emit('click');
+			} else {
+				this.tools.routerTo(emptyData.path);
+			}
+		}
+	}
 };
 </script>
 

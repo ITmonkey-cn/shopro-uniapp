@@ -13,7 +13,8 @@ const state = {
 	routes: [],
 	addons: uni.getStorageSync('addons') ? uni.getStorageSync('addons') : [], //插件列表
 	templateData: uni.getStorageSync('templateData') ? uni.getStorageSync('templateData') : {},
-	hasTemplate: true //是否有初始化数据
+	hasTemplate: true, //是否有初始化数据
+	noNetwork: false //是否有网络
 }
 
 const actions = {
@@ -28,8 +29,10 @@ const actions = {
 				uni.setStorageSync('shareInfo', res.data.share);
 				uni.setStorageSync('addons', res.data.addons);
 				uni.setStorageSync('chat', res.data.chat);
+				commit('noNetwork', false);
 				resolve(res)
 			}).catch(e => {
+				commit('noNetwork', true);
 				reject(e)
 			})
 		})
@@ -73,9 +76,12 @@ const actions = {
 				if (res.code == 0) {
 					commit('hasTemplate', false);
 				}
+				commit('noNetwork', false);
 				resolve(res)
 			}).catch(e => {
+				commit('noNetwork', true);
 				reject(e)
+
 			})
 		})
 	},
@@ -93,6 +99,9 @@ const mutations = {
 	},
 	hasTemplate(state, data) {
 		state.hasTemplate = data
+	},
+	noNetwork(state, data) {
+		state.noNetwork = data
 	},
 	// 弹窗一次的话，关闭的时候删除数据。
 	delPopup(state, path) {

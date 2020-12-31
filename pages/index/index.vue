@@ -2,7 +2,8 @@
 <template>
 	<view class="page_box">
 		<!-- 空白页 -->
-		<shopro-empty v-if="!hasTemplate" :emptyData="emptyData"></shopro-empty>
+		<shopro-empty v-if="noNetwork" :emptyData="noNetworkData" @click="onEmptyBtn"></shopro-empty>
+		<shopro-empty v-else-if="!hasTemplate" :emptyData="emptyData"></shopro-empty>
 		<view v-else class="page_box shopro-selector">
 			<!-- 导航栏 -->
 			<view class="head_box active" :style="{ background: bgcolor }">
@@ -152,6 +153,12 @@ export default {
 				img: this.$IMG_URL + '/imgs/empty/template_empty.png',
 				tip: '暂未找到模板，赶快去装修吧~'
 			},
+			noNetworkData: {
+				img: '/static/imgs/empty/empty_network.png',
+				tip: '网络连接断开,请刷新重试~',
+				pathText: '刷新重试',
+				type: 'netWork'
+			},
 			netEmptyData: {}
 		};
 	},
@@ -160,6 +167,7 @@ export default {
 			initData: state => state.init.initData,
 			template: state => state.init.templateData?.home,
 			hasTemplate: state => state.init.hasTemplate,
+			noNetwork: state => state.init.noNetwork,
 			cartNum: state => state.cart.cartNum,
 			forceOauth: state => state.user.forceOauth
 		}),
@@ -185,8 +193,8 @@ export default {
 		this.init();
 	},
 	onLoad(options) {
+		let that = this;
 		// #ifdef APP-VUE
-		console.log('是否同意隐私协议', plus.runtime.isAgreePrivacy());
 		if (!plus.runtime.isAgreePrivacy()) {
 			this.showPrivacy = true;
 			this.showNoticeModal = false;
@@ -194,8 +202,9 @@ export default {
 		// 监听设备网络状态变化事件，接口ios市场首次安装网络切换问题
 		plus.globalEvent.addEventListener('netchange', function() {
 			var nt = plus.networkinfo.getCurrentType(); //网络状态
-			console.log(nt,11111);
-		
+			if (nt !== plus.networkinfo.CONNECTION_UNKNOW && nt !== plus.networkinfo.CONNECTION_NONE) {
+				that.init();
+			}
 		});
 		// #endif
 	},
@@ -217,6 +226,11 @@ export default {
 			return Promise.all([this.getAppInit(), this.getTemplate()]).then(() => {
 				uni.stopPullDownRefresh();
 			});
+		},
+
+		// 点击无网络按钮
+		onEmptyBtn() {
+			this.init();
 		},
 
 		// 获取轮播背景色

@@ -79,11 +79,15 @@ export default {
 		}
 		// #endif
 		await this.setAppInfo();
-		await this.getTemplate(options);
-		let init = await this.getAppInit(options);
-		await this.autoLogin(init.data);
-		if (process.env.NODE_ENV === 'development') {
-			await this.getRoutes();
+		try {
+			await this.getTemplate(options);
+			let init = await this.getAppInit(options);
+			await this.autoLogin(init.data);
+			if (process.env.NODE_ENV === 'development') {
+				await this.getRoutes();
+			}
+		} catch (e) {
+			console.log(e);
 		}
 	},
 	onShow: function() {
