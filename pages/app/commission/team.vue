@@ -6,7 +6,7 @@
 				<block slot="backText"><text class="head-title">我的团队</text></block>
 			</cu-custom>
 			<!-- 推荐人 -->
-			<view class="referrer-box x-f px30 ">
+			<view class="referrer-box x-f px30" v-if="referrerInfo && referrerInfo.avatar">
 				推荐人：
 				<image class="referrer-avatar" :src="referrerInfo.avatar" mode=""></image>
 				{{ referrerInfo.nickname }}
