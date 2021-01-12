@@ -26,7 +26,8 @@
             "Share" : {},
             "Maps" : {},
             "Webview-x5" : {},
-            "Geolocation" : {}
+            "Geolocation" : {},
+            "Push" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -81,21 +82,21 @@
             "sdkConfigs" : {
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "wx522bf4cc9a13****",
-                        "appsecret" : "fa44dc893ab55338f46d65f900b1****",
+                        "appid" : "wx522bf4cc9a1319ae",
+                        "appsecret" : "6f6f4d22e65a544a4b960c84175deb24",
                         "UniversalLinks" : ""
                     }
                 },
                 "payment" : {
                     "weixin" : {
-                        "appid" : "wx522bf4cc9a13****",
+                        "appid" : "wx522bf4cc9a1319ae",
                         "UniversalLinks" : ""
                     },
                     "alipay" : {}
                 },
                 "share" : {
                     "weixin" : {
-                        "appid" : "wx522bf4cc9a13****",
+                        "appid" : "wx522bf4cc9a1319ae",
                         "UniversalLinks" : ""
                     }
                 },
@@ -112,7 +113,8 @@
                         "appkey_ios" : "f3c725a2c41ae7218e39392f28635ee7",
                         "appkey_android" : "7a3cedafa6b15b3482e85b7400355b1c"
                     }
-                }
+                },
+                "push" : {}
             },
             "icons" : {
                 "android" : {
