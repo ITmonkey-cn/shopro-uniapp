@@ -2,7 +2,7 @@
 
 
 
-###  :sparkles: 开源不易，给个star吧~  问题交流：648050824
+###  :sparkles: 开源不易，给个star吧~  问题反馈交流：648050824
 
  
 
@@ -30,7 +30,7 @@
 
 # Shopro演示站
 
-| ![微信小程序码](https://images.gitee.com/uploads/images/2020/0710/155655_84691250_2264724.jpeg "微信小程序码") | ![H5二维码](https://images.gitee.com/uploads/images/2020/0710/155655_c9e61609_2264724.png "H5二维码") | ![apk](https://images.gitee.com/uploads/images/2020/0930/174425_693acc40_2264724.png "apk_code.png") |
+| ![微信小程序码](https://images.gitee.com/uploads/images/2020/0710/155655_84691250_2264724.jpeg "微信小程序码") | ![H5二维码](https://images.gitee.com/uploads/images/2020/0710/155655_c9e61609_2264724.png "H5二维码") | ![apk](https://www.fastadmin.net/addons/qrcode/index/build?text=https://www.fastadmin.net/app/shopro.html&logo=android "apk_code.png") |
 |------------------------------------------------- | ---------------------------------------- | ---------------------------------- |
 | 微信小程序                                        | H5二维码                                 |  安卓apk                                   |
 
@@ -38,6 +38,20 @@
 
 
 # 更新日志
+
+## V1.2.0(2021-1-12)
+1. 新增官方客服
+2. 新增分销中心,搭配后台强大的分销功能
+3. 新增全局静态资源的服务地址
+4. 新增uView UI 部分组件（特别鸣谢）
+5. 优化IOS APP的网络权限验证流程
+6. 优化海报的头像位置，适应小屏机型
+7. 优化多选项卡切换的数据抖动问题
+8. 优化H5微信支付的回调逻辑
+7. 修复IOS App的webview内核，防止被Appstore审核被拒
+8. 更多细节优化，可扫码体验~
+## 更新功能部分截图
+![V1.2.0功能](https://images.gitee.com/uploads/images/2021/0112/182440_a691a92b_2264724.png "some.png")
 
 
 ## V1.1.2(2020-10-15)
@@ -69,7 +83,7 @@
 17. 修复：iphonX底部安全区域问题。
 18. 修复：直播列表瀑布流排序问题
 ## 更新功能部分截图
-![v1.07功能](https://images.gitee.com/uploads/images/2020/0929/161907_1de1deff_2264724.png "04.png")
+![v1.0.7功能](https://images.gitee.com/uploads/images/2020/0929/161907_1de1deff_2264724.png "04.png")
 
 
 

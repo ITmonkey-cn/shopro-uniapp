@@ -1,6 +1,6 @@
 {
     "name" : "Shopro",
-    "appid" : "__UNI__5B85585",
+    "appid" : "__UNI__5B85****",
     "description" : "",
     "versionName" : "Shopro 1.2.0",
     "versionCode" : 215,
@@ -82,36 +82,36 @@
             "sdkConfigs" : {
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "wx522bf4cc9a1319ae",
-                        "appsecret" : "6f6f4d22e65a544a4b960c84175deb24",
+                        "appid" : "wx522bf4cc9a13****",
+                        "appsecret" : "6f6f4d22e65a544a4b960c84175****",
                         "UniversalLinks" : ""
                     }
                 },
                 "payment" : {
                     "weixin" : {
-                        "appid" : "wx522bf4cc9a1319ae",
+                        "appid" : "wx522bf4cc9a13****e",
                         "UniversalLinks" : ""
                     },
                     "alipay" : {}
                 },
                 "share" : {
                     "weixin" : {
-                        "appid" : "wx522bf4cc9a1319ae",
+                        "appid" : "wx522bf4cc9a1****e",
                         "UniversalLinks" : ""
                     }
                 },
                 "ad" : {},
                 "maps" : {
                     "amap" : {
-                        "appkey_ios" : "f3c725a2c41ae7218e39392f28635ee7",
-                        "appkey_android" : "7a3cedafa6b15b3482e85b7400355b1c"
+                        "appkey_ios" : "f3c725a2c41ae7218e39392f2****7",
+                        "appkey_android" : "7a3cedafa6b15b3482e85****55b1c"
                     }
                 },
                 "geolocation" : {
                     "amap" : {
                         "__platform__" : [ "ios", "android" ],
-                        "appkey_ios" : "f3c725a2c41ae7218e39392f28635ee7",
-                        "appkey_android" : "7a3cedafa6b15b3482e85b7400355b1c"
+                        "appkey_ios" : "f3c725a2c41ae7218e3939****35ee7",
+                        "appkey_android" : "7a3cedafa6b15b3****b7400355b1c"
                     }
                 },
                 "push" : {}
@@ -184,7 +184,7 @@
         "usingComponents" : {
             "subscribe" : "plugin-private://wx2b03c6e691cd7370/components/subscribe/subscribe"
         },
-        "appid" : "wx39cd0799d4567dd0",
+        "appid" : "wx39cd0799d****0",
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
@@ -213,7 +213,7 @@
     },
     "h5" : {
         "title" : "Shopro",
-        "domain" : "frontend.test.7wpp.com",
+        "domain" : "****",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true
@@ -237,7 +237,7 @@
         "sdkConfigs" : {
             "maps" : {
                 "qqmap" : {
-                    "key" : "4NRBZ-CMP63-VSU3Y-YTSAF-ARYXH-DCFH3"
+                    "key" : "4NRBZ-CMP63-VSU3Y-YTSAF****FH3"
                 }
             }
         }
