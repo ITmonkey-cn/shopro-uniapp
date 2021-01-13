@@ -13,7 +13,9 @@
 			"path": "pages/index/index",
 			"name": "home",
 			"title": "首页",
+			// #ifdef H5
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
+			// #endif
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationBarTextStyle": "white",
@@ -915,13 +917,15 @@
 			]
 		}
 	],
-	// 分包预加载规则
+	// // 分包预加载规则
+	// #ifdef MP-WEIXIN
 	"preloadRule": {
 		"pages/index/index": {
 			"network": "all",
 			"packages": ["pages/goods", "pages/user", "pages/activity", "pages/app", "pages/order", "pages/public"]
 		}
 	},
+	// #endif
 	// 默认导航栏样式
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
