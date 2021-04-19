@@ -1,0 +1,212 @@
+/* ==================
+     flex布局  
+ ==================== */
+// flex(主轴,交叉轴,方向,换行,多轴线对齐)
+@mixin flex($justify: null, $align: null, $direction: null, $warp: null, $warpAlign: null) {
+	display: flex;
+
+	@if $direction !=null {
+		@include flex-direction($direction);
+	}
+
+	@if $justify !=null {
+		@include flex-justify($justify);
+	}
+
+	@if $align !=null {
+		@include flex-align($align);
+	}
+
+	@if $warp !=null {
+		@include flex-warp($warp);
+	}
+
+	@if $warpAlign !=null {
+		@include flex-warpAlign($warpAlign);
+	}
+}
+
+// flex-self(对齐,(布满||固定),顺序)
+@mixin flex-self($flex: null, $align: null, $order: null) {
+	@if $flex !=null {
+		@if $flex==full {
+			flex: auto;
+		} @else if $flex==keep {
+			flex: none;
+		} @else {
+			@include flexError($flex, 'flex-self');
+		}
+	}
+
+	@if $align !=null {
+		@include flex-selfAlign($align);
+	}
+
+	@if $order !=null {
+		@include flex-order($order);
+	}
+}
+
+// flex错误提示
+@mixin flexError($param, $type) {
+	position: relative;
+	background-color: #ff3c00 !important;
+	overflow: hidden;
+
+	&::after {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		padding: 0.5em;
+		color: #ff3c00 !important;
+		background-color: white !important;
+		font-size: 12px;
+		content: 'ErrorParam: #{$param} in #{$type}';
+	}
+}
+
+// 项目的排列方向
+@mixin flex-direction($direction: row) {
+	@if $direction==column {
+		flex-direction: column;
+	} @else if $direction==row {
+		flex-direction: row;
+	} @else if $direction==row-reverse {
+		flex-direction: row-reverse;
+	} @else if $direction==column-reverse {
+		flex-direction: column-reverse;
+	} @else {
+		@include flexError($direction, 'flex-direction');
+	}
+}
+
+// 主轴上的对齐方式
+@mixin flex-justify($justify: start) {
+	@if $justify==start {
+		justify-content: start;
+	} @else if $justify==center {
+		justify-content: center;
+	} @else if $justify==end {
+		justify-content: flex-end;
+	} @else if $justify==between {
+		justify-content: space-between;
+	} @else if $justify==around {
+		justify-content: space-around;
+	} @else {
+		@include flexError($justify, 'flex-justify');
+	}
+}
+
+// 交叉轴上的对齐方式
+@mixin flex-align($align: top) {
+	@if $align==top {
+		align-items: flex-start;
+	} @else if $align==center {
+		align-items: center;
+	} @else if $align==bottom {
+		align-items: flex-end;
+	} @else {
+		@include flexError($align, 'flex-align');
+	}
+}
+
+// 换行
+@mixin flex-warp($warp: wrap) {
+	@if $warp==wrap {
+		flex-wrap: wrap;
+	} @else if $warp==nowrap {
+		flex-wrap: nowrap;
+	} @else if $warp==wrap-reverse {
+		flex-wrap: wrap-reverse;
+	} @else {
+		@include flexError($warp, 'flex-wrap');
+	}
+}
+
+// 换行多根轴线的对齐方式,如果项目只有一根轴线，该属性不起作用
+@mixin flex-warpAlign($align: stretch) {
+	@if $align==stretch {
+		align-content: stretch;
+	} @else if $align==top {
+		align-content: flex-start;
+	} @else if $align==center {
+		align-content: center;
+	} @else if $align==bottom {
+		align-content: flex-end;
+	} @else if $align==between {
+		align-content: space-between;
+	} @else if $align==around {
+		align-content: space-around;
+	} @else {
+		@include flexError($align, 'flex-wrapAlign');
+	}
+}
+
+// 单个项目有与其他项目不一样的对齐方式
+@mixin flex-selfAlign($align: auto) {
+	@if $align==auto {
+		align-self: auto;
+	} @else if $align==top {
+		align-self: flex-start;
+	} @else if $align==center {
+		align-self: center;
+	} @else if $align==bottom {
+		align-self: flex-end;
+	} @else if $align==baseline {
+		align-self: baseline;
+	} @else if $align==stretch {
+		align-self: stretch;
+	} @else {
+		@include flexError($align, 'flex-self-align');
+	}
+}
+
+// 项目的排列顺序,数值越小，排列越靠前，默认为0
+@mixin flex-order($order: 0) {
+	@if $order==round($order) {
+		order: $order;
+	} @else {
+		@include flexError($order, 'flex-self-order');
+	}
+}
+
+/* ==================
+      渐变色 
+ ==================== */
+
+@mixin linear-gradient($from, $to) {
+	/* Fallback for sad browsers */
+	background-color: $to;
+	/* Mozilla Firefox */
+	background-image: -moz-linear-gradient($from, $to);
+	/* Opera */
+	background-image: -o-linear-gradient($from, $to);
+	/* WebKit (Safari 4+, Chrome 1+) */
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, $from), color-stop(1, $to));
+	/* WebKit (Chrome 11+) */
+	background-image: -webkit-linear-gradient($from, $to);
+	/* IE10 */
+	background-image: -ms-linear-gradient($from, $to);
+	/* W3C */
+	background-image: linear-gradient($from, $to);
+}
+
+/**
+* 溢出省略号
+* @param {Number} 行数
+*/
+@mixin ellipsis($rowCount: 1) {
+	@if $rowCount <=1 {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	} @else {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: $rowCount;
+		-webkit-box-orient: vertical;
+	}
+}
+

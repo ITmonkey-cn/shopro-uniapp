@@ -1,0 +1,10 @@
+{
+	"dependencies": {
+		"dev": {
+			"mp-weixin": "cross-env NODE_ENV=development UNI_PLATFORM=mp-weixin vue-cli-service uni-build --watch --minimize"
+		},
+		"jweixin-module": "^1.6.0",
+		"uni-read-pages": "^1.0.5",
+		"uni-simple-router": "1.5.2"
+	}
+}
