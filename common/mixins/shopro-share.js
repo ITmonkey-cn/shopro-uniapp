@@ -36,12 +36,20 @@ export default {
 			})
 		}
 		//用户进入识别判断流程
+<<<<<<< HEAD
 		// 1.解析进入信息
 		if (options.scene) {
 			let scene = decodeURIComponent(options.scene);
 			scene = scene.replace("amp;","")
 			options.url = this.getQueryValue('url', scene);
 			options.share_id = this.getQueryValue('share_id', scene);
+=======
+		// 1.解析进入信息
+		if (options.scene) {
+			let scene = decodeURIComponent(options.scene);
+			options.url = this.getQueryValue('url', scene);
+			options.share_id = this.getQueryValue('share_id', scene);
+>>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7
 		}
 		// 2.保存推荐人信息
 		if (options.share_id) {

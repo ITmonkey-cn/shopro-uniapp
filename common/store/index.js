@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -16,3 +17,23 @@ const store = new Vuex.Store({
 })
 
 export default store
+=======
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+
+Vue.use(Vuex)
+import init from './modules/init.js'
+import user from './modules/user.js'
+import cart from './modules/cart.js'
+
+const store = new Vuex.Store({
+	modules: {
+		init,
+		user,
+		cart
+	}
+})
+
+export default store
+>>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7

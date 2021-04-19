@@ -62,6 +62,7 @@ export default {
 	 * param(imgPath): 图片地址。
 	 */
 
+<<<<<<< HEAD
 	async checkImgHttp(imgPath, type) {
 		let res = await this.getImageInfo_PromiseFc(imgPath)
 		let newPath = '';
@@ -127,6 +128,20 @@ export default {
 		}
 		// #endif
 		return url;
+=======
+	checkImgHttp(imgPath) {
+		let newPath = '';
+		let pathArr = imgPath.split('://');
+		// #ifdef H5
+		let ishttps = 'https:' == window.location.protocol ? true : false;
+		ishttps ? (pathArr[0] = 'https') : (pathArr[0] = 'http');
+		// #endif
+		// #ifdef MP-WEIXIN
+		pathArr[0] = 'https'
+		// #endif
+		newPath = pathArr.join('://');
+		return newPath;
+>>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7
 	},
 	// 打电话
 	callPhone(phoneNumber = '') {

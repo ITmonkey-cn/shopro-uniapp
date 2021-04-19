@@ -93,6 +93,7 @@ export default class Wechat {
 	}
 
 	// #ifdef MP-WEIXIN
+<<<<<<< HEAD
 	//微信小程序自动登录
 	    getWxMiniProgramSessionKey(autoLogin = true) {
 	        let that = this;
@@ -169,6 +170,68 @@ export default class Wechat {
 	            })
 	        });
 	    }
+=======
+	getWxMiniProgramSessionKey() {
+		let that = this;
+		let sessionStatus = false;
+		let session_key = '';
+		return new Promise((resolve, reject) => {
+			uni.checkSession({
+				success(res) {
+					if (res.errMsg === 'checkSession:ok') sessionStatus = true;
+				},
+				complete() {
+					if (!uni.getStorageSync('session_key') || !sessionStatus) {
+						uni.login({
+							success: function(info) {
+								let code = info.code;
+								api('user.getWxMiniProgramSessionKey', {
+									code: code,
+								}).then(res => {
+									if (res.code === 1) {
+										uni.setStorageSync('session_key', res.data.session_key);
+										uni.setStorageSync('openid', res.data.openid);
+										session_key = res.data.session_key;
+									}
+								});
+							}
+						});
+					} else {
+						session_key = uni.getStorageSync('session_key');
+					}
+				}
+			})
+
+			resolve(session_key);
+
+		});
+	}
+
+	wxMiniProgramLogin(e) {
+		let that = this;
+		return new Promise((resolve, reject) => {
+			if (!uni.getStorageSync('session_key')) {
+				uni.showToast({
+					title: '未获取到session_key,请重启应用',
+					icon: 'none'
+				})
+				return;
+			}
+			if (e.detail.errMsg === "getUserInfo:ok") {
+				api('user.wxMiniProgramLogin', {
+					session_key: uni.getStorageSync('session_key'),
+					encryptedData: e.detail.encryptedData,
+					iv: e.detail.iv,
+					signature: e.detail.signature
+				}).then(res => {
+					if (res.code === 1) {
+						resolve(res.data.token);
+					}
+				});
+			}
+		});
+	}
+>>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7
 
 	// 小程序更新
 	checkMiniProgramUpdate() {
