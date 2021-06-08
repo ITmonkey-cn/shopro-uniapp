@@ -90,6 +90,7 @@
  * @event {Function} on-choose-complete 每次选择图片后触发，只是让外部可以得知每次选择后，内部的文件列表
  * @example <u-upload :action="action" :file-list="fileList" ></u-upload>
  */
+import Auth from '@/shopro/permission/index.js';
 export default {
 	name: 'u-upload',
 	props: {
@@ -246,7 +247,9 @@ export default {
 		limitType: {
 			type: Array,
 			default() {
-				return ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+				// 支付宝小程序真机选择图片的后缀为"image"
+				// https://opendocs.alipay.com/mini/api/media-image
+				return ['png', 'jpg', 'jpeg', 'webp', 'gif', 'image'];
 			}
 		},
 		// 在各个回调事件中的最后一个参数返回，用于区别是哪一个组件的事件
@@ -295,60 +298,60 @@ export default {
 		},
 		// 选择图片
 		async selectFile() {
-			let that = this;
-			let checkPermission = await that.$tools.checkAppAlbum();
-			if (checkPermission) {
-				if (this.disabled) return;
-				// #ifdef APP-VUE
-				// #endif
-				const { name = '', maxCount, multiple, maxSize, sizeType, lists, camera, compressed, maxDuration, sourceType } = this;
-				let chooseFile = null;
-				const newMaxCount = maxCount - lists.length;
-				// 设置为只选择图片的时候使用 chooseImage 来实现
-				chooseFile = new Promise((resolve, reject) => {
-					uni.chooseImage({
-						count: multiple ? (newMaxCount > 9 ? 9 : newMaxCount) : 1,
-						sourceType: sourceType,
-						sizeType,
-						success: resolve,
-						fail: reject
-					});
-				});
-				chooseFile
-					.then(res => {
-						let file = null;
-						let listOldLength = this.lists.length;
-						res.tempFiles.map((val, index) => {
-							// 检查文件后缀是否允许，如果不在this.limitType内，就会返回false
-							if (!this.checkFileExt(val)) return;
+			if (this.disabled) return;
+			let authState = 0;
+			authState += await new Auth('writePhotosAlbum').check();
+			if (authState < 1) return;
+			authState += await new Auth('camera').check();
+			if (authState < 2) return;
+			const { name = '', maxCount, multiple, maxSize, sizeType, lists, camera, compressed, maxDuration, sourceType } = this;
+			let chooseFile = null;
+			const newMaxCount = maxCount - lists.length;
 
-							// 如果是非多选，index大于等于1或者超出最大限制数量时，不处理
-							if (!multiple && index >= 1) return;
-							if (val.size > maxSize) {
-								this.$emit('on-oversize', val, this.lists, this.index);
-								this.showToast('超出允许的文件大小');
-							} else {
-								if (maxCount <= lists.length) {
-									this.$emit('on-exceed', val, this.lists, this.index);
-									this.showToast('超出最大允许的文件个数');
-									return;
-								}
-								lists.push({
-									url: val.path,
-									progress: 0,
-									error: false,
-									file: val
-								});
+			// 设置为只选择图片的时候使用 chooseImage 来实现
+			chooseFile = new Promise((resolve, reject) => {
+				uni.chooseImage({
+					count: multiple ? (newMaxCount > 9 ? 9 : newMaxCount) : 1,
+					sourceType: sourceType,
+					sizeType,
+					success: resolve,
+					fail: reject
+				});
+			});
+			chooseFile
+				.then(res => {
+					let file = null;
+					let listOldLength = this.lists.length;
+					res.tempFiles.map((val, index) => {
+						// 检查文件后缀是否允许，如果不在this.limitType内，就会返回false
+						if (!this.checkFileExt(val)) return;
+
+						// 如果是非多选，index大于等于1或者超出最大限制数量时，不处理
+						if (!multiple && index >= 1) return;
+						if (val.size > maxSize) {
+							this.$emit('on-oversize', val, this.lists, this.index);
+							this.showToast('超出允许的文件大小');
+						} else {
+							if (maxCount <= lists.length) {
+								this.$emit('on-exceed', val, this.lists, this.index);
+								this.showToast('超出最大允许的文件个数');
+								return;
 							}
-						});
-						// 每次图片选择完，抛出一个事件，并将当前内部选择的图片数组抛出去
-						this.$emit('on-choose-complete', this.lists, this.index);
-						if (this.autoUpload) this.uploadFile(listOldLength);
-					})
-					.catch(error => {
-						this.$emit('on-choose-fail', error);
+							lists.push({
+								url: val.path,
+								progress: 0,
+								error: false,
+								file: val
+							});
+						}
 					});
-			}
+					// 每次图片选择完，抛出一个事件，并将当前内部选择的图片数组抛出去
+					this.$emit('on-choose-complete', this.lists, this.index);
+					if (this.autoUpload) this.uploadFile(listOldLength);
+				})
+				.catch(error => {
+					this.$emit('on-choose-fail', error);
+				});
 		},
 		// 提示用户消息
 		showToast(message, force = false) {
@@ -604,7 +607,6 @@ export default {
 .u-add-tips {
 	margin-top: 20rpx;
 	line-height: 40rpx;
-	font-size: 24rpx;
 }
 
 .u-add-wrap__hover {
@@ -620,8 +622,8 @@ export default {
 
 .u-delete-icon {
 	position: absolute;
-	top: 0rpx;
-	right: 0rpx;
+	top: 10rpx;
+	right: 10rpx;
 	z-index: 10;
 	background-color: $u-type-error;
 	border-radius: 100rpx;

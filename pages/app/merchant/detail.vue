@@ -1,38 +1,51 @@
-<!-- 配送自提详情 -->
+<!-- 门店订单详情 -->
 <template>
 	<view class="order-detail-wrap">
 		<!-- 订单卡片 -->
 		<view class="card-box">
 			<view class="order-goods-item" v-for="item in orderDetail.item" :key="item.id">
-				<shopro-mini-card :type="'order'" :detail="item"></shopro-mini-card>
-				<view class="goods-phone card-item">
+				<shopro-mini-card :title="item.goods_title" :image="item.goods_image">
+					<template #describe>
+						<view class="order-sku u-ellipsis-1">
+							<text class="order-num">数量:{{ item.goods_num || 0 }};</text>
+							{{ item.goods_sku_text ? item.goods_sku_text : '' }}
+						</view>
+					</template>
+					<template #cardBottom>
+						<view class="card-price-box u-flex">
+							<text class="order-price font-OPPOSANS">￥{{ item.goods_price || 0 }}</text>
+							<button class="u-reset-button status-btn" v-if="item.status_name">{{ item.status_name }}</button>
+						</view>
+					</template>
+				</shopro-mini-card>
+				<view class="goods-phone card-item" v-show="item.ext_arr.dispatch_phone">
 					<text class="item-title">预留电话：</text>
 					<text class="item-content">{{ item.ext_arr.dispatch_phone }}</text>
 				</view>
 				<view class="goods-date card-item">
-					<text class="item-title" v-if="item.dispatch_type == 'slefetch'">到店/自提时间：</text>
-					<text class="item-title" v-if="item.dispatch_type == 'store'">配送时间：</text>
+					<text class="item-title" v-show="item.dispatch_type === 'selfetch'">到店/自提时间：</text>
+					<text class="item-title" v-show="item.dispatch_type === 'store'">配送时间：</text>
 					<text class="item-content">{{ item.ext_arr.dispatch_date || '' }}</text>
 				</view>
 			</view>
 		</view>
 		<!-- 订单信息 -->
 		<view class="order-detail-card">
-			<view class="card-title x-f">订单信息</view>
+			<view class="card-title u-flex ">订单信息</view>
 			<view class="detial-content">
-				<view class="detail-item x-f">
+				<view class="detail-item u-flex">
 					<view class="item-title">订单状态：</view>
 					<view class="item-content">{{ orderDetail.status_name }}</view>
 				</view>
-				<view class="detail-item x-f">
+				<view class="detail-item u-flex">
 					<view class="item-title">订单编号：</view>
 					<view class="item-content">{{ orderDetail.order_sn }}</view>
 				</view>
-				<view class="detail-item x-f">
+				<view class="detail-item u-flex">
 					<view class="item-title">下单时间：</view>
-					<view class="item-content">{{ orderDetail.paytime || '' }}</view>
+					<view class="item-content">{{ $u.timeFormat(orderDetail.paytime, 'yyyy-mm-dd hh:MM') }}</view>
 				</view>
-				<view class="detail-item x-f" v-if="orderDetail.remark">
+				<view class="detail-item u-flex" v-if="orderDetail.remark">
 					<view class="item-title">备注：</view>
 					<view class="item-content">{{ orderDetail.remark }}</view>
 				</view>
@@ -44,7 +57,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="bottom-box x-c" v-if="orderDetail.status_code == 'nosend'"><button class="cu-btn send-btn" @tap="sendOrder">发货</button></view>
+		<view class="bottom-box u-flex u-row-center u-col-center" v-if="orderDetail.status_code == 'nosend'"><button class="cu-btn send-btn" @tap="sendOrder">发货</button></view>
 	</view>
 </template>
 
@@ -54,7 +67,6 @@ export default {
 	data() {
 		return {
 			orderDetail: {},
-			tools: this.$tools,
 			orderType: []
 		};
 	},
@@ -66,13 +78,13 @@ export default {
 		// 订单详情
 		getOrderDetail() {
 			let that = this;
-			that.$api('store.orderDetail', {
+			that.$http('store.orderDetail', {
 				id: that.$Route.query.orderId,
 				store_id: uni.getStorageSync('storeId')
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
-					that.orderDetail.paytime = this.$tools.dateFormat('YYYY-mm-dd HH:MM', new Date(res.data.paytime * 1000));
+					that.orderDetail.paytime = that.$u.timeFormat(res.data.paytime, 'yyyy-mm-dd hh:MM');
 					that.orderDetail.item.forEach(goods => {
 						that.orderType.push(goods.dispatch_type);
 					});
@@ -82,12 +94,12 @@ export default {
 		// 订单发货
 		sendOrder() {
 			let that = this;
-			that.$api('store.orderSend', {
+			that.$http('store.orderSend', {
 				id: that.orderDetail.id,
 				store_id: uni.getStorageSync('storeId')
-			}).then(res => {
+			}, '发货中...').then(res => {
 				if (res.code === 1) {
-					that.$tools.toast(res.msg);
+					that.$u.toast(res.msg);
 					that.getOrderDetail();
 				}
 			});
@@ -113,7 +125,7 @@ export default {
 			border: 1rpx solid rgba(237, 237, 237, 1);
 			border-radius: 40rpx;
 			font-size: 30rpx;
-			font-family: PingFang SC;
+
 			font-weight: 500;
 			color: rgba(255, 255, 255, 1);
 		}
@@ -137,13 +149,43 @@ export default {
 			}
 		}
 	}
+	.order-sku {
+		font-size: 24rpx;
+
+		font-weight: 400;
+		color: rgba(153, 153, 153, 1);
+		width: 450rpx;
+		margin-bottom: 20rpx;
+		.order-num {
+			margin-right: 10rpx;
+		}
+	}
+	.card-price-box {
+		.status-btn {
+			height: 32rpx;
+			border: 1rpx solid rgba(207, 169, 114, 1);
+			border-radius: 15rpx;
+			font-size: 20rpx;
+			font-weight: 400;
+			color: rgba(168, 112, 13, 1);
+			padding: 0 10rpx;
+			margin-left: 20rpx;
+			background: rgba(233, 183, 102, 0.16);
+		}
+		.order-price {
+			font-size: 26rpx;
+
+			font-weight: 600;
+			color: rgba(51, 51, 51, 1);
+		}
+	}
 }
 .order-detail-card {
 	background-color: #fff;
 	margin: 20rpx 0;
 	.card-title {
 		font-size: 30rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(51, 51, 51, 1);
 		height: 80rpx;

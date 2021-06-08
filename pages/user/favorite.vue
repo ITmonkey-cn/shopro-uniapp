@@ -1,45 +1,52 @@
 <!-- 收藏列表 -->
 <template>
 	<view class="page_box">
-		<view class="head_box x-bc" v-if="favoriteList.length">
+		<!-- 总收藏数 -->
+		<view class="head_box u-flex u-row-between" v-show="!isEmpty">
 			<view class="count-box">
 				共
 				<text class="all-num">{{ total }}</text>
 				件商品
 			</view>
-			<button class="cu-btn set-btn" @tap="onSet">{{ isSel ? '完成' : '编辑' }}</button>
+			<button class="set-btn u-reset-button" @tap="onSet">{{ isEdit ? '完成' : '编辑' }}</button>
 		</view>
+
+		<!-- 收藏列表 -->
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<checkbox-group @change="onSel" v-if="favoriteList.length">
-					<view class="collect-list x-f" v-if="f.goods_id" v-for="f in favoriteList" :key="f.id">
-						<checkbox v-if="isSel" :value="f.goods_id.toString()" :checked="f.checked" :class="{ checked: f.checked }" class="goods-radio round orange"></checkbox>
-						<shopro-mini-card :detail="f" :type="'favorite'"></shopro-mini-card>
+				<u-checkbox-group @change="checkboxGroupChange" activeColor="#e9b461">
+					<view class="collect-list u-flex" v-for="f in favoriteList" :key="f.id">
+						<u-checkbox v-show="isEdit" :name="f.goods_id" shape="circle" v-model="f.checked"></u-checkbox>
+						<shopro-mini-card
+							:image="f.goods.image"
+							:title="f.goods.title"
+							:price="f.goods.price"
+							:originPrice="f.goods.original_price"
+							:subtitle="f.goods.subtitle"
+							@click="$Router.push({ path: '/pages/goods/detail', query: { id: f.goods_id } })"
+						></shopro-mini-card>
 					</view>
-				</checkbox-group>
+				</u-checkbox-group>
 				<!-- 缺省页 -->
-				<shopro-empty v-if="!favoriteList.length" :emptyData="emptyData"></shopro-empty>
+				<shopro-empty
+					v-show="isEmpty"
+					:image="$IMG_URL + '/imgs/empty/empty_goods.png'"
+					tipText="暂无收藏"
+					btnText="去首页逛逛"
+					@click="$Router.pushTab('/pages/index/index')"
+				></shopro-empty>
 				<!-- 更多 -->
-				<u-loadmore v-if="favoriteList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
+				<u-loadmore v-show="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
 		<view class="foot_box ">
-			<view class="tools-box x-bc" v-if="isSel && favoriteList.length">
-				<label class="check-all" @tap="onAllSel">
-					<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
-					<text>全选</text>
-				</label>
-				<button class="cu-btn close-btn" @tap="cancelFavorite">取消收藏</button>
+			<view class="tools-box u-flex u-row-between u-flex-1" v-show="isEdit && !isEmpty">
+				<u-checkbox shape="circle" activeColor="#e9b461" @change="onAllSel" v-model="isAllSel"><text>全选</text></u-checkbox>
+				<button class="u-reset-button close-btn" @tap="cancelFavorite">取消收藏</button>
 			</view>
 		</view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
 		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -48,14 +55,10 @@ export default {
 	components: {},
 	data() {
 		return {
-			isSel: false,
-			allSel: false,
-			routerTo: this.$Router,
+			isEmpty: false,
+			isEdit: false,
+			isAllSel: false, //是否全选
 			selList: [],
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
-				tip: '暂无收藏商品，赶紧去收藏好货吧~'
-			},
 			favoriteList: [],
 			total: 0,
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
@@ -64,50 +67,31 @@ export default {
 		};
 	},
 	computed: {},
-	onShow() {
-		this.init();
-	},
-	onHide() {
-		this.favoriteList = [];
+	onLoad() {
+		this.getFavoriteList();
 	},
 	methods: {
-		// init
-		init() {
-			return Promise.all([this.getFavoriteList()]);
+		// 单选
+		checkboxGroupChange(e) {
+			this.selList = e;
+			this.isAllSel = this.favoriteList.every(item => item.checked);
 		},
-		onSel(e) {
-			let items = this.favoriteList,
-				values = e.detail.value;
-			this.selList = values;
-			items.forEach(i => {
-				if (values.includes(i.goods_id.toString())) {
-					this.$set(i, 'checked', true);
-				} else {
-					this.$set(i, 'checked', false);
-				}
-			});
-			if (this.selList.length < items.length) {
-				this.allSel = false;
-			} else {
-				this.allSel = true;
-			}
-		},
+
+		// 编辑
 		onSet() {
-			this.isSel = !this.isSel;
+			this.isEdit = !this.isEdit;
 		},
-		onAllSel() {
-			this.allSel = !this.allSel;
+
+		// 全选
+		onAllSel(e) {
+			this.isAllSel = e.value;
 			this.selList = [];
-			const { favoriteList } = this;
-			favoriteList.forEach(i => {
-				if (this.allSel) {
-					this.$set(i, 'checked', true);
-					this.selList.push(i.goods_id);
-				} else {
-					this.$set(i, 'checked', false);
-				}
+			this.favoriteList.forEach(item => {
+				e.value && this.selList.push(item.goods_id);
+				this.$set(item, 'checked', e.value);
 			});
 		},
+
 		// 加载更多
 		loadMore() {
 			if (this.currentPage < this.lastPage) {
@@ -118,37 +102,41 @@ export default {
 		// 收藏列表
 		getFavoriteList() {
 			let that = this;
+			let list = [];
 			that.loadStatus = 'loading';
-			that.$api('goods.favoriteList', {
+			that.$http('user.favoriteList', {
 				pre_page: 10,
 				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.total = res.data.total;
-					that.favoriteList = [...that.favoriteList, ...res.data.data];
+					list = res.data.data;
+					list.map(item => {
+						that.$set(item, 'checked', false);
+					});
+					that.favoriteList = [...that.favoriteList, ...list];
+					that.isEmpty = !that.favoriteList.length;
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		},
+
 		// 取消收藏
 		cancelFavorite() {
 			let that = this;
-			let ids = that.selList;
-			const { favoriteList } = this;
-			that.$api('goods.favorite', {
-				goods_ids: ids
+			let { favoriteList, selList } = this;
+			favoriteList = JSON.parse(JSON.stringify(favoriteList));
+			that.$http('goods.favorite', {
+				goods_ids: selList
 			}).then(res => {
 				if (res.code === 1) {
-					if (that.allSel) {
+					if (that.isAllSel) {
 						that.favoriteList = [];
+						that.isEmpty = true;
 					} else {
-						that.favoriteList = favoriteList.filter(f => !ids.includes(f.goods_id.toString()));
-						that.total = favoriteList.length;
+						that.favoriteList = favoriteList.filter(f => !selList.includes(f.goods_id));
+						that.total = that.favoriteList.length;
 					}
 				}
 			});
@@ -175,18 +163,15 @@ export default {
 		background: none;
 		font-size: 26rpx;
 		color: #a8700d;
+		padding: 20rpx;
 	}
 }
 
 .collect-list {
 	padding: 30rpx 20rpx;
 	background: #fff;
+	width: 750rpx;
 	margin-bottom: 20rpx;
-
-	.goods-radio {
-		transform: scale(0.7);
-		margin-right: 20rpx;
-	}
 }
 
 .tools-box {
@@ -194,18 +179,9 @@ export default {
 	width: 750rpx;
 	padding: 0 20rpx;
 	background: #fff;
-
-	.check-all {
-		font-size: 26rpx;
-
-		.check-all-radio {
-			transform: scale(0.7);
-		}
-	}
-
 	.close-btn {
 		width: 200rpx;
-		height: 70rpx;
+		line-height: 70rpx;
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
 		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 		border-radius: 35rpx;

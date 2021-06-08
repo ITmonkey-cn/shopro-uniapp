@@ -2,9 +2,8 @@
 <template>
 	<view class="apply-commission-wrap page_box">
 		<!-- 标题栏 -->
-		<view class="head-box">
-			<view class="nav-box"><cu-custom isBack></cu-custom></view>
-		</view>
+		<view class="head-box"><u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}"></u-navbar></view>
+
 		<!-- 表单 -->
 		<view class="apply-form content_box">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
@@ -23,7 +22,7 @@
 						:showProgress="false"
 						@on-uploaded="uploadSuccess($event, 'storeImg')"
 						@on-remove="uploadRemove($event, 'storeImg')"
-						:action="`${upLoadUrl}/index/upload`"
+						:action="`${$API_URL}/index/upload`"
 						:file-list="model.fileImages"
 						width="148"
 						height="148"
@@ -43,7 +42,7 @@
 				<u-form-item :labelStyle="labelStyle" 　 label-width="150" label-position="left" label="营业天数" prop="weeks">
 					<u-input type="select" placeholder="请选择营业天数" disabled :placeholderStyle="placeholderStyle" v-model="model.weeks" @click="onSelect('week')"></u-input>
 				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" 　 label-width="150" label-position="left" label="所在地区" prop="area_id">
+				<u-form-item :labelStyle="labelStyle" 　 label-width="150" label-position="left" label="所在地区" prop="area">
 					<u-input type="select" :select-open="pickerShow" v-model="model.area" placeholder="请选择地区" @click="pickerShow = true"></u-input>
 				</u-form-item>
 				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="详细地址" prop="address">
@@ -57,59 +56,55 @@
 						v-model="model.address"
 					></u-input>
 				</u-form-item>
-				<view class="agreement x-f">
+				<view class="agreement u-flex u-col-center">
 					<u-checkbox v-model="model.agreement" activeColor="#4CB89D" shape="circle" @change="onAgreement"></u-checkbox>
-					<view class="agreement-text" @tap="jump('/pages/public/richtext', { id: protocolId })">勾选代表同意《门店入驻协议》</view>
+					<view class="agreement-text" @tap="toProtocol">勾选代表同意《门店入驻协议》</view>
 				</view>
-				<view class="x-c">
-					<button class="cu-btn save-btn" @tap="onSubmit" :disabled="isFormEnd">
-						<text v-if="isFormEnd" class="cuIcon-loading2 cuIconfont-spin"></text>
-						确认提交
-					</button>
-				</view>
+				<view class="u-flex u-row-center u-col-center"><button class="u-reset-button save-btn" @tap="onSubmit" :disabled="isFormEnd">确认提交</button></view>
 			</u-form>
 		</view>
-		<u-select :mode="selectMode" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
+
+		<!-- 弹窗 -->
+		<u-select v-if="selectShow" :mode="selectMode" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
-		<view class="cu-modal bottom-modal" :class="{ show: showWeeksModal }" @tap="hideWeekModal">
-			<view class="cu-dialog" @tap.stop>
-				<view class="cu-bar bg-white">
-					<view class="action text-blue" @tap="hideWeekModal">取消</view>
+
+		<!-- 选择星期 -->
+		<u-popup v-model="showWeeksModal" safe-area-inset-bottom mode="bottom">
+			<view class="week-modal">
+				<view class="u-flex u-row-between u-p-x-30 week-modal--head ">
+					<view></view>
 					<view class="action text-green" @tap="saveWeekModal">确定</view>
 				</view>
-				<view class="grid col-3 padding-sm">
-					<view v-for="(item, index) in weekcheckbox" class="padding-xs" :key="index">
-						<button class="cu-btn orange mini block" :class="item.checked ? 'bg-green' : 'line-green'" @tap="onSelectWeek(index)">{{ item.name }}</button>
+				<view class="u-flex u-flex-wrap u-p-x-30 u-p-y-30 u-row-between week-modal--content">
+					<view v-for="(item, index) in weekcheckbox" class="week-btn" :key="index">
+						<u-button @click="onSelectWeek(index)" :plain="!item.checked" size="medium" type="success">{{ item.name }}</u-button>
 					</view>
 				</view>
 			</view>
-		</view>
+		</u-popup>
+
 		<!-- 权限验证 -->
-		<view class="auth-box cu-modal" :class="{ show: showNotice }">
-			<view class="notice-box cu-dialog">
+		<u-popup v-model="showNotice" mode="center" border-radius="20">
+			<view class="notice-modal">
 				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
 				<view class="notice-title">{{ authNotice.title }}</view>
 				<view class="notice-detail">{{ authNotice.detail }}</view>
-				<button class="cu-btn notice-btn" @tap="onAuthBtn(authNotice.btnPath)">{{ authNotice.btnText }}</button>
-				<button class="cu-btn back-btn" @tap="$Router.back()">返回</button>
+				<button class="u-reset-button notice-btn" @tap="onAuthBtn(authNotice.btnPath)">{{ authNotice.btnText }}</button>
+				<button class="u-reset-button back-btn" @tap="$Router.back()">返回</button>
 			</view>
-		</view>
+		</u-popup>
 	</view>
 </template>
 
 <script>
-import { API_URL } from '@/env.js';
-// #ifdef APP-PLUS
-import permision from '@/common/permission.js';
-// #endif
+import Auth from '@/shopro/permission/index.js';
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {
-			upLoadUrl: API_URL,
 			showNotice: false,
-			protocolId: 0,
-			showWeeksModal: false,
+			showWeeksModal: false, //星期弹窗
 			isFormEnd: false,
 			weekcheckbox: [
 				{
@@ -149,13 +144,7 @@ export default {
 					checked: false
 				}
 			],
-			authNotice: {
-				//权限提示内容
-				// img: this.$IMG_URL + '/imgs/commission/auth_check.png',
-				// title: '正在审核中！',
-				// detail: '请耐心等候',
-				// btnText: '知道了'
-			},
+			authNotice: {},
 			// 表单
 			errorType: ['message'],
 			pickerShow: false,
@@ -248,6 +237,9 @@ export default {
 		};
 	},
 	computed: {
+		...mapState({
+			storeTcp: ({ shopro }) => shopro?.config?.store
+		}),
 		selectWorkerTime() {
 			let mArr = [];
 			for (let i = 0; i <= 24; i++) {
@@ -288,20 +280,18 @@ export default {
 			this.model.openweeks = arr.join(',');
 			this.model.weeks = arr2.join(',');
 		},
-		hideWeekModal() {
-			this.showWeeksModal = false;
-		},
+
+		// 选择星期
 		onSelectWeek(index) {
 			this.weekcheckbox[index].checked = !this.weekcheckbox[index].checked;
 		},
 
 		// 弹窗按钮
 		onAuthBtn(path) {
-			if (path) {
+			path &&
 				this.$Router.push({
 					path: path
 				});
-			}
 			this.showNotice = false;
 		},
 
@@ -329,39 +319,21 @@ export default {
 					return;
 			}
 		},
-		// app权限判断
-		async checkPermission() {
-			let status = permision.isIOS ? await permision.requestIOS('location') : await permision.requestAndroid(['android.permission.ACCESS_FINE_LOCATION']);
-			return status;
-		},
 
 		// 地址选择
 		async chooseLocation() {
-			// #ifdef APP-PLUS
-			let status = await this.checkPermission();
-			if (status !== 1) {
-				uni.showModal({
-					content: '需要定位权限',
-					confirmText: '设置',
-					success: function(res) {
-						if (res.confirm) {
-							permision.gotoAppSetting();
-						}
+			let authState = await new Auth('userLocation').check();
+			authState &&
+				uni.chooseLocation({
+					success: res => {
+						this.model.address = res.address + res.name;
+						this.model.latitude = res.latitude;
+						this.model.longitude = res.longitude;
+					},
+					fail: err => {
+						console.log(err);
 					}
 				});
-				return;
-			}
-			// #endif
-			uni.chooseLocation({
-				success: res => {
-					this.model.address = res.address;
-					this.model.latitude = res.latitude;
-					this.model.longitude = res.longitude;
-				},
-				fail: err => {
-					console.log(err);
-				}
-			});
 		},
 
 		onSelect(type) {
@@ -408,12 +380,15 @@ export default {
 		// 门店详情
 		getStoreInfo() {
 			let that = this;
-			that.$api('store.shopInfo').then(res => {
+			that.$http('store.shopInfo').then(res => {
 				if (res.code === 1) {
-					res.data.apply && this.authStatus(res.data.apply);
-					this.protocolId = res.data.config.protocol;
+					res.data && this.authStatus(res.data);
 				}
 			});
+		},
+		// 跳转门店协议
+		toProtocol() {
+			this.storeTcp?.protocol && this.jump('/pages/public/richtext', { id: this.storeTcp.protocol });
 		},
 
 		// 初始化model
@@ -453,7 +428,7 @@ export default {
 					this.authNotice = {
 						img: this.$IMG_URL + '/imgs/commission/auth_check.png',
 						title: '正在审核中',
-						detail: data.msg,
+						detail: data.status_msg,
 						btnText: '修改信息',
 						btnPath: ''
 					};
@@ -465,7 +440,7 @@ export default {
 					this.authNotice = {
 						img: this.$IMG_URL + '/imgs/commission/auth_reject.png',
 						title: '您的申请已被驳回！',
-						detail: data.msg,
+						detail: data.status_msg,
 						btnText: '重新申请',
 						btnPath: ''
 					};
@@ -482,7 +457,7 @@ export default {
 		applyStore() {
 			let that = this;
 			this.isFormEnd = false;
-			that.$api('store.apply', that.model).then(res => {
+			that.$http('store.apply', that.model, '提交中...').then(res => {
 				this.isFormEnd = true;
 				if (res.code === 1) {
 					//  #ifdef MP-WEIXIN
@@ -501,6 +476,10 @@ export default {
 		// 提交
 		onSubmit() {
 			let that = this;
+			if (!that.model.images.length) {
+				this.$u.toast('请上传门店图片');
+				return;
+			}
 			this.$refs.uForm.validate(valid => {
 				if (valid) {
 					if (!this.model.agreement) return this.$u.toast('请勾选协议');
@@ -522,18 +501,11 @@ export default {
 
 <style lang="scss">
 .apply-commission-wrap {
-	height: 100%;
 	background-color: #fff;
 	.head-box {
 		background: url($IMG_URL+'/imgs/user/sh_shop_apply_head.png') no-repeat;
 		background-size: 100% auto;
 		height: 370rpx;
-	}
-}
-.nav-box {
-	/deep/ .cu-back {
-		color: #fff;
-		font-size: 40rpx;
 	}
 }
 // 表单
@@ -551,8 +523,8 @@ export default {
 		}
 	}
 	.save-btn {
-		width: 616rpx;
-		height: 86rpx;
+		width: 690rpx;
+		line-height: 86rpx;
 		background: linear-gradient(90deg, #2dae9c, #6bc29e);
 		box-shadow: 0px 7rpx 11rpx 2rpx rgba(61, 179, 156, 0.34);
 		border-radius: 43rpx;
@@ -562,67 +534,81 @@ export default {
 	}
 }
 
-.auth-box {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	position: fixed;
-	z-index: 99;
-	.notice-box {
-		position: fixed;
-		z-index: 1111;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		background-color: #fff;
-		top: 50%;
-		left: 50%;
-		width: 612rpx;
-		min-height: 658rpx;
-		background: #ffffff;
-		padding: 30rpx;
-		border-radius: 20rpx;
-		transform: translate(-50%, -50%);
-		.img-wrap {
-			margin-bottom: 50rpx;
-			.notice-img {
-				width: 180rpx;
-				height: 170rpx;
+// 星期
+.week-modal {
+	.week-modal--head {
+		height: 100rpx;
+		border-bottom: 1rpx solid $u-border-color;
+
+		.text-cancel {
+			color: #ccc;
+		}
+		.text-green {
+			color: #18b566;
+		}
+	}
+	.week-modal--content {
+		.week-btn {
+			margin-right: 20rpx;
+			margin-bottom: 20rpx;
+			&:nth-of-type(3n) {
+				margin-right: 0;
 			}
 		}
-		.notice-title {
-			font-size: 35rpx;
-			font-weight: bold;
-			color: #46351b;
-			margin-bottom: 28rpx;
+	}
+}
+
+// 提示
+.notice-modal {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 612rpx;
+	min-height: 658rpx;
+	background: #ffffff;
+	padding: 30rpx;
+	border-radius: 20rpx;
+	.img-wrap {
+		margin-bottom: 50rpx;
+		.notice-img {
+			width: 180rpx;
+			height: 170rpx;
 		}
-		.notice-detail {
-			font-size: 28rpx;
-			font-weight: 400;
-			color: #999999;
-			line-height: 36rpx;
-			margin-bottom: 50rpx;
-		}
-		.notice-btn {
-			width: 492rpx;
-			height: 70rpx;
-			background: linear-gradient(-90deg, #a36fff, #5336ff);
-			box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
-			border-radius: 35rpx;
-			font-size: 28rpx;
-			font-weight: 500;
-			color: #ffffff;
-			margin-bottom: 10rpx;
-		}
-		.back-btn {
-			width: 492rpx;
-			height: 70rpx;
-			font-size: 28rpx;
-			font-weight: 500;
-			color: #c5b8fb;
-			background: none;
-		}
+	}
+	.notice-title {
+		font-size: 35rpx;
+		font-weight: bold;
+		color: #46351b;
+		margin-bottom: 28rpx;
+	}
+	.notice-detail {
+		font-size: 28rpx;
+		font-weight: 400;
+		color: #999999;
+		line-height: 36rpx;
+		margin-bottom: 50rpx;
+	}
+	.notice-btn {
+		width: 492rpx;
+		height: 70rpx;
+		line-height: 70rpx;
+		background: linear-gradient(90deg, #2dae9c, #6bc29e);
+		box-shadow: 0 7rpx 11rpx 2rpx rgba(61, 179, 156, 0.34);
+		border-radius: 35rpx;
+		font-size: 28rpx;
+		font-weight: 500;
+		color: #ffffff;
+		margin-bottom: 10rpx;
+	}
+	.back-btn {
+		width: 492rpx;
+		height: 70rpx;
+		line-height: 70rpx;
+		font-size: 28rpx;
+		font-weight: 500;
+		color: #3ab29c;
+		background: none;
 	}
 }
 </style>

@@ -162,10 +162,15 @@ uni-toast .uni-toast {
 /* start--去除button的所有默认样式--start */
 .u-reset-button {
 	padding: 0;
+	margin: 0;
 	font-size: inherit;
 	line-height: inherit;
 	background-color: transparent;
 	color: inherit;
+	transform: translate(0rpx, 0rpx);
+}
+.u-reset-button.button-hover {
+	transform: translate(1upx, 1upx);
 }
 
 .u-reset-button::after {

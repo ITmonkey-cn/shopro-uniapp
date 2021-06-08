@@ -11,7 +11,7 @@ export default {
 		};
 	},
 	onLoad() {
-		this.webviewPath = decodeURIComponent(this.$Route.query.webviewPath);
+		this.webviewPath = this.$Route.query.webviewPath;
 	}
 };
 </script>

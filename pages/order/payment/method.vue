@@ -1,109 +1,95 @@
 <!-- 收银台 -->
 <template>
-	<view class="page_box">
-		<view class="head_box"></view>
-		<view class="content_box">
-			<view class="y-f money-box" v-if="orderDetail.total_fee">
-				<text class="time" v-if="isPast">{{ timeText }}</text>
-				<view class="money">{{ orderDetail.total_fee }}</view>
-			</view>
-			<radio-group @change="selPay" class="pay-box" v-if="payment">
-				<label class="x-bc pay-item" v-if="payment.includes('wechat')">
-					<view class="x-f">
-						<image class="pay-img"  :src="$IMG_URL + '/imgs/wx_pay.png'" mode=""></image>
-						<text>微信支付</text>
-					</view>
-					<radio value="wechat" :class="{ checked: payType === 'wechat' }" class=" pay-radio orange" :checked="payType === 'wechat'"></radio>
-				</label>
-				<label class="x-bc pay-item" v-if="payment.includes('alipay')">
-					<view class="x-f">
-						<image class="pay-img"  :src="$IMG_URL + '/imgs/ali_pay.png'" mode=""></image>
-						<text>支付宝支付</text>
-					</view>
-					<radio value="alipay" :class="{ checked: payType === 'alipay' }" class="pay-radio orange" :checked="payType === 'alipay'"></radio>
-				</label>
-				<label class="x-bc pay-item" v-if="payment.includes('iospay') && !isAndroid">
-					<view class="x-f">
-						<image class="pay-img"  :src="$IMG_URL + '/imgs/apple_pay.png'" mode=""></image>
-						<text>ApplePay</text>
-					</view>
-					<radio value="iospay" :class="{ checked: payType === 'iospay' }" class="pay-radio orange" :checked="payType === 'iospay'"></radio>
-				</label>
-				<label class="x-bc pay-item" v-if="payment.includes('wallet')">
-					<view class="x-f">
-						<image class="pay-img"  :src="$IMG_URL + '/imgs/wallet_pay.png'" mode=""></image>
-						<text>余额支付</text>
-					</view>
-					<radio value="wallet" :class="{ checked: payType === 'wallet' }" class="pay-radio orange" :checked="payType === 'wallet'"></radio>
-				</label>
-			</radio-group>
-			<view class="x-c">
-				<button class="cu-btn pay-btn" @tap="confirmPay">确认支付 ￥{{ orderDetail.total_fee }}</button>
-			</view>
+	<view class="pay-method-wrap">
+		<view class="u-flex-col u-col-center money-box" v-if="orderDetail.total_fee">
+			<text class="time" v-show="isCountDown">{{ timeText }}</text>
+			<view class="money">{{ orderDetail.total_fee }}</view>
 		</view>
-		<view class="foot_box"></view>
+
+		<!-- 支付方式单选项 -->
+		<u-radio-group v-if="payment" class="pay-box" v-model="payType" active-color="#f0c785">
+			<!-- 微信支付 -->
+			<view class="u-flex u-row-between pay-item" v-show="payment.includes('wechat')" @tap="payType = 'wechat'">
+				<view class="u-flex">
+					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_wx_pay.png'" mode=""></image>
+					<text>微信支付</text>
+				</view>
+				<u-radio shape="circle" name="wechat"></u-radio>
+			</view>
+			<!-- 支付宝支付 -->
+			<view class="u-flex u-row-between pay-item" v-show="payment.includes('alipay')" @tap="payType = 'alipay'">
+				<view class="u-flex">
+					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_ali_pay.png'" mode=""></image>
+					<text>支付宝支付</text>
+				</view>
+				<u-radio shape="circle" name="alipay"></u-radio>
+			</view>
+			<!-- 苹果支付 -->
+			<view class="u-flex u-row-between pay-item" v-show="payment.includes('iospay') && appPlatfrom === 'ios'" @tap="payType = 'iospay'">
+				<view class="u-flex">
+					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_apple_pay.png'" mode=""></image>
+					<text>ApplePay</text>
+				</view>
+				<u-radio shape="circle" name="iospay"></u-radio>
+			</view>
+			<!-- 余额支付 -->
+			<view class="u-flex u-row-between pay-item" v-show="payment.includes('wallet')" @tap="payType = 'wallet'">
+				<view class="u-flex">
+					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_wallet_pay.png'" mode=""></image>
+					<text>余额支付</text>
+				</view>
+				<u-radio shape="circle" name="wallet"></u-radio>
+			</view>
+		</u-radio-group>
+
+		<button class="u-reset-button pay-btn" @tap="confirmPay">确认支付 ￥{{ orderDetail.total_fee || '0.00' }}</button>
 		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
 <script>
-import ShoproPay from '@/common/shopro-pay';
+import Pay from '@/shopro/pay';
 import { mapMutations, mapActions, mapState } from 'vuex';
-
 let timer;
 export default {
 	components: {},
 	data() {
 		return {
-			payType: 'wechat',
-			options: {},
+			payType: '', //支付方式
+			isCountDown: true, //是否显示订单倒计时。
 			orderDetail: {},
-			timeText: '',
-			isPast: true, //是否显示订单倒计时。
-			isAndroid: uni.getStorageSync('isAndroid'),
-			platform: uni.getStorageSync('platform')
+			timeText: '', //倒计时文本
+			platform: this.$platform.get(),
+			appPlatfrom: ''
 		};
 	},
 	computed: {
 		...mapState({
-			payment: state => state.init.initData.payment
+			payment: ({ shopro }) => shopro.config.payment
 		})
 	},
-	onLoad(options) {
-		this.options = options;
-		if (options.openid) {
-			//检测到回传openid
-			uni.setStorageSync('openid', options.openid);
-		}
-		// #ifdef H5
-		if (uni.getStorageSync('platform') === 'wxOfficialAccount' && uni.getSystemInfoSync().platform === 'ios' && !uni.getStorageSync('payReload')) {
-			//检测到IOS支付路径问题
-			uni.setStorageSync('payReload', true);
-			window.location.reload();
-			throw 'stop';
-		}
-		uni.removeStorageSync('payReload');
-		// #endif
-		this.init();
+	onShow() {
+		this.orderDetail.id && this.countDown();
 	},
-	onShow() {},
+	onLoad() {
+		if(this.$platform.get() === 'wxOfficialAccount' && this.$platform.device() === 'ios' && this.$platform.entry() !== location.href) location.reload();
+		this.getOrderDetail();
+		if (this.payment.length) {
+			this.payType = this.payment[0];
+		}
+	},
 	onHide() {
 		clearInterval(timer);
+		timer = null;
 	},
 	methods: {
-		init() {
-			return Promise.all([this.getOrderDetail()]);
-		},
-		selPay(e) {
-			this.payType = e.detail.value;
-		},
 		// 倒计时
 		countDown() {
 			let that = this;
 			let t = parseInt(that.orderDetail.ext_arr.expired_time * 1000) - parseInt(new Date().getTime());
 			t = t / 1000;
-			let timer = setInterval(() => {
+			timer = setInterval(() => {
 				if (t > 0) {
 					let time = that.$tools.format(t);
 					that.timeText = `支付剩余时间 ${time.m}:${time.s}`;
@@ -114,24 +100,43 @@ export default {
 				}
 			}, 1000);
 		},
+
 		// 发起支付
 		confirmPay() {
 			let that = this;
-
-			let pay = new ShoproPay(that.payType, that.orderDetail);
+			let pay = null;
+			if (!that.payType) {
+				this.$u.toast('请选择支付方式');
+				return;
+			}
+			if (that.payType === 'wallet') {
+				uni.showModal({
+					title: '支付提示',
+					confirmColor: '#f0c785',
+					content: `是否确认使用余额支付:${that.orderDetail.total_fee}元?`,
+					success: res => {
+						if (res.confirm) {
+							pay = new Pay(that.payType, that.orderDetail);
+						}
+					}
+				});
+			} else {
+				pay = new Pay(that.payType, that.orderDetail);
+			}
 		},
+
 		// 支付信息
 		getOrderDetail() {
 			let that = this;
-			that.$api('order.detail', {
-				id: that.options.orderId
+			that.$http('order.detail', {
+				id: that.$Route.query.orderId
 			}).then(res => {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
 					if (res.data.ext_arr !== null) {
 						that.countDown();
 					} else {
-						that.isPast = false;
+						that.isCountDown = false;
 					}
 				}
 			});
@@ -177,14 +182,9 @@ export default {
 			border-bottom: none;
 		}
 
-		.pay-radio {
-			transform: scale(0.8);
-		}
-
 		.pay-img {
 			width: 40rpx;
 			height: 40rpx;
-			// background: #ccc;
 			margin-right: 25rpx;
 		}
 	}
@@ -192,10 +192,10 @@ export default {
 
 .pay-btn {
 	width: 690rpx;
-	height: 80rpx;
+	line-height: 80rpx;
 	background: linear-gradient(90deg, rgba(240, 199, 133, 1), rgba(246, 214, 157, 1));
 	border-radius: 40rpx;
 	color: rgba(#fff, 0.9);
-	margin-top: 100rpx;
+	margin: 100rpx auto 0;
 }
 </style>

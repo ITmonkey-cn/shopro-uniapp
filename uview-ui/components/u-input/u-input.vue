@@ -57,14 +57,18 @@
 		/>
 		<view class="u-input__right-icon u-flex">
 			<view class="u-input__right-icon__clear u-input__right-icon__item" @tap="onClear" v-if="clearable && value != '' && focused">
-				<u-icon size="32" name="close-circle-fill" color="#c0c4cc"/>
+				<u-icon size="32" name="close-circle-fill" color="#c0c4cc" />
 			</view>
 			<view class="u-input__right-icon__clear u-input__right-icon__item" v-if="passwordIcon && type == 'password'">
-				<u-icon size="32" :name="!showPassword ? 'eye' : 'eye-fill'" color="#c0c4cc" @click="showPassword = !showPassword"/>
+				<u-icon size="32" :name="!showPassword ? 'eye-off' : 'eye-fill'" color="#c0c4cc" @click="showPassword = !showPassword" />
 			</view>
-			<view class="u-input__right-icon--select u-input__right-icon__item" v-if="type == 'select'" :class="{
-				'u-input__right-icon--select--reverse': selectOpen
-			}">
+			<view
+				class="u-input__right-icon--select u-input__right-icon__item"
+				v-if="type == 'select'"
+				:class="{
+					'u-input__right-icon--select--reverse': selectOpen
+				}"
+			>
 				<u-icon name="arrow-down-fill" size="26" color="#c0c4cc"></u-icon>
 			</view>
 		</view>
@@ -210,9 +214,9 @@ export default {
 			default: true
 		},
 		// 是否显示键盘上方带有”完成“按钮那一栏
-		showConfirmbar:{
-			type:Boolean,
-			default:true
+		showConfirmbar: {
+			type: Boolean,
+			default: true
 		}
 	},
 	data() {
@@ -223,19 +227,20 @@ export default {
 			validateState: false, // 当前input的验证状态，用于错误时，边框是否改为红色
 			focused: false, // 当前是否处于获得焦点的状态
 			showPassword: false, // 是否预览密码
-			lastValue: '', // 用于头条小程序，判断@input中，前后的值是否发生了变化，因为头条中文下，按下键没有输入内容，也会触发@input时间
+			lastValue: '' // 用于头条小程序，判断@input中，前后的值是否发生了变化，因为头条中文下，按下键没有输入内容，也会触发@input时间
 		};
 	},
 	watch: {
 		value(nVal, oVal) {
 			this.defaultValue = nVal;
 			// 当值发生变化，且为select类型时(此时input被设置为disabled，不会触发@input事件)，模拟触发@input事件
-			if(nVal != oVal && this.type == 'select') this.handleInput({
-				detail: {
-					value: nVal
-				}
-			})
-		},
+			if (nVal != oVal && this.type == 'select')
+				this.handleInput({
+					detail: {
+						value: nVal
+					}
+				});
+		}
 	},
 	computed: {
 		// 因为uniapp的input组件的maxlength组件必须要数值，这里转为数值，给用户可以传入字符串数值
@@ -245,8 +250,7 @@ export default {
 		getStyle() {
 			let style = {};
 			// 如果没有自定义高度，就根据type为input还是textare来分配一个默认的高度
-			style.minHeight = this.height ? this.height + 'rpx' : this.type == 'textarea' ?
-				this.textareaHeight + 'rpx' : this.inputHeight + 'rpx';
+			style.minHeight = this.height ? this.height + 'rpx' : this.type == 'textarea' ? this.textareaHeight + 'rpx' : this.inputHeight + 'rpx';
 			style = Object.assign(style, this.customStyle);
 			return style;
 		},
@@ -275,7 +279,7 @@ export default {
 		handleInput(event) {
 			let value = event.detail.value;
 			// 判断是否去除空格
-			if(this.trim) value = this.$u.trim(value);
+			if (this.trim) value = this.$u.trim(value);
 			// vue 原生的方法 return 出去
 			this.$emit('input', value);
 			// 当前model 赋值
@@ -286,12 +290,12 @@ export default {
 			setTimeout(() => {
 				// 头条小程序由于自身bug，导致中文下，每按下一个键(尚未完成输入)，都会触发一次@input，导致错误，这里进行判断处理
 				// #ifdef MP-TOUTIAO
-				if(this.$u.trim(value) == this.lastValue) return ;
+				if (this.$u.trim(value) == this.lastValue) return;
 				this.lastValue = value;
 				// #endif
 				// 将当前的值发送到 u-form-item 进行校验
 				this.dispatch('u-form-item', 'on-form-change', value);
-			}, 40)
+			}, 40);
 		},
 		/**
 		 * blur 事件
@@ -302,18 +306,18 @@ export default {
 			// 这里改为监听点击事件，手点击清除图标时，同时也发生了@blur事件，导致图标消失而无法点击，这里做一个延时
 			setTimeout(() => {
 				this.focused = false;
-			}, 100)
+			}, 100);
 			// vue 原生的方法 return 出去
 			this.$emit('blur', event.detail.value);
 			setTimeout(() => {
 				// 头条小程序由于自身bug，导致中文下，每按下一个键(尚未完成输入)，都会触发一次@input，导致错误，这里进行判断处理
 				// #ifdef MP-TOUTIAO
-				if(this.$u.trim(value) == this.lastValue) return ;
+				if (this.$u.trim(value) == this.lastValue) return;
 				this.lastValue = value;
 				// #endif
 				// 将当前的值发送到 u-form-item 进行校验
 				this.dispatch('u-form-item', 'on-form-blur', event.detail.value);
-			}, 40)
+			}, 40);
 		},
 		onFormItemError(status) {
 			this.validateState = status;
@@ -336,7 +340,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../libs/css/style.components.scss";
+@import '../../libs/css/style.components.scss';
 
 .u-input {
 	position: relative;
@@ -366,17 +370,16 @@ export default {
 	}
 
 	&--error {
-		border-color: $u-type-error!important;
+		border-color: $u-type-error !important;
 	}
 
 	&__right-icon {
-
 		&__item {
 			margin-left: 10rpx;
 		}
 
 		&--select {
-			transition: transform .4s;
+			transition: transform 0.4s;
 
 			&--reverse {
 				transform: rotate(-180deg);

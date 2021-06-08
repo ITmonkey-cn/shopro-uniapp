@@ -2,43 +2,46 @@
 <template>
 	<view style="width:100%;height: 100%;">
 		<view class="commission-wrap" :class="{ blur: !hasAuth }">
-			<cu-custom isBack></cu-custom>
+			<!-- 标题栏 -->
+			<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}"></u-navbar>
+
 			<!-- 用户资料 -->
 			<view class="user-card">
-				<view class="card-top x-bc">
-					<view class="x-f">
+				<view class="card-top u-flex u-row-between">
+					<view class="u-flex">
 						<view class="head-img-box"><image class="head-img" :src="userInfo.avatar" mode=""></image></view>
-						<view class="y-start">
+						<view class="u-flex-col">
 							<view class="user-name">{{ userInfo.nickname }}</view>
-							<view class="user-info-box x-f">
-								<view class="grade-tag tag-box x-f" v-if="commissionLv">
-									<image class="tag-img" :src="commissionLv.image" mode=""></image>
+							<view class="user-info-box u-flex">
+								<view class="tag-box u-flex" v-if="commissionLv">
+									<image v-if="commissionLv.image" class="tag-img" :src="commissionLv.image" mode=""></image>
 									<text class="tag-title">{{ commissionLv.name }}</text>
-									<text class="cuIcon-right" v-if="showLv" style="color: #fff; font-size: 26rpx;"></text>
+									<u-icon v-show="showLv" name="arrow-right" size="28" color="#fff"></u-icon>
 								</view>
 							</view>
 						</view>
 					</view>
-					<view class="y-start">
-						<view class="y-f">
-							<button class="cu-btn log-btn" @tap="jump('/pages/app/commission/commission-log')">明细</button>
-							<button class="cu-btn look-btn" @tap="onEye">
-								<text v-if="showMoney" class="cuIcon-attentionfill"></text>
-								<text v-else class="cuIcon-attentionforbidfill"></text>
+					<view class="u-flex-col">
+						<view class="u-flex-col u-col-center">
+							<button class="u-reset-button log-btn u-m-b-20" @tap="jump('/pages/app/commission/commission-log')">明细</button>
+							<button class="u-reset-button look-btn" @tap="showMoney = !showMoney">
+								<u-icon :name="showMoney ? 'eye-fill' : 'eye-off'" size="50" color="#fff"></u-icon>
 							</button>
 						</view>
 					</view>
 				</view>
-				<view class="card-bottom x-f" v-if="commissionWallet">
-					<view class="flex-sub y-start">
+
+				<!-- 收益 -->
+				<view class="card-bottom u-flex" v-if="commissionWallet">
+					<view class="u-flex-1 ">
 						<view class="item-title">总收益</view>
 						<view class="item-detail">{{ showMoney ? commissionWallet.total_income || '0.00' : '***' }}</view>
 					</view>
-					<view class="flex-sub y-start" style="align-items: center;">
+					<view class="u-flex-1 u-col-center">
 						<view class="item-title">待入账佣金</view>
 						<view class="item-detail">{{ showMoney ? commissionWallet.delay_money || '0.00' : '***' }}</view>
 					</view>
-					<view class="flex-sub y-start" style="align-items: flex-end;">
+					<view class="u-flex-1 u-col-center">
 						<view class="item-title">我的消费</view>
 						<view class="item-detail">{{ showMoney ? userInfo.total_consume || '0.00' : '***' }}</view>
 					</view>
@@ -48,17 +51,17 @@
 			<!-- 滚动明细 -->
 			<view class="commission-log">
 				<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box log-scroll">
-					<view class="log-item-box x-bc" v-for="item in commissionLog" :key="item.id">
+					<view class="log-item-box u-flex u-row-between" v-for="item in commissionLog" :key="item.id" @tap="$u.toast(item.remark)">
 						<view class="log-item-wrap">
-							<view class="log-item x-f one-t">
-								<view class="">
+							<view class="log-item u-flex u-ellipsis-1 u-col-center">
+								<view class="u-flex u-col-center ">
 									<image
 										class="log-img"
 										:src="item.oper_type !== 'user' ? logMap[item.oper_type] : item.oper ? item.oper.avatar : logMap['admin']"
 										mode=""
 									></image>
 								</view>
-								<view class="log-text one-t">{{ item.remark }}</view>
+								<view class="log-text u-ellipsis-1">{{ item.remark }}</view>
 							</view>
 						</view>
 						<text class="log-time">{{ $u.timeFrom(item.createtime) }}</text>
@@ -69,63 +72,86 @@
 			</view>
 
 			<!-- 功能菜单 -->
-			<view class="menu-box flex">
-				<view class="menu-item y-f" v-for="(menu, index) in menuList" v-if="!menu.isAgentFrom" :key="index" @tap="jump(menu.path)">
+			<view class="menu-box u-flex">
+				<view class="menu-item u-flex-col u-col-center" v-for="(menu, index) in menuList" v-if="!menu.isAgentFrom" :key="index" @tap="jump(menu.path)">
 					<image class="item-img" :src="menu.img" mode=""></image>
 					<view class="item-title">{{ menu.title }}</view>
 				</view>
 			</view>
-			<!-- 登录提示 -->
-			<shopro-login-modal></shopro-login-modal>
 		</view>
+
+		<!-- 	分享组件 -->
+		<shopro-share v-model="showShare" :shareDetail="shareInfo" posterType="user"></shopro-share>
+
+		<!-- 登录提示 -->
+		<shopro-auth-modal></shopro-auth-modal>
+
 		<!-- 佣金中心权限验证 -->
-		<view class="auth-box cu-modal" :class="{ show: !hasAuth && authNotice.title }">
-			<view class="notice-box cu-dialog">
+		<u-popup
+			v-if="showAuthModal"
+			class="auth-box"
+			:mask="false"
+			v-model="showAuthModal"
+			mode="center"
+			:mask-close-able="false"
+			close-icon-pos="top-left"
+			border-radius="20"
+		>
+			<view class="notice-box">
 				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
 				<view class="notice-title">{{ authNotice.title }}</view>
 				<view class="notice-detail">{{ authNotice.detail }}</view>
-				<button class="cu-btn notice-btn" @tap="onAuthBtn(authNotice.btnPath)">{{ authNotice.btnText }}</button>
-				<button class="cu-btn back-btn" @tap="onBack" v-if="!authNotice.hideBtn">返回</button>
-				<button class="cu-btn back-btn" @tap="hideAuth" v-else>取消</button>
+				<button class="u-reset-button notice-btn" @tap="onAuthBtn(authNotice.btnPath)">{{ authNotice.btnText }}</button>
+				<button class="u-reset-button back-btn" @tap="$Router.back()" v-if="!authNotice.hideBtn">返回</button>
+				<button class="u-reset-button back-btn" @tap="hasAuth = true" v-else>取消</button>
 			</view>
-		</view>
+		</u-popup>
+
 		<!-- 成为分销商条件 -->
-		<view class="into-agent-modal cu-modal" :class="{ show: showTerm }">
-			<view class="condition-box cu-dialog x-c">
+		<u-popup
+			v-if="showTerm"
+			class="into-agent-modal"
+			:bgStyle="{
+				background: 'none'
+			}"
+			v-model="showTerm"
+			mode="center"
+			:mask="false"
+			:mask-close-able="false"
+		>
+			<view class="condition-box u-flex u-row-center u-col-center">
 				<!-- 商品 -->
-				<view class="goods-condition y-c" v-if="showGoodsTerm">
+				<view class="goods-condition u-flex-col u-col-center" v-if="showGoodsTerm">
 					<scroll-view class="card-wrap" scroll-y="true">
-						<view
-							class="card-box x-f mb30"
-							v-for="item in goodsTermList"
-							:key="item.id"
-							style="margin: 30rpx 0;"
-							@tap="jump('/pages/goods/detail/index', { id: item.id })"
-						>
+						<view class="card-box u-flex u-m-x-10 u-m-y-10" v-for="item in goodsTermList" :key="item.id" @tap="jump('/pages/goods/detail', { id: item.id })">
 							<view class="img-wrap"><image class="goods-img" :src="item.image" mode=""></image></view>
-							<view class="detail y-bc">
-								<view class="title more-t">{{ item.title }}</view>
-								<view class="sub one-t">{{ item.subtitle }}</view>
+							<view class="detail u-fle u-row-between">
+								<view class="title u-ellipsis-2 u-m-b-10">{{ item.title }}</view>
+								<view class="sub u-ellipsis-1">{{ item.subtitle }}</view>
 							</view>
 						</view>
+
 						<view class="hack" style="height: 100rpx;"></view>
 					</scroll-view>
-					<view class="btn-box y-f py20">
-						<button class="cu-btn buy-btn mb10" @tap="$Router.back()">知道了</button>
+					<view class="btn-box u-flex-col u-col-center u-p-20">
+						<button class="u-reset-button buy-btn u-m-b-20" @tap="$Router.back()">知道了</button>
 						<view class="tips">* 购买指定商品即可成为分销商</view>
 					</view>
 				</view>
+
 				<!-- 金额人数 -->
-				<view class="goods-condition y-bc" v-if="showMoneyTerm">
+				<view class="goods-condition u-flex u-row-between" v-if="showMoneyTerm">
 					<scroll-view class="card-wrap" scroll-y="true">
-						<view class="card-box x-f" style="margin: 30rpx 0;" :class="{ 'filter-card': userInfo.total_consume == moneyTermNum }">
+						<view class="card-box u-flex u-m-x-10 u-m-y-10" :class="{ 'filter-card': userInfo.total_consume == moneyTermNum }">
 							<view class="img-wrap"><image class="goods-img" :src="$IMG_URL + '/imgs/user/commission_task_card.png'" mode=""></image></view>
 							<view class="detail">
-								<view class="title more-t ml10">满足以下消费金额</view>
-								<view class="x-f modal-progress">
-									<view class="progress-box ml20 x-f">
-										<view class="cu-progress round sm">
-											<view class="progress--ing" :style="[{ width: getProgress(userInfo.total_consume, moneyTermNum) }]"></view>
+								<view class="title u-ellipsis-2 u-m-l-10">满足以下消费金额</view>
+
+								<!-- 进度条 -->
+								<view class="u-flex modal-progress ">
+									<view class="progress-box u-m-l-30 u-flex u-col-bottom">
+										<view class="cu-progress" style="width:150rpx ;">
+											<!-- 圆环 -->
 											<view
 												class="round-wrap"
 												v-if="userInfo.total_consume != moneyTermNum"
@@ -133,8 +159,16 @@
 											>
 												<view class="round-inner"></view>
 											</view>
+											<u-line-progress
+												height="12"
+												:show-percent="false"
+												inactive-color="#7430EE"
+												:percent="getProgress(userInfo.total_consume, moneyTermNum)"
+												active-color="#C6A6FF"
+											></u-line-progress>
+											<!-- 已完成数 -->
 											<view
-												class="progress-num"
+												class="progress-num u-m-t-10"
 												v-if="userInfo.total_consume != moneyTermNum"
 												:style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]"
 											>
@@ -147,22 +181,24 @@
 							</view>
 						</view>
 					</scroll-view>
-					<view class="btn-box y-f py20">
-						<button class="cu-btn buy-btn mb10" @tap="$Router.back()">知道了</button>
+					<view class="btn-box u-flex-col u-p-20 u-col-center">
+						<button class="u-reset-button buy-btn u-m-b-10" @tap="$Router.back()">知道了</button>
 						<view class="tips">* 满足指定消费金额即可成为分销商</view>
 					</view>
 				</view>
 			</view>
-		</view>
+		</u-popup>
 	</view>
 </template>
 
 <script>
 import { mapMutations, mapActions, mapState } from 'vuex';
+import share from '@/shopro/share';
 export default {
 	components: {},
 	data() {
 		return {
+			showShare: false, //是否显示分享海报
 			showMoney: true, //是否显示金额
 			hasAuth: true, //是否有权限
 			commissionLv: null, //分销商等级
@@ -182,13 +218,7 @@ export default {
 			showMoneyTerm: false, //金额条件
 			goodsTermList: [],
 			moneyTermNum: 0,
-			authNotice: {
-				//权限提示内容
-				// img: this.$IMG_URL + '/imgs/commission/auth_check.png',
-				// title: '正在审核中！',
-				// detail: '请耐心等候',
-				// btnText: '知道了'
-			},
+			authNotice: {},
 			menuList: [
 				//menu
 				{
@@ -225,7 +255,7 @@ export default {
 				{
 					img: this.$IMG_URL + '/imgs/commission/commission_icon7.png',
 					title: '邀请海报',
-					path: '/pages/public/poster/index?posterType=user'
+					path: ''
 				},
 				{
 					img: this.$IMG_URL + '/imgs/commission/commission_icon8.png',
@@ -237,21 +267,31 @@ export default {
 	},
 	computed: {
 		...mapState({
-			userInfo: state => state.user.userInfo,
-			agentInfo: state => state.user.agentInfo
-		})
+			userInfo: ({ user }) => user.userInfo,
+			agentInfo: ({ user }) => user.agentInfo
+		}),
+		showAuthModal: {
+			get() {
+				return !!this.authNotice.title && !this.hasAuth;
+			},
+			set(val) {
+				return val;
+			}
+		}
 	},
 	onShow() {
 		this.init();
 	},
 	onHide() {
 		this.commissionLog = [];
+		this.lastPage = 1;
 		this.currentPage = 1;
 	},
 	onLoad() {},
 	onPullDownRefresh() {
-		this.commissionLog = [];
 		this.currentPage = 1;
+		this.lastPage = 1;
+		this.commissionLog = [];
 		this.init();
 	},
 	methods: {
@@ -261,10 +301,19 @@ export default {
 				uni.stopPullDownRefresh();
 			});
 		},
+
 		// 跳转
 		jump(path, query) {
-			this.$tools.routerTo(path, query);
+			if (!path) {
+				this.showShare = true;
+			} else {
+				this.$Router.push({
+					path: path,
+					query: query
+				});
+			}
 		},
+
 		// 百分比
 		getProgress(sales, stock) {
 			let unit = '';
@@ -275,11 +324,6 @@ export default {
 				unit = '0%';
 			}
 			return unit;
-		},
-
-		// 是否显示金额
-		onEye() {
-			this.showMoney = !this.showMoney;
 		},
 
 		// 身份认证
@@ -306,18 +350,14 @@ export default {
 		getLog() {
 			let that = this;
 			that.loadStatus = 'loading';
-			this.$api('commission.log', {
+			this.$http('commission.log', {
 				page: that.currentPage,
 				per_page: 5
 			}).then(res => {
 				if (res.code === 1) {
 					that.commissionLog = [...that.commissionLog, ...res.data.data];
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		},
@@ -341,7 +381,7 @@ export default {
 						title: '抱歉！你的账户已被禁用',
 						detail: data.msg,
 						btnText: '联系客服',
-						btnPath: '/pages/public/kefu/index'
+						btnPath: '/pages/public/chat/index'
 					};
 					break;
 				case 'pending':
@@ -395,7 +435,7 @@ export default {
 						title: '抱歉！你的账户已被冻结',
 						detail: data.msg,
 						btnText: '联系客服',
-						btnPath: '/pages/public/kefu/index',
+						btnPath: '/pages/public/chat/index',
 						hideBtn: true
 					};
 					break;
@@ -422,7 +462,7 @@ export default {
 		// 成为分销商，商品列表
 		getGoodsTermList(ids) {
 			let that = this;
-			that.$api('goods.lists', {
+			that.$http('goods.lists', {
 				goods_ids: ids
 			}).then(res => {
 				if (res.code === 1) {
@@ -433,29 +473,17 @@ export default {
 
 		// 权限
 		onAuthBtn(path) {
-			if (path) {
-				this.$Router.push({
-					path: path
-				});
-			} else {
-				uni.navigateBack({
-					delta: 1
-				});
-			}
-		},
-		onBack() {
-			uni.navigateBack({
-				delta: 1
-			});
-		},
-		hideAuth() {
-			this.hasAuth = true;
+			path
+				? this.$Router.push({
+						path: path
+				  })
+				: this.$Router.back();
 		}
 	}
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .commission-wrap {
 	background: url($IMG_URL+'/imgs/commission/commission_bg1.jpg') no-repeat;
 	background-size: cover;
@@ -464,10 +492,6 @@ export default {
 	background-position: center center;
 	transition: all 0.3s ease-in-out 0s;
 	overflow: hidden;
-	/deep/ .cu-back {
-		color: #fff;
-		font-size: 38rpx;
-	}
 }
 // 进度条
 .progress-box {
@@ -475,8 +499,6 @@ export default {
 		font-size: 24rpx;
 		font-weight: 500;
 		color: #c7b2ff;
-		line-height: 24rpx;
-		white-space: nowrap;
 	}
 	.progress-num {
 		font-size: 24rpx;
@@ -485,38 +507,27 @@ export default {
 		bottom: -30rpx;
 		white-space: nowrap;
 	}
-	.cu-progress {
-		width: 150rpx;
-		height: 10rpx;
-		background: #503bae;
-		overflow: visible;
-		position: relative;
-		.progress--ing {
-			background: linear-gradient(180deg, #c6a6ff 0%, #7430ee 100%);
-			border-radius: 10rpx;
-		}
-		.round-wrap {
-			width: 30rpx;
-			height: 30rpx;
+	.round-wrap {
+		width: 30rpx;
+		height: 30rpx;
+		border: 2rpx solid #5c3cff;
+		background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
+		border-radius: 50%;
+		position: absolute;
+		bottom: -6rpx;
+		transform: translateY(-50%);
+		left: 0;
+		margin-left: -15rpx;
+		.round-inner {
+			width: 20rpx;
+			height: 20rpx;
 			border: 2rpx solid #5c3cff;
 			background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
 			border-radius: 50%;
 			position: absolute;
-			bottom: -15rpx;
-			transform: translateY(-50%);
-			left: 0;
-			margin-left: -15rpx;
-			.round-inner {
-				width: 20rpx;
-				height: 20rpx;
-				border: 2rpx solid #5c3cff;
-				background: linear-gradient(0deg, #a36fff 0%, #846fff 100%);
-				border-radius: 50%;
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			}
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
 		}
 	}
 }
@@ -572,7 +583,7 @@ export default {
 		}
 		.notice-btn {
 			width: 492rpx;
-			height: 70rpx;
+			line-height: 70rpx;
 			background: linear-gradient(-90deg, #a36fff, #5336ff);
 			box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
 			border-radius: 35rpx;
@@ -583,7 +594,7 @@ export default {
 		}
 		.back-btn {
 			width: 492rpx;
-			height: 70rpx;
+			line-height: 70rpx;
 			font-size: 28rpx;
 			font-weight: 500;
 			color: #c5b8fb;
@@ -594,27 +605,16 @@ export default {
 
 // 成为分销商
 .into-agent-modal {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	position: fixed;
-	z-index: 99;
-	background: none;
 	.condition-box {
 		width: 640rpx;
 		height: 786rpx;
 		background: url($IMG_URL+'/imgs/commission/into_commission.png') no-repeat;
 		background-size: 100% 100%;
-		position: fixed;
-		z-index: 1111;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
 	}
 	.goods-condition {
 		width: 484rpx;
 		height: 580rpx;
-		padding: 70rpx 0 30rpx;
+		padding: 80rpx 0 30rpx;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -622,22 +622,19 @@ export default {
 		position: relative;
 		.card-wrap {
 			width: 484rpx;
-			height: 500rpx;
+			height: 460rpx;
 			padding: 10rpx;
 			padding-bottom: 30rpx;
 		}
 		.modal-progress {
 			.progress-tip {
 				font-size: 24rpx;
-				font-weight: 500;
-				color: #c7b2ff;
-				line-height: 30rpx;
-				text-align: right;
 			}
 			.progress-box {
 				margin-right: 10rpx;
 				.cu-progress {
 					width: 200rpx;
+					position: relative;
 					.round-wrap {
 						width: 20rpx;
 						height: 20rpx;
@@ -697,7 +694,7 @@ export default {
 			bottom: 0;
 			.buy-btn {
 				width: 390rpx;
-				height: 60rpx;
+				line-height: 60rpx;
 				background: linear-gradient(-90deg, #a36fff, #5336ff);
 				box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
 				border-radius: 35rpx;
@@ -713,6 +710,7 @@ export default {
 		}
 	}
 }
+
 // 用户资料卡片
 .user-card {
 	width: 690rpx;
@@ -733,13 +731,9 @@ export default {
 			line-height: 30rpx;
 			margin-bottom: 20rpx;
 		}
-		.cu-btn {
-			padding: 0;
-			background: none;
-		}
 		.log-btn {
 			width: 83rpx;
-			height: 41rpx;
+			line-height: 41rpx;
 			border: 1rpx solid rgba(#ffffff, 0.33);
 			border-radius: 21rpx;
 			font-size: 22rpx;
@@ -749,15 +743,6 @@ export default {
 		.look-btn {
 			color: #fff;
 			font-size: 40rpx;
-			.cuIcon-attentionfill,
-			.cuIcon-attentionforbidfill {
-				line-height: 50rpx;
-				margin-top: 20rpx;
-			}
-			.cuIcon-attentionfill {
-				line-height: 50rpx;
-				margin-top: 20rpx;
-			}
 		}
 	}
 	.head-img-box {
@@ -784,21 +769,19 @@ export default {
 			background: rgba(0, 0, 0, 0.2);
 			border-radius: 21rpx;
 			line-height: 38rpx;
-			padding-right: 10rpx;
 
 			.tag-img {
 				width: 36rpx;
 				height: 36rpx;
-				margin-right: 6rpx;
 				border-radius: 50%;
 			}
 
 			.tag-title {
 				font-size: 20rpx;
-				font-family: PingFang SC;
+				padding: 0 10rpx;
 				font-weight: 500;
 				color: rgba(255, 255, 255, 1);
-				line-height: 20rpx;
+				line-height: 36rpx;
 			}
 		}
 	}
@@ -806,7 +789,7 @@ export default {
 		margin: 0 40rpx 40rpx;
 		.item-title {
 			font-size: 24rpx;
-			font-family: PingFang SC;
+
 			font-weight: 400;
 			color: #ffffff;
 			line-height: 30rpx;

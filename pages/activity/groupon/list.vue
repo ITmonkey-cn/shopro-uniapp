@@ -1,72 +1,70 @@
 <!-- 拼购列表 -->
 <template>
-	<view class="page_box">
-		<view class="content_box">
-			<scroll-view class="scroll-box" scroll-y enable-back-to-top scroll-with-animation @scrolltolower="loadMore">
-				<view class="group-wrap">
-					<view class="group-head x-bc">
-						<text class="group-head__title">爆款推荐</text>
-						<text class="group-head__notice">省钱省心限时拼</text>
-					</view>
-					<view class="group-box">
-						<view class="goods-item" v-for="(groupon, index) in grouponList" :key="groupon.id">
-							<sh-activity-card
-								:cardId="groupon.id"
-								:title="groupon.title"
-								:subtitle="groupon.subtitle"
-								:img="groupon.image"
-								:price="groupon.groupon_price"
-								:originalPrice="groupon.original_price"
-							>
-								<block slot="tag">
-									<view class="tag" v-if="index < 3">TOP{{ index + 1 }}</view>
-								</block>
-								<block slot="sell">
-									<view class="x-f">
-										<view class="sell-box">
-											<text class="cuIcon-hotfill"></text>
-											<text class="sell-num">已拼{{ groupon.sales }}件</text>
-										</view>
-										<text class="group-num">{{ groupon.activity.rules.team_num || 0 }}人团</text>
-									</view>
-								</block>
-								<block slot="btn"><button class="cu-btn buy-btn" @tap.stop="jump('/pages/goods/detail/index', { id: groupon.id })">马上拼</button></block>
-							</sh-activity-card>
+	<view class="groupon-wrap">
+		<view class="group-head u-flex u-row-between">
+			<text class="group-head__title">爆款推荐</text>
+			<text class="group-head__notice">省钱省心限时拼</text>
+		</view>
+		<view class="group-box">
+			<view class="goods-item u-m-b-16" v-for="(item, index) in grouponList" :key="item.id">
+				<view class="big-goods u-p-20 u-flex u-col-top">
+					<image v-if="index < 3" class="top-tag" :src="tagMap[index]" mode=""></image>
+					<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
+					<view class=" card-right u-m-l-20 u-flex-col u-row-between">
+						<view class="">
+							<view class="goods-title u-ellipsis-1  u-m-t-10 u-m-b-10">
+								<u-tag class="title-tag u-m-r-10" text="拼团" size="mini" bg-color="#FF6600" border-color="#FF6600" color="#fff" />
+								{{ item.title }}
+							</view>
+							<view v-show="item.subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ item.subtitle }}</view>
+						</view>
+
+						<view class="u-flex u-m-y-20">
+							<view class="sell-box">
+								<text class=" hot-icon iconfont iconicon-test"></text>
+								<text class="sell-num">已拼{{ item.sales }}件</text>
+							</view>
+							<text class="group-num">{{ item.activity.rules.team_num || 0 }}人团</text>
+						</view>
+
+						<view class=" u-flex u-row-between u-col-center">
+							<view class="u-flex u-col-bottom font-OPPOSANS">
+								<view class="price u-m-r-10">{{ item.groupon_price }}</view>
+								<view class="origin-price">{{ item.original_price }}</view>
+							</view>
+							<button class="u-reset-button buy-btn" @tap="$Router.push({ path: '/pages/goods/detail', query: { id: item.id } })">马上拼</button>
 						</view>
 					</view>
 				</view>
-				<!-- 空白 -->
-				<shopro-empty v-if="!grouponList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
-				<!-- 加载更多 -->
-				<u-loadmore v-if="grouponList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-				<!-- loading -->
-				<shopro-load v-model="isLoading"></shopro-load>
-			</scroll-view>
+			</view>
+			<!-- 空白 -->
+			<shopro-empty
+				style="padding-top: 200rpx;"
+				marginTop="0"
+				v-if="!grouponList.length && !isLoading"
+				:image="$IMG_URL + '/imgs/empty/empty_goods.png'"
+				@click="$Router.pushTab('/pages/index/index')"
+				btnText="去首页逛逛"
+				tipText="还没有拼团商品噢，去首页看看吧~"
+			></shopro-empty>
+			<!-- 加载更多 -->
 		</view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
+
+		<u-loadmore v-if="grouponList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
 <script>
-import shActivityCard from '../children/sh-activity-card.vue';
 export default {
-	components: {
-		shActivityCard
-	},
+	components: {},
 	data() {
 		return {
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
-				tip: '还没有拼团商品噢，去首页看看吧~',
-				path: '/pages/index/index',
-				pathText: '去首页逛逛'
+			tagMap: {
+				0: this.$IMG_URL + '/imgs/group/groupon_top1.png',
+				1: this.$IMG_URL + '/imgs/group/groupon_top2.png',
+				2: this.$IMG_URL + '/imgs/group/groupon_top3.png'
 			},
 			isLoading: true,
 			loadStatus: 'loadmore', //loadmore:加载前的状态，loading:加载中的状态，nomore:没有更多的状态
@@ -78,7 +76,15 @@ export default {
 	onLoad() {
 		this.getGrouponList();
 	},
-	onPullDownRefresh() {},
+	onReachBottom() {
+		this.loadMore();
+	},
+	onPullDownRefresh() {
+		this.currentPage = 1;
+		this.lastPage = 1;
+		this.grouponList = [];
+		this.getGrouponList();
+	},
 	computed: {},
 	methods: {
 		// 路由跳转
@@ -100,18 +106,15 @@ export default {
 			let that = this;
 			that.isLoading = true;
 			that.loadStatus = 'loading';
-			that.$api('goods.grouponList', {
+			that.$http('goods.grouponList', {
 				page: that.currentPage
 			}).then(res => {
+				that.isLoading = false;
+				uni.stopPullDownRefresh();
 				if (res.code === 1) {
-					that.isLoading = false;
 					that.grouponList = [...that.grouponList, ...res.data.data];
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		}
@@ -120,8 +123,9 @@ export default {
 </script>
 
 <style lang="scss">
-.group-wrap {
-	background: url($IMG_URL+'/imgs/group_list_bg.png') no-repeat;
+// 背景
+.groupon-wrap {
+	background: url($IMG_URL+'/imgs/group/group_list_bg.png') no-repeat;
 	background-size: 100% 374rpx;
 }
 .group-head {
@@ -129,13 +133,13 @@ export default {
 	height: 100rpx;
 	.group-head__title {
 		font-size: 32rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(255, 255, 255, 1);
 	}
 	.group-head__notice {
 		font-size: 26rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(255, 255, 255, 1);
 	}
@@ -146,73 +150,97 @@ export default {
 	background: linear-gradient(#fff, #f5f5f5);
 	border-radius: 20rpx;
 	margin: 0 auto;
-	min-height: 1000rpx;
+	min-height: 800rpx;
 	.goods-item {
 		border-radius: 20rpx;
-		overflow: hidden;
-		position: relative;
-		margin-bottom: 20rpx;
-		.tag {
-			position: absolute;
-			left: 0;
-			top: 10rpx;
-			z-index: 2;
-			line-height: 35rpx;
-			background: linear-gradient(132deg, rgba(255, 153, 93, 1), rgba(255, 99, 97, 1));
-			border-radius: 0px 18rpx 18rpx 0px;
-			padding: 0 10rpx;
-			font-size: 24rpx;
-			font-family: PingFang SC;
-			font-weight: bold;
-			color: rgba(255, 255, 255, 0.8);
-		}
-		/deep/.goods-right {
-			width: 460rpx;
-			.title {
-				width: 460rpx;
+		background-color: #fff;
+		// 大商品卡片
+		.big-goods {
+			width: 710rpx;
+			height: 260rpx;
+			background: #ffffff;
+			box-shadow: 0px 7rpx 8rpx 1rpx rgba(254, 76, 29, 0.05);
+			border-radius: 20rpx;
+			position: relative;
+			.top-tag {
+				position: absolute;
+				z-index: 3;
+				top: 20rpx;
+				left: 20rpx;
+				width: 84rpx;
+				height: 36rpx;
 			}
-			.tip {
-				width: 460rpx;
+			.card-right {
+				width: 430rpx;
+				height: 220rpx;
 			}
-		}
-		.buy-btn {
-			position: absolute;
-			right: 0;
-			bottom: -10rpx;
-			width: 160rpx;
-			height: 60rpx;
-			background: linear-gradient(90deg, rgba(254, 131, 42, 1), rgba(255, 102, 0, 1));
-			box-shadow: 0px 7rpx 6rpx 0px rgba(255, 104, 4, 0.22);
-			border-radius: 30rpx;
-			font-size: 28rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: #fff;
-			padding: 0;
-		}
-		.group-num {
-			font-size: 20rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: rgba(153, 153, 153, 1);
-			margin-left: 20rpx;
-		}
-		.sell-box {
-			background: rgba(255, 224, 226, 0.3);
-			border-radius: 16rpx;
-			line-height: 32rpx;
-			padding: 0 10rpx;
-			.sell-num {
-				font-size: 20rpx;
-				font-family: PingFang SC;
-				font-weight: 400;
-				color: rgba(247, 151, 156, 1);
-			}
-
-			.cuIcon-hotfill {
+			.goods-title {
 				font-size: 26rpx;
-				color: #e1212b;
-				margin-right: 8rpx;
+				font-weight: 600;
+				width: 400rpx;
+				color: #000000;
+				vertical-align: middle;
+				.title-tag {
+					transform: scale(0.9);
+				}
+			}
+			.subtitle-text {
+				font-size: 22rpx;
+				width: 400rpx;
+				font-weight: 500;
+				color: #666666;
+			}
+			.buy-btn {
+				width: 120rpx;
+				line-height: 50rpx;
+				background: linear-gradient(90deg, #ff6600 0%, #fe832a 100%);
+				border-radius: 25rpx;
+				font-size: 24rpx;
+				font-weight: 500;
+				color: #ffffff;
+			}
+			// 拼团
+			.sell-box {
+				background: rgba(#f9efd6, 0.3);
+				border-radius: 16rpx;
+				line-height: 32rpx;
+				.sell-num {
+					font-size: 20rpx;
+
+					font-weight: 400;
+					color: #ff6904;
+				}
+
+				.hot-icon {
+					font-size: 26rpx;
+					color: #ff6904;
+					margin-right: 8rpx;
+				}
+			}
+			.group-num {
+				font-size: 20rpx;
+
+				font-weight: 500;
+				color: rgba(153, 153, 153, 1);
+				margin-left: 20rpx;
+			}
+			// 价格
+			.price {
+				color: #ff0000;
+				font-weight: 600;
+				&::before {
+					content: '￥';
+					font-size: 20rpx;
+				}
+			}
+			.origin-price {
+				color: #c4c4c4;
+				font-size: 24rpx;
+				text-decoration: line-through;
+				&::before {
+					content: '￥';
+					font-size: 20rpx;
+				}
 			}
 		}
 	}

@@ -1,119 +1,120 @@
 <template>
 	<!-- 轮播 -->
-	<view class="banner-swiper-box mb10" v-if="detail.list">
-		<swiper class="banner-carousel shopro-selector-rect" circular @change="swiperChange" :autoplay="true">
-			<swiper-item v-for="(item, index) in detail.list" :key="index" class="carousel-item " @tap="routerTo(item.path)">
-				<image class="swiper-image " :src="item.image" mode="widthFix" lazy-load></image>
-			</swiper-item>
-		</swiper>
-		<view class="banner-swiper-dots">
-			<text :class="swiperCurrent === index ? 'banner-dot-active' : 'banner-dot'" v-for="(dot, index) in detail.list.length" :key="index"></text>
-		</view>
+	<view class="banner-swiper-wrap u-m-b-10" :style="{ padding: `${Py}rpx ${Px}rpx` }">
+		<u-swiper
+			:height="height"
+			:list="list"
+			:autoplay="autoplay"
+			:borderRadius="borderRadius"
+			:indicator-pos="indicatorPos"
+			:mode="mode"
+			:interval="interval"
+			:duration="duration"
+			:circular="circular"
+			:imgMode="imgMode"
+			:bgColor="bgColor"
+			@click="onSwiper"
+		></u-swiper>
 	</view>
 </template>
 
 <script>
 /**
- * 自定义之轮播卡片
- * @property {Object} detail - 轮播信息
+ * shBanner-轮播卡片,主要为了处理数据,去掉了标题相关
+ * @property {Array} list 轮播图数据，
+ * @property {String} mode 指示器模式
+ * @property {String Number} height 轮播图组件高度，单位rpx（默认250）
+ * @property {String} indicator-pos 指示器的位置（默认bottomCenter）
+ * @property {Boolean} autoplay 是否自动播放（默认true）
+ * @property {Boolean} circular 是否衔接播放（默认true）
+ * @property {String Number} interval 隔多久换，单位ms（默认2500）
+ * @property {String Number} duration 自动轮播时间间隔，单位ms（默认500）
+ * @property {String} img-mode 图片的裁剪模式，详见image组件裁剪模式（默认aspectFill）
+ * @property {String} borderRadius 圆角值
+ * @property {String} bgColor 背景色
+ * @event {Function} click 点击轮播图时触发
  */
 export default {
 	components: {},
 	data() {
-		return {
-			swiperCurrent: 0, //轮播下标
-			webviewId: 0,
-			routerTo: this.$tools.routerTo
-		};
+		return {};
 	},
 	props: {
-		detail: {
-			type: Object,
-			default: null
+		Px: {
+			type: [Number, String],
+			default: 0
+		},
+		Py: {
+			type: [Number, String],
+			default: 0
+		},
+		// 轮播图的数据,格式如：[{image: 'xxxx', title: 'xxxx'}，{image: 'yyyy', title: 'yyyy'}]，其中title字段可选
+		list: {
+			type: Array,
+			default() {
+				return [];
+			}
+		},
+		// 圆角值
+		borderRadius: {
+			type: [Number, String],
+			default: 0
+		},
+		// 隔多久自动切换
+		interval: {
+			type: [String, Number],
+			default: 3000
+		},
+		// 指示器的模式，rect|dot|number|round
+		mode: {
+			type: String,
+			default: 'round'
+		},
+		// list的高度，单位rpx
+		height: {
+			type: [Number, String],
+			default: 250
+		},
+		// 指示器的位置，topLeft|topCenter|topRight|bottomLeft|bottomCenter|bottomRight
+		indicatorPos: {
+			type: String,
+			default: 'bottomCenter'
+		},
+
+		// 是否自动播放
+		autoplay: {
+			type: Boolean,
+			default: true
+		},
+		// 自动轮播时间间隔，单位ms
+		duration: {
+			type: [Number, String],
+			default: 500
+		},
+		// 是否衔接滑动，即到最后一张时接着滑动，是否自动切换到第一张
+		circular: {
+			type: Boolean,
+			default: true
+		},
+		// 图片的裁剪模式
+		imgMode: {
+			type: String,
+			default: 'aspectFill'
+		},
+		// 背景颜色
+		bgColor: {
+			type: String,
+			default: '#f3f4f6'
 		}
 	},
 	computed: {},
-	created() {
-		this.initBgColor();
-	},
+	created() {},
 	methods: {
-		// 轮播切换
-		swiperChange(e) {
-			this.swiperCurrent = e.detail.current;
-			this.initBgColor();
-		},
-		// 初始化背景颜色，轮播图没滚动前
-		initBgColor() {
-			let bgcolor = this.detail.list[this.swiperCurrent].bgcolor;
-			this.$emit('getbgcolor', bgcolor);
-		},
-		// 路由跳转
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
+		onSwiper(e) {
+			this.$tools.routerTo(this.list[e].path);
 		}
 	}
 };
 </script>
 
-<style lang="scss">
-.hide-canvas {
-	position: fixed !important;
-	top: -99999upx;
-	left: -99999upx;
-	z-index: -99999;
-}
-
-// 轮播
-.banner-swiper-box {
-	background: #fff;
-}
-
-.banner-swiper-box,
-.banner-carousel {
-	width: 750rpx;
-	height: 350rpx;
-	position: relative;
-
-	.carousel-item {
-		width: 100%;
-		height: 100%;
-		// padding: 0 28upx;
-		overflow: hidden;
-	}
-
-	.swiper-image {
-		width: 100%;
-		height: 100%;
-		// border-radius: 10upx;
-		// background: #ccc;
-	}
-}
-
-.banner-swiper-dots {
-	display: flex;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 20rpx;
-	z-index: 66;
-
-	.banner-dot {
-		width: 14rpx;
-		height: 14rpx;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 50%;
-		margin-right: 10rpx;
-	}
-
-	.banner-dot-active {
-		width: 14rpx;
-		height: 14rpx;
-		background: #a8700d;
-		border-radius: 50%;
-		margin-right: 10rpx;
-	}
-}
-</style>
+<style lang="scss" scoped></style>

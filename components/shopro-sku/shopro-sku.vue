@@ -1,67 +1,61 @@
 <template>
-	<view class="">
-		<!-- 规格 -->
-		<view class="cu-modal sku-modal  bottom-modal" style="z-index: 999;" :class="{ show: showModal }" @tap="hideModal" v-if="goodsInfo.sku_price">
-			<view class="cu-dialog" @tap.stop style="background: none;">
-				<view class="shop-modal page_box" :style="goodsInfo.is_sku == 0 ? 'height:500rpx' : ''">
-					<text class="cuIcon-roundclosefill" @tap="hideModal"></text>
-					<!-- 商品信息 -->
-					<view class="top x-f modal-head__box">
-						<image class="shop-img" :src="currentSkuPrice.image ? currentSkuPrice.image : goodsInfo.image" mode="aspectFill"></image>
-						<view class="y-bc goods-box">
-							<view class="goods-title more-t">{{ goodsInfo.title }}</view>
-							<view class="x-bc goods-bottom">
-								<view class="price-box x-f">
-									<view v-if="goodsType === 'score'">{{ currentSkuPrice.price_text || goodsInfo.price }}</view>
-									<view v-else-if="grouponBuyType === 'groupon'">
-										￥{{ currentSkuPrice.groupon_price || (goodsInfo.activity_type === 'groupon' ? goodsInfo.groupon_price : goodsInfo.price) }}
-									</view>
-									<view v-else>￥{{ currentSkuPrice.price || goodsInfo.price }}</view>
-								</view>
-								<text class="stock">库存{{ currentSkuPrice.stock || goodsInfo.stock }}件</text>
+	<!-- 规格 -->
+	<u-popup v-model="showModal" :closeable="true" mode="bottom" close-icon-pos="top-right" border-radius="30" v-if="goodsInfo.sku_price">
+		<view class="shop-modal page_box" :style="goodsInfo.is_sku == 0 ? 'height:700rpx' : ''">
+			<!-- 商品卡片-->
+			<view class="top u-flex modal-head__box">
+				<image class="shop-img" :src="currentSkuPrice.image ? currentSkuPrice.image : goodsInfo.image" mode="aspectFill"></image>
+				<view class=" goods-box u-flex-col u-row-between">
+					<view class="goods-title u-ellipsis-2">{{ goodsInfo.title }}</view>
+					<view class="u-flex u-row-between goods-bottom">
+						<view class="price-box u-flex">
+							<view v-if="goodsType === 'score'">{{ currentSkuPrice.price_text || goodsInfo.price }}</view>
+							<view v-else-if="grouponBuyType === 'groupon'">
+								￥{{ currentSkuPrice.groupon_price || (goodsInfo.activity_type === 'groupon' ? goodsInfo.groupon_price : goodsInfo.price) }}
 							</view>
+							<view v-else>￥{{ currentSkuPrice.price || goodsInfo.price }}</view>
 						</view>
-					</view>
-					<!-- 选择规格 -->
-					<view class="content_box">
-						<view class="select-box y-start" v-for="(s, x) in skuList" :key="s.id">
-							<view class="type-title">{{ s.name }}</view>
-							<view class="tag-box x-f">
-								<button
-									class="tag cu-btn"
-									v-for="(sc, y) in s.content"
-									:key="sc.id"
-									:class="{ 'tag-active': currentSkuArray[sc.pid] == sc.id, 'tag-disabled': sc.disabled == true }"
-									:disabled="sc.disabled == true"
-									@tap="chooseSku(sc.pid, sc.id)"
-								>
-									{{ sc.name }}
-								</button>
-							</view>
-						</view>
-						<view class="buy-num-box x-bc">
-							<view class="num-title">购买数量</view>
-							<view class="num-step">
-								<uni-number-box
-									@change="changeNum"
-									:step="1"
-									:min="0"
-									:currentSkuPrice.sync="currentSkuPrice"
-									:goodsInfo="goodsInfo"
-									:value="goodsNum"
-								></uni-number-box>
-							</view>
-						</view>
-					</view>
-					<view class="btn-box foot_box x-bc" v-if="buyType === 'cart' || buyType === 'buy'"><button class="cu-btn  seckill-btn" @tap="confirm">确认</button></view>
-					<view class="btn-box foot_box x-bc" v-else>
-						<button class="cu-btn  cart-btn" @tap="confirmCart">加入购物车</button>
-						<button class="cu-btn  buy-btn" @tap="confirmBuy">立即购买</button>
+						<text class="stock">库存{{ currentSkuPrice.stock || goodsInfo.stock }}件</text>
 					</view>
 				</view>
 			</view>
+
+			<!-- 规格选项 -->
+			<view class="content_box">
+				<view class="select-box u-felx-col u-row-left" v-for="(s, x) in skuList" :key="s.id">
+					<view class="type-title">{{ s.name }}</view>
+					<view class="tag-box u-flex u-flex-wrap">
+						<button
+							class="tag u-reset-button"
+							v-for="(sc, y) in s.content"
+							:key="sc.id"
+							:class="{ 'tag-active': currentSkuArray[sc.pid] == sc.id, 'tag-disabled': sc.disabled == true }"
+							:disabled="sc.disabled == true"
+							@tap="chooseSku(sc.pid, sc.id)"
+						>
+							{{ sc.name }}
+						</button>
+					</view>
+				</view>
+
+				<!-- 计步器 -->
+				<view class="buy-num-box u-flex u-row-between">
+					<view class="num-title">购买数量</view>
+					<u-number-box v-model="goodsNum" :min="1" :step="1" :max="maxStep" disabled-input @plus="plus" @change="changeNum"></u-number-box>
+				</view>
+			</view>
+
+			<!-- 功能按钮 -->
+			<view class="btn-box foot_box u-flex u-row-between" v-if="buyType === 'cart' || buyType === 'buy'">
+				<button class="u-reset-button cu-btn save-btn" v-if="(activityRules && activityRules.status === 'ing') || !goodsInfo.activity_type" @tap="confirm">确认</button>
+				<button class="u-reset-button cu-btn cancel-btn" v-if="activityRules && activityRules.status !== 'ing' && goodsInfo.activity_type" @tap="showModal = false">确定</button>
+			</view>
+			<view class="btn-box foot_box u-flex u-row-between" v-else>
+				<button class="u-reset-button cu-btn  cart-btn" @tap="confirmCart">加入购物车</button>
+				<button class="u-reset-button cu-btn  buy-btn" @tap="confirmBuy">立即购买</button>
+			</view>
 		</view>
-	</view>
+	</u-popup>
 </template>
 
 <script>
@@ -73,16 +67,14 @@
  * @property {String} goodsType - 商品类别
  * @property {String} grouponBuyType -拼团商品购买方式
  * @property {Number} grouponId - 拼团ID,分享进入
+ * @property {Object} activityRules - 活动状态。
  */
-import uniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
-	name: 'shoproSku',
-	components: {
-		uniNumberBox
-	},
+	components: {},
 	data() {
 		return {
+			maxStep: 999999,
 			skuList: [],
 			currentSkuPrice: {},
 			currentSkuArray: [],
@@ -93,6 +85,7 @@ export default {
 	},
 	props: {
 		goodsInfo: {},
+		activityRules: {},
 		value: {},
 		buyType: {
 			type: String,
@@ -136,6 +129,7 @@ export default {
 				return this.value;
 			},
 			set(val) {
+				val ? uni.hideTabBar() : uni.showTabBar();
 				this.$emit('input', val);
 			}
 		},
@@ -165,10 +159,13 @@ export default {
 				query: parmas
 			});
 		},
+
 		// 选择规格
 		chooseSku(pid, skuId) {
 			let that = this;
 			let isChecked = true; // 选中 or 取消选中
+			this.goodsNum = 1; //选择规格时，数量重置为1.
+			this.maxStep = 999999; //选择其他规格时，取消上个规格库存限制
 
 			if (that.currentSkuArray[pid] != undefined && that.currentSkuArray[pid] == skuId) {
 				// 点击已被选中的，删除并填充 ''
@@ -200,6 +197,7 @@ export default {
 			// 改变规格项禁用状态
 			this.changeDisabled(isChecked, pid, skuId);
 		},
+
 		// 改变禁用状态
 		changeDisabled(isChecked = false, pid = 0, skuId = 0) {
 			let newPrice = []; // 所有可以选择的 skuPrice
@@ -307,20 +305,28 @@ export default {
 
 			return newPrice;
 		},
+
 		// 数量
 		changeNum(e) {
-			let that = this;
-			this.goodsNum = +e;
 			this.changeDisabled(false);
 		},
-		// 弹窗显示隐藏
-		showSkuModal() {
-			this.$emit('changeType', 'sku');
-			this.showModal = true;
+		// 增加
+		plus(e) {
+			if (e.value >= this.currentSkuPrice.stock) {
+				this.maxStep = this.currentSkuPrice.stock;
+				this.$u.toast('库存不足');
+				return;
+			}
+			if (this.goodsInfo.activity_type === 'seckill' || this.goodsInfo.activity_type === 'groupon') {
+				let rules = this.goodsInfo.activity.rules;
+				if (rules.limit_buy != 0 && e.value >= rules.limit_buy) {
+					this.maxStep = rules.limit_buy;
+					this.$u.toast('本次活动最多购买' + rules.limit_buy + '件');
+					return;
+				}
+			}
 		},
-		hideModal() {
-			this.showModal = false;
-		},
+
 		// 加入购物车确定
 		confirmCart() {
 			let that = this;
@@ -331,7 +337,8 @@ export default {
 				};
 				that.addCartGoods(confirmGoodsList).then(res => {
 					if (res.code === 1) {
-						that.$tools.toast(res.msg);
+						that.showModal = false;
+						that.$u.toast(res.msg);
 					}
 				});
 			}
@@ -339,11 +346,12 @@ export default {
 		// 立即购买
 		confirmBuy() {
 			let that = this;
+			that.showModal = false;
 			if (this.confirmSku()) {
 				let confirmGoodsList = [];
 				confirmGoodsList.push(that.confirmGoodsInfo);
 				that.jump('/pages/order/confirm', {
-					goodsList: JSON.stringify(confirmGoodsList),
+					goodsList: confirmGoodsList,
 					from: 'goods',
 					orderType: that.goodsType,
 					grouponBuyType: that.grouponBuyType,
@@ -368,7 +376,7 @@ export default {
 		confirmSku() {
 			let that = this;
 			if (that.currentSkuPrice.stock == 0 || that.currentSkuPrice.stock < that.goodsNum) {
-				that.$tools.toast('库存不足');
+				that.$u.toast('库存不足');
 				that.showModal = false;
 				return false;
 			} else {
@@ -380,7 +388,7 @@ export default {
 					goods_price: that.currentSkuPrice.price
 				};
 				if (!that.confirmGoodsInfo.sku_price_id) {
-					that.$tools.toast('请选择规格');
+					that.$u.toast('请选择规格');
 					return false;
 				} else {
 					that.showModal = false;
@@ -416,19 +424,12 @@ export default {
 	width: 750upx;
 	height: 950rpx;
 	background: rgba(255, 255, 255, 1);
-	border-radius: 30rpx 30rpx 0 0 !important;
-	padding: 60upx 20upx 30rpx;
-
-	.cuIcon-roundclosefill {
-		font-size: 34rpx;
-		color: #e0e0e0;
-		position: absolute;
-		top: 20rpx;
-		right: 20rpx;
-	}
-
+	padding: 20rpx 20upx 30rpx;
+	// 商品卡片
 	.top {
-		margin-bottom: 50upx;
+		margin: 30rpx 0;
+		border-radius: 20rpx;
+		padding: 20rpx;
 
 		.shop-img {
 			width: 160upx;
@@ -445,7 +446,7 @@ export default {
 
 			.goods-title {
 				font-size: 28rpx;
-				font-family: PingFang SC;
+
 				font-weight: 500;
 				color: rgba(51, 51, 51, 1);
 				line-height: 42rpx;
@@ -458,13 +459,13 @@ export default {
 
 			.price-box {
 				font-size: 36upx;
-				font-family: PingFang SC;
+
 				font-weight: bold;
 				color: #e1212b;
 
 				.unit {
 					font-size: 24upx;
-					font-family: PingFang SC;
+
 					font-weight: bold;
 					color: #e1212b;
 				}
@@ -477,12 +478,13 @@ export default {
 		}
 	}
 
+	// 规格选项
 	.select-box {
-		margin-bottom: 25upx;
+		margin-bottom: 30rpx;
 
 		.type-title {
 			font-size: 26upx;
-			font-family: PingFang SC;
+
 			font-weight: 400;
 			margin-bottom: 20upx;
 		}
@@ -491,31 +493,33 @@ export default {
 		}
 		.tag {
 			line-height: 62rpx;
-			background: rgba(#ddd, 0.8);
+			background: #f4f4f4;
 			border-radius: 31rpx;
 			font-size: 28upx;
-			font-family: PingFang SC;
 			font-weight: 400;
-			color: #999;
+			color: #666666;
 			padding: 0 30upx;
 			margin-bottom: 20rpx;
 			margin-right: 10rpx;
 		}
 
 		.tag-active {
-			background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-			color: rgba(#fff, 0.9);
+			background: linear-gradient(90deg, #e9b461, #eecc89);
+			font-size: 28rpx;
+			font-weight: 400;
+			color: #ffffff;
 		}
 
 		.tag-disabled {
-			background: #f5f5f5;
+			background: #f8f8f8;
+			color: #cacaca;
 		}
 	}
 
 	.buy-num-box {
 		.num-title {
 			font-size: 26upx;
-			font-family: PingFang SC;
+
 			font-weight: 400;
 			margin-bottom: 20upx;
 		}
@@ -527,10 +531,10 @@ export default {
 
 	.cu-btn {
 		width: 340rpx;
-		height: 70rpx;
+		line-height: 70rpx;
 		border-radius: 35rpx;
 		font-size: 28rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(255, 255, 255, 0.9);
 		padding: 0;
@@ -543,17 +547,24 @@ export default {
 
 	.buy-btn {
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 	}
-	.seckill-btn {
+	.save-btn {
 		width: 710rpx;
 		height: 70rpx;
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 		font-size: 28rpx;
-		font-family: PingFang SC;
 		font-weight: 500;
 		color: rgba(255, 255, 255, 1);
+		border-radius: 35rpx;
+		padding: 0;
+	}
+	.cancel-btn {
+		width: 710rpx;
+		height: 70rpx;
+		background: rgba(221, 221, 221, 1);
+		font-size: 28rpx;
+		font-weight: 500;
+		color: #999999;
 		border-radius: 35rpx;
 		padding: 0;
 	}

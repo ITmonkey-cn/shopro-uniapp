@@ -1,68 +1,68 @@
 <!-- 我的钱包 -->
 <template>
-	<view class="page_box">
-		<view class="head_box">
-			<cu-custom :isBack="true">
-				<block slot="backText"></block>
-				<block slot="content">我的钱包</block>
-			</cu-custom>
-			<!-- <image class="resale-bg" src="/static/resale_bg.png" mode=""></image> -->
-			<view class="card-box x-end x-bc">
-				<view class="left y-start">
-					<text class="title">可提现</text>
-					<text class="money-num">{{ userinfo.money }}</text>
-					<text class="add">{{ rules }}</text>
+	<view class="wallet-wrap">
+		<!-- 钱包卡片 -->
+		<view class="head_box u-flex u-row-center u-col-center">
+			<view class="card-box">
+				<view class="card-head u-flex u-col-center">
+					<view class="card-title u-m-r-10">可提现金额（元）</view>
+					<u-icon @click="showMoney = !showMoney" :name="showMoney ? 'eye-fill' : 'eye-off'" size="46" color="#fff"></u-icon>
 				</view>
-				<button class="cu-btn cash-btn" @tap="onWithdrawals">提现</button>
+				<view class="money-num u-p-t-50">{{ showMoney ? userinfo.money || '0.00' : '***' }}</view>
+				<button class="u-reset-button withdraw-btn" @tap="$Router.push('/pages/user/wallet/withdraw')">提现</button>
 			</view>
 		</view>
-		<view class="content_box">
-			<view class="resale-list x-bc" @tap="jump('/pages/user/wallet/bind-bank')">
-				<view class="x-f">
-					<text class=" cuicon cuIcon-vipcard"></text>
-					<text>绑定银行卡</text>
-				</view>
-				<text class="cuIcon-right"></text>
+		<!-- 筛选 -->
+		<u-sticky offset-top="0" :enable="true">
+			<view class="filter-box u-flex u-row-between">
+				<button class="u-reset-button date-btn" @tap="showCalendar = true">
+					{{ selDateText }}
+					<u-icon class="u-m-l-20" name="arrow-down-fill" size="28" color="#e5e5e5"></u-icon>
+				</button>
+				<view class="total-box">收入￥{{ incomeMoney || '0.00' }} 支出￥{{ expendMoney || '0.00' }}</view>
 			</view>
-			<view class="resale-list x-bc" @tap="jump('/pages/user/wallet/log')">
-				<view class="x-f">
-					<text class=" cuicon cuIcon-baby"></text>
-					<text>钱包明细</text>
+			<!-- 状态分类 -->
+			<view class="u-flex nav-box">
+				<view class="state-item u-flex-1 " v-for="(state, index) in statusList" :key="state.value" @tap="onTab(state.value)">
+					<text class="state-title" :class="{ 'title-active': stateCurrent === state.value }">{{ state.name }}</text>
+					<text class="underline" :class="{ 'underline-active': stateCurrent === state.value }"></text>
 				</view>
-				<text class="cuIcon-right"></text>
 			</view>
-			<!-- <view class="resale-list x-bc" @tap="jump('/pages/user/team/index')">
-				<view class="x-f">
-					<text class=" cuicon cuIcon-friend"></text>
-					<text>我的团队</text>
-				</view>
-				<text class="cuIcon-right"></text>
-			</view> -->
-			<!-- <view class="resale-list x-bc" @tap="jump('/pages/user/poster')">
-				<view class="x-f">
-					<text class=" cuicon cuIcon-present"></text>
-					<text>邀请好友</text>
-				</view>
-				<text class="cuIcon-right"></text>
-			</view> -->
-		</view>
-		<view class="foot_box"></view>
-		<shopro-modal v-model="showModal" style="z-index: 88;">
-			<block slot="modalContent">
-				<view class="modal-box">
-					<view class="modal-head">
-						<image class="modal-head-img"  :src="$IMG_URL + '/imgs/modal_bg.png'" mode=""></image>
-						<text class="modal-head-title">提现金额</text>
+		</u-sticky>
+
+		<!-- 钱包记录 -->
+		<view class="wallet-list u-flex" v-for="item in walletLog" :key="item.id">
+			<image class="head-img u-m-r-20" :src="item.avatar" mode=""></image>
+			<view class="list-content">
+				<view class="title-box u-flex u-row-between">
+					<text class="title u-ellipsis-1">{{ item.type_name }}{{ item.title ? '-' + item.title : '' }}</text>
+					<view class="money">
+						<text v-if="item.wallet >= 0" class="add font-OPPOSANS">+{{ item.wallet }}</text>
+						<text v-else class="minus font-OPPOSANS">{{ item.wallet }}</text>
 					</view>
-					<input class="inp" type="number" @input="onInput" v-model="money" placeholder="在此输入提现金额" placeholder-class="pl-inp" />
-					<button class="cu-btn post-btn" @tap="postMoney">提现</button>
 				</view>
-			</block>
-		</shopro-modal>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
+				<text class="time">{{ $u.timeFormat(item.createtime, 'yyyy-mm-dd hh:MM') }}</text>
+			</view>
+		</view>
+		<!-- 空置页 -->
+		<shopro-empty v-show="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据~"></shopro-empty>
+		<!-- 更多 -->
+		<u-loadmore v-if="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
+		<!-- 日期选择 -->
+		<u-calendar
+			v-model="showCalendar"
+			ref="uCalendar"
+			safeAreaInsetBottom
+			mode="range"
+			start-text="开始"
+			end-text="结束"
+			active-bg-color="#7063d2"
+			active-color="#fff"
+			range-bg-color="#e5e2ff"
+			range-color="#7063d2"
+			:customStyle="{ background: 'linear-gradient(90deg, #A36FFF, #5336FF)', boxShadow: '0 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34)' }"
+			@change="selDate"
+		></u-calendar>
 	</view>
 </template>
 
@@ -72,227 +72,248 @@ export default {
 	components: {},
 	data() {
 		return {
-			showModal: false,
-			money: '',
-			rules: ''
+			isEmpty: false,
+			stateCurrent: 'all', //默认
+			statusList: [
+				{
+					name: '全部',
+					value: 'all'
+				},
+				{
+					name: '收入',
+					value: 'add'
+				},
+				{
+					name: '支出',
+					value: 'reduce'
+				}
+			],
+			showMoney: true,
+			//日期选择
+			showCalendar: false,
+			selDateText: '',
+			walletLog: [], //钱包记录
+			propsDate: '', //日期参数
+			incomeMoney: '', //收入
+			expendMoney: '', //支出
+			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
+			currentPage: 1,
+			lastPage: 1
 		};
 	},
 	computed: {
 		...mapState({
-			userinfo: state => state.user.userInfo
+			userinfo: ({ user }) => user.userInfo,
+			isLogin: ({ user }) => user.isLogin
 		})
 	},
-	onLoad() {
-		this.getApplyRules();
-		this.getUserInfo();
+	onShow() {
+		this.isLogin && this.getUserInfo();
+		this.getToday();
+		this.currentPage = 1;
+		this.lastPage = 1;
+		this.walletLog = [];
+		this.getWalletLog();
+	},
+	// 触底加载更多
+	onReachBottom() {
+		if (this.currentPage < this.lastPage) {
+			this.currentPage += 1;
+			this.getWalletLog();
+		}
 	},
 	methods: {
 		...mapActions(['getUserInfo']),
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
+		//  今日
+		getToday() {
+			let now = new Date();
+			let dateText = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+			this.selDateText = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`;
+			this.propsDate = `${dateText}-${dateText}`;
 		},
-		postMoney() {
-			this.apply();
-			this.showModal = false;
-		},
-		onInput() {
-			if (+this.userinfo.money > 0 && +this.userinfo.money < +this.money) {
-				setTimeout(() => {
-					this.money = this.userinfo.money;
-				}, 0);
+		// tab切换
+		onTab(state) {
+			if (this.stateCurrent !== state) {
+				this.stateCurrent = state;
+				this.currentPage = 1;
+				this.lastPage = 1;
+				this.walletLog = [];
+				this.getWalletLog();
 			}
 		},
-		// 提现
-		apply() {
+		// 日期选择
+		selDate(e) {
+			this.walletLog = [];
+			this.currentPage = 1;
+			this.lastPage = 1;
+			this.selDateText = `${e.startYear}.${e.startMonth}.${e.startDay}-${e.endYear}.${e.endMonth}.${e.endDay}`;
+			let dateText = `${e.startYear}/${e.startMonth}/${e.startDay}-${e.endYear}/${e.endMonth}/${e.endDay}`;
+			this.propsDate = dateText;
+			this.getWalletLog();
+			this.$refs.uCalendar.init();
+		},
+		// 钱包明细
+		getWalletLog() {
 			let that = this;
-			that.$api('user_wallet_apply.apply', {
-				money: that.money
+			that.loadStatus = 'loading';
+			that.$http('money.walletLog', {
+				wallet_type: 'money',
+				status: that.stateCurrent,
+				date: that.propsDate,
+				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
-					//  #ifdef MP-WEIXIN
-					this.$store.dispatch('getMessageIds', 'wallet');
-					//  #endif
-					this.$tools.toast(res.msg);
-					that.getUserInfo();
+					that.walletLog = [...that.walletLog, ...res.data.wallet_logs.data];
+					that.incomeMoney = res.data.income;
+					that.expendMoney = Math.abs(res.data.expend);
+					that.isEmpty = !that.walletLog.length;
+					that.lastPage = res.data.wallet_logs.last_page;
+					that.loadStatus = that.currentPage < res.data.wallet_logs.last_page ? 'loadmore' : 'nomore';
 				}
 			});
-		},
-		// 提现规则
-		getApplyRules() {
-			let that = this;
-			that.$api('user_wallet_apply.rule').then(res => {
-				if (res.code === 1) {
-					that.rules = res.data;
-				}
-			});
-		},
-		onWithdrawals() {
-			if (this.userinfo.money <= 0) {
-				this.$tools.toast('暂无可提现余额');
-			} else {
-				this.showModal = true;
-			}
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-// 提现弹窗
-.modal-box {
-	background: #fff;
-	width: 610rpx;
-	margin: 0 auto;
-	border-radius: 20rpx;
-	.modal-head-img {
-		width: 100%;
-		height: 213rpx;
-	}
-
-	.modal-head-title {
-		font-size: 35rpx;
-		font-family: PingFang SC;
-		font-weight: bold;
-		color: #6d5028;
-		line-height: 42rpx;
-	}
-
-	.inp {
-		width: 501rpx;
-		height: 78rpx;
-		border: 1rpx solid rgba(168, 112, 13, 1);
-		margin: 60rpx auto 40rpx;
-		font-size: 28rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
-		color: #6d5028;
-
-		.pl-inp {
-			color: #bd9560;
-		}
-	}
-
-	.radio {
-		width: 500rpx;
-		padding: 0 50rpx;
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
-		color: rgba(200, 150, 61, 1);
-		margin-bottom: 20rpx;
-
-		.radio-inp {
-			transform: scale(0.7);
-			margin-right: 10rpx;
-		}
-	}
-
-	.post-btn {
-		width: 492rpx;
+// 钱包记录
+.wallet-list {
+	width: 750rpx;
+	padding: 30rpx;
+	background-color: #ffff;
+	border-bottom: 1rpx solid #eeeeee;
+	.head-img {
+		width: 70rpx;
 		height: 70rpx;
-		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
-		border-radius: 35rpx;
-		font-size: 28rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(255, 255, 255, 1);
-		padding: 0;
-		margin-bottom: 60rpx;
+		border-radius: 50%;
+		background: #ccc;
 	}
-}
 
+	.list-content {
+		justify-content: space-between;
+		align-items: flex-start;
+		flex: 1;
+		.title {
+			font-size: 28rpx;
+			color: #333;
+			width: 400rpx;
+		}
+		.time {
+			color: #c0c0c0;
+			font-size: 22rpx;
+		}
+	}
+	.money {
+		font-size: 28rpx;
+		font-weight: bold;
+		.add {
+			color: #7063d2;
+		}
+
+		.minus {
+			color: #333333;
+		}
+	}
+} // 钱包
 .head_box {
 	width: 750rpx;
-	height: 480rpx;
-	background: linear-gradient(125deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 100%);
-	position: relative;
-
-	.resale-bg {
-		width: 750rpx;
-		height: 64rpx;
-		position: absolute;
-		bottom: 0;
-	}
-
+	background-color: #fff;
+	padding: 30rpx 0;
 	.card-box {
-		width: 695rpx;
-		height: 298rpx;
+		width: 690rpx;
+		min-height: 300rpx;
 		padding: 40rpx;
-		background: url($IMG_URL+'/imgs/money_wallet_bg.png') no-repeat;
+		background: url($IMG_URL+'/imgs/user/money_wallet_bg.png') no-repeat;
 		background-size: 100% 100%;
-		box-shadow: 0px 0px 12rpx 9rpx rgba(#f8dca5, 0.82);
+		box-shadow: 1rpx 5rpx 16rpx 0 rgba(94, 73, 195, 0.81);
 		border-radius: 30rpx;
 		overflow: hidden;
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-		bottom: 30rpx;
-		z-index: 6;
-
-		.left {
-			display: flex;
-			justify-content: space-between;
-			height: 100%;
-		}
-
-		.cash-btn {
-			width: 170rpx;
-			height: 64rpx;
-			background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-			border: 2rpx solid rgba(230, 184, 115, 1);
-			box-shadow: 0px 7px 6px 0px rgba(229, 138, 0, 0.22);
-			border-radius: 32rpx;
-			padding: 0;
+		position: relative;
+		.card-head {
+			color: #fff;
 			font-size: 30rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: rgba(51, 51, 51, 1);
 		}
-
-		.title {
-			font-size: 30rpx;
-			font-family: Noto Sans S Chinese;
-			font-weight: 400;
-			color: rgba(230, 184, 115, 1);
-			line-height: 30rpx;
-		}
-
 		.money-num {
 			font-size: 70rpx;
-			font-family: FZHei-B01S;
+			line-height: 70rpx;
+			font-weight: 500;
+			color: #ffffff;
+		}
+		.reduce-num {
+			font-size: 26rpx;
 			font-weight: 400;
-			color: rgba(230, 184, 115, 1);
-			line-height: 72rpx;
+			color: #ffffff;
 		}
 
-		.add {
-			font-size: 22rpx;
-			width: 400rpx;
-			font-family: PingFang SC;
-			font-weight: 400;
-			color: rgba(230, 184, 115, 1);
-			line-height: 26rpx;
+		.withdraw-btn {
+			width: 120rpx;
+			height: 60rpx;
+			line-height: 60rpx;
+			background: #ffffff;
+			border-radius: 30px;
+			font-size: 24rpx;
+			font-weight: 500;
+			color: #5848c4;
+			position: absolute;
+			right: 30rpx;
+			top: 40rpx;
 		}
 	}
 }
 
-.resale-list {
-	height: 96rpx;
-	background: #fff;
-	padding: 0 30rpx 0 40rpx;
-	border-bottom: 1rpx solid #dfdfdf;
-	font-size: 28rpx;
-	font-weight: 500;
-	color: rgba(51, 51, 51, 1);
+// 筛选
 
-	.cuicon {
-		font-size: 40rpx;
+.filter-box {
+	height: 120rpx;
+	padding: 0 30rpx;
+	background-color: #f6f6f6;
+	.date-btn {
+		background-color: #fff;
+		line-height: 54rpx;
+		border-radius: 27rpx;
+		padding: 0 20rpx;
+		font-size: 24rpx;
+		font-weight: 500;
+		color: #666666;
+	}
+	.total-box {
+		font-size: 24rpx;
+		font-weight: 500;
+		color: #999999;
+	}
+}
+// 分类
+.state-item {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff;
+	border-bottom: 1rpx solid rgba(#999, 0.5);
+	.state-title {
 		color: #666;
-		margin-right: 30rpx;
+		font-weight: 500;
+		font-size: 28rpx;
+		line-height: 90rpx;
+	}
+	.title-active {
+		color: #333;
+	}
+	.underline {
+		display: block;
+		width: 68rpx;
+		height: 4rpx;
+		background: #fff;
+		border-radius: 2rpx;
+	}
+	.underline-active {
+		background: #5e49c3;
+		display: block;
+		width: 68rpx;
+		height: 4rpx;
+		border-radius: 2rpx;
 	}
 }
 </style>

@@ -13,26 +13,24 @@
 			<scroll-view enable-back-to-top scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<u-waterfall v-model="liveList" ref="uWaterfall" v-if="liveList.length">
 					<template v-slot:left="{ leftList }">
-						<view v-for="live in leftList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
+						<view class="u-flex u-row-center u-col-center u-m-b-20" v-for="live in leftList" :key="live.id">
+							<shopro-live-card :type="2" :detail="live"></shopro-live-card>
+						</view>
 					</template>
 					<template v-slot:right="{ rightList }">
-						<view v-for="live in rightList" :key="live.id"><shopro-live-card :detail="live"></shopro-live-card></view>
+						<view class="u-flex u-row-center u-col-center u-m-b-20" v-for="live in rightList" :key="live.id">
+							<shopro-live-card :type="2" :detail="live"></shopro-live-card>
+						</view>
 					</template>
 				</u-waterfall>
 
 				<!-- 更多 -->
-				<u-loadmore v-if="liveList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
+				<u-loadmore v-if="liveList.length" height="80rpx" :status="loadStatus" color="#ccc" />
+				<!-- 置空页 -->
+				<u-empty :show="isEmpty" mode="list"></u-empty>
 			</scroll-view>
 		</view>
-		<view class="foot_box"></view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -42,6 +40,7 @@ export default {
 	data() {
 		return {
 			tabCur: 'all',
+			isEmpty: false,
 			liveTab: [
 				{
 					title: 'all',
@@ -74,10 +73,13 @@ export default {
 	methods: {
 		// 切换tab
 		selTab(cur) {
-			this.tabCur = cur;
-			this.liveList = [];
-			this.currentPage = 1;
-			this.$u.debounce(this.getLiveList);
+			if (this.tabCur !== cur) {
+				this.tabCur = cur;
+				this.liveList = [];
+				this.currentPage = 1;
+				this.lastPage = 1;
+				this.getLiveList();
+			}
 		},
 		// 加载更多
 		loadMore() {
@@ -90,18 +92,15 @@ export default {
 		getLiveList() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$api('live', {
+			that.$http('common.live', {
 				type: that.tabCur,
 				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.liveList = [...that.liveList, ...res.data.data];
+					that.isEmpty = !that.liveList.length;
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		}
@@ -115,19 +114,25 @@ export default {
 	width: 100%;
 	height: 96rpx;
 	background: #fff;
-	@include flex($align: center);
+	display: flex;
+
 	&__item {
 		flex: 1;
 		height: 100%;
-		@include flex($direction: column, $justify: between, $align: center);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
 	}
 	&__item-name {
 		font-size: 28rpx;
-		font-family: PingFang SC;
+
 		font-weight: bold;
 		color: rgba(51, 51, 51, 1);
 		flex: 1;
-		@include flex($justify: center, $align: center);
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	&__item--link {
 		width: 68rpx;
@@ -144,12 +149,7 @@ export default {
 }
 // 瀑布流 list
 .scroll-box {
-	.list-box {
-		width: 100%;
-		-moz-column-count: 2;
-		-webkit-column-count: 2;
-		column-count: 2;
-		padding: 25rpx;
-	}
+	margin: 20rpx auto;
+	width: 730rpx;
 }
 </style>

@@ -4,59 +4,41 @@
 		<!-- 钱包卡片 -->
 		<view class="wallet-wrap">
 			<view class="wallet-card">
-				<view class="head-box x-f">
+				<view class="head-box u-flex">
 					<view class="head-title">总收益（元）</view>
-					<button class="cu-btn look-btn" @tap="onEye">
-						<text v-if="showMoney" class="cuIcon-attentionfill"></text>
-						<text v-else class="cuIcon-attentionforbidfill"></text>
+					<button class="u-reset-button look-btn" @tap="showMoney = !showMoney">
+						<u-icon :name="showMoney ? 'eye-fill' : 'eye-off'" size="50" color="#fff"></u-icon>
 					</button>
 				</view>
 				<view class="card-num">{{ showMoney ? agentInfo.total_income || '0.00' : '***' }}</view>
-				<view class="card-bottom x-bc">
-					<view class="card-item y-start">
+				<view class="card-bottom u-flex u-row-left">
+					<view class="card-item u-flex-1">
 						<view class="item-title">待入账佣金</view>
 						<view class="item-value">{{ showMoney ? agentInfo.delay_money || '0.00' : '***' }}</view>
 					</view>
-
-					<view class="card-item y-start">
+					<view class="card-item u-flex-1">
 						<view class="item-title">可提现佣金</view>
 						<view class="item-value">{{ showMoney ? userInfo.money || '0.00' : '***' }}</view>
 					</view>
-					<view class=""></view>
 				</view>
-				<button class="cu-btn draw-btn" @tap="jump('/pages/user/wallet/index')">提现</button>
-			</view>
-			<!-- 消费 -->
-			<view class="x-bc" v-if="false">
-				<view class="consumption-item x-f">
-					<text class="cuIcon-goods item-icon"></text>
-					<view class="y-start">
-						<view class="item-title">我的消费</view>
-						<view class="item-value">{{ agentInfo.order_money || '0.00' }}</view>
-					</view>
-				</view>
-				<view class="consumption-item x-f">
-					<text class="cuIcon-vip item-icon"></text>
-					<view class="y-start">
-						<view class="item-title">团队消费</view>
-						<view class="item-value">{{ agentInfo.child_order_money_1 || '0.00' }}</view>
-					</view>
-				</view>
+				<button class="u-reset-button draw-btn" @tap="jump('/pages/user/wallet/withdraw')">提现</button>
 			</view>
 		</view>
 
 		<!-- 筛选 -->
 		<u-sticky offset-top="0" :enable="true">
-			<view class="head_box x-bc">
-				<button class="cu-btn date-btn" @tap="onFilterDate">
+			<view class="head_box u-flex u-row-between">
+				<button class="u-reset-button date-btn" @tap="showCalendar = true">
 					{{ selDateText }}
-					<text class="cuIcon-triangledownfill"></text>
+					<u-icon class="u-m-l-20" name="arrow-down-fill" size="28" color="#e5e5e5"></u-icon>
 				</button>
-				<view class="total-box">收入￥{{ totalMoney || '0.00' }}</view>
+				<view class="">
+					<view class="total-box">{{ stateMap[stateCurrent] }}￥{{ totalMoney || '0.00' }}</view>
+				</view>
 			</view>
 			<!-- 状态分类 -->
-			<view class="x-f nav-box">
-				<view class="state-item flex-sub " v-for="(state, index) in statusList" :key="state.value" @tap="onTab(state.value)">
+			<view class="u-flex nav-box">
+				<view class="state-item u-flex-1 " v-for="(state, index) in statusList" :key="state.value" @tap="onTab(state.value)">
 					<text class="state-title" :class="{ 'title-active': stateCurrent === state.value }">{{ state.name }}</text>
 					<text class="underline" :class="{ 'underline-active': stateCurrent === state.value }"></text>
 				</view>
@@ -65,51 +47,61 @@
 
 		<view class="item-box">
 			<!-- 佣金明细列表 -->
-			<view class="log-item x-bc" v-for="item in rewardLog" :key="item.id">
-				<view class="item-left x-f">
+			<view class="log-item u-flex u-row-between" v-for="item in rewardLog" :key="item.id">
+				<view class="item-left u-flex">
 					<image class="log-img" :src="item.buyer.avatar" mode=""></image>
-					<view class="y-start">
+					<view class="">
 						<view class="log-name">{{ item.buyer.nickname }}</view>
 						<view class="log-notice">{{ $u.timeFormat(item.createtime, 'yyyy.mm.dd') }}</view>
 					</view>
 				</view>
-				<view class="item-right y-end">
-					<view class="log-num" :style="{ color: classType[item.status_name] }">+{{ item.commission }}</view>
+				<view class="item-right">
+					<view class="log-num" :style="{ color: classType[item.status] }">{{ item.status < 0 ? '-' : '+' }} {{ item.commission }}</view>
 					<view class="log-date"></view>
 				</view>
 			</view>
 			<!-- 更多 -->
 			<u-loadmore v-if="rewardLog.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			<!-- 缺省页 -->
-			<shopro-empty v-if="emptyData.show" :emptyData="emptyData" :isFixed="false"></shopro-empty>
+			<shopro-empty v-show="isEmpty" marginTop="100rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据"></shopro-empty>
 		</view>
 		<!-- 日期选择 -->
 		<u-calendar
 			v-model="showCalendar"
-			:mode="mode"
-			:start-text="startText"
-			:end-text="endText"
-			:range-color="rangeColor"
-			:range-bg-color="rangeBgColor"
-			:active-bg-color="activeBgColor"
-			btnType="success"
+			safeAreaInsetBottom
+			ref="uCalendar"
+			mode="range"
+			start-text="开始"
+			end-text="结束"
+			active-bg-color="#7063d2"
+			active-color="#fff"
+			range-bg-color="#e5e2ff"
+			range-color="#7063d2"
+			:customStyle="{ background: 'linear-gradient(90deg, #A36FFF, #5336FF)', boxShadow: '0 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34)' }"
 			@change="selDate"
 		></u-calendar>
 	</view>
 </template>
 
 <script>
+import { mapMutations, mapActions, mapState } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {
-			agentInfo: uni.getStorageSync('agentInfo'),
-			userInfo: uni.getStorageSync('userInfo'),
 			stateCurrent: 'all', //默认
+			stateMap: {
+				all: '全部收入',
+				waiting: '待入账',
+				accounted: '已入账',
+				back: '已退回',
+				cancel: '已取消'
+			},
 			classType: {
-				已退回: '#EB2B3D',
-				待入账: '#05C3A1',
-				已入账: '#7063D2'
+				'-1': '#EB2B3D',
+				'0': '#05C3A1',
+				'1': '#7063D2',
+				'-2': '#EEEEEE'
 			},
 			statusList: [
 				{
@@ -122,23 +114,20 @@ export default {
 				},
 				{
 					name: '已入账',
-					value: 'entry'
+					value: 'accounted'
 				},
 				{
 					name: '已退回',
 					value: 'back'
+				},
+				{
+					name: '已取消',
+					value: 'cancel'
 				}
 			],
 			showMoney: true, //是否显示金额
 			//日期选择
 			showCalendar: false,
-			mode: 'range',
-			result: '请选择日期',
-			startText: '开始',
-			endText: '结束',
-			rangeColor: '#4CB89D',
-			rangeBgColor: 'rgba(76,184,157,0.13)',
-			activeBgColor: '#4CB89D',
 			selDateText: '',
 			rewardLog: [], //佣金记录
 			propsDate: '', //日期参数
@@ -146,18 +135,23 @@ export default {
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
-			emptyData: {
-				show: false,
-				img: this.$IMG_URL + '/imgs/empty/no_data.png',
-				tip: '暂无数据',
-				path: '',
-				pathText: ''
-			}
+			isEmpty: false
 		};
 	},
-	computed: {},
+	computed: {
+		...mapState({
+			userInfo: ({ user }) => user.userInfo,
+			agentInfo: ({ user }) => user.agentInfo
+		})
+	},
 	onLoad() {
 		this.getToday();
+		this.getCommissionLog();
+	},
+	onPullDownRefresh() {
+		this.rewardLog = [];
+		this.currentPage = 1;
+		this.lastPage = 1;
 		this.getCommissionLog();
 	},
 	onReachBottom() {
@@ -175,20 +169,13 @@ export default {
 		},
 		// 切换分类
 		onTab(state) {
-			this.rewardLog = [];
-			this.currentPage = 1;
-			this.lastPage = 1;
-			this.stateCurrent = state;
-			this.$u.debounce(this.getCommissionLog);
-		},
-		// 点击日期选择
-		onFilterDate() {
-			this.showCalendar = true;
-		},
-
-		// 是否显示金额
-		onEye() {
-			this.showMoney = !this.showMoney;
+			if (this.stateCurrent !== state) {
+				this.rewardLog = [];
+				this.currentPage = 1;
+				this.lastPage = 1;
+				this.stateCurrent = state;
+				this.getCommissionLog();
+			}
 		},
 
 		//  今日
@@ -208,30 +195,29 @@ export default {
 			let dateText = `${e.startYear}/${e.startMonth}/${e.startDay}-${e.endYear}/${e.endMonth}/${e.endDay}`;
 			this.propsDate = dateText;
 			this.getCommissionLog();
+			this.$refs.uCalendar.init();
 		},
 
 		// 佣金明细
 		getCommissionLog() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.emptyData.show = false;
-			that.$api('commission.rewardLog', {
-				date: that.propsDate,
-				type: that.stateCurrent,
-				page: that.currentPage
-			}).then(res => {
+			that.$http(
+				'commission.rewardLog',
+				{
+					date: that.propsDate,
+					type: that.stateCurrent,
+					page: that.currentPage
+				},
+				'加载中...'
+			).then(res => {
+				uni.stopPullDownRefresh();
 				if (res.code === 1) {
 					that.totalMoney = res.data.total_money;
 					that.rewardLog = [...that.rewardLog, ...res.data.rewards.data];
 					that.lastPage = res.data.rewards.last_page;
-					if (!that.rewardLog.length) {
-						that.emptyData.show = true;
-					}
-					if (that.currentPage < res.data.rewards.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.isEmpty = !that.rewardLog.length;
+					that.loadStatus = that.currentPage < res.data.rewards.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		},
@@ -343,7 +329,7 @@ export default {
 		top: 35rpx;
 		right: 35rpx;
 		width: 121rpx;
-		height: 58rpx;
+		line-height: 58rpx;
 		background: #ffffff;
 		border-radius: 29rpx;
 		padding: 0;
@@ -353,26 +339,6 @@ export default {
 	}
 }
 
-// 消费
-.consumption-item {
-	flex: 1;
-	.item-icon {
-		color: #5e49c3;
-		font-size: 50rpx;
-		font-weight: bold;
-		margin-right: 20rpx;
-	}
-	.item-title {
-		font-size: 24rpx;
-		font-weight: 500;
-		color: #999999;
-	}
-	.item-value {
-		font-size: 30rpx;
-		font-weight: 500;
-		color: #333333;
-	}
-}
 // 表头
 .head_box {
 	height: 120rpx;
@@ -380,17 +346,12 @@ export default {
 	background-color: #f6f6f6;
 	.date-btn {
 		background-color: #fff;
-		height: 54rpx;
+		line-height: 54rpx;
 		border-radius: 27rpx;
-		padding: 0;
-		padding-left: 20rpx;
+		padding: 0 20rpx;
 		font-size: 24rpx;
 		font-weight: 500;
 		color: #666666;
-		.cuIcon-triangledownfill {
-			font-size: 60rpx;
-			color: #e5e5e5;
-		}
 	}
 	.total-box {
 		font-size: 24rpx;

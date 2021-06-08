@@ -1,17 +1,19 @@
 <template>
-	<view class="sh-title-card mb10">
+	<view class="sh-title-card u-m-b-10">
 		<view class="title-box">
-			<image class="title-bg" :src="detail.image" mode="aspectFill"></image>
-			<view class="title-text" :style="{ color: detail.color }">{{ detail.name }}</view>
+			<image class="title-bg" :src="bgImage" mode="aspectFill"></image>
+			<view class="title-text" :style="{ color: titleColor }">{{ title }}</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	/**
-	 * 组件标题栏
-	 * @property {Object} detail - 各个卡片标题栏
-	 */
+/**
+ * shTitleCard 组件标题栏
+ * @property {String} bgImage - 背景图
+ * @property {String} title - 标题
+ * @property {String} titleColor - 标题颜色
+ */
 export default {
 	components: {},
 	data() {
@@ -19,9 +21,17 @@ export default {
 	},
 	computed: {},
 	props: {
-		detail: {
-			type: Object,
-			default: null
+		bgImage: {
+			type: String,
+			default: ''
+		},
+		title: {
+			type: String,
+			default: ''
+		},
+		titleColor: {
+			type: String,
+			default: ''
 		}
 	},
 	methods: {}

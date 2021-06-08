@@ -1,70 +1,69 @@
 <!-- 购物车 -->
 <template>
 	<view class="page_box">
-		<view class="head_box" v-if="cartList.length">
-			<view class="safety-box x-f" v-if="false">
-				<text class="cuIcon-safe"></text>
-				<text>无忧退换，让你的购物体验简单省心</text>
-			</view>
-			<view class="tip-box x-f" v-if="false">
-				<text class="tag">全场满额减</text>
-				再购154.10元立享每满400元减20元 >
-			</view>
-			<view class="tool-box x-bc">
+		<!-- 总数 -->
+		<view class="head_box" v-show="!isEmpty">
+			<view class="tool-box u-flex u-row-between">
 				<view class="count-box">
 					共
 					<text class="all-num">{{ cartList.length }}</text>
 					件商品
 				</view>
-				<button class="cu-btn set-btn" @tap="onSet">{{ isTool ? '完成' : '编辑' }}</button>
+				<button class="u-reset-button set-btn" @tap="isTool = !isTool">{{ isTool ? '完成' : '编辑' }}</button>
 			</view>
 		</view>
+
 		<view class="content_box">
-			<checkbox-group class="block" v-if="cartList.length">
-				<view class="collect-list x-start" v-for="(g, index) in cartList" :key="index">
-					<view class="x-c" style="height: 200rpx;" @tap="onSel(index, g.checked)">
-						<checkbox :checked="g.checked" :class="{ checked: g.checked }" class="goods-radio round orange"></checkbox>
-					</view>
+			<!-- 列表 -->
+			<u-checkbox-group @change="checkboxGroupChange" activeColor="#e9b461" v-if="!isEmpty">
+				<view class="collect-list u-flex u-row-left u-col-center" v-for="(g, index) in cartList" :key="index">
+					<u-checkbox class="u-p-l-10" :name="g.goods_id" shape="circle" v-model="g.checked"><view style="height: 160rpx"></view></u-checkbox>
 					<view class="goods-wrap">
 						<view class="lose-box" v-if="g.cart_type === 'invalid' || (g.cart_type === 'activity' && !isActivityPay)">
-							<text v-if="g.cart_type === 'invalid'" class="iconfont icon-yishixiao"></text>
-							<view v-if="g.cart_type === 'activity' && !isActivityPay" class="invalid-tips x-c">活动商品,仅支持单独购买</view>
+							<text v-if="g.cart_type === 'invalid'" class="iconfont iconyishixiao"></text>
+							<view v-if="g.cart_type === 'activity' && !isActivityPay" class="invalid-tips u-flex u-row-center u-col-center">活动商品,仅支持单独购买</view>
 						</view>
-						<shopro-mini-card :detail="g.goods" :sku="g.sku_price" :type="'sku'" :orderType="g.activity_type">
-							<block slot="goodsBottom">
-								<view class="x-bc price-box">
-									<view class="price">￥{{ g.sku_price.price }}</view>
-									<view class="num-step"><uni-number-box @change="onChangeNum($event, g, index)" :value="g.goods_num" :step="1" :min="0"></uni-number-box></view>
+						<shopro-mini-card :image="g.goods.image" :title="g.goods.title" @click="$Router.push({ path: '/pages/goods/detail', query: { id: g.goods.id } })">
+							<template #describe>
+								<view class="order-sku u-ellipsis-1">
+									<text class="order-num">{{ g.sku_price && g.sku_price.goods_sku_text ? g.sku_price.goods_sku_text : '' }}</text>
 								</view>
-							</block>
+							</template>
+							<template #cardBottom>
+								<view class="order-price-box u-flex u-row-between">
+									<text class="order-price font-OPPOSANS">￥{{ g.sku_price ? g.sku_price.price : 0 }}</text>
+									<u-number-box
+										:value="g.goods_num"
+										:long-press="false"
+										:min="0"
+										:step="1"
+										:index="index"
+										disabled-input
+										@min="onMin(g)"
+										@change="changeNum($event, g)"
+									></u-number-box>
+								</view>
+							</template>
 						</shopro-mini-card>
 					</view>
 				</view>
-			</checkbox-group>
-			<view class="empty-box x-c" v-else><shopro-empty :emptyData="emptyData"></shopro-empty></view>
+			</u-checkbox-group>
+
+			<!-- 数据为空 -->
+			<shopro-empty v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_cart.png'" tipText="购物车空空如也,快去逛逛吧~"></shopro-empty>
 		</view>
-		<view class="foot_box " v-if="cartList.length">
-			<view class="tools-box x-bc">
-				<label class="check-all x-f" @tap="onAllSel">
-					<radio :checked="allSel" :class="{ checked: allSel }" class="check-all-radio orange"></radio>
-					<text>全选</text>
-					<text>（{{ totalCount.totalNum }}）</text>
-				</label>
-				<view class="x-f">
-					<view class="price" v-if="!isTool">￥{{ totalCount.totalPrice.toFixed(2) }}</view>
-					<button class="cu-btn pay-btn" :disabled="!isSel" v-show="!isTool" @tap="onPay">结算</button>
-					<button class="cu-btn del-btn" v-show="isTool" @tap="goodsDelete">删除</button>
+
+		<!-- 底部按钮 -->
+		<view class="foot_box " v-show="!isEmpty">
+			<view class="tools-box u-flex u-row-between">
+				<u-checkbox @change="onAllSel" activeColor="#e9b461" shape="circle" :value="allSel">全选（{{ totalCount.totalNum }}）</u-checkbox>
+				<view class="u-flex">
+					<view class="price font-OPPOSANS" v-show="!isTool">￥{{ totalCount.totalPrice.toFixed(2) }}</view>
+					<button class="u-reset-button pay-btn" :disabled="!isSel" v-show="!isTool" @tap="onPay">结算</button>
+					<button class="u-reset-button del-btn" v-show="isTool" @tap="goodsDelete">删除</button>
 				</view>
 			</view>
 		</view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
 	</view>
 </template>
 
@@ -75,36 +74,55 @@ export default {
 	components: {},
 	data() {
 		return {
-			isTool: false,
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/emptyCart.png',
-				tip: '购物车空空如也,快去逛逛吧~'
-			}
+			isTool: false
 		};
 	},
 	computed: {
 		...mapState({
 			cartList: ({ cart }) => cart.cartList,
-			allSel: ({ cart }) => cart.allSelected
+			allSel: ({ cart }) => cart.allSelected,
+			authType: ({ user }) => user.authType
 		}),
+		isEmpty() {
+			return !this.cartList.length;
+		},
 		...mapGetters(['totalCount', 'isSel', 'isActivityPay'])
 	},
-	onLoad() {
-		this.getCartList();
+	onShow() {
+		this.$store.state.user.isLogin && this.getCartList();
+	},
+	onHide() {
+		this.isTool = false;
 	},
 	methods: {
 		...mapActions(['getCartList', 'changeCartList']),
-		// 更改商品数
-		async onChangeNum(e, g, index) {
-			if (g.goods_num !== e) {
-				uni.showLoading({
-					mask: true
-				});
-				this.$set(this.cartList[index], 'goods_num', +e);
-				await this.changeCartList({ ids: [g.id], goodsNum: e, art: 'change' });
-				await uni.hideLoading();
-			}
+
+		// 到达最小值
+		onMin(g) {
+			uni.showModal({
+				title: '删除提示',
+				confirmColor: '#f0c785',
+				content: `是否确认从购物车中删除此商品?`,
+				success: res => {
+					res.confirm && this.changeCartList({ ids: [g.id], art: 'delete' });
+				}
+			});
 		},
+		// 更改商品数
+		async changeNum(e, g) {
+			uni.showLoading({
+				mask: true
+			});
+			e.value > 0 && this.changeCartList({ ids: [g.id], goodsNum: e.value, art: 'change' });
+			uni.hideLoading();
+			await this.getCartList();
+		},
+
+		// 单选
+		checkboxGroupChange(e) {
+			this.$store.commit('checkCartList');
+		},
+
 		// 路由跳转
 		jump(path, parmas) {
 			this.$Router.push({
@@ -112,21 +130,14 @@ export default {
 				query: parmas
 			});
 		},
-		// 单选
-		onSel(index, flag) {
-			let that = this;
-			that.$store.commit('selectItem', { index, flag });
-		},
-		// 功能切换
-		onSet() {
-			this.isTool = !this.isTool;
-		},
+
 		// 全选
 		onAllSel() {
 			let that = this;
 			that.$store.commit('changeAllSellect'); //按钮切换全选。
 			that.$store.commit('getAllSellectCartList', that.allSel); //列表全选
 		},
+
 		// 结算
 		onPay() {
 			let that = this;
@@ -137,13 +148,13 @@ export default {
 					if (item.checked) {
 						confirmcartList.push({
 							goods_id: item.goods_id,
-							goods_num: item.goods_num,
 							sku_price_id: item.sku_price_id,
-							goods_price: item.sku_price.price
+							goods_price: item.sku_price.price,
+							goods_num: item.goods_num
 						});
 					}
 				});
-				that.jump('/pages/order/confirm', { goodsList: JSON.stringify(confirmcartList), from: 'cart' });
+				that.jump('/pages/order/confirm', { goodsList: confirmcartList, from: 'cart' });
 			}
 		},
 		// 删除
@@ -163,42 +174,12 @@ export default {
 </script>
 
 <style lang="scss">
+// 总计商品
 .head_box {
-	.safety-box {
-		height: 80rpx;
-		font-size: 24rpx;
-		padding: 0 30rpx;
-		background: #f7f5f6;
-
-		.cuIcon-safe {
-			font-size: 32rpx;
-			margin-right: 16rpx;
-		}
-	}
-
-	.tip-box {
-		font-size: 26rpx;
-		color: #999;
-		height: 90rpx;
-		padding: 0 30rpx;
-		background: #fff;
-
-		.tag {
-			border: 1rpx solid rgba(168, 112, 13, 1);
-			border-radius: 2rpx;
-			padding: 0 10rpx;
-			line-height: 40rpx;
-			font-size: 26rpx;
-			color: #a8700d;
-			margin-right: 20rpx;
-		}
-	}
-
 	.tool-box {
 		height: 90rpx;
 		padding: 0 30rpx;
 		background: #f7f5f6;
-
 		.count-box {
 			font-size: 26rpx;
 			color: #999;
@@ -207,7 +188,6 @@ export default {
 				color: #a8700d;
 			}
 		}
-
 		.set-btn {
 			background: none;
 			font-size: 26rpx;
@@ -223,25 +203,50 @@ export default {
 	height: 100%;
 }
 
+// 购物车项
 .collect-list {
-	padding: 30rpx 20rpx;
 	background: #fff;
+	width: 750rpx;
 	margin-bottom: 20rpx;
-
-	/deep/ .goods-title {
-		width: 420rpx !important;
-	}
-
+	padding: 20rpx 10rpx;
 	// 商品卡片包裹
 	.goods-wrap {
 		position: relative;
+		.order-sku {
+			font-size: 24rpx;
+			font-weight: 400;
+			color: rgba(153, 153, 153, 1);
+			width: 440rpx;
+			margin-bottom: 20rpx;
+			.order-num {
+				margin-right: 10rpx;
+			}
+		}
+		.order-price-box {
+			.status-btn {
+				height: 32rpx;
+				border: 1rpx solid rgba(207, 169, 114, 1);
+				border-radius: 15rpx;
+				font-size: 20rpx;
+				font-weight: 400;
+				color: rgba(168, 112, 13, 1);
+				padding: 0 10rpx;
+				margin-left: 20rpx;
+				background: rgba(233, 183, 102, 0.16);
+			}
+			.order-price {
+				font-size: 26rpx;
+				font-weight: 600;
+				color: #ff0000;
+			}
+		}
 		.lose-box {
 			position: absolute;
 			z-index: 10;
 			width: 100%;
 			height: 100%;
 			background-color: rgba(#fff, 0.8);
-			.icon-yishixiao {
+			.iconyishixiao {
 				position: absolute;
 				bottom: 0rpx;
 				right: 80rpx;
@@ -322,14 +327,14 @@ export default {
 	}
 
 	.price {
-		color: #e1212b;
+		color: #ff0000;
 		font-size: 500;
 		margin-right: 30rpx;
 	}
 
 	.pay-btn {
 		width: 200rpx;
-		height: 70rpx;
+		line-height: 70rpx;
 		background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
 		box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 		border-radius: 35rpx;
@@ -339,7 +344,7 @@ export default {
 
 	.del-btn {
 		width: 200rpx;
-		height: 70rpx;
+		line-height: 70rpx;
 		background: linear-gradient(90deg, rgba(244, 71, 57, 1) 0%, rgba(255, 102, 0, 1) 100%);
 		border-radius: 35rpx;
 		padding: 0;

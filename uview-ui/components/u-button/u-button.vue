@@ -9,7 +9,7 @@
 			shape == 'circle' ? 'u-round-circle' : '',
 			hairLine ? showHairLineBorder : 'u-btn--bold-border',
 			'u-btn--' + type,
-			disabled ? `u-btn--${type}--disabled` : '',
+			disabled ? `u-btn--${type}--disabled` : ''
 		]"
 		:hover-start-time="Number(hoverStartTime)"
 		:hover-stay-time="Number(hoverStayTime)"
@@ -30,9 +30,12 @@
 		@error="error"
 		@opensetting="opensetting"
 		@launchapp="launchapp"
-		:style="[customStyle, {
-			overflow: ripple ? 'hidden' : 'visible'
-		}]"
+		:style="[
+			customStyle,
+			{
+				overflow: ripple ? 'hidden' : 'visible'
+			}
+		]"
 		@tap.stop="click($event)"
 		:hover-class="getHoverClass"
 		:loading="loading"
@@ -212,7 +215,7 @@ export default {
 		// 节流，一定时间内只能触发一次
 		throttleTime: {
 			type: [String, Number],
-			default: 1000
+			default: 500
 		},
 		// 按住后多久出现点击态，单位毫秒
 		hoverStartTime: {
@@ -223,7 +226,7 @@ export default {
 		hoverStayTime: {
 			type: [String, Number],
 			default: 150
-		},
+		}
 	},
 	computed: {
 		// 当没有传bgColor变量时，按钮按下去的颜色类名
@@ -352,7 +355,7 @@ export default {
 	border: 0;
 	//border-radius: 10rpx;
 	/* #ifndef APP-NVUE */
-	display: inline-flex;		
+	display: inline-flex;
 	/* #endif */
 	// 避免边框某些场景可能被“裁剪”，不能设置为hidden
 	overflow: visible;
@@ -365,93 +368,93 @@ export default {
 	z-index: 1;
 	box-sizing: border-box;
 	transition: all 0.15s;
-	
+
 	&--bold-border {
 		border: 1px solid #ffffff;
 	}
-	
+
 	&--default {
 		color: $u-content-color;
 		border-color: #c0c4cc;
 		background-color: #ffffff;
 	}
-	
+
 	&--primary {
 		color: #ffffff;
 		border-color: $u-type-primary;
 		background-color: $u-type-primary;
 	}
-	
+
 	&--success {
 		color: #ffffff;
 		border-color: $u-type-success;
 		background-color: $u-type-success;
 	}
-	
+
 	&--error {
 		color: #ffffff;
 		border-color: $u-type-error;
 		background-color: $u-type-error;
 	}
-	
+
 	&--warning {
 		color: #ffffff;
 		border-color: $u-type-warning;
 		background-color: $u-type-warning;
 	}
-	
+
 	&--default--disabled {
 		color: #ffffff;
 		border-color: #e4e7ed;
 		background-color: #ffffff;
 	}
-	
+
 	&--primary--disabled {
-		color: #ffffff!important;
-		border-color: $u-type-primary-disabled!important;
-		background-color: $u-type-primary-disabled!important;
+		color: #ffffff !important;
+		border-color: $u-type-primary-disabled !important;
+		background-color: $u-type-primary-disabled !important;
 	}
-	
+
 	&--success--disabled {
-		color: #ffffff!important;
-		border-color: $u-type-success-disabled!important;
-		background-color: $u-type-success-disabled!important;
+		color: #ffffff !important;
+		border-color: $u-type-success-disabled !important;
+		background-color: $u-type-success-disabled !important;
 	}
-	
+
 	&--error--disabled {
-		color: #ffffff!important;
-		border-color: $u-type-error-disabled!important;
-		background-color: $u-type-error-disabled!important;
+		color: #ffffff !important;
+		border-color: $u-type-error-disabled !important;
+		background-color: $u-type-error-disabled !important;
 	}
-	
+
 	&--warning--disabled {
-		color: #ffffff!important;
-		border-color: $u-type-warning-disabled!important;
-		background-color: $u-type-warning-disabled!important;
+		color: #ffffff !important;
+		border-color: $u-type-warning-disabled !important;
+		background-color: $u-type-warning-disabled !important;
 	}
-	
+
 	&--primary--plain {
-		color: $u-type-primary!important;
-		border-color: $u-type-primary-disabled!important;
-		background-color: $u-type-primary-light!important;
+		color: $u-type-primary !important;
+		border-color: $u-type-primary-disabled !important;
+		background-color: $u-type-primary-light !important;
 	}
-	
+
 	&--success--plain {
-		color: $u-type-success!important;
-		border-color: $u-type-success-disabled!important;
-		background-color: $u-type-success-light!important;
+		color: $u-type-success !important;
+		border-color: $u-type-success-disabled !important;
+		background-color: $u-type-success-light !important;
 	}
-	
+
 	&--error--plain {
-		color: $u-type-error!important;
-		border-color: $u-type-error-disabled!important;
-		background-color: $u-type-error-light!important;
+		color: $u-type-error !important;
+		border-color: $u-type-error-disabled !important;
+		background-color: $u-type-error-light !important;
 	}
-	
+
 	&--warning--plain {
-		color: $u-type-warning!important;
-		border-color: $u-type-warning-disabled!important;
-		background-color: $u-type-warning-light!important;
+		color: $u-type-warning !important;
+		border-color: $u-type-warning-disabled !important;
+		background-color: $u-type-warning-light !important;
 	}
 }
 
@@ -512,7 +515,7 @@ export default {
 
 .u-size-medium {
 	/* #ifndef APP-NVUE */
-	display: inline-flex;		
+	display: inline-flex;
 	/* #endif */
 	width: auto;
 	font-size: 26rpx;
@@ -523,7 +526,7 @@ export default {
 
 .u-size-mini {
 	/* #ifndef APP-NVUE */
-	display: inline-flex;		
+	display: inline-flex;
 	/* #endif */
 	width: auto;
 	font-size: 22rpx;

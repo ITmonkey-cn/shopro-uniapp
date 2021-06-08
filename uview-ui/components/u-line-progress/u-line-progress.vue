@@ -121,6 +121,7 @@
 		@include vue-flex;
 		justify-items: flex-end;
 		justify-content: space-around;
+		white-space: nowrap;
 		font-size: 20rpx;
 		color: #ffffff;
 		transition: all 0.4s ease;

@@ -2,34 +2,31 @@
 <template>
 	<view class="rankings-wrap">
 		<!-- 标题栏 -->
-		<view class="nav-box">
-			<cu-custom isBack>
-				<block slot="backText"><text class="head-title">分销排行</text></block>
-			</cu-custom>
-		</view>
+		<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}" :backTextStyle="backTextStyle" backText="分销排行"></u-navbar>
 
 		<!-- 排行榜 -->
 		<view class="rankings-list-box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<view class="ranking-list x-bc" v-for="(item, index) in rankingsList" :key="index">
-					<view class="list-left x-f">
-						<view class="tag-box x-c">
-							<text class="tag-text" v-if="index >= 3">{{ index }}</text>
+				<view class="ranking-list u-flex u-row-between" v-for="(item, index) in rankingsList" :key="index">
+					<view class="list-left u-flex">
+						<view class="tag-box u-flex u-row-center u-col-center">
+							<text class="tag-text" v-if="index >= 3">{{ index + 1 }}</text>
 							<image v-else class="tag-icon" :src="rankingsIcon[index]" mode=""></image>
 						</view>
-						<image class="user-avatar" :src="item.user.avatar" mode=""></image>
+						<image class="user-avatar" :src="item.user ? item.user.avatar : $IMG_URL + '/imgs/base_avatar.png'" mode=""></image>
 						<view class="user-info">
-							<view class="name mb10">{{ item.user.nickname }}</view>
+							<view class="name u-m-b-10">{{ item.user ? item.user.nickname : '当前用户已注销' }}</view>
 							<view class="date">{{ $u.timeFormat(item.createtime, 'yyyy年mm月dd日') }}</view>
 						</view>
 					</view>
 					<view class="list-right y-end">
-						<view class="num mb10">{{ item.total_income }}</view>
+						<view class="num u-m-b-10">{{ item.total_income }}</view>
 						<view class="des">累计收益</view>
 					</view>
 				</view>
 				<!-- 更多 -->
 				<u-loadmore v-if="rankingsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
+				<view class="hack-box" style="height: 200rpx;width: 100%;"></view>
 			</scroll-view>
 		</view>
 	</view>
@@ -40,6 +37,11 @@ export default {
 	components: {},
 	data() {
 		return {
+			backTextStyle: {
+				color: '#fff',
+				fontSize: '40rpx',
+				fontWeight: '500'
+			},
 			rankingsIcon: {
 				0: this.$IMG_URL + '/imgs/commission/01.png',
 				1: this.$IMG_URL + '/imgs/commission/02.png',
@@ -59,22 +61,20 @@ export default {
 		getRankings() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$api('commission.ranking').then(res => {
+			that.$http('commission.ranking', {
+				page: that.currentPage
+			}).then(res => {
 				if (res.code === 1) {
 					that.rankingsList = [...that.rankingsList, ...res.data.data];
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		},
 
 		// 加载更多
 		loadMore() {
-			if (this.currentPage < 6) {
+			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
 				this.getRankings();
 			}
@@ -90,16 +90,6 @@ export default {
 	height: 100%;
 	overflow: hidden;
 }
-.nav-box {
-	/deep/ .cu-back {
-		color: #fff;
-		font-size: 40rpx;
-	}
-	.head-title {
-		font-size: 38rpx;
-		color: #fff;
-	}
-}
 
 // 排行榜列表
 .rankings-list-box {
@@ -108,6 +98,9 @@ export default {
 	width: 690rpx;
 	height: 100%;
 	margin: 60rpx auto 0;
+	.scroll-box {
+		height: 100%;
+	}
 	.ranking-list {
 		height: 140rpx;
 		padding: 0 30rpx;

@@ -2,10 +2,10 @@
 <template>
 	<view class="apply-commission-wrap">
 		<!-- 标题栏 -->
-		<view class="head-box">
-			<view class="nav-box"><cu-custom isBack></cu-custom></view>
-			<view class="head-img-wrap"><image class="head-img" :src="formHeadImg" mode="widthFix"></image></view>
+		<view class="head-box" :style="{ backgroundImage: ' url(' + formHeadImg + ')' }">
+			<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}"></u-navbar>
 		</view>
+
 		<!-- 表单 -->
 		<view class="apply-form">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
@@ -44,7 +44,7 @@
 							@on-uploaded="uploadSuccess($event, `value${index}`)"
 							@on-remove="uploadRemove($event, `value${index}`)"
 							:file-list="model[`valueList${index}`]"
-							:action="`${upLoadUrl}/index/upload`"
+							:action="`${$API_URL}/index/upload`"
 							width="148"
 							height="148"
 							maxCount="1"
@@ -52,35 +52,29 @@
 					</u-form-item>
 				</block>
 
-				<view class="agreement x-f" v-if="protocol && hasPostBtn">
+				<view class="agreement u-flex" v-if="protocol && hasPostBtn">
 					<u-checkbox v-model="model.agreement" activeColor="#b095ff" shape="circle" @change="onAgreement"></u-checkbox>
-					<view class="agreement-text" @tap="Router.push({ path: '/pages/public/richtext', query: { id: protocol.richtext_id } })">
+					<view class="agreement-text" @tap="$Router.push({ path: '/pages/public/richtext', query: { id: protocol.richtext_id } })">
 						我已阅读并遵守
 						<text class="text-underline">{{ protocol.name }}</text>
 					</view>
 				</view>
-				<button class="cu-btn save-btn" v-if="hasPostBtn" @tap="onSubmit" :disabled="isFormEnd">
-					<text v-if="isFormEnd" class="cuIcon-loading2 cuIconfont-spin"></text>
-					确认提交
-				</button>
+				<button class="u-reset-button save-btn" v-if="hasPostBtn" @tap="onSubmit" :disabled="isFormEnd">确认提交</button>
 			</u-form>
 		</view>
 	</view>
 </template>
 
 <script>
-import { API_URL } from '@/env.js';
 export default {
 	components: {},
 	data() {
 		return {
-			Router: this.$Router,
 			formList: [], //返回的表单
 			formHeadImg: '', //表单头部背景
 			protocol: null, //协议
 			isFormEnd: false, //提交成功
 			hasPostBtn: false, //是否显示提交按钮
-			upLoadUrl: API_URL,
 			errorType: ['message'],
 			labelStyle: {
 				'font-size': '28rpx',
@@ -110,7 +104,6 @@ export default {
 	onLoad() {
 		this.getFrom();
 	},
-	onReady() {},
 	methods: {
 		// 上传图片成功-单图
 		uploadSuccess(e, value) {
@@ -130,7 +123,7 @@ export default {
 		// 获取申请分销商表单
 		getFrom() {
 			let that = this;
-			that.$api('commission.form').then(res => {
+			that.$http('commission.form').then(res => {
 				if (res.code === 1) {
 					that.protocol = res.data.apply_protocol; //表单协议同
 					that.formList = res.data.apply_info; //表单
@@ -188,9 +181,13 @@ export default {
 		applyCommission(data) {
 			let that = this;
 			that.isFormEnd = true;
-			that.$api('commission.apply', {
-				data: data
-			}).then(res => {
+			that.$http(
+				'commission.apply',
+				{
+					data: data
+				},
+				'申请中...'
+			).then(res => {
 				that.isFormEnd = false;
 				if (res.code === 1) {
 					uni.showToast({
@@ -230,25 +227,9 @@ export default {
 
 	.head-box {
 		width: 100%;
-		position: relative;
-		.nav-box {
-			position: absolute;
-		}
-		.head-img-wrap {
-			width: 750rpx;
-			height: 400rpx;
-			overflow: hidden;
-			.head-img {
-				width: 100%;
-			}
-		}
-	}
-}
-
-.nav-box {
-	/deep/ .cu-back {
-		color: #fff;
-		font-size: 40rpx;
+		height: 400rpx;
+		background-size: 100% auto;
+		background-repeat: no-repeat;
 	}
 }
 
@@ -274,7 +255,7 @@ export default {
 
 	.save-btn {
 		width: 690rpx;
-		height: 86rpx;
+		line-height: 86rpx;
 		background: linear-gradient(-90deg, #a36fff, #5336ff);
 		box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
 		border-radius: 43rpx;

@@ -2,42 +2,34 @@
 <template>
 	<view class="page_box">
 		<view class="head_box">
-			<cu-custom :isBack="true">
-				<block slot="backText">积分余额</block>
-				<block slot="content"></block>
-			</cu-custom>
-			<image class="bg" :src="$IMG_URL + '/imgs/user/integral_bg.png'" mode=""></image>
-			<view class="all-box x-c">
+			<u-navbar backIconColor="#333" :borderBottom="false" :background="navbar.background" :backTextStyle="navbar.backTextStyle" backText="积分余额"></u-navbar>
+			<view class="all-box u-flex-col u-row-center u-col-center">
 				<text class="all-num">{{ score }}</text>
-				<text class="all-title">当前积分</text>
+				<text class="all-title u-m-b-30">当前积分</text>
+				<image class="score-card-bg" :src="$IMG_URL + '/imgs/score/score_wallet_bg.png'" mode=""></image>
 			</view>
-			<view class="tab-box x-f">
-				<view class="tab-item y-f " @tap="onTab('all')"><text class="tab-name" :class="{ 'tab-active': tabDot === 'all' }">全部</text></view>
-				<view class="tab-item y-f " @tap="onTab('add')"><text class="tab-name" :class="{ 'tab-active': tabDot === 'add' }">收入</text></view>
-				<view class="tab-item y-f " @tap="onTab('reduce')"><text class="tab-name" :class="{ 'tab-active': tabDot === 'reduce' }">支出</text></view>
+			<view class="tab-box u-flex">
+				<view class="tab-item u-flex u-row-center " @tap="onTab('all')"><view class="tab-name" :class="{ 'tab-active': tabCur === 'all' }">全部</view></view>
+				<view class="tab-item u-flex u-row-center" @tap="onTab('add')"><view class="tab-name" :class="{ 'tab-active': tabCur === 'add' }">收入</view></view>
+				<view class="tab-item u-flex u-row-center" @tap="onTab('reduce')"><view class="tab-name" :class="{ 'tab-active': tabCur === 'reduce' }">支出</view></view>
 			</view>
 		</view>
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<view class="item-box x-bc" v-for="log in scoreLog" :key="log.id">
-					<view class="y-start">
+				<view class="item-box u-flex u-row-between" v-for="log in scoreLog" :key="log.id">
+					<view class="u-flex-col">
 						<view class="name">{{ log.type_name }}</view>
-						<view class="time">{{ timestamp(log.createtime) }}</view>
+						<view class="time">{{ $u.timeFormat(log.createtime) }}</view>
 					</view>
-					<view class="num" v-if="log.wallet >= 0">{{ log.wallet }}</view>
-					<view class="num" v-else>{{ log.wallet }}</view>
+					<view class="num font-OPPOSANS" v-if="log.wallet >= 0">{{ log.wallet }}</view>
+					<view class="num font-OPPOSANS" v-else>{{ log.wallet }}</view>
 				</view>
+				<!-- 空置页 -->
+				<shopro-empty v-show="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/comment_empty.png'" tipText="暂无数据~"></shopro-empty>
 				<!-- 更多 -->
 				<u-loadmore v-if="scoreLog.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
-		<view class="foot_box"></view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
 	</view>
 </template>
 
@@ -47,9 +39,18 @@ export default {
 	components: {},
 	data() {
 		return {
-			tabDot: 'all',
+			isEmpty: false,
+			navbar: {
+				background: {
+					background: 'none'
+				},
+				backTextStyle: {
+					color: '#333',
+					fontSize: '36rpx'
+				}
+			},
+			tabCur: 'all',
 			scoreLog: [],
-			timestamp: this.$tools.timestamp,
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
@@ -71,28 +72,27 @@ export default {
 			}
 		},
 		onTab(type) {
-			this.tabDot = type;
-			this.scoreLog = [];
-			this.currentPage = 1;
-			this.$u.debounce(this.getScoreLog);
+			if (this.tabCur !== type) {
+				this.tabCur = type;
+				this.scoreLog = [];
+				this.currentPage = 1;
+				this.getScoreLog();
+			}
 		},
 		// 积分明细
 		getScoreLog(type) {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$api('user_wallet_log', {
-				wallet_type: 'score ',
-				status: that.tabDot,
+			that.$http('money.walletLog', {
+				wallet_type: 'score',
+				status: that.tabCur,
 				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
-					that.scoreLog = [...that.scoreLog, ...res.data.data];
+					that.scoreLog = [...that.scoreLog, ...res.data.wallet_logs.data];
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.isEmpty = !that.scoreLog.length;
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		}
@@ -101,53 +101,30 @@ export default {
 </script>
 
 <style lang="scss">
-.scroll-box {
-	flex: 1;
-	height: 100%;
-	padding: 0 30rpx;
-}
 .page_box {
 	background: #fff;
 	.head_box {
 		width: 750rpx;
 		height: 480rpx;
-		background: linear-gradient(180deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 56.99999999999999%, rgba(255, 255, 255, 1) 100%);
+		background: linear-gradient(180deg, rgba(239, 196, 128, 1) 0%, rgba(248, 220, 165, 1) 40%, rgba(255, 255, 255, 1) 100%) no-repeat;
 		position: relative;
-		.bg {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
-			width: 310rpx;
-			height: 310rpx;
-		}
 		.all-box {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
-			width: 180rpx;
-			height: 180rpx;
+			height: 360rpx;
+			padding-bottom: var(--status-bar-height);
 			.all-num {
 				font-size: 50rpx;
-				font-family: PingFang SC;
 				font-weight: 500;
 				color: #a8700d;
 				margin-bottom: 20rpx;
 			}
 			.all-title {
-				position: absolute;
 				font-size: 24rpx;
-				font-family: PingFang SC;
 				font-weight: 500;
 				color: rgba(168, 112, 13, 1);
-				line-height: 54rpx;
-				text-align: center;
-				width: 154rpx;
-				height: 53rpx;
-				background: linear-gradient(90deg, rgba(233, 180, 97, 1), rgba(238, 204, 137, 1));
-				border-radius: 27rpx;
-				bottom: -16rpx;
+			}
+			.score-card-bg {
+				width: 100%;
+				height: 90rpx;
 			}
 		}
 		.tab-box {
@@ -164,6 +141,7 @@ export default {
 			.tab-item {
 				flex: 1;
 				.tab-name {
+					display: inline-block;
 					font-size: 30rpx;
 					font-family: Noto Sans S Chinese;
 					font-weight: 400;
@@ -185,7 +163,7 @@ export default {
 	padding: 30rpx;
 	.name {
 		font-size: 28rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(102, 102, 102, 1);
 		line-height: 28rpx;
@@ -193,14 +171,14 @@ export default {
 	}
 	.time {
 		font-size: 24rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(196, 196, 196, 1);
 		line-height: 24px;
 	}
 	.num {
 		font-size: 30rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: #e6b873;
 	}

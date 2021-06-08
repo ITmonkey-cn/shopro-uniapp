@@ -10,7 +10,7 @@
 						mode="aspectFill"
 					></image>
 					<!-- 购物车角标 -->
-					<view v-if="tab.path == '/pages/index/cart' && cartNum" class="cu-tag badge">{{ cartNum }}</view>
+					<view v-if="tab.path == '/pages/index/cart' && cartNum" class="badge">{{ cartNum }}</view>
 				</view>
 
 				<view
@@ -29,52 +29,46 @@
 /**
  * 自定义底部导航
  * @property {Array} tabbarList - vuex初始化的底部导航数据
- * @property {String} currentPath -computed解析当前页面路径，还有携带参数。
+ * @property {String} currentPath -computed解析当前页面路径。
  */
 import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
+import { router } from '@/shopro/router';
 export default {
 	name: 'shoproTabbar',
 	components: {},
 	data() {
 		return {};
 	},
-	props: {
-		queryObj: {}
-	},
 	computed: {
 		...mapState({
-			templateData: state => state.init.templateData.tabbar,
-			cartNum: state => state.cart.cartNum
+			tabbarInfo: ({ shopro }) => shopro?.template?.tabbar,
+			cartNum: ({ cart }) => cart.cartNum
 		}),
+		// 底部导航栏配置数据
 		tabbarData() {
-			if (this.templateData) {
-				return this.templateData[0].content;
+			if (this.tabbarInfo) {
+				return this.tabbarInfo[0].content;
 			}
 		},
+		// 底部导航栏列表
 		tabbarList() {
 			if (this.tabbarData) {
 				return this.tabbarData.list;
 			}
 		},
+
+		/**
+		 * 当前页面路径
+		 * 去掉首页携带的参数拼接，后台装修是不会带参数
+		 */
 		currentPath() {
-			let pages = getCurrentPages();
-			let query = this.queryObj ? this.queryObj : this.$Route.query;
-			let currPage = this.$Route.path;
-			if (Object.keys(query).length && currPage !== '/pages/index/index') {
-				let params = '';
-				for (let key in query) {
-					params += '?' + key + '=' + query[key] + '&';
-				}
-				params = params.substring(0, params.length - 1);
-				return currPage + params;
-			}
-			return currPage;
+			return this.$Route.path === '/pages/index/index' ? this.$Route.path : this.$Route.fullPath;
 		},
+		// 后台tabbarList数据中必需含有'/pages/index/index',不然逻辑混乱
 		showTabbar() {
 			if (this.tabbarData && this.tabbarData.list) {
-				let arr = [];
+				let arr = ['/pages/index/index'];
 				let path = '';
-				arr.push('/pages/index/index');
 				for (let item of this.tabbarData.list) {
 					arr.push(item.path);
 				}
@@ -82,11 +76,10 @@ export default {
 			}
 		}
 	},
-	created() {},
 	methods: {
 		// 切换tabbar
 		switchTabbar(tab, index) {
-			this.$tools.routerTo(tab.path, {}, true);
+			this.$tools.routerTo(tab.path, true);
 		}
 	}
 };
@@ -123,18 +116,37 @@ export default {
 			.img-box {
 				position: relative;
 
-				.cu-tag {
-					right: -12px;
+				.badge {
+					position: absolute;
+					/* #ifndef APP-NVUE */
+					display: inline-flex;
+					/* #endif */
+					justify-content: center;
+					align-items: center;
+					line-height: 24rpx;
+					padding: 4rpx 10rpx;
+					border-radius: 100rpx;
+					color: #fff;
+					font-size: 24rpx;
+					z-index: 9;
+					background-color: $u-type-error;
+					transform: scale(0.8);
+					transform-origin: center center;
+					top: 0;
+					left: 46rpx;
+					white-space: nowrap;
 				}
 			}
 
 			.tabbar-icon {
 				width: 50rpx;
 				height: 50rpx;
+				display: block;
 			}
 
 			.tabbar-text {
 				font-size: 20rpx;
+				margin-top: 4rpx;
 			}
 		}
 	}

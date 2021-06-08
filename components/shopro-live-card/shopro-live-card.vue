@@ -1,30 +1,44 @@
 <template>
-	<view class="sp-live-card" :style="{ width: wh + 'rpx' }">
-		<view class="live-content" @tap="goRoom" :style="{ width: wh + 'rpx' }">
-			<image class="item-cover" :src="detail.share_img" mode="aspectFill"></image>
-			<view class="item-status">
-				<image class="status-img" :src="liveStatus[detail.live_status].img" mode=""></image>
-				<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
-			</view>
-			<view class="item-title" :style="{ width: wh + 'rpx' }">{{ detail.name }}</view>
-		</view>
-		<view class="live-bottom" :style="{ width: wh + 'rpx' }">
-			<view class="live-info">
-				<view class="info-box">
-					<view class="info-name">{{ detail.anchor_name }}</view>
+	<view class="live-card-wrap">
+		<!-- 小卡片 -->
+		<view class="sp-live-card" v-if="type == 2" :style="{ width: wh + 'rpx' }">
+			<view class="live-content" @tap="goRoom" :style="{ width: wh + 'rpx' }">
+				<image class="item-cover" :src="detail.share_img" mode="aspectFill"></image>
+				<view class="item-status">
+					<image class="status-img" :src="liveStatus[detail.live_status].img" mode=""></image>
+					<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
 				</view>
+				<view class="item-title u-ellipsis-1" :style="{ width: wh + 'rpx' }">{{ detail.name }}</view>
 			</view>
-			<slot name="liveGoods">
-				<view class="live-goods" v-if="detail.goods.length">
-					<view class="live-goods__item" v-for="(goods, index) in detail.goods" :key="goods.id" v-if="index < 3">
-						<image class="live-goods__img" :src="goods.cover_img" mode=""></image>
-						<view class="live-goods__price" v-if="index < 2">￥{{ goods.price }}</view>
-						<view class="live-goods__mark" v-else>
-							<text>{{ detail.goods.length }}+</text>
-						</view>
+			<view class="live-bottom" :style="{ width: wh + 'rpx' }">
+				<view class="live-info">
+					<view class="info-box">
+						<view class="info-name u-ellipsis-1" :style="{ width: wh + 'rpx' }">{{ detail.anchor_name }}</view>
 					</view>
 				</view>
-			</slot>
+				<slot name="liveGoods">
+					<view class="live-goods" v-if="detail.goods.length">
+						<view class="live-goods__item" v-for="(goods, index) in detail.goods" :key="goods.id" v-if="index < 3">
+							<image class="live-goods__img" :src="goods.cover_img" mode=""></image>
+							<view class="live-goods__price" v-if="index < 2">￥{{ goods.price }}</view>
+							<view class="live-goods__mark" v-else>
+								<text>{{ detail.goods.length }}+</text>
+							</view>
+						</view>
+					</view>
+				</slot>
+			</view>
+		</view>
+		<!-- 大卡片 -->
+		<view class="big-card-wrap" v-if="type == 1">
+			<view class="content-one__item" @tap="goRoom">
+				<image class="item-cover" :src="detail.share_img" mode="widthFix"></image>
+				<view class="item-status">
+					<image class="status-img" :src="liveStatus[detail.live_status].img" mode=""></image>
+					<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
+				</view>
+				<view class="item-title u-ellipsis-1">{{ detail.name }}</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -34,6 +48,7 @@
  * 小程序直播显示卡片
  * @property {Object} detail - 直播卡片显示数据
  * @property {Number} wh = [345] - 直播卡片宽度
+ * @property {Number|String} style = 2 - 1:大卡片；2:：小卡片
  */
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
@@ -63,7 +78,7 @@ export default {
 					title: '已结束'
 				},
 				'104': {
-					img:this.$IMG_URL + '/imgs/live/104.png',
+					img: this.$IMG_URL + '/imgs/live/104.png',
 					title: '禁播'
 				},
 				'105': {
@@ -89,6 +104,10 @@ export default {
 		wh: {
 			type: Number,
 			default: 345
+		},
+		type: {
+			type: [Number, String],
+			default: 2
 		}
 	},
 
@@ -104,6 +123,7 @@ export default {
 	},
 	beforeDestroy() {
 		timer = null;
+		clearInterval(timer);
 	},
 	methods: {
 		goRoom() {
@@ -117,8 +137,9 @@ export default {
 			if (HAS_LIVE) {
 				let that = this;
 				let date = '';
+
 				if (that.detail.live_status == 102) {
-					date = that.$tools.dateFormat('mm-dd HH:MM', new Date(that.detail.starttime * 1000)).replace('-', '/');
+					date = that.$u.timeFormat(that.detail.starttime, 'mm-dd hh:MM');
 					that.liveStatus['102'].title = '预告 ' + date;
 				}
 				livePlayer
@@ -137,18 +158,18 @@ export default {
 </script>
 
 <style lang="scss">
+// 小卡片
 .sp-live-card {
-	width: 344rpx;
+	width: 335rpx;
 	box-shadow: 0px 0px 10rpx 4rpx rgba(199, 199, 199, 0.22);
 	border-radius: 20rpx;
 	height: 100%;
 	overflow: auto;
-	margin-bottom: 20rpx;
 }
 .live-content {
 	position: relative;
-	width: 344rpx;
-	height: 344rpx;
+	width: 335rpx;
+	height: 335rpx;
 	overflow: hidden;
 	.item-cover {
 		background-color: #eee;
@@ -163,31 +184,31 @@ export default {
 		height: 40rpx;
 		background: rgba(0, 0, 0, 0.4);
 		border-radius: 20rpx;
-		@include flex($justify: center, $align: center);
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		.status-img {
 			width: 40rpx;
 			height: 40rpx;
 		}
 		.status-text {
 			font-size: 22rpx;
-			font-family: PingFang SC;
+
 			font-weight: 500;
 			color: rgba(255, 255, 255, 1);
 			padding: 0 10rpx;
 		}
 	}
 	.item-title {
-		width: 345rpx;
+		width: 335rpx;
 		position: absolute;
 		bottom: 0;
 		line-height: 60rpx;
 		padding: 0 20rpx;
 		font-size: 26rpx;
-		font-family: PingFang SC;
 		font-weight: 500;
 		color: rgba(255, 255, 255, 1);
 		background: linear-gradient(transparent, rgba(#000, 0.5));
-		@include ellipsis(1);
 		padding-right: 60rpx;
 	}
 	.like-img {
@@ -201,12 +222,15 @@ export default {
 .live-bottom {
 	background-color: #fff;
 	padding: 20rpx;
-	width: 345rpx;
+	width: 335rpx;
 	.live-info {
-		@include flex($justify: between, $align: center);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		width: 100%;
 		.info-box {
-			@include flex($align: center);
+			display: flex;
+			align-items: center;
 		}
 		.info-avatar {
 			width: 40rpx;
@@ -217,21 +241,20 @@ export default {
 		}
 		.info-name {
 			width: 150rpx;
-			@include ellipsis(1);
 			font-size: 24rpx;
-			font-family: PingFang SC;
+
 			font-weight: 500;
 			color: rgba(51, 51, 51, 1);
 		}
 		.views {
 			font-size: 20rpx;
-			font-family: PingFang SC;
 			font-weight: 400;
 			color: rgba(153, 153, 153, 1);
 		}
 	}
 	.live-goods {
-		@include flex($align: center);
+		display: flex;
+		align-items: center;
 		margin-top: 20rpx;
 		&__item {
 			position: relative;
@@ -266,12 +289,69 @@ export default {
 			top: 0;
 			left: 0;
 			margin: auto;
-			@include flex($justify: center, $align: center);
+			display: flex;
+			justify-content: center;
+			align-items: center;
 			background: rgba(#000, 0.3);
 			font-size: 24rpx;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 1);
+		}
+	}
+}
+// 单个大图直播
+.big-card-wrap {
+	.content-one__item {
+		position: relative;
+		height: 280rpx;
+		border-radius: 20rpx;
+		margin-top: 16rpx;
+		overflow: hidden;
+		.item-cover {
+			background-color: #eee;
+			width: 100%;
+			height: 100%;
+		}
+		.item-status {
+			position: absolute;
+			top: 20rpx;
+			left: 10rpx;
+			height: 40rpx;
+			background: rgba(0, 0, 0, 0.4);
+			border-radius: 20rpx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.status-img {
+				width: 38rpx;
+				height: 38rpx;
+			}
+			.status-text {
+				font-size: 22rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(255, 255, 255, 1);
+				padding: 0 10rpx;
+			}
+		}
+		.item-title {
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			line-height: 60rpx;
+			padding: 0 20rpx;
+			font-size: 26rpx;
 			font-family: PingFang SC;
 			font-weight: 500;
 			color: rgba(255, 255, 255, 1);
+			background: linear-gradient(transparent, rgba(#000, 0.5));
+		}
+		.like-img {
+			position: absolute;
+			bottom: 20rpx;
+			right: 10rpx;
+			width: 60rpx;
+			height: 130rpx;
 		}
 	}
 }

@@ -1,181 +1,174 @@
 <!-- 商家中心 -->
 <template>
-	<view class="">
-		<view class="mask" v-if="isShowDropDown" cathctouchmove @tap.stop="onHideDropDown"></view>
-		<!-- 商家信息 -->
+	<view class="merchant-wrap">
 		<view class="shopinfo-box">
-			<image class="user-bg" :src="$IMG_URL + '/imgs/shop_headbg.png'" mode=""></image>
-			<view class="head-wrap">
-				<view class="titleNav pad">
-					<view class="status-bar"></view>
-					<text class="nav-title x-f">商家中心</text>
-				</view>
-				<view class="user-head x-bc">
-					<view class="shop-info">
-						<view class="x-f mb30" @tap="goStoreList">
-							<text class="shop-title">{{ storeDetail.name }}</text>
-							<text class="cuIcon-roundrightfill"></text>
-						</view>
-						<view class="shop-address" @tap="jump('/pages/app/merchant/info')">
-							{{ storeDetail.province_name || '' }}{{ storeDetail.city_name || '' }}{{ storeDetail.area_name || '' }}{{ storeDetail.address || '' }}
-						</view>
+			<!-- 标题栏 -->
+			<u-navbar backIconName="" :isFixed="false" :borderBottom="false" :background="navbar.background" :backTextStyle="navbar.backTextStyle" backText="商家中心"></u-navbar>
+			<!-- 商家信息 -->
+			<view class="user-head u-flex u-row-between">
+				<view class="shop-info">
+					<view class="u-flex u-m-b-10" @tap="goStoreList">
+						<text class="shop-title u-m-r-20">{{ storeDetail.name }}</text>
+						<text class="iconfont iconxiala"></text>
 					</view>
-
-					<button v-if="true" @tap="jump('/pages/index/user')" class="cu-btn merchant-btn">切换个人版</button>
+					<view class="shop-address" @tap="jump('/pages/app/merchant/info')">
+						{{ storeDetail.province_name || '' }}{{ storeDetail.city_name || '' }}{{ storeDetail.area_name || '' }}{{ storeDetail.address || '' }}
+					</view>
 				</view>
+				<button @tap="$Router.pushTab('/pages/index/user')" class="u-reset-button merchant-btn">切换个人版</button>
 			</view>
 		</view>
-		<!-- 信息卡片 -->
-		<view class="info-card-box x-bc">
+
+		<!-- 核销卡片 -->
+		<view class="info-card-box u-flex u-row-between">
 			<view class="info-card">
 				<image class="card-bg" :src="$IMG_URL + '/imgs/user/shop_info.png'" mode="aspectFill"></image>
-				<view class="card-content y-c">
+				<view class="card-content u-flex-col">
 					<view class="card-title">输码核销</view>
-					<view class="x-f card-detail-box" @tap="onEditCode">
-						<text class="cuIcon-edit card-icon"></text>
-						<text class="card-detail">输码</text>
+					<view class="u-flex card-detail-box" @tap="showInputModal = true">
+						<text class="iconfont icon21shuru icon-color1"></text>
+						<text class="icon-color1 u-m-l-20">输码</text>
 					</view>
 				</view>
 			</view>
 			<view class="info-card" @tap="scanCode">
 				<image class="card-bg" :src="$IMG_URL + '/imgs/user/shop_qrcode.png'" mode="aspectFill"></image>
-				<view class="card-content y-c">
+				<view class="card-content u-flex-col">
 					<view class="card-title">扫码核销</view>
-					<view class="x-f card-detail-box">
-						<text class="cuIcon-qr_code card-icon" style="color: #129BF9;"></text>
-						<text class="card-detail" style="color: #129BF9;">扫码</text>
+					<view class="u-flex card-detail-box">
+						<text class="iconfont iconicon-test1  icon-color2"></text>
+						<text class="icon-color2 u-m-l-20">扫码</text>
 					</view>
 				</view>
 			</view>
 		</view>
-		<!-- 核销商品信息 -->
+
 		<view class="cancel-shop-box">
-			<view class="cancel-nav x-f">
-				<view class="nav-item x-f" v-for="nav in cancelTypeList" :key="nav.id" @tap="onNav(nav.type)">
-					<view class="y-f" style="width: 100%;">
-						<view class="item-title x-f" :class="{ 'title-active': cancelType === nav.type }">
-							<text>{{ nav.title }}</text>
-							<view :class="{ 'icon-active': cancelType === nav.type }">
-								<text class="cuIcon-triangledownfill" :class="{ 'icon-active': cancelType === nav.type }"></text>
-							</view>
-						</view>
-						<text class="nav-line" :class="{ 'line-active': cancelType === nav.type }"></text>
-					</view>
-				</view>
-				<!-- 下拉窗 -->
-				<view class="drop-down-box" :class="{ 'hide-drop-down': !isShowDropDown }">
-					<view class="drop-down-item x-bc" v-for="(item, index) in dropDown[cancelType]" :key="index" @tap="onFilter(item.value, item.title)">
-						<text class="item-title">{{ item.title }}</text>
-						<text class="cuIcon-check" v-if="filter[cancelType] == item.value"></text>
-					</view>
-				</view>
+			<!-- 筛选框 -->
+			<view class="cancel-nav u-flex">
+				<u-dropdown ref="uDropdown" activeColor="#4cb89d" :borderBottom="false">
+					<u-dropdown-item v-model="filter1Value" @change="changeFilter1" :title="filter1Label" :options="filterList1"></u-dropdown-item>
+					<u-dropdown-item v-model="filter2Value" @change="changeFilter2" :title="filter2Label" :options="filterList2"></u-dropdown-item>
+				</u-dropdown>
 			</view>
 			<!-- 销量 -->
-			<view class="sales-volume-box x-bc pa30">
-				<view class="sales-volume x-c">订单量(单)：{{ orderInfo.total_num || 0 }}</view>
-				<view class="sales-volume x-c">交易额(元)：{{ orderInfo.total_money || 0 }}</view>
+			<view class="sales-volume-box u-flex u-row-between u-p-30">
+				<view class="sales-volume u-flex u-row-center u-col-center">订单量(单)：{{ orderInfo.total_num || 0 }}</view>
+				<view class="sales-volume u-flex u-row-center u-col-center">交易额(元)：{{ orderInfo.total_money || 0 }}</view>
 			</view>
 		</view>
+
 		<!-- 订单列表 -->
-		<view class="order-list" v-for="order in storeOrderList" :key="order.order_sn" @tap.stop="jump('/pages/app/merchant/detail', { orderId: order.id })">
-			<view class="order-head x-bc">
+		<view class="order-list" v-for="order in storeOrderList" :key="order.order_sn" @tap="jump('/pages/app/merchant/detail', { orderId: order.id })">
+			<view class="order-head u-flex u-row-between">
 				<text class="no">订单编号：{{ order.order_sn }}</text>
 				<text class="state">{{ order.status_name }}</text>
 			</view>
 			<view class="goods-order" v-for="item in order.item" :key="item.id">
-				<view class="order-content"><shopro-mini-card :type="'order'" :detail="item"></shopro-mini-card></view>
+				<shopro-mini-card :title="item.goods_title" :image="item.goods_image">
+					<template #describe>
+						<view class="order-sku u-ellipsis-1">
+							<text class="order-num">数量:{{ item.goods_num || 0 }};</text>
+							{{ item.goods_sku_text ? item.goods_sku_text : '' }}
+						</view>
+					</template>
+					<template #cardBottom>
+						<view class="order-price-box u-flex ">
+							<text class="order-price font-OPPOSANS">￥{{ item.goods_price || 0 }}</text>
+							<button class="u-reset-button status-btn" v-if="item.status_name">{{ item.status_name }}</button>
+						</view>
+					</template>
+				</shopro-mini-card>
 			</view>
-			<view class="order-bottom x-f">
+			<view class="order-bottom u-flex">
 				<text class="total-price-title">实付款：</text>
 				<text class="total-price">{{ order.pay_fee }}</text>
 			</view>
 		</view>
 
+		<!-- 置空页 -->
+		<u-empty :show="isEmpty" margin-top="160" mode="list"></u-empty>
+
 		<!-- 更多 -->
 		<u-loadmore v-if="storeOrderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-
 		<!-- 日期选择 -->
 		<u-calendar
 			v-model="showCalendar"
-			:mode="mode"
-			:start-text="startText"
-			:end-text="endText"
-			:range-color="rangeColor"
-			:range-bg-color="rangeBgColor"
-			:active-bg-color="activeBgColor"
+			safeAreaInsetBottom
+			mode="range"
+			start-text="开始"
+			end-text="结束"
+			range-color="#4CB89D"
+			range-bg-color="rgba(76,184,157,0.13)"
+			active-bg-color="#4CB89D"
+			:customStyle="{ background: 'linear-gradient(90deg, #4cb89d, #4CB89D)', boxShadow: '0 7rpx 11rpx 2rpx rgba(4cb89d, 0.34)' }"
 			btnType="success"
 			@change="selDate"
 		></u-calendar>
 		<!-- 输码弹窗 -->
-		<shopro-modal v-model="showInputModal" style="z-index: 88;">
-			<block slot="modalContent">
-				<view class="modal-box">
-					<view class="modal-head">
-						<image class="modal-head-img" :src="$IMG_URL + '/imgs/modal/store_check.png'" mode=""></image>
-						<text class="modal-head-title">输码核销</text>
-					</view>
-					<input class="inp" type="number" v-model="qrcode" placeholder="在此输入核销码" placeholder-class="pl-inp" />
-					<button class="cu-btn post-btn" @tap="onConfirm">核销</button>
+		<u-popup v-model="showInputModal" mode="center" :closeable="true" close-icon-pos="top-left" border-radius="20">
+			<view class="modal-box u-flex-col u-col-center">
+				<view class="modal-head u-flex-col u-col-center">
+					<image class="modal-head-img" :src="$IMG_URL + '/imgs/modal/store_check.png'" mode=""></image>
+					<text class="modal-head-title">输码核销</text>
 				</view>
-			</block>
-		</shopro-modal>
+				<input class="inp" type="number" v-model="qrcode" placeholder="在此输入核销码" placeholder-class="pl-inp" />
+				<button class="u-reset-button post-btn" @tap="onConfirm">核销</button>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
 <script>
 import { mapMutations, mapActions, mapState } from 'vuex';
+import Auth from '@/shopro/permission/index.js';
 export default {
 	components: {},
 	data() {
 		return {
+			isEmpty: false,
+			navbar: {
+				//标题栏
+				background: {
+					background: 'none'
+				},
+				backTextStyle: {
+					color: '#fff',
+					fontSize: '40rpx',
+					fontWeight: '800'
+				}
+			},
+			// 筛选
+			filter1: 'today',
+			filter1Value: 0,
+			filter1Label: '今日',
+			filterList1: [
+				{ label: '今日', value: 0, parmas: 'today' },
+				{ label: '昨日', value: 1, parmas: 'yesterday' },
+				{ label: '本周', value: 2, parmas: 'week' },
+				{ label: '本月', value: 3, parmas: 'month' },
+				{ label: '自定义', value: 4, parmas: 'custom' }
+			],
+			filter2: 'all',
+			filter2Value: 0,
+			filter2Label: '全部',
+			filterList2: [
+				{ label: '全部', value: 0, parmas: 'all' },
+				{ label: '待发货', value: 1, parmas: 'nosend' },
+				{ label: '待完成', value: 2, parmas: 'noget' },
+				{ label: '已完成', value: 3, parmas: 'finish' }
+			],
+			custom: [], //自定义日期
+
 			storeOrderList: [], //订单商品列表
 			orderInfo: {}, //订单统计信息
 			storeDetail: {}, //门店信息
 			cancelType: '', //核销分类
 			scanCodes: [], //扫码内容。
-			cancelTypeList: [
-				{
-					id: 0,
-					title: '今日',
-					type: 'date'
-				},
-				{
-					id: 1,
-					title: '全部',
-					type: 'status'
-				}
-			],
 			showInputModal: false, //输码核销
 			qrcode: '', //输码
 			showCalendar: false, //日期选择
-			mode: 'range',
-			result: '请选择日期',
-			startText: '开始',
-			endText: '结束',
-			rangeColor: '#4CB89D',
-			rangeBgColor: 'rgba(76,184,157,0.13)',
-			activeBgColor: '#4CB89D',
-			isShowDropDown: false, //是否显示下拉菜单
-			filter: {
-				date: 'today',
-				status: 'all',
-				custom: []
-			},
-			dropDown: {
-				date: [
-					{ title: '今日', value: 'today', isChecked: false },
-					{ title: '昨日', value: 'yesterday', isChecked: false },
-					{ title: '本周', value: 'week', isChecked: false },
-					{ title: '本月', value: 'month', isChecked: false },
-					{ title: '自定义', value: 'custom', isChecked: false }
-				],
-				status: [
-					{ title: '全部', value: 'all', isChecked: false },
-					{ title: '待发货', value: 'nosend', isChecked: false },
-					{ title: '待完成', value: 'noget', isChecked: false },
-					{ title: '已完成', value: 'finish', isChecked: true }
-				]
-			},
+
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1
@@ -183,15 +176,19 @@ export default {
 	},
 	computed: {},
 	onLoad(options) {
-		if (options.storeId) {
-			uni.setStorageSync('storeId', options.storeId);
-		}
+		options.storeId && uni.setStorageSync('storeId', options.storeId);
 		this.getStoreDetail();
+	},
+	onShow() {
+		this.currentPage = 1;
+		this.lastPage = 1;
+		this.storeOrderList = [];
 		this.getStoreOrder();
 	},
 	onPullDownRefresh() {
-		this.storeOrderList = [];
 		this.currentPage = 1;
+		this.lastPage = 1;
+		this.storeOrderList = [];
 		this.getStoreOrder();
 	},
 	onReachBottom() {
@@ -207,16 +204,34 @@ export default {
 				query: query
 			});
 		},
+
+		// 筛选
+		changeFilter1(e) {
+			if (e === 4) {
+				this.showCalendar = true;
+			} else {
+				this.filter1 = this.filterList1[e].parmas;
+				this.filter1Label = this.filterList1[e].label;
+				this.onFilter();
+			}
+		},
+		changeFilter2(e) {
+			this.filter2 = this.filterList2[e].parmas;
+			this.filter2Label = this.filterList2[e].label;
+			this.onFilter();
+		},
+
 		// 选择门店
 		goStoreList() {
 			this.$Router.replace({
 				path: '/pages/app/merchant/list'
 			});
 		},
+
 		// 获取门店信息
 		getStoreDetail() {
 			let that = this;
-			that.$api('store.info', {
+			that.$http('store.info', {
 				store_id: uni.getStorageSync('storeId')
 			}).then(res => {
 				if (res.code === 1) {
@@ -226,59 +241,55 @@ export default {
 		},
 
 		// 扫码
-		scanCode() {
-			let platform = uni.getStorageSync('platform');
-			switch (platform) {
-				case 'wxOfficialAccount':
-					// #ifdef H5
-					this.$wxsdk.scanQRCode(res => {
-						this.scanCodes = res.resultStr.split(',');
-						this.postOrderConfirm();
-					});
-					// #endif
-					break;
-				case 'wxMiniProgram' || 'App':
-					uni.scanCode({
-						success: res => {
-							this.scanCodes = res.result.split(',');
-							this.postOrderConfirm();
-						},
-						fail: err => {
-							console.log(err);
-						}
-					});
-					break;
-				case 'App':
-					uni.scanCode({
-						success: res => {
-							this.scanCodes = res.result.split(',');
-							this.postOrderConfirm();
-						},
-						fail: err => {
-							console.log(err);
-						}
-					});
-					break;
-				default:
-					this.$tools.toast('请使用小程序或微信浏览器');
+		async scanCode() {
+			let platform = this.$platform.get();
+			let authState = await new Auth('camera').check();
+			// #ifdef H5
+			if (platform === 'H5') {
+				this.$u.toast('普通浏览器不支持扫码功能，请使用小程序或微信内浏览器');
+			} else {
+				this.$wxsdk.scanQRCode(res => {
+					this.scanCodes = res.resultStr.split(',');
+					this.postOrderConfirm();
+				});
 			}
+			// #endif
+
+			// #ifndef H5
+			authState &&
+				uni.scanCode({
+					success: res => {
+						this.scanCodes = res.result.split(',');
+						this.postOrderConfirm();
+					},
+					fail: err => {
+						console.log(err);
+					}
+				});
+			// #endif
 		},
 
 		// 输码
 		onConfirm() {
 			this.showInputModal = false;
+			this.scanCodes = [];
 			this.scanCodes.push(this.qrcode);
 			this.postOrderConfirm();
 		},
 		// 核销
 		postOrderConfirm() {
 			let that = this;
-			that.$api('store.orderConfirm', {
+			that.$http('store.orderConfirm', {
 				codes: that.scanCodes,
 				store_id: uni.getStorageSync('storeId')
-			}).then(res => {
+			}, '核销中...').then(res => {
+				uni.vibrateLong({
+					success: () => {
+						that.$u.toast(res.msg);
+					}
+				});
 				if (res.code === 1) {
-					that.$tools.toast(res.msg);
+					that.$u.toast(res.msg);
 					that.scanCodes = [];
 					that.storeOrderList = [];
 					that.qrcode = '';
@@ -286,71 +297,44 @@ export default {
 				}
 			});
 		},
+
 		// 门店订单列表
 		getStoreOrder() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$api('store.order', {
-				date_type: that.filter.date,
-				date: that.filter.custom,
-				type: that.filter.status,
+			that.$http('store.order', {
+				date_type: that.filter1,
+				date: that.custom,
+				type: that.filter2,
 				page: that.currentPage,
 				store_id: uni.getStorageSync('storeId')
-			}).then(res => {
+			}, '加载中...').then(res => {
+				uni.stopPullDownRefresh();
 				if (res.code == 1) {
-					uni.stopPullDownRefresh();
 					that.storeOrderList = [...that.storeOrderList, ...res.data.result.data];
+					that.isEmpty = !that.storeOrderList.length;
 					that.orderInfo = res.data;
 					that.lastPage = res.data.result.last_page;
-					if (that.currentPage < res.data.result.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.result.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		},
-		// 切换核销分类
-		onNav(type) {
-			this.isShowDropDown = this.cancelType == type ? false : true;
-			this.cancelType = this.cancelType == type ? '' : type;
-		},
+
 		// 选择日期
 		selDate(e) {
-			this.filter.custom.push(e.startDate);
-			this.filter.custom.push(e.endDate);
+			this.custom = [];
+			this.custom.push(e.startDate);
+			this.custom.push(e.endDate);
 			this.isShowDropDown = false;
-			this.cancelTypeList[0].title = `${e.startDate.replace(/-/g, ':')}-${e.endDate.replace(/-/g, ':')}`;
-			this.storeOrderList = [];
-			this.currentPage = 1;
-			this.getStoreOrder();
+			this.filter1Label = `${e.startDate.replace(/-/g, ':')}-${e.endDate.replace(/-/g, ':')}`;
+			this.onFilter();
 		},
-		// 下拉筛选
-		onHideDropDown() {
-			this.isShowDropDown = false;
-			this.cancelType = '';
-		},
+
 		// 选择筛选
 		onFilter(val, title) {
-			this.isShowDropDown = false;
-			if (val == 'custom') {
-				this.showCalendar = true;
-			}
-			if (this.cancelType == 'date') {
-				this.cancelTypeList[0].title = title;
-			}
-			if (this.cancelType == 'status') {
-				this.cancelTypeList[1].title = title;
-			}
-			this.filter[this.cancelType] = val;
 			this.storeOrderList = [];
 			this.currentPage = 1;
 			this.getStoreOrder();
-			this.cancelType = '';
-		},
-		//输码
-		onEditCode() {
-			this.showInputModal = true;
 		}
 	}
 };
@@ -366,68 +350,39 @@ export default {
 }
 // 商户信息
 .shopinfo-box {
-	position: relative;
+	background: url($IMG_URL+'/imgs/user/shop_headbg.png') no-repeat;
+	background-size: 100% 100%;
 	height: 320rpx;
-	.user-bg {
-		width: 100%;
-		height: 320rpx;
-	}
-	.head-wrap {
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 100%;
-		z-index: 9;
-		top: 0;
-		.nav-title {
-			font-size: 38rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: #fff;
-		}
-		.status-bar {
-			// #ifndef H5
-			height: var(--status-bar-height);
-			// #endif
-			// #ifdef H5
-			height: 50rpx;
-			// #endif
-			width: 700rpx;
-		}
-	}
-
 	.user-head {
-		padding-top: 50rpx;
+		padding-top: 10rpx;
 		.shop-info {
 			padding-left: 30rpx;
 			.shop-title {
 				font-size: 34rpx;
-				font-family: PingFang SC;
+
 				font-weight: bold;
 				color: rgba(255, 255, 255, 1);
 			}
-			.cuIcon-roundrightfill {
-				color: rgba(255, 255, 255, 1);
+			.iconxiala {
 				font-size: 34rpx;
-				margin-left: 10rpx;
-				transform: rotate(90deg);
+				color: rgba(255, 255, 255, 1);
 			}
 			.shop-address {
 				font-size: 28rpx;
-				font-family: PingFang SC;
+
 				font-weight: 500;
 				color: rgba(255, 255, 255, 1);
-				width: 560rpx;
+				width: 540rpx;
 			}
 		}
 		.merchant-btn {
 			padding: 0;
 			width: 136rpx;
-			height: 46rpx;
+			line-height: 46rpx;
 			background: rgba(255, 255, 255, 1);
 			border-radius: 23rpx 0px 0px 23rpx;
 			font-size: 20rpx;
-			font-family: PingFang SC;
+
 			font-weight: 500;
 			color: #3eb49c;
 		}
@@ -439,7 +394,7 @@ export default {
 	padding: 30rpx 20rpx;
 	.info-card {
 		position: relative;
-		width: 344rpx;
+		width: 350rpx;
 		height: 165rpx;
 		border-radius: 10rpx;
 		overflow: hidden;
@@ -457,7 +412,7 @@ export default {
 			padding: 30rpx 0 0 30rpx;
 			.card-title {
 				font-size: 28rpx;
-				font-family: PingFang SC;
+
 				font-weight: bold;
 				color: rgba(255, 255, 255, 1);
 			}
@@ -470,19 +425,16 @@ export default {
 				margin-top: 20rpx;
 				.card-detail {
 					font-size: 22rpx;
-					font-family: PingFang SC;
+
 					font-weight: 500;
-					color: rgba(0, 187, 206, 1);
 				}
-				.cuIcon-qr_code {
-					color: #0f98f9;
-				}
-				.cuIcon-edit {
+				.icon-color1 {
 					color: #00b6ce;
+					font-size: 24rpx;
 				}
-				.card-icon {
-					font-size: 36rpx;
-					margin-right: 14rpx;
+				.icon-color2 {
+					color: #0f98f9;
+					font-size: 24rpx;
 				}
 			}
 		}
@@ -508,7 +460,7 @@ export default {
 
 		.item-title {
 			font-size: 30rpx;
-			font-family: PingFang SC;
+
 			font-weight: 400;
 			color: #666;
 			line-height: 100rpx;
@@ -537,40 +489,7 @@ export default {
 		}
 	}
 }
-// 下拉窗
-.drop-down-box {
-	position: absolute;
-	z-index: 22;
-	width: 750rpx;
-	top: 110rpx;
-	background-color: #ffff;
-	box-shadow: 0px 15rpx 27rpx 0px rgba(203, 203, 203, 0.34);
-	transform: scaleX(1);
-	transition: all linear 0.1s;
-	.drop-down-item {
-		height: 80rpx;
-		border-bottom: 1rpx solid rgba(#dfdfdf, 0.5);
-		padding: 0 60rpx;
-		.item-title {
-			font-size: 24rpx;
-			color: #666;
-		}
-		.cuIcon-check {
-			color: #4cb89d;
-		}
-		.title-active {
-			color: #4cb89d;
-		}
-	}
-}
-.hide-drop-down {
-	top: 0;
-	width: 750rpx;
-	transform: scaleY(0);
-	opacity: 0;
-	transform-origin: top;
-	transition: all linear 0.1s;
-}
+
 // 销量
 .sales-volume-box {
 	background-color: #fff;
@@ -581,7 +500,6 @@ export default {
 		border: 1rpx solid rgba(185, 227, 217, 1);
 		border-radius: 10rpx;
 		font-size: 24rpx;
-		font-family: PingFang SC;
 		font-weight: 400;
 		color: rgba(76, 184, 157, 1);
 	}
@@ -592,47 +510,49 @@ export default {
 	width: 610rpx;
 	margin: 0 auto;
 	border-radius: 20rpx;
-	.modal-head-img {
+	.modal-head {
 		width: 100%;
-		height: 213rpx;
-	}
+		.modal-head-img {
+			width: 100%;
+			height: 213rpx;
+		}
+		.modal-head-title {
+			font-size: 35rpx;
 
-	.modal-head-title {
-		font-size: 35rpx;
-		font-family: PingFang SC;
-		font-weight: bold;
-		color: #343434;
-		line-height: 42rpx;
+			font-weight: bold;
+			color: #343434;
+			line-height: 42rpx;
+		}
 	}
-
 	.inp {
 		width: 501rpx;
 		height: 78rpx;
 		border: 1rpx solid #e5e5e5;
 		margin: 60rpx auto 40rpx;
 		font-size: 28rpx;
-		font-family: PingFang SC;
+
 		font-weight: 400;
 		color: #6d5028;
-
+		padding-left: 20rpx;
 		.pl-inp {
 			color: #9a9a9a;
 		}
 	}
 	.post-btn {
 		width: 492rpx;
-		height: 70rpx;
+		line-height: 70rpx;
 		background: linear-gradient(90deg, #2eae9c, #6cc29f);
 		box-shadow: 0px 7rpx 6rpx 0px rgba(#6cc29f, 0.22);
 		border-radius: 35rpx;
 		font-size: 28rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(255, 255, 255, 1);
 		padding: 0;
 		margin-bottom: 60rpx;
 	}
 }
+
 // 订单列表
 .order-list {
 	background: #fff;
@@ -674,6 +594,36 @@ export default {
 		border-bottom: 1px solid rgba(223, 223, 223, 0.5);
 		padding: 20rpx;
 		margin-bottom: 20rpx;
+		.order-sku {
+			font-size: 24rpx;
+
+			font-weight: 400;
+			color: rgba(153, 153, 153, 1);
+			width: 450rpx;
+			margin-bottom: 20rpx;
+			.order-num {
+				margin-right: 10rpx;
+			}
+		}
+		.order-price-box {
+			.status-btn {
+				height: 32rpx;
+				border: 1rpx solid rgba(207, 169, 114, 1);
+				border-radius: 15rpx;
+				font-size: 20rpx;
+				font-weight: 400;
+				color: rgba(168, 112, 13, 1);
+				padding: 0 10rpx;
+				margin-left: 20rpx;
+				background: rgba(233, 183, 102, 0.16);
+			}
+			.order-price {
+				font-size: 26rpx;
+
+				font-weight: 600;
+				color: rgba(51, 51, 51, 1);
+			}
+		}
 	}
 }
 </style>

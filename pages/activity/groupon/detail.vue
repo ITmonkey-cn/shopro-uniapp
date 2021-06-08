@@ -1,128 +1,144 @@
 <!-- 拼团详情 -->
 <template>
 	<view class="page_box">
+		<!-- 商品卡片 -->
 		<view class="head_box">
-			<view class="goods-card" v-if="grouponDetail.id">
-				<sh-activity-card
-					:cardId="grouponDetail.goods_id"
+			<view class="goods-card u-p-x-20 u-p-y-40" v-if="grouponDetail.id">
+				<shopro-mini-card
 					:title="grouponDetail.goods.title"
+					:image="grouponDetail.goods.image"
 					:subtitle="grouponDetail.goods.subtitle"
-					:img="grouponDetail.goods.image"
-					:price="grouponDetail.goods.groupon_price || grouponDetail.goods.price"
-					:originalPrice="grouponDetail.goods.original_price"
+					:price="grouponDetail.goods.groupon_price"
+					:originPrice="grouponDetail.goods.original_price"
 				>
-					<block slot="sell">
-						<view class="x-f">
+					<template #describe>
+						<view class="u-flex u-m-b-20">
 							<view class="sell-box">
-								<text class="cuIcon-hotfill"></text>
+								<text class=" hot-icon iconfont iconicon-test"></text>
 								<text class="sell-num">已拼{{ grouponDetail.goods.sales }}件</text>
 							</view>
-							<text class="group-num">{{ grouponDetail.num }}人团</text>
+							<text class="group-num">{{ grouponDetail.num || 0 }}人团</text>
 						</view>
-					</block>
-				</sh-activity-card>
+					</template>
+				</shopro-mini-card>
 			</view>
 		</view>
+
 		<view class="content_box">
-			<view class="y-bc group-box">
+			<view class="u-flex-col u-row-between group-box">
 				<!-- 拼团成功 -->
-				<view v-if="grouponDetail.status === 'finish' || grouponDetail.status === 'finish-fictitious'">
-					<view class="tip-box x-f" v-if="grouponDetail.my">
-						<text class="cuIcon-roundcheckfill"></text>
+				<view class="u-flex u-row-center u-col-center" v-if="grouponDetail.status === 'finish' || grouponDetail.status === 'finish-fictitious'">
+					<view class="tip-box u-flex" v-if="grouponDetail.my">
+						<u-icon class="u-m-r-10" name="checkmark-circle-fill" color="#42B111" size="34"></u-icon>
 						<text>恭喜您~拼团成功！</text>
 					</view>
-					<view class="tip-box x-f" v-else>
-						<text class="cuIcon-roundclosefill"></text>
+					<view class="tip-box u-flex" v-else>
+						<u-icon class="u-m-r-10" name="error-circle-fill" color="#E1212B" size="34"></u-icon>
 						<text>对不起~您来晚了，该团已满</text>
 					</view>
 				</view>
 
 				<!--  拼团失败-->
-				<view v-if="grouponDetail.status === 'invalid'">
-					<view class="tip-box x-f" v-if="grouponDetail.my">
-						<text class="cuIcon-roundclosefill"></text>
-						<text>对不起~拼团已过期！已全额退款</text>
-					</view>
-					<view class="tip-box x-f" v-else>
-						<text class="cuIcon-roundclosefill"></text>
-						<text>对不起~拼团已过期！您来晚了~</text>
+				<view class="u-flex u-row-center u-col-center" v-if="grouponDetail.status === 'invalid'">
+					<view class="tip-box u-flex">
+						<u-icon class="u-m-r-10" name="error-circle-fill" color="#E1212B" size="34"></u-icon>
+						<text>{{ grouponDetail.my ? '对不起~拼团已过期！已全额退款' : '对不起~拼团已过期！您来晚了~' }}</text>
 					</view>
 				</view>
+
 				<!-- 拼团中 -->
-				<view class="title-box x-f" v-if="grouponDetail.status === 'ing'">
-					<view class="title-text">
-						待成团，还差
-						<text class="group-num">{{ grouponDetail.num - grouponDetail.current_num }}</text>
-						人拼团成功
+				<view class="title-box u-flex u-row-center u-col-center" v-if="grouponDetail.status === 'ing'">
+					<!-- 活动结束 -->
+					<view class="" v-if="grouponDetail.activity_status === 'ended'">
+						<view class="tip-box u-flex">
+							<u-icon class="u-m-r-10" name="error-circle-fill" color="#E1212B" size="34"></u-icon>
+							<text>对不起~拼团活动已结束！您来晚了~</text>
+						</view>
 					</view>
-					<view class="count-down x-f" v-if="time">
-						<text class="count-down-tip">倒计时</text>
-						<view class="time-box x-f">
-							<view class="count-text">{{ time.h || '00' }}</view>
-							:
-							<view class="count-text">{{ time.m || '00' }}</view>
-							:
-							<view class="count-text">{{ time.s || '00' }}</view>
+					<view v-else class="u-flex u-col-center">
+						<view class="title-text">
+							待成团，还差
+							<text class="group-num">{{ grouponDetail.num - grouponDetail.current_num }}</text>
+							人拼团成功
+						</view>
+						<view class="count-down u-flex" v-if="time">
+							<text class="count-down-tip">倒计时</text>
+							<view class="time-box u-flex">
+								<view class="count-text">{{ time.h || '00' }}</view>
+								:
+								<view class="count-text">{{ time.m || '00' }}</view>
+								:
+								<view class="count-text">{{ time.s || '00' }}</view>
+							</view>
 						</view>
 					</view>
 				</view>
-				<view class="group-people x-f">
-					<view class="img-box" v-for="(team, index) in grouponDetail.groupon_log" :key="team.id">
+
+				<!-- 拼团人 -->
+				<view class="group-people u-flex u-row-center">
+					<view class="img-box" v-for="(team, index) in grouponDetail.groupon_log" :key="team.user_avatar">
 						<view class="tag" v-if="index == 0">团长</view>
 						<image class="avatar" :class="{ leader: index == 0 }" :src="team.user_avatar" mode="aspectFill"></image>
 					</view>
-					<view class="img-box" v-for="base in surplusNum" :key="base+'base'"><image class="avatar"  :src="$IMG_URL + '/imgs/groupon/base_groupon.png'" mode="aspectFill"></image></view>
+					<view class="img-box" v-for="(base, index) in surplusNum" :key="base" v-if="index < 100">
+						<image class="avatar" :src="$IMG_URL + '/imgs/group/base_group_avatar.png'" mode="aspectFill"></image>
+					</view>
 				</view>
-				<view class="btn-box x-c">
+
+				<!-- 底部按钮 -->
+				<view class="btn-box u-flex u-row-center u-col-center">
 					<!-- 拼团中 -->
 					<view v-if="grouponDetail.status === 'ing'">
-						<button class="cu-btn btn1" v-if="grouponDetail.my" @tap="onInvite">邀请好友参团</button>
-						<button class="cu-btn btn1" v-else @tap="onJoin">立即参团</button>
+						<block v-if="grouponDetail.activity_status === 'ended'">
+							<button class="u-reset-button btn2" v-if="grouponDetail.my" @tap.stop="jump('/pages/order/detail', { id: grouponDetail.my.order_id })">查看订单</button>
+						</block>
+						<block v-else>
+							<button class="u-reset-button btn1" v-if="grouponDetail.my" @tap="showShare = true">邀请好友参团</button>
+							<button class="u-reset-button btn1" v-else @tap="showSku = true">立即参团</button>
+						</block>
 					</view>
 					<!-- 拼团成功/失败-->
 					<view v-if="grouponDetail.status === 'finish' || grouponDetail.status === 'finish-fictitious' || grouponDetail.status === 'invalid'">
-						<button class="cu-btn btn2" v-if="grouponDetail.my" @tap.stop="jump('/pages/order/detail', { id: grouponDetail.my.order_id })">查看订单</button>
-						<button class="cu-btn btn1" v-else @tap="jump('/pages/goods/detail/index', { id: grouponDetail.goods_id })">我要开团</button>
+						<button class="u-reset-button btn2" v-if="grouponDetail.my" @tap.stop="jump('/pages/order/detail', { id: grouponDetail.my.order_id })">查看订单</button>
+						<button class="u-reset-button btn1" v-else @tap="jump('/pages/goods/detail', { id: grouponDetail.goods_id })">我要开团</button>
 					</view>
 				</view>
 			</view>
-			<view v-if="activity && activity.richtext_id" class="groupon-play x-bc" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
+
+			<!-- 玩法 -->
+			<view v-if="activity && activity.id" class="groupon-play u-flex u-row-between" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
 				<text class="title">玩法</text>
-				<view class="x-f">
-					<view class="description one-t">{{ activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
-					<text class="cuIcon-right"></text>
+				<view class="u-flex">
+					<view class="description u-ellipsis-1">{{ activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
+					<u-icon name="arrow-right" size="28" color="#666"></u-icon>
 				</view>
 			</view>
 		</view>
-		<view class="foot_box"></view>
+
 		<!-- 邀请好友 -->
-		<shopro-share v-model="showShare" v-if="grouponDetail.goods" :goodsInfo="grouponDetail" :posterType="'groupon'"></shopro-share>
-		<!-- sku -->
+		<shopro-share v-model="showShare" :shareDetail="shareInfo" 　 :posterInfo="grouponDetail" :posterType="'groupon'"></shopro-share>
+		<!-- 规格弹窗 -->
+
 		<shopro-sku
-			v-model="showSku"
 			v-if="grouponDetail.goods"
-			:grouponId="grouponDetail.id"
+			v-model="showSku"
+			:activityRules="{ status: grouponDetail.status }"
 			:goodsInfo="grouponDetail.goods"
-			:buyType="'buy'"
-			:grouponBuyType="'groupon'"
+			:grouponId="grouponDetail.id"
+			buyType="buy"
+			grouponBuyType="groupon"
 		></shopro-sku>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
+
 		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
 <script>
-import shActivityCard from '../children/sh-activity-card.vue';
+let timer = null;
+import share from '@/shopro/share';
 export default {
-	components: {
-		shActivityCard
-	},
+	components: {},
 	data() {
 		return {
 			time: 0,
@@ -140,6 +156,15 @@ export default {
 	onPullDownRefresh() {
 		this.getGrouponDetail();
 	},
+	onHide() {
+		clearInterval(timer);
+		timer = null;
+	},
+	// #ifdef H5
+	onUnload() {
+		share.setShareInfo();
+	},
+	// #endif
 	methods: {
 		// 路由跳转
 		jump(path, parmas) {
@@ -148,60 +173,60 @@ export default {
 				query: parmas
 			});
 		},
+
 		// 倒计时
 		countDown(t) {
-			let _self = this;
-			let timer = setInterval(() => {
+			const that = this;
+			timer = setInterval(() => {
 				if (t > 0) {
-					_self.time = _self.$tools.formatToHours(t);
+					that.time = that.$tools.format(t);
 					t--;
 				} else {
 					clearInterval(timer);
-					_self.time = false;
+					that.time = false;
 				}
 			}, 1000);
 		},
+
 		// 拼团详情
 		getGrouponDetail() {
 			let that = this;
-			that.$api('goods.grouponDetail', {
+			that.$http('goods.grouponDetail', {
 				id: that.$Route.query.id
 			}).then(res => {
 				uni.stopPullDownRefresh();
 				that.grouponDetail = res.data;
-				that.activity = res.data.goods.activity;
+				that.activity = res.data.activity;
 				if (that.activity) {
 					that.activity.richtext_id = parseInt(that.activity.richtext_id);
 				}
 				that.surplusNum = res.data.num - res.data.current_num;
+
 				let newTime = new Date().getTime();
 				let endTime = res.data.expiretime * 1000;
 				let t = endTime - newTime;
 				that.countDown(t / 1000);
-				that.setShareInfo({
-					query: {
-						url: 'groupon-' + that.$Route.query.id
-					},
+
+				// 设置分享信息
+				that.shareInfo = share.setShareInfo({
 					title: that.grouponDetail.goods.title,
-					image: that.grouponDetail.goods.image
+					desc: that.grouponDetail.goods.subtitle,
+					image: that.grouponDetail.goods.image,
+					params: {
+						page: 3,
+						pageId: that.$Route.query.id
+					}
 				});
 			});
-		},
-		// 邀请
-		onInvite() {
-			this.showShare = true;
-		},
-		// 立即参团
-		onJoin() {
-			this.showSku = true;
 		}
 	}
 };
 </script>
 
 <style lang="scss">
+// 商品卡片
 .head_box {
-	background: url($IMG_URL+'/imgs/group_detail_bg.png') no-repeat;
+	background: url($IMG_URL+'/imgs/group/group_detail_bg.png') no-repeat;
 	background-size: 100% 316rpx;
 	padding: 60rpx 20rpx 20rpx;
 	.goods-card {
@@ -209,7 +234,7 @@ export default {
 		border-radius: 20rpx;
 		.group-num {
 			font-size: 24rpx;
-			font-family: PingFang SC;
+
 			font-weight: 400;
 			color: rgba(153, 153, 153, 1);
 			margin-left: 30rpx;
@@ -220,10 +245,10 @@ export default {
 			border-radius: 16rpx;
 			padding: 0 10rpx;
 
-			.cuIcon-hotfill {
-				color: #e1212b;
+			.hot-icon {
 				font-size: 26rpx;
-				margin-right: 10rpx;
+				color: #e1212b;
+				margin-right: 8rpx;
 			}
 
 			.sell-num {
@@ -231,21 +256,10 @@ export default {
 				color: #f7979c;
 			}
 		}
-		/deep/.activity-goods-box {
-			border-bottom: none;
-			background: none;
-			.goods-right {
-				width: 460rpx;
-				.title {
-					width: 460rpx;
-				}
-				.tip {
-					width: 460rpx;
-				}
-			}
-		}
 	}
 }
+
+// 拼团人
 .group-box {
 	background: #fff;
 	padding: 40rpx 0;
@@ -298,7 +312,7 @@ export default {
 		padding: 50rpx;
 		.img-box {
 			position: relative;
-			margin-right: 34rpx;
+			margin-right: 30rpx;
 			&:nth-child(6n) {
 				margin-right: 0;
 			}
@@ -331,22 +345,22 @@ export default {
 		width: 750rpx;
 		.btn1 {
 			width: 690rpx;
-			height: 70rpx;
+			line-height: 70rpx;
 			background: linear-gradient(90deg, rgba(254, 131, 42, 1), rgba(255, 102, 0, 1));
 			box-shadow: 0px 7rpx 6rpx 0px rgba(255, 104, 4, 0.22);
 			border-radius: 35rpx;
 			font-size: 28rpx;
-			font-family: PingFang SC;
+
 			font-weight: 500;
 			color: rgba(255, 255, 255, 1);
 		}
 		.btn2 {
 			width: 690rpx;
-			height: 70rpx;
+			line-height: 70rpx;
 			border: 1rpx solid rgba(223, 223, 223, 1);
 			border-radius: 35rpx;
 			font-size: 28rpx;
-			font-family: PingFang SC;
+
 			font-weight: 500;
 			color: rgba(153, 153, 153, 1);
 		}
@@ -364,9 +378,6 @@ export default {
 	.description {
 		font-size: 28rpx;
 		text-align: right;
-	}
-	.cuIcon-right {
-		margin-left: 20rpx;
 	}
 }
 </style>

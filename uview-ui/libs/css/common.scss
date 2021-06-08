@@ -108,6 +108,52 @@ text {
 	flex-direction: column;
 }
 
+/**
+* 弹性盒三段式布局
+*/
+.page_box {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow-x: hidden;
+	background: $u-bg-color;
+}
+.scroll-box {
+	flex: 1;
+	height: 100%;
+	position: relative;
+}
+.content_box {
+	flex: 1;
+	overflow-y: auto;
+}
+
+/**
+* 溢出省略号
+* @param {Number} 行数
+*/
+@mixin ellipsis($rowCount: 1) {
+	@if $rowCount <=1 {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	} @else {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: $rowCount;
+		-webkit-box-orient: vertical;
+	}
+}
+@for $i from 1 through 12 {
+	.u-ellipsis-#{$i} {
+		@include ellipsis($i);
+	}
+}
+
 // 定义flex等分
 @for $i from 0 through 12 {
 	.u-flex-#{$i} {
@@ -129,41 +175,59 @@ text {
 	}
 }
 
-// 定义内外边距，历遍1-80
-@for $i from 0 through 80 {
+// 定义内外边距，历遍1-100
+@for $i from 0 through 100 {
 	// 只要双数和能被5除尽的数
 	@if $i % 2 == 0 or $i % 5 == 0 {
 		// 得出：u-margin-30或者u-m-30
-		.u-margin-#{$i}, .u-m-#{$i} {
-			margin: $i + rpx!important;
+		.u-margin-#{$i},
+		.u-m-#{$i} {
+			margin: $i + rpx !important;
 		}
-		
+		.u-m-x-#{$i} {
+			margin-left: $i + rpx !important;
+			margin-right: $i + rpx !important;
+		}
+		.u-m-y-#{$i} {
+			margin-top: $i + rpx !important;
+			margin-bottom: $i + rpx !important;
+		}
+
 		// 得出：u-padding-30或者u-p-30
-		.u-padding-#{$i}, .u-p-#{$i} {
-			padding: $i + rpx!important;
+		.u-padding-#{$i},
+		.u-p-#{$i} {
+			padding: $i + rpx !important;
 		}
-		
+		.u-p-x-#{$i} {
+			padding-left: $i + rpx !important;
+			padding-right: $i + rpx !important;
+		}
+		.u-p-y-#{$i} {
+			padding-top: $i + rpx !important;
+			padding-bottom: $i + rpx !important;
+		}
+
 		@each $short, $long in l left, t top, r right, b bottom {
 			// 缩写版，结果如： u-m-l-30
 			// 定义外边距
 			.u-m-#{$short}-#{$i} {
-				margin-#{$long}: $i + rpx!important;
+				margin-#{$long}: $i + rpx !important;
 			}
-			
+
 			// 定义内边距
 			.u-p-#{$short}-#{$i} {
-				padding-#{$long}: $i + rpx!important;
+				padding-#{$long}: $i + rpx !important;
 			}
-			
+
 			// 完整版，结果如：u-margin-left-30
 			// 定义外边距
 			.u-margin-#{$long}-#{$i} {
-				margin-#{$long}: $i + rpx!important;
+				margin-#{$long}: $i + rpx !important;
 			}
-			
+
 			// 定义内边距
 			.u-padding-#{$long}-#{$i} {
-				padding-#{$long}: $i + rpx!important;
+				padding-#{$long}: $i + rpx !important;
 			}
 		}
 	}

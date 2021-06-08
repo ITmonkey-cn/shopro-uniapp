@@ -1,92 +1,78 @@
 <!-- 秒杀列表 -->
 <template>
-	<view class="page_box">
-		<view class="head_box">
-			<view class="tab-box x-f">
-				<view class="tab-item" @tap="onTab(tab.id)" :class="{ 'tab-active': tabCurrent === tab.id }" v-for="tab in tabList" :key="tab.id">
-					<text class="tab-title">{{ tab.title }}</text>
-					<text v-show="tabCurrent === tab.id" class="tab-triangle"></text>
-				</view>
+	<view class="page_box seckill-list-wrap">
+		<!-- tab栏 -->
+		<view class="tab-box u-flex">
+			<view class="tab-item u-flex-col u-row-center u-col-center" @tap="onTab(tab.id)" v-for="tab in tabList" :key="tab.id">
+				<text class="tab-title u-m-b-20" :class="{ 'tab-active': tabCurrent === tab.id }">{{ tab.title }}</text>
+				<text v-show="tabCurrent === tab.id" class="tab-line"></text>
 			</view>
 		</view>
+
+		<!-- 商品列表 -->
 		<view class="content_box">
 			<scroll-view scroll-y="true" enable-back-to-top @scrolltolower="loadMore" class="scroll-box">
-				<view class="goods-item" v-for="item in goodsList" :key="item.id">
-					<sh-activity-card :cardId="item.id" :title="item.title" :subtitle="item.subtitle" :img="item.image" :price="item.price" :originalPrice="item.original_price">
-						<block slot="sell">
-							<view class="x-f">
-								<view class="cu-progress round sm">
-									<view class="progress--color" :style="[{ width: loading ? getProgress(item.sales, item.stock) : '' }]"></view>
+				<view class="goods-item u-m-b-16" v-for="item in goodsList" :key="item.id">
+					<view class="big-goods  u-flex u-p-20 u-col-top ">
+						<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
+						<view class=" card-right u-m-l-20 u-flex-col u-row-between">
+							<view class="">
+								<view class="goods-title u-ellipsis-1 u-m-t-10 u-m-b-10">
+									<u-tag class="title-tag u-m-r-10" text="秒杀" size="mini" bg-color="#FF2621" border-color="#FF2621" color="#fff" />
+									{{ item.title }}
 								</view>
-								<view class="progress-text">已抢{{ getProgress(item.sales, item.stock) }}</view>
+								<view v-show="item.subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ item.subtitle }}</view>
 							</view>
-						</block>
-						<block slot="btn">
-							<button class="cu-btn buy-btn" :class="btnType[tabCurrent].color">{{ btnType[tabCurrent].name }}</button>
-						</block>
-					</sh-activity-card>
+
+							<view class="u-flex u-m-y-20">
+								<u-line-progress
+									style="width:210rpx;"
+									height="18"
+									:show-percent="false"
+									:percent="item.percent"
+									inactive-color=" #e7e7e7"
+									active-color="#ffbbbb "
+								></u-line-progress>
+
+								<view class="progress-text">已售出{{ item.percent }}件</view>
+							</view>
+
+							<view class=" u-flex u-row-between u-col-center">
+								<view class="u-flex u-col-bottom font-OPPOSANS">
+									<view class="price u-m-r-10">{{ item.price }}</view>
+									<view class="origin-price">{{ item.original_price }}</view>
+								</view>
+								<button class="u-reset-button buy-btn" @tap="$Router.push({ path: '/pages/goods/detail', query: { id: item.id } })">去抢购</button>
+							</view>
+						</view>
+					</view>
 				</view>
 				<!-- 空白 -->
-				<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
+				<shopro-empty v-if="isEmpty" tipText="暂无秒杀商品，敬请期待~" :image="$IMG_URL + '/imgs/empty/empty_goods.png'"></shopro-empty>
 				<!-- 加载更多 -->
-				<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-				<!-- loading -->
-				<shopro-load v-model="isLoading"></shopro-load>
+				<u-loadmore v-if="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
-		<view class="foot_box"></view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
 		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
 <script>
-import shActivityCard from '../children/sh-activity-card.vue';
 export default {
-	components: {
-		shActivityCard
-	},
+	components: {},
 	data() {
 		return {
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
-				tip: '暂无秒杀商品，敬请期待~'
-			},
-			isLoading: true,
+			isEmpty: false, //无数据
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			lastPage: 1,
 			currentPage: 1,
 			tabCurrent: 'ing',
 			goodsList: [],
-			loading: false,
-			btnType: {
-				ended: {
-					name: '已结束',
-					color: 'btn-end'
-				},
-				ing: {
-					name: '立即抢购',
-					color: 'btn-ing'
-				},
-				nostart: {
-					name: '立即抢购',
-					color: 'btn-nostart'
-				}
-			},
 			tabList: [
 				{
-					id: 'ended',
-					title: '已结束'
-				},
-				{
 					id: 'ing',
-					title: '进行中'
+					title: '抢购进行中'
 				},
 				{
 					id: 'nostart',
@@ -97,28 +83,23 @@ export default {
 	},
 	computed: {},
 	onLoad() {
-		setTimeout(() => {
-			this.loading = true;
-		}, 500);
+		this.getGoodsList();
+	},
+	onPullDownRefresh() {
+		this.lastPage = 1;
+		this.currentPage = 1;
+		this.goodsList = [];
 		this.getGoodsList();
 	},
 	methods: {
 		onTab(id) {
-			this.tabCurrent = id;
-			this.goodsList = [];
-			this.currentPage = 1;
-			this.$u.debounce(this.getGoodsList);
-		},
-		// 百分比
-		getProgress(sales, stock) {
-			let unit = '';
-			if (stock + sales > 0) {
-				let num = (sales / (sales + stock)) * 100;
-				unit = num.toFixed(2) + '%';
-			} else {
-				unit = '0%';
+			if (this.tabCurrent !== id) {
+				this.tabCurrent = id;
+				this.goodsList = [];
+				this.currentPage = 1;
+				this.lastPage = 1;
+				this.getGoodsList();
 			}
-			return unit;
 		},
 		// 加载更多
 		loadMore() {
@@ -130,21 +111,20 @@ export default {
 		// 秒杀列表
 		getGoodsList() {
 			let that = this;
-			that.isLoading = true;
 			that.loadStatus = 'loading';
-			that.$api('goods.seckillList', {
+			that.$http('goods.seckillList', {
 				type: that.tabCurrent,
 				page: that.currentPage
-			}).then(res => {
+			}, '加载中...').then(res => {
+				uni.stopPullDownRefresh();
 				if (res.code === 1) {
-					that.isLoading = false;
 					that.goodsList = [...that.goodsList, ...res.data.data];
+					that.goodsList.map(item => {
+						item.percent = item.stock + item.sales > 0 ? parseInt((item.sales / (item.sales + item.stock)) * 100) : 0;
+					});
+					that.isEmpty = !that.goodsList.length;
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		}
@@ -153,63 +133,107 @@ export default {
 </script>
 
 <style lang="scss">
+.seckill-list-wrap {
+	background: url($IMG_URL+'/imgs/seckill/sekill_list_head_bg.png') no-repeat;
+	background-size: 100% auto;
+}
+// tab
 .tab-box {
 	.tab-item {
 		flex: 1;
-		line-height: 84rpx;
-		text-align: center;
-		background: #636363;
-		color: #fff;
-		font-size: 28rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(255, 255, 255, 1);
-		position: relative;
-		border-right: 1rpx solid #fff;
-		.tab-triangle {
-			position: absolute;
-			z-index: 2;
-			bottom: -14rpx;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 28rpx;
-			height: 28rpx;
-			background: #e6b873;
-			transform: rotate(45deg);
-			transform-origin: center;
+		height: 140rpx;
+		color: rgba(#fff, 0.4);
+		font-size: 32rpx;
+		font-weight: 600;
+		.tab-line {
+			width: 50rpx;
+			height: 8rpx;
+			background: #fff;
+			border-radius: 4rpx;
 		}
 	}
 
 	.tab-active {
-		background: #e6b873;
+		color: rgba(#fff, 1);
 	}
 }
+
+.scroll-box {
+	background: linear-gradient(#fff, #f5f5f5);
+	width: 710rpx;
+	border-radius: 20rpx;
+	margin: 0 auto;
+}
+// 列表
 .goods-item {
-	margin-bottom: 2rpx;
-	.cu-progress {
-		width: 225rpx;
-		height: 16rpx;
-		.progress--color {
-			background: #e6b873;
+	// 大商品卡片
+	.big-goods {
+		width: 710rpx;
+		height: 260rpx;
+		background: #ffffff;
+		box-shadow: 0px 7rpx 8rpx 1rpx rgba(254, 76, 29, 0.05);
+		border-radius: 20rpx;
+		.card-right {
+			width: 430rpx;
+			height: 220rpx;
+		}
+		.goods-title {
+			font-size: 26rpx;
+			font-weight: 600;
+			width: 400rpx;
+			color: #000000;
+			.title-tag {
+				transform: scale(0.9);
+			}
+		}
+		.subtitle-text {
+			font-size: 22rpx;
+			width: 400rpx;
+			font-weight: 500;
+			color: #666666;
+		}
+		.buy-btn {
+			width: 120rpx;
+			line-height: 50rpx;
+			background: linear-gradient(90deg, #d01325, #ed3c30);
+			border-radius: 25rpx;
+			font-size: 24rpx;
+			font-weight: 500;
+			color: #ffffff;
+		}
+		.progress-text {
+			color: #c4c4c4;
+			font-size: 20rpx;
+			margin-left: 25rpx;
+		}
+		// 价格
+		.price {
+			color: #ff0000;
+			font-weight: 600;
+			&::before {
+				content: '￥';
+				font-size: 20rpx;
+			}
+		}
+		.origin-price {
+			color: #c4c4c4;
+			font-size: 24rpx;
+			text-decoration: line-through;
+			&::before {
+				content: '￥';
+				font-size: 20rpx;
+			}
 		}
 	}
-	.progress-text {
-		color: #999999;
-		font-size: 20rpx;
-		margin-left: 25rpx;
-	}
-	.buy-btn {
-		position: absolute;
-		right: 0;
-		bottom: -20rpx;
-		width: 140rpx;
-		height: 60rpx;
-		border-radius: 30rpx;
-		font-size: 26rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
 
-		padding: 0;
+	.buy-btn {
+		width: 120rpx;
+		line-height: 50rpx;
+		background: linear-gradient(90deg, #d01325, #ed3c30);
+		border-radius: 25rpx;
+		font-size: 24rpx;
+		font-weight: 500;
+		color: #ffffff;
 	}
 	.btn-end,
 	.btn-nostart {

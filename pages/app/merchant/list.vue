@@ -4,10 +4,10 @@
 		<view class="head_box"></view>
 		<view class="content_box">
 			<label v-for="store in storeList" :key="store.id" @tap="selStore(store.id)">
-				<view class="store-item x-bc">
-					<view class="x-f">
+				<view class="store-item u-flex u-row-between">
+					<view class="u-flex u-col-center">
 						<view class="img-box"><image class="store-img" :src="store.image_first" mode="aspectFill" lazy-load></image></view>
-						<view class="item-left y-start">
+						<view class="item-left u-flex-col u-row-left">
 							<text class="store-title">{{ store.name }}</text>
 							<text class="store-content">{{ store.city_name }}{{ store.area_name }}{{ store.address }}</text>
 						</view>
@@ -17,7 +17,7 @@
 				</view>
 			</label>
 		</view>
-		<view class="foot_box x-c"><button class="cu-btn save-btn" @tap="saveStore">确认</button></view>
+		<view class="foot_box u-flex u-row-between u-col-center"><button class="u-reset-button save-btn" @tap="saveStore">确认</button></view>
 	</view>
 </template>
 
@@ -42,14 +42,18 @@ export default {
 		// 确认门店
 		saveStore() {
 			uni.setStorageSync('storeId', this.storeId);
-			this.$Router.replace({
-				path: '/pages/app/merchant/index'
-			});
+			if (!this.storeId) {
+				this.$u.toast('请选选择门店');
+			} else {
+				this.$Router.replace({
+					path: '/pages/app/merchant/index'
+				});
+			}
 		},
 		// 获取门店列表
 		getStoreAddress() {
 			let that = this;
-			that.$api('store.list').then(res => {
+			that.$http('store.list').then(res => {
 				if (res.code == 1) {
 					that.storeList = res.data;
 				}
@@ -80,14 +84,14 @@ export default {
 	}
 	.store-title {
 		font-size: 30rpx;
-		font-family: PingFang SC;
+
 		font-weight: 600;
 		color: rgba(52, 52, 52, 1);
 		margin-bottom: 10rpx;
 	}
 	.store-content {
 		font-size: 24rpx;
-		font-family: PingFang SC;
+
 		font-weight: 400;
 		color: rgba(102, 102, 102, 1);
 	}
@@ -98,11 +102,11 @@ export default {
 	padding: 0 20rpx;
 	.save-btn {
 		width: 710rpx;
-		height: 80rpx;
+		line-height: 80rpx;
 		background: linear-gradient(90deg, #2eae9c, #6cc29f);
 		border: 1rpx solid rgba(238, 238, 238, 1);
 		font-size: 30rpx;
-		font-family: PingFang SC;
+
 		font-weight: 500;
 		color: rgba(255, 255, 255, 1);
 		padding: 0;

@@ -1,14 +1,22 @@
 <template>
-	<view class="popup-box" v-if="!screenShot && !showLoginTip">
+	<view class="popup-box" v-if="newPopupList && newPopupList.length">
 		<view v-for="(p, index) in newPopupList" :key="index">
-			<view class="cu-modal" :class="{ show: showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
-				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
-					<view class="img-box">
-						<image class="modal-img" :src="p.image" mode="widthFix"></image>
-						<text class="cuIcon-roundclose" @tap.stop="hideModal(p)"></text>
-					</view>
+			<u-popup
+				v-if="popupCurrent === index && p.image"
+				v-model="showModal"
+				:bgStyle="{
+					background: 'none'
+				}"
+				@close="hideModal(p, index)"
+				:border-radius="20"
+				mode="center"
+				length="auto"
+				:closeable="false"
+			>
+				<view class="cu-dialog" @tap.stop="onPopup(p.path)">
+					<view class="img-box"><image class="modal-img" :src="p.image" mode="aspectFit"></image></view>
 				</view>
-			</view>
+			</u-popup>
 		</view>
 	</view>
 </template>
@@ -26,78 +34,52 @@ export default {
 	data() {
 		return {
 			popupCurrent: 0,
-			showModal: true,
-			screenShot: uni.getStorageSync('screenShot')
+			showModal: true
 		};
 	},
 	props: {},
 	computed: {
 		...mapState({
-			templateData: state => state.init.templateData.popup,
-			showLoginTip: state => state.user.showLoginTip
+			popupData: ({ shopro }) => shopro.template?.popup?.[0]?.content,
+			isLogin: ({ user }) => user.isLogin
 		}),
-		popupData() {
-			if (this.templateData) {
-				return this.templateData[0].content;
-			}
-		},
-		currentPath() {
-			let pages = getCurrentPages();
-			let currPage = null;
-			if (pages.length) {
-				currPage = pages[pages.length - 1].route;
-			}
-			return '/' + currPage;
-		},
 		newPopupList() {
 			if (this.popupData) {
-				let arr = this.popupData.list.filter(item => {
-					return item.page.includes(this.currentPath);
-				});
-				return arr;
+				return this.popupData.list;
 			}
 		}
 	},
-	created() {},
+	beforeDestroy() {
+		clearTimeout(timer);
+		timer = null;
+	},
 	methods: {
-		hideModal(p) {
+		hideModal(p, index) {
 			clearTimeout(timer);
 			this.showModal = false;
 			if (p.style == 1) {
-				this.$store.commit('delPopup', this.currentPath);
+				this.$store.commit('delPopup', index);
 			}
 			timer = setTimeout(() => {
 				this.popupCurrent += 1;
 				this.showModal = true;
 			}, 500);
 		},
-		changePopup(path) {
-			this.$tools.routerTo(path, null);
+		onPopup(path) {
+			this.$tools.routerTo(path);
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-.modal-img {
-	width: 610rpx;
-}
-
-.cu-modal {
-	z-index: 10000;
-}
-
 .img-box {
 	position: relative;
-
-	.cuIcon-roundclose {
-		position: absolute;
-		left: 50%;
-		transform: translate(-50%);
-		bottom: -80rpx;
-		color: #fff;
-		font-size: 60rpx;
-		z-index: 99;
+	width: 610rpx;
+	.modal-img {
+		width: 100%;
+		will-change: transform;
+		height: 830rpx;
 	}
 }
 </style>

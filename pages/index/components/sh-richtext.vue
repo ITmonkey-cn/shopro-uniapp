@@ -1,15 +1,14 @@
 <template>
-	<view class="sh-richtext-box mb10" v-if="richText.content"><u-parse :html="richText.content"></u-parse></view>
+	<view class="sh-richtext-box u-m-b-10" v-if="richText.content"><u-parse :html="richText.content"></u-parse></view>
 </template>
 
 <script>
-	/**
-	 * 自定义之富文本卡片 局部
-	 * @property {String} richText - 富文本信息
-	 */
+/**
+ * 自定义之富文本卡片
+ * @property {Number|String} id - 富文本id
+ */
 export default {
-	components: {
-	},
+	components: {},
 	data() {
 		return {
 			richText: ''
@@ -17,20 +16,22 @@ export default {
 	},
 	computed: {},
 	props: {
-		detail: {
-			type: Object,
-			default: null
+		richId: {
+			type: [Number, String],
+			default: 0
 		}
 	},
 	created() {
-		this.detail.id && this.getRichText();
+		this.richId && this.getRichText();
 	},
 	methods: {
 		getRichText() {
-			this.$api('richtext', {
-				id: this.detail.id
+			this.$http('common.richText', {
+				id: this.richId
 			}).then(res => {
-				this.richText = res.data;
+				if (res.code === 1) {
+					this.richText = res.data;
+				}
 			});
 		}
 	}

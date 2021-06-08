@@ -1,48 +1,53 @@
 <!-- 推广商品 -->
 <template>
 	<view class="promotion-goods-wrap">
-		<view class="goods-list x-f" v-for="item in goodsList" :key="item.goods_id" @tap="jump('/pages/goods/detail/index', { id: item.id })">
+		<view class="goods-list u-flex" v-for="(item, index) in goodsList" :key="item.goods_id" @tap="jump('/pages/goods/detail', { id: item.id })">
 			<view class="img-box"><image class="goods-img" :src="item.image" mode=""></image></view>
-			<view class="goods-info y-bc">
-				<view class="goods-title one-t">{{ item.title }}</view>
-				<view class="goods-des one-t">{{ item.subtitle }}</view>
-				<view class="goods-price x-f">
+			<view class="goods-info u-flex-col u-row-between">
+				<view class="goods-title u-ellipsis-1">{{ item.title }}</view>
+				<view class="goods-des u-ellipsis-1">{{ item.subtitle }}</view>
+				<view class="goods-price u-flex font-OPPOSANS">
 					<view class="price">￥{{ item.price }}</view>
 					<view class="origin-price">￥{{ item.original_price }}</view>
 				</view>
 				<view class="commission-num">预计佣金：￥{{ item.commission_money }}</view>
 			</view>
-			<button class="share-btn cu-btn" @tap.stop="jump('/pages/public/poster/index', { id: item.id, posterType: 'goods' })">分享赚</button>
+			<button class="share-btn u-reset-button" @tap.stop="toShare(index)">分享赚</button>
 		</view>
+
+		<!-- 	分享组件 -->
+		<shopro-share v-model="showShare" :shareDetail="shareInfo" :posterInfo="posterInfo" :posterType="'goods'"></shopro-share>
 		<!-- 缺省页 -->
-		<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
+		<shopro-empty v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据"></shopro-empty>
 		<!-- 更多 -->
 		<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 	</view>
 </template>
 
 <script>
+import share from '@/shopro/share';
 export default {
 	components: {},
 	data() {
 		return {
+			showShare: false, //是否分享
+			posterInfo: {}, //分享信息
 			goodsList: [], //分销商品
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
-			emptyData: {
-				show: false,
-				img: this.$IMG_URL + '/imgs/empty/no_data.png',
-				tip: '暂无数据',
-				path: '',
-				pathText: ''
-			}
+			isEmpty: false
 		};
 	},
 	computed: {},
 	onLoad() {
 		this.getGoodList();
 	},
+	// #ifdef H5
+	onUnload() {
+		share.setShareInfo();
+	},
+	// #endif
 	onReachBottom() {
 		if (this.currentPage < this.lastPage) {
 			this.currentPage += 1;
@@ -56,24 +61,33 @@ export default {
 				query: parmas
 			});
 		},
+		// 去分享
+		toShare(index) {
+			const that = this;
+			let goodsInfo = this.goodsList[index];
+			this.posterInfo = goodsInfo;
+			that.shareInfo = share.setShareInfo({
+				title: goodsInfo.title,
+				desc: goodsInfo.subtitle,
+				image: goodsInfo.image,
+				params: {
+					page: 2,
+					pageId: goodsInfo.id
+				}
+			});
+			this.showShare = true;
+		},
 		getGoodList() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.emptyData.show = false;
-			that.$api('commission.goods', {
+			that.$http('commission.goods', {
 				page: that.currentPage
 			}).then(res => {
 				if (res.code === 1) {
 					that.goodsList = [...that.goodsList, ...res.data.data];
 					that.lastPage = res.data.last_page;
-					if (!that.goodsList.length) {
-						that.emptyData.show = true;
-					}
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.isEmpty = !that.goodsList.length;
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		}
@@ -82,7 +96,7 @@ export default {
 </script>
 
 <style lang="scss">
-.promotion-goods-wrap {
+page {
 	background-color: #fff;
 }
 // 推广商品列表
@@ -95,7 +109,7 @@ export default {
 		bottom: 30rpx;
 		right: 30rpx;
 		width: 160rpx;
-		height: 60rpx;
+		line-height: 60rpx;
 		background: linear-gradient(90deg, #a36fff, #5336ff);
 		box-shadow: 0px 7rpx 11rpx 2rpx rgba(124, 103, 214, 0.34);
 		border-radius: 30rpx;
@@ -139,7 +153,7 @@ export default {
 			}
 			.origin-price {
 				font-size: 24rpx;
-				font-family: PingFang SC;
+
 				font-weight: 400;
 				text-decoration: line-through;
 				color: #999999;

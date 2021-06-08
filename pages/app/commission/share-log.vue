@@ -4,13 +4,12 @@
 		<!-- 标题栏 -->
 		<view class="head_box">
 			<view class="nav-box">
-				<cu-custom isBack>
-					<block slot="backText"><text class="head-title">分享记录</text></block>
-				</cu-custom>
+				<!-- 标题栏 -->
+				<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}" :backTextStyle="backTextStyle" backText="分享记录"></u-navbar>
 			</view>
 			<!-- 分类tab -->
-			<view class="tab-box x-f">
-				<view class="tab-item flex-sub " v-for="(tab, index) in tabsList" :key="tab.value" @tap="onTab(tab.value)">
+			<view class="tab-box u-flex">
+				<view class="tab-item u-flex-1 " v-for="(tab, index) in tabsList" :key="tab.value" @tap="onTab(tab.value)">
 					<text class="tab-title" :class="{ 'title-active': tabCurrent === tab.value }">{{ tab.name }}</text>
 					<text class="underline" :class="{ 'underline-active': tabCurrent === tab.value }"></text>
 				</view>
@@ -20,24 +19,24 @@
 		<view class="content_box">
 			<scroll-view scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
 				<!-- 分享记录列表 -->
-				<view class="log-list x-f" v-for="item in shareLogList" :key="item.id">
+				<view class="log-list u-flex" v-for="item in shareLogList" :key="item.id">
 					<view class="log-avatar-wrap"><image class="log-avatar" :src="item.user.avatar" mode=""></image></view>
 
 					<view class="item-right">
 						<view class="name">{{ item.user.nickname }}</view>
-						<view class="content x-f" v-if="item.type_data">
-							<view class="content-img-wrap"><image class="content-img" :src="item.type_data.image" mode=""></image></view>
+						<view class="content u-flex">
+							<view class="content-img-wrap" v-if="item.type_data"><image class="content-img" :src="item.type_data.image" mode=""></image></view>
 
-							<view class="content-text">通过{{ typeObj[item.type] }}访问了商品“{{ item.type_data.title }}”, 进入商城</view>
+							<view class="content-text">{{ item.msg }}</view>
 						</view>
-						<view class="item-bottom x-bc">
+						<view class="item-bottom u-flex u-row-between">
 							<view class="time">{{ $u.timeFormat(item.createtime, 'yyyy年mm月dd日 hh:MM') }}</view>
 							<view class="from-text">来自{{ typeObj[item.type] }}分享</view>
 						</view>
 					</view>
 				</view>
 				<!-- 缺省页 -->
-				<shopro-empty v-if="emptyData.show" :emptyData="emptyData"></shopro-empty>
+				<shopro-empty v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据"></shopro-empty>
 				<!-- 更多 -->
 				<u-loadmore v-if="shareLogList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
@@ -51,6 +50,11 @@ export default {
 	components: {},
 	data() {
 		return {
+			backTextStyle: {
+				color: '#fff',
+				fontSize: '40rpx',
+				fontWeight: '500'
+			},
 			shareLogList: [], //分享记录
 			tabCurrent: 'all', //默认
 			tabsList: [
@@ -79,49 +83,45 @@ export default {
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
 			lastPage: 1,
-			emptyData: {
-				show: false,
-				img: this.$IMG_URL + '/imgs/empty/no_data.png',
-				tip: '暂无数据',
-				path: '',
-				pathText: ''
-			}
+			isEmpty: false
 		};
 	},
 	computed: {},
 	onLoad() {
 		this.getShareLog();
 	},
+	onPullDownRefresh() {
+		this.currentPage = 1;
+		this.lastPage = 1;
+		this.shareLogList = [];
+		this.getShareLog();
+	},
 	methods: {
 		// 切换分类
 		onTab(type) {
-			this.tabCurrent = type;
-			this.currentPage = 1;
-			this.lastPage = 1;
-			this.shareLogList = [];
-			this.$u.debounce(this.getShareLog);
+			if (this.tabCurrent !== type) {
+				this.tabCurrent = type;
+				this.currentPage = 1;
+				this.lastPage = 1;
+				this.shareLogList = [];
+				this.getShareLog();
+			}
 		},
 
 		// 分享记录数据
 		getShareLog() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.emptyData.show = false;
-			that.$api('commission.share', {
+			that.$http('commission.share', {
 				type: that.tabCurrent,
 				page: that.currentPage
 			}).then(res => {
+				uni.stopPullDownRefresh();
 				if (res.code === 1) {
 					that.shareLogList = [...that.shareLogList, ...res.data.data];
 					that.lastPage = res.data.last_page;
-					if (!that.shareLogList.length) {
-						that.emptyData.show = true;
-					}
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.isEmpty = !that.shareLogList.length;
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		},
@@ -144,16 +144,6 @@ export default {
 	background: url($IMG_URL+'/imgs/commission/share_head_bg.png') no-repeat;
 	background-size: 100% auto;
 	position: relative;
-
-	.nav-box {
-		color: #fff;
-		font-size: 40rpx;
-
-		/deep/ .cu-back {
-			color: #fff;
-			font-size: 40rpx;
-		}
-	}
 }
 
 // 分类
@@ -240,6 +230,7 @@ export default {
 				.content-img {
 					width: 80rpx;
 					height: 80rpx;
+					border-radius: 6rpx;
 				}
 			}
 

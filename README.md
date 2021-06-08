@@ -22,22 +22,35 @@
 
 2. 基于uni-app，需要下载hbuilderX进行编译
 
-3. 新添加页面进入不了问题：
-
-    把page.json中新加的页面，meta中的auth和async设置为false。重新运行下，一般可以解决。
+3. manifest.json中配置相关信息
 
     
 
 # Shopro演示站
 
-| ![微信小程序码](https://images.gitee.com/uploads/images/2020/0710/155655_84691250_2264724.jpeg "微信小程序码") | ![H5二维码](https://images.gitee.com/uploads/images/2020/0710/155655_c9e61609_2264724.png "H5二维码") | ![apk](https://www.fastadmin.net/addons/qrcode/index/build?text=https://www.fastadmin.net/app/shopro.html&logo=android "apk_code.png") |
+| ![微信小程序码](https://shopro-1253949872.cos.ap-beijing.myqcloud.com/dcloud/wx_code.jpg "微信小程序码") | ![H5二维码](https://shopro-1253949872.cos.ap-beijing.myqcloud.com/dcloud/h5_code_new.png "H5二维码") | ![apk](https://www.fastadmin.net/addons/qrcode/index/build?text=https://www.fastadmin.net/app/shopro.html&logo=android "apk_code.png") |
 |------------------------------------------------- | ---------------------------------------- | ---------------------------------- |
-| 微信小程序                                        | H5二维码                                 |  安卓apk                                   |
+| 微信小程序                                        | H5二维码                                 |  安卓apk (暂未更新)                                  |
 
 
 
 
 # 更新日志
+
+## V1.3.0(2021-6-8)
+1. 重构所有页面，重新设计了样式，全面使用uview替换color-ui，感谢uview团队！
+2. 优化页面加载速度，重写初始化流程，兼容H5的hash模式与history模式
+3. 重写登录注册模块，自动登录注册、绑定/解绑 第三方授权登录信息，更新微信小程序最新的getUserProfile接口
+4. 重构分享逻辑，分享信息使用状态管理，解决重复冗余加载，使用spm参数构造，支持添加自定义参数，精确的分享链路追踪（分享人、分享方式、页面、分享平台、受邀请人平台）解决了因小程序码参数苏的位数限制导致无法支持长页面和大用户ID被截断的问题。（之前的海报和分享卡片将作废）
+5. 添加多提现方式（包含支付宝、微信企业付款、银行卡）
+6. 重写海报模块
+7. 更新了路由拦截和请求拦截器。
+8. 重构App权限请求和加载速度
+9. 默认使用原生底部导航，可修改代码实现自定义底部导航和后端对接
+10. 更多重构细节体验优化，可扫码体验~
+## 部分模板功能截图
+![V1.3.0模板](https://images.gitee.com/uploads/images/2021/0112/182440_a691a92b_2264724.png "some.png")
+
 
 ## V1.2.0(2021-1-12)
 1. 新增官方客服

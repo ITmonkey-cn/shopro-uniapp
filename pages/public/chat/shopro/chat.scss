@@ -1,0 +1,185 @@
+.bg-gradual-purple {
+	background-image: linear-gradient(45deg, #9000ff, #5e00ff);
+	color: #ffffff;
+}
+
+.bg-white {
+	background-color: #ffffff;
+	color: #666666;
+}
+
+.round {
+	border-radius: 5000upx;
+}
+
+/* ==================
+         聊天
+ ==================== */
+.cu-avatar {
+	font-variant: small-caps;
+	margin: 0;
+	padding: 0;
+	display: inline-flex;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+	background-color: #ccc;
+	color: #ffffff;
+	white-space: nowrap;
+	position: relative;
+	width: 64upx;
+	height: 64upx;
+	background-size: cover;
+	background-position: center;
+	vertical-align: middle;
+	font-size: 1.5em;
+}
+
+.cu-bar {
+	display: flex;
+	position: relative;
+	align-items: center;
+	min-height: 100upx;
+	justify-content: space-between;
+	background-color: #fff;
+}
+
+.cu-bar .action {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	justify-content: center;
+	max-width: 100%;
+}
+
+.cu-bar.foot {
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	z-index: 1024;
+	box-shadow: 0 -1upx 6upx rgba(0, 0, 0, 0.1);
+}
+
+.cu-chat {
+	display: flex;
+	flex-direction: column;
+}
+
+.cu-chat .cu-item {
+	display: flex;
+	padding: 30upx 30upx 70upx;
+	position: relative;
+}
+
+.cu-chat .cu-item > .cu-avatar {
+	width: 80upx;
+	height: 80upx;
+}
+
+.cu-chat .cu-item > .main {
+	max-width: calc(100% - 260upx);
+	margin: 0 40upx;
+	display: flex;
+	align-items: center;
+}
+
+.cu-chat .cu-item > image {
+	height: 320upx;
+}
+
+.cu-chat .cu-item > .main .content {
+	padding: 20upx;
+	border-radius: 6upx;
+	display: inline-flex;
+	max-width: 100%;
+	align-items: center;
+	font-size: 30upx;
+	position: relative;
+	min-height: 80upx;
+	line-height: 40upx;
+	text-align: left;
+}
+
+.cu-chat .cu-item > .main .content:not([class*='bg-']) {
+	background-color: #ffffff;
+	color: #333333;
+}
+
+.cu-chat .cu-item .date {
+	position: absolute;
+	font-size: 24upx;
+	color: #8799a3;
+	width: calc(100% - 320upx);
+	bottom: 20upx;
+	left: 160upx;
+}
+
+.cu-chat .cu-item .action {
+	padding: 0 30upx;
+	display: flex;
+	align-items: center;
+}
+
+.cu-chat .cu-item > .main .content::after {
+	content: '';
+	top: 27upx;
+	transform: rotate(45deg);
+	position: absolute;
+	z-index: 100;
+	display: inline-block;
+	overflow: hidden;
+	width: 24upx;
+	height: 24upx;
+	left: -12upx;
+	right: initial;
+	background-color: inherit;
+}
+
+.cu-chat .cu-item.self > .main .content::after {
+	left: auto;
+	right: -12upx;
+}
+
+.cu-chat .cu-item > .main .content::before {
+	content: '';
+	top: 30upx;
+	transform: rotate(45deg);
+	position: absolute;
+	z-index: -1;
+	display: inline-block;
+	overflow: hidden;
+	width: 24upx;
+	height: 24upx;
+	left: -12upx;
+	right: initial;
+	background-color: inherit;
+	filter: blur(5upx);
+	opacity: 0.3;
+}
+
+.cu-chat .cu-item > .main .content:not([class*='bg-'])::before {
+	background-color: #333333;
+	opacity: 0.1;
+}
+
+.cu-chat .cu-item.self > .main .content::before {
+	left: auto;
+	right: -12upx;
+}
+
+.cu-chat .cu-item.self {
+	justify-content: flex-end;
+	text-align: right;
+}
+
+.cu-chat .cu-info {
+	display: inline-block;
+	margin: 20upx auto;
+	font-size: 24upx;
+	padding: 8upx 12upx;
+	background-color: rgba(0, 0, 0, 0.2);
+	border-radius: 6upx;
+	color: #ffffff;
+	max-width: 400upx;
+	line-height: 1.4;
+}
