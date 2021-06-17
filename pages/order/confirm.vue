@@ -120,7 +120,7 @@
 		<view class="foot-box-wrap">
 			<view class="foot-box u-flex u-row-between safe-area-inset-bottom">
 				<view class="u-flex">
-					<text class="num">共1件</text>
+					<text class="num">共{{ totalNum }}件</text>
 					<view class="all-money">
 						<text>合计：</text>
 						<text class="price">￥{{ orderPre.total_fee || '0.00' }}</text>
@@ -197,16 +197,16 @@
 						<view class="" v-else>
 							<view
 								class="express-top u-flex u-col-center u-row-between"
-								@tap="jump('/pages/order/express/store-address', { goodsId: currentGoodsId, lat: lat, lng: lng, storeId: storeInfo.id })"
+								@tap="jump('/pages/order/express/store-address', { goodsId: currentGoodsId, lat: lat, lng: lng, storeId: storeInfo ? storeInfo.id : 0 })"
 							>
 								<view class="">
 									<text class="tag1" v-if="addressData.is_default == 1">最近</text>
-									<text class="address">{{ storeInfo.name ? storeInfo.name : '暂无自提点' }}</text>
+									<text class="address">{{ storeInfo ? storeInfo.name : '暂无自提点' }}</text>
 									<u-icon name="arrow-right" size="28" color="#999"></u-icon>
 								</view>
 								<view class="address-location u-flex-col u-col-center">
 									<image class="location-img" :src="$IMG_URL + '/imgs/order/e1.png'" mode=""></image>
-									<view class="location-text">距您{{ storeInfo.distance_text || 0 }}</view>
+									<view class="location-text">距您{{ storeInfo ? storeInfo.distance_text : 0 }}</view>
 								</view>
 							</view>
 							<view class="express-content u-flex u-col-cetner">
@@ -348,7 +348,7 @@ export default {
 	data() {
 		return {
 			platform: this.$platform.get(),
-			wxOpenTags: '提交订单',
+			totalNum: 0,
 			couponList: [], //优惠券列表
 			addressData: {}, //收货地址
 			addressId: 0, //收货地址ID
@@ -463,8 +463,6 @@ export default {
 		uni.$once('SELECT_STORE', res => {
 			this.storeInfo = JSON.parse(res.storeInfo);
 		});
-	},
-	async onLoad() {
 		// 监听地址
 		uni.$on('SELECT_ADDRESS', res => {
 			if (res.addressData) {
@@ -474,7 +472,10 @@ export default {
 				this.addressId = 0;
 			}
 			this.getPre();
+			res.addressData && uni.$off('SELECT_ADDRESS');
 		});
+	},
+	async onLoad() {
 		this.goodsList = this.$Route.query.goodsList;
 		this.from = this.$Route.query.from;
 		this.orderType = this.$Route.query.orderType;
@@ -617,6 +618,7 @@ export default {
 					that.perGoodsList = res.data.new_goods_list;
 					that.perGoodsList.map(item => {
 						item.selType = item.dispatch_type;
+						that.totalNum += item.goods_num;
 						that.goodsList.forEach(goods => {
 							if (item.goods_id == goods.goods_id && item.sku_price_id == goods.sku_price_id) {
 								goods.dispatch_type = item.dispatch_type;
@@ -665,7 +667,7 @@ export default {
 		// 初始地址
 		getDefaultAddress() {
 			this.$http('address.defaults', {}, '', false).then(res => {
-				if (res.code === 1) {
+				if (res.code === 1 && res.data) {
 					this.addressData = res.data;
 					this.addressId = res.data.id;
 				}
@@ -725,6 +727,17 @@ export default {
 		},
 		// 保存配送方式
 		saveExpressType() {
+			if (this.expressTypeCur === 'selfetch') {
+				if (!this.storeInfo) {
+					this.$u.toast('暂无自提点，请选择其他配送方式');
+					return false;
+				}
+				if (!this.isProtocol) {
+					this.$u.toast('请先勾选门店协议');
+					return false;
+				}
+			}
+
 			this.showExpressType = false;
 			this.changeGoodsList();
 			this.getPre();
@@ -738,6 +751,10 @@ export default {
 					goods.dispatch_phone = this.selfPhone;
 					goods.dispatch_date = this.checkTime['day'][this.checkDayCur].value + ' ' + this.checkTime['time'][this.checkTimeCur] + ':00';
 					if (this.expressTypeCur == 'selfetch') {
+						if (!this.storeInfo) {
+							this.$u.toast('暂无自提点，请选择其他配送方式');
+							return false;
+						}
 						goods.store_id = this.storeInfo.id;
 					}
 					goods.checkDayCur = this.checkDayCur;

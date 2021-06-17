@@ -32,9 +32,7 @@ export default function http(
 
 	/* 请求之后拦截器 */
 	shoproRequest.interceptor.response((response) => {
-		if (toastBefore !== '') {
-			uni.hideLoading();
-		}
+		uni.hideLoading();
 		if (response.code === 0) {
 			if (toastAfter) {
 				uni.showToast({

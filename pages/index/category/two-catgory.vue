@@ -18,7 +18,7 @@
 			<view style="height: 100%;width: 100%;">
 				<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
-						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" lazy-load mode="aspectFill"></image>
+						<image class="type-img" v-if="categoryData[listId].image" :src="categoryData[listId].image" lazy-load mode="aspectFill"></image>
 						<view class="type-box u-flex u-col-center u-row-center">
 							<u-icon class="" name="minus" size="26" color="#d3d3d3"></u-icon>
 							<text class="type-title">{{ categoryData[listId].name }}</text>

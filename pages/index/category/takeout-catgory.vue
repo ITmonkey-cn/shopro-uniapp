@@ -19,7 +19,9 @@
 			<!-- 右侧商品列表 -->
 			<view class="right-wrap u-p-b-30">
 				<scroll-view scroll-y class="right-box menu-scroll-view " @scrolltolower="loadMore" v-if="tabbarList.length">
-					<view class="u-flex u-row-center"><image class="category-img" :src="tabbarList[currentTab].image" mode="aspectFill"></image></view>
+					<view class="u-flex u-row-center" v-if="tabbarList[currentTab].image">
+						<image class="category-img" :src="tabbarList[currentTab].image" mode="aspectFill"></image>
+					</view>
 					<view class="category-title">{{ tabbarList[currentTab].name }}</view>
 
 					<view class="sh-big-card-wrap u-m-20 " v-for="(item, index) in goodsList" :key="item.id">
@@ -180,9 +182,10 @@ export default {
 	async created() {
 		console.log('%c当前分类：快速购买', 'color:green;background:yellow');
 		await this.getCategory();
-		await this.getGoodsList();
-		this.$store.state.user.isLogin && this.getCartList();
+		let res = await this.getGoodsList();
+		console.log(res, 111111);
 	},
+
 	methods: {
 		...mapActions(['getCartList', 'changeCartList', 'addCartGoods']),
 		// 跳转详情
@@ -223,20 +226,28 @@ export default {
 		getGoodsList() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$http('goods.lists', {
-				category_id: that.categoryID,
-				page: that.currentPage
-			}, '加载中...').then(res => {
-				if (res.code === 1) {
-					that.goodsList = [...that.goodsList, ...res.data.data];
-					that.goodsList.map(item => {
-						item.percent = item.stock + item.sales > 0 ? ((item.sales / (item.sales + item.stock)) * 100).toFixed(2) : 0;
-					});
-					that.isEmpty = !that.goodsList.length;
-					that.lastPage = res.data.last_page;
-					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
-				}
-			});
+			that.$http(
+				'goods.lists',
+				{
+					category_id: that.categoryID,
+					page: that.currentPage
+				},
+				'加载中...'
+			)
+				.then(res => {
+					if (res.code === 1) {
+						that.goodsList = [...that.goodsList, ...res.data.data];
+						that.goodsList.map(item => {
+							item.percent = item.stock + item.sales > 0 ? ((item.sales / (item.sales + item.stock)) * 100).toFixed(2) : 0;
+						});
+						that.isEmpty = !that.goodsList.length;
+						that.lastPage = res.data.last_page;
+						that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
+					}
+				})
+				.then(() => {
+					that.$store.state.user.isLogin && that.getCartList();
+				});
 		},
 
 		// 点击左边的栏目切换
@@ -391,10 +402,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.hack-tabbar {
-		height: calc(100rpx + env(safe-area-inset-bottom) / 2);
-		width: 100%;
-	}
+.hack-tabbar {
+	height: calc(100rpx + env(safe-area-inset-bottom) / 2);
+	width: 100%;
+}
 // 最外层结构包裹
 .catgory-wrap {
 	height: calc(100vh);

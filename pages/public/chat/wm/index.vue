@@ -163,7 +163,7 @@
 					</view>
 					<view v-if="showTool" class="footer_div">
 						<!-- 表情 -->
-						<block v-if="showTool == 'smiley'" v-for="(item, index) in expressionData" :key="item.title">
+						<block v-if="showTool == 'smiley'" v-for="(item, index) in expressionData" :key="item.src">
 							<image :src="item.src" @tap="select_expression(item.title)"></image>
 						</block>
 						<!-- 表情end -->
@@ -223,18 +223,20 @@
 	</view>
 </template>
 
+
 <script>
 import Config from './config.js'; // 本地配置数据
-var token = uni.getStorageSync('token'); // 用户身份标识
-var fixedCsr = ''; // 指定客服
-var innerAudioContext = null;
+let token = uni.getStorageSync('token'); // 用户身份标识
+let fixedCsr = ''; // 指定客服
+let innerAudioContext = null;
 import { mapMutations, mapActions, mapState } from 'vuex';
 import Auth from '@/shopro/permission/index.js';
+
 export default {
 	components: {},
 	data() {
 		return {
-			headTitle:'客服',
+			headTitle: '客服',
 			leaveMessage: {
 				name: '',
 				contact: '',
@@ -268,9 +270,9 @@ export default {
 			chatRecordPage: 1,
 			errorTips: '链接中...',
 			selectModel: false,
-			selectModelType:{
-				goods:'发送商品',
-				order:'发送订单'
+			selectModelType: {
+				goods: '发送商品',
+				order: '发送订单'
 			},
 			selectModelData: [],
 			writeBottom: 0
@@ -281,8 +283,8 @@ export default {
 			userInfo: state => state.user.userInfo
 		})
 	},
-	props:{
-		options:null
+	props: {
+		options: null
 	},
 	created() {
 		fixedCsr = this.options?.fixed_csr ? this.options?.fixed_csr : fixedCsr;
@@ -321,15 +323,19 @@ export default {
 			});
 		},
 		// 跳转详情
-		goDetail(msg){
-			msg.number ? this.jump('/pages/order/detail', { id:msg.id })  :this.jump('/pages/goods/detail/index', { id:msg.id })
+		goDetail(msg) {
+			msg.number ? this.jump('/pages/order/detail', { id: msg.id }) : this.jump('/pages/goods/detail', { id: msg.id });
 		},
 		// 关闭遮罩
-		hideMask(){
-			if(this.showTool){this.showTool = false}
-			if(this.selectModel){this.selectModel = false}
-				this.writeBottom = 0;
-			},
+		hideMask() {
+			if (this.showTool) {
+				this.showTool = false;
+			}
+			if (this.selectModel) {
+				this.selectModel = false;
+			}
+			this.writeBottom = 0;
+		},
 		load: function() {
 			var that = this;
 			var kefu_tourists_token = '';
@@ -395,7 +401,6 @@ export default {
 							};
 						}
 						that.expressionData = expression;
-
 						// 杂项资源
 						that.attachBackground = that.build_url('res', '/img/more.png');
 
@@ -474,8 +479,7 @@ export default {
 				},
 				success: res => {
 					if (res.data.code == 1) {
-						console.log(res.data.data);
-						this.selectModelData = res.data.data;
+						this.selectModelData = res.data.data.data;
 					} else {
 						uni.showModal({
 							title: '温馨提示',
@@ -511,60 +515,60 @@ export default {
 			});
 		},
 		async upload_file() {
-		let authState =  await new Auth('writePhotosAlbum').check();
-			if(authState){
+			let authState = await new Auth('writePhotosAlbum').check();
+			if (authState) {
 				// #ifdef APP-VUE
+				// #endif
+				var that = this;
+				that.ws.pageHideCloseWs = false; // 页面hide不关闭链接
+				uni.chooseImage({
+					success: res => {
+						const tempFilePaths = res.tempFilePaths;
+
+						uni.showLoading({
+							title: '正在上传...'
+						});
+
+						const uploadTask = uni.uploadFile({
+							url: that.build_url('upload'),
+							// #ifdef APP-PLUS || H5
+							file: res.tempFiles[0],
 							// #endif
-							var that = this;
-							that.ws.pageHideCloseWs = false; // 页面hide不关闭链接
-							uni.chooseImage({
-								success: res => {
-									const tempFilePaths = res.tempFilePaths;
-				
-									uni.showLoading({
-										title: '正在上传...'
+							filePath: tempFilePaths[0],
+							name: 'file',
+							formData: {
+								token: uni.getStorageSync('token')
+							},
+							success: res => {
+								uni.hideLoading();
+								that.ws.pageHideCloseWs = true;
+								res = JSON.parse(res.data);
+								if (res.code == 1) {
+									that.send_message(res.data, 1);
+									that.switch_show_tool(false);
+									that.kefuMessageFocus = true;
+								} else {
+									uni.showModal({
+										title: '温馨提示',
+										content: res.msg,
+										showCancel: false
 									});
-				
-									const uploadTask = uni.uploadFile({
-										url: that.build_url('upload'),
-										// #ifdef APP-PLUS || H5
-										file: res.tempFiles[0],
-										// #endif
-										filePath: tempFilePaths[0],
-										name: 'file',
-										formData: {
-											token: uni.getStorageSync('token')
-										},
-										success: res => {
-											uni.hideLoading();
-											that.ws.pageHideCloseWs = true;
-											res = JSON.parse(res.data);
-											if (res.code == 1) {
-												that.send_message(res.data.url, 1);
-												that.switch_show_tool(false);
-												that.kefuMessageFocus = true;
-											} else {
-												uni.showModal({
-													title: '温馨提示',
-													content: res.msg,
-													showCancel: false
-												});
-											}
-										},
-										complete: res => {
-											uni.hideLoading();
-										}
-									});
-				
-									// #ifndef APP-PLUS
-									uploadTask.onProgressUpdate(res => {
-										uni.showLoading({
-											title: res.progress + '%'
-										});
-									});
-									// #endif
 								}
+							},
+							complete: res => {
+								uni.hideLoading();
+							}
+						});
+
+						// #ifndef APP-PLUS
+						uploadTask.onProgressUpdate(res => {
+							uni.showLoading({
+								title: res.progress + '%'
 							});
+						});
+						// #endif
+					}
+				});
 			}
 		},
 		connect_socket: function() {
@@ -718,7 +722,7 @@ export default {
 				c: 'Message',
 				a: 'sendMessage',
 				data: {
-					message: message,
+					message: message_type == 1 ? message.url : message,
 					message_type: message_type,
 					session_id: that.sessionId,
 					modulename: 'index'
@@ -733,7 +737,7 @@ export default {
 			var data = {
 				id: message_id,
 				sender: 'me',
-				message: message,
+				message: message_type == 1 ? message.fullurl : message,
 				message_type: message_type
 			};
 
@@ -826,15 +830,13 @@ export default {
 					that.csr = msg.data.session.csr;
 					that.sessionId = msg.data.session.id;
 					that.showLeaveMessage = false;
-					that.headTitle = '客服 ' + msg.data.session.nickname + ' 为您服务'
-					
+					that.headTitle = '客服 ' + msg.data.session.nickname + ' 为您服务';
 				} else if (msg.code == 302) {
 					if (!that.csr) {
 						// 打开留言板
 						that.csr = 'none';
 						that.showLeaveMessage = true;
 						that.headTitle = '当前无客服在线哦~';
-						
 					} else {
 						uni.showToast({
 							title: '当前客服暂时离开,您可以直接发送离线消息~',
@@ -975,7 +977,7 @@ export default {
 		build_url: function(type = 'ws', res_path) {
 			var that = this;
 			var protocol = Config.https_switch ? 'https://' : 'http://';
-			
+
 			switch (type) {
 				//websocket聊天
 				case 'ws':
@@ -992,7 +994,7 @@ export default {
 					break;
 				//上传图片
 				case 'upload':
-					return protocol + Config.baseURL + '/addons/kefu/index/upload?modulename=index';
+					return protocol + Config.baseURL + '/addons/shopro/index/upload';
 					break;
 				//发送消息
 				case 'message_prompt':
@@ -1071,7 +1073,10 @@ export default {
 		// 显示/隐藏发送按钮-调整消息记录框高度
 		kefu_message_change: function() {
 			this.showSendButton = this.kefuMessage == '' ? false : true;
-			let write = uni.createSelectorQuery().in(this).select('.write');
+			let write = uni
+				.createSelectorQuery()
+				.in(this)
+				.select('.write');
 			write
 				.fields(
 					{
@@ -1170,11 +1175,11 @@ page {
 }
 
 // 选择商品
-.mask{
+.mask {
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	background:rgba(#000,0.3);
+	background: rgba(#000, 0.3);
 	z-index: 11;
 }
 .select_model {
@@ -1185,35 +1190,33 @@ page {
 	width: 100%;
 	border-top-left-radius: 20rpx;
 	border-top-right-radius: 20rpx;
-	.select_model--head{
+	.select_model--head {
 		background-color: #fff;
-		height:82rpx;
-		padding:0 26rpx;
+		height: 82rpx;
+		padding: 0 26rpx;
 		border-radius: 20rpx 20rpx 0 0;
-		.select-title-box{
+		.select-title-box {
 			line-height: 82rpx;
-			.title-text{
-				font-size:30rpx;
-				font-family:PingFang SC;
-				font-weight:500;
-				color:rgba(51,51,51,1);
+			.title-text {
+				font-size: 30rpx;
+				font-family: PingFang SC;
+				font-weight: 500;
+				color: rgba(51, 51, 51, 1);
 				line-height: 76rpx;
 			}
-			.title-line{
-				width:120rpx;
-				height:6rpx;
-				background:rgba(230,184,115,1);
+			.title-line {
+				width: 120rpx;
+				height: 6rpx;
+				background: rgba(230, 184, 115, 1);
 			}
 		}
-		
-		
 	}
 }
 
 .close_select {
 	font-size: 40rpx;
 	padding: 20rpx 0;
-	color: #E0E0E0;
+	color: #e0e0e0;
 }
 
 .project_list {
@@ -1228,7 +1231,7 @@ page {
 	display: flex;
 	align-items: center;
 	padding: 16rpx 8rpx 16rpx 16rpx;
-	margin:10rpx 20rpx;
+	margin: 10rpx 20rpx;
 	border-radius: 20rpx;
 }
 
@@ -1264,14 +1267,14 @@ page {
 }
 .project_item_price {
 	.price {
-		color: #E1212B;
+		color: #e1212b;
 		font-size: 28rpx;
-		&::before{
-			content:'￥';
-			font-size:20rpx
+		&::before {
+			content: '￥';
+			font-size: 20rpx;
 		}
 	}
-	.unit{
+	.unit {
 		color: #999999;
 		font-size: 22rpx;
 		margin-left: 20rpx;
@@ -1448,7 +1451,7 @@ page {
 	flex: 7;
 	background-color: #ffffff;
 	border-radius: 20rpx;
-// overflow-y: auto;
+	// overflow-y: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -1471,7 +1474,7 @@ page {
 	outline: none;
 	border: none;
 	resize: none;
-	
+
 	-webkit-user-select: text !important;
 	-moz-user-select: text !important;
 	-ms-user-select: text !important;

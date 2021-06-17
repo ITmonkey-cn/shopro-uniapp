@@ -13,7 +13,7 @@
 			<view style="height: 100%;width: 100%;">
 				<scroll-view @scrolltolower="loadMore" scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
-						<image class="type-img" v-show="categoryData[listId].image" :src="categoryData[listId].image" mode="aspectFill"></image>
+						<image class="type-img" v-if="categoryData[listId].image" :src="categoryData[listId].image" mode="aspectFill"></image>
 						<view class="item-list">
 							<view class="item-box u-flex">
 								<view

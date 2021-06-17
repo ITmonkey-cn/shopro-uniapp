@@ -1,17 +1,14 @@
 /**
- * Wechat v1.0.0
+ * Wechat v1.1.0
  * @Class Wechat
- * @description shopro-wechat 1.0.0 wehcat第三方登录组件
- * @Author llidongtony
- * @Date 2020-02-19
+ * @description shopro-wechat 1.1.0 wehcat第三方登录组件
+ * @Author lidongtony
+ * @Date 2020-05-20
  * @Email lidongtony@qq.com
  */
 import api from '@/shopro/request/index';
 import $platform from '@/shopro/platform';
 import store from '@/shopro/store';
-import {
-	router
-} from '@/shopro/router';
 import {
 	API_URL
 } from '@/env'
@@ -162,7 +159,7 @@ export default {
 					if (res.errMsg === 'checkSession:ok') sessionStatus = true;
 				},
 				complete() {
-					if (uni.getStorageSync('session_key') && sessionStatus) {
+					if (uni.getStorageSync('session_key') && sessionStatus && !autoLogin) {
 						resolve(uni.getStorageSync('session_key'));
 					} else {
 						uni.login({

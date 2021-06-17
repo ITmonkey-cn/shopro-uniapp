@@ -642,7 +642,7 @@ export default {
 		uploadSuccess(list) {
 			list.forEach(item => {
 				this.sendWs(item.response.data.url, 'image');
-				this.pushChat(`<img class="chat-img" src="${item.response.data.full_url}"/>`);
+				this.pushChat(`<img class="chat-img" src="${item.response.data.fullurl}"/>`);
 				this.onMask();
 			});
 		},

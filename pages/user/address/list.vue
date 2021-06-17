@@ -14,9 +14,13 @@
 		<view class="foot_box-wrap safe-area-inset-bottom">
 			<view class="foot_box u-flex u-row-between safe-area-inset-bottom">
 				<!-- 微信小程序和微信H5 -->
-				<button class="u-reset-button sync-wxaddress u-m-20 u-flex u-row-center u-col-center" @tap="getWXaddress" v-show="platform == 'wxMiniProgram' || platform == 'wxOfficialAccount'">
+				<button
+					class="u-reset-button sync-wxaddress u-m-20 u-flex u-row-center u-col-center"
+					@tap="getWXaddress"
+					v-show="platform == 'wxMiniProgram' || platform == 'wxOfficialAccount'"
+				>
 					<u-icon class="u-m-r-10" name="weixin-fill" :size="42" color="rgb(9, 187, 7)"></u-icon>
-					
+
 					导入微信地址
 				</button>
 				<button class="u-reset-button add-btn u-m-20" @tap="jump('/pages/user/address/edit')">添加新的收货地址</button>

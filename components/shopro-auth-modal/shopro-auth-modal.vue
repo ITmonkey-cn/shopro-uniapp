@@ -172,7 +172,9 @@
 					mode=""
 				></image> -->
 				<!-- 苹果 -->
-				<!-- 	<image v-if="['App'].includes(platform)" class="auto-login-img" @tap="thirdLogin('')" :src="$IMG_URL + '/imgs/auto_login_iphone.png'" mode=""></image> -->
+				<!-- #ifdef APP-PLUS -->
+				<image v-if="device === 'ios'" class="auto-login-img" @tap="thirdLogin('apple')" :src="$IMG_URL + '/imgs/auto_login_iphone.png'" mode=""></image>
+				<!-- #endif -->
 			</view>
 
 			<!-- 协议 -->
@@ -199,15 +201,18 @@
 /**
  * 登录提示页
  */
-import platform from '@/shopro/platform';
 import FormValidate from '@/shopro/validate/form';
 import wechat from '@/shopro/wechat/wechat';
 import { mapMutations, mapActions, mapState } from 'vuex';
+// #ifdef APP-PLUS
+import apple from '@/shopro/apple';
+// #endif
 export default {
 	name: 'shoproAuthModal',
 	data() {
 		return {
-			platform: platform.get(),
+			platform: this.$platform.get(),
+			device: this.$platform.device(),
 			form: {
 				// 1.账号密码登录
 				accountLogin: {
@@ -411,11 +416,16 @@ export default {
 					break;
 				case 'alipay':
 					break;
+				case 'apple':
+					token = await apple.appleIdOauth();
+					break;
 				default:
 					break;
 			}
-			that.closeAuthModal();
-			that.getUserInfo(token);
+			if(token) {
+				that.closeAuthModal();
+				that.getUserInfo(token);
+			}
 		},
 
 		// 1.账号登录

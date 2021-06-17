@@ -2,7 +2,7 @@ import $http from '@/shopro/request/index'
 // #ifdef H5
 import wxsdk from '@/shopro/wechat/sdk'
 // #endif
-import Wechat from '@/shopro/wechat/wechat'
+import wechat from '@/shopro/wechat/wechat'
 import {
 	router as $Router
 } from '@/shopro/router/index.js'
@@ -97,11 +97,10 @@ export default class ShoproPay {
 					res.data === 'no_openid' ?
 						uni.showModal({
 							title: '微信支付',
-							content: '点击确定后请再次使用微信支付',
+							content: '请先绑定微信再使用微信支付',
 							success: function(res) {
 								if (res.confirm) {
-									//静默获取openid
-									wechat.wxOfficialAccountBaseLogin();
+									wechat.bind();
 								}
 							},
 						}) :

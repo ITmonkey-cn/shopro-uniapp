@@ -87,16 +87,7 @@
 		<shopro-auth-modal></shopro-auth-modal>
 
 		<!-- 佣金中心权限验证 -->
-		<u-popup
-			v-if="showAuthModal"
-			class="auth-box"
-			:mask="false"
-			v-model="showAuthModal"
-			mode="center"
-			:mask-close-able="false"
-			close-icon-pos="top-left"
-			border-radius="20"
-		>
+		<u-popup v-if="showAuthModal" class="auth-box" :mask="false" v-model="showAuthModal" mode="center" :mask-close-able="false" close-icon-pos="top-left" border-radius="20">
 			<view class="notice-box">
 				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
 				<view class="notice-title">{{ authNotice.title }}</view>
@@ -305,6 +296,7 @@ export default {
 		// 跳转
 		jump(path, query) {
 			if (!path) {
+				this.shareInfo = share.setShareInfo();
 				this.showShare = true;
 			} else {
 				this.$Router.push({

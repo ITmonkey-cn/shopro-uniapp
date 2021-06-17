@@ -10,13 +10,15 @@ import store from '@/shopro/store'
 import share from '@/shopro/share'
 import http from '@/shopro/request'
 import $platform from '@/shopro/platform'
-import { router } from '@/shopro/router'
+import {
+	router
+} from '@/shopro/router'
 export default {
 	onLoad(options) {
 		let that = this;
 		// 后端拼接的具体page页面 直接进入 （如订阅消息场景下直接跳转）
-		// #ifdef MP-WEIXIN
-		if(options?.scene) {
+		// #ifdef MP
+		if (options?.scene) {
 			let scene = decodeURIComponent(options.scene);
 			let sceneObj = scene.split('=');
 			options[sceneObj[0]] = sceneObj[1];
@@ -30,7 +32,7 @@ export default {
 		if (options?.custom_id) {
 			router.push({
 				path: '/pages/index/view',
-				query:{
+				query: {
 					id: options.custom_id
 				}
 			})
@@ -39,9 +41,11 @@ export default {
 			let shareParams = share.getShareQuery(options.spm);
 			// 保存推荐信息
 			if (shareParams.shareUserId) {
-				if(store.state.user.isLogin) {
-					http('common.shareAdd', {spm: options.spm});
-				}else {
+				if (store.state.user.isLogin) {
+					http('common.shareAdd', {
+						spm: options.spm
+					});
+				} else {
 					uni.setStorageSync('spm', options.spm);
 				}
 			}

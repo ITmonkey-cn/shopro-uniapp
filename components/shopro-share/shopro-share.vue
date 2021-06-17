@@ -215,7 +215,7 @@ export default {
 							{
 								name: 'wxCode',
 								type: 'image',
-								url: `${that.$API_URL}wechat/wxacode?scene=${that.scene}`,
+								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareDetail.query}`,
 								alpha: 1,
 								dy: 560,
 								isBgCenter: true,
@@ -334,7 +334,7 @@ export default {
 							{
 								name: 'wxCode',
 								type: 'image', //微信小程序码
-								url: `${that.$API_URL}wechat/wxacode?scene=${that.scene}`,
+								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareDetail.query}`,
 								alpha: 1,
 								dx: 522,
 								dy: 911,
@@ -449,7 +449,7 @@ export default {
 							{
 								name: 'wxCode',
 								type: 'image', //微信小程序码
-								url: `${that.$API_URL}wechat/wxacode?scene=${that.scene}`,
+								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareDetail.query}`,
 								alpha: 1,
 								dx: 522,
 								dy: 911,

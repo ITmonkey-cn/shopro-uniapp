@@ -1,6 +1,7 @@
 import {
 	IMG_URL,
-	API_URL
+	API_URL,
+	BASE_URL
 } from '@/env.js'
 module.exports = {
 	data() {

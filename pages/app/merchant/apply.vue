@@ -88,7 +88,7 @@
 			<view class="notice-modal">
 				<view class="img-wrap"><image class="notice-img" :src="authNotice.img" mode=""></image></view>
 				<view class="notice-title">{{ authNotice.title }}</view>
-				<view class="notice-detail">{{ authNotice.detail }}</view>
+				<view class="notice-detail">{{ authNotice.detail || '' }}</view>
 				<button class="u-reset-button notice-btn" @tap="onAuthBtn(authNotice.btnPath)">{{ authNotice.btnText }}</button>
 				<button class="u-reset-button back-btn" @tap="$Router.back()">返回</button>
 			</view>

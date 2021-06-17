@@ -41,7 +41,7 @@
 		</u-form>
 
 		<!-- 省市区选择器 -->
-		<u-picker mode="region" v-model="showSelect" @confirm="regionConfirm"></u-picker>
+		<u-select mode="mutil-column-auto" safe-area-inset-bottom :list="addressAreaList" v-model="showSelect" @confirm="regionConfirm"></u-select>
 	</view>
 </template>
 
@@ -53,6 +53,7 @@ export default {
 	data() {
 		return {
 			showSelect: false, //省市区
+			addressAreaList: [],
 			addressId: 0, //收货地址ID
 			labelStyle: {
 				'font-size': '28rpx',
@@ -115,6 +116,7 @@ export default {
 		this.$refs.uForm.setRules(this.rules);
 	},
 	onLoad() {
+		this.getArea();
 		this.addressId = this.$Route.query.id ? this.$Route.query.id : 0;
 		uni.setNavigationBarTitle({
 			title: this.addressId ? '编辑收货地址' : '添加收货地址'
@@ -124,6 +126,22 @@ export default {
 		this.$Route.query.addressData && this.wxAddressInit();
 	},
 	methods: {
+		// 获取省市区
+		getArea() {
+			this.$http('address.area').then(res => {
+				if (res.code === 1) {
+					let { provinceData, cityData, areaData } = res.data;
+					provinceData.forEach((item, index) => {
+						this.addressAreaList.push({ ...item, children: [] });
+						this.addressAreaList[index].children.push(...cityData[index]);
+						this.addressAreaList[index].children.forEach((item1, index1) => {
+							item1['children'] = [];
+							item1.children.push(...areaData[index][index1]);
+						});
+					});
+				}
+			});
+		},
 		// 微信导入数据格式
 		wxAddressInit() {
 			let wxAddress = this.$Route.query.addressData; //微信导入
@@ -142,7 +160,7 @@ export default {
 
 		// 确认省市区
 		regionConfirm(e) {
-			this.model.area_text = `${e.province.label}-${e.city.label}-${e.area.label}`;
+			this.model.area_text = `${e[0].label}-${e[1].label}-${e[2].label}`;
 		},
 
 		// 获取定位

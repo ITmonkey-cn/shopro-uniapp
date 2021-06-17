@@ -142,7 +142,7 @@ const getters = {
 		state.cartList.filter(item => {
 			if (item.checked) {
 				totalNum += 1;
-				totalPrice += item.goods_num * item.sku_price.price;
+				totalPrice += item.goods_num * (item.sku_price ? item.sku_price.price : 0);
 			}
 		})
 		return {

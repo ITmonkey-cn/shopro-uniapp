@@ -104,10 +104,12 @@ export default {
 		deleteLog() {
 			let that = this;
 			const { browseList, selList } = this;
-			that.$http('user.viewDelete', {
-				goods_ids: selList
-			},
-			'删除中...'
+			that.$http(
+				'user.viewDelete',
+				{
+					goods_ids: selList
+				},
+				'删除中...'
 			).then(res => {
 				if (res.code === 1) {
 					if (that.isAllSel) {
@@ -134,7 +136,6 @@ export default {
 .head_box {
 	height: 70rpx;
 	padding: 0 30rpx;
-
 	.count-box {
 		font-size: 26rpx;
 		color: #999;

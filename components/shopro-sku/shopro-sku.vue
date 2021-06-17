@@ -21,7 +21,7 @@
 			</view>
 
 			<!-- 规格选项 -->
-			<view class="content_box">
+			<scroll-view scroll-y class="content_box">
 				<view class="select-box u-felx-col u-row-left" v-for="(s, x) in skuList" :key="s.id">
 					<view class="type-title">{{ s.name }}</view>
 					<view class="tag-box u-flex u-flex-wrap">
@@ -43,12 +43,14 @@
 					<view class="num-title">购买数量</view>
 					<u-number-box v-model="goodsNum" :min="1" :step="1" :max="maxStep" disabled-input @plus="plus" @change="changeNum"></u-number-box>
 				</view>
-			</view>
+			</scroll-view>
 
 			<!-- 功能按钮 -->
 			<view class="btn-box foot_box u-flex u-row-between" v-if="buyType === 'cart' || buyType === 'buy'">
 				<button class="u-reset-button cu-btn save-btn" v-if="(activityRules && activityRules.status === 'ing') || !goodsInfo.activity_type" @tap="confirm">确认</button>
-				<button class="u-reset-button cu-btn cancel-btn" v-if="activityRules && activityRules.status !== 'ing' && goodsInfo.activity_type" @tap="showModal = false">确定</button>
+				<button class="u-reset-button cu-btn cancel-btn" v-if="activityRules && activityRules.status !== 'ing' && goodsInfo.activity_type" @tap="showModal = false">
+					确定
+				</button>
 			</view>
 			<view class="btn-box foot_box u-flex u-row-between" v-else>
 				<button class="u-reset-button cu-btn  cart-btn" @tap="confirmCart">加入购物车</button>
@@ -400,7 +402,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .size-box {
 	line-height: 82rpx;
 	background: #fff;
@@ -421,10 +423,10 @@ export default {
 
 // 规格
 .shop-modal {
-	width: 750upx;
+	width: 750rpx;
 	height: 950rpx;
 	background: rgba(255, 255, 255, 1);
-	padding: 20rpx 20upx 30rpx;
+	padding: 20rpx 20rpx 30rpx;
 	// 商品卡片
 	.top {
 		margin: 30rpx 0;
@@ -481,10 +483,8 @@ export default {
 	// 规格选项
 	.select-box {
 		margin-bottom: 30rpx;
-
 		.type-title {
 			font-size: 26upx;
-
 			font-weight: 400;
 			margin-bottom: 20upx;
 		}

@@ -48,12 +48,21 @@ const actions = {
 	}, options) {
 		return new Promise((resolve, reject) => {
 			let shop_id = 0;
+			// #ifdef H5
 			if (options?.query.shop_id) {
 				shop_id = options.query.shop_id;
 			}
-			if (options?.scene.shop_id) {
-				shop_id = options.scene.shop_id;
+			// #endif
+
+			// #ifdef MP
+			if (options?.query.scene) {
+				let scene = decodeURIComponent(options?.query.scene);
+				let sceneObj = scene.split('=');
+				if (sceneObj[0] === 'shop_id') {
+					shop_id = sceneObj[1]
+				}
 			}
+			// #endif
 			http('common.template', {
 				shop_id
 			}).then(res => {

@@ -384,6 +384,12 @@ export default {
 			method: 'GET',
 			// desc: '用户其他信息',
 		},
+		appleIdOauth: {
+			url: 'user/appleIdOauth',
+			auth: false,
+			method: 'POST',
+			// desc: 'appleId授权',
+		}
 	},
 
 	/** 位置 ↓ **/

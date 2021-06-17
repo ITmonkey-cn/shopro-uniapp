@@ -1,6 +1,6 @@
 {
 	"name": "Shopro开源商城",
-	"appid": "__UNI__EB95F06",
+	"appid": "__UNI__*****",
 	"description": "Shopro开源商城",
 	"versionName": "1.3.0",
 	"versionCode": "100",
@@ -11,9 +11,10 @@
 			"subPackages": true
 		},
 		"runmode": "liberate", // 开启分包优化后，必须配置资源释放模式
-		"safearea": {
+		"safearea": { //APP底部安全区域
+			"background": "#fff",
 			"bottom": {
-				"offset": "none"
+				"offset": "auto"
 			}
 		},
 		"splashscreen": {
@@ -69,7 +70,7 @@
 			"ios": {
 				"capabilities": {
 					"entitlements": {
-						"com.apple.developer.associated-domains": ["applinks:m.shopro.top"]
+						"com.apple.developer.associated-domains": ["applinks:*****top"]
 					}
 				},
 				"privacyDescription": {
@@ -90,66 +91,66 @@
 					},
 					"weixin": {
 						"__platform__": ["ios", "android"],
-						"appid": "wx522bf4cc9a1319ae",
-						"UniversalLinks": "https://m.shopro.top/uni-universallinks/__UNI__EB95F06"
+						"appid": "wx522*****319ae",
+						"UniversalLinks": "https://*****/uni-universallinks/__UNI__EB95F06"
 					}
 				},
 				"geolocation": {
 					"amap": {
 						"__platform__": ["ios", "android"],
-						"appkey_ios": "949f86b55f78c9cad8632de010206494",
-						"appkey_android": "0d51d7add82e0eeebf2bcbe264dac409"
+						"appkey_ios": "949f86b55*****8632de010206494",
+						"appkey_android": "0d51d7add*****2bcbe264dac409"
 					}
 				},
 				"maps": {
 					"amap": {
-						"appkey_ios": "949f86b55f78c9cad8632de010206494",
-						"appkey_android": "0d51d7add82e0eeebf2bcbe264dac409"
+						"appkey_ios": "949f86b55f78c*****de010206494",
+						"appkey_android": "0d51d7add8*****bcbe264dac409"
 					}
 				},
 				"oauth": {
 					"weixin": {
-						"appid": "wx522bf4cc9a1319ae",
-						"appsecret": "531b39d953f972bf5f6e83c7238fb4dc",
-						"UniversalLinks": "https://m.shopro.top/uni-universallinks/__UNI__EB95F06"
+						"appid": "wx522bf*****319ae",
+						"appsecret": "531b39d*****2bf5f6e83c7238fb4dc",
+						"UniversalLinks": "https://*****/uni-universallinks/__UNI__EB95F06"
 					}
 				},
 				"share": {
 					"weixin": {
-						"appid": "wx522bf4cc9a1319ae",
-						"UniversalLinks": "https://m.shopro.top/uni-universallinks/__UNI__EB95F06"
+						"appid": "wx522bf*****19ae",
+						"UniversalLinks": "https://*****/uni-universallinks/__UNI__EB95F06"
 					}
 				}
 			},
 			"icons": {
 				"android": {
-					"hdpi": "unpackage/res/icons/72x72.png",
-					"xhdpi": "unpackage/res/icons/96x96.png",
-					"xxhdpi": "unpackage/res/icons/144x144.png",
-					"xxxhdpi": "unpackage/res/icons/192x192.png"
+					"hdpi": "",
+					"xhdpi": "",
+					"xxhdpi": "",
+					"xxxhdpi": ""
 				},
 				"ios": {
-					"appstore": "unpackage/res/icons/1024x1024.png",
+					"appstore": "",
 					"ipad": {
-						"app": "unpackage/res/icons/76x76.png",
-						"app@2x": "unpackage/res/icons/152x152.png",
-						"notification": "unpackage/res/icons/20x20.png",
-						"notification@2x": "unpackage/res/icons/40x40.png",
-						"proapp@2x": "unpackage/res/icons/167x167.png",
-						"settings": "unpackage/res/icons/29x29.png",
-						"settings@2x": "unpackage/res/icons/58x58.png",
-						"spotlight": "unpackage/res/icons/40x40.png",
-						"spotlight@2x": "unpackage/res/icons/80x80.png"
+						"app": "",
+						"app@2x": "",
+						"notification": "",
+						"notification@2x": "",
+						"proapp@2x": "",
+						"settings": "",
+						"settings@2x": "",
+						"spotlight": "",
+						"spotlight@2x": ""
 					},
 					"iphone": {
-						"app@2x": "unpackage/res/icons/120x120.png",
-						"app@3x": "unpackage/res/icons/180x180.png",
-						"notification@2x": "unpackage/res/icons/40x40.png",
-						"notification@3x": "unpackage/res/icons/60x60.png",
-						"settings@2x": "unpackage/res/icons/58x58.png",
-						"settings@3x": "unpackage/res/icons/87x87.png",
-						"spotlight@2x": "unpackage/res/icons/80x80.png",
-						"spotlight@3x": "unpackage/res/icons/120x120.png"
+						"app@2x": "",
+						"app@3x": "",
+						"notification@2x": "",
+						"notification@3x": "",
+						"settings@2x": "",
+						"settings@3x": "",
+						"spotlight@2x": "",
+						"spotlight@3x": ""
 					}
 				}
 			}
@@ -160,7 +161,7 @@
 	},
 	"quickapp": {},
 	"mp-weixin": {
-		"appid": "wx39cd0799d4567dd0",
+		"appid": "wx39cd*****dd0",
 		"setting": {
 			"urlCheck": false,
 			"es6": true, //消除大多数样式警告
@@ -222,7 +223,7 @@
 	"h5": {
 		"template": "template.h5.html",
 		"router": {
-			"mode": "history",
+			"mode": "hash",
 			"base": ""
 		},
 		"optimization": {
@@ -232,22 +233,22 @@
 		},
 		"title": "Shopro开源商城",
 		"devServer": {
-			"https": false,
+			"https": true,
 			"port": ""
 		},
 		"sdkConfigs": {
 			"maps": {
 				"qqmap": {
-					"key": "4NRBZ-CMP63-VSU3Y-YTSAF-ARYXH-DCFH3"
+					"key": "4NRBZ-CM*****-ARYXH-DCFH3"
 				}
 			}
 		},
-		"domain": "m.shopro.top",
+		"domain": "*****.com",
 		"uniStatistics": {
 			"enable": true
 		}
 	},
-	"_spaceID": "f0536ae9-056c-4db0-8350-2aa7c3e11334",
+	"_spaceID": "f0536ae9*****a7c3e11334",
 	"uniStatistics": {
 		"enable": false
 	}

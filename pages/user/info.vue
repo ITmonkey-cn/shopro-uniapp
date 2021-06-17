@@ -119,9 +119,7 @@
 						<view class="name">{{ thirdOauthInfo.nickname }}</view>
 					</view>
 					<view class="bind-box u-m-l-20">
-						<button class="u-reset-button bind-btn" v-if="userInfo.id && !userInfo.verification.wxOpenPlatform" @tap="bindThirdOauth('App', 'Wechat')">
-							绑定
-						</button>
+						<button class="u-reset-button bind-btn" v-if="userInfo.id && !userInfo.verification.wxOpenPlatform" @tap="bindThirdOauth('App', 'Wechat')">绑定</button>
 						<button class="u-reset-button relieve-btn" v-else @tap="unbindThirdOauth('App', 'Wechat')">解绑</button>
 					</view>
 				</view>
@@ -217,7 +215,7 @@ export default {
 			if (authState < 2) return;
 			const chooseImageRes = await this.chooseImage(1);
 			const uploadImageRes = await this.uploadImage(chooseImageRes[0]);
-			this.userData.avatar = uploadImageRes.full_url;
+			this.userData.avatar = uploadImageRes.fullurl;
 			this.userData.fileUrl = uploadImageRes.url;
 			this.editInfoDisabled = this.userData.avatar == this.userInfo.avatar;
 		},
@@ -281,11 +279,15 @@ export default {
 				this.$u.toast('昵称不能为空');
 				return false;
 			}
-			that.$http('user.profile', {
-				nickname: that.userData.nickname,
-				birthday: that.userData.birthday,
-				avatar: that.userData.fileUrl
-			}, '保存中...').then(res => {
+			that.$http(
+				'user.profile',
+				{
+					nickname: that.userData.nickname,
+					birthday: that.userData.birthday,
+					avatar: that.userData.fileUrl
+				},
+				'保存中...'
+			).then(res => {
 				if (res.code === 1) {
 					that.getUserInfo();
 					that.editInfoDisabled = true;

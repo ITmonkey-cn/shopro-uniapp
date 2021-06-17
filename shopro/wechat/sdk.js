@@ -62,8 +62,7 @@ export default {
 						console.log(`%c微信H5sdk,openAddress失败：`,
 							'color:green;background:yellow');
 					},
-					complete: function(msg) {
-					}
+					complete: function(msg) {}
 				});
 			});
 		});
