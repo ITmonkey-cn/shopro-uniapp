@@ -12,7 +12,7 @@
 		<!-- 商品列表 -->
 		<view class="content_box">
 			<scroll-view scroll-y="true" enable-back-to-top @scrolltolower="loadMore" class="scroll-box">
-				<view class="goods-item u-m-b-16" v-for="item in goodsList" :key="item.id">
+				<view class="goods-item u-m-b-16" v-for="item in goodsList" :key="item.id" @tap="toSeckillDetail(item.id)">
 					<view class="big-goods  u-flex u-p-20 u-col-top ">
 						<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
 						<view class=" card-right u-m-l-20 u-flex-col u-row-between">
@@ -29,12 +29,12 @@
 									style="width:210rpx;"
 									height="18"
 									:show-percent="false"
-									:percent="item.percent"
+									:percent="Number(item.percent)"
 									inactive-color=" #e7e7e7"
 									active-color="#ffbbbb "
 								></u-line-progress>
 
-								<view class="progress-text">已售出{{ item.percent }}件</view>
+								<view class="progress-text">已售出{{ item.sales }}件</view>
 							</view>
 
 							<view class=" u-flex u-row-between u-col-center">
@@ -42,7 +42,7 @@
 									<view class="price u-m-r-10">{{ item.price }}</view>
 									<view class="origin-price">{{ item.original_price }}</view>
 								</view>
-								<button class="u-reset-button buy-btn" @tap="$Router.push({ path: '/pages/goods/detail', query: { id: item.id } })">去抢购</button>
+								<button class="u-reset-button buy-btn">去抢购</button>
 							</view>
 						</view>
 					</view>
@@ -101,6 +101,9 @@ export default {
 				this.getGoodsList();
 			}
 		},
+		toSeckillDetail(id) {
+			this.$Router.push({ path: '/pages/goods/detail', query: { id: id } });
+		},
 		// 加载更多
 		loadMore() {
 			if (this.currentPage < this.lastPage) {
@@ -112,15 +115,19 @@ export default {
 		getGoodsList() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$http('goods.seckillList', {
-				type: that.tabCurrent,
-				page: that.currentPage
-			}, '加载中...').then(res => {
+			that.$http(
+				'goods.seckillList',
+				{
+					type: that.tabCurrent,
+					page: that.currentPage
+				},
+				'加载中...'
+			).then(res => {
 				uni.stopPullDownRefresh();
 				if (res.code === 1) {
 					that.goodsList = [...that.goodsList, ...res.data.data];
 					that.goodsList.map(item => {
-						item.percent = item.stock + item.sales > 0 ? parseInt((item.sales / (item.sales + item.stock)) * 100) : 0;
+						item.percent = item.stock + item.sales > 0 ? ((item.sales / (item.sales + item.stock)) * 100).toFixed(2) : 0;
 					});
 					that.isEmpty = !that.goodsList.length;
 					that.lastPage = res.data.last_page;

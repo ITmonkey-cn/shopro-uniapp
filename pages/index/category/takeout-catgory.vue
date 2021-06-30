@@ -183,7 +183,6 @@ export default {
 		console.log('%c当前分类：快速购买', 'color:green;background:yellow');
 		await this.getCategory();
 		let res = await this.getGoodsList();
-		console.log(res, 111111);
 	},
 
 	methods: {

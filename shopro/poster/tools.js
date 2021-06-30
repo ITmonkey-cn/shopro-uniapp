@@ -3,6 +3,7 @@ export default {
 		let res = await this.getImageInfo_PromiseFc(imgPath)
 		let newPath = '';
 		if (!res) {
+			uni.hideLoading()
 			switch (type) {
 				case 'avatar':
 					console.log('%cerr:海报头像图片错误', 'color:green;background:yellow');

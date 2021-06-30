@@ -60,20 +60,20 @@
 						style="width:210rpx;"
 						height="18"
 						:show-percent="false"
-						:percent="item.percent"
+						:percent="Number(item.percent)"
 						inactive-color=" #e7e7e7"
 						active-color="#ffbbbb "
 					></u-line-progress>
 
-					<view class="progress-text">已售出{{ item.percent }}件</view>
+					<view class="progress-text">已售出{{ item.sales }}件</view>
 				</view>
 
 				<view class=" u-flex u-row-between u-col-center">
-					<view class="u-flex u-col-bottom font-OPPOSANS">
+					<view class="u-flex u-col-bottom">
 						<view class="price u-m-r-10">{{ item.price }}</view>
 						<view class="origin-price">{{ item.original_price }}</view>
 					</view>
-					<button class="u-reset-button buy-btn" @tap.stop="$Router.push({ path: '/pages/goods/detail', query: { id: item.id } })">去抢购</button>
+					<button class="u-reset-button buy-btn">去抢购</button>
 				</view>
 			</view>
 		</view>
@@ -130,7 +130,7 @@ export default {
 				if (res.code === 1) {
 					that.goodsList = res.data.goods.data;
 					that.goodsList.map(item => {
-						item.percent = item.stock + item.sales > 0 ? parseInt((item.sales / (item.sales + item.stock)) * 100) : 0;
+						item.percent = item.stock + item.sales > 0 ? ((item.sales / (item.sales + item.stock)) * 100).toFixed(2) : 0;
 					});
 					let nowTime = new Date().getTime();
 					let endTime = res.data.endtime * 1000;

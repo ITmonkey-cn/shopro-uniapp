@@ -15,7 +15,7 @@
  * @example <u-waterfall :flowList="flowList"></u-waterfall>
  */
 export default {
-	name: "u-waterfall",
+	name: 'u-waterfall',
 	props: {
 		value: {
 			// 瀑布流数据
@@ -44,7 +44,7 @@ export default {
 			rightList: [],
 			tempList: [],
 			children: []
-		}
+		};
 	},
 	watch: {
 		copyFlowList(nVal, oVal) {
@@ -74,7 +74,7 @@ export default {
 			let item = this.tempList[0];
 			// 解决多次快速上拉后，可能数据会乱的问题，因为经过上面的两个await节点查询阻塞一定时间，加上后面的定时器干扰
 			// 数组可能变成[]，导致此item值可能为undefined
-			if(!item) return ;
+			if (!item) return;
 			if (leftRect.height < rightRect.height) {
 				this.leftList.push(item);
 			} else if (leftRect.height > rightRect.height) {
@@ -82,7 +82,7 @@ export default {
 			} else {
 				// 这里是为了保证第一和第二张添加时，左右都能有内容
 				// 因为添加第一张，实际队列的高度可能还是0，这时需要根据队列元素长度判断下一个该放哪边
-				if (this.leftList.length <= this.rightList.length) {
+				if (this.leftList.length < this.rightList.length) {
 					this.leftList.push(item);
 				} else {
 					this.rightList.push(item);
@@ -94,7 +94,7 @@ export default {
 			if (this.tempList.length) {
 				setTimeout(() => {
 					this.splitData();
-				}, this.addTime)
+				}, this.addTime);
 			}
 		},
 		// 复制而不是引用对象和数组
@@ -114,34 +114,34 @@ export default {
 			// 如果findIndex找不到合适的条件，就会返回-1
 			let index = -1;
 			index = this.leftList.findIndex(val => val[this.idKey] == id);
-			if(index != -1) {
+			if (index != -1) {
 				// 如果index不等于-1，说明已经找到了要找的id，根据index索引删除这一条数据
 				this.leftList.splice(index, 1);
 			} else {
 				// 同理于上方面的方法
 				index = this.rightList.findIndex(val => val[this.idKey] == id);
-				if(index != -1) this.rightList.splice(index, 1);
+				if (index != -1) this.rightList.splice(index, 1);
 			}
 			// 同时清除父组件的数据中的对应id的条目
 			index = this.value.findIndex(val => val[this.idKey] == id);
-			if(index != -1) this.$emit('input', this.value.splice(index, 1));
+			if (index != -1) this.$emit('input', this.value.splice(index, 1));
 		},
 		// 修改某条数据的某个属性
 		modify(id, key, value) {
 			// 如果findIndex找不到合适的条件，就会返回-1
 			let index = -1;
 			index = this.leftList.findIndex(val => val[this.idKey] == id);
-			if(index != -1) {
+			if (index != -1) {
 				// 如果index不等于-1，说明已经找到了要找的id，修改对应key的值
 				this.leftList[index][key] = value;
 			} else {
 				// 同理于上方面的方法
 				index = this.rightList.findIndex(val => val[this.idKey] == id);
-				if(index != -1) this.rightList[index][key] = value;
+				if (index != -1) this.rightList[index][key] = value;
 			}
 			// 修改父组件的数据中的对应id的条目
 			index = this.value.findIndex(val => val[this.idKey] == id);
-			if(index != -1) {
+			if (index != -1) {
 				// 首先复制一份value的数据
 				let data = this.cloneData(this.value);
 				// 修改对应索引的key属性的值为value
@@ -151,11 +151,11 @@ export default {
 			}
 		}
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import "../../libs/css/style.components.scss";
+@import '../../libs/css/style.components.scss';
 
 .u-waterfall {
 	@include vue-flex;

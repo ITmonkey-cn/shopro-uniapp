@@ -146,7 +146,7 @@
 											<view
 												class="round-wrap"
 												v-if="userInfo.total_consume != moneyTermNum"
-												:style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]"
+												:style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) + '%' }]"
 											>
 												<view class="round-inner"></view>
 											</view>
@@ -161,7 +161,7 @@
 											<view
 												class="progress-num u-m-t-10"
 												v-if="userInfo.total_consume != moneyTermNum"
-												:style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) }]"
+												:style="[{ left: getProgress(userInfo.total_consume, moneyTermNum) + '%' }]"
 											>
 												{{ userInfo.total_consume }}
 											</view>
@@ -311,11 +311,11 @@ export default {
 			let unit = '';
 			if (stock + sales > 0) {
 				let num = (sales / stock) * 100;
-				unit = num.toFixed(2) + '%';
+				unit = num.toFixed(2);
 			} else {
-				unit = '0%';
+				unit = '0';
 			}
-			return unit;
+			return Number(unit);
 		},
 
 		// 身份认证
@@ -533,26 +533,18 @@ export default {
 .auth-box {
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
-	position: fixed;
-	z-index: 99;
 	background: none;
 	.notice-box {
-		position: fixed;
-		z-index: 1111;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		background-color: #fff;
-		top: 50%;
-		left: 50%;
 		width: 612rpx;
 		min-height: 658rpx;
 		background: #ffffff;
 		padding: 30rpx;
 		border-radius: 20rpx;
-		transform: translate(-50%, -50%);
 		.img-wrap {
 			margin-bottom: 50rpx;
 			.notice-img {

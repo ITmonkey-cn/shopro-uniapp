@@ -128,7 +128,7 @@ export default {
 		// 图片的裁剪模式
 		imgMode: {
 			type: String,
-			default: 'widthFix'
+			default: 'aspectFill'
 		},
 		// 背景颜色
 		bgColor: {

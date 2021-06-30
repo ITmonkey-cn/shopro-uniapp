@@ -57,7 +57,9 @@
 				</view>
 			</view>
 		</view>
-		<view class="bottom-box u-flex u-row-center u-col-center" v-if="orderDetail.status_code == 'nosend'"><button class="cu-btn send-btn" @tap="sendOrder">发货</button></view>
+		<view class="bottom-hack" v-if="orderDetail.status_code == 'nosend'">
+			<view class="bottom-box u-flex u-row-center u-col-center"><button class="cu-btn send-btn" @tap="sendOrder">发货</button></view>
+		</view>
 	</view>
 </template>
 
@@ -94,10 +96,14 @@ export default {
 		// 订单发货
 		sendOrder() {
 			let that = this;
-			that.$http('store.orderSend', {
-				id: that.orderDetail.id,
-				store_id: uni.getStorageSync('storeId')
-			}, '发货中...').then(res => {
+			that.$http(
+				'store.orderSend',
+				{
+					id: that.orderDetail.id,
+					store_id: uni.getStorageSync('storeId')
+				},
+				'发货中...'
+			).then(res => {
 				if (res.code === 1) {
 					that.$u.toast(res.msg);
 					that.getOrderDetail();
@@ -110,12 +116,17 @@ export default {
 
 <style lang="scss">
 .order-detail-wrap {
-	position: relative;
 	height: 100%;
-	.bottom-box {
-		position: absolute;
+	.bottom-hack {
 		width: 750rpx;
+		height: 100rpx;
+	}
+	.bottom-box {
+		position: fixed;
+		width: 750rpx;
+		height: 100rpx;
 		bottom: 0;
+		left: 0;
 		background-color: #fff;
 		padding: 10rpx 0;
 		.send-btn {
@@ -125,7 +136,6 @@ export default {
 			border: 1rpx solid rgba(237, 237, 237, 1);
 			border-radius: 40rpx;
 			font-size: 30rpx;
-
 			font-weight: 500;
 			color: rgba(255, 255, 255, 1);
 		}

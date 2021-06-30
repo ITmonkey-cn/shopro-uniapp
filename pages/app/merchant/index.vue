@@ -11,7 +11,7 @@
 						<text class="shop-title u-m-r-20">{{ storeDetail.name }}</text>
 						<text class="iconfont iconxiala"></text>
 					</view>
-					<view class="shop-address" @tap="jump('/pages/app/merchant/info')">
+					<view class="shop-address u-ellipsis-2" @tap="jump('/pages/app/merchant/info')">
 						{{ storeDetail.province_name || '' }}{{ storeDetail.city_name || '' }}{{ storeDetail.area_name || '' }}{{ storeDetail.address || '' }}
 					</view>
 				</view>
@@ -369,7 +369,6 @@ export default {
 			}
 			.shop-address {
 				font-size: 28rpx;
-
 				font-weight: 500;
 				color: rgba(255, 255, 255, 1);
 				width: 540rpx;

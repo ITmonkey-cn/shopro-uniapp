@@ -6,7 +6,7 @@
 			<text class="group-head__notice">省钱省心限时拼</text>
 		</view>
 		<view class="group-box">
-			<view class="goods-item u-m-b-16" v-for="(item, index) in grouponList" :key="item.id">
+			<view class="goods-item u-m-b-16" v-for="(item, index) in grouponList" :key="item.id" @tap="$Router.push({ path: '/pages/goods/detail', query: { id: item.id } })">
 				<view class="big-goods u-p-20 u-flex u-col-top">
 					<image v-if="index < 3" class="top-tag" :src="tagMap[index]" mode=""></image>
 					<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
@@ -32,7 +32,7 @@
 								<view class="price u-m-r-10">{{ item.groupon_price }}</view>
 								<view class="origin-price">{{ item.original_price }}</view>
 							</view>
-							<button class="u-reset-button buy-btn" @tap="$Router.push({ path: '/pages/goods/detail', query: { id: item.id } })">马上拼</button>
+							<button class="u-reset-button buy-btn">马上拼</button>
 						</view>
 					</view>
 				</view>

@@ -115,6 +115,7 @@ export default {
 		// 单规格选项
 		if (!this.goodsInfo.is_sku) {
 			this.currentSkuPrice = this.skuPrice[0];
+			this.maxStep = this.skuPrice[0].stock;
 		}
 	},
 	watch: {

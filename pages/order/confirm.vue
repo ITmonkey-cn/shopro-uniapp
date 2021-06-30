@@ -90,7 +90,7 @@
 				>
 					<u-collapse-item>
 						<block slot="title">
-							<view style="width: 100%;padding-right: 0;" class="u-flex u-row-between item-list">
+							<view style="width: 680rpx;padding-right: 0;" class="u-flex u-row-between item-list">
 								<view class="item-title">活动优惠</view>
 								<view class="u-flex">
 									<text class="price" style="margin-right: 0;">-￥{{ orderPre.activity_discount_money || '0.00' }}</text>
@@ -98,7 +98,7 @@
 							</view>
 						</block>
 						<view class="" v-for="item in orderPre.activity_discount_infos" :key="item.activity_id">
-							<view class="u-flex u-row-between item-list">
+							<view class="u-flex u-row-between item-list" v-if="item.activity_type !== 'free_shipping'">
 								<view class="item-title">{{ item.activity_title }}</view>
 								<view class="u-flex">
 									<text class="price" style="color: #666;">-￥{{ item.activity_discount_money || '0.00' }}</text>
@@ -108,9 +108,13 @@
 					</u-collapse-item>
 				</u-collapse>
 				<view class="price-box  u-flex u-row-between item-list">
-					<view class="item-title">运费</view>
+					<view class="item-title u-flex u-col-center">
+						<view class="u-m-r-10">运费</view>
+						<view class="activity-title" v-if="Number(orderPre.dispatch_discount_money) > 0">活动减￥ {{ orderPre.dispatch_discount_money }}</view>
+					</view>
 					<view class="u-flex">
-						<text class="price">￥{{ orderPre.dispatch_amount || '0.00' }}</text>
+						<text class="origin-price u-m-r-10" v-if="Number(orderPre.dispatch_discount_money) > 0">-￥{{ orderPre.dispatch_amount }}</text>
+						<text class="price">￥{{ Number(orderPre.dispatch_amount) - Number(orderPre.dispatch_discount_money) || '0.00' }}</text>
 					</view>
 				</view>
 			</block>
@@ -165,11 +169,11 @@
 					</view>
 					<!-- 地址 -->
 					<view class="express-address" v-if="expressTypeCur == 'express' && addressId">
-						<view class="express-top x-bc" @tap="jump('/pages/user/address/list', { from: 'order' })">
+						<view class="express-top  u-flex u-row-between" @tap="jump('/pages/user/address/list', { from: 'order' })">
 							<view class="">
 								<text class="tag" v-show="addressData.is_default == 1">默认</text>
 								<text class="address">{{ addressData.province_name }}{{ addressData.city_name }}{{ addressData.area_name }}{{ addressData.address }}</text>
-								<u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon>
+								<text class="address-guide"><u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon></text>
 							</view>
 
 							<view class="address-location u-flex-col u-col-center">
@@ -613,7 +617,7 @@ export default {
 				buy_type: that.grouponBuyType,
 				groupon_id: that.grouponId
 			}).then(res => {
-				if (res.code === 1) {
+				if (res.data) {
 					that.orderPre = res.data;
 					that.perGoodsList = res.data.new_goods_list;
 					that.perGoodsList.map(item => {
@@ -706,7 +710,7 @@ export default {
 			this.goodsList.forEach(item => {
 				if (item.goods_id == this.currentGoodsId && this.currentSkuId == item.sku_price_id) {
 					this.expressTypeCur = item.dispatch_type;
-					this.selfPhone = item.dispatch_phone ? item.dispatch_phone : this.address && this.address.phone;
+					this.selfPhone = item.dispatch_phone ? item.dispatch_phone : this.addressData && this.addressData.phone;
 					this.checkDayCur = item.checkDayCur ? item.checkDayCur : 0;
 					this.checkTimeCur = item.checkTimeCur ? item.checkTimeCur : 0;
 					if (this.expressTypeCur == 'selfetch') {
@@ -716,6 +720,7 @@ export default {
 								this.storeInfo = store;
 							}
 						});
+						this.selfPhone = item.dispatch_phone ? item.dispatch_phone : this.addressData && this.addressData.phone;
 					}
 				}
 			});
@@ -892,11 +897,20 @@ export default {
 	.item-title {
 		font-size: 28rpx;
 		margin-right: 20rpx;
+		.activity-title {
+			font-size: 26rpx;
+			color: #999;
+		}
 	}
 
 	.detail {
 		font-size: 28rpx;
 		color: #333;
+	}
+	.origin-price {
+		font-size: 26rpx;
+		color: #666;
+		text-decoration: line-through;
 	}
 
 	.price {

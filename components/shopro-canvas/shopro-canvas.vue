@@ -38,6 +38,7 @@ export default {
 	methods: {
 		async shareFc() {
 			let that = this;
+			_app.showLoading('绘制中...');
 			let config = {};
 			if (that.canvasParams.backgroundImage) {
 				config = {
@@ -79,11 +80,13 @@ export default {
 						{
 							canvasId: that.canvasId,
 							success: res => {
+								_app.hideLoading();
 								that.posterImage = res.tempFilePath;
 								that.$emit('success', res.tempFilePath);
 								_app.log('海报生成成功, 时间:' + new Date() + '， 临时路径: ' + res.tempFilePath);
 							},
 							fail: err => {
+								_app.hideLoading();
 								console.log('生成异常', err);
 							}
 						},

@@ -345,7 +345,7 @@ export default {
 							// #ifndef MP-WEIXIN
 							{
 								type: 'qrcode',
-								text: that.shareDetail.path,
+								text: that.shareDetail.copyLink,
 								size: 110,
 								dx: 530,
 								dy: 930
@@ -481,6 +481,7 @@ export default {
 		},
 		// 开始绘制
 		onPoster() {
+			this.posterImage = '';
 			if (this.$store.state.user.isLogin) {
 				this.canvasParams = this.getPosterFormatter();
 				this.showPoster = true;

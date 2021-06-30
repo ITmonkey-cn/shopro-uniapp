@@ -7,7 +7,7 @@
 				<view class="u-flex-1 u-flex u-col-center">
 					<u-search
 						class="u-m-r-20"
-						:placeholder="placeholder"
+						placeholder="请输入搜索关键字"
 						@change="onSearch"
 						@search="onSearch"
 						@clear="clearSearch"
@@ -85,7 +85,6 @@ export default {
 			},
 			goodsList: [],
 			searchVal: '',
-			placeholder: '请输入搜索关键字',
 			listParams: {
 				category_id: 0,
 				keywords: '',
@@ -107,8 +106,8 @@ export default {
 			this.listParams.category_id = this.$Route.query.id;
 		}
 		if (this.$Route.query.keywords) {
-			this.listParams.keywords = this.$Route.query.keywords;
-			this.placeholder = this.$Route.query.keywords;
+			this.listParams.keywords = this.$Route.query.keywords
+			this.searchVal = this.$Route.query.keywords;
 		}
 		this.getGoodsList();
 	},

@@ -19,8 +19,8 @@
 				<view v-show="subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ subtitle }}</view>
 			</view>
 
-			<view class="" v-if="tagTextList.length">
-				<view class="tag-box u-m-b-20 u-m-r-10" v-for="(item, index) in tagTextList" :key="index">{{ item }}</view>
+			<view class="u-m-b-20" v-if="tagTextList.length">
+				<view class="tag-box u-m-r-10" v-for="(item, index) in tagTextList" :key="index">{{ item }}</view>
 			</view>
 
 			<view class=" u-flex u-row-between u-col-center">
@@ -46,7 +46,7 @@
 								:value="checkCart[detail.id].num"
 								:min="0"
 								:step="1"
-								:max="999"
+								:max="detail.sku_price[0].stock"
 								disabled-input
 								@min="onMin"
 								@plus="plus($event, detail.sku_price[0])"
@@ -210,14 +210,12 @@ export default {
 		// 增加
 		plus(e, sku) {
 			if (e.value >= sku.stock) {
-				this.maxStep = sku.stock;
 				this.$u.toast('库存不足');
 				return;
 			}
 			if (this.detail.activity_type === 'seckill' || this.detail.activity_type === 'groupon') {
 				let rules = this.detail.activity.rules;
 				if (rules.limit_buy != 0 && e.value >= rules.limit_buy) {
-					this.maxStep = rules.limit_buy;
 					this.$u.toast('本次活动最多购买' + rules.limit_buy + '件');
 					return;
 				}
@@ -249,6 +247,10 @@ export default {
 
 		// 加入购物车
 		addCart(sku) {
+			if (sku.stock <= 0) {
+				this.$u.toast('库存不足');
+				return;
+			}
 			if (this.detail.activity_type) {
 				this.$Router.push({ path: '/pages/goods/detail', query: { id: this.detail.id } });
 				return;

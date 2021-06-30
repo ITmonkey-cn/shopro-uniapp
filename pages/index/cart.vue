@@ -38,6 +38,7 @@
 										:min="0"
 										:step="1"
 										:index="index"
+										:max="g.sku_price ? g.sku_price.stock : 0"
 										disabled-input
 										@min="onMin(g)"
 										@change="changeNum($event, g)"
@@ -144,16 +145,28 @@ export default {
 			let { cartList } = this;
 			if (this.isSel) {
 				let confirmcartList = [];
-				this.cartList.forEach(item => {
+				let isActivity = false;
+				for (let item of this.cartList) {
 					if (item.checked) {
+						if (item.cart_type === 'invalid') {
+							this.$u.toast('商品已失效');
+							return false;
+						}
+						if (item.cart_type === 'activity') {
+							isActivity = true;
+						}
 						confirmcartList.push({
 							goods_id: item.goods_id,
 							sku_price_id: item.sku_price_id,
-							goods_price: item.sku_price.price,
+							goods_price: item.sku_price ? item.sku_price.price : 0,
 							goods_num: item.goods_num
 						});
 					}
-				});
+				}
+				if (confirmcartList.length > 1 && isActivity) {
+					this.$u.toast('活动商品只能单独购买');
+					return false;
+				}
 				that.jump('/pages/order/confirm', { goodsList: confirmcartList, from: 'cart' });
 			}
 		},

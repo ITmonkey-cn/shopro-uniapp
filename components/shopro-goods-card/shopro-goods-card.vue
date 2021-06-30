@@ -16,16 +16,19 @@
 				{{ title }}
 			</view>
 			<view class="sub-title u-ellipsis-1 u-m-b-10" v-show="subtitle">{{ subtitle }}</view>
-			<u-tag
-				class="u-m-t-10 u-m-b-20 u-m-r-10"
-				v-for="(item, index) in tagTextList"
-				:key="index"
-				:text="item"
-				size="mini"
-				bg-color="#fff"
-				border-color="#FF0000"
-				color="#FF0000"
-			/>
+			<view class="u-m-b-20">
+				<u-tag
+					class="u-m-t-10  u-m-r-10"
+					v-for="(item, index) in tagTextList"
+					:key="index"
+					:text="item"
+					size="mini"
+					bg-color="#fff"
+					border-color="#FF0000"
+					color="#FF0000"
+				/>
+			</view>
+
 			<slot name="cardBottom">
 				<view class="u-flex u-col-center u-row-between">
 					<view class="price-box font-OPPOSANS">
@@ -44,7 +47,7 @@
 									:value="checkCart[detail.id].num"
 									:min="0"
 									:step="1"
-									:max="999"
+									:max="detail.sku_price[0].stock"
 									disabled-input
 									@min="onMin"
 									@plus="plus($event, detail.sku_price[0])"
@@ -84,6 +87,7 @@ export default {
 	components: {},
 	data() {
 		return {
+			maxStep: 999999,
 			showSku: false,
 			goodsInfo: {}, //商品详情
 			typeMap: {
@@ -171,6 +175,7 @@ export default {
 
 		// 更改商品数
 		async onChangeNum(e, sku) {
+			this.maxStep = sku.stock;
 			let gIndex = this.checkGoodsIndex(sku.goods_id);
 			if (e.value != this.checkCart[sku.goods_id].num) {
 				uni.showLoading({
@@ -205,14 +210,12 @@ export default {
 		// 增加
 		plus(e, sku) {
 			if (e.value >= sku.stock) {
-				this.maxStep = sku.stock;
 				this.$u.toast('库存不足');
 				return;
 			}
 			if (this.detail.activity_type === 'seckill' || this.detail.activity_type === 'groupon') {
 				let rules = this.detail.activity.rules;
 				if (rules.limit_buy != 0 && e.value >= rules.limit_buy) {
-					this.maxStep = rules.limit_buy;
 					this.$u.toast('本次活动最多购买' + rules.limit_buy + '件');
 					return;
 				}
@@ -244,6 +247,10 @@ export default {
 
 		// 加入购物车
 		addCart(sku) {
+			if (sku.stock <= 0) {
+				this.$u.toast('库存不足');
+				return;
+			}
 			if (this.detail.activity_type) {
 				this.$Router.push({ path: '/pages/goods/detail', query: { id: this.detail.id } });
 				return;

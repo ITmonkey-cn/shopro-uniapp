@@ -1,5 +1,5 @@
 /**
- *  Shopro全局配置文件
+ *  Shopro全局配置文件 v1.3.2
  */
 
 export const BASE_URL = 'https://demo.shopro.top' //后台根域名

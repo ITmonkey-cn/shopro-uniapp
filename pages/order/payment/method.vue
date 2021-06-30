@@ -113,7 +113,7 @@ export default {
 				uni.showModal({
 					title: '支付提示',
 					confirmColor: '#f0c785',
-					content: `是否确认使用余额支付:${that.orderDetail.total_fee}元?`,
+					content: `是否确认使用余额支付:${that.orderDetail.total_fee || '0.00'}元?`,
 					success: res => {
 						if (res.confirm) {
 							pay = new Pay(that.payType, that.orderDetail);

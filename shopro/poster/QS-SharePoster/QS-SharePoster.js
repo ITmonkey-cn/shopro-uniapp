@@ -32,7 +32,6 @@ function getSharePoster(obj) {
 	} = obj;
 	return new Promise(async (rs, rj) => {
 		try {
-			_app.showLoading('正在准备海报数据');
 			if (!Context) {
 				_app.log('没有画布对象,创建画布对象');
 				Context = uni.createCanvasContext(posterCanvasId, (_this || null));
@@ -71,10 +70,8 @@ function getSharePoster(obj) {
 			if (imagesArray) {
 				if (typeof(imagesArray) == 'function')
 					imagesArray = imagesArray(params);
-				_app.showLoading('正在生成需绘制图片的临时路径');
 				_app.log('准备设置图片');
 				imagesArray = await setImage(imagesArray);
-				_app.hideLoading();
 			}
 			if (textArray) {
 				if (typeof(textArray) == 'function')
@@ -85,13 +82,11 @@ function getSharePoster(obj) {
 			if (qrCodeArray) {
 				if (typeof(qrCodeArray) == 'function')
 					qrCodeArray = qrCodeArray(params);
-				_app.showLoading('正在生成需绘制图片的临时路径');
 				for (let i = 0; i < qrCodeArray.length; i++) {
 					_app.log(i);
 					if (qrCodeArray[i].image)
 						qrCodeArray[i].image = await _app.downloadFile_PromiseFc(qrCodeArray[i].image);
 				}
-				_app.hideLoading();
 			}
 			if (drawArray) {
 				if (typeof(drawArray) == 'function') {
@@ -107,7 +102,7 @@ function getSharePoster(obj) {
 					for (let i = 0; i < drawArray.length; i++) {
 						const drawArrayItem = drawArray[i];
 						// if (_app.isFn(drawArrayItem.allInfoCallback) && !hasAllInfoCallback)
-							// hasAllInfoCallback = true;
+						// hasAllInfoCallback = true;
 						drawArrayItem[idKey] = i;
 						let newData;
 						let addDraw = false;
@@ -171,62 +166,62 @@ function getSharePoster(obj) {
 					_app.log('AllInfoCallback之前', JSON.stringify(drawArray));
 
 					// if (hasAllInfoCallback) {
-						_app.log('----------------hasAllInfoCallback----------------');
-						const drawArray_copy = [...drawArray];
-						drawArray_copy.sort((a, b) => {
-							const a_serialNum = !_app.isUndef(a.serialNum) && !_app.isNull(a
-								.serialNum) ? Number(a.serialNum) : Number.NEGATIVE_INFINITY;
-							const b_serialNum = !_app.isUndef(b.serialNum) && !_app.isNull(b
-								.serialNum) ? Number(b.serialNum) : Number.NEGATIVE_INFINITY;
-							return a_serialNum - b_serialNum;
-						})
-						_app.log('开始for循环');
+					_app.log('----------------hasAllInfoCallback----------------');
+					const drawArray_copy = [...drawArray];
+					drawArray_copy.sort((a, b) => {
+						const a_serialNum = !_app.isUndef(a.serialNum) && !_app.isNull(a
+							.serialNum) ? Number(a.serialNum) : Number.NEGATIVE_INFINITY;
+						const b_serialNum = !_app.isUndef(b.serialNum) && !_app.isNull(b
+							.serialNum) ? Number(b.serialNum) : Number.NEGATIVE_INFINITY;
+						return a_serialNum - b_serialNum;
+					})
+					_app.log('开始for循环');
 
-						for (let i = 0; i < drawArray_copy.length; i++) {
-							const item = {
-								...drawArray_copy[i]
-							};
-							const item_idKey = item[idKey];
-							_app.log('item_idKey', item_idKey);
-							const ind = drawArray.findIndex(it => it[idKey] == item_idKey);
-							_app.log('ind', ind);
-							if(-1 == ind) break;
-							if (_app.isFn(item.allInfoCallback)) {
-								let newData = item.allInfoCallback({
-									drawArray
+					for (let i = 0; i < drawArray_copy.length; i++) {
+						const item = {
+							...drawArray_copy[i]
+						};
+						const item_idKey = item[idKey];
+						_app.log('item_idKey', item_idKey);
+						const ind = drawArray.findIndex(it => it[idKey] == item_idKey);
+						_app.log('ind', ind);
+						if (-1 == ind) break;
+						if (_app.isFn(item.allInfoCallback)) {
+							let newData = item.allInfoCallback({
+								drawArray
+							});
+							_app.log('newData', JSON.stringify(newData));
+							if (_app.isPromise(newData)) newData = await newData;
+
+							if (drawArray[ind].type === 'text' && newData.size) {
+								const textLength = countTextLength(Context, {
+									text: newData.text || drawArray[ind].text,
+									size: newData.size
 								});
-								_app.log('newData', JSON.stringify(newData));
-								if (_app.isPromise(newData)) newData = await newData;
-								
-								if(drawArray[ind].type === 'text' && newData.size) {
-									const textLength = countTextLength(Context, {
-										text: newData.text || drawArray[ind].text,
-										size: newData.size
-									});
-									newData.textLength = textLength;
-								}
-								drawArray[ind] = {
-									...item,
-									...newData
-								};
+								newData.textLength = textLength;
 							}
-							_app.log('drawArray[ind]', JSON.stringify(drawArray[ind]));
-							if(drawArray[ind].type === 'text') {
-								const setLineFeedResult = setLineFeed(Context, drawArray[ind], params.bgObj);
-								if(_app.isArray(setLineFeedResult)) {
-									setLineFeedResult.forEach((ite, index) => {
-										ite[idKey] = drawArray.length + index;
-										ite.allInfoCallback = null;
-									})
-									drawArray.splice(ind, 1, ...setLineFeedResult);
-								}else{
-									drawArray.splice(ind, 1, setLineFeedResult);
-								}
-							}
-							
+							drawArray[ind] = {
+								...item,
+								...newData
+							};
 						}
-						_app.log('for循环结束');
-						_app.log('allInfocallback结束', JSON.stringify(drawArray));
+						_app.log('drawArray[ind]', JSON.stringify(drawArray[ind]));
+						if (drawArray[ind].type === 'text') {
+							const setLineFeedResult = setLineFeed(Context, drawArray[ind], params.bgObj);
+							if (_app.isArray(setLineFeedResult)) {
+								setLineFeedResult.forEach((ite, index) => {
+									ite[idKey] = drawArray.length + index;
+									ite.allInfoCallback = null;
+								})
+								drawArray.splice(ind, 1, ...setLineFeedResult);
+							} else {
+								drawArray.splice(ind, 1, setLineFeedResult);
+							}
+						}
+
+					}
+					_app.log('for循环结束');
+					_app.log('allInfocallback结束', JSON.stringify(drawArray));
 					// }
 				}
 			}
@@ -265,7 +260,6 @@ function getSharePoster(obj) {
 				canvas2image,
 				draw
 			});
-			_app.hideLoading();
 			rs({
 				bgObj,
 				poster,
@@ -273,6 +267,7 @@ function getSharePoster(obj) {
 			});
 		} catch (e) {
 			//TODO handle the exception
+			_app.hideLoading();
 			rj(e);
 		}
 	});
@@ -306,9 +301,8 @@ function drawShareImage(obj) { //绘制海报方法
 	};
 	delayTimeScale = delayTimeScale !== undefined ? delayTimeScale : 15;
 	drawDelayTime = drawDelayTime !== undefined ? drawDelayTime : 100;
-	return new Promise((rs, rj) => {
+	return new Promise(async (rs, rj) => {
 		try {
-			_app.showLoading('正在绘制海报');
 			_app.log('背景对象:' + JSON.stringify(bgObj));
 			if (bgObj && bgObj.path) {
 				_app.log('背景有图片路径');
@@ -324,25 +318,20 @@ function drawShareImage(obj) { //绘制海报方法
 				}
 			}
 
-			_app.showLoading('绘制图片');
 			if (imagesArray && imagesArray.length > 0)
 				drawImage(Context, imagesArray);
 
-			_app.showLoading('绘制自定义内容');
 			if (setDraw && typeof(setDraw) == 'function') setDraw(params);
 
-			_app.showLoading('绘制文本');
 			if (textArray && textArray.length > 0)
 				drawText(Context, textArray, bgObj);
 
-			_app.showLoading('绘制二维码');
 			if (qrCodeArray && qrCodeArray.length > 0) {
 				for (let i = 0; i < qrCodeArray.length; i++) {
 					drawQrCode(Context, qrCodeArray[i]);
 				}
 			}
 
-			_app.showLoading('绘制可控层级序列');
 			if (drawArray && drawArray.length > 0) {
 				for (let i = 0; i < drawArray.length; i++) {
 					const drawArrayItem = drawArray[i];
@@ -388,7 +377,6 @@ function drawShareImage(obj) { //绘制海报方法
 					}
 				}
 			}
-			_app.showLoading('绘制中')
 			setTimeout(() => {
 				_app.log('准备执行draw方法')
 				_app.log('Context:' + Context);
@@ -417,18 +405,15 @@ function drawShareImage(obj) { //绘制海报方法
 						canvasId: posterCanvasId,
 					};
 					if (canvas2image === false) {
-						_app.hideLoading();
 						return rs({
 							setCanvasToTempFilePath: data
 						});
 					}
-					_app.showLoading('正在输出图片');
 					_app.log('canvasToTempFilePath的data对象:' + JSON.stringify(data));
 					canvasToTempFilePathFn = function() {
 						const toTempFilePathObj = { //输出为图片
 							...data,
 							success(res) {
-								_app.hideLoading();
 								rs({
 									...res,
 									setCanvasToTempFilePath: data
@@ -617,8 +602,8 @@ function setTextFn(Context, textItem, bgObj) {
 		if (textItem.infoCallBack && typeof(textItem.infoCallBack) === 'function') {
 			infoCallBackObj = textItem.infoCallBack(textLength);
 		}
-		
-		if(infoCallBackObj.size)
+
+		if (infoCallBackObj.size)
 			textLength = countTextLength(Context, {
 				text: textItem.text,
 				size: textItem.size
@@ -653,7 +638,7 @@ function setLineFeed(Context, textItem, bgObj) {
 				lineHeight;
 			dx = (lineFeed.dx !== undefined && typeof(lineFeed.dx) === 'number') ? lineFeed.dx : dx;
 		}
-		_app.lineFeedTags.forEach(i=>{
+		_app.lineFeedTags.forEach(i => {
 			textItem.text = textItem.text.split(i).join(_app.tagetLineFeedTag);
 		})
 		const chr = (textItem.text).split("");
@@ -661,7 +646,7 @@ function setLineFeed(Context, textItem, bgObj) {
 		const row = [];
 		//循环出几行文字组成数组
 		for (let a = 0, len = chr.length; a < len; a++) {
-			if(chr[a] === _app.tagetLineFeedTag) {
+			if (chr[a] === _app.tagetLineFeedTag) {
 				row.push(temp);
 				temp = chr[++a];
 				continue;
@@ -690,10 +675,10 @@ function setLineFeed(Context, textItem, bgObj) {
 		for (let i = 0; i < allNum; i++) {
 			let str = row[i];
 			if (i == (allNum - 1) && allNum < row.length && row.length > 1) {
-				if(countTextLength(Context, {
-					text: str,
-					size: textItem.size
-				}) > (maxWidth - textItem.size)*.9) {
+				if (countTextLength(Context, {
+						text: str,
+						size: textItem.size
+					}) > (maxWidth - textItem.size) * .9) {
 					str = str.substring(0, str.length - 1) + '...';
 				}
 			}
@@ -947,6 +932,7 @@ function setImage(images) { // 设置图片数据
 			}
 			resolve(images);
 		} catch (e) {
+			_app.hideLoading()
 			//TODO handle the exception
 			rejcet(e);
 		}
@@ -964,31 +950,38 @@ function base64ToPathFn(path) {
 
 function setImageFn(image) {
 	return new Promise(async (resolve, reject) => {
-		if (image.url) {
-			image.url = (await base64ToPathFn(image.url));
-			let imgUrl = image.url;
-			const oldImgUrl = imgUrl;
-			imgUrl = await _app.downloadFile_PromiseFc(imgUrl);
-			image.url = imgUrl;
-			const hasinfoCallBack = image.infoCallBack && typeof(image.infoCallBack) === 'function';
-			let imageInfo = {};
-			imageInfo = await _app.getImageInfo_PromiseFc(oldImgUrl);
-			if (hasinfoCallBack) {
+		try {
+			if (image.url) {
+				image.url = (await base64ToPathFn(image.url));
+				let imgUrl = image.url;
+				const oldImgUrl = imgUrl;
+				imgUrl = await _app.downloadFile_PromiseFc(imgUrl);
+				image.url = imgUrl;
+				const hasinfoCallBack = image.infoCallBack && typeof(image.infoCallBack) === 'function';
+				let imageInfo = {};
+				imageInfo = await _app.getImageInfo_PromiseFc(oldImgUrl);
+				if (hasinfoCallBack) {
+					image = {
+						...image,
+						...image.infoCallBack(imageInfo)
+					};
+				}
+				image.dx = Number(image.dx) || 0;
+				image.dy = Number(image.dy) || 0;
+				image.dWidth = Number(image.dWidth || imageInfo.width);
+				image.dHeight = Number(image.dHeight || imageInfo.height);
 				image = {
 					...image,
-					...image.infoCallBack(imageInfo)
-				};
+					imageInfo
+				}
 			}
-			image.dx = Number(image.dx) || 0;
-			image.dy = Number(image.dy) || 0;
-			image.dWidth = Number(image.dWidth || imageInfo.width);
-			image.dHeight = Number(image.dHeight || imageInfo.height);
-			image = {
-				...image,
-				imageInfo
-			}
+			resolve(image);
+		} catch (e) {
+			_app.hideLoading();
+			rejcet(e)
+			//TODO handle the exception
 		}
-		resolve(image);
+
 	})
 }
 
@@ -1399,7 +1392,6 @@ function drawRoundRectImage(Context, obj) { // 绘制矩形
 // export 
 function drawQrCode(Context, qrCodeObj) { //生成二维码方法， 参考了 诗小柒 的二维码生成器代码
 	_app.log('进入绘制二维码方法')
-	_app.showLoading('正在生成二维码');
 	let qrcodeAlgObjCache = [];
 	let options = {
 		text: String(qrCodeObj.text || '') || '', // 生成内容
@@ -1491,7 +1483,6 @@ function drawQrCode(Context, qrCodeObj) { //生成二维码方法， 参考了 �
 		}
 	}
 	_app.log('进入绘制二维码方法完毕')
-	_app.hideLoading();
 }
 
 
@@ -1502,9 +1493,7 @@ function getShreUserPosterBackground(objs) { //检查背景图是否存在于本
 	} = objs;
 	return new Promise(async (resolve, reject) => {
 		try {
-			_app.showLoading('正在获取海报背景图');
 			const savedFilePath = await getShreUserPosterBackgroundFc(objs)
-			_app.hideLoading();
 			resolve(savedFilePath);
 		} catch (e) {
 			_app.hideLoading();
@@ -1543,7 +1532,6 @@ function getShreUserPosterBackgroundFc(objs, upimage) { //下载并保存背景�
 	_app.log('获取分享背景图, 尝试清空本地数据');
 	return new Promise(async (resolve, reject) => {
 		try {
-			_app.showLoading('正在下载海报背景图');
 			_app.log('没有从后端获取的背景图片路径, 尝试从后端获取背景图片路径');
 			let image = backgroundImage ? backgroundImage : (await _app.getPosterUrl(objs));
 			image = (await base64ToPathFn(image));
@@ -1567,17 +1555,17 @@ function getShreUserPosterBackgroundFc(objs, upimage) { //下载并保存背景�
 				});
 				// #endif
 
-				_app.hideLoading();
 				_app.log('返回背景图信息对象');
 				resolve({
 					...returnObj
 				});
 			} else {
-				_app.hideLoading();
 				reject('not find savedFilePath');
 			}
 		} catch (e) {
+
 			//TODO handle the exception
+			_app.hideLoading();
 			reject(e);
 		}
 	});

@@ -108,7 +108,7 @@ export default {
 				]
 			},
 			errorType: ['message'],
-			chooseAddress: '点击定位当前地点' //定位地址
+			chooseAddress: '点击选择地理位置' //定位地址
 		};
 	},
 	computed: {},
@@ -166,34 +166,17 @@ export default {
 		// 获取定位
 		async getLocation() {
 			let authState = await new Auth('userLocation').check();
-			// #ifdef MP || APP-VUE
 			authState &&
-				uni.getLocation({
-					type: 'gcj02',
+				uni.chooseLocation({
 					success: res => {
 						this.model.latitude = res.latitude;
 						this.model.longitude = res.longitude;
 						this.getLocationInfo();
 					},
 					fail: err => {
-						console.log('%cuni.getLocation,调用失败', 'color:green;background:yellow');
+						console.log(err);
 					}
 				});
-			// #endif
-
-			// #ifdef H5
-			uni.getLocation({
-				type: 'gcj02',
-				success: res => {
-					this.model.latitude = res.latitude;
-					this.model.longitude = res.longitude;
-					this.getLocationInfo();
-				},
-				fail: err => {
-					console.log('%cuni.getLocation,调用失败', 'color:green;background:yellow');
-				}
-			});
-			// #endif
 		},
 
 		//逆坐标解析
@@ -205,7 +188,9 @@ export default {
 			if (res.data.status === '1') {
 				const addressComponent = res.data.regeocode.addressComponent;
 				this.chooseAddress = res.data.regeocode.formatted_address;
-				this.model.area_text = `${addressComponent.province}-${addressComponent.city}-${addressComponent.district}`;
+				this.model.area_text = `${addressComponent.province}-${addressComponent.city.length ? addressComponent.city : addressComponent.province}-${
+					addressComponent.district
+				}`;
 				this.model.address = res.data.regeocode.formatted_address.replace(`${addressComponent.province}${addressComponent.city}${addressComponent.district}`, '');
 			} else {
 				console.log('%c逆地址解析失败，请检查是否在env中配置地图key', 'color:green;background:yellow');

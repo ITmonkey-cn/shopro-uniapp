@@ -13,10 +13,10 @@
 				<u-form-item :labelStyle="labelStyle" label-position="left" label="手机号" prop="phone" label-width="150">
 					<u-input placeholder="请输入手机号" :placeholderStyle="placeholderStyle" v-model="model.phone" type="number"></u-input>
 				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="门店名称" prop="name">
+				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="申请名称" prop="name">
 					<u-input placeholder="请输入门店名称" :placeholderStyle="placeholderStyle" v-model="model.name" type="text"></u-input>
 				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" prop="images" label="门店图片" label-position="top" label-width="150" :borderBottom="true">
+				<u-form-item :labelStyle="labelStyle" prop="images" label="展示图片" label-position="top" label-width="150" :borderBottom="true">
 					<u-upload
 						:placeholderStyle="placeholderStyle"
 						:showProgress="false"
@@ -42,23 +42,16 @@
 				<u-form-item :labelStyle="labelStyle" 　 label-width="150" label-position="left" label="营业天数" prop="weeks">
 					<u-input type="select" placeholder="请选择营业天数" disabled :placeholderStyle="placeholderStyle" v-model="model.weeks" @click="onSelect('week')"></u-input>
 				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" 　 label-width="150" label-position="left" label="所在地区" prop="area">
-					<u-input type="select" :select-open="pickerShow" v-model="model.area" placeholder="请选择地区" @click="pickerShow = true"></u-input>
+				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="所在地区" prop="area">
+					<u-input type="text" disabled v-model="model.area" placeholder="请点击定位" @click="chooseLocation"></u-input>
+					<u-icon slot="right" name="map-fill" size="40" color="#4CB89D" @click="chooseLocation"></u-icon>
 				</u-form-item>
 				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="详细地址" prop="address">
-					<u-input
-						type="textarea"
-						disabled
-						border
-						placeholder="点击获取详细地址"
-						:placeholderStyle="placeholderStyle"
-						@click="chooseLocation"
-						v-model="model.address"
-					></u-input>
+					<u-input type="textarea" placeholder="请输入详细地址~" :placeholderStyle="placeholderStyle" v-model="model.address"></u-input>
 				</u-form-item>
 				<view class="agreement u-flex u-col-center">
 					<u-checkbox v-model="model.agreement" activeColor="#4CB89D" shape="circle" @change="onAgreement"></u-checkbox>
-					<view class="agreement-text" @tap="toProtocol">勾选代表同意《门店入驻协议》</view>
+					<view class="agreement-text" @tap="toProtocol">勾选代表同意《申请协议》</view>
 				</view>
 				<view class="u-flex u-row-center u-col-center"><button class="u-reset-button save-btn" @tap="onSubmit" :disabled="isFormEnd">确认提交</button></view>
 			</u-form>
@@ -99,6 +92,7 @@
 <script>
 import Auth from '@/shopro/permission/index.js';
 import { mapMutations, mapActions, mapState } from 'vuex';
+import { MAP_KEY } from '@/env.js';
 export default {
 	components: {},
 	data() {
@@ -190,6 +184,13 @@ export default {
 						trigger: ['change', 'blur']
 					}
 				],
+				area: [
+					{
+						required: true,
+						message: '请定位所在地区',
+						trigger: ['change', 'blur']
+					}
+				],
 				phone: [
 					{
 						required: true,
@@ -216,13 +217,6 @@ export default {
 					{
 						required: true,
 						message: '请选择营业天数',
-						trigger: ['change', 'blur']
-					}
-				],
-				area: [
-					{
-						required: true,
-						message: '请选择所在地区',
 						trigger: ['change', 'blur']
 					}
 				],
@@ -326,14 +320,30 @@ export default {
 			authState &&
 				uni.chooseLocation({
 					success: res => {
-						this.model.address = res.address + res.name;
 						this.model.latitude = res.latitude;
 						this.model.longitude = res.longitude;
+						this.getLocationInfo();
 					},
 					fail: err => {
 						console.log(err);
 					}
 				});
+		},
+
+		//逆坐标解析
+		async getLocationInfo() {
+			this.chooseAddress = '定位中...';
+			const [error, res] = await uni.request({
+				url: `https://restapi.amap.com/v3/geocode/regeo?location=${this.model.longitude},${this.model.latitude}&key=${MAP_KEY}`
+			});
+			if (res.data.status === '1') {
+				const addressComponent = res.data.regeocode.addressComponent;
+				this.model.area_id = addressComponent.adcode;
+				this.model.area = `${addressComponent.province}-${addressComponent.city.length ? addressComponent.city : addressComponent.province}-${addressComponent.district}`;
+				this.model.address = res.data.regeocode.formatted_address.replace(`${addressComponent.province}${addressComponent.city}${addressComponent.district}`, '');
+			} else {
+				console.log('%c逆地址解析失败，请检查是否在env中配置地图key', 'color:green;background:yellow');
+			}
 		},
 
 		onSelect(type) {
@@ -364,12 +374,6 @@ export default {
 				default:
 					return;
 			}
-		},
-
-		// 选择地区回调
-		regionConfirm(e) {
-			this.model.area = e.province.label + '-' + e.city.label + '-' + e.area.label;
-			this.model.area_id = e.area.value;
 		},
 
 		// 勾选同意
@@ -503,7 +507,7 @@ export default {
 .apply-commission-wrap {
 	background-color: #fff;
 	.head-box {
-		background: url($IMG_URL+'/imgs/user/sh_shop_apply_head.png') no-repeat;
+		background: url($IMG_URL+'/imgs/user/sh_leader_apply_head.png') no-repeat;
 		background-size: 100% auto;
 		height: 370rpx;
 	}
