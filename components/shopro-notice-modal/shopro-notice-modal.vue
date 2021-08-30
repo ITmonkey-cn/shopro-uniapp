@@ -1,22 +1,11 @@
 <template>
-	<view class="popup-box" v-if="newPopupList && newPopupList.length">
-		<view v-for="(p, index) in newPopupList" :key="index">
-			<u-popup
-				v-if="popupCurrent === index && p.image"
-				v-model="showModal"
-				:bgStyle="{
-					background: 'none'
-				}"
-				@close="hideModal(p, index)"
-				:border-radius="20"
-				mode="center"
-				length="auto"
-				:closeable="false"
-			>
-				<view class="cu-dialog" @tap.stop="onPopup(p.path)">
-					<view class="img-box"><image class="modal-img" :src="p.image" mode="aspectFit"></image></view>
+	<view class="popup-box" v-show="newPopupList && newPopupList.length">
+		<view class="" v-for="(p, index) in newPopupList" :key="index">
+			<view class="cu-modal" :class="{ show: showModal }" @tap="hideModal(p, index)" v-if="popupCurrent === index && p.image">
+				<view class="cu-dialog" style="width: 610rpx;background: none;">
+					<view class="img-box" @tap.stop="onPopup(p.path)"><image class="modal-img" :src="p.image" mode="aspectFit"></image></view>
 				</view>
-			</u-popup>
+			</view>
 		</view>
 	</view>
 </template>
@@ -26,7 +15,7 @@
  * 广告模态框。连续弹窗和只弹一次。
  * @property {Object} newPopupList  - vuex 初始化传过来的数据
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 let timer = null;
 export default {
 	name: 'shoproNoticeModal',
@@ -39,10 +28,7 @@ export default {
 	},
 	props: {},
 	computed: {
-		...mapState({
-			popupData: ({ shopro }) => shopro.template?.popup?.[0]?.content,
-			isLogin: ({ user }) => user.isLogin
-		}),
+		...mapGetters(['popupData', 'isLogin']),
 		newPopupList() {
 			if (this.popupData) {
 				return this.popupData.list;

@@ -2,7 +2,7 @@
 <template>
 	<view class="rankings-wrap">
 		<!-- 标题栏 -->
-		<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}" :backTextStyle="backTextStyle" backText="分销排行"></u-navbar>
+		<shopro-navbar back-icon-color="#fff" :background="{}" :backTextStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: '500' }" backText="分销排行榜"></shopro-navbar>
 
 		<!-- 排行榜 -->
 		<view class="rankings-list-box">
@@ -37,11 +37,6 @@ export default {
 	components: {},
 	data() {
 		return {
-			backTextStyle: {
-				color: '#fff',
-				fontSize: '40rpx',
-				fontWeight: '500'
-			},
 			rankingsIcon: {
 				0: this.$IMG_URL + '/imgs/commission/01.png',
 				1: this.$IMG_URL + '/imgs/commission/02.png',

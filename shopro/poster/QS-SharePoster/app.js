@@ -1,8 +1,8 @@
 let log = console.log; // 如果在项目的APP.vue文件中的onlaunch中设置 console.log = ()=> {} 则在此也不会有打印信息
 log = ()=>{};	// 打开注释则该插件不会打印任何信息
 let _app = {
-	lineFeedTags: ['<br />', '<br/>', '\r\n', '\n\t', '\r', '\n'],	//换行符识别列表
-	tagetLineFeedTag: `❤`,	//将lineFeedTags列表中的字符串替换为该字符, 代表换行符, 只要找一个特殊符号就行，必须是单字符单字符单字符!
+	lineFeedTags: ['<br />', '<br/>', '\r\n', '\n\t', '\r', '\n'], //换行符识别列表
+	tagetLineFeedTag: `❤`, //将lineFeedTags列表中的字符串替换为该字符, 代表换行符, 只要找一个特殊符号就行，必须是单字符单字符单字符!
 	//交互控制
 	log(t) {
 		// log(t);
@@ -32,7 +32,7 @@ let _app = {
 			let image;
 			if (backgroundImage) {
 				image = backgroundImage;
-			}else{
+			} else {
 				switch (type) { //根据type获取背景图, 一般要改成request获取
 					case 1:
 						image = '';
@@ -44,7 +44,7 @@ let _app = {
 			}
 			if (image) {
 				rs(image); // resolve图片的路径
-			}else{
+			} else {
 				rj('背景图片路径不存在');
 			}
 		})
@@ -144,7 +144,7 @@ let _app = {
 		return new Promise((rs, rj) => {
 			if (url.substring(0, 4) !== 'http') {
 				rs(url);
-			}else {
+			} else {
 				url = checkMPUrl(url);
 				log('url:' + url);
 				uni.downloadFile({
@@ -180,11 +180,11 @@ let _app = {
 					success(d_res) {
 						log('下载背景图成功：' + JSON.stringify(d_res));
 						if (d_res && d_res.tempFilePath) {
-							
+
 							// #ifdef H5
 							rs(d_res.tempFilePath);
 							// #endif
-							
+
 							// #ifndef H5
 							uni.saveFile({
 								tempFilePath: d_res.tempFilePath,
@@ -200,7 +200,7 @@ let _app = {
 								}
 							})
 							// #endif
-							
+
 						} else {
 							rj('not find tempFilePath');
 						}
@@ -209,7 +209,7 @@ let _app = {
 						rj(err);
 					}
 				})
-			}else{
+			} else {
 				rs(url);
 			}
 		})
@@ -365,19 +365,23 @@ let _app = {
 		})
 	},
 	// #ifdef APP-PLUS
-	getShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb, fcb) { //miniProgram: {path: '', type: 0, webUrl: ''}
+	getShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb,
+		fcb) { //miniProgram: {path: '', type: 0, webUrl: ''}
 		let _this = this;
 		if (typeof(shareType) == 'number' && !isNaN(shareType) && shareType >= 0) {
-			_this.readyShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb,
+			_this.readyShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj,
+				mediaUrl, scb,
 				fcb);
 		} else {
 			_this.actionSheet(_this.shareTypeListSheetArray, function(index) {
-				_this.readyShare(providerName, WXScene, _this.shareTypeListSheetArray.array[index], title, summary, href,
+				_this.readyShare(providerName, WXScene, _this.shareTypeListSheetArray.array[index], title,
+					summary, href,
 					imageUrl, miniProgramObj, mediaUrl, scb, fcb);
 			});
 		}
 	},
-	readyShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb, fcb) {
+	readyShare(providerName, WXScene, shareType, title, summary, href, imageUrl, miniProgramObj, mediaUrl, scb,
+		fcb) {
 		let _this = this;
 		let shareObjData = {};
 		switch (shareType) {
@@ -419,7 +423,8 @@ let _app = {
 				break;
 			case 5:
 				shareObjData = {
-					miniProgram: { ...miniProgramObj,
+					miniProgram: {
+						...miniProgramObj,
 						id: miniProgramId,
 						type: miniProgramShareType
 					},
@@ -545,17 +550,15 @@ let _app = {
 
 function checkMPUrl(url) {
 	// #ifdef MP
-	// if(process.env.NODE_ENV !== 'development'){
-	// 	if(
-	// 		url.substring(0, 4) === 'http' && 
-	// 		url.substring(0, 5) !== 'https' && 
-	// 		url.substring(0, 12) !== 'http://store' && 
-	// 		url.substring(0, 10) !== 'http://tmp' && 
-	// 		url.substring(0, 10) !== 'http://usr'
-	// 	) {
-	// 		url = 'https' + url.substring(4, url.length);
-	// 	}
-	// }
+	if (
+		url.substring(0, 4) === 'http' &&
+		url.substring(0, 5) !== 'https' &&
+		url.substring(0, 12) !== 'http://store' &&
+		url.substring(0, 10) !== 'http://tmp' &&
+		url.substring(0, 10) !== 'http://usr'
+	) {
+		url = 'https' + url.substring(4, url.length);
+	}
 	// #endif
 	return url;
 }

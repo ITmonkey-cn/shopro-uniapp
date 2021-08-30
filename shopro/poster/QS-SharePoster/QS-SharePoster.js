@@ -1533,9 +1533,11 @@ function getShreUserPosterBackgroundFc(objs, upimage) { //下载并保存背景�
 	return new Promise(async (resolve, reject) => {
 		try {
 			_app.log('没有从后端获取的背景图片路径, 尝试从后端获取背景图片路径');
+
 			let image = backgroundImage ? backgroundImage : (await _app.getPosterUrl(objs));
 			image = (await base64ToPathFn(image));
 			_app.log('尝试下载并保存背景图:' + image);
+
 			const savedFilePath = await _app.downLoadAndSaveFile_PromiseFc(image);
 			if (savedFilePath) {
 				_app.log('下载并保存背景图成功:' + savedFilePath);

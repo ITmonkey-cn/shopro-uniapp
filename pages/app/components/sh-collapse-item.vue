@@ -18,7 +18,7 @@
 				</view>
 			</view>
 			<button v-if="childNum" class="u-reset-button arrow-btn" :class="{ 'arrow-active': showUnfold }" @tap="onArrow">
-				<u-icon class="u-m-l-20" name="arrow-down" size="26" color="#999"></u-icon>
+				<view class="u-iconfont uicon-arrow-down u-m-l-20" style="color: #999;font-size: 26rpx;"></view>
 			</button>
 		</view>
 		<slot v-if="showUnfold" name="collapse-children"></slot>

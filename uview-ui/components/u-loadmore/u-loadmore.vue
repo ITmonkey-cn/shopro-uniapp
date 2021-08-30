@@ -158,13 +158,6 @@ export default {
 <style scoped lang="scss">
 @import '../../libs/css/style.components.scss';
 
-/* #ifdef MP */
-// 在mp.scss中，赋予了u-line为flex: 1，这里需要一个明确的长度，所以重置掉它
-// 在组件内部，把组件名(u-line)当做选择器，在微信开发工具会提示不合法，但不影响使用
-u-line {
-	flex: none;
-}
-/* #endif */
 
 .u-line {
 	vertical-align: middle;

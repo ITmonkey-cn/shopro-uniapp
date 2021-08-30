@@ -3,7 +3,7 @@
 	<view class="order-detail-wrap">
 		<!-- 订单卡片 -->
 		<view class="card-box">
-			<view class="order-goods-item" v-for="item in orderDetail.item" :key="item.id">
+			<view class="order-goods-item u-m-b-10" v-for="item in orderDetail.item" :key="item.id">
 				<shopro-mini-card :title="item.goods_title" :image="item.goods_image">
 					<template #describe>
 						<view class="order-sku u-ellipsis-1">
@@ -43,7 +43,7 @@
 				</view>
 				<view class="detail-item u-flex">
 					<view class="item-title">下单时间：</view>
-					<view class="item-content">{{ $u.timeFormat(orderDetail.paytime, 'yyyy-mm-dd hh:MM') }}</view>
+					<view class="item-content">{{ orderDetail.paytime }}</view>
 				</view>
 				<view class="detail-item u-flex" v-if="orderDetail.remark">
 					<view class="item-title">备注：</view>
@@ -146,6 +146,7 @@ export default {
 	margin-bottom: 20rpx;
 	background-color: #fff;
 	.order-goods-item {
+		border-bottom: 1rpx solid rgba(237, 237, 237, 1);
 		padding: 20rpx;
 		.card-item {
 			line-height: 60rpx;

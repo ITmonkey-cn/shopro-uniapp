@@ -11,7 +11,7 @@
 					<view class="status-text">{{ aftersaleDetail.aftersale_status_desc }}</view>
 					<view class="status-time">{{ aftersaleDetail.updatetime }}</view>
 				</view>
-				<u-icon name="arrow-right" size="28" color="#666"></u-icon>
+				<text class="u-iconfont uicon-arrow-right" style="color: #666"></text>
 			</view>
 
 			<!-- 退款金额 -->
@@ -223,10 +223,6 @@ export default {
 
 		font-weight: 400;
 		color: rgba(153, 153, 153, 1);
-	}
-	.cuIcon-right {
-		color: rgba(153, 153, 153, 1);
-		font-size: 30rpx;
 	}
 }
 // 退款金额

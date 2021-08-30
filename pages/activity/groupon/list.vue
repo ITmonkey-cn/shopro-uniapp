@@ -9,11 +9,11 @@
 			<view class="goods-item u-m-b-16" v-for="(item, index) in grouponList" :key="item.id" @tap="$Router.push({ path: '/pages/goods/detail', query: { id: item.id } })">
 				<view class="big-goods u-p-20 u-flex u-col-top">
 					<image v-if="index < 3" class="top-tag" :src="tagMap[index]" mode=""></image>
-					<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
+					<image class="goods-img" lazy-load fade-show :src="item.image" mode="aspectFill"></image>
 					<view class=" card-right u-m-l-20 u-flex-col u-row-between">
 						<view class="">
 							<view class="goods-title u-ellipsis-1  u-m-t-10 u-m-b-10">
-								<u-tag class="title-tag u-m-r-10" text="拼团" size="mini" bg-color="#FF6600" border-color="#FF6600" color="#fff" />
+								<view class="title-tag cu-tag bg-orange sm radius u-m-r-10">拼团</view>
 								{{ item.title }}
 							</view>
 							<view v-show="item.subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ item.subtitle }}</view>
@@ -21,7 +21,7 @@
 
 						<view class="u-flex u-m-y-20">
 							<view class="sell-box">
-								<text class=" hot-icon iconfont iconicon-test"></text>
+								<text class=" hot-icon iconfont icon-icon-test"></text>
 								<text class="sell-num">已拼{{ item.sales }}件</text>
 							</view>
 							<text class="group-num">{{ item.activity.rules.team_num || 0 }}人团</text>
@@ -39,20 +39,16 @@
 			</view>
 			<!-- 空白 -->
 			<shopro-empty
+				v-if="!grouponList.length && !isLoading"
 				style="padding-top: 200rpx;"
 				marginTop="0"
-				v-if="!grouponList.length && !isLoading"
 				:image="$IMG_URL + '/imgs/empty/empty_goods.png'"
-				@click="$Router.pushTab('/pages/index/index')"
-				btnText="去首页逛逛"
-				tipText="还没有拼团商品噢，去首页看看吧~"
+				tipText="暂无拼团商品，敬请期待~"
 			></shopro-empty>
 			<!-- 加载更多 -->
 		</view>
 
 		<u-loadmore v-if="grouponList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -162,6 +158,11 @@ export default {
 			box-shadow: 0px 7rpx 8rpx 1rpx rgba(254, 76, 29, 0.05);
 			border-radius: 20rpx;
 			position: relative;
+			.goods-img {
+				width: 220rpx;
+				height: 220rpx;
+				border-radius: 6rpx;
+			}
 			.top-tag {
 				position: absolute;
 				z-index: 3;
@@ -180,9 +181,6 @@ export default {
 				width: 400rpx;
 				color: #000000;
 				vertical-align: middle;
-				.title-tag {
-					transform: scale(0.9);
-				}
 			}
 			.subtitle-text {
 				font-size: 22rpx;

@@ -11,7 +11,7 @@
 				<text class="wallet-item__title">积分</text>
 			</view>
 			<view class="wallet-item u-flex-col u-col-center" @tap="jump('/pages/app/coupon/list')">
-				<text class="wallet-item__detail item-coupon u-ellipsis-1">{{ userData.coupons_num || '0' }}</text>
+				<text class="wallet-item__detail item-coupon u-ellipsis-1">{{ userOtherData.coupons_num || '0' }}</text>
 				<text class="wallet-item__title">优惠券</text>
 			</view>
 		</view>
@@ -27,17 +27,14 @@
 /**
  * 钱包样式卡片
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {};
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			userData: ({ user }) => user.userData
-		})
+		...mapGetters(['userInfo', 'userOtherData'])
 	},
 	methods: {
 		jump(path, query) {

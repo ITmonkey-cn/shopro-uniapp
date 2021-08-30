@@ -4,16 +4,16 @@
 		<!-- 标题栏 -->
 		<view class="title-box u-flex u-row-between u-p-y-20 groupon-title">
 			<view class="u-flex u-col-center">
-				<view class="title-text u-m-r-20 u-ellipsis-1">{{ detail.name }}</view>
+				<view class="title-text u-m-r-20 u-ellipsis-1">{{ detail.title }}</view>
 			</view>
 			<view class="more-box u-flex" @tap="$Router.push('/pages/activity/groupon/list')">
 				<text class="more-text u-m-r-10">更多拼团</text>
-				<text class="iconfont iconyoujiantou-tianchong more-icon"></text>
+				<text class="iconfont icon-youjiantou-tianchong more-icon"></text>
 			</view>
 		</view>
 		<!-- 活动商品 -->
 		<!-- m -->
-		<scroll-view v-if="detail.style === 1" class="scroll-box" scroll-x scroll-anchoring>
+		<scroll-view v-if="grouponType === 1" class="scroll-box" scroll-x scroll-anchoring>
 			<view class="goods-box u-flex">
 				<view class="min-goods u-m-r-14" v-for="mgoods in goodsList" :key="mgoods.id" @tap="jump('/pages/goods/detail', { id: mgoods.id })">
 					<view class="img-box"><image class="img" :src="mgoods.image" mode=""></image></view>
@@ -31,17 +31,17 @@
 		</scroll-view>
 		<!--b-->
 		<view
-			v-if="detail.style === 2"
+			v-if="grouponType === 2"
 			class="big-goods  u-flex u-p-20 u-col-top u-m-b-16"
 			v-for="item in goodsList"
 			:key="item.id"
 			@tap="jump('/pages/goods/detail', { id: item.id })"
 		>
-			<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
+			<image class="goods-img" :src="item.image" mode="aspectFill"></image>
 			<view class=" card-right u-m-l-20 u-flex-col u-row-between">
 				<view class="">
 					<view class="goods-title u-ellipsis-1  u-m-t-10 u-m-b-10">
-						<u-tag class="title-tag u-m-r-10" text="拼团" size="mini" bg-color="#FF6600" border-color="#FF6600" color="#fff" />
+						<view class=" sm cu-tag radius title-tag u-m-r-10" style="{ backgroundColor: #FF6600, color: '#fff' }">拼团</view>
 						{{ item.title }}
 					</view>
 					<view v-show="item.subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ item.subtitle }}</view>
@@ -49,7 +49,7 @@
 
 				<view class="u-flex u-m-y-20">
 					<view class="sell-box">
-						<text class=" hot-icon iconfont iconicon-test"></text>
+						<text class=" hot-icon iconfont icon-icon-test"></text>
 						<text class="sell-num">已拼{{ item.sales }}件</text>
 					</view>
 					<text class="group-num">{{ item.activity.rules.team_num || 0 }}人团</text>
@@ -78,7 +78,8 @@ export default {
 		return {
 			timestamp: 0, //倒计时
 			goodsList: [],
-			showActivity: true //是否显示活动。
+			showActivity: true, //是否显示活动。
+			grouponType: this.detail.style
 		};
 	},
 	props: {
@@ -112,6 +113,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.goodsList = res.data.goods.data;
+					that.showActivity = that.goodsList.length;
 				} else {
 					that.showActivity = false;
 					console.log(`%cerr:拼团活动已结束`, 'color:green;background:yellow');
@@ -236,6 +238,11 @@ export default {
 	background: #ffffff;
 	box-shadow: 0px 7rpx 8rpx 1rpx #fffaef;
 	border-radius: 20rpx;
+	.goods-img {
+		width: 220rpx;
+		height: 220rpx;
+		border-radius: 6rpx;
+	}
 	.card-right {
 		width: 430rpx;
 		height: 100%;

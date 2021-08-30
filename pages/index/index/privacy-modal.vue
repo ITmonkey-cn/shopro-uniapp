@@ -4,8 +4,8 @@
 			<image class="service-head-img" :src="$IMG_URL + '/imgs/modal/servece_head.png'" mode="widthFix"></image>
 			<view class="service-title">用户隐私协议概况</view>
 			<view class="service-content ">
-				感谢您使用{{ shopInfo.name }}，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读
-				<text style="color: #EAB866;" @tap="jump('/pages/public/richtext', { id: shopInfo.privacy_protocol })">《{{ shopInfo.name }}隐私协议》</text>
+				感谢您使用{{ initShop.name }}，我们非常重视您的个人信息和隐私保护，在您使用服务前，请仔细阅读
+				<text style="color: #EAB866;" @tap="jump('/pages/public/richtext', { id: initShop.privacy_protocol })">《{{ initShop.name }}隐私协议》</text>
 				，我们将会严格按照经您同意的各项条款使用您的个人信息，以便为您提供更好的服务。
 			</view>
 			<view class="service-tip ">如您同意此条款，请点击“同意”并开始使用我们的产品和服务，我们将尽全力保护您的个人信息安全。</view>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState,mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -25,9 +25,7 @@ export default {
 		value: {}
 	},
 	computed: {
-		...mapState({
-			shopInfo: ({ shopro }) => shopro.config?.shop
-		}),
+		...mapGetters(['initShop']),
 		showModal: {
 			get() {
 				return this.value;

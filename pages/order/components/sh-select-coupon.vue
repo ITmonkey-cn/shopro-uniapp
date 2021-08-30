@@ -5,7 +5,7 @@
 			<view class="u-flex" @tap="showModal = true">
 				<text class="price" v-if="couponList.length">{{ title }}</text>
 				<text class="sel-coupon" v-else>暂无优惠券</text>
-				<u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon>
+				<text class="u-iconfont uicon-arrow-right" style="color: #bfbfbf"></text>
 			</view>
 		</view>
 

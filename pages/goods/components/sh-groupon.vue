@@ -3,7 +3,7 @@
 		<block v-if="grouponTeamList.length">
 			<view class="into-title u-flex u-row-between">
 				<text>已有{{ grouponData.sales }}人参与活动</text>
-				<u-icon name="arrow-right" size="28" color="#bfbfbf" @click="onMoreGrouponTeam"></u-icon>
+				<view class="u-iconfont uicon-arrow-right" style="color: #bfbfbf;font-size: 28rpx;" @tap="onMoreGrouponTeam"></view>
 			</view>
 			<view class="into-item u-flex u-row-between" v-for="(g, index) in grouponTeamList" :key="g.id" v-if="index < 2">
 				<view class="u-flex">
@@ -26,10 +26,8 @@
 		<!-- 弹窗 -->
 		<u-popup v-model="showModal" mode="bottom" :closeable="true" close-icon-pos="top-right">
 			<view class="modal-box page_box">
-				<view class="modal-head u-flex u-row-between">
-					<text></text>
+				<view class="modal-head u-flex u-row-center">
 					<text class="head-title">正在拼团</text>
-					<text class="cuIcon-roundclosefill" @tap="hideModal"></text>
 				</view>
 				<view class="modal-content content_box y-f">
 					<view class="into-item u-flex u-row-between" v-for="g in grouponTeamList" :key="g.id">

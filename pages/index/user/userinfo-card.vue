@@ -3,11 +3,21 @@
 		<view class="sh-userinfo-box">
 			<view class="head-wrap" :style="{ background: detail.image ? `url(${detail.image}) no-repeat center / 100% 100%` : detail.color }">
 				<!-- 标题栏 -->
-				<u-navbar backIconName="" :isFixed="isFixed" :borderBottom="isFixed" :background="navBackground" :backTextStyle="navbackTextStyle" backText="我的">
-					<view slot="right" class="u-flex u-row-center u-col-center u-m-r-20" v-if="userData.is_store" @tap="goStore">
+				<shopro-navbar
+					backIconName=""
+					backText="我的"
+					:backTextStyle="{
+						color: '#fff',
+						fontSize: '40rpx',
+						fontWeight: '500'
+					}"
+					:background="navBackground"
+				>
+					<view slot="right" class="u-flex u-row-center u-col-center u-m-r-20" v-if="userOtherData.is_store" @tap="goStore">
 						<button class="u-reset-button merchant-btn">切换商家版</button>
 					</view>
-				</u-navbar>
+				</shopro-navbar>
+
 				<view class="user-head u-flex u-row-between">
 					<view class="u-flex">
 						<!-- 个人信息 -->
@@ -18,7 +28,7 @@
 									<!-- 同步信息 -->
 									<block v-if="showRefresh">
 										<button @tap.stop="showModal = true" class="u-reset-button u-flex u-row-center u-col-center refresh-btn">
-											<u-icon name="reload" size="24" color="#fff"></u-icon>
+											<view class="u-iconfont uicon-reload" style="color: #fff;font-size: 24rpx;"></view>
 										</button>
 									</block>
 								</view>
@@ -32,7 +42,7 @@
 						</view>
 					</view>
 					<view class="u-flex" v-if="userInfo.nickname">
-						<button class=" u-reset-button code-btn" @tap="onShare"><text class="iconfont iconqrcode"></text></button>
+						<button class=" u-reset-button code-btn" @tap="onShare"><text class="iconfont icon-qrcode"></text></button>
 					</view>
 				</view>
 			</view>
@@ -42,19 +52,19 @@
 			<view class="notice-detail">点击绑定手机号，确保账户安全</view>
 			<button class="u-reset-button bindPhone">去绑定</button>
 		</view>
-		<!-- modal -->
-		<u-modal
-			ref="uModal"
-			v-model="showModal"
-			:show-cancel-button="true"
-			confirm-color="#e9b461"
-			cancel-color="#666666"
-			@confirm="refreshWechatUser"
-			confirm-text="确定"
-			cancel-text="取消"
-			content="更新微信信息？"
-			title="提示"
-		></u-modal>
+		<!-- 更新信息 -->
+		<view class="cu-modal" :class="{ show: showModal }" @tap="showModal = false">
+			<view class="cu-dialog" style="width: 600rpx;">
+				<view class="modal-box">
+					<view class="modal-head">提示</view>
+					<view class="modal-content">更新微信信息？</view>
+					<view class="modal-bottom u-flex u-col-center">
+						<button class="u-reset-button modal-btn cancel-btn" :hover-stay-time="100" hover-class="btn-hover" @tap="showModal = false">取消</button>
+						<button class="u-reset-button  modal-btn save-btn" :hover-stay-time="100" hover-class="btn-hover" @tap="refreshWechatUser">确定</button>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -63,7 +73,7 @@
  * 自定义之个人信息
  * @property {Object} detail - 个人信息
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 import wechat from '@/shopro/wechat/wechat';
 export default {
 	components: {},
@@ -74,11 +84,6 @@ export default {
 			isFixed: false,
 			navBackground: {
 				background: 'none'
-			},
-			navbackTextStyle: {
-				color: '#fff',
-				fontSize: '40rpx',
-				fontWeight: '500'
 			}
 		};
 	},
@@ -98,15 +103,11 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			isLogin: ({ user }) => user.isLogin,
-			userData: ({ user }) => user.userData
-		}),
+		...mapGetters(['isLogin', 'userInfo', 'userOtherData']),
 		showRefresh() {
 			if (this.isLogin) {
 				if (this.platform === 'wxOfficialAccount') {
-					return this.userInfo.verification.wxOfficialAccount;
+					return this.userInfo.verification?.wxOfficialAccount;
 				}
 				if (this.platform === 'wxMiniProgram') {
 					return this.userInfo.verification.wxMiniProgram;
@@ -132,16 +133,15 @@ export default {
 		},
 		// 同步用户信息
 		async refreshWechatUser() {
+			this.showModal = false;
 			let token = await wechat.refresh();
-			if (token) {
-				this.getUserInfo(token);
-			}
+			token && this.getUserInfo(token);
 		},
 		// 跳转门店
 		goStore() {
-			if (this.userData.store_id) {
-				uni.setStorageSync('storeId', this.userData.store_id);
-				this.jump('/pages/app/merchant/index', { storeId: this.userData.store_id });
+			if (this.userOtherData.store_id) {
+				uni.setStorageSync('storeId', this.userOtherData.store_id);
+				this.jump('/pages/app/merchant/index', { storeId: this.userOtherData.store_id });
 			} else {
 				if (uni.getStorageSync('storeId')) {
 					this.jump('/pages/app/merchant/index');
@@ -150,7 +150,7 @@ export default {
 				}
 			}
 			//  #ifdef MP-WEIXIN
-			this.$store.dispatch('getMessageIds', 'store');
+			this.$store.commit('subscribeMessage', 'store');
 			//  #endif
 		},
 		// 绑定手机号
@@ -162,6 +162,43 @@ export default {
 </script>
 
 <style lang="scss">
+// 更新信息
+.modal-box {
+	width: 600rpx;
+	.btn-hover {
+		background-color: rgb(230, 230, 230);
+	}
+	.modal-head {
+		padding-top: 48rpx;
+		font-weight: 500;
+		text-align: center;
+		color: $u-main-color;
+	}
+	.modal-content {
+		padding: 48rpx;
+		font-size: 30rpx;
+		text-align: center;
+		color: $u-content-color;
+	}
+	.modal-bottom {
+		.modal-btn {
+			flex: 1;
+			height: 100rpx;
+			line-height: 100rpx;
+			font-size: 32rpx;
+			box-sizing: border-box;
+			cursor: pointer;
+			text-align: center;
+			border-radius: 4rpx;
+		}
+		.cancel-btn {
+			color: #6666;
+		}
+		.save-btn {
+			color: #e9b461;
+		}
+	}
+}
 .sh-userinfo-box {
 	position: relative;
 	height: calc(var(--status-bar-height) + 300rpx);
@@ -210,7 +247,6 @@ export default {
 
 			.user-name {
 				font-size: 30rpx;
-
 				font-weight: 500;
 				color: #fff;
 				line-height: 30rpx;
@@ -237,7 +273,7 @@ export default {
 		}
 		.code-btn {
 			padding: 30rpx;
-			.iconqrcode {
+			.icon-qrcode {
 				font-size: 50rpx;
 				color: #fff;
 			}

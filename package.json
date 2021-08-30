@@ -16,7 +16,6 @@
 	"dependencies": {
 		"jweixin-module": "^1.6.0",
 		"uni-read-pages": "^1.0.5",
-		"uni-simple-router": "^2.0.1",
 		"vconsole": "^3.7.0"
 	},
 	"description": ""

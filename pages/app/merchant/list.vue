@@ -13,7 +13,7 @@
 						</view>
 					</view>
 
-					<radio style="transform: scale(0.7);" class="orange" :checked="storeId == store.id" :class="{ checked: storeId == store.id }"></radio>
+					<u-checkbox :value="storeId == store.id" activeColor="#4CB89D" shape="circle"></u-checkbox>
 				</view>
 			</label>
 		</view>

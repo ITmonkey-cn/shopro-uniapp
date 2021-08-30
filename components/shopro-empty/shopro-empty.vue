@@ -22,8 +22,8 @@ export default {
 	name: 'shoproEmpty',
 	props: {
 		image: {
-			type: String,
-			default: ''
+			type: [String,null],
+			default: '/static/images/empty_network.png'
 		},
 		tipText: {
 			type: String,

@@ -2,7 +2,7 @@
 	<view class="catgory-wrap">
 		<view class="u-flex wrapper-box">
 			<!-- 左侧分类列表 -->
-			<scroll-view scroll-y scroll-with-animation class="u-tab-view menu-scroll-view" :scroll-top="scrollLeftTop">
+			<scroll-view enable-flex scroll-y scroll-with-animation class="u-tab-view menu-scroll-view" :scroll-top="scrollLeftTop">
 				<view
 					v-for="(item, index) in tabbarList"
 					:key="index"
@@ -31,15 +31,13 @@
 								<image class="goods-tag" v-if="item.is_hot && !item.activity" :src="$IMG_URL + '/goods/goods_hot_tag.png'" mode=""></image>
 							</view>
 							<view class="goods-title u-p-x-20 u-m-b-10 u-ellipsis-2">
-								<u-tag
-									class="title-tag u-m-r-10"
+								<view
 									v-if="item.activity_type"
-									:text="typeMap[item.activity_type].text"
-									size="mini"
-									:bg-color="typeMap[item.activity_type].tagBg"
-									:border-color="typeMap[item.activity_type].tagBg"
-									color="#fff"
-								/>
+									class=" sm cu-tag radius title-tag u-m-r-10"
+									:style="{ backgroundColor: typeMap[item.activity_type].tagBg, color: '#fff' }"
+								>
+									{{ typeMap[item.activity_type].text }}
+								</view>
 								{{ item.title }}
 							</view>
 							<view class="goods-subtitle u-p-x-20 u-m-b-10 u-ellipsis-1">{{ item.subtitle }}</view>
@@ -102,7 +100,7 @@
 					</view>
 
 					<!-- 缺省页 -->
-					<shopro-empty v-show="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/empty_goods.png'" tipText="暂无该商品，还有更多好货等着你噢~"></shopro-empty>
+					<shopro-empty v-if="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/empty_goods.png'" tipText="暂无该商品，还有更多好货等着你噢~"></shopro-empty>
 
 					<!-- 加载更多 -->
 					<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
@@ -162,11 +160,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			cartNum: ({ cart }) => cart.cartNum,
-			cartList: ({ cart }) => cart.cartList
-		}),
-		...mapGetters(['totalCount', 'isSel']),
+		...mapGetters(['totalCount', 'isSel', 'cartNum', 'cartList','isLogin']),
 		// 购物车检测
 		checkCart() {
 			let obj = {};
@@ -245,7 +239,7 @@ export default {
 					}
 				})
 				.then(() => {
-					that.$store.state.user.isLogin && that.getCartList();
+					that.isLogin && that.getCartList();
 				});
 		},
 
@@ -490,7 +484,7 @@ export default {
 			width: 100%;
 			height: 256rpx;
 			border-radius: 20rpx 20rpx 0 0;
-			background-color: #ccc;
+			background: #f5f5f5;
 		}
 		.goods-tag {
 			position: absolute;

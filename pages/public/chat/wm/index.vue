@@ -1,12 +1,12 @@
 <!-- FastAdmin在线客服插件不是开源产品，所有文字、图片、样式、风格等版权归在线客服作者所有，如有复制、仿冒、抄袭、盗用，FastAdmin和在线客服作者将追究法律责任 -->
 <template>
 	<view>
-		<u-navbar :isFixed="true" :borderBottom="false" :background="{background:'#fff'}" :backTextStyle="{color:'#333'}" :backText="headTitle"></u-navbar>
+		<shopro-navbar backIconColor="#333":backText="headTitle"></shopro-navbar>
 		<view class="kefu_container">
 			<view v-if="errorTips" class="error_tips">{{ errorTips }}</view>
 			<view v-if="config.announcement && errorTips == ''" class="notice">
 				<text>{{ config.announcement }}</text>
-				<u-icon class="close_notice cuIcon-roundclose" name="close-circle-fill" size="36" color="#e0e0e0" @click="close_notice"></u-icon>
+				<text class="u-iconfont uicon-close-circle-fill close_notice" style="color: #e0e0e0;font-size: 36rpx;"  @tap="close_notice"></text>
 			</view>
 
 			<!--留言板 -->
@@ -196,7 +196,9 @@
 							<text class="title-line"></text>
 						</view>
 						
-						<view @tap="show_select_model(false)" class="close_select"><u-icon class="cuIcon-roundclose" name="close-circle-fill" size="36" color="#e0e0e0"></u-icon></view>
+						<view @tap="show_select_model(false)" class="close_select">
+							<text class="u-iconfont uicon-close-circle-fill" style="#e0e0e0;font-size: 36rpx;"></text>
+						</view>
 				</view>
 
 				<view class="project_list">
@@ -229,7 +231,7 @@ import Config from './config.js'; // 本地配置数据
 let token = uni.getStorageSync('token'); // 用户身份标识
 let fixedCsr = ''; // 指定客服
 let innerAudioContext = null;
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState,mapGetters } from 'vuex';
 import Auth from '@/shopro/permission/index.js';
 
 export default {
@@ -279,9 +281,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userInfo: state => state.user.userInfo
-		})
+			...mapGetters(['userInfo']),
 	},
 	props: {
 		options: null

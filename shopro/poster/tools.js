@@ -6,16 +6,16 @@ export default {
 			uni.hideLoading()
 			switch (type) {
 				case 'avatar':
-					console.log('%cerr:海报头像图片错误', 'color:green;background:yellow');
+					console.log('%cerr:海报头像图片错误: ' + imgPath, 'color:green;background:yellow');
 					break;
 				case 'bgImage':
-					console.log('%cerr:海报背景图片错误', 'color:green;background:yellow');
+					console.log('%cerr:海报背景图片错误: ' + imgPath, 'color:green;background:yellow');
 					break;
 				case 'wxCode':
-					console.log('%cerr:海报微信二维码图片错误', 'color:green;background:yellow');
+					console.log('%cerr:海报微信二维码图片错误: ' + imgPath, 'color:green;background:yellow');
 					break;
 				case 'goodsImage':
-					console.log('%cerr:海报商品图片错误', 'color:green;background:yellow');
+					console.log('%cerr:海报商品图片错误: ' + imgPath, 'color:green;background:yellow');
 					break;
 				default:
 					break;
@@ -44,6 +44,7 @@ export default {
 					rs(1);
 				},
 				fail: err => {
+					console.log(err)
 					rs(0);
 				}
 			})
@@ -64,6 +65,9 @@ export default {
 		// #endif
 		return url;
 	},
+
+
+
 
 	/**
 	 * 相对比例

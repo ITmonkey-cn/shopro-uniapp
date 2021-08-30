@@ -1,18 +1,18 @@
 <template>
-	<view class="live-el u-m-p-20 u-m-b-10" v-if="detail.ids">
+	<view class="live-el u-m-p-20 u-m-b-10" v-if="showLive">
 		<view class="head">
 			<text class="head-title">{{ detail.name }}</text>
 			<view class="head-more u-flex u-col-center" @tap="$Router.push('/pages/app/live/list')">
 				<text class="u-m-r-10 more-text">更多直播</text>
-				<text class="iconfont iconyoujiantou-tianchong more-icon"></text>
+				<text class="iconfont icon-youjiantou-tianchong more-icon"></text>
 			</view>
 		</view>
-		
+
 		<!-- 大图 -->
-		<view v-if="detail.style == 1" v-for="live in liveList" :key="live.id"><shopro-live-card :type="1" :detail="live"></shopro-live-card></view>
-		
+		<view v-if="liveType == 1" v-for="live in liveList" :key="live.id"><shopro-live-card :type="1" :detail="live"></shopro-live-card></view>
+
 		<!-- 小图 -->
-		<view class="content-two" v-if="detail.style == 2">
+		<view class="content-two" v-if="liveType == 2">
 			<view class="content-two__item" v-for="live in liveList" :key="live.id">
 				<shopro-live-card :type="2" :detail="live" :wh="345">
 					<block slot="liveGoods"><text></text></block>
@@ -31,14 +31,16 @@ export default {
 	components: {},
 	data() {
 		return {
-			liveList: []
+			liveList: [],
+			showLive: this.detail.ids,
+			liveType: this.detail.style
 		};
 	},
 	props: {
 		detail: {}
 	},
 	created() {
-		this.detail.ids && this.getLiveList();
+		this.showLive && this.getLiveList();
 	},
 	computed: {},
 	methods: {

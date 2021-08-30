@@ -1,5 +1,6 @@
 <template>
 	<view class="invite-poster-content">
+		 <!-- TODO: 小程序端使用type='2d'会有报错 -->
 		<canvas class="hideCanvas" canvas-id="self_canvas" :style="{ width: (poster.width || 1) + 'px', height: (poster.height || 1) + 'px' }"></canvas>
 	</view>
 </template>
@@ -8,7 +9,7 @@
 import _app from '@/shopro/poster/QS-SharePoster/app.js';
 import { getSharePoster } from '@/shopro/poster/QS-SharePoster/QS-SharePoster.js';
 import tools from '@/shopro/poster/tools.js';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 let ctx = null;
 export default {
 	components: {},
@@ -26,10 +27,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			shareData: ({ shopro }) => shopro.config.share
-		})
+		...mapGetters(['initShare', 'userInfo'])
 	},
 	async mounted() {
 		ctx = uni.createCanvasContext(this.canvasId, this);
@@ -75,29 +73,33 @@ export default {
 						this.poster = bgObj;
 					}
 				});
-				ctx.draw(false, () => {
-					uni.canvasToTempFilePath(
-						{
-							canvasId: that.canvasId,
-							success: res => {
-								_app.hideLoading();
-								that.posterImage = res.tempFilePath;
-								that.$emit('success', res.tempFilePath);
-								_app.log('海报生成成功, 时间:' + new Date() + '， 临时路径: ' + res.tempFilePath);
-							},
-							fail: err => {
-								_app.hideLoading();
-								console.log('生成异常', err);
-							}
-						},
-						that
-					);
-				});
+				await that.drawPoster();
 			} catch (e) {
 				_app.hideLoading();
 				_app.showToast(JSON.stringify(e));
 				console.log(JSON.stringify(e));
 			}
+		},
+		async drawPoster() {
+			let that = this;
+			ctx.draw(false, () => {
+				uni.canvasToTempFilePath(
+					{
+						canvasId: that.canvasId,
+						success: res => {
+							_app.hideLoading();
+							that.posterImage = res.tempFilePath;
+							that.$emit('success', res.tempFilePath);
+							_app.log('海报生成成功, 时间:' + new Date() + '， 临时路径: ' + res.tempFilePath);
+						},
+						fail: err => {
+							_app.hideLoading();
+							console.log('生成异常', err);
+						}
+					},
+					that
+				);
+			});
 		}
 	}
 };

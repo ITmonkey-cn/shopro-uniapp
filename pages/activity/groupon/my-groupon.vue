@@ -28,7 +28,7 @@
 								<template #describe>
 									<view class="u-flex u-m-b-20">
 										<view class="sell-box">
-											<text class="cuIcon-hotfill"></text>
+											<text class="iconfont  icon-fire"></text>
 											<text class="sell-num">已拼{{ groupon.goods.sales }}件</text>
 										</view>
 										<text class="group-num">{{ groupon.groupon.num || 0 }}人团</text>
@@ -55,8 +55,6 @@
 				<u-loadmore v-if="myGrouponList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -135,10 +133,14 @@ export default {
 		getMyGroupon() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$http('goods.myGroupon', {
-				type: that.stateId,
-				page: that.currentPage
-			}, '加载中').then(res => {
+			that.$http(
+				'goods.myGroupon',
+				{
+					type: that.stateId,
+					page: that.currentPage
+				},
+				'加载中'
+			).then(res => {
 				uni.stopPullDownRefresh();
 				if (res.code === 1) {
 					that.myGrouponList = [...that.myGrouponList, ...res.data.data];
@@ -212,7 +214,7 @@ export default {
 			border-radius: 16rpx;
 			padding: 0 10rpx;
 
-			.cuIcon-hotfill {
+			.icon-fire {
 				color: #e1212b;
 				font-size: 26rpx;
 				margin-right: 10rpx;

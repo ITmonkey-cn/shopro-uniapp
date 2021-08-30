@@ -1,12 +1,12 @@
 <template>
 	<view class="live-card-wrap">
 		<!-- 小卡片 -->
-		<view class="sp-live-card" v-if="type == 2" :style="{ width: wh + 'rpx' }">
+		<view class="sp-live-card" v-if="liveType == 2" :style="{ width: wh + 'rpx' }">
 			<view class="live-content" @tap="goRoom" :style="{ width: wh + 'rpx' }">
 				<image class="item-cover" :src="detail.share_img" mode="aspectFill"></image>
 				<view class="item-status">
-					<image class="status-img" :src="liveStatus[detail.live_status].img" mode=""></image>
-					<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
+					<image class="status-img" :src="liveStatus[liveState].img" mode=""></image>
+					<text class="status-text">{{ liveStatus[liveState].title }}</text>
 				</view>
 				<view class="item-title u-ellipsis-1" :style="{ width: wh + 'rpx' }">{{ detail.name }}</view>
 			</view>
@@ -17,12 +17,12 @@
 					</view>
 				</view>
 				<slot name="liveGoods">
-					<view class="live-goods" v-if="detail.goods.length">
-						<view class="live-goods__item" v-for="(goods, index) in detail.goods" :key="goods.id" v-if="index < 3">
+					<view class="live-goods" v-if="liveGoodsList.length">
+						<view class="live-goods__item" v-for="(goods, index) in liveGoodsList" :key="goods.id" v-if="index < 3">
 							<image class="live-goods__img" :src="goods.cover_img" mode=""></image>
 							<view class="live-goods__price" v-if="index < 2">￥{{ goods.price }}</view>
 							<view class="live-goods__mark" v-else>
-								<text>{{ detail.goods.length }}+</text>
+								<text>{{ liveGoodsList.length }}+</text>
 							</view>
 						</view>
 					</view>
@@ -30,12 +30,12 @@
 			</view>
 		</view>
 		<!-- 大卡片 -->
-		<view class="big-card-wrap" v-if="type == 1">
+		<view class="big-card-wrap" v-if="liveType == 1">
 			<view class="content-one__item" @tap="goRoom">
 				<image class="item-cover" :src="detail.share_img" mode="widthFix"></image>
 				<view class="item-status">
-					<image class="status-img" :src="liveStatus[detail.live_status].img" mode=""></image>
-					<text class="status-text">{{ liveStatus[detail.live_status].title }}</text>
+					<image class="status-img" :src="liveStatus[liveState].img" mode=""></image>
+					<text class="status-text">{{ liveStatus[liveState].title }}</text>
 				</view>
 				<view class="item-title u-ellipsis-1">{{ detail.name }}</view>
 			</view>
@@ -64,6 +64,9 @@ export default {
 	components: {},
 	data() {
 		return {
+			liveType: this.type,
+			liveState: this.detail.live_status,
+			liveGoodsList: this.detail.goods,
 			liveStatus: {
 				'101': {
 					img: this.$IMG_URL + '/imgs/live/live.png',
@@ -138,7 +141,7 @@ export default {
 				let that = this;
 				let date = '';
 
-				if (that.detail.live_status == 102) {
+				if (that.liveState == 102) {
 					date = that.$u.timeFormat(that.detail.starttime, 'mm-dd hh:MM');
 					that.liveStatus['102'].title = '预告 ' + date;
 				}
@@ -146,7 +149,7 @@ export default {
 					.getLiveStatus({ room_id: that.detail.room_id })
 					.then(res => {
 						// 101: 直播中, 102: 未开始, 103: 已结束, 104: 禁播, 105: 暂停中, 106: 异常，107：已过期
-						that.detail.live_status = res.liveStatus;
+						that.liveState = res.liveStatus;
 					})
 					.catch(err => {
 						console.log('get live status', err);

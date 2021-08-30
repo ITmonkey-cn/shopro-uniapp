@@ -3,7 +3,7 @@
 	<view style="width:100%;height: 100%;">
 		<view class="commission-wrap" :class="{ blur: !hasAuth }">
 			<!-- 标题栏 -->
-			<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}"></u-navbar>
+			<shopro-navbar back-icon-color="#fff" :background="{}"></shopro-navbar>
 
 			<!-- 用户资料 -->
 			<view class="user-card">
@@ -16,7 +16,7 @@
 								<view class="tag-box u-flex" v-if="commissionLv">
 									<image v-if="commissionLv.image" class="tag-img" :src="commissionLv.image" mode=""></image>
 									<text class="tag-title">{{ commissionLv.name }}</text>
-									<u-icon v-show="showLv" name="arrow-right" size="28" color="#fff"></u-icon>
+									<view v-show="showLv" class="u-iconfont uicon-arrow-right" style="color: #fff;font-size: 28rpx;"></view>
 								</view>
 							</view>
 						</view>
@@ -25,7 +25,7 @@
 						<view class="u-flex-col u-col-center">
 							<button class="u-reset-button log-btn u-m-b-20" @tap="jump('/pages/app/commission/commission-log')">明细</button>
 							<button class="u-reset-button look-btn" @tap="showMoney = !showMoney">
-								<u-icon :name="showMoney ? 'eye-fill' : 'eye-off'" size="50" color="#fff"></u-icon>
+								<view class="u-iconfont" :class="showMoney ? 'uicon-eye-fill' : 'uicon-eye-off'" style="color: #fff;font-size: 50rpx;"></view>
 							</button>
 						</view>
 					</view>
@@ -81,10 +81,7 @@
 		</view>
 
 		<!-- 	分享组件 -->
-		<shopro-share v-model="showShare" :shareDetail="shareInfo" posterType="user"></shopro-share>
-
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
+		<shopro-share v-model="showShare" posterType="user"></shopro-share>
 
 		<!-- 佣金中心权限验证 -->
 		<u-popup v-if="showAuthModal" class="auth-box" :mask="false" v-model="showAuthModal" mode="center" :mask-close-able="false" close-icon-pos="top-left" border-radius="20">
@@ -183,7 +180,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 import share from '@/shopro/share';
 export default {
 	components: {},
@@ -257,10 +254,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			agentInfo: ({ user }) => user.agentInfo
-		}),
+		...mapGetters(['userInfo', 'agentInfo']),
 		showAuthModal: {
 			get() {
 				return !!this.authNotice.title && !this.hasAuth;
@@ -296,7 +290,6 @@ export default {
 		// 跳转
 		jump(path, query) {
 			if (!path) {
-				this.shareInfo = share.setShareInfo();
 				this.showShare = true;
 			} else {
 				this.$Router.push({

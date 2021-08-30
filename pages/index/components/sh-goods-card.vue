@@ -1,19 +1,11 @@
+<!-- 横版大图，商品卡片 -->
 <template>
-	<!--b-->
 	<view class="big-goods u-flex u-p-20 u-col-top u-m-b-16" @tap="click" :style="type ? 'background-image: url(' + $IMG_URL + typeMap[type].goodsBg + ')' : ''">
-		<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="image" mode="aspectFill"></u-image>
+		<image class="goods-img" lazy-load fade-show :src="image" mode="aspectFill"></image>
 		<view class=" card-right u-m-l-20 u-flex-col u-row-between">
 			<view class="">
 				<view class="goods-title u-ellipsis-1 u-m-t-10 u-m-b-10">
-					<u-tag
-						class="title-tag u-m-r-10"
-						v-if="type"
-						:text="typeMap[type].text"
-						size="mini"
-						:bg-color="typeMap[type].tagBg"
-						:border-color="typeMap[type].tagBg"
-						color="#fff"
-					/>
+					<view v-if="type" class=" sm cu-tag radius title-tag u-m-r-10" :style="{ backgroundColor: typeMap[type].tagBg, color: '#fff' }">{{ typeMap[type].text }}</view>
 					{{ title }}
 				</view>
 				<view v-show="subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ subtitle }}</view>
@@ -80,7 +72,7 @@
  * @property {Array} tagTextList - 活动标签
  * @event {Function} click 商品被点击
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -106,10 +98,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			cartList: ({ cart }) => cart.cartList,
-			checkCart: ({ cart }) => cart.checkCart
-		})
+		...mapGetters(['cartList', 'checkCart'])
 	},
 	props: {
 		detail: {
@@ -119,7 +108,7 @@ export default {
 			}
 		},
 		type: {
-			type: String,
+			type: [String,null],
 			default: ''
 		},
 		image: {
@@ -280,11 +269,17 @@ export default {
 // 大商品卡片
 .big-goods {
 	width: 710rpx;
-	height: 260rpx;
+	min-height: 260rpx;
 	background: #ffffff;
 	border-radius: 20rpx;
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
+	.goods-img {
+		width: 260rpx;
+		height: 260rpx;
+		background-color: #f5f5f5;
+		border-radius: 6rpx;
+	}
 	.card-right {
 		width: 430rpx;
 		height: 220rpx;

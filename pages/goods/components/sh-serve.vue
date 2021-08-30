@@ -12,7 +12,7 @@
 					</view>
 				</view>
 			</view>
-			<u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon>
+			<view class="u-iconfont uicon-arrow-right" style="color: #bfbfbf;font-size: 28rpx;"></view>
 		</view>
 		<u-popup v-model="showModal" mode="bottom" :closeable="true" close-icon-pos="top-right">
 			<view class=" server-modal">

@@ -52,7 +52,7 @@
 						@tap="goDistribution(order.dispatch_type, orderDetail.id, order.id, order.dispatch_status)"
 					>
 						<text>详情</text>
-						<u-icon name="arrow-right" size="28" color="#666"></u-icon>
+						<text class="u-iconfont uicon-arrow-right" style="color: #666;"></text>
 					</view>
 				</view>
 
@@ -170,15 +170,12 @@
 						<button v-if="btn === 'groupon'" @tap.stop="jump('/pages/activity/groupon/detail', { id: orderDetail.ext_arr.groupon_id })" class="u-reset-button obtn2">
 							拼团详情
 						</button>
-						<button v-if="btn === 'delete'" style="background:#FFEEEE;color:#E50808" @tap.stop="onDelete(orderDetail.id)" class="u-reset-button obtn1">删除</button>
+						<button v-if="btn === 'delete'" @tap.stop="onDelete(orderDetail.id)" class="u-reset-button delete-btn">删除</button>
 						<button v-if="btn === 'express'" @tap.stop="onExpress(orderDetail.id)" class="u-reset-button obtn1">查看物流</button>
 					</view>
 				</view>
 			</view>
 		</view>
-
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -264,11 +261,13 @@ export default {
 		// 确认收货
 		onConfirm(id, itemId) {
 			let that = this;
-			that.$http('order.confirm', {
-				id: id,
-				order_item_id: itemId
-			},
-			'确认中...'
+			that.$http(
+				'order.confirm',
+				{
+					id: id,
+					order_item_id: itemId
+				},
+				'确认中...'
 			).then(res => {
 				if (res.code === 1) {
 					that.getOrderDetail();
@@ -292,10 +291,12 @@ export default {
 		// 取消订单
 		onCancel(id) {
 			let that = this;
-			that.$http('order.cancel', {
-				id: id
-			},
-			'取消中...'
+			that.$http(
+				'order.cancel',
+				{
+					id: id
+				},
+				'取消中...'
 			).then(res => {
 				if (res.code === 1) {
 					that.$Router.back();
@@ -518,12 +519,6 @@ export default {
 	margin-bottom: 20rpx;
 	.tip-box {
 		font-size: 28rpx;
-
-		.cuIcon-roundcheckfill {
-			color: #ecbe60;
-			font-size: 34rpx;
-			margin-right: 20rpx;
-		}
 	}
 	.title-box {
 		font-size: 26rpx;
@@ -699,13 +694,23 @@ export default {
 	.btn-box {
 		justify-content: flex-end;
 		margin-bottom: 20rpx;
+		.delete-btn {
+			background: #ffeeee;
+			color: #e50808;
+			width: 160rpx;
+			line-height: 60rpx;
+			border-radius: 30rpx;
+			font-size: 26rpx;
+			font-weight: 400;
+			margin-right: 20rpx;
+			padding: 0;
+		}
 		.obtn1 {
 			width: 160rpx;
 			line-height: 60rpx;
 			background: rgba(238, 238, 238, 1);
 			border-radius: 30rpx;
 			font-size: 26rpx;
-
 			font-weight: 400;
 			color: rgba(51, 51, 51, 1);
 			margin-right: 20rpx;
@@ -719,7 +724,6 @@ export default {
 			border-radius: 30rpx;
 			margin-right: 20rpx;
 			font-size: 26rpx;
-
 			font-weight: 400;
 			color: #fff;
 			padding: 0;

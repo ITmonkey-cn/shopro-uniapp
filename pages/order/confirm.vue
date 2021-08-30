@@ -6,7 +6,7 @@
 			<view class="add-address-box u-flex u-flex-1" v-if="!addressId">
 				<view class="box-bg u-p-30 u-flex-1 u-flex u-row-between">
 					<text class="select-notice">请选择收货地址</text>
-					<u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon>
+					<text class="u-iconfont uicon-arrow-right" style="color: #bfbfbf;"></text>
 				</view>
 			</view>
 			<view class="add-address-box u-p-30" v-else>
@@ -17,7 +17,7 @@
 				</view>
 				<view class="detail u-flex u-row-between">
 					<view class="address">{{ addressData.province_name }}{{ addressData.city_name }}{{ addressData.area_name }}{{ addressData.address }}</view>
-					<u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon>
+					<text class="u-iconfont uicon-arrow-right" style="color: #bfbfbf;"></text>
 				</view>
 			</view>
 		</view>
@@ -51,16 +51,16 @@
 					<view class="item-title">配送方式</view>
 					<view class="u-flex">
 						<view class="detail">{{ getCurGoodsExpress(g) }}</view>
-						<u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon>
+						<text class="u-iconfont uicon-arrow-right" style="color: #bfbfbf;"></text>
 					</view>
 				</view>
 			</view>
 
 			<block v-if="perGoodsList.length">
 				<!-- 备注 -->
-				<view class="remark-box u-flex item-list">
+				<view class="remark-box u-flex item-list u-p-30">
 					<view class="item-title">备注</view>
-					<input class="item-input u-p-30" placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
+					<input class="item-input " placeholder-class="input-pl" type="text" v-model="remark" placeholder="建议留言前先于卖家沟通确认" />
 				</view>
 
 				<!-- 选择优惠券 -->
@@ -130,14 +130,9 @@
 						<text class="price">￥{{ orderPre.total_fee || '0.00' }}</text>
 					</view>
 				</view>
-				<u-button shape="circle" :disabled="isDisabled" :loading="isDisabled" :custom-style="customStyle" :hair-line="false" hover-class="btn-hover" @click="subOrder">
-					提交订单
-				</u-button>
+				<button class="cu-btn sub-btn" @tap="subOrder" :disabled="isDisabled" hover-class="btn-hover">提交订单</button>
 			</view>
 		</view>
-
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 
 		<!-- 配送方式弹窗 -->
 		<u-popup v-model="showExpressType" @close="showExpressType = false" safe-area-inset-bottom mode="bottom" :closeable="false" border-radius="20">
@@ -165,15 +160,15 @@
 					>
 						请选择收货地址
 
-						<u-icon name="arrow-right" size="28" color="#999"></u-icon>
+						<text class="u-iconfont uicon-arrow-right" style="color: #999;"></text>
 					</view>
 					<!-- 地址 -->
 					<view class="express-address" v-if="expressTypeCur == 'express' && addressId">
 						<view class="express-top  u-flex u-row-between" @tap="jump('/pages/user/address/list', { from: 'order' })">
-							<view class="">
-								<text class="tag" v-show="addressData.is_default == 1">默认</text>
+							<view class="u-flex">
+								<text class="tag" style="white-space: nowrap;" v-show="addressData.is_default == 1">默认</text>
 								<text class="address">{{ addressData.province_name }}{{ addressData.city_name }}{{ addressData.area_name }}{{ addressData.address }}</text>
-								<text class="address-guide"><u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon></text>
+								<view class="address-guide"><text class="u-iconfont uicon-arrow-right" style="color: #bfbfbf"></text></view>
 							</view>
 
 							<view class="address-location u-flex-col u-col-center">
@@ -203,10 +198,10 @@
 								class="express-top u-flex u-col-center u-row-between"
 								@tap="jump('/pages/order/express/store-address', { goodsId: currentGoodsId, lat: lat, lng: lng, storeId: storeInfo ? storeInfo.id : 0 })"
 							>
-								<view class="">
+								<view class="u-flex">
 									<text class="tag1" v-if="addressData.is_default == 1">最近</text>
 									<text class="address">{{ storeInfo ? storeInfo.name : '暂无自提点' }}</text>
-									<u-icon name="arrow-right" size="28" color="#999"></u-icon>
+									<text class="u-iconfont uicon-arrow-right" style="color: #999;"></text>
 								</view>
 								<view class="address-location u-flex-col u-col-center">
 									<image class="location-img" :src="$IMG_URL + '/imgs/order/e1.png'" mode=""></image>
@@ -218,7 +213,7 @@
 									<view class="box-title u-m-b-20">到店时间</view>
 									<view class="box-content u-flex u-col-center" @tap="checkExpressTime('selfetch')">
 										<text class="box-text">{{ checkTime['day'][checkDayCur].title }}{{ checkTime['time'][checkTimeCur] }}</text>
-										<u-icon name="arrow-right" size="28" color="#999"></u-icon>
+										<text class="u-iconfont uicon-arrow-right" style="color: #999;"></text>
 									</view>
 								</view>
 								<view class="box-line"></view>
@@ -253,7 +248,7 @@
 							<view class="">
 								<text class="tag" v-if="addressData.is_default == 1">默认</text>
 								<text class="address">{{ addressData.province_name }}{{ addressData.city_name }}{{ addressData.area_name }}{{ addressData.address }}</text>
-								<text class="address-guide"><u-icon name="arrow-right" size="28" color="#999"></u-icon></text>
+								<text class="address-guide u-iconfont uicon-arrow-right" style="color: #999;"></text>
 							</view>
 
 							<view class="address-location u-flex-col u-col-center">
@@ -264,9 +259,9 @@
 						<view class="express-content u-flex">
 							<view class="time-box">
 								<view class="box-title u-m-b-20">配送时间</view>
-								<view class="box-content" @tap="checkExpressTime('store')">
+								<view class="box-content u-flex" @tap="checkExpressTime('store')">
 									<text class="box-text">{{ checkTime['day'][checkDayCur].title }}{{ checkTime['time'][checkTimeCur] }}</text>
-									<u-icon name="arrow-right" size="28" color="#999"></u-icon>
+									<text class="u-iconfont uicon-arrow-right" style="color: #999"></text>
 								</view>
 							</view>
 							<view class="box-line"></view>
@@ -488,7 +483,7 @@ export default {
 		await this.init();
 	},
 	methods: {
-		...mapActions(['getCartList', 'getMessageIds']),
+		...mapActions(['getCartList']),
 		init() {
 			uni.showLoading({
 				title: '加载中...',
@@ -620,6 +615,7 @@ export default {
 				if (res.data) {
 					that.orderPre = res.data;
 					that.perGoodsList = res.data.new_goods_list;
+					that.totalNum = 0;
 					that.perGoodsList.map(item => {
 						item.selType = item.dispatch_type;
 						that.totalNum += item.goods_num;
@@ -923,9 +919,6 @@ export default {
 		color: #c4c4c4;
 		margin-right: 20rpx;
 	}
-	.cuIcon-right {
-		color: #c4c4c4;
-	}
 }
 .logistic,
 .price-box,
@@ -1151,7 +1144,6 @@ export default {
 				text-align: left;
 				.address {
 					font-size: 28rpx;
-
 					font-weight: 500;
 					color: rgba(51, 51, 51, 1);
 					line-height: 40rpx;

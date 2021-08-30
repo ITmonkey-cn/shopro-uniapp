@@ -31,7 +31,7 @@ export default {
 			if (isTabbar) {
 				router.replaceAll(path)
 			} else {
-				path.includes('/pages/index') && !path.includes('/pages/index/view') ? router.pushTab(path) : router
+				path.includes('/pages/index') && !path.includes('/pages/index/view') ? router.replaceAll(path) : router
 					.push(path)
 			}
 

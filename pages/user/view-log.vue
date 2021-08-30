@@ -21,7 +21,7 @@
 				</u-checkbox-group>
 				<!-- 缺省页 -->
 				<shopro-empty
-					v-show="isEmpty"
+					v-if="isEmpty"
 					:image="$IMG_URL + '/imgs/empty/empty_goods.png'"
 					tipText="暂无浏览记录"
 					btnText="去首页逛逛"
@@ -37,8 +37,6 @@
 				<button class="u-reset-button close-btn" @tap="deleteLog">删除</button>
 			</view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 

@@ -18,9 +18,9 @@
 		<view class="u-flex u-col-top form-item u-m-b-20">
 			<text class="form-tilte">营业星期：</text>
 			<view class="form-content u-flex u-flex-wrap u-row-left">
-				<u-button class="u-m-r-10 u-m-b-10 u-m-l-0" v-for="week in weekList" :key="week.title" shape="circle" :plain="!storeWeek.includes(week.value)" size="mini" type="success">
+				<button class="cu-btn sm u-m-r-10 u-m-b-10 u-m-l-0" :class="!storeWeek.includes(week.value)?'line-green':'bg-green'" v-for="week in weekList" :key="week.title">
 					{{ week.title }}
-				</u-button>
+				</button>
 			</view>
 		</view>
 

@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="u-flex u-col-center wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view class="left u-flex-col u-col-center" enable-back-to-top scroll-y>
+				<scroll-view class="left u-flex-col u-col-center" enable-flex enable-back-to-top scroll-y>
 					<view
 						class="type-list u-flex u-col-center"
 						:class="[{ 'list-active': listId == index }]"
@@ -20,9 +20,9 @@
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-if="categoryData[listId].image" :src="categoryData[listId].image" lazy-load mode="aspectFill"></image>
 						<view class="type-box u-flex u-col-center u-row-center">
-							<u-icon class="" name="minus" size="26" color="#d3d3d3"></u-icon>
+							<view class="u-iconfont uicon-minus" style="color: #d3d3d3;font-size: 28rpx;"></view>
 							<text class="type-title">{{ categoryData[listId].name }}</text>
-							<u-icon class="" name="minus" size="26" color="#d3d3d3"></u-icon>
+							<view class="u-iconfont uicon-minus" style="color: #d3d3d3;font-size: 28rpx;"></view>
 						</view>
 						<view class="item-list">
 							<view class="item-box u-flex">
@@ -175,10 +175,6 @@ export default {
 			font-weight: bold;
 			padding: 0 16rpx;
 		}
-		.cuIcon-move {
-			color: #d3d3d3;
-		}
-
 		.more {
 			font-size: 26rpx;
 			color: #999;
@@ -201,7 +197,7 @@ export default {
 					width: 150rpx;
 					height: 150rpx;
 					border-radius: 6rpx;
-					// background: #ccc;
+					background: #f5f5f5;
 				}
 
 				.item-title {

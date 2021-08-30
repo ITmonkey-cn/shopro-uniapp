@@ -9,7 +9,7 @@
 			<text class="list-name">头像</text>
 			<view class="u-flex" @tap="onChooseImg">
 				<image class="avatar" :src="userData.avatar" mode=""></image>
-				<u-icon class="u-m-l-20" name="arrow-right" size="26" color="#999"></u-icon>
+				<text class="u-iconfont uicon-arrow-right u-m-l-20" style="color:#999;"></text>
 			</view>
 		</view>
 		<view class="user-list u-flex u-row-between">
@@ -25,14 +25,14 @@
 					maxlength="50"
 					placeholder-style="color:#c8c9cc;fontSize:28rpx"
 				/>
-				<u-icon class="u-m-l-20" name="arrow-right" size="26" color="#999"></u-icon>
+				<text class="u-iconfont uicon-arrow-right u-m-l-20" style="color:#999;"></text>
 			</view>
 		</view>
 		<view class="user-list  u-flex u-row-between u-m-b-10" @tap="showCalendar = true">
 			<text class="list-name">生日</text>
 			<view class="u-flex">
 				<text class="list-val">{{ userData.birthday || '请选择生日~' }}</text>
-				<u-icon class="u-m-l-20" name="arrow-right" size="26" color="#999"></u-icon>
+				<text class="u-iconfont uicon-arrow-right u-m-l-20" style="color:#999;"></text>
 			</view>
 		</view>
 
@@ -40,22 +40,22 @@
 			<text class="list-name">地址管理</text>
 			<view class="u-flex">
 				<text class="list-val"></text>
-				<u-icon class="u-m-l-20" name="arrow-right" size="26" color="#999"></u-icon>
+				<text class="u-iconfont uicon-arrow-right u-m-l-20" style="color:#999;"></text>
 			</view>
 		</view>
 		<view class="user-list u-flex u-row-between" @tap="changePwd">
 			<text class="list-name">修改密码</text>
 			<view class="u-flex">
 				<text class="list-val"></text>
-				<u-icon class="u-m-l-20" name="arrow-right" size="26" color="#999"></u-icon>
+				<text class="u-iconfont uicon-arrow-right u-m-l-20" style="color:#999;"></text>
 			</view>
 		</view>
 		<view class="user-list u-flex u-row-between" @tap="bindMobile">
 			<text class="list-name">手机号</text>
 			<view class="u-flex">
 				<text class="list-val">{{ userInfo.mobile || '暂未绑定手机号' }}</text>
-				<u-icon v-if="userInfo.id && !userInfo.verification.mobile" class="u-m-l-20" name="arrow-right" size="26" color="#999"></u-icon>
-				<u-icon v-else class="u-m-l-20" name="checkmark-circle-fill" size="36" color="#09BB07"></u-icon>
+				<text v-if="userInfo.id && !userInfo.verification.mobile" class="u-iconfont uicon-arrow-right u-m-l-20" style="color:#999;"></text>
+				<text v-else class="u-iconfont uicon-checkmark-circle-fill u-m-l-20" style="color:#09BB07;"></text>
 			</view>
 		</view>
 
@@ -131,22 +131,8 @@
 			<button hover-class="hover-logout-btn" class="u-reset-button logout-btn" @tap="showModal = true">退出登录</button>
 		</view>
 
-		<!-- 登录提示 -->
-		<shopro-auth-modal v-if="authType"></shopro-auth-modal>
 		<!-- 日历 -->
-		<u-calendar
-			v-if="showCalendar"
-			v-model="showCalendar"
-			ref="calendar"
-			safe-area-inset-bottom
-			activeBgColor="#e9b461"
-			toolTip="选择生日"
-			:customStyle="{
-				background: '#e9b461'
-			}"
-			mode="date"
-			@change="changeCalendar"
-		></u-calendar>
+		<u-picker @confirm="changeCalendar" mode="time" confirm-color="#e9b461" v-model="showCalendar" :params="{ year: true, month: true, day: true, hour: false, minute: false, second: false }"></u-picker>
 		<!-- modal -->
 		<u-modal
 			ref="uModal"
@@ -161,7 +147,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 import Auth from '@/shopro/permission/index.js';
 import wechat from '@/shopro/wechat/wechat';
 
@@ -178,10 +164,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			authType: ({ user }) => user.authType
-		})
+		...mapGetters(['userInfo', 'authType'])
 	},
 	onLoad() {
 		this.userData = JSON.parse(JSON.stringify(this.userInfo));
@@ -191,7 +174,7 @@ export default {
 		...mapActions(['getUserInfo', 'showAuthModal', 'logout']),
 		// 选择日期
 		changeCalendar(e) {
-			this.userData.birthday = e.result;
+			this.userData.birthday = `${e.year}-${e.month}-${e.day}`;
 			this.editInfoDisabled = this.userData.birthday == this.userInfo.birthday;
 		},
 		// 修改密码
@@ -424,9 +407,6 @@ export default {
 		width: 67rpx;
 		height: 67rpx;
 		border-radius: 50%;
-	}
-	.cuIcon-right {
-		margin-left: 25rpx;
 	}
 	.list-val {
 		color: #999;

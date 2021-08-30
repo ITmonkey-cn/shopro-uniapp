@@ -15,11 +15,11 @@
 			<!-- 切换年月 -->
 			<view class="bar u-flex u-row-center">
 				<view class="previous" @tap="handleCalendar(0)">
-					<button class="u-reset-button bar-btn u-p-r-30"><u-icon name="arrow-left" size="28" color="#c4c4c4"></u-icon></button>
+					<button class="u-reset-button bar-btn u-p-r-30"><view class="u-iconfont uicon-arrow-left" style="color:#c4c4c4 ;font-size:28rpx ;"></view></button>
 				</view>
 				<view class="date">{{ cur_year || '--' }} 年 {{ cur_month || '--' }} 月</view>
 				<view class="next" @tap="handleCalendar(1)">
-					<button class="u-reset-button bar-btn u-p-l-30"><u-icon name="arrow-right" size="28" color="#c4c4c4"></u-icon></button>
+					<button class="u-reset-button bar-btn u-p-l-30"><view class="u-iconfont uicon-arrow-right" style="color:#c4c4c4 ;font-size:28rpx ;"></view></button>
 				</view>
 			</view>
 
@@ -50,8 +50,8 @@
 				</view>
 			</view>
 		</view>
-		<u-popup v-model="showSign" mode="center" border-radius="20">
-			<view class="sign-modal-box">
+		<view class="cu-modal" :class="{ show: showSign }" @tap="showSign = false">
+			<view class="sign-modal-box cu-dialog" style="width: 610rpx;">
 				<view class="modal-head u-flex-col u-col-center">
 					<image class="modal-bg" :src="$IMG_URL + '/imgs/modal/sign_modal_bg.jpg'" mode=""></image>
 					<image class="sign-tag" :src="$IMG_URL + '/imgs/modal/sign_modal_succeed.png'" mode=""></image>
@@ -67,9 +67,7 @@
 				</view>
 				<view class="modal-bottom u-flex u-row-center"><button class="u-reset-button confirem-btn" @tap="showSign = false">确认</button></view>
 			</view>
-		</u-popup>
-		<!-- 登录 -->
-		<shopro-auth-modal ></shopro-auth-modal>
+		</view>
 	</view>
 </template>
 
@@ -152,10 +150,12 @@ export default {
 			let that = this;
 			let month = that.cur_month.toString().padStart(2, '0');
 			let query = `${that.cur_year}-${month}`;
-			that.$http('user.sign', {
-				month: query
-			},
-			'签到中...'
+			that.$http(
+				'user.sign',
+				{
+					month: query
+				},
+				'签到中...'
 			).then(res => {
 				if (res.code == 1) {
 					that.getSignList();
@@ -331,13 +331,13 @@ export default {
 		padding: 30rpx 0;
 		.sign-success {
 			font-size: 34rpx;
-			
+
 			font-weight: bold;
 			color: rgba(227, 173, 91, 1);
 		}
 		.sign-score {
 			font-size: 26rpx;
-			
+
 			font-weight: 500;
 			color: rgba(153, 153, 153, 1);
 			padding-top: 16rpx;
@@ -352,7 +352,7 @@ export default {
 			border-radius: 35rpx;
 			padding: 0;
 			font-size: 28rpx;
-			
+
 			font-weight: 500;
 			color: rgba(255, 255, 255, 0.9);
 		}

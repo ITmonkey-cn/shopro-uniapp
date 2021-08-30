@@ -11,13 +11,11 @@
 				<view class="comment-list">
 					<block v-for="comment in commentList" :key="comment.id"><sh-comment :comment="comment"></sh-comment></block>
 				</view>
-				<shopro-empty v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/comment_empty.png'" tipText="暂无此类评价~"></shopro-empty>
+				<shopro-empty v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/comment_empty.png'" tipText="暂无此类评价~"></shopro-empty>
 				<!-- 加载更多 -->
 				<u-loadmore v-if="commentList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 

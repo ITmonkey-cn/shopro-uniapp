@@ -2,9 +2,9 @@
 <template>
 	<view class="page_box">
 		<view class="head_box">
-			<u-navbar backIconColor="#333" :borderBottom="false" :background="navbar.background" :backTextStyle="navbar.backTextStyle" backText="积分余额"></u-navbar>
+			<shopro-navbar :background="{ background: 'none' }" backText="积分余额" backIconColor="#333"></shopro-navbar>
 			<view class="all-box u-flex-col u-row-center u-col-center">
-				<text class="all-num">{{ score }}</text>
+				<text class="all-num">{{ userInfo.score || 0 }}</text>
 				<text class="all-title u-m-b-30">当前积分</text>
 				<image class="score-card-bg" :src="$IMG_URL + '/imgs/score/score_wallet_bg.png'" mode=""></image>
 			</view>
@@ -25,7 +25,7 @@
 					<view class="num font-OPPOSANS" v-else>{{ log.wallet }}</view>
 				</view>
 				<!-- 空置页 -->
-				<shopro-empty v-show="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/comment_empty.png'" tipText="暂无数据~"></shopro-empty>
+				<shopro-empty v-if="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/comment_empty.png'" tipText="暂无数据~"></shopro-empty>
 				<!-- 更多 -->
 				<u-loadmore v-if="scoreLog.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
@@ -34,21 +34,12 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {
 			isEmpty: false,
-			navbar: {
-				background: {
-					background: 'none'
-				},
-				backTextStyle: {
-					color: '#333',
-					fontSize: '36rpx'
-				}
-			},
 			tabCur: 'all',
 			scoreLog: [],
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
@@ -57,9 +48,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			score: state => state.user.userInfo.score
-		})
+		...mapGetters(['userInfo'])
 	},
 	onLoad() {
 		this.getScoreLog();

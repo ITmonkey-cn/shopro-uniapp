@@ -42,7 +42,7 @@
 								<view class="serve-title">{{ order.aftersale_status_text }}</view>
 								<view class="serve-content">{{ order.aftersale_status_desc }}</view>
 							</view>
-							<u-icon name="arrow-right" size="28" color="#666"></u-icon>
+							<text class="u-iconfont uicon-arrow-right" style="color: #666"></text>
 						</view>
 						<view class="btn-box u-flex" v-for="orderBtn in order.btns" :key="orderBtn">
 							<button v-if="orderBtn === 'cancel'" @tap.stop="onCancel(order.id, orderIndex)" class="u-reset-button obtn">取消</button>
@@ -53,7 +53,7 @@
 					</view>
 				</view>
 				<!-- 缺省页 -->
-				<shopro-empty v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_groupon.png'" tipText="暂无相关记录~"></shopro-empty>
+				<shopro-empty v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_groupon.png'" tipText="暂无相关记录~"></shopro-empty>
 				<!-- 更多 -->
 				<u-loadmore v-if="orderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
@@ -239,10 +239,6 @@ export default {
 
 				font-weight: 400;
 				color: rgba(102, 102, 102, 1);
-			}
-			.cuIcon-right {
-				color: #999999;
-				font-size: 20rpx;
 			}
 		}
 		.btn-box {

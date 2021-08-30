@@ -22,8 +22,6 @@
 				<button class="u-reset-button again-pay " v-show="payState === 'fail'" @tap="onPay">重新支付</button>
 			</view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 		<!-- modal -->
 		<!-- #ifdef MP-WEIXIN -->
 		<u-modal
@@ -45,7 +43,7 @@
 
 <script>
 import Pay from '@/shopro/pay';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 let payTimer = null;
 const payCount = 5;
 export default {
@@ -53,6 +51,7 @@ export default {
 	data() {
 		return {
 			showModal: false,
+			messageType: '',
 			templateIds: [],
 			wxOpenTags: '',
 			orderDetail: {}, //订单详情
@@ -69,7 +68,9 @@ export default {
 			payState: '' //支付状态
 		};
 	},
-	computed: {},
+	computed: {
+		...mapGetters(['subscribeMessageIdsMap'])
+	},
 	onLoad() {
 		this.payState = this.$Route.query.payState ? this.$Route.query.payState : '';
 		this.$Route.query.orderId && this.getOrderDetail();
@@ -96,16 +97,7 @@ export default {
 		// 订阅消息
 		onConfirm() {
 			//  #ifdef MP-WEIXIN
-			this.templateIds.length &&
-				uni.requestSubscribeMessage({
-					tmplIds: this.templateIds,
-					success: res => {
-						console.log(res);
-					},
-					fail: err => {
-						console.log(err);
-					}
-				});
+			this.templateIds.length && this.$store.commit('subscribeMessage', this.messageType);
 			//  #endif
 		},
 
@@ -118,7 +110,8 @@ export default {
 				if (res.code === 1) {
 					that.orderDetail = res.data;
 					if (res.data.status > 0) {
-						this.templateIds = await this.$store.dispatch('getMessageIds', this.orderDetail.activity_type == 'groupon' ? 'grouponResult' : 'result');
+						this.messageType = this.orderDetail.activity_type == 'groupon' ? 'grouponResult' : 'result';
+						this.templateIds = this.subscribeMessageIdsMap[this.messageType];
 						this.showModal = this.templateIds.length;
 					}
 				}

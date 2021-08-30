@@ -1,12 +1,11 @@
 <template>
 	<view class="" v-if="floatList && floatList.length">
-		<u-mask v-if="showMask" :z-index="10001" :show="showMask" @click="hideModal"></u-mask>
+		<view class="cu-modal" :class="{ show: showMask }" @tap="hideMask"></view>
+		<!-- 悬浮按钮菜单 -->
 		<view class="shopro-float-btn">
-			<!-- 悬浮按钮 -->
 			<button class="wechat-btn u-reset-button" @tap="onBtn">
 				<image class="wechat_img" :src="floatList.length == 1 ? floatList[0].btnimage : floatData.image" mode="widthFix"></image>
 			</button>
-			<!-- 菜单列表 -->
 			<view :class="showBtnList ? 'float--active' : 'float-list-box'">
 				<view class="btn-img-box u-flex-col" @tap="onBtnItem(item)" v-for="item in floatList" :key="item.btnimage">
 					<view class="btn-item u-flex-col u-row-center u-col-center">
@@ -17,22 +16,11 @@
 			</view>
 		</view>
 		<!-- 弹窗 -->
-		<u-popup
-			v-model="showModal"
-			@close="hideModal"
-			:bgStyle="{
-				background: 'none'
-			}"
-			:border-radius="20"
-			:mask="false"
-			mode="center"
-			length="auto"
-			:closeable="false"
-		>
-			<view class="img-box">
-				<view class="img-wrap"><image class="modal-img" :src="modalImg" mode="aspectFit" @tap="saveImage(modalImg)"></image></view>
+		<view class="cu-modal" :class="{ show: showModal }" @tap="showModal = false">
+			<view class="cu-dialog" style="width: 610rpx;background: none;">
+				<view class="img-box"><image class="modal-img" :src="modalImg" mode="aspectFit" @tap="saveImage(modalImg)"></image></view>
 			</view>
-		</u-popup>
+		</view>
 	</view>
 </template>
 
@@ -56,9 +44,7 @@ export default {
 	},
 	props: {},
 	computed: {
-		...mapState({
-			floatData: ({ shopro }) => shopro.template['float-button']?.[0]?.content
-		}),
+		...mapGetters(['floatData']),
 		// 悬浮按钮数据列表
 		floatList() {
 			if (this.floatData) {
@@ -68,8 +54,7 @@ export default {
 	},
 	created() {},
 	methods: {
-		hideModal() {
-			this.showModal = false;
+		hideMask() {
 			this.showBtnList = false;
 			this.showMask = false;
 		},
@@ -93,6 +78,7 @@ export default {
 				this.$tools.routerTo(item.path);
 			} else {
 				this.modalImg = item.image;
+				this.showMask = false;
 				this.showModal = true;
 				this.showBtnList = false;
 				!item.image && console.log(`%cerr:弹窗图片未配置`, 'color:green;background:yellow');
@@ -139,7 +125,7 @@ export default {
 	position: fixed;
 	bottom: calc(var(--window-bottom) + 100rpx);
 	right: 30rpx;
-	z-index: 10002;
+	z-index: 9999;
 	.float--active {
 		position: absolute;
 		bottom: 80rpx;

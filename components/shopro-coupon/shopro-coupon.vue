@@ -1,7 +1,7 @@
 <template>
 	<view class="">
 		<!-- 未领取，已领取 -->
-		<view class="coupon-wrap" :style="gradientColor" :class="{ 'gray-wrap': state === 3 }">
+		<view class="coupon-wrap" :style="gradientColor" :class="{ 'gray-wrap': state === 3 || state === 2 || couponData.status_code == 'cannot_get' }">
 			<view class="coupon-item u-flex u-row-between">
 				<view class="coupon-left  u-flex-col ">
 					<view class="sum-box">
@@ -15,10 +15,10 @@
 					</view>
 				</view>
 				<view class="coupon-right u-flex-col">
-					<button class=" get-btn" :style="{ color: btnTextColor }" v-if="state === 0" @tap.stop="getCoupon">立即领取</button>
-					<button class=" get-btn" :style="{ color: btnTextColor }" v-if="state === 1">去使用</button>
-					<button class=" get-btn" :style="{ color: btnTextColor }" v-if="state === 2">查看详情</button>
-					<button class="cu-btn get-btn" v-if="state === 3">已失效</button>
+					<button class="get-btn" :style="{ color: btnTextColor }" v-if="state === 0" @tap.stop="getCoupon">{{ stateMap[couponData.status_code] ||　'立即领取' }}</button>
+					<button class="get-btn" :style="{ color: btnTextColor }" v-if="state === 1">去使用</button>
+					<button class="get-btn" :style="{ color: btnTextColor }" v-if="state === 2">暂不可用</button>
+					<button class="get-btn" v-if="state === 3">{{ stateMap[couponData.status_code] }}</button>
 					<view class="surplus-num" :style="{ color: color }" v-if="state === 0">仅剩{{ stock }}张</view>
 				</view>
 			</view>
@@ -37,7 +37,15 @@ export default {
 	components: {},
 	data() {
 		return {
-			stock: 0
+			stock: 0,
+			stateMap: {
+				can_use: '立即使用',
+				used: '已使用',
+				expired: '已失效',
+				cannot_use: '暂不可用',
+				can_get: '立即领取',
+				cannot_get: '已领取'
+			}
 		};
 	},
 	props: {
@@ -79,6 +87,7 @@ export default {
 			).then(res => {
 				if (res.code === 1) {
 					that.stock -= 1;
+					that.$u.toast('领取成功');
 				}
 			});
 		}
@@ -96,6 +105,7 @@ export default {
 // 未领取，已领取
 .coupon-wrap {
 	mask: url($IMG_URL+'/imgs/coupon_bg1.png');
+	-webkit-mask-box-image: url($IMG_URL+'/imgs/coupon_bg1.png');
 	mask-size: 100% 100%;
 	position: relative;
 	border-radius: 10rpx;
@@ -156,7 +166,6 @@ export default {
 
 			.surplus-num {
 				font-size: 22rpx;
-
 				font-weight: 500;
 				color: #fff;
 				margin-top: 14rpx;

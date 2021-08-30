@@ -1,17 +1,12 @@
 <template>
 	<view class="sh-user-menu-box u-m-b-10">
-		<u-cell-group class="menu-list-box">
-			<u-cell-item
-				class="menu-item u-flex u-row-between"
-				v-for="(item, index) in list"
-				:key="index"
-				@tap="jump(item)"
-				:icon="item.image"
-				:title="item.name"
-				:titleStyle="{ color: '#999999', fontSize: '26rpx' }"
-				:icon-style="{ width: '36rpx', height: '36rpx' }"
-			></u-cell-item>
-		</u-cell-group>
+		<view class="menu-item u-flex u-row-between u-border-bottom" hover-stay-time="150" hover-class="u-cell-hover" v-for="(item, index) in list" :key="index" @tap="jump(item)">
+			<view class="menu-head u-flex u-col-center">
+				<image class="menu-img u-m-r-10" :src="item.image" mode=""></image>
+				<view class="menu-title ">{{ item.name }}</view>
+			</view>
+			<view class="u-iconfont uicon-arrow-right" style="color: #969799;font-size: 28rpx;"></view>
+		</view>
 	</view>
 </template>
 
@@ -42,4 +37,20 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.menu-item {
+	background-color: #fff;
+	width: 100%;
+	padding: 26rpx 32rpx;
+	font-size: 28rpx;
+	line-height: 54rpx;
+	.menu-img {
+		width: 36rpx;
+		height: 36rpx;
+	}
+	.menu-title {
+		font-size: 26rpx;
+		color: #999;
+	}
+}
+</style>

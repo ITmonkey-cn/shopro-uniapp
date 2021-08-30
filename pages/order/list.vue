@@ -66,13 +66,11 @@
 				</view>
 
 				<!-- 空白页 -->
-				<shopro-empty v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_groupon.png'" tipText="暂无商品，还有更多好货等着你噢~"></shopro-empty>
+				<shopro-empty v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_groupon.png'" tipText="暂无商品，还有更多好货等着你噢~"></shopro-empty>
 				<!-- 更多 -->
 				<u-loadmore v-show="orderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -325,7 +323,6 @@ export default {
 			border-radius: 30rpx;
 			margin-right: 20rpx;
 			font-size: 26rpx;
-
 			font-weight: 400;
 			padding: 0;
 		}

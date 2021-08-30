@@ -1,139 +1,134 @@
-// 初始化数据模块
 import http from '@/shopro/request/index'
-import store from '@/shopro/store'
-import {
-	router
-} from '@/shopro/router';
 import share from '@/shopro/share';
-import {
-	CONFIG,
-	TEMPLATE,
-	SHARE_INFO,
-	PAGE_ROUTES,
-} from '../types.js'
+
 const state = {
-	config: uni.getStorageSync('config') ? uni.getStorageSync('config') : {},
-	routes: [],
-	template: uni.getStorageSync('template') ? uni.getStorageSync('template') : {},
+	shop: {}, // 商城信息
+	wechat: {}, // 微信配置
+	share: {}, // 分享配置
+	payment: {}, // 支付配置
+	addons: [], // 插件配置
+	chat: {}, // 客服配置
+	store: {}, // 商城信息
+	tabbarData: [], //自定义底部导航数据
+
+	homeTemplate: [], // 首页模板数据
+	userTemplate: [], // 个人中心模板数据
+	floatData: {}, // 悬浮按钮数据
+	popupData: {}, // 弹窗数据
 	hasTemplate: true, //是否有模板数据
-	shareInfo: {},
+	shareInfo: {} // 默认分享数据
+}
+const getters = {
+	initShop: state => state.shop,
+	initStore: state => state.store,
+	initShare: state => state.share,
+	initPayment: state => state.payment,
+	initAddons: state => state.addons,
+	initChat: state => state.chat,
+	initWechat: state => state.wechat,
+
+	hasTemplate: state => state.hasTemplate,
+	homeTemplate: state => state.homeTemplate,
+	userTemplate: state => state.userTemplate,
+	floatData: state => state.floatData,
+	popupData: state => state.popupData,
+	tabbarData: state => state.tabbarData,
+
+	shareInfo: state => state.shareInfo
 }
 
+
 const actions = {
-
-	appInit({
-		commit
+	// 初始化数据
+	async appInit({
+		commit,
+		dispatch
 	}, options) {
-		return new Promise((resolve, reject) => {
-			http('common.init').then(res => {
-				if (res.code === 1) {
-					commit('CONFIG', res.data);
-					if (!options?.query?.token) {
-						store.dispatch('autoLogin');
-						store.dispatch('getTemplate', options);
-						store.dispatch('getShareInfo');
-					}
-
-				}
-				resolve(res.data)
-			}).catch(e => {
-				reject(e)
-			})
-		})
+		const result = await http('common.init');
+		if (result.code === 1) {
+			commit('CONFIG', result.data);
+			if (!options?.query?.token) {
+				dispatch('autoLogin');
+			}
+			return result.data;
+		}
+		return false;
 	},
 
 	// 获取模板数据
-	getTemplate({
+	async getTemplate({
 		commit
 	}, options) {
-		return new Promise((resolve, reject) => {
-			let shop_id = 0;
-			// #ifdef H5
-			if (options?.query.shop_id) {
-				shop_id = options.query.shop_id;
-			}
-			// #endif
+		let shop_id = 0;
+		// #ifdef H5
+		if (options?.query.shop_id) {
+			shop_id = options.query.shop_id;
+		}
+		// #endif
 
-			// #ifdef MP
-			if (options?.query.scene) {
-				let scene = decodeURIComponent(options?.query.scene);
-				let sceneObj = scene.split('=');
-				if (sceneObj[0] === 'shop_id') {
-					shop_id = sceneObj[1]
-				}
+		// #ifdef MP
+		if (options?.query.scene) {
+			let scene = decodeURIComponent(options?.query.scene);
+			let sceneObj = scene.split('=');
+			if (sceneObj[0] === 'shop_id') {
+				shop_id = sceneObj[1]
 			}
-			// #endif
-			http('common.template', {
-				shop_id
-			}).then(res => {
-				res.code === 0 ? commit('hasTemplate', false) : commit('hasTemplate', true);
-				if (res.code === 1) {
-					commit('TEMPLATE', res.data);
-					uni.setStorageSync('template', res.data);
-				}
-				resolve(res)
-			}).catch(e => {
-				reject(e)
-
-			})
-		})
+		}
+		// #endif
+		const result = await http('common.template', shop_id ? {
+			shop_id
+		} : {});
+		if (result.code === 1) {
+			commit("hasTemplate", true);
+			commit('TEMPLATE', result.data);
+			return result.data;
+		} else {
+			commit("hasTemplate", false);
+			return false;
+		}
 	},
 
-	getShareInfo({
-		commit
-	}) {
-		let shareInfo = share.setShareInfo();
-		commit('SHARE_INFO', shareInfo);
-		return shareInfo;
-	},
-
-	// 同步后端路由
+	// 同步路由到后端
 	syncPages({
 		commit
 	}) {
-		return new Promise((resolve, reject) => {
-			http('common.syncPages', {
-				data: ROUTES
-			}).then(res => {
-				commit('PAGE_ROUTES', res.data);
-				resolve(res)
-			}).catch(e => {
-				reject(e)
-			})
+		http('common.syncPages', {
+			data: ROUTES,
 		})
 	},
 }
 
+
 const mutations = {
-	[CONFIG](state, data) {
-		state.config = data
-		uni.setStorageSync('config', data);
+	CONFIG(state, payload) {
+		Object.keys(payload).forEach(k => {
+			state[k] = payload[k];
+		})
 	},
-	[TEMPLATE](state, data) {
-		state.template = data
+
+	TEMPLATE(state, data) {
+		state.template = data;
+		state.homeTemplate = data.home
+		state.userTemplate = data.user
+		state.floatData = data['float-button']?. [0]?.content
+		state.popupData = data?.popup?. [0]?.content
+		state.tabbarData = data?.tabbar?. [0]?.content
 	},
-	[PAGE_ROUTES](state, data) {
-		state.routes = data
-	},
-	[SHARE_INFO](state, data) {
-		state.shareInfo = data
-	},
+
 	hasTemplate(state, data) {
 		state.hasTemplate = data
 	},
 	// 弹窗一次的话，关闭的时候删除数据。
 	delPopup(state, index) {
-		let templateData = state.template;
-		uni.removeStorageSync('template');
-		templateData.popup[0].content.list.splice(index, 1)
-		uni.setStorageSync('template', templateData);
-		state.template = templateData;
+		let popupData = state.popupData;
+		popupData.list.splice(index, 1)
+		state.template = popupData;
+	},
+	shareInfo(state, shareInfo) {
+		state.shareInfo = shareInfo;
 	}
 }
 
-const getters = {
-
-}
 
 export default {
 	state,

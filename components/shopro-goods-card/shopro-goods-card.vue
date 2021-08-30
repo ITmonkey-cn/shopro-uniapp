@@ -1,37 +1,20 @@
 <template>
 	<!-- m -->
 	<view class="goods-box" @tap="click">
-		<view class="img-box"><u-image ref="uImage" :width="345" :height="345" :src="image" mode="aspectFill"></u-image></view>
+		<view class="img-box"><image class="goods-img" lazy-load fade-show :src="image" mode="aspectFill"></image></view>
 		<view class="goods-bottom u-p-14" :style="type ? 'background-image: url(' + $IMG_URL + typeMap[type].goodsBg + ')' : ''">
 			<view class="title u-ellipsis-2 u-m-b-10">
-				<u-tag
-					class="title-tag u-m-r-10"
-					v-if="type"
-					:text="typeMap[type].text"
-					size="mini"
-					:bg-color="typeMap[type].tagBg"
-					:border-color="typeMap[type].tagBg"
-					color="#fff"
-				/>
+				<view class=" sm cu-tag radius title-tag u-m-r-10" :style="{ backgroundColor: typeMap[type].tagBg, color: '#fff' }" v-if="type">{{ typeMap[type].text }}</view>
 				{{ title }}
 			</view>
 			<view class="sub-title u-ellipsis-1 u-m-b-10" v-show="subtitle">{{ subtitle }}</view>
 			<view class="u-m-b-20">
-				<u-tag
-					class="u-m-t-10  u-m-r-10"
-					v-for="(item, index) in tagTextList"
-					:key="index"
-					:text="item"
-					size="mini"
-					bg-color="#fff"
-					border-color="#FF0000"
-					color="#FF0000"
-				/>
+				<view class="cu-tag line-red sm radius" v-for="(item, index) in tagTextList" :key="index">{{ item }}</view>
 			</view>
 
 			<slot name="cardBottom">
 				<view class="u-flex u-col-center u-row-between">
-					<view class="price-box font-OPPOSANS">
+					<view class="price-box">
 						<view class="price u-m-b-10">{{ price }}</view>
 						<view class="origin-price">￥{{ originPrice }}</view>
 					</view>
@@ -40,7 +23,7 @@
 						<!-- 单规格 -->
 						<view class="" v-if="!detail.is_sku">
 							<button class="u-reset-button cart-btn u-flex u-col-center u-row-center" v-if="!isCart(detail.id)" @tap.stop="addCart(detail.sku_price[0])">
-								<u-icon name="shopping-cart-fill" size="32" color="#fff"></u-icon>
+								<view class="u-iconfont uicon-shopping-cart-fill" style="color: #fff;"></view>
 							</button>
 							<view class="num-step" v-else>
 								<u-number-box
@@ -57,7 +40,7 @@
 						</view>
 						<!-- 多规格 -->
 						<button class="u-reset-button item-btn cart-btn  u-flex u-col-center u-row-center" @tap.stop="selSku(detail)" v-else>
-							<u-icon name="shopping-cart-fill" size="32" color="#fff"></u-icon>
+							<view class="u-iconfont uicon-shopping-cart-fill" style="color: #fff;"></view>
 						</button>
 					</view>
 				</view>
@@ -82,7 +65,7 @@
  * @property {Array} tagTextList - 活动标签
  * @event {Function} click 商品被点击
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -105,10 +88,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			cartList: ({ cart }) => cart.cartList,
-			checkCart: ({ cart }) => cart.checkCart
-		})
+		...mapGetters(['cartList', 'checkCart'])
 	},
 	props: {
 		detail: {
@@ -118,7 +98,7 @@ export default {
 			}
 		},
 		type: {
-			type: String,
+			type: [String,null],
 			default: ''
 		},
 		image: {
@@ -277,24 +257,24 @@ export default {
 </script>
 
 <style lang="scss">
-.goods-bottom {
-	background-size: 100% 100%;
-	background-position: bottom center;
-	background-repeat: no-repeat;
-}
 .goods-box {
 	width: 345rpx;
 	background: #fff;
 	border-radius: 20rpx;
 	overflow: hidden;
-
+	.goods-bottom {
+		background-size: 100% 100%;
+		background-position: bottom center;
+		background-repeat: no-repeat;
+	}
 	.img-box {
 		width: 345rpx;
 		height: 345rpx;
 		overflow: hidden;
 		position: relative;
 		background-color: #fff;
-		.img {
+		border-radius: 6rpx;
+		.goods-img {
 			width: 345rpx;
 			height: 345rpx;
 			background-color: #ccc;
@@ -311,7 +291,6 @@ export default {
 		padding-top: 6rpx;
 
 		.title-tag {
-			transform: scale(0.9);
 			position: relative;
 			top: -6rpx;
 		}

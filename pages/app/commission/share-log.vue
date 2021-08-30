@@ -5,7 +5,7 @@
 		<view class="head_box">
 			<view class="nav-box">
 				<!-- 标题栏 -->
-				<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}" :backTextStyle="backTextStyle" backText="分享记录"></u-navbar>
+				<shopro-navbar back-icon-color="#fff" :background="{}" :backTextStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: '500' }" backText="分享记录"></shopro-navbar>
 			</view>
 			<!-- 分类tab -->
 			<view class="tab-box u-flex">
@@ -50,11 +50,6 @@ export default {
 	components: {},
 	data() {
 		return {
-			backTextStyle: {
-				color: '#fff',
-				fontSize: '40rpx',
-				fontWeight: '500'
-			},
 			shareLogList: [], //分享记录
 			tabCurrent: 'all', //默认
 			tabsList: [

@@ -31,7 +31,7 @@
 		<!-- 更多 -->
 		<u-loadmore v-show="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 		<!-- 空置页 -->
-		<shopro-empty v-show="isEmpty" marginTop="300rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据~"></shopro-empty>
+		<shopro-empty v-if="isEmpty" marginTop="300rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据~"></shopro-empty>
 	</view>
 </template>
 

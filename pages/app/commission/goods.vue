@@ -16,9 +16,9 @@
 		</view>
 
 		<!-- 	分享组件 -->
-		<shopro-share v-model="showShare" :shareDetail="shareInfo" :posterInfo="posterInfo" :posterType="'goods'"></shopro-share>
+		<shopro-share v-model="showShare" :posterInfo="posterInfo" :posterType="'goods'"></shopro-share>
 		<!-- 缺省页 -->
-		<shopro-empty v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据"></shopro-empty>
+		<shopro-empty v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据"></shopro-empty>
 		<!-- 更多 -->
 		<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 	</view>
@@ -43,11 +43,9 @@ export default {
 	onLoad() {
 		this.getGoodList();
 	},
-	// #ifdef H5
 	onUnload() {
 		share.setShareInfo();
 	},
-	// #endif
 	onReachBottom() {
 		if (this.currentPage < this.lastPage) {
 			this.currentPage += 1;
@@ -66,7 +64,7 @@ export default {
 			const that = this;
 			let goodsInfo = this.goodsList[index];
 			this.posterInfo = goodsInfo;
-			that.shareInfo = share.setShareInfo({
+			share.setShareInfo({
 				title: goodsInfo.title,
 				desc: goodsInfo.subtitle,
 				image: goodsInfo.image,

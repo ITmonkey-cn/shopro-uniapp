@@ -18,12 +18,12 @@
 			</view>
 			<view class="more-box u-flex" @tap="$Router.push('/pages/activity/seckill/list')">
 				<text class="more-text u-m-r-10">更多抢购</text>
-				<text class="iconfont iconyoujiantou-tianchong more-icon"></text>
+				<text class="iconfont icon-youjiantou-tianchong more-icon"></text>
 			</view>
 		</view>
 		<!-- 活动商品 -->
 		<!-- m -->
-		<scroll-view v-if="detail.style === 1" class="scroll-box" scroll-x scroll-anchoring>
+		<scroll-view v-if="seckillType === 1" class="scroll-box" scroll-x scroll-anchoring>
 			<view class="goods-box u-flex">
 				<view class="min-goods u-m-r-14" v-for="mgoods in goodsList" :key="mgoods.id" @tap="jump('/pages/goods/detail', { id: mgoods.id })">
 					<view class="img-box"><image class="img" :src="mgoods.image" mode=""></image></view>
@@ -39,17 +39,17 @@
 		</scroll-view>
 		<!--b-->
 		<view
-			v-if="detail.style === 2"
+			v-if="seckillType === 2"
 			class="big-goods  u-flex u-p-20 u-col-top u-m-b-16"
 			v-for="item in goodsList"
 			:key="item.id"
 			@tap="jump('/pages/goods/detail', { id: item.id })"
 		>
-			<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
+			<image class="goods-img" :src="item.image" mode="aspectFill"></u-image>
 			<view class=" card-right u-m-l-20 u-flex-col u-row-between">
 				<view class="">
 					<view class="goods-title u-ellipsis-1 u-m-t-10 u-m-b-10">
-						<u-tag class="title-tag u-m-r-10" text="秒杀" size="mini" bg-color="#FF2621" border-color="#FF2621" color="#fff" />
+						<view class=" sm cu-tag bg-red radius title-tag u-m-r-10" >秒杀</view>
 						{{ item.title }}
 					</view>
 					<view v-show="item.subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ item.subtitle }}</view>
@@ -91,7 +91,8 @@ export default {
 		return {
 			timestamp: 0, //倒计时
 			goodsList: [],
-			showActivity: true //是否显示活动。
+			showActivity: true, //是否显示活动。
+			seckillType: this.detail.style
 		};
 	},
 	props: {
@@ -242,6 +243,11 @@ export default {
 	background: #ffffff;
 	box-shadow: 0px 7rpx 8rpx 1rpx rgba(254, 76, 29, 0.05);
 	border-radius: 20rpx;
+	.goods-img{
+		width: 220rpx;
+		height: 220rpx;
+		border-radius: 6rpx;
+	}
 	.card-right {
 		width: 430rpx;
 		height: 100%;
@@ -251,9 +257,6 @@ export default {
 		font-weight: 600;
 		width: 400rpx;
 		color: #000000;
-		.title-tag {
-			transform: scale(0.9);
-		}
 	}
 	.subtitle-text {
 		font-size: 22rpx;

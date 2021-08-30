@@ -64,10 +64,7 @@
 					<text v-if="endDate">至{{ endDate }}</text>
 				</view>
 				<view class="u-calendar__bottom__btn">
-					<button v-if="Object.keys(customStyle).length" class="u-reset-button submit-btn" :style="{ background: customStyle.background }" @tap="btnFix(false)">
-						确定
-					</button>
-					<u-button v-else :type="btnType" shape="circle" size="default" @click="btnFix(false)">确定</u-button>
+					<button class="u-reset-button submit-btn" :style="{ background: customStyle.background }" @tap="btnFix(false)">确定</button>
 				</view>
 			</view>
 		</view>
@@ -662,6 +659,7 @@ export default {
 			background: #fff;
 			border-radius: 100rpx;
 			color: #fff;
+			background: #2979ff;
 			font-size: 28rpx;
 		}
 	}

@@ -1,140 +1,19 @@
 // 购物车模块
 import http from '@/shopro/request/index'
-import store from '@/shopro/store/index.js'
-import {
-	CART_LIST,
-	CART_NUM
-} from '../types.js'
+
 const state = {
-	cartList: uni.getStorageSync('cartList') ? uni.getStorageSync('cartList') : [],
+	cartList: [], //购物车列表
 	checkCart: {}, //检测是否是购物车数据的对象
-	allSelected: false,
-	cartNum: uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : 0, //购物车,涉及到刷新数据丢失，所以存了本地,
+	allSelected: false, // 全选检测
+	cartNum: 0, //购物车,涉及到刷新数据丢失，所以存了本地,
 }
 
-const actions = {
-	// 购物车数据（查）
-	getCartList({
-		commit,
-		state
-	}) {
-		return new Promise((resolve, reject) => {
-			http('cart.index').then(res => {
-				if (res.code === 1) {
-					let cartData = res.data;
-					cartData.length && cartData.map(item => {
-						item.checked = true;
-					})
-					uni.setStorageSync('cartNum', cartData.length);
-					commit('CART_LIST', cartData);
-					commit('checkCartList');
-					commit('getCheckCart')
-					commit('CART_NUM');
-				}
-
-			}).catch(e => {
-				reject(e)
-			})
-		})
-	},
-	// 添加到购物车（增）
-	addCartGoods({
-		commit,
-		dispatch,
-	}, data) {
-		return new Promise((resolve, reject) => {
-			http('cart.add', {
-				goods_list: data.list,
-				from: data.from
-			}).then(res => {
-				if (res.code === 1) {
-					dispatch('getCartList');
-				}
-				resolve(res)
-			}).catch(e => {
-				reject(e)
-			})
-		})
-	},
-	// 修改购物车商品数量（改）|| 删除购物车商品（删）
-	changeCartList({
-		commit,
-		state,
-		dispatch
-	}, param) {
-		return new Promise((resolve, reject) => {
-			http('cart.edit', {
-				cart_list: param.ids,
-				value: param.goodsNum || null,
-				act: param.art
-			}).then(res => {
-				if (param.art === 'delete' && res.code === 1) {
-					dispatch('getCartList');
-				}
-				resolve(res)
-				commit('checkCartList');
-			}).catch(e => {
-				reject(e)
-			})
-		})
-	},
-}
-
-const mutations = {
-	// cart数据获取变动。
-	[CART_LIST](state, data) {
-		uni.setStorageSync('cartList', data)
-		state.cartList = data
-	},
-	// cart数量角标更新。
-	[CART_NUM](state, data) {
-		let cartNum = uni.getStorageSync('cartNum') ? uni.getStorageSync('cartNum') : 0;
-		if (Number(cartNum)) {
-			uni.setTabBarBadge({
-				index: 2,
-				text: String(cartNum)
-			})
-		} else {
-			uni.removeTabBarBadge({
-				index: 2
-			})
-		}
-		state.cartNum = cartNum
-	},
-	// 切换全选。
-	changeAllSellect(state) {
-		state.allSelected = !state.allSelected;
-	},
-	// 全选设置
-	getAllSellectCartList(state, flag) {
-		state.cartList.map(item => {
-			item.checked = flag
-		})
-	},
-	// 全选检测
-	checkCartList(state) {
-		let all = true;
-		state.cartList.map(item => {
-			if (!item.checked) {
-				all = false
-			}
-		})
-		state.allSelected = all;
-	},
-	// 是否购物车数据检测
-	getCheckCart(state) {
-		let obj = {};
-		state.cartList.map(item => {
-			obj[item.goods_id] = {
-				num: item.goods_num,
-				cartOrderId: item.id
-			};
-		});
-		state.checkCart = obj;
-	},
-}
 
 const getters = {
+	cartList: state => state.cartList,
+	checkCart: state => state.checkCart,
+	allSelected: state => state.allSelected,
+	cartNum: state => state.cartNum,
 	// 购物车数量和总价
 	totalCount: state => {
 		let totalNum = 0;
@@ -180,6 +59,119 @@ const getters = {
 		return false
 	}
 
+}
+
+
+const mutations = {
+	// cart数据获取变动。
+	CART_LIST(state, payload) {
+		state.cartList = payload;
+		let cartListNumber = payload.length;
+		if (Number(cartListNumber)) {
+			uni.setTabBarBadge({
+				index: 2,
+				text: String(cartListNumber)
+			})
+		} else {
+			uni.removeTabBarBadge({
+				index: 2
+			})
+		}
+		state.cartNum = cartListNumber;
+	},
+
+	// 切换全选。
+	changeAllSellect(state) {
+		state.allSelected = !state.allSelected;
+	},
+	// 全选设置
+	getAllSellectCartList(state, flag) {
+		state.cartList.map(item => {
+			item.checked = flag
+		})
+	},
+	// 全选检测
+	checkCartList(state) {
+		let all = true;
+		state.cartList.map(item => {
+			if (!item.checked) {
+				all = false
+			}
+		})
+		state.allSelected = all;
+	},
+	// 是否购物车数据检测
+	getCheckCart(state) {
+		let obj = {};
+		state.cartList.map(item => {
+			obj[item.goods_id] = {
+				num: item.goods_num,
+				cartOrderId: item.id
+			};
+		});
+		state.checkCart = obj;
+	},
+}
+
+const actions = {
+	// 购物车数据（查）
+	getCartList({
+		commit
+	}) {
+		return new Promise((resolve, reject) => {
+			http('cart.index').then(res => {
+				if (res.code === 1) {
+					let cartData = res.data;
+					cartData.length && cartData.map(item => {
+						item.checked = true;
+					})
+					commit('CART_LIST', cartData);
+					commit('checkCartList');
+					commit('getCheckCart')
+				}
+
+			}).catch(e => {
+				reject(e)
+			})
+		})
+	},
+	// 添加到购物车（增）
+	addCartGoods({
+		dispatch
+	}, data) {
+		return new Promise((resolve, reject) => {
+			http('cart.add', {
+				goods_list: data.list,
+				from: data.from
+			}).then(res => {
+				res.code === 1 && dispatch('getCartList');
+				resolve(res)
+			}).catch(e => {
+				reject(e)
+			})
+		})
+	},
+	// 修改购物车商品数量（改）|| 删除购物车商品（删）
+	changeCartList({
+		commit,
+		dispatch
+	}, param) {
+		return new Promise((resolve, reject) => {
+			http('cart.edit', {
+				cart_list: param.ids,
+				value: param.goodsNum || null,
+				act: param.art
+			}).then(res => {
+				if (param.art === 'delete' && res.code === 1) {
+					dispatch('getCartList');
+				}
+				commit('checkCartList');
+				resolve(res)
+			}).catch(e => {
+				reject(e)
+			})
+		})
+	},
 }
 
 export default {

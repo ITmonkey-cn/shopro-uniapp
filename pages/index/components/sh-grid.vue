@@ -1,11 +1,9 @@
 <template>
-	<view class="sh-grid-box u-m-b-10" 　v-if="list.length">
-		<u-grid :col="4" :border="false">
-			<u-grid-item :border="false" name="item1" v-for="(menu, index) in list" :key="index" @click="jump(menu)">
-				<image class="tool-img" :src="menu.image" mode="aspectFill"></image>
-				<view class="item-title">{{ menu.name }}</view>
-			</u-grid-item>
-		</u-grid>
+	<view class="grid-wap u-m-b-10 u-flex u-flex-wrap u-col-center" v-if="list.length">
+		<view class="grid-item u-flex-col u-row-center u-col-center" v-for="(menu, index) in list" :key="index" @tap="jump(menu)">
+			<image class="tool-img" :src="menu.image" mode="aspectFill"></image>
+			<view class="item-title">{{ menu.name }}</view>
+		</view>
 	</view>
 </template>
 
@@ -28,6 +26,7 @@ export default {
 			}
 		}
 	},
+	created() {},
 	methods: {
 		jump(data) {
 			this.$tools.routerTo(data.path);
@@ -38,20 +37,24 @@ export default {
 
 <style lang="scss">
 // 宫格
-.sh-grid-box {
+.grid-wap {
 	background: #fff;
-	display: flex;
-	flex-wrap: wrap;
-	.tool-img {
-		width: 44rpx;
-		height: 44rpx;
-	}
-	.item-title {
-		font-size: 26rpx;
-		font-weight: 500;
-		color: rgba(153, 153, 153, 1);
-		line-height: 24rpx;
-		padding-top: 30rpx;
+	width: 750rpx;
+	padding: 30rpx 0 0;
+	.grid-item {
+		width: 25%;
+		margin-bottom: 40rpx;
+		.tool-img {
+			width: 44rpx;
+			height: 44rpx;
+		}
+		.item-title {
+			font-size: 26rpx;
+			font-weight: 500;
+			color: rgba(153, 153, 153, 1);
+			line-height: 24rpx;
+			padding-top: 20rpx;
+		}
 	}
 }
 </style>

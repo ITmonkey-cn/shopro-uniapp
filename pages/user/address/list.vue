@@ -19,16 +19,13 @@
 					@tap="getWXaddress"
 					v-show="platform == 'wxMiniProgram' || platform == 'wxOfficialAccount'"
 				>
-					<u-icon class="u-m-r-10" name="weixin-fill" :size="42" color="rgb(9, 187, 7)"></u-icon>
+					<text class="u-iconfont uicon-weixin-fill u-p-r-10" style="color:#09bb07;font-size: 40rpx;"></text>
 
 					导入微信地址
 				</button>
 				<button class="u-reset-button add-btn u-m-20" @tap="jump('/pages/user/address/edit')">添加新的收货地址</button>
 			</view>
 		</view>
-
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 

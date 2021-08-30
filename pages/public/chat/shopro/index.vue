@@ -2,20 +2,25 @@
 <template>
 	<view class="chat-wrap">
 		<!-- 标题栏 -->
-		<u-navbar :borderBottom="true" :background="navBackground" back-icon-color="#fff">
-			<view class="u-flex u-col-bottom head-box">
+		<shopro-navbar
+			:background="{
+				backgroundImage: 'linear-gradient(45deg, #9000ff, #5e00ff)',
+				color: '#FFF'
+			}"
+			backIconColor="#fff"
+		>
+			<view class="u-flex u-col-bottom head-box" slot="content">
 				<view class="head-title u-m-r-20">{{ navTitle.split(',')[0] }}</view>
 				<view v-show="navTitle.split(',')[1] === '在线'" class="u-flex u-col-center">
-					<view class="iconfont iconyuandianxiao text-green head-icon"></view>
+					<view class="iconfont icon-yuandianxiao text-green head-icon"></view>
 					<view class="head-state">在线</view>
 				</view>
 				<view v-show="navTitle.split(',')[1] === '离线'" class="u-flex u-col-center">
-					<view class="iconfont iconyuandianxiao text-gray head-icon"></view>
+					<view class="iconfont icon-yuandianxiao text-gray head-icon"></view>
 					<view class="head-state">离线</view>
 				</view>
 			</view>
-		</u-navbar>
-
+		</shopro-navbar>
 		<!-- 提示 -->
 		<u-notice-bar
 			:autoplay="true"
@@ -113,11 +118,11 @@
 						@input="onInput"
 						@confirm="onSend"
 					/>
-					<view class="action u-p-10" @tap="selEmoji"><text class="iconfont iconbiaoqing text-grey"></text></view>
+					<view class="action u-p-10" @tap="selEmoji"><text class="iconfont icon-biaoqing text-grey"></text></view>
 				</view>
 				<button v-if="isFocus" class="u-reset-button send-btn shadow" @tap.stop="onSend">发送</button>
 				<button v-else class="u-reset-button more-btn" @tap.stop="onTools">
-					<view class="action" style="margin-right: 0;"><text class="iconfont icontianjia text-grey" :class="{ 'tools-active': showTools }"></text></view>
+					<view class="action" style="margin-right: 0;"><text class="iconfont icon-tianjia text-grey" :class="{ 'tools-active': showTools }"></text></view>
 				</button>
 			</view>
 			<!-- 工具栏 -->
@@ -175,7 +180,7 @@
 		<view class="cu-bar log-box foot input u-flex-col" v-if="showLogBox">
 			<view class="log-head u-flex u-row-between">
 				<view class="title-box">{{ logTitle }}</view>
-				<button class="u-reset-button close-btn" @tap="closeToolsItem"><u-icon name="close-circle-fill" size="36" color="#e0e0e0"></u-icon></button>
+				<button class="u-reset-button close-btn" @tap="closeToolsItem"><text class="u-iconfont uicon-close-circle-fill" style="#e0e0e0;font-size: 36rpx;"></text></button>
 			</view>
 			<view class="log-content">
 				<scroll-view class="card-scroll-box" scroll-y="true" :scroll-with-animation="true" :show-scrollbar="false" @scrolltolower="loadMore">
@@ -217,22 +222,16 @@
 		</view>
 		<!-- 遮罩 -->
 		<view class="cu-modal" @tap="onMask" :class="{ show: showTools || showEmoji }" style="z-index: 1000;"></view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
 <script>
 import Socket from './chat.js';
 import { BASE_URL, API_URL } from '@/env.js';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	data() {
 		return {
-			navBackground: {
-				backgroundImage: 'linear-gradient(45deg, #9000ff, #5e00ff)',
-				color: '#FFF'
-			},
 			socket: null, //socket服务
 			InputBottom: 0,
 			isPageHide: false,
@@ -258,7 +257,7 @@ export default {
 				// identify: 'customer_service', // 用户发送的为 user; 客服发送的为 customer_service
 				// type: 'text', //message:用户消息类型; message_list:请求消息列表
 				// msg: message.message,
-				// date: this.$u.date(message.createtime, 'yyyy年mm月dd日 hh时MM分')
+				// date: this.$u.timeFormat(message.createtime, 'yyyy年mm月dd日 hh时MM分')
 			],
 			msgText: '', //输入框内容
 			showNotice: true, //滚动提示
@@ -302,6 +301,7 @@ export default {
 		};
 	},
 	computed: {
+		...mapGetters(['userInfo']),
 		isFocus() {
 			//检测输入框是否有信息
 			let isMsg = false;
@@ -312,10 +312,7 @@ export default {
 			if (this.socket) {
 				return this.socket.isClose;
 			}
-		},
-		...mapState({
-			userInfo: state => state.user.userInfo //用户数据
-		})
+		}
 	},
 	created() {
 		this.init();
@@ -896,7 +893,7 @@ page {
 	.more-btn {
 		padding: 0;
 		background: none;
-		.icontianjia {
+		.icon-tianjia {
 			font-size: 44rpx;
 			background: linear-gradient(90deg, #a36fff, #5336ff);
 			-webkit-background-clip: text;
@@ -1009,10 +1006,6 @@ page {
 		.close-btn {
 			padding: 0;
 			background: none;
-			.cuIcon-roundclosefill {
-				font-size: 40rpx;
-				color: #e0e0e0;
-			}
 		}
 	}
 	.log-content {

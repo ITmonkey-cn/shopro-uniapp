@@ -2,10 +2,13 @@
 import {
 	RouterMount,
 	createRouter
-} from 'uni-simple-router';
+} from './uni-simple-router.js'
 import store from '@/shopro/store'
 const router = createRouter({
 	platform: process.env.VUE_APP_PLATFORM,
+	applet: {
+		animationDuration: 0 //默认 300ms 
+	},
 	routerErrorEach: ({
 		type,
 		msg
@@ -26,6 +29,7 @@ const router = createRouter({
 				// #endif
 				break;
 			case 2:
+			case 0:
 				router.$lockStatus = false;
 				break;
 			default:
@@ -49,7 +53,7 @@ const router = createRouter({
 //全局路由前置守卫
 router.beforeEach((to, from, next) => {
 	// 权限控制登录
-	if (to.meta && to.meta.auth && !store.state.user.isLogin) {
+	if (to.meta && to.meta.auth && !store.getters.isLogin) {
 		store.dispatch('showAuthModal');
 		next(false);
 	} else {

@@ -252,7 +252,7 @@ export default {
 				this.rtf = div;
 			} else {
 				if (!this.rtf) this.rtf = div;
-				else this.rtf.appendChild(div);
+				else if (this.rtf.appendChild) this.rtf.appendChild(div);
 			}
 			div.innerHTML = this._handleHtml(html, append);
 			for (var styles = this.rtf.getElementsByTagName('style'), i = 0, style; (style = styles[i++]); ) {
@@ -392,7 +392,7 @@ export default {
 					div.appendChild(table);
 				}
 			}
-			if (!append) this.document.appendChild(this.rtf);
+			if (!append &&  this.document ) this.document.appendChild(this.rtf);
 			this.$nextTick(() => {
 				this.nodes = [1];
 				this.$emit('load');

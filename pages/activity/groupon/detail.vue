@@ -14,7 +14,7 @@
 					<template #describe>
 						<view class="u-flex u-m-b-20">
 							<view class="sell-box">
-								<text class=" hot-icon iconfont iconicon-test"></text>
+								<text class=" hot-icon iconfont icon-icon-test"></text>
 								<text class="sell-num">已拼{{ grouponDetail.goods.sales }}件</text>
 							</view>
 							<text class="group-num">{{ grouponDetail.num || 0 }}人团</text>
@@ -29,11 +29,11 @@
 				<!-- 拼团成功 -->
 				<view class="u-flex u-row-center u-col-center" v-if="grouponDetail.status === 'finish' || grouponDetail.status === 'finish-fictitious'">
 					<view class="tip-box u-flex" v-if="grouponDetail.my">
-						<u-icon class="u-m-r-10" name="checkmark-circle-fill" color="#42B111" size="34"></u-icon>
+						<view class="u-iconfont uicon-checkmark-circle-fill u-m-r-10" style="color:#42B111;font-size:34rpx ;"></view>
 						<text>恭喜您~拼团成功！</text>
 					</view>
 					<view class="tip-box u-flex" v-else>
-						<u-icon class="u-m-r-10" name="error-circle-fill" color="#E1212B" size="34"></u-icon>
+						<view class="u-iconfont uicon-close-circle-fill u-m-r-10" style="color:#E1212B;font-size:34rpx ;"></view>
 						<text>对不起~您来晚了，该团已满</text>
 					</view>
 				</view>
@@ -41,7 +41,7 @@
 				<!--  拼团失败-->
 				<view class="u-flex u-row-center u-col-center" v-if="grouponDetail.status === 'invalid'">
 					<view class="tip-box u-flex">
-						<u-icon class="u-m-r-10" name="error-circle-fill" color="#E1212B" size="34"></u-icon>
+						<view class="u-iconfont uicon-close-circle-fill u-m-r-10" style="color:#E1212B;font-size:34rpx ;"></view>
 						<text>{{ grouponDetail.my ? '对不起~拼团已过期！已全额退款' : '对不起~拼团已过期！您来晚了~' }}</text>
 					</view>
 				</view>
@@ -50,8 +50,8 @@
 				<view class="title-box u-flex u-row-center u-col-center" v-if="grouponDetail.status === 'ing'">
 					<!-- 活动结束 -->
 					<view class="" v-if="grouponDetail.activity_status === 'ended'">
-						<view class="tip-box u-flex">
-							<u-icon class="u-m-r-10" name="error-circle-fill" color="#E1212B" size="34"></u-icon>
+						<view class="tip-box u-flex u-col-center">
+							<view class="u-iconfont uicon-close-circle-fill u-m-r-10" style="color:#E1212B;font-size:34rpx ;"></view>
 							<text>对不起~拼团活动已结束！您来晚了~</text>
 						</view>
 					</view>
@@ -106,17 +106,17 @@
 			</view>
 
 			<!-- 玩法 -->
-			<view v-if="activity && activity.id" class="groupon-play u-flex u-row-between" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
+			<view v-if="activity && activity.id" class="groupon-play u-flex u-row-between u-col-center" @tap="jump('/pages/public/richtext', { id: activity.richtext_id })">
 				<text class="title">玩法</text>
-				<view class="u-flex">
+				<view class="u-flex u-col-center">
 					<view class="description u-ellipsis-1">{{ activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
-					<u-icon name="arrow-right" size="28" color="#666"></u-icon>
+					<view class="u-iconfont uicon-arrow-right u-m-r-10" style="color:#999;font-size:28rpx ;"></view>
 				</view>
 			</view>
 		</view>
 
 		<!-- 邀请好友 -->
-		<shopro-share v-model="showShare" :shareDetail="shareInfo" 　 :posterInfo="grouponDetail" :posterType="'groupon'"></shopro-share>
+		<shopro-share v-model="showShare" :posterInfo="grouponDetail" :posterType="'groupon'"></shopro-share>
 		<!-- 规格弹窗 -->
 
 		<shopro-sku
@@ -160,11 +160,9 @@ export default {
 		clearInterval(timer);
 		timer = null;
 	},
-	// #ifdef H5
 	onUnload() {
 		share.setShareInfo();
 	},
-	// #endif
 	methods: {
 		// 路由跳转
 		jump(path, parmas) {
@@ -208,7 +206,7 @@ export default {
 				that.countDown(t / 1000);
 
 				// 设置分享信息
-				that.shareInfo = share.setShareInfo({
+				share.setShareInfo({
 					title: that.grouponDetail.goods.title,
 					desc: that.grouponDetail.goods.subtitle,
 					image: that.grouponDetail.goods.image,
@@ -268,16 +266,6 @@ export default {
 	.tip-box {
 		font-size: 28rpx;
 		font-weight: bold;
-		.cuIcon-roundcheckfill {
-			color: #42b111;
-			font-size: 34rpx;
-			margin-right: 20rpx;
-		}
-		.cuIcon-roundclosefill {
-			color: #d81e06;
-			font-size: 34rpx;
-			margin-right: 20rpx;
-		}
 	}
 	.title-box {
 		font-size: 26rpx;

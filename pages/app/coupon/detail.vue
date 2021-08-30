@@ -2,7 +2,7 @@
 <template>
 	<view class="page_box">
 		<!-- 标题栏 -->
-		<u-navbar backText="优惠券详情" :borderBottom="false" :background="{}" :z-index="99" :is-fixed="true"></u-navbar>
+		<shopro-navbar back-icon-color="#fff" :background="{}" :backTextStyle="{ color: '#fff', fontSize: '36rpx', fontWeight: '500' }" backText="优惠券详情"></shopro-navbar>
 		<view class="content_box">
 			<scroll-view class="scroll-box" scroll-y="true" scroll-with-animation enable-back-to-top :scroll-into-view="scrollId" @scroll="onScroll">
 				<!-- 详情卡片 -->
@@ -11,7 +11,7 @@
 						<view class="img-box u-flex u-row-center u-col-center"><image class="coupon-img" :src="$IMG_URL + '/imgs/coupon.png'" mode=""></image></view>
 						<view class="title">{{ couponDetail.amount || '0.00' }}元优惠券</view>
 						<view class="tip">满{{ couponDetail.enough || '0.00' }}元可用</view>
-						<button class="u-reset-button" :class="btnStataus == 'no_use' || !btnStataus ? 'use-btn' : 'fail-btn'" @tap="goScroll">
+						<button class="u-reset-button" :class="['can_use', 'can_get'].includes(btnStataus) ||　!btnStataus ? 'use-btn' : 'fail-btn'" @tap="goScroll">
 							{{ btnStatusText[btnStataus] || '立即领取' }}
 						</button>
 						<view class="time" v-if="couponDetail.usetime && couponDetail.usetime.start">
@@ -43,8 +43,6 @@
 				</view>
 			</scroll-view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -59,10 +57,12 @@ export default {
 			nowTime: new Date().getTime(),
 			options: {},
 			btnStatusText: {
-				no_use: '立即使用',
+				can_use: '立即使用',
 				used: '已使用',
 				expired: '已失效',
-				no_can_use: '暂不可用'
+				cannot_use: '暂不可用',
+				can_get: '立即领取',
+				cannot_get: '不可领取'
 			},
 			btnStataus: ''
 		};
@@ -87,6 +87,7 @@ export default {
 				if (res.code === 1) {
 					this.options.userCouponId = res.data.id;
 					that.getCouponDetail();
+					that.$u.toast('领取成功')
 				}
 			});
 		},
@@ -123,7 +124,7 @@ export default {
 			if (!this.options.userCouponId) {
 				this.getCoupon();
 			} else {
-				if (this.couponDetail.goods_ids === '0' && this.btnStataus == 'no_use') {
+				if (this.couponDetail.goods_ids === '0' && this.btnStataus == 'can_use') {
 					this.$Router.push({
 						path: '/pages/goods/list'
 					});

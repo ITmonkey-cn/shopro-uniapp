@@ -32,7 +32,7 @@
  * 订单中心卡片
  *
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -72,10 +72,10 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			orderNum: ({ user }) => user.userData?.order_num,
-			isLogin: ({ user }) => user.isLogin
-		})
+		...mapGetters(['isLogin', 'userOtherData']),
+		orderNum() {
+			return this.userOtherData.order_num || 0;
+		}
 	},
 	methods: {
 		jump(path, query) {

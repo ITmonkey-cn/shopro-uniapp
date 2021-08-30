@@ -11,26 +11,25 @@
 		</view>
 		<view class="content_box">
 			<scroll-view enable-back-to-top scroll-y="true" @scrolltolower="loadMore" class="scroll-box">
-				<u-waterfall v-model="liveList" ref="uWaterfall" v-if="liveList.length">
-					<template v-slot:left="{ leftList }">
+				<view class="u-waterfall" v-if="!isEmpty">
+					<view id="u-left-column" class="u-column">
 						<view class="u-flex u-row-center u-col-center u-m-b-20" v-for="live in leftList" :key="live.id">
 							<shopro-live-card :type="2" :detail="live"></shopro-live-card>
 						</view>
-					</template>
-					<template v-slot:right="{ rightList }">
+					</view>
+					<view id="u-left-column" class="u-column">
 						<view class="u-flex u-row-center u-col-center u-m-b-20" v-for="live in rightList" :key="live.id">
 							<shopro-live-card :type="2" :detail="live"></shopro-live-card>
 						</view>
-					</template>
-				</u-waterfall>
+					</view>
+				</view>
 
 				<!-- 更多 -->
-				<u-loadmore v-if="liveList.length" height="80rpx" :status="loadStatus" color="#ccc" />
+				<u-loadmore v-if="!isEmpty" height="80rpx" :status="loadStatus" color="#ccc" />
 				<!-- 置空页 -->
 				<u-empty :show="isEmpty" mode="list"></u-empty>
 			</scroll-view>
 		</view>
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -62,7 +61,15 @@ export default {
 			liveList: [],
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
-			lastPage: 1
+			lastPage: 1,
+
+			// 瀑布流 300-220
+			addTime: 100, //排序间隙时间
+			leftHeight: 0,
+			rightHeight: 0,
+			leftList: [],
+			rightList: [],
+			tempList: []
 		};
 	},
 	computed: {},
@@ -71,6 +78,39 @@ export default {
 	},
 	onHide() {},
 	methods: {
+		// 瀑布流相关
+		async splitData() {
+			if (!this.tempList.length) return;
+			let item = this.tempList[0];
+			if (!item) return;
+
+			// 分左右
+			if (this.leftHeight < this.rightHeight) {
+				this.leftHeight += item.goods.length ? 300 : 220;
+				this.leftList.push(item);
+			} else if (this.leftHeight > this.rightHeight) {
+				this.rightHeight += item.goods.length ? 300 : 220;
+				this.rightList.push(item);
+			} else {
+				this.leftHeight += item.goods.length ? 300 : 220;
+				this.leftList.push(item);
+			}
+
+			// 移除临时列表的第一项，如果临时数组还有数据，继续循环
+			this.tempList.splice(0, 1);
+			if (this.tempList.length) {
+				setTimeout(() => {
+					this.splitData();
+				}, this.addTime);
+			}
+		},
+		clear() {
+			this.leftList = [];
+			this.rightList = [];
+			this.leftHeight = 0;
+			this.rightHeight = 0;
+			this.tempList = [];
+		},
 		// 切换tab
 		selTab(cur) {
 			if (this.tabCur !== cur) {
@@ -78,6 +118,7 @@ export default {
 				this.liveList = [];
 				this.currentPage = 1;
 				this.lastPage = 1;
+				this.clear();
 				this.getLiveList();
 			}
 		},
@@ -101,6 +142,8 @@ export default {
 					that.isEmpty = !that.liveList.length;
 					that.lastPage = res.data.last_page;
 					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
+					that.tempList = res.data.data;
+					that.splitData();
 				}
 			});
 		}
@@ -109,6 +152,24 @@ export default {
 </script>
 
 <style lang="scss">
+@mixin vue-flex($direction: row) {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	flex-direction: $direction;
+	/* #endif */
+}
+.u-waterfall {
+	@include vue-flex;
+	flex-direction: row;
+	align-items: flex-start;
+}
+
+.u-column {
+	@include vue-flex;
+	flex: 1;
+	flex-direction: column;
+	height: auto;
+}
 // tab
 .live-tab {
 	width: 100%;

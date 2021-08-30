@@ -2,7 +2,7 @@
 <template>
 	<view class="apply-commission-wrap page_box">
 		<!-- 标题栏 -->
-		<view class="head-box"><u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}"></u-navbar></view>
+		<view class="head-box"><shopro-navbar back-icon-color="#fff" :background="{}"></shopro-navbar></view>
 
 		<!-- 表单 -->
 		<view class="apply-form content_box">
@@ -39,15 +39,14 @@
 						@click="onSelect('time')"
 					></u-input>
 				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" 　 label-width="150" label-position="left" label="营业天数" prop="weeks">
+				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="营业天数" prop="weeks">
 					<u-input type="select" placeholder="请选择营业天数" disabled :placeholderStyle="placeholderStyle" v-model="model.weeks" @click="onSelect('week')"></u-input>
 				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="所在地区" prop="area">
+				<u-form-item :labelStyle="labelStyle" right-icon="map-fill" :right-icon-style="{color:'#4CB89D'}" label-width="150" label-position="left" label="所在地区" prop="area">
 					<u-input type="text" disabled v-model="model.area" placeholder="请点击定位" @click="chooseLocation"></u-input>
-					<u-icon slot="right" name="map-fill" size="40" color="#4CB89D" @click="chooseLocation"></u-icon>
 				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="详细地址" prop="address">
-					<u-input type="textarea" placeholder="请输入详细地址~" :placeholderStyle="placeholderStyle" v-model="model.address"></u-input>
+				<u-form-item :border-bottom="false" :labelStyle="labelStyle" label-width="150" label-position="left" label="详细地址" prop="address">
+					<u-input type="textarea" border placeholder="请输入详细地址~" :placeholderStyle="placeholderStyle" v-model="model.address"></u-input>
 				</u-form-item>
 				<view class="agreement u-flex u-col-center">
 					<u-checkbox v-model="model.agreement" activeColor="#4CB89D" shape="circle" @change="onAgreement"></u-checkbox>
@@ -59,7 +58,6 @@
 
 		<!-- 弹窗 -->
 		<u-select v-if="selectShow" :mode="selectMode" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
-		<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 
 		<!-- 选择星期 -->
 		<u-popup v-model="showWeeksModal" safe-area-inset-bottom mode="bottom">
@@ -68,9 +66,9 @@
 					<view></view>
 					<view class="action text-green" @tap="saveWeekModal">确定</view>
 				</view>
-				<view class="u-flex u-flex-wrap u-p-x-30 u-p-y-30 u-row-between week-modal--content">
+				<view class="u-flex u-flex-wrap u-p-x-30 u-p-y-30 week-modal--content">
 					<view v-for="(item, index) in weekcheckbox" class="week-btn" :key="index">
-						<u-button @click="onSelectWeek(index)" :plain="!item.checked" size="medium" type="success">{{ item.name }}</u-button>
+						<button @tap="onSelectWeek(index)" class="cu-btn" :class="!item.checked ? 'line-green' : 'bg-green'">{{ item.name }}</button>
 					</view>
 				</view>
 			</view>
@@ -141,7 +139,6 @@ export default {
 			authNotice: {},
 			// 表单
 			errorType: ['message'],
-			pickerShow: false,
 			selectShow: false,
 			selectMode: 'mutil-column', // single-column, mutil-column, mutil-column-auto
 			selectType: '',
@@ -465,7 +462,7 @@ export default {
 				this.isFormEnd = true;
 				if (res.code === 1) {
 					//  #ifdef MP-WEIXIN
-					this.$store.dispatch('getMessageIds', 'storeApply');
+					this.$store.commit('subscribeMessage', 'storeApply');
 					//  #endif
 					uni.showToast({
 						title: res.msg,
@@ -553,9 +550,9 @@ export default {
 	}
 	.week-modal--content {
 		.week-btn {
-			margin-right: 20rpx;
-			margin-bottom: 20rpx;
-			&:nth-of-type(3n) {
+			margin-right: 56rpx;
+			margin-bottom: 30rpx;
+			&:nth-of-type(4n) {
 				margin-right: 0;
 			}
 		}

@@ -2,36 +2,45 @@
 <template>
 	<view class="set-wrap">
 		<!-- logo -->
-		<view class="logo-box u-flex-col u-row-center u-col-center" v-if="shop.name">
-			<image class="logo-img" :src="shop.logo" mode="aspectFit"></image>
-			<view class="app-name u-m-t-50">{{ shop.name }}</view>
+		<view class="logo-box u-flex-col u-row-center u-col-center" v-if="initShop.name">
+			<image class="logo-img" :src="initShop.logo" mode="aspectFit"></image>
+			<view class="app-name u-m-t-50">{{ initShop.name }}</view>
 		</view>
 
 		<!-- cell -->
 		<view class="set-box">
-			<u-cell-group class="menu-list-box">
-				<u-cell-item class="menu-item" title="占用缓存" :titleStyle="{ color: '#333' }" :value="storageSize" :value-style="{ color: '#999' }"></u-cell-item>
-				<u-cell-item class="menu-item" title="当前版本" :titleStyle="{ color: '#333' }" :value="shop.version" :value-style="{ color: '#999' }"></u-cell-item>
-				<u-cell-item class="menu-item" title="意见反馈" :titleStyle="{ color: '#333', fontSize: '28rpx' }" @tap="$Router.push('/pages/public/feedback')"></u-cell-item>
-				<u-cell-item
-					class="menu-item"
-					title="关于我们"
-					:titleStyle="{ color: '#333', fontSize: '28rpx' }"
-					@tap="$Router.push(`/pages/public/richtext?id=${shop.about_us}`)"
-				></u-cell-item>
-				<u-cell-item
-					class="menu-item"
-					title="隐私协议"
-					:titleStyle="{ color: '#333', fontSize: '28rpx' }"
-					@tap="$Router.push(`/pages/public/richtext?id=${shop.privacy_protocol}`)"
-				></u-cell-item>
-			</u-cell-group>
+			<view class="cell-item u-flex u-col-center u-row-between u-p-x-30 u-p-y-20">
+				<view class="cell-title">占用缓存</view>
+				<view class="cell-right u-flex u-col-center">
+					<view class="cell-content">{{ storageSize }}</view>
+					<text class="u-iconfont uicon-arrow-right u-m-l-10" style="color: #999"></text>
+				</view>
+			</view>
+			<view class="cell-item u-flex u-col-center u-row-between u-p-x-30 u-p-y-20">
+				<view class="cell-title">当前版本</view>
+				<view class="cell-right u-flex u-col-center">
+					<view class="cell-content">{{ initShop.version }}</view>
+					<text class="u-iconfont uicon-arrow-right u-m-l-10" style="color: #999"></text>
+				</view>
+			</view>
+			<view class="cell-item u-flex u-col-center u-row-between u-p-x-30 u-p-y-20" @tap="$Router.push('/pages/public/feedback')">
+				<view class="cell-title">意见反馈</view>
+				<view class="cell-right u-flex u-col-center"><text class="u-iconfont uicon-arrow-right u-m-l-10" style="color: #999"></text></view>
+			</view>
+			<view class="cell-item u-flex u-col-center u-row-between u-p-x-30 u-p-y-20" @tap="$Router.push(`/pages/public/richtext?id=${initShop.about_us}`)">
+				<view class="cell-title">关于我们</view>
+				<view class="cell-right u-flex u-col-center"><text class="u-iconfont uicon-arrow-right u-m-l-10" style="color: #999"></text></view>
+			</view>
+			<view class="cell-item u-flex u-col-center u-row-between u-p-x-30 u-p-y-20" @tap="$Router.push(`/pages/public/richtext?id=${initShop.privacy_protocol}`)">
+				<view class="cell-title">隐私协议</view>
+				<view class="cell-right u-flex u-col-center"><text class="u-iconfont uicon-arrow-right u-m-l-10" style="color: #999"></text></view>
+			</view>
 		</view>
 
 		<!-- copyright -->
-		<view class="copyright-box u-flex-col u-row-center u-col-center u-p-t-80 u-p-b-50" v-if="shop.copyright">
-			<view class="copyright-text">{{ shop.copyright[0] }}</view>
-			<view class="copyright-text">{{ shop.copyright[1] }}</view>
+		<view class="copyright-box u-flex-col u-row-center u-col-center u-p-t-80 u-p-b-50" v-if="initShop.copyright">
+			<view class="copyright-text">{{ initShop.copyright[0] }}</view>
+			<view class="copyright-text">{{ initShop.copyright[1] }}</view>
 		</view>
 		<!-- 登录提示 -->
 		<shopro-auth-modal></shopro-auth-modal>
@@ -39,7 +48,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -48,9 +57,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			shop: ({ shopro }) => shopro.config.shop //初始化数据
-		})
+		...mapGetters(['initShop'])
 	},
 
 	methods: {}
@@ -60,6 +67,16 @@ export default {
 <style lang="scss">
 .set-box {
 	background-color: #fff;
+	.cell-item {
+		border-bottom: 1px solid #f5f5f5;
+		.cell-title {
+			font-size: 28rpx;
+			color: #333;
+		}
+		.cell-content {
+			color: #999;
+		}
+	}
 }
 .logo-box {
 	padding: 110rpx 0;

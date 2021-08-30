@@ -1,7 +1,7 @@
 <template>
 	<!-- 产品分类导航 -->
 	<view class="wrap">
-		<view v-if="true" class="menu-category-box u-m-b-10" :style="list.length <= oneRowNum ? `height:180rpx` : `height:380rpx`">
+		<view class="menu-category-box u-m-b-10" :style="list.length <= oneRowNum ? `height:180rpx` : `height:380rpx`">
 			<swiper
 				class="menu-swiper-box"
 				@change="onSwiper"
@@ -30,23 +30,6 @@
 				<text :class="categoryCurrent === index ? 'category-dot-active' : 'category-dot'" v-for="(dot, index) in newList.length" :key="index"></text>
 			</view>
 		</view>
-
-		<!-- cell -->
-		<view class="menu-list-box" v-else>
-			<view
-				class="menu-item u-flex u-col-center u-row-between"
-				hover-stay-time="150"
-				hover-class="u-cell-hover"
-				v-for="(nav, index) in list"
-				:key="nav.name"
-				@tap="jump(nav)"
-			>
-				<view class="u-flex u-col-center">
-					<image v-if="nav.image" class="item-img" :src="nav.image" mode=""></image>
-					<text class="item-title">{{ nav.name }}</text>
-				</view>
-				<u-icon class="u-m-l-20" name="arrow-right" size="26" color="#999"></u-icon>
-			</view>
 		</view>
 	</view>
 </template>
@@ -61,7 +44,7 @@ export default {
 	components: {},
 	data() {
 		return {
-			categoryCurrent: 0 //分类轮播下标
+			categoryCurrent: 0 ,//分类轮播下标
 		};
 	},
 	props: {
@@ -145,28 +128,6 @@ export default {
 			background: #e9b461;
 			border-radius: 50%;
 			margin-right: 10rpx;
-		}
-	}
-}
-// cell
-.menu-list-box {
-	.menu-item {
-		height: 100rpx;
-		padding: 0 30rpx;
-		background: #fff;
-		border-bottom: 1rpx solid #f3f3f3;
-		.item-img {
-			width: 44rpx;
-			height: 44rpx;
-			margin-right: 20rpx;
-		}
-
-		.item-title {
-			font-size: 24rpx;
-			font-family: PingFang SC;
-			font-weight: 500;
-			color: rgba(153, 153, 153, 1);
-			line-height: 24rpx;
 		}
 	}
 }

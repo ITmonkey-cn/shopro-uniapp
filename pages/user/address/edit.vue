@@ -5,10 +5,10 @@
 			<!-- 地址定位 -->
 			<view class="location-item u-flex u-row-between u-p-20 u-m-b-20" @tap="getLocation">
 				<view class="u-flex">
-					<u-icon name="map" size="28" color="#a76f0d"></u-icon>
+					<text class="u-iconfont uicon-map-fill" style="#a76f0d;"></text>
 					<text>{{ chooseAddress }}</text>
 				</view>
-				<u-icon name="arrow-right" size="28" color="#666"></u-icon>
+				<text class="u-iconfont uicon-arrow-right" style="color: #666"></text>
 			</view>
 
 			<view class="address-box">
@@ -262,7 +262,6 @@ export default {
 // 点击定位
 .location-item {
 	font-size: 28rpx;
-
 	font-weight: 500;
 	background-color: #fff;
 	color: rgba(167, 111, 13, 1);

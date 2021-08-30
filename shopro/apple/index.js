@@ -40,12 +40,10 @@ export default {
 						            success(res) {
 										if(res.errMsg === 'getUserInfo:ok') {
 											let userInfo = res.userInfo;
-											console.log(userInfo,11)
 											api('user.appleIdOauth', {
 												userInfo,
 												event
 											}, that.eventMap(event)).then(res => {
-												console.log(res,22)
 												if (res.code === 1) {
 													resolve(res.data.token);
 												} else {

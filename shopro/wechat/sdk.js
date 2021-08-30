@@ -1,20 +1,19 @@
-var jweixin = require('jweixin-module');
-import http from '@/shopro/request/index';
-import $platform from '@/shopro/platform';
+var jweixin = require("jweixin-module");
+import http from "@/shopro/request/index";
+import $platform from "@/shopro/platform";
 export default {
 	//判断是否在微信中
 	isWechat() {
 		var ua = window.navigator.userAgent.toLowerCase();
-		if (ua.match(/micromessenger/i) == 'micromessenger') {
+		if (ua.match(/micromessenger/i) == "micromessenger") {
 			return true;
 		} else {
 			return false;
 		}
 	},
-
 	// 鉴权页面
 	initJssdk(callback) {
-		http('common.wxJssdk', {
+		http("common.wxJssdk", {
 			uri: encodeURIComponent($platform.entry())
 		}).then(res => {
 			jweixin.config({
@@ -29,7 +28,7 @@ export default {
 			if (callback) {
 				callback(res.data);
 			}
-		})
+		});
 	},
 
 	//在需要定位页面调用
@@ -37,13 +36,13 @@ export default {
 		this.isWechat() && this.initJssdk(function(res) {
 			jweixin.ready(function() {
 				jweixin.getLocation({
-					type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+					type: "gcj02", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 					success: function(res) {
-						callback(res)
+						callback(res);
 					},
 					fail: function(res) {
-						console.log(`%c微信H5sdk,getLocation失败：`,
-							'color:green;background:yellow');
+						console.log("%c微信H5sdk,getLocation失败：",
+							"color:green;background:yellow");
 					},
 				});
 			});
@@ -56,11 +55,11 @@ export default {
 			jweixin.ready(function() {
 				jweixin.openAddress({
 					success: function(res) {
-						callback(res)
+						callback(res);
 					},
 					fail: function(err) {
-						console.log(`%c微信H5sdk,openAddress失败：`,
-							'color:green;background:yellow');
+						console.log("%c微信H5sdk,openAddress失败：",
+							"color:green;background:yellow");
 					},
 					complete: function(msg) {}
 				});
@@ -76,11 +75,11 @@ export default {
 					needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 					scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 					success: function(res) {
-						callback(res)
+						callback(res);
 					},
 					fail: function(res) {
-						console.log(`%c微信H5sdk,scanQRCode失败：`,
-							'color:green;background:yellow');
+						console.log("%c微信H5sdk,scanQRCode失败：",
+							"color:green;background:yellow");
 					},
 				});
 			});
@@ -97,7 +96,7 @@ export default {
 					link: data.path,
 					imgUrl: data.image,
 					success: function(res) {
-						callback(res)
+						callback(res);
 						// 分享后的一些操作,比如分享统计等等
 					},
 					cancel: function(res) {}
@@ -105,7 +104,7 @@ export default {
 
 				jweixin.updateAppMessageShareData(shareData); //新版接口
 				//分享到朋友圈接口
-				jweixin.updateTimelineShareData(shareData);
+				// jweixin.updateTimelineShareData(shareData);
 
 
 			});
@@ -131,12 +130,12 @@ export default {
 			jweixin.ready(function() {
 				jweixin.chooseImage({
 					count: 1,
-					sizeType: ['compressed'],
-					sourceType: ['album'],
+					sizeType: ["compressed"],
+					sourceType: ["album"],
 					success: function(rs) {
-						callback(rs)
+						callback(rs);
 					}
-				})
+				});
 			});
 		});
 	},
@@ -154,12 +153,12 @@ export default {
 					signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 					paySign: data.paySign, // 支付签名
 					success: function(res) {
-						callback(res)
+						callback(res);
 					},
 					fail: function(res) {
-						console.log(`%c微信H5sdk,chooseWXPay失败：`,
-							'color:green;background:yellow');
-						callback(res)
+						console.log("%c微信H5sdk,chooseWXPay失败：",
+							"color:green;background:yellow");
+						callback(res);
 					},
 					cancel: function(res) {
 
@@ -168,4 +167,4 @@ export default {
 			});
 		});
 	}
-}
+};

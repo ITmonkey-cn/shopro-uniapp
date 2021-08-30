@@ -5,7 +5,9 @@
 		<view class="nav-box">
 			<view class="state-hack"></view>
 			<view :style="{ height: navbarHeight + 'px' }">
-				<view hover-class="back-hover" class="back-box u-m-x-30 u-flex u-row-center u-col-center" @tap="goBack"><u-icon :name="backIconName" color="#fff"></u-icon></view>
+				<view hover-class="back-hover" class="back-box u-m-x-30 u-flex u-row-center u-col-center" @tap="goBack">
+					<view class="u-iconfont uicon-arrow-left" style="color: #fff;font-size: 28rpx;"></view>
+				</view>
 			</view>
 		</view>
 
@@ -30,12 +32,12 @@
 
 				<!-- 规格选择 -->
 				<view class="sku-box" @tap="showSku = true" v-if="activityRules.status !== 'waiting' && checkActivity(goodsInfo.activity_type, 'groupon') && goodsInfo.is_sku">
-					<view class="x-bc">
+					<view class="u-flex u-row-between u-col-center">
 						<view class="u-flex">
 							<text class="title">规格</text>
 							<text class="tip">{{ currentSkuText || '请选择规格' }}</text>
 						</view>
-						<text class="cuIcon-right"></text>
+						<text class="u-iconfont uicon-arrow-right" style="color: #bfbfbf;"></text>
 					</view>
 				</view>
 
@@ -64,7 +66,7 @@
 						<text class="title">玩法</text>
 						<view class="description u-ellipsis-1">{{ goodsInfo.activity.richtext_title || '开团/参团·邀请好友·人满发货（不满退款' }}</view>
 					</view>
-					<u-icon name="arrow-right" size="28" color="#bfbfbf"></u-icon>
+					<view class="u-iconfont uicon-arrow-right" style="color:#bfbfbf ;font-size: 28rpx;"></view>
 				</view>
 
 				<!-- 选项卡 -->
@@ -96,7 +98,7 @@
 						<view class="more-box u-flex u-row-center u-col-center" v-show="commentNum > 3">
 							<button class="u-reset-button more-btn u-flex u-row-center u-col-center" @tap="jump('/pages/goods/comment/comment-list', { goodsId: goodsInfo.id })">
 								查看全部
-								<u-icon name="arrow-right" size="28" color="#d5a65a"></u-icon>
+								<view class="u-iconfont uicon-arrow-right" style="color:#d5a65a ;font-size: 28rpx;"></view>
 							</button>
 						</view>
 					</view>
@@ -190,7 +192,7 @@
 			></shopro-sku>
 
 			<!-- 	分享组件 -->
-			<shopro-share v-model="showShare" :shareDetail="shareInfo" :posterInfo="goodsInfo" :posterType="'goods'"></shopro-share>
+			<shopro-share v-model="showShare" :posterInfo="goodsInfo" :posterType="'goods'"></shopro-share>
 			<!-- 登录 -->
 			<shopro-auth-modal v-if="authType"></shopro-auth-modal>
 		</view>
@@ -207,7 +209,7 @@ import shCoupon from './components/sh-coupon.vue';
 import shComment from './components/sh-comment.vue';
 import share from '@/shopro/share';
 
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {
 		shServe,
@@ -258,10 +260,7 @@ export default {
 	},
 	// 是否登录
 	computed: {
-		...mapState({
-			isLogin: ({ user }) => user.isLogin,
-			authType: ({ user }) => user.authType
-		}),
+		...mapGetters(['isLogin', 'authType']),
 		navbarHeight() {
 			// #ifdef APP-PLUS || H5
 			return 48;
@@ -284,29 +283,29 @@ export default {
 			default:
 				await this.getGoodsDetail();
 		}
-		that.shareInfo = share.setShareInfo({
-			title: that.goodsInfo.title,
-			desc: that.goodsInfo.subtitle,
-			image: that.goodsInfo.image,
-			params: {
-				page: 2,
-				pageId: that.$Route.query.id
-			}
-		});
 	},
 
-	// #ifdef H5
 	onUnload() {
 		share.setShareInfo();
 	},
-	// #endif
 
 	methods: {
 		// goBack
+		// 微信直播商品跳转详情，需要用小程序原生接口才能返回。
 		goBack() {
 			let pageList = getCurrentPages();
-			pageList.length > 1 ? this.$Router.back() : this.$Router.pushTab('/pages/index/index');
+			if (pageList.length > 1) {
+				// #ifdef MP-WEIXIN
+				wx.navigateBack();
+				// #endif
+				// #ifndef MP-WEIXIN
+				uni.navigateBack();
+				// #endif
+			} else {
+				this.$Router.pushTab('/pages/index/index');
+			}
 		},
+
 		// 轮播图预览
 		onGoodsSwiper(e) {
 			this.$tools.previewImage(this.goodsInfo.images, e);
@@ -376,8 +375,17 @@ export default {
 						if (that.goodsInfo.activity_type) {
 							that.activityRules.status = that.goodsInfo.activity.status_code;
 						}
-						resolve(res.data);
+						share.setShareInfo({
+							title: that.goodsInfo.title,
+							desc: that.goodsInfo.subtitle,
+							image: that.goodsInfo.image,
+							params: {
+								page: 2,
+								pageId: that.$Route.query.id
+							}
+						});
 						that.getCommentList();
+						resolve(res.data);
 					} else {
 						resolve(false);
 						// that.$u.toast(res.msg);
@@ -599,11 +607,6 @@ export default {
 				color: rgba(168, 112, 13, 1);
 				padding: 0;
 				background: #fff;
-
-				.cuIcon-right {
-					font-size: 30rpx;
-					margin-left: 10rpx;
-				}
 			}
 		}
 	}
@@ -620,11 +623,6 @@ export default {
 	.title {
 		color: #999;
 		margin-right: 20rpx;
-	}
-
-	.cuIcon-right {
-		color: #bfbfbf;
-		font-size: 36rpx;
 	}
 }
 

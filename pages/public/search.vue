@@ -55,7 +55,7 @@ export default {
 				let searchHistoryArr = JSON.stringify(this.getArr(this.historyTag, e));
 				uni.setStorageSync('searchHistoryArr', searchHistoryArr);
 			}
-			this.$Router.replace(`/pages/goods/list?keywords=${e}`);
+			this.$Router.push(`/pages/goods/list?keywords=${e}`);
 			this.searchVal = '';
 		},
 		// 清除输入框

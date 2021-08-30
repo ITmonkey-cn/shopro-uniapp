@@ -3,7 +3,7 @@
 	<view class="page_box team-wrap">
 		<view class="head_box">
 			<!-- 标题栏 -->
-			<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}" :backTextStyle="backTextStyle" backText="我的团队"></u-navbar>
+			<shopro-navbar back-icon-color="#fff" :background="{}" :backTextStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: '500' }" backText="我的团队"></shopro-navbar>
 			<!-- 推荐人 -->
 			<view class="referrer-box u-flex u-p-x-20" v-if="referrerInfo && referrerInfo.avatar">
 				推荐人：
@@ -77,14 +77,12 @@
 									</view>
 								</view>
 								<button class="cu-btn refresh-btn u-flex u-row-center u-col-center" @tap.stop="childrenLoadMore(item.id)">
-									<u-icon
+									<view
 										v-if="childrenCurrentPage < childrenLastPage"
+										class="u-iconfont uicon-reload u-m-r-10"
 										:class="{ 'refresh-active': isRefresh }"
-										class="u-m-r-10"
-										name="reload"
-										size="26"
-										color="#999"
-									></u-icon>
+										style="color: #999;font-size: 26rpx;"
+									></view>
 									{{ childrenLoad ? '点击加载更多' : '没有更多~' }}
 								</button>
 							</view>
@@ -92,7 +90,7 @@
 					</view>
 				</view>
 				<!-- 缺省页 -->
-				<shopro-empty v-show="isEmpty" marginTop="50rpx" :image="$IMG_URL + '/imgs/empty/no_team.png'" tipText="暂无团队人员"></shopro-empty>
+				<shopro-empty v-if="isEmpty" marginTop="50rpx" :image="$IMG_URL + '/imgs/empty/no_team.png'" tipText="暂无团队人员"></shopro-empty>
 				<!-- 更多 -->
 				<u-loadmore v-if="teamList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
@@ -102,18 +100,13 @@
 
 <script>
 import shCollapseItem from '../components/sh-collapse-item.vue';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {
 		shCollapseItem
 	},
 	data() {
 		return {
-			backTextStyle: {
-				color: '#fff',
-				fontSize: '40rpx',
-				fontWeight: '500'
-			},
 			isEmpty: false,
 			referrerInfo: {}, //推荐人信息
 			twoTeamCount: 0, //二级成员
@@ -130,10 +123,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			agentInfo: ({ user }) => user.agentInfo
-		})
+		...mapGetters(['userInfo', 'agentInfo'])
 	},
 	onLoad() {
 		this.getTeam();
@@ -244,11 +234,6 @@ export default {
 	font-weight: 500;
 	color: #999999;
 	white-space: nowrap;
-	.cuIcon-refresh {
-		color: #dbdbdb;
-		margin-right: 12rpx;
-		font-size: 32rpx;
-	}
 }
 .refresh-active {
 	transform: rotate(360deg);

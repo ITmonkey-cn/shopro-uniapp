@@ -3,7 +3,7 @@
 	<view class="page_box commission-order-wrap">
 		<view class="head_box">
 			<!-- 标题栏 -->
-			<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}" :backTextStyle="backTextStyle" backText="分销订单"></u-navbar>
+			<shopro-navbar back-icon-color="#fff" :background="{}" :backTextStyle="{ color: '#fff', fontSize: '40rpx', fontWeight: '500' }" backText="分销订单"></shopro-navbar>
 
 			<!-- 团队数据总览 -->
 			<view class="team-data-box u-flex u-row-between">
@@ -57,9 +57,9 @@
 			<view class="">
 				<!-- 日期筛选 -->
 				<view class="filter-box u-flex u-row-between">
-					<button class="u-reset-button date-btn" @tap="showCalendar = true">
+					<button class="u-reset-button date-btn u-flex u-col-center" @tap="showCalendar = true">
 						{{ selDateText }}
-						<u-icon class="u-m-l-20" name="arrow-down-fill" size="28" color="#e5e5e5"></u-icon>
+						<text class="u-iconfont uicon-arrow-down-fill u-m-l-20" style="color:#e5e5e5 ; font-size: 34rpx;"></text>
 					</button>
 					<view class="">
 						<view class="total-box">{{ stateMap[stateCurrent] }}￥{{ amount || '0.00' }}</view>
@@ -110,7 +110,7 @@
 					</view>
 				</view>
 				<!-- 缺省页 -->
-				<shopro-empty marginTop="100rpx" v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/no_order.png'" tipText="暂无订单"></shopro-empty>
+				<shopro-empty marginTop="100rpx" v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/no_order.png'" tipText="暂无订单"></shopro-empty>
 				<!-- 更多 -->
 				<u-loadmore v-if="orderList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -187,10 +187,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userInfo: state => state.user.userInfo,
-			agentInfo: ({ user }) => user.agentInfo
-		})
+		...mapGetters(['userInfo', 'agentInfo'])
 	},
 	onLoad() {
 		this.getToday();

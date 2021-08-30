@@ -7,7 +7,7 @@
 				<view class="head-box u-flex">
 					<view class="head-title">总收益（元）</view>
 					<button class="u-reset-button look-btn" @tap="showMoney = !showMoney">
-						<u-icon :name="showMoney ? 'eye-fill' : 'eye-off'" size="50" color="#fff"></u-icon>
+						<view class="u-iconfont" :class="showMoney ? 'uicon-eye-fill' : 'uicon-eye-off'" style="color: #fff;font-size: 50rpx;"></view>
 					</button>
 				</view>
 				<view class="card-num">{{ showMoney ? agentInfo.total_income || '0.00' : '***' }}</view>
@@ -28,9 +28,9 @@
 		<!-- 筛选 -->
 		<u-sticky offset-top="0" :enable="true">
 			<view class="head_box u-flex u-row-between">
-				<button class="u-reset-button date-btn" @tap="showCalendar = true">
+				<button class="u-reset-button date-btn u-flex u-col-center" @tap="showCalendar = true">
 					{{ selDateText }}
-					<u-icon class="u-m-l-20" name="arrow-down-fill" size="28" color="#e5e5e5"></u-icon>
+					<text class="u-iconfont uicon-arrow-down-fill u-m-l-20" style="color:#e5e5e5 ; font-size: 34rpx;"></text>
 				</button>
 				<view class="">
 					<view class="total-box">{{ stateMap[stateCurrent] }}￥{{ totalMoney || '0.00' }}</view>
@@ -63,7 +63,7 @@
 			<!-- 更多 -->
 			<u-loadmore v-if="rewardLog.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			<!-- 缺省页 -->
-			<shopro-empty v-show="isEmpty" marginTop="100rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据"></shopro-empty>
+			<shopro-empty v-if="isEmpty" marginTop="100rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据"></shopro-empty>
 		</view>
 		<!-- 日期选择 -->
 		<u-calendar
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -139,10 +139,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			agentInfo: ({ user }) => user.agentInfo
-		})
+		...mapGetters(['userInfo', 'agentInfo'])
 	},
 	onLoad() {
 		this.getToday();
@@ -294,13 +291,6 @@ export default {
 			background: none;
 			padding: 0;
 			margin-left: 20rpx;
-			.cuIcon-attentionfill,
-			.cuIcon-attentionforbidfill {
-				line-height: 30rpx;
-			}
-			.cuIcon-attentionfill {
-				line-height: 30rpx;
-			}
 		}
 	}
 	.card-num {

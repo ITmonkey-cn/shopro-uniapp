@@ -23,7 +23,7 @@
 
 				<!-- 到店自提 -->
 				<view class="u-flex-col u-col-center u-m-b-20 u-p-y-20" v-if="expressType == 'selfetch' && itemDetail.status_code !== 'refund_finish' && qrcodeList.length">
-					<image class="qr-code--img u-m-y-20" :src="allqrcodepath" mode=""></image>
+					<image class="qr-code--img u-m-y-20" v-if="allqrcodepath" :src="allqrcodepath" mode=""></image>
 					<view class="all-qrcode-title u-m-b-20">总核销码</view>
 					<view class="detail-item">
 						<view class="item-title u-flex">核销码</view>
@@ -51,7 +51,7 @@
 						<view class="item-content">营业时间：{{ storeInfo.openhours || '' }}</view>
 					</view>
 					<view class="u-flex-col u-col-center location-box" style="flex: 1;" @tap="openStoreMap">
-						<u-icon name="map-fill" size="34" color="#4fbbff"></u-icon>
+						<text class="u-iconfont uicon-map-fill" style="color: #4fbbff;font-size: 34rpx;"></text>
 						<text class="location-text u-m-t-10">到这去</text>
 					</view>
 				</view>
@@ -79,8 +79,8 @@
 			</view>
 		</view>
 		<view class="foot_box u-flex u-row-center u-col-center u-p-b-20" v-if="expressType == 'selfetch' || expressType == 'store'">
-			<button class="service-btn u-reset-button" @tap="onService">
-				<text class="cuIcon-dianhua"></text>
+			<button class="service-btn u-reset-button u-flex u-col-center u-row-center" @tap="onService">
+				<text class="u-iconfont uicon-phone-fill u-m-r-10" style="color: #fff;font-size: 40rpx;"></text>
 				联系商家
 			</button>
 		</view>
@@ -215,9 +215,7 @@ export default {
 							_arr.push(code.code);
 						});
 						that.qrcode = _arr.join(',');
-						if (that.qrcodeList.length) {
-							that.showPoster = true;
-						}
+						that.showPoster = true;
 					}
 				}
 			});
@@ -396,13 +394,7 @@ export default {
 	box-shadow: 0px 7rpx 6rpx 0px rgba(229, 138, 0, 0.22);
 	border-radius: 40rpx;
 	font-size: 30rpx;
-
 	font-weight: 500;
 	color: rgba(255, 255, 255, 1);
-	.cuIcon-dianhua {
-		color: #fff;
-		font-size: 40rpx;
-		margin-right: 10rpx;
-	}
 }
 </style>

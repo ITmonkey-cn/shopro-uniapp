@@ -3,13 +3,13 @@
 	<view class="merchant-wrap">
 		<view class="shopinfo-box">
 			<!-- 标题栏 -->
-			<u-navbar backIconName="" :isFixed="false" :borderBottom="false" :background="navbar.background" :backTextStyle="navbar.backTextStyle" backText="商家中心"></u-navbar>
+			<shopro-navbar back-icon-color="#fff" :background="{}" :backTextStyle="{ color: '#fff', fontSize: '36rpx', fontWeight: '500' }" backText="商家中心"></shopro-navbar>
 			<!-- 商家信息 -->
 			<view class="user-head u-flex u-row-between">
 				<view class="shop-info">
 					<view class="u-flex u-m-b-10" @tap="goStoreList">
 						<text class="shop-title u-m-r-20">{{ storeDetail.name }}</text>
-						<text class="iconfont iconxiala"></text>
+						<text class="iconfont icon-xiala"></text>
 					</view>
 					<view class="shop-address u-ellipsis-2" @tap="jump('/pages/app/merchant/info')">
 						{{ storeDetail.province_name || '' }}{{ storeDetail.city_name || '' }}{{ storeDetail.area_name || '' }}{{ storeDetail.address || '' }}
@@ -26,7 +26,7 @@
 				<view class="card-content u-flex-col">
 					<view class="card-title">输码核销</view>
 					<view class="u-flex card-detail-box" @tap="showInputModal = true">
-						<text class="iconfont icon21shuru icon-color1"></text>
+						<text class="iconfont icon-21shuru icon-color1"></text>
 						<text class="icon-color1 u-m-l-20">输码</text>
 					</view>
 				</view>
@@ -36,7 +36,7 @@
 				<view class="card-content u-flex-col">
 					<view class="card-title">扫码核销</view>
 					<view class="u-flex card-detail-box">
-						<text class="iconfont iconicon-test1  icon-color2"></text>
+						<text class="iconfont icon-icon-test1  icon-color2"></text>
 						<text class="icon-color2 u-m-l-20">扫码</text>
 					</view>
 				</view>
@@ -116,6 +116,17 @@
 				<button class="u-reset-button post-btn" @tap="onConfirm">核销</button>
 			</view>
 		</u-popup>
+		<!-- 禁用弹窗 -->
+		<u-modal
+			ref="uModal"
+			v-model="showModal"
+			:show-cancel-button="false"
+			confirm-color="#999"
+			confirm-text="返回"
+			content="当前门店已被禁用,是否返回重新选择？"
+			title="提示"
+			@confirm="$Router.back()"
+		></u-modal>
 	</view>
 </template>
 
@@ -127,17 +138,7 @@ export default {
 	data() {
 		return {
 			isEmpty: false,
-			navbar: {
-				//标题栏
-				background: {
-					background: 'none'
-				},
-				backTextStyle: {
-					color: '#fff',
-					fontSize: '40rpx',
-					fontWeight: '800'
-				}
-			},
+			showModal: false,
 			// 筛选
 			filter1: 'today',
 			filter1Value: 0,
@@ -176,7 +177,7 @@ export default {
 	},
 	computed: {},
 	onLoad(options) {
-		options.storeId && uni.setStorageSync('storeId', options.storeId);
+		options && options.storeId && uni.setStorageSync('storeId', options.storeId);
 		this.getStoreDetail();
 	},
 	onShow() {
@@ -236,6 +237,9 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.storeDetail = res.data;
+				} else {
+					uni.removeStorageSync('storeId')
+					that.showModal = true;
 				}
 			});
 		},
@@ -279,10 +283,14 @@ export default {
 		// 核销
 		postOrderConfirm() {
 			let that = this;
-			that.$http('store.orderConfirm', {
-				codes: that.scanCodes,
-				store_id: uni.getStorageSync('storeId')
-			}, '核销中...').then(res => {
+			that.$http(
+				'store.orderConfirm',
+				{
+					codes: that.scanCodes,
+					store_id: uni.getStorageSync('storeId')
+				},
+				'核销中...'
+			).then(res => {
 				uni.vibrateLong({
 					success: () => {
 						that.$u.toast(res.msg);
@@ -302,13 +310,17 @@ export default {
 		getStoreOrder() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$http('store.order', {
-				date_type: that.filter1,
-				date: that.custom,
-				type: that.filter2,
-				page: that.currentPage,
-				store_id: uni.getStorageSync('storeId')
-			}, '加载中...').then(res => {
+			that.$http(
+				'store.order',
+				{
+					date_type: that.filter1,
+					date: that.custom,
+					type: that.filter2,
+					page: that.currentPage,
+					store_id: uni.getStorageSync('storeId')
+				},
+				'加载中...'
+			).then(res => {
 				uni.stopPullDownRefresh();
 				if (res.code == 1) {
 					that.storeOrderList = [...that.storeOrderList, ...res.data.result.data];
@@ -359,11 +371,10 @@ export default {
 			padding-left: 30rpx;
 			.shop-title {
 				font-size: 34rpx;
-
 				font-weight: bold;
 				color: rgba(255, 255, 255, 1);
 			}
-			.iconxiala {
+			.icon-xiala {
 				font-size: 34rpx;
 				color: rgba(255, 255, 255, 1);
 			}
@@ -445,48 +456,6 @@ export default {
 	margin: 10rpx 0 0;
 	position: relative;
 	z-index: 22;
-	.nav-item {
-		flex: 1;
-		&:first-child {
-			&::after {
-				content: '';
-				height: 30rpx;
-				width: 2rpx;
-				background-color: #bdbdbd;
-				display: inline-block;
-			}
-		}
-
-		.item-title {
-			font-size: 30rpx;
-
-			font-weight: 400;
-			color: #666;
-			line-height: 100rpx;
-		}
-		.cuIcon-triangleupfill {
-			color: #666;
-			transition: all linear 0.2s;
-		}
-		.icon-active {
-			transition: all linear 0.2s;
-			transform: rotate(180deg);
-			color: #4cb89d;
-		}
-		.title-active {
-			color: #4cb89d;
-		}
-		.nav-line {
-			width: 100%;
-			height: 2rpx;
-			background: rgba(#ccc, 0.5);
-		}
-
-		.line-active {
-			background: #4cb89d;
-			height: 2rpx;
-		}
-	}
 }
 
 // 销量

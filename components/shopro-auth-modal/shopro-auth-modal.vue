@@ -1,29 +1,53 @@
-<template v-if="showAuth">
-	<u-popup v-model="showAuth" safe-area-inset-bottom mode="bottom" border-radius="20" :closeable="true" close-icon-pos="top-right" @close="closeAuthModal">
-		<view class="login-wrap">
+<template>
+	<view class="cu-modal bottom-modal" :class="{ show: showAuth }" @tap="closeAuthModal" style="z-index: 10080;">
+		<view class="login-wrap cu-dialog form-wrap  safe-area-inset-bottom" @tap.stop style="border-radius: 20rpx 20rpx 0 0;">
 			<!-- 1.账号密码登录 -->
-			<u-form v-if="authType === 'accountLogin'" :model="form['accountLogin'].data" :rules="form['accountLogin'].rules" ref="accountLogin" :errorType="errorType">
+			<view v-if="authType === 'accountLogin'">
 				<!-- 标题 -->
-				<view class="head-box u-m-b-60">
+				<view class="head-box u-m-b-60 u-flex-col ">
 					<view class="u-flex u-m-b-20">
 						<view class="head-title u-m-r-40 head-title-animation">账号登录</view>
 						<view class="head-title-active head-title-line" @tap="showAuthModal('smsLogin')">短信登录</view>
 					</view>
 					<view class="head-subtitle">如果未设置过密码，请点击忘记密码</view>
 				</view>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="账号" prop="account">
-					<u-input placeholder="请输入账号" :placeholderStyle="placeholderStyle" v-model="form['accountLogin'].data.account" type="text"></u-input>
-					<button class="u-reset-button forgot-btn" slot="right" @tap="showAuthModal('forgotPwd')">忘记密码</button>
-				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label=" 密码" prop="password" label-width="150">
-					<u-input placeholder="请输入密码" :placeholderStyle="placeholderStyle" v-model="form['accountLogin'].data.password" type="password"></u-input>
-					<button slot="right" class="u-reset-button login-btn-start" @tap="accountLoginSubmit">登录</button>
-				</u-form-item>
+				<view class="form-item  u-border-bottom ">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">账号</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							placeholder="请输入账号"
+							@blur="checkValue($event, 'account')"
+							@input="checkValue($event, 'account')"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['accountLogin'].data.account"
+							type="text"
+						></u-input>
+						<button class="u-reset-button forgot-btn" @tap="showAuthModal('forgotPwd')">忘记密码</button>
+					</view>
+					<view class="message-error">{{ form['accountLogin'].error.account || '' }}</view>
+				</view>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">密码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							placeholder="请输入密码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['accountLogin'].data.password"
+							type="password"
+							@blur="checkValue($event, 'password')"
+							@input="checkValue($event, 'password')"
+						></u-input>
+						<button class="u-reset-button login-btn-start" @tap="accountLoginSubmit">登录</button>
+					</view>
+					<view class="message-error">{{ form['accountLogin'].error.password || '' }}</view>
+				</view>
 				<button class="u-reset-button type-btn" @tap="showAuthModal('register')">立即注册</button>
-			</u-form>
+			</view>
 
 			<!-- 2.短信登录 -->
-			<u-form v-if="authType === 'smsLogin'" :model="form['smsLogin'].data" :rules="form.smsLogin.rules" ref="smsLogin" :errorType="errorType">
+			<view v-if="authType === 'smsLogin'">
 				<view class="head-box u-m-b-60">
 					<view class="u-flex u-m-b-20">
 						<view class="head-title-active u-m-r-40" @tap="showAuthModal('accountLogin')">账号登录</view>
@@ -31,127 +55,280 @@
 					</view>
 					<view class="head-subtitle">未注册手机号请先点击下方立即注册</view>
 				</view>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="手机号" prop="mobile">
-					<u-input placeholder="请输入手机号" @input="mobileInput" :placeholderStyle="placeholderStyle" v-model="form['smsLogin'].data.mobile" type="number"></u-input>
-					<button
-						class="u-reset-button code-btn code-btn-start"
-						:disabled="!form['smsLogin'].data.isMobileEnd"
-						:class="{ 'code-btn-end': form['smsLogin'].data.isMobileEnd }"
-						slot="right"
-						@tap="getSmsCode('mobilelogin')"
-					>
-						{{ codeText }}
-					</button>
-				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="验证码" prop="code" label-width="150">
-					<u-input placeholder="请输入验证码" :placeholderStyle="placeholderStyle" v-model="form['smsLogin'].data.code" type="number"></u-input>
-					<button slot="right" class="u-reset-button login-btn-start" @tap="smsLoginSubmit">登录</button>
-				</u-form-item>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">手机号</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							placeholder="请输入手机号"
+							@blur="checkValue($event, 'mobile')"
+							@input="mobileInput($event, 'mobile')"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['smsLogin'].data.mobile"
+							type="number"
+						></u-input>
+						<button
+							class="u-reset-button code-btn code-btn-start"
+							:disabled="!form['smsLogin'].data.isMobileEnd"
+							:class="{ 'code-btn-end': form['smsLogin'].data.isMobileEnd }"
+							@tap="getSmsCode('mobilelogin')"
+						>
+							{{ codeText }}
+						</button>
+					</view>
+					<view class="message-error">{{ form['smsLogin'].error.mobile || '' }}</view>
+				</view>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">验证码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'code')"
+							@input="checkValue($event, 'code')"
+							placeholder="请输入验证码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['smsLogin'].data.code"
+							type="number"
+						></u-input>
+						<button class="u-reset-button login-btn-start" @tap="smsLoginSubmit">登录</button>
+					</view>
+					<view class="message-error">{{ form['smsLogin'].error.code || '' }}</view>
+				</view>
 				<button class="u-reset-button type-btn" @tap="showAuthModal('register')">立即注册</button>
-			</u-form>
+			</view>
 
 			<!-- 3.注册 -->
-			<u-form v-if="authType === 'register'" :model="form['register'].data" :rules="form.register.rules" ref="register" :errorType="errorType">
+			<view v-if="authType === 'register'">
 				<view class="head-box u-m-b-60">
 					<view class="head-title u-m-b-20">注册</view>
 					<view class="head-subtitle">请使用本人手机号完成注册</view>
 				</view>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="手机号" prop="mobile">
-					<u-input placeholder="请输入手机号" @input="mobileInput" :placeholderStyle="placeholderStyle" v-model="form['register'].data.mobile" type="number"></u-input>
-					<button
-						class="u-reset-button code-btn code-btn-start"
-						:disabled="!form['register'].data.isMobileEnd"
-						:class="{ 'code-btn-end': form['register'].data.isMobileEnd }"
-						slot="right"
-						@tap="getSmsCode('register')"
-					>
-						{{ codeText }}
-					</button>
-				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label=" 密码" prop="password" label-width="150">
-					<u-input placeholder="请输入密码" :placeholderStyle="placeholderStyle" v-model="form['register'].data.password" type="password"></u-input>
-				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="验证码" prop="code" label-width="150">
-					<u-input placeholder="请输入验证码" :placeholderStyle="placeholderStyle" v-model="form['register'].data.code" type="number"></u-input>
-					<button slot="right" class="u-reset-button login-btn-start" @tap="registerSubmit">注册</button>
-				</u-form-item>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">手机号</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							placeholder="请输入手机号"
+							@blur="checkValue($event, 'mobile')"
+							@input="mobileInput($event, 'mobile')"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['register'].data.mobile"
+							type="number"
+						></u-input>
+						<button
+							class="u-reset-button code-btn code-btn-start"
+							:disabled="!form['register'].data.isMobileEnd"
+							:class="{ 'code-btn-end': form['register'].data.isMobileEnd }"
+							@tap="getSmsCode('register')"
+						>
+							{{ codeText }}
+						</button>
+					</view>
+					<view class="message-error">{{ form['register'].error.mobile || '' }}</view>
+				</view>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">密码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'password')"
+							@input="checkValue($event, 'password')"
+							placeholder="请输入密码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['register'].data.password"
+							type="password"
+						></u-input>
+					</view>
+					<view class="message-error">{{ form['register'].error.password || '' }}</view>
+				</view>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">验证码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'code')"
+							@input="checkValue($event, 'code')"
+							placeholder="请输入验证码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['register'].data.code"
+							type="number"
+						></u-input>
+						<button class="u-reset-button login-btn-start" @tap="registerSubmit">注册</button>
+					</view>
+					<view class="message-error">{{ form['register'].error.code || '' }}</view>
+				</view>
 				<button v-if="!isLogin" class="u-reset-button type-btn" @tap="showAuthModal('accountLogin')">返回登录</button>
-			</u-form>
+			</view>
 
 			<!-- 4.忘记密码 -->
-			<u-form v-if="authType === 'forgotPwd'" :model="form['forgotPwd'].data" :rules="form['forgotPwd'].rules" ref="forgotPwd" :errorType="errorType">
+			<view v-if="authType === 'forgotPwd'">
 				<view class="head-box u-m-b-60">
 					<view class="head-title u-m-b-20">忘记密码</view>
 					<view class="head-subtitle">为了您的账号安全，修改密码前请先进行安全验证</view>
 				</view>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="手机号" prop="mobile">
-					<u-input placeholder="请输入手机号" @input="mobileInput" :placeholderStyle="placeholderStyle" v-model="form['forgotPwd'].data.mobile" type="number"></u-input>
-					<button
-						class="u-reset-button code-btn code-btn-start"
-						:disabled="!form['forgotPwd'].data.isMobileEnd"
-						:class="{ 'code-btn-end': form['forgotPwd'].data.isMobileEnd }"
-						slot="right"
-						@tap="getSmsCode('resetpwd')"
-					>
-						{{ codeText }}
-					</button>
-				</u-form-item>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">手机号</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'mobile')"
+							@input="mobileInput($event, 'mobile')"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['forgotPwd'].data.mobile"
+							type="number"
+						></u-input>
+						<button
+							class="u-reset-button code-btn code-btn-start"
+							:disabled="!form['forgotPwd'].data.isMobileEnd"
+							:class="{ 'code-btn-end': form['forgotPwd'].data.isMobileEnd }"
+							slot="right"
+							@tap="getSmsCode('resetpwd')"
+						>
+							{{ codeText }}
+						</button>
+					</view>
+					<view class="message-error">{{ form['forgotPwd'].error.mobile || '' }}</view>
+				</view>
 
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="验证码" prop="code" label-width="150">
-					<u-input placeholder="请输入验证码" :placeholderStyle="placeholderStyle" v-model="form['forgotPwd'].data.code" type="number"></u-input>
-				</u-form-item>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">验证码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'code')"
+							@input="checkValue($event, 'code')"
+							placeholder="请输入验证码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['forgotPwd'].data.code"
+							type="number"
+						></u-input>
+					</view>
+					<view class="message-error">{{ form['forgotPwd'].error.code || '' }}</view>
+				</view>
 
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="新密码" prop="password" label-width="150">
-					<u-input placeholder="请输入密码" :placeholderStyle="placeholderStyle" v-model="form['forgotPwd'].data.password" type="password"></u-input>
-					<button slot="right" class="u-reset-button login-btn-start" @tap="forgotPwdSubmit">确认</button>
-				</u-form-item>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">密码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'password')"
+							@input="checkValue($event, 'password')"
+							placeholder="请输入密码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['forgotPwd'].data.password"
+							type="password"
+						></u-input>
+						<button class="u-reset-button login-btn-start" @tap="forgotPwdSubmit">确认</button>
+					</view>
+					<view class="message-error">{{ form['forgotPwd'].error.password || '' }}</view>
+				</view>
 				<button v-if="!isLogin" class="u-reset-button type-btn" @tap="showAuthModal('accountLogin')">返回登录</button>
-			</u-form>
+			</view>
 
 			<!-- 5.绑定手机号 -->
-			<u-form v-if="authType === 'bindMobile'" :model="form['bindMobile'].data" :rules="form['bindMobile'].rules" ref="bindMobile" :errorType="errorType">
+			<view v-if="authType === 'bindMobile'">
 				<view class="head-box u-m-b-60">
 					<view class="head-title u-m-b-20">绑定手机号</view>
 					<view class="head-subtitle">为了您的账号安全，请绑定手机号</view>
 				</view>
-				<u-form-item :labelStyle="labelStyle" label-width="150" label-position="left" label="手机号" prop="mobile">
-					<u-input placeholder="请输入手机号" @input="mobileInput" :placeholderStyle="placeholderStyle" v-model="form['bindMobile'].data.mobile" type="number"></u-input>
-					<button
-						class="u-reset-button code-btn code-btn-start"
-						:disabled="!form['bindMobile'].data.isMobileEnd"
-						:class="{ 'code-btn-end': form['bindMobile'].data.isMobileEnd }"
-						slot="right"
-						@tap="getSmsCode('changemobile')"
-					>
-						{{ codeText }}
-					</button>
-				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="验证码" prop="code" label-width="150">
-					<u-input placeholder="请输入验证码" :placeholderStyle="placeholderStyle" v-model="form['bindMobile'].data.code" type="number"></u-input>
-					<button slot="right" class="u-reset-button login-btn-start" @tap="bindMobileSubmit">立即绑定</button>
-				</u-form-item>
-			</u-form>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">手机号</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'mobile')"
+							@input="mobileInput($event, 'mobile')"
+							placeholder="请输入手机号"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['bindMobile'].data.mobile"
+							type="number"
+						></u-input>
+						<button
+							class="u-reset-button code-btn code-btn-start"
+							:disabled="!form['bindMobile'].data.isMobileEnd"
+							:class="{ 'code-btn-end': form['bindMobile'].data.isMobileEnd }"
+							slot="right"
+							@tap="getSmsCode('changemobile')"
+						>
+							{{ codeText }}
+						</button>
+					</view>
+					<view class="message-error">{{ form['bindMobile'].error.mobile || '' }}</view>
+				</view>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">验证码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'code')"
+							@input="checkValue($event, 'code')"
+							placeholder="请输入验证码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['bindMobile'].data.code"
+							type="number"
+						></u-input>
+						<button class="u-reset-button login-btn-start" @tap="bindMobileSubmit">立即绑定</button>
+					</view>
+					<view class="message-error">{{ form['bindMobile'].error.code || '' }}</view>
+				</view>
+			</view>
 
 			<!-- 6.修改密码 -->
-			<u-form v-if="authType === 'changePwd'" :model="form['changePwd'].data" :rules="form['changePwd'].rules" ref="changePwd" :errorType="errorType">
+			<view v-if="authType === 'changePwd'">
 				<view class="head-box u-m-b-60">
 					<view class="head-title u-m-b-20">修改密码</view>
 					<view class="head-subtitle"></view>
 				</view>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="旧密码" prop="oldPassword" label-width="150">
-					<u-input placeholder="请输入旧密码" :placeholderStyle="placeholderStyle" v-model="form['changePwd'].data.oldPassword" type="password"></u-input>
-				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="新密码" prop="newPassword" label-width="150">
-					<u-input placeholder="请输入新密码" :placeholderStyle="placeholderStyle" v-model="form['changePwd'].data.newPassword" type="password"></u-input>
-				</u-form-item>
-				<u-form-item :labelStyle="labelStyle" label-position="left" label="确认密码" prop="reNewPassword" label-width="150">
-					<u-input placeholder="再次输入新密码" :placeholderStyle="placeholderStyle" v-model="form['changePwd'].data.reNewPassword" type="password"></u-input>
-				</u-form-item>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">旧密码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'oldPassword')"
+							@input="checkValue($event, 'oldPassword')"
+							placeholder="请输入旧密码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['changePwd'].data.oldPassword"
+							type="password"
+						></u-input>
+					</view>
+					<view class="message-error">{{ form['changePwd'].error.oldPassword || '' }}</view>
+				</view>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">新密码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'newPassword')"
+							@input="checkValue($event, 'newPassword')"
+							placeholder="请输入新密码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['changePwd'].data.newPassword"
+							type="password"
+						></u-input>
+					</view>
+					<view class="message-error">{{ form['changePwd'].error.newPassword || '' }}</view>
+				</view>
+				<view class="form-item u-border-bottom">
+					<view class="item-content u-flex u-col-center">
+						<view class="item-title">确认密码</view>
+						<u-input
+							class="u-m-r-10 u-flex-1"
+							@blur="checkValue($event, 'reNewPassword')"
+							@input="checkValue($event, 'reNewPassword')"
+							placeholder="再次输入新密码"
+							:placeholderStyle="placeholderStyle"
+							v-model="form['changePwd'].data.reNewPassword"
+							type="password"
+						></u-input>
+					</view>
+					<view class="message-error">{{ form['changePwd'].error.reNewPassword || '' }}</view>
+				</view>
 				<view class="editPwd-btn-box u-m-t-80">
 					<button class="u-reset-button save-btn" @tap="changePwdSubmit">保存</button>
 					<button class="u-reset-button forgot-btn" @tap="showAuthModal('forgotPwd')">忘记密码</button>
 				</view>
-			</u-form>
+			</view>
 
 			<!-- 第三方登录 -->
 			<view v-if="authType === 'accountLogin' || authType === 'smsLogin'" class="auto-login-box u-flex u-row-center u-col-center">
@@ -183,18 +360,15 @@
 					<view class="agreement-text tcp-text u-flex u-col-center">
 						我已阅读并遵守
 						<view class="tcp-text u-flex u-col-center">
-							<view @tap.stop="$Router.push({ path: '/pages/public/richtext', query: { id: config.shop.user_protocol || 0 } })">《用户协议》</view>
+							<view @tap.stop="$Router.push({ path: '/pages/public/richtext', query: { id: initStore.shop.user_protocol || 0 } })">《用户协议》</view>
 							与
-							<view @tap.stop="$Router.push({ path: '/pages/public/richtext', query: { id: config.shop.privacy_protocol || 0 } })">《隐私协议》</view>
+							<view @tap.stop="$Router.push({ path: '/pages/public/richtext', query: { id: initStore.shop.privacy_protocol || 0 } })">《隐私协议》</view>
 						</view>
 					</view>
 				</u-checkbox>
 			</view>
-
-			<!-- 公用验证码倒计时，防止恶意请求短信验证 -->
-			<u-verification-code changeText="Xs" seconds="10" ref="code" @change="codeChange"></u-verification-code>
 		</view>
-	</u-popup>
+	</view>
 </template>
 
 <script>
@@ -202,8 +376,9 @@
  * 登录提示页
  */
 import FormValidate from '@/shopro/validate/form';
+import schema from '@/uview-ui/libs/util/async-validator';
 import wechat from '@/shopro/wechat/wechat';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 // #ifdef APP-PLUS
 import apple from '@/shopro/apple';
 // #endif
@@ -223,6 +398,10 @@ export default {
 					rules: {
 						account: FormValidate.account,
 						password: FormValidate.password
+					},
+					error: {
+						account: '',
+						password: ''
 					}
 				},
 
@@ -236,6 +415,10 @@ export default {
 					rules: {
 						code: FormValidate.code,
 						mobile: FormValidate.mobile
+					},
+					error: {
+						mobile: '', // 手机号
+						code: '' // 验证码
 					}
 				},
 				// 3.注册
@@ -250,6 +433,11 @@ export default {
 						code: FormValidate.code,
 						mobile: FormValidate.mobile,
 						password: FormValidate.password
+					},
+					error: {
+						mobile: '', // 手机号
+						code: '', // 验证码
+						password: '' // 密码
 					}
 				},
 
@@ -265,6 +453,11 @@ export default {
 						mobile: FormValidate.mobile,
 						code: FormValidate.code,
 						password: FormValidate.password
+					},
+					error: {
+						mobile: '', //手机号
+						code: '', //验证码
+						password: '' //密码
 					}
 				},
 				// 5.绑定手机号
@@ -277,6 +470,10 @@ export default {
 					rules: {
 						code: FormValidate.code,
 						mobile: FormValidate.mobile
+					},
+					error: {
+						mobile: '', //手机号
+						code: '' //验证码
 					}
 				},
 				// 6.修改密码
@@ -303,28 +500,23 @@ export default {
 								trigger: ['change', 'blur']
 							}
 						]
+					},
+					error: {
+						oldPassword: '', //旧密码
+						newPassword: '', //新密码
+						reNewPassword: '' //确认密码
 					}
 				}
 			},
 			codeText: '获取验证码',
+			disabledCode: false,
 			protocol: false, //是否同意隐私协议
-			// 表单样式
-			errorType: ['message'],
-			labelStyle: {
-				'font-size': '30rpx',
-				'font-weight': '600',
-				color: '#333'
-			},
 			placeholderStyle: 'font-size: 30rpx; font-weight: 500;color:#C2C7CF;'
 		};
 	},
 
 	computed: {
-		...mapState({
-			authType: ({ user }) => user.authType,
-			config: ({ shopro }) => shopro.config,
-			isLogin: ({ user }) => user.isLogin
-		}),
+		...mapGetters(['initStore', 'isLogin','authType']),
 		showAuth: {
 			get() {
 				return !!this.authType;
@@ -334,40 +526,92 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		this.switchModalType(this.authType);
-	},
-	watch: {
-		authType(newValue, oldValue) {
-			delete this.$refs[oldValue];
-			this.switchModalType(newValue);
-		}
-	},
+	mounted() {},
 	methods: {
 		...mapActions(['getUserInfo', 'showAuthModal']),
 
-		// 手机号是否输入完毕
-		mobileInput() {
-			this.form[this.authType].data.isMobileEnd = this.$u.test.mobile(this.form[this.authType].data.mobile);
+		// 检测
+		checkValue(e, key) {
+			this.validation(key);
 		},
 
-		// 切换表单模式
-		switchModalType(type) {
-			type &&
-				this.$nextTick(() => {
-					this.$refs[type].resetFields();
-					this.$refs[type].setRules(this.form[type].rules);
-				});
+		// 校验数据
+		validation(key, callback = () => {}) {
+			let that = this;
+			//拿到需要校验的数据
+			let fieldValue = this.form[this.authType].data[key];
+			//拿到需要检验的规则
+			let rules = this.form[this.authType].rules[key];
+			// 判空
+			if (!rules || rules.length === 0) {
+				return callback('');
+			}
+			// 设置当前的装填，标识为校验中
+			let validateState = 'validating';
+			// 调用async-validator的方法
+			let validator = new schema({
+				[key]: rules
+			});
+			// 校验
+			validator.validate(
+				{
+					[key]: fieldValue
+				},
+				{
+					firstFields: true
+				},
+				(errors, fields) => {
+					// 记录状态和报错信息
+					validateState = !errors ? 'success' : 'error';
+					let validateMessage = errors ? errors[0].message : '';
+					that.form[that.authType].error[key] = validateMessage;
+					callback(validateMessage);
+				}
+			);
 		},
+
+		// 校验全部数据
+		validateAll(callback) {
+			let that = this;
+			return new Promise(resolve => {
+				// 对当前所有表单检验
+				let valid = true; // 默认通过
+				let count = 0; // 用于标记是否检查完毕
+				let errorArr = []; // 存放错误信息
+				let curFormData = that.form[that.authType].data;
+				Object.keys(curFormData).map(field => {
+					that.validation(field, error => {
+						// 如果回调有error
+						if (error) {
+							valid = false;
+							errorArr.push(error);
+						}
+						if (++count === Object.keys(curFormData).length) {
+							resolve(valid);
+							if (errorArr.length) {
+								this.$u.toast(errorArr[0]);
+							}
+							if (typeof callback == 'function') callback(valid);
+						}
+					});
+				});
+			});
+		},
+
+		// 手机号是否输入完毕
+		mobileInput(e, key) {
+			this.form[this.authType].data.isMobileEnd = this.$u.test.mobile(this.form[this.authType].data.mobile);
+			this.validation(key);
+		},
+
 		closeAuthModal() {
-			this.showAuth = false;
 			this.$store.dispatch('showAuthModal', '');
 		},
 
 		// 获取短信验证码
 		getSmsCode(type) {
 			const that = this;
-			if (that.form[this.authType].data.isMobileEnd && that.$refs['code'].canGetCode) {
+			if (that.form[this.authType].data.isMobileEnd && !that.disabledCode) {
 				that.$http(
 					'common.smsSend',
 					{
@@ -377,7 +621,7 @@ export default {
 					'获取验证码中...'
 				).then(res => {
 					if (res.code === 1) {
-						that.$refs['code'].start();
+						that.codeChange();
 						that.$u.toast('验证码已发送，请注意查收短信');
 					} else {
 						that.$u.toast(res.msg);
@@ -389,8 +633,22 @@ export default {
 		},
 
 		// 倒计时
-		codeChange(e, type) {
-			this.codeText = e;
+		codeChange() {
+			if (this.disabledCode) return;
+			this.disabledCode = true;
+			let n = 10;
+			this.codeText = n + 's';
+			const run = setInterval(() => {
+				n -= 1;
+				if (n < 0) {
+					clearInterval(run);
+				}
+				this.codeText = n + 's';
+				if (this.codeText < 0 + 's') {
+					this.disabledCode = false;
+					this.codeText = '重新获取';
+				}
+			}, 1000);
 		},
 
 		// 规则校验
@@ -399,7 +657,7 @@ export default {
 				this.$u.toast('请同意用户协议');
 				return false;
 			}
-			return this.$refs[this.authType].validate();
+			return this.validateAll();
 		},
 
 		// 第三方登录
@@ -422,7 +680,7 @@ export default {
 				default:
 					break;
 			}
-			if(token) {
+			if (token) {
 				that.closeAuthModal();
 				that.getUserInfo(token);
 			}
@@ -570,7 +828,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@keyframes title {
+@keyframes title-animation {
 	0% {
 		font-size: 32rpx;
 	}
@@ -580,9 +838,38 @@ export default {
 	}
 }
 
+.form-wrap {
+	.form-item {
+		display: flex;
+		flex-direction: column;
+		font-size: 28rpx;
+		padding: 20rpx 0;
+		color: $u-main-color;
+		box-sizing: border-box;
+		line-height: $u-form-item-height;
+		width: 100%;
+		.item-title {
+			width: 140rpx;
+			font-size: 30rpx;
+			color: #333;
+			font-weight: 600;
+			text-align: left;
+		}
+		.message-error {
+			text-align: left;
+			font-size: 24rpx;
+			line-height: 24rpx;
+			color: $u-type-error;
+			margin-top: 12rpx;
+			margin-left: 120rpx;
+		}
+	}
+}
+
 .login-wrap {
 	padding: 50rpx 34rpx;
 	min-height: 700rpx;
+	background-color: #fff;
 
 	.head-box {
 		.head-title {
@@ -600,7 +887,7 @@ export default {
 			line-height: 36rpx;
 		}
 		.head-title-animation {
-			animation-name: title;
+			animation-name: title-animation;
 			animation-duration: 0.1s;
 			animation-timing-function: ease-out;
 			animation-fill-mode: forwards;
@@ -623,6 +910,8 @@ export default {
 			font-size: 26rpx;
 			font-weight: 400;
 			color: #c2c7cf;
+			text-align: left;
+			display: flex;
 		}
 	}
 	.code-btn[disabled] {
@@ -684,7 +973,9 @@ export default {
 
 	.agreement-box {
 		margin: 80rpx auto 0;
-
+		.protocol-check {
+			transform: scale(0.7);
+		}
 		.agreement-text {
 			font-size: 26rpx;
 			font-weight: 500;

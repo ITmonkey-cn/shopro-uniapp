@@ -3,7 +3,7 @@
 	<view class="apply-commission-wrap">
 		<!-- 标题栏 -->
 		<view class="head-box" :style="{ backgroundImage: ' url(' + formHeadImg + ')' }">
-			<u-navbar :isFixed="false" :borderBottom="false" back-icon-color="#fff" :background="{}"></u-navbar>
+			<shopro-navbar back-icon-color="#fff" :background="{}"></shopro-navbar>
 		</view>
 
 		<!-- 表单 -->

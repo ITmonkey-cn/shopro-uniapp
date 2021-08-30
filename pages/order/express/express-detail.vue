@@ -14,7 +14,7 @@
 			</view>
 			<view class="express-sn u-flex u-col-center ">
 				<text class="u-m-r-30">{{ expressDetail.express_name || '' }} {{ expressDetail.express_no || '' }}</text>
-				<u-icon name="file-text" size="32" color="#666" @click="copyCode(expressDetail.express_no)"></u-icon>
+				<text class="u-iconfont uicon-file-text" style="color: #666;font-size: 32rpx;" @tap="copyCode(expressDetail.express_no)"></text>
 			</view>
 		</view>
 

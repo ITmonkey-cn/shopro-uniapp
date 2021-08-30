@@ -1,7 +1,7 @@
 <template>
 	<view class="goods-box u-flex u-col-top" @tap="click">
 		<view class="goods__tag" v-show="tag"><image class="tag-img" :src="tag" mode="widthFix"></image></view>
-		<u-image ref="uImage" :width="180" :height="180" :src="image" mode="aspectFill"></u-image>
+		<image class="goods_img"  lazy-load fade-show :src="image" mode="aspectFill"></u-image>
 		<view class="u-m-l-20">
 			<view class="goods-title u-ellipsis-2 u-m-b-10">{{ title }}</view>
 			<view v-if="subtitle" class="describe-text u-m-b-10 u-ellipsis-1">{{ subtitle }}</view>
@@ -90,9 +90,13 @@ export default {
 			width: 60rpx;
 		}
 	}
+	.goods_img{
+		width: 180rpx;
+		height: 180rpx;
+		border-radius: 6rpx;
+	}
 	.goods-title {
 		font-size: 28rpx;
-		
 		font-weight: 500;
 		color: rgba(51, 51, 51, 1);
 		width: 450rpx;

@@ -130,7 +130,7 @@ export default class ShoproPay {
 			var url = result.data.pay_data.match(/url\=\'(\S*)\'/);
 			let reg = new RegExp('&amp;', 'g') //g代表全部
 			let newUrl = url[1].replace(reg, '&');
-			let domain = store.state.shopro.config.shop.domain; //域名需要https
+			let domain =store.getters.initShop.domain; //域名需要https
 			let params = encodeURIComponent(
 				`${domain}pages/order/payment/result?orderId=${that.order.id}&type=${that.payment}`)
 			window.location.href = newUrl + '&redirect_url=' + params;

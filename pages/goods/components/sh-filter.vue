@@ -1,6 +1,6 @@
 <template>
 	<view class="filter-box">
-		<u-mask v-if="showSel" :z-index="-1" :show="showSel" @click="hideModal"></u-mask>
+		<view class="cu-modal" style="z-index: -1;" :class="{ show: showSel }" @tap="hideModal"></view>
 		<view class="navbar">
 			<view class="sel-box u-flex-col" v-show="showSel">
 				<view class="sel-item" @tap="onSel(0)" :class="{ 'sel-active': defaultOrder === 0 && filterIndex === 0 }">综合推荐</view>
@@ -9,7 +9,7 @@
 			<view class="nav-item u-flex-col" :class="{ current: filterIndex === 0 }" @tap="tabClick(0)">
 				<view class="title-box  u-flex u-col-center">
 					<text class="filter-title">{{ defaultOrder === 1 ? '自定义' : '综合推荐' }}</text>
-					<view class="p-box"><text :class="{ active: filterIndex === 0 }" class="yticon cuIcon-fold xia"></text></view>
+					<view class="p-box"><text :class="{ active: filterIndex === 0 }" class="yticon u-iconfont uicon-arrow-up xia u-m-l-6"></text></view>
 				</view>
 				<view class="line" :class="{ 'line-active': filterIndex === 0 }"></view>
 			</view>
@@ -21,8 +21,8 @@
 				<view class="title-box u-flex">
 					<text class="filter-title">价格</text>
 					<view class="p-box u-flex-col u-m-l-6">
-						<u-icon name="arrow-up" size="20" :color="priceOrder === 1 && filterIndex === 2 ? '#d5a65a' : '#333'"></u-icon>
-						<u-icon name="arrow-down" size="20" :color="priceOrder === 2 && filterIndex === 2 ? '#d5a65a' : '#333'"></u-icon>
+						<view class="u-iconfont uicon-arrow-up" :style="{ fontSize: '22rpx', color: priceOrder === 1 && filterIndex === 2 ? '#d5a65a' : '#333' }"></view>
+						<view class="u-iconfont uicon-arrow-down" :style="{ fontSize: '22rpx', color: priceOrder === 2 && filterIndex === 2 ? '#d5a65a' : '#333' }"></view>
 					</view>
 				</view>
 				<view class="line" :class="{ 'line-active': filterIndex === 2 }"></view>

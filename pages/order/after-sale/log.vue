@@ -4,13 +4,13 @@
 		<u-time-line>
 			<u-time-line-item v-for="(log, index) in aftersaleLog" :key="log.id" nodeTop="4">
 				<template v-slot:node>
-					<view class="u-node" :style="index === 0 ? 'background: #19be6b;' : ''"><u-icon name="account-fill" color="#fff" :size="24"></u-icon></view>
+					<view class="u-node" :style="index === 0 ? 'background: #19be6b;' : ''"><text class="u-iconfont uicon-bell-fill" style="color: #fff;font-size: 26rpx;"></text></view>
 				</template>
 				<template v-slot:content>
 					<view class="u-order-title unacive u-m-b-20">{{ log.reason }}</view>
 					<view class="u-order-desc  u-m-b-10" v-show="log.content"><u-parse :html="log.content"></u-parse></view>
 					<view class="item-img-box u-flex u-flex-wrap" v-show="log.images.length">
-						<block v-for="(img,index) in log.images" :key="index"><image :src="img" class="log-img" mode="aspectFill"></image></block>
+						<block v-for="(img, index) in log.images" :key="index"><image :src="img" class="log-img" mode="aspectFill"></image></block>
 					</view>
 					<view class="u-order-time">{{ $u.timeFormat(log.createtime, 'yyyy-mm-dd hh:MM') }}</view>
 				</template>
@@ -86,6 +86,7 @@ export default {
 		background-color: #ccc;
 		margin-right: 20rpx;
 		margin-bottom: 20rpx;
+		border-radius: 6rpx;
 	}
 }
 .u-order-time {

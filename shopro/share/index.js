@@ -30,8 +30,8 @@ export default {
 			copyLink: '', 	// 复制链接
 			query: ''		// 分享参数
 		}
-		let shareConfig = store.state.shopro.config.share;
-		let shopConfig = store.state.shopro.config.shop;
+		let shareConfig = store.getters.initShare;
+		let shopConfig = store.getters.initShop;
 		if (shopConfig?.domain === '' || shareConfig.title === '' || shareConfig.image === '') {
 			throw '请在商城配置中设置商城域名和分享信息'
 		}
@@ -47,16 +47,16 @@ export default {
 		shareInfo.path = `/pages/index/index?${query}`;
 		// #endif
 		// #ifndef MP
-		shareInfo.path = `${store.state.shopro.config.shop?.domain}?${query}`;
+		shareInfo.path = `${store.getters.initShop?.domain}?${query}`;
 		// #endif
-		shareInfo.copyLink = `${store.state.shopro.config.shop?.domain}?${query}`;
+		shareInfo.copyLink = `${store.getters.initShop?.domain}?${query}`;
 		shareInfo.query = query;
 		// #ifdef H5
 		if($platform.get() === 'wxOfficialAccount') {
 			wxsdk.share(shareInfo);
 		}
 		// #endif
-
+		store.commit("shareInfo", shareInfo);
 		return shareInfo;
 	},
 
@@ -64,8 +64,8 @@ export default {
 	setShareQuery(params) {
 		let shareUserId = '0'; // 设置分享者用户ID
 		if (params.shareId === undefined) {
-			if (store.state.user.isLogin) {
-				shareUserId = store.state.user.userInfo.id;
+			if (store.getters.isLogin) {
+				shareUserId = store.getters.userInfo.id;
 			}
 		}
 		let page = '1'; // 页面类型: 1=首页(默认),2=商品,3=拼团...按需扩展

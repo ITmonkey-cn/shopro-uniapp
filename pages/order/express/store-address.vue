@@ -2,18 +2,20 @@
 <template>
 	<view class="map-box">
 		<!-- 标题栏 -->
-		<u-navbar :borderBottom="true" :background="{ background: '#fff' }" :z-index="99" :is-fixed="false">
-			<u-search
-				class="u-m-r-20"
-				placeholder="输入自提点名称"
-				@change="onSearch"
-				@search="onSearch"
-				@clear="clearSearch"
-				v-model="searchVal"
-				:showAction="false"
-				height="60"
-			></u-search>
-		</u-navbar>
+		<shopro-navbar>
+			<view class="search-wrap u-flex" slot="content">
+				<u-search
+					class="u-m-r-20"
+					placeholder="输入自提点名称"
+					@change="onSearch"
+					@search="onSearch"
+					@clear="clearSearch"
+					v-model="searchVal"
+					:showAction="false"
+					height="60"
+				></u-search>
+			</view>
+		</shopro-navbar>
 
 		<map id="map" :style="{ width: '750rpx', height: mapHeight + 'px' }" :latitude="latitude" :longitude="longitude" show-location @tap="onMap"></map>
 		<view class="dragLayer safe-area-inset-bottom" :class="moveCard">
@@ -37,7 +39,7 @@
 										<!-- 时间 -->
 										<view class="time-box ">
 											<view class=" u-flex u-col-center">
-												<u-icon class="u-m-r-20" name="clock" size="28" color="#999"></u-icon>
+												<text class="u-iconfont uicon-clock u-m-r-20" style="color: #999;"></text>
 												{{ address.openhours }}
 											</view>
 											<view class="u-flex u-col-center u-p-l-30 u-m-t-20">
@@ -46,16 +48,16 @@
 										</view>
 										<!-- 地址 -->
 										<view class="address-detail u-flex u-col-center">
-											<u-icon class="u-m-r-20" name="map" size="28" color="#999"></u-icon>
+											<text class="u-iconfont uicon-map u-m-r-20" style="color: #999;"></text>
 											{{ address.province_name }}{{ address.city_name }}{{ address.area_name }}{{ address.address }}
 										</view>
 										<!-- 电话 -->
 										<view class="address-phone u-flex u-col-center">
-											<u-icon class="u-m-r-20" name="phone" size="28" color="#999"></u-icon>
+											<text class="u-iconfont uicon-phone u-m-r-20" style="color: #999;"></text>
 											{{ address.phone }}
 										</view>
 									</view>
-									<view class="address-right u-flex-col">
+									<view class="address-right u-flex-col u-row-center u-col-center">
 										<u-radio :name="address.id"></u-radio>
 										<text class="address-distance u-m-t-10">{{ address.distance_text || 0 }}</text>
 									</view>
@@ -208,6 +210,14 @@ export default {
 </script>
 
 <style lang="scss">
+.search-wrap {
+	/* #ifdef MP-WEIXIN */
+	width: 460rpx;
+	/* #endif */
+	/* #ifndef MP-WEIXIN */
+	width: 100%;
+	/* #endif */
+}
 /* 浮层 */
 .dragLayer {
 	width: 750rpx;

@@ -20,7 +20,7 @@
 					<u-checkbox class="u-p-l-10" :name="g.goods_id" shape="circle" v-model="g.checked"><view style="height: 160rpx"></view></u-checkbox>
 					<view class="goods-wrap">
 						<view class="lose-box" v-if="g.cart_type === 'invalid' || (g.cart_type === 'activity' && !isActivityPay)">
-							<text v-if="g.cart_type === 'invalid'" class="iconfont iconyishixiao"></text>
+							<text v-if="g.cart_type === 'invalid'" class="iconfont icon-yishixiao"></text>
 							<view v-if="g.cart_type === 'activity' && !isActivityPay" class="invalid-tips u-flex u-row-center u-col-center">活动商品,仅支持单独购买</view>
 						</view>
 						<shopro-mini-card :image="g.goods.image" :title="g.goods.title" @click="$Router.push({ path: '/pages/goods/detail', query: { id: g.goods.id } })">
@@ -41,7 +41,8 @@
 										:max="g.sku_price ? g.sku_price.stock : 0"
 										disabled-input
 										@min="onMin(g)"
-										@change="changeNum($event, g)"
+										@minus="changeNum($event, g)"
+										@plus="changeNum($event, g)"
 									></u-number-box>
 								</view>
 							</template>
@@ -51,13 +52,13 @@
 			</u-checkbox-group>
 
 			<!-- 数据为空 -->
-			<shopro-empty v-show="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_cart.png'" tipText="购物车空空如也,快去逛逛吧~"></shopro-empty>
+			<shopro-empty v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_cart.png'" tipText="购物车空空如也,快去逛逛吧~"></shopro-empty>
 		</view>
 
 		<!-- 底部按钮 -->
 		<view class="foot_box " v-show="!isEmpty">
 			<view class="tools-box u-flex u-row-between">
-				<u-checkbox @change="onAllSel" activeColor="#e9b461" shape="circle" :value="allSel">全选（{{ totalCount.totalNum }}）</u-checkbox>
+				<u-checkbox @change="onAllSel" activeColor="#e9b461" shape="circle" :value="allSelected">全选（{{ totalCount.totalNum }}）</u-checkbox>
 				<view class="u-flex">
 					<view class="price font-OPPOSANS" v-show="!isTool">￥{{ totalCount.totalPrice.toFixed(2) }}</view>
 					<button class="u-reset-button pay-btn" :disabled="!isSel" v-show="!isTool" @tap="onPay">结算</button>
@@ -65,6 +66,7 @@
 				</view>
 			</view>
 		</view>
+		<!-- <shopro-tabbar></shopro-tabbar> -->
 	</view>
 </template>
 
@@ -79,18 +81,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			cartList: ({ cart }) => cart.cartList,
-			allSel: ({ cart }) => cart.allSelected,
-			authType: ({ user }) => user.authType
-		}),
+		...mapGetters(['totalCount', 'isSel', 'isActivityPay', 'cartList', 'allSelected', 'authType','isLogin']),
 		isEmpty() {
 			return !this.cartList.length;
-		},
-		...mapGetters(['totalCount', 'isSel', 'isActivityPay'])
+		}
 	},
 	onShow() {
-		this.$store.state.user.isLogin && this.getCartList();
+		this.isLogin && this.getCartList();
 	},
 	onHide() {
 		this.isTool = false;
@@ -136,7 +133,7 @@ export default {
 		onAllSel() {
 			let that = this;
 			that.$store.commit('changeAllSellect'); //按钮切换全选。
-			that.$store.commit('getAllSellectCartList', that.allSel); //列表全选
+			that.$store.commit('getAllSellectCartList', that.allSelected); //列表全选
 		},
 
 		// 结算
@@ -259,7 +256,7 @@ export default {
 			width: 100%;
 			height: 100%;
 			background-color: rgba(#fff, 0.8);
-			.iconyishixiao {
+			.icon-yishixiao {
 				position: absolute;
 				bottom: 0rpx;
 				right: 80rpx;

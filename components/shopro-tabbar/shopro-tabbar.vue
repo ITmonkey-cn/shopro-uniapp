@@ -37,32 +37,20 @@ export default {
 	name: 'shoproTabbar',
 	components: {},
 	data() {
-		return {};
+		return {
+			currentPath: '' //当前页面路径
+		};
+	},
+	mounted() {
+		this.currentPath = this.$Route.path === '/pages/index/index' ? this.$Route.path : this.$Route.fullPath;
 	},
 	computed: {
-		...mapState({
-			tabbarInfo: ({ shopro }) => shopro?.template?.tabbar,
-			cartNum: ({ cart }) => cart.cartNum
-		}),
-		// 底部导航栏配置数据
-		tabbarData() {
-			if (this.tabbarInfo) {
-				return this.tabbarInfo[0].content;
-			}
-		},
+		...mapGetters(['cartNum', 'tabbarData']),
 		// 底部导航栏列表
 		tabbarList() {
 			if (this.tabbarData) {
 				return this.tabbarData.list;
 			}
-		},
-
-		/**
-		 * 当前页面路径
-		 * 去掉首页携带的参数拼接，后台装修是不会带参数
-		 */
-		currentPath() {
-			return this.$Route.path === '/pages/index/index' ? this.$Route.path : this.$Route.fullPath;
 		},
 		// 后台tabbarList数据中必需含有'/pages/index/index',不然逻辑混乱
 		showTabbar() {

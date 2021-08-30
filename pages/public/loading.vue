@@ -20,6 +20,7 @@
 				uni.showLoading({
 					title: '登录中...'
 				})
+				
 				await that.getUserInfo(options.token);
 				let lastPage = uni.getStorageSync('lastPage');
 				if(lastPage) {

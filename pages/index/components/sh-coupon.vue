@@ -5,7 +5,7 @@
 			<view class="head-title u-ellipsis-1">领券专区</view>
 			<view class="head-more u-flex u-col-center" @tap="$Router.push('/pages/app/coupon/list')">
 				<text class="more-text u-m-r-10">查看更多</text>
-				<text class="iconfont iconyoujiantou-tianchong more-icon"></text>
+				<text class="iconfont icon-youjiantou-tianchong more-icon"></text>
 			</view>
 		</view>
 		<scroll-view class="groupon-scroll" enable-flex scroll-anchoring scroll-x scroll-with-animation>
@@ -14,28 +14,39 @@
 					<!-- mini -->
 					<view
 						class="coupon-card u-flex u-row-between u-m-r-16"
-						v-if="detail.style === 2"
-						:style="{ background: `linear-gradient(to right, ${detail.bgcolor1}, ${detail.bgcolor2})` }"
+						v-if="couponType === 2"
+						:style="{ background: `linear-gradient(to right, ${bgColor1}, ${bgColor2})` }"
 					>
 						<view class="card-left u-flex-col u-row-center u-p-l-30">
-							<view class="price u-m-b-10" :style="{ color: detail.pricecolor }">{{ item.amount }}</view>
-							<view class="notice" :style="{ color: detail.color }">满{{ item.enough }}元可用</view>
-							<view class="notice u-m-b-10" :style="{ color: detail.color }">仅剩{{ item.stock }}张</view>
+							<view class="price u-m-b-10" :style="{ color: priceColor }">{{ item.amount }}</view>
+							<view class="notice" :style="{ color: color }">满{{ item.enough }}元可用</view>
+							<view class="notice u-m-b-10" :style="{ color: color }">仅剩{{ item.stock }}张</view>
 						</view>
 						<view class="card-right u-p-y-20 u-p-r-10 u-flex-col u-row-center u-col-center">
-							<button class="u-reset-button get-btn u-m-b-10" :style="{ color: detail.color }" @tap="getCoupon(item.id, index)">领券购买</button>
+							<button class="u-reset-button get-btn u-m-b-10" :style="{ color: color }" @tap="getCoupon(item.id, index)">领券购买</button>
 						</view>
 					</view>
 					<!-- big -->
-					<view v-if="detail.style === 1" class="u-p-r-16">
-						<shopro-coupon
-							:couponData="item"
-							:gradientColor="`background: linear-gradient(to right, ${detail.bgcolor1}, ${detail.bgcolor2});`"
-							:priceColor="detail.pricecolor"
-							:color="detail.color"
-							:btnTextColor="detail.bgcolor1"
-							:state="0"
-						></shopro-coupon>
+					<view v-if="couponType === 1" class="u-p-r-16">
+						<view class="coupon-wrap" :style="{ background: `linear-gradient(to right, ${bgColor1}, ${bgColor2})` }">
+							<view class="coupon-item u-flex u-row-between">
+								<view class="coupon-left  u-flex-col ">
+									<view class="sum-box">
+										<text class="unit " :style="{ color: priceColor }">￥</text>
+										<text class="sum " :style="{ color: priceColor }">{{ item.amount }}</text>
+										<text class="sub " :style="{ color: priceColor }">{{ item.name }}</text>
+									</view>
+									<view class="notice " :style="{ color: color }">满{{ item.enough }}元可用</view>
+									<view class="notice" :style="{ color: color }">
+										有效期：{{ $u.timeFormat(item.usetime.start, 'yyyy-mm-dd') }} 至 {{ $u.timeFormat(item.usetime.end, 'yyyy-mm-dd') }}
+									</view>
+								</view>
+								<view class="coupon-right u-flex-col">
+									<button class=" get-btn" :style="{ color: bgColor1 }" @tap.stop="getCoupon(item.id, index)">立即领取</button>
+									<view class="surplus-num" :style="{ color: color }">仅剩{{ item.stock }}张</view>
+								</view>
+							</view>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -53,7 +64,13 @@ export default {
 	data() {
 		return {
 			currentIndex: 0,
-			couponList: []
+			couponList: [],
+
+			couponType: this.detail.style,
+			priceColor: this.detail.pricecolor,
+			color: this.detail.color,
+			bgColor1:this.detail.bgcolor1,
+			bgColor2:this.detail.bgcolor2
 		};
 	},
 	props: {
@@ -84,16 +101,16 @@ export default {
 		// 领取
 		getCoupon(id, index) {
 			let that = this;
-
-			that.$http(
-				'coupons.get',
-				{
-					id: id
-				},
-				'领取中...'
-			).then(res => {
+			uni.showLoading({
+				title: '领取中'
+			});
+			that.$http('coupons.get', {
+				id: id
+			}).then(res => {
+				uni.hideLoading();
 				if (res.code === 1) {
 					that.couponList[index].stock -= 1;
+					this.$u.toast('领取成功');
 				}
 			});
 		}
@@ -105,10 +122,10 @@ export default {
 .groupon-scroll {
 	height: 170rpx;
 	width: 730rpx;
-}
-.groupon-card-wrap {
-	height: 170rpx;
-	width: 730rpx;
+	.groupon-card-wrap {
+		height: 170rpx;
+		width: 730rpx;
+	}
 }
 
 .coupon-box {
@@ -168,6 +185,78 @@ export default {
 				color: #a8700d;
 				writing-mode: vertical-lr; /*从左向右 从右向左是 writing-mode: vertical-rl;*/
 				writing-mode: tb-lr; /*IE浏览器的从左向右 从右向左是 writing-mode: tb-rl；*/
+			}
+		}
+	}
+}
+
+// 未领取，已领取
+.coupon-wrap {
+	mask: url($IMG_URL+'/imgs/coupon_bg1.png');
+	mask-size: 100% 100%;
+	position: relative;
+	border-radius: 10rpx;
+	width: 710rpx;
+	height: 170rpx;
+	background: linear-gradient(to right, $u-type-warning-disabled, $u-type-warning);
+	.coupon-item {
+		width: 100%;
+		height: 168rpx;
+		border-radius: 10rpx;
+
+		.coupon-left {
+			height: 100%;
+			justify-content: center;
+			padding-left: 40rpx;
+
+			.unit {
+				font-size: 24rpx;
+				color: #fff;
+			}
+
+			.sum {
+				font-size: 55rpx;
+				font-weight: bold;
+				color: #fff;
+				line-height: 55rpx;
+				padding-right: 10rpx;
+			}
+
+			.sub {
+				font-size: 26rpx;
+				color: #fff;
+			}
+
+			.notice {
+				font-size: 22rpx;
+				color: rgba(#fff, 0.7);
+				margin-top: 6rpx;
+			}
+		}
+
+		.coupon-right {
+			height: 100%;
+			width: 220rpx;
+			justify-content: center;
+			align-items: center;
+
+			.get-btn {
+				width: 142rpx;
+				height: 54rpx;
+				background: #ffffff;
+				border-radius: 27rpx;
+				padding: 0;
+				font-size: 24rpx;
+				font-weight: 500;
+				color: $u-type-warning;
+			}
+
+			.surplus-num {
+				font-size: 22rpx;
+
+				font-weight: 500;
+				color: #fff;
+				margin-top: 14rpx;
 			}
 		}
 	}

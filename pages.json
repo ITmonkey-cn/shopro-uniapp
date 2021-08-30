@@ -127,7 +127,7 @@
 						"enablePullDownRefresh": true
 					},
 					"meta": {
-						"auth": true,
+						"auth": false,
 						"async": false,
 						"title": "拼团详情",
 						"group": "拼团"
@@ -190,7 +190,8 @@
 				{
 					"path": "coupon/list",
 					"style": {
-						"navigationBarTitleText": "优惠券中心"
+						"navigationBarTitleText": "优惠券中心",
+						"navigationStyle": "custom"
 
 
 					},
@@ -417,8 +418,7 @@
 					"path": "detail",
 					"style": {
 						"navigationBarTitleText": "商品详情",
-						"navigationStyle": "custom",
-						"navigationBarTextStyle": "white"
+						"navigationStyle": "custom"
 					},
 					"meta": {
 						"auth": false,
@@ -701,10 +701,12 @@
 					"style": {
 						"navigationBarTitleText": "页面不存在"
 					}
-				}, {
+				},
+				{
 					"path": "loading",
 					"style": {
 						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
 						"enablePullDownRefresh": false
 					}
 

@@ -41,7 +41,7 @@ export default {
 			let shareParams = share.getShareQuery(options.spm);
 			// 保存推荐信息
 			if (shareParams.shareUserId) {
-				if (store.state.user.isLogin) {
+				if (store.getters.isLogin) {
 					http('common.shareAdd', {
 						spm: options.spm
 					});
@@ -64,4 +64,58 @@ export default {
 			}
 		}
 	},
+	// #ifdef MP-WEIXIN
+	onShareAppMessage(res) {
+		let that = this;
+		// uni.$emit('ON_WX_SHARE')
+		let shareInfo = store.getters.shareInfo;
+		return {
+			title: shareInfo.title,
+			path: shareInfo.path,
+			imageUrl: shareInfo.image,
+			success(res) {
+				uni.showToast({
+					title: '分享成功'
+				})
+
+			},
+			fail(res) {
+				uni.showToast({
+					title: '分享失败',
+					icon: 'none'
+				})
+			},
+			complete() {}
+		}
+	},
+	onShareTimeline(res) {
+		let that = this;
+		let shareInfo = store.getters.shareInfo;
+		let query = shareInfo.query;
+		//携带当前页面资源ID参数
+		let currentPage = getCurrentPages()[getCurrentPages().length - 1];
+		let options = currentPage.options;
+		if (JSON.stringify(options) != '{}' && options.id) {
+			query += `&id=${options.id}`;
+		}
+
+		return {
+			title: shareInfo.title,
+			query: query,
+			imageUrl: shareInfo.image,
+			success(res) {
+				uni.showToast({
+					title: '分享成功'
+				})
+			},
+			fail(res) {
+				uni.showToast({
+					title: '分享失败',
+					icon: 'none'
+				})
+			},
+			complete() {}
+		}
+	}
+	// #endif
 }

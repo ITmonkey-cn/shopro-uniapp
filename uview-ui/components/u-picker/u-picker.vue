@@ -96,9 +96,9 @@
 </template>
 
 <script>
-import provinces from '../../libs/util/province.js';
-import citys from '../../libs/util/city.js';
-import areas from '../../libs/util/area.js';
+// import provinces from '../../libs/util/province.js';
+// import citys from '../../libs/util/city.js';
+// import areas from '../../libs/util/area.js';
 
 /**
  * picker picker弹出选择器
@@ -268,9 +268,9 @@ export default {
 			startDate: '',
 			endDate: '',
 			valueArr: [],
-			provinces: provinces,
-			citys: citys[0],
-			areas: areas[0][0],
+			// provinces: provinces,
+			// citys: citys[0],
+			// areas: areas[0][0],
 			province: 0,
 			city: 0,
 			area: 0,

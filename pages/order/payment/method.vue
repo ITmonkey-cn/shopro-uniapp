@@ -7,9 +7,9 @@
 		</view>
 
 		<!-- 支付方式单选项 -->
-		<u-radio-group v-if="payment" class="pay-box" v-model="payType" active-color="#f0c785">
+		<u-radio-group v-if="initPayment.length" class="pay-box" v-model="payType" active-color="#f0c785">
 			<!-- 微信支付 -->
-			<view class="u-flex u-row-between pay-item" v-show="payment.includes('wechat')" @tap="payType = 'wechat'">
+			<view class="u-flex u-row-between pay-item" v-show="initPayment.includes('wechat')" @tap="payType = 'wechat'">
 				<view class="u-flex">
 					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_wx_pay.png'" mode=""></image>
 					<text>微信支付</text>
@@ -17,7 +17,7 @@
 				<u-radio shape="circle" name="wechat"></u-radio>
 			</view>
 			<!-- 支付宝支付 -->
-			<view class="u-flex u-row-between pay-item" v-show="payment.includes('alipay')" @tap="payType = 'alipay'">
+			<view class="u-flex u-row-between pay-item" v-show="initPayment.includes('alipay')" @tap="payType = 'alipay'">
 				<view class="u-flex">
 					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_ali_pay.png'" mode=""></image>
 					<text>支付宝支付</text>
@@ -25,7 +25,7 @@
 				<u-radio shape="circle" name="alipay"></u-radio>
 			</view>
 			<!-- 苹果支付 -->
-			<view class="u-flex u-row-between pay-item" v-show="payment.includes('iospay') && appPlatfrom === 'ios'" @tap="payType = 'iospay'">
+			<view class="u-flex u-row-between pay-item" v-show="initPayment.includes('iospay') && appPlatfrom === 'ios'" @tap="payType = 'iospay'">
 				<view class="u-flex">
 					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_apple_pay.png'" mode=""></image>
 					<text>ApplePay</text>
@@ -33,7 +33,7 @@
 				<u-radio shape="circle" name="iospay"></u-radio>
 			</view>
 			<!-- 余额支付 -->
-			<view class="u-flex u-row-between pay-item" v-show="payment.includes('wallet')" @tap="payType = 'wallet'">
+			<view class="u-flex u-row-between pay-item" v-show="initPayment.includes('wallet')" @tap="payType = 'wallet'">
 				<view class="u-flex">
 					<image class="pay-img" :src="$IMG_URL + '/imgs/order/order_wallet_pay.png'" mode=""></image>
 					<text>余额支付</text>
@@ -43,14 +43,12 @@
 		</u-radio-group>
 
 		<button class="u-reset-button pay-btn" @tap="confirmPay">确认支付 ￥{{ orderDetail.total_fee || '0.00' }}</button>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
 <script>
 import Pay from '@/shopro/pay';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 let timer;
 export default {
 	components: {},
@@ -65,18 +63,16 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			payment: ({ shopro }) => shopro.config.payment
-		})
+		...mapGetters(['initPayment'])
 	},
 	onShow() {
 		this.orderDetail.id && this.countDown();
 	},
 	onLoad() {
-		if(this.$platform.get() === 'wxOfficialAccount' && this.$platform.device() === 'ios' && this.$platform.entry() !== location.href) location.reload();
+		if (this.$platform.get() === 'wxOfficialAccount' && this.$platform.device() === 'ios' && this.$platform.entry() !== location.href) location.reload();
 		this.getOrderDetail();
-		if (this.payment.length) {
-			this.payType = this.payment[0];
+		if (this.initPayment.length) {
+			this.payType = this.initPayment[0];
 		}
 	},
 	onHide() {

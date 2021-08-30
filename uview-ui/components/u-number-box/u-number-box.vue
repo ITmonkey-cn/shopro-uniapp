@@ -35,9 +35,9 @@
 			@touchend.stop.prevent="clearTimer"
 			:class="{ 'u-icon-disabled': disabled || inputVal >= max }"
 			:style="{
-				background: '#e9b564',
+				background: bgColor,
 				height: inputHeight + 'rpx',
-				color: '#fff'
+				color: color
 			}"
 		>
 			<u-icon name="plus" :size="size"></u-icon>
@@ -274,7 +274,7 @@ export default {
 			uni.hideKeyboard();
 			if (this.disabled) return;
 			let value = 0;
-			
+
 			// 减
 			if (type === 'minus') {
 				if (this.calcMinus(this.inputVal, this.step) == 0) {
@@ -286,7 +286,7 @@ export default {
 				value = this.calcPlus(this.inputVal, this.step);
 			}
 			// 判断是否小于最小值和大于最大值
-			if (value < this.min || value > this.max ) {
+			if (value < this.min || value > this.max) {
 				return;
 			}
 			this.inputVal = value;

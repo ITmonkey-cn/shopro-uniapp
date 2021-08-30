@@ -1,48 +1,52 @@
 <template>
 	<view class="content">
 		<!-- 海报弹窗 -->
-		<u-popup v-model="showPoster" @close="onClosePoster" mode="center" :bgStyle="{ background: 'none' }" border-radius="20" :z-index="10078" :closeable="false" :mask="true">
-			<view class="poster-img-box"><image class="poster-img" :src="posterImage" mode="widthFix"></image></view>
-			<view class="poster-btn-box u-m-t-20 u-flex u-row-between u-col-center" v-show="posterImage">
-				<button class="cancel-btn u-reset-button" @tap="showPoster = false">取消</button>
-				<button class="save-btn u-reset-button" @tap="saveImage">{{ ['wxOfficialAccount', 'H5'].includes(platform) ? '长按图片保存' : '保存图片' }}</button>
-			</view>
-		</u-popup>
-
-		<!-- 分享tools -->
-		<u-popup v-model="showShare" @close="showShare = false" safe-area-inset-bottom mode="bottom" border-radius="20" :closeable="false">
-			<view class="share-box">
-				<view class="share-list-box u-flex">
-					<!-- #ifdef MP-WEIXIN -->
-					<button class="share-item share-btn u-flex-col u-col-center" open-type="share">
-						<image class="share-img" :src="$IMG_URL + '/imgs/share/share_wx.png'" mode=""></image>
-						<text class="share-title">微信好友</text>
-					</button>
-					<!-- #endif -->
-					<!-- #ifndef MP-WEIXIN  -->
-					<view v-if="platform !== 'H5'" class="share-item u-flex-col u-col-center" @tap="shareFriend">
-						<image class="share-img" :src="$IMG_URL + '/imgs/share/share_wx.png'" mode=""></image>
-						<text class="share-title">微信好友</text>
-					</view>
-					<!-- #endif -->
-					<view class="share-item u-flex-col u-col-center" @tap="onPoster">
-						<image class="share-img" :src="$IMG_URL + '/imgs/share/share_poster.png'" mode=""></image>
-						<text class="share-title">生成海报</text>
-					</view>
-
-					<view class="share-item u-flex-col u-col-center" @tap="copySharePath">
-						<image class="share-img" :src="$IMG_URL + '/imgs/share/share_link.png'" mode=""></image>
-						<text class="share-title">复制链接</text>
-					</view>
+		<view class="cu-modal" :class="{ show: showPoster }" @tap="onClosePoster">
+			<view class="cu-dialog" style="width: 640rpx;background: none;">
+				<view class="poster-img-box"><image class="poster-img" :src="posterImage" mode="widthFix"></image></view>
+				<view class="poster-btn-box u-m-t-20 u-flex u-row-between u-col-center" v-show="posterImage">
+					<button class="cancel-btn u-reset-button" @tap="showPoster = false">取消</button>
+					<button class="save-btn u-reset-button" @tap="saveImage">{{ ['wxOfficialAccount', 'H5'].includes(platform) ? '长按图片保存' : '保存图片' }}</button>
 				</view>
-				<view class="share-foot u-flex u-row-center u-col-center" @tap="showShare = false">取消</view>
 			</view>
-		</u-popup>
+		</view>
+		<!-- 分享tools -->
+		<view class="cu-modal bottom-modal" :class="{ show: showShare }" @tap="showShare = false">
+			<view class="cu-dialog safe-area-inset-bottom" style="border-radius: 20rpx 20rpx 0 0;background: none;">
+				<view class="share-box">
+					<view class="share-list-box u-flex">
+						<!-- #ifdef MP-WEIXIN -->
+						<button class="share-item share-btn u-flex-col u-col-center" open-type="share">
+							<image class="share-img" :src="$IMG_URL + '/imgs/share/share_wx.png'" mode=""></image>
+							<text class="share-title">微信好友</text>
+						</button>
+						<!-- #endif -->
+						<!-- #ifndef MP-WEIXIN  -->
+						<view v-if="platform !== 'H5'" class="share-item u-flex-col u-col-center" @tap="shareFriend">
+							<image class="share-img" :src="$IMG_URL + '/imgs/share/share_wx.png'" mode=""></image>
+							<text class="share-title">微信好友</text>
+						</view>
+						<!-- #endif -->
+						<view class="share-item u-flex-col u-col-center" @tap="onPoster">
+							<image class="share-img" :src="$IMG_URL + '/imgs/share/share_poster.png'" mode=""></image>
+							<text class="share-title">生成海报</text>
+						</view>
 
+						<view class="share-item u-flex-col u-col-center" @tap="copySharePath">
+							<image class="share-img" :src="$IMG_URL + '/imgs/share/share_link.png'" mode=""></image>
+							<text class="share-title">复制链接</text>
+						</view>
+					</view>
+					<view class="share-foot u-flex u-row-center u-col-center" @tap="showShare = false">取消</view>
+				</view>
+			</view>
+		</view>
 		<!-- 分享指引 -->
-		<u-popup v-model="showShareGuide" safe-area-inset-bottom mode="top" :closeable="false" :bgStyle="{ background: 'none' }">
-			<view class="guide-wrap u-flex u-col-top u-row-center"><image class="guide-img" :src="$IMG_URL + '/imgs/share/share_guide.png'" mode=""></image></view>
-		</u-popup>
+		<view class="cu-modal bottom-modal" :class="{ show: showShareGuide }" @tap="showShareGuide = false">
+			<view class="cu-dialog safe-area-inset-bottom" style="border-radius: 20rpx 20rpx 0 0;background: none;vertical-align: top;">
+				<view class="guide-wrap u-flex u-col-top u-row-center"><image class="guide-img" :src="$IMG_URL + '/imgs/share/share_guide.png'" mode=""></image></view>
+			</view>
+		</view>
 
 		<!-- 各海报模块 -->
 		<shopro-canvas v-if="showPoster" ref="shoproCanvas" :canvasParams="canvasParams" @success="onSuccess"></shopro-canvas>
@@ -54,9 +58,8 @@
  * @property {Boolean} value = showModal - v-model控制显隐
  * @property {String} posterType - 海报类别
  * @property {Object} posterInfo - 海报数据
- * @property {Object} shareDetail - 分享信息
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 import Auth from '@/shopro/permission/index.js';
 export default {
 	name: 'shoproShare',
@@ -79,17 +82,10 @@ export default {
 			type: Object,
 			default: () => {}
 		},
-		shareDetail: {
-			type: Object,
-			default: () => {}
-		},
 		value: {}
 	},
 	computed: {
-		...mapState({
-			userInfo: ({ user }) => user.userInfo,
-			configShare: ({ shopro }) => shopro.config.share
-		}),
+		...mapGetters(['initShare', 'userInfo', 'isLogin', 'shareInfo']),
 		showShare: {
 			get() {
 				return this.value;
@@ -114,6 +110,22 @@ export default {
 			this.showPoster = false;
 			uni.showTabBar();
 		},
+		// 绘制成功
+		onSuccess(e) {
+			this.posterImage = e;
+		},
+		// 开始绘制
+		onPoster() {
+			this.posterImage = '';
+			uni.hideTabBar();
+			if (this.$store.getters.isLogin) {
+				this.canvasParams = this.getPosterFormatter();
+				this.showPoster = true;
+			} else {
+				this.$store.dispatch('showAuthModal', 'accountLogin');
+			}
+			this.showShare = false;
+		},
 		// 分享好友
 		shareFriend() {
 			let that = this;
@@ -122,10 +134,10 @@ export default {
 				provider: 'weixin',
 				scene: 'WXSceneSession',
 				type: 0,
-				href: that.shareDetail.path,
-				title: that.shareDetail.title,
-				summary: that.shareDetail.title,
-				image: that.shareDetail.image,
+				href: that.shareInfo.path,
+				title: that.shareInfo.title,
+				summary: that.shareInfo.title,
+				image: that.shareInfo.image,
 				success: res => {
 					console.log('success:' + JSON.stringify(res));
 					this.showShare = false;
@@ -138,12 +150,6 @@ export default {
 			// #ifdef H5
 			this.showShare = false;
 			this.showShareGuide = true;
-			this.$wxsdk.share({
-				title: that.shareDetail.title,
-				desc: that.shareDetail.subtitle || '',
-				path: that.shareDetail.path,
-				image: that.shareDetail.image
-			});
 			// #endif
 		},
 
@@ -173,7 +179,7 @@ export default {
 		copySharePath() {
 			let that = this;
 			uni.setClipboardData({
-				data: that.shareDetail.copyLink,
+				data: that.shareInfo.copyLink,
 				success: data => {
 					that.$u.toast('已复制到剪切板');
 					that.showShare = false;
@@ -187,7 +193,7 @@ export default {
 			switch (this.posterType) {
 				case 'user':
 					data = {
-						backgroundImage: that.configShare.user_poster_bg,
+						backgroundImage: that.initShare.user_poster_bg,
 						drawArray: [
 							{
 								name: '用户昵称',
@@ -215,7 +221,7 @@ export default {
 							{
 								name: 'wxCode',
 								type: 'image',
-								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareDetail.query}`,
+								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareInfo.query}`,
 								alpha: 1,
 								dy: 560,
 								isBgCenter: true,
@@ -227,7 +233,7 @@ export default {
 							{
 								name: '普通二维码',
 								type: 'qrcode',
-								text: that.shareDetail.path,
+								text: that.shareInfo.path,
 								size: 180,
 								dy: 560,
 								isBgCenter: true
@@ -238,7 +244,7 @@ export default {
 					break;
 				case 'goods':
 					data = {
-						backgroundImage: that.configShare.goods_poster_bg,
+						backgroundImage: that.initShare.goods_poster_bg,
 						drawArray: [
 							{
 								name: 'avatar',
@@ -334,7 +340,7 @@ export default {
 							{
 								name: 'wxCode',
 								type: 'image', //微信小程序码
-								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareDetail.query}`,
+								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareInfo.query}`,
 								alpha: 1,
 								dx: 522,
 								dy: 911,
@@ -345,7 +351,7 @@ export default {
 							// #ifndef MP-WEIXIN
 							{
 								type: 'qrcode',
-								text: that.shareDetail.copyLink,
+								text: that.shareInfo.copyLink,
 								size: 110,
 								dx: 530,
 								dy: 930
@@ -356,7 +362,7 @@ export default {
 					break;
 				case 'groupon':
 					data = {
-						backgroundImage: that.configShare.groupon_poster_bg,
+						backgroundImage: that.initShare.groupon_poster_bg,
 						drawArray: [
 							{
 								name: 'avatar',
@@ -443,16 +449,16 @@ export default {
 								textAlign: 'left',
 								textBaseline: 'top',
 								dx: 565,
-								dy: 862
+								dy: 863
 							},
 							// #ifdef MP-WEIXIN
 							{
 								name: 'wxCode',
 								type: 'image', //微信小程序码
-								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareDetail.query}`,
+								url: `${that.$API_URL}wechat/wxacode?scene=${that.shareInfo.query}`,
 								alpha: 1,
-								dx: 522,
-								dy: 911,
+								dx: 530,
+								dy: 930,
 								dWidth: 110,
 								dHeight: 110
 							},
@@ -460,7 +466,7 @@ export default {
 							// #ifndef MP-WEIXIN
 							{
 								type: 'qrcode',
-								text: that.shareDetail.path,
+								text: that.shareInfo.path,
 								size: 110,
 								dx: 530,
 								dy: 930
@@ -474,21 +480,6 @@ export default {
 					break;
 			}
 			return data;
-		},
-		// 绘制成功
-		onSuccess(e) {
-			this.posterImage = e;
-		},
-		// 开始绘制
-		onPoster() {
-			this.posterImage = '';
-			if (this.$store.state.user.isLogin) {
-				this.canvasParams = this.getPosterFormatter();
-				this.showPoster = true;
-			} else {
-				this.$store.dispatch('showAuthModal', 'accountLogin');
-			}
-			this.showShare = false;
 		}
 	}
 };

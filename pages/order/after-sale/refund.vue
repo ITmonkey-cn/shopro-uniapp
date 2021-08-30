@@ -33,7 +33,7 @@
 			<view class="u-flex refund-cause">
 				<text class="u-m-r-20" style="color: #333;" v-if="refundCause">{{ refundCause }}</text>
 				<text class="u-m-r-20" v-else>请选择申请原因~</text>
-				<u-icon name="arrow-right" size="28" color="#666"></u-icon>
+				<text class="u-iconfont uicon-arrow-right" style="color: #666"></text>
 			</view>
 		</view>
 
@@ -202,7 +202,7 @@ export default {
 			}, '申请中...').then(res => {
 				if (res.code === 1) {
 					//  #ifdef MP-WEIXIN
-					that.$store.dispatch('getMessageIds', 'aftersale');
+					that.$store.commit('subscribeMessage', 'aftersale');
 					//  #endif
 					that.$Router.back();
 				}
@@ -317,10 +317,6 @@ export default {
 		font-size: 28rpx;
 	}
 
-	.cuIcon-right {
-		font-size: 32rpx;
-	}
-
 	.price {
 		font-size: 28rpx;
 		color: #a8700d;
@@ -353,27 +349,9 @@ export default {
 		&:nth-child(5n) {
 			margin-right: 0;
 		}
-
-		.cuIcon-cameraadd {
-			font-size: 50rpx;
-			color: #dfdfdf;
-		}
-
 		.preview-img {
 			width: 100%;
 			height: 100%;
-		}
-
-		.cuIcon-close {
-			background: linear-gradient(90deg, rgba(216, 159, 100, 1), rgba(235, 193, 150, 1));
-			border-radius: 50%;
-			width: 40rpx;
-			line-height: 40rpx;
-			color: #fff;
-			text-align: center;
-			position: absolute;
-			top: -10rpx;
-			right: -10rpx;
 		}
 	}
 }

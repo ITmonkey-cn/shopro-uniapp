@@ -85,7 +85,7 @@ import shOrderCard from './components/sh-order-card.vue';
 import shWallet from './components/sh-wallet.vue';
 import shSearch from './components/sh-search.vue';
 import shCategoryTabs from './components/sh-category-tabs.vue';
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 
 // #ifdef MP-WEIXIN
 import { HAS_LIVE } from '@/env';
@@ -135,9 +135,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			isLogin: ({ user }) => user.isLogin
-		})
+		...mapGetters(['isLogin'])
 	},
 	onPullDownRefresh() {
 		this.getViewTemplate();

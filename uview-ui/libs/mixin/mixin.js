@@ -6,14 +6,17 @@ import {
 module.exports = {
 	data() {
 		return {
-			$IMG_URL: IMG_URL, //解决小程序端template中无法使用vue挂载变量
-			$API_URL: API_URL, //解决小程序端template中无法使用vue挂载变量
-			$Router: this.$Router, //解决小程序端template中无法使用vue挂载变量
-			$tools: this.$tools, //解决小程序端template中无法使用vue挂载变量
+			//解决小程序端template中无法使用vue挂载变量
+			$IMG_URL: IMG_URL, //图片地址
+			$API_URL: API_URL, //api地址
+			$tools: this.$tools, // 工具函数
 		}
 	},
 	mounted() {
-		this.$u.getRect = this.$uGetRect // getRect挂载到$u上，因为这方法需要使用in(this)，所以无法把它独立成一个单独的文件导出
+		// getRect挂载到$u上，因为这方法需要使用in(this)，所以无法把它独立成一个单独的文件导出
+		this.$nextTick(() => {
+			this.$u.getRect = this.$uGetRect
+		})
 	},
 	methods: {
 		// 查询节点信息

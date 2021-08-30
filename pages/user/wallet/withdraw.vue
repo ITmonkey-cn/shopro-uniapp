@@ -2,19 +2,12 @@
 <template>
 	<view class="draw-money-wrap">
 		<view class="head-box">
-			<u-navbar
-				backIconColor="#fff"
-				:borderBottom="false"
-				:background="{ background: 'none' }"
-				:backTextStyle="{ color: '#fff', fontSize: '32rpx' }"
-				backText="提现"
-				:isFixed="false"
-			></u-navbar>
+			<shopro-navbar :background="{ background: 'none' }" :backTextStyle="{ color: '#fff' }" backText="提现" backIconColor="#fff"></shopro-navbar>
 			<!-- 可提现 -->
 			<view class="wallet-num-box u-flex u-col-center u-row-between">
 				<view class="">
 					<view class="num-title">可提现金额（元）</view>
-					<view class="wallet-num">{{ userinfo.money || '0.00' }}</view>
+					<view class="wallet-num">{{ userInfo.money || '0.00' }}</view>
 				</view>
 				<button class="u-reset-button log-btn" @tap="$Router.push({ path: '/pages/user/wallet/withdraw-log' })">提现记录</button>
 			</view>
@@ -34,7 +27,7 @@
 						<image class="item-img" :src="withdrawList[withdrawType].icon" mode=""></image>
 						<view class="item-title u-m-l-20">{{ withdrawList[withdrawType].title }}</view>
 					</view>
-					<u-icon name="arrow-right" size="28" color="#C4C4C4"></u-icon>
+					<text class="u-iconfont uicon-arrow-right" style="#C4C4C4;"></text>
 				</view>
 			</view>
 			<!-- 提现信息 -->
@@ -138,7 +131,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import FormValidate from '@/shopro/validate/form';
 import wechat from '@/shopro/wechat/wechat';
 export default {
@@ -198,9 +191,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userinfo: ({ user }) => user.userInfo
-		})
+		...mapGetters(['userInfo'])
 	},
 	async onLoad() {
 		this.getWithdrawRules();
@@ -248,7 +239,7 @@ export default {
 					that.money = '';
 					that.showModal = true;
 					//  #ifdef MP-WEIXIN
-					this.$store.dispatch('getMessageIds', 'wallet');
+					this.$store.commit('subscribeMessage', 'wallet');
 					//  #endif
 					that.$store.dispatch('getUserInfo');
 				} else {

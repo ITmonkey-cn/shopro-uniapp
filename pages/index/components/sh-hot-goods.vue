@@ -1,9 +1,8 @@
 <template>
 	<!-- 为你推荐 -->
 	<view class="hot-goods u-m-b-10 u-p-x-16">
-		<!-- s -->
-		<u-waterfall v-model="goodsList" ref="uWaterfall" v-if="detail.style === 1">
-			<template v-slot:left="{ leftList }">
+		<view class="u-waterfall" v-if="goodsType === 1">
+			<view id="u-left-column" class="u-column">
 				<view class="goods-item u-m-b-16 u-flex u-row-center u-col-center" v-for="leftGoods in leftList" :key="leftGoods.id">
 					<shopro-goods-card
 						:detail="leftGoods"
@@ -18,8 +17,8 @@
 						@click="$Router.push({ path: '/pages/goods/detail', query: { id: leftGoods.id } })"
 					></shopro-goods-card>
 				</view>
-			</template>
-			<template v-slot:right="{ rightList }">
+			</view>
+			<view id="u-right-column" class="u-column">
 				<view class="goods-item  u-m-b-16 u-flex u-row-center u-col-center" v-for="rightGoods in rightList" :key="rightGoods.id">
 					<shopro-goods-card
 						:detail="rightGoods"
@@ -34,10 +33,10 @@
 						@click="$Router.push({ path: '/pages/goods/detail', query: { id: rightGoods.id } })"
 					></shopro-goods-card>
 				</view>
-			</template>
-		</u-waterfall>
+			</view>
+		</view>
 		<!-- m -->
-		<view class="big-card-wrap u-p-10" v-if="detail.style === 2">
+		<view class="big-card-wrap u-p-10" v-if="goodsType === 2">
 			<block v-for="item in goodsList" :key="item.id">
 				<sh-goods-card
 					:detail="item"
@@ -54,7 +53,7 @@
 			</block>
 		</view>
 		<button v-show="total > perPage" class="u-reset-button refresh-btn u-m-y-20 u-flex u-col-center u-row-center" @tap.stop="loadMore">
-			<u-icon class="u-m-r-6" name="reload" size="28" color="#999" :class="{ 'refresh-active': isRefresh }"></u-icon>
+			<text class="u-m-r-6 u-iconfont uicon-reload" style="font-size: 28rpx;color: #999" :class="{ 'refresh-active': isRefresh }"></text>
 			{{ listParams.page >= lastPage ? '收起' : '加载更多' }}
 		</button>
 	</view>
@@ -79,13 +78,24 @@ export default {
 			total: 0, //总商品数
 			perPage: 0, //单页商品数
 			goodsList: [],
-			isRefresh: false
+			isRefresh: false,
+
+			// 瀑布流 350-330
+			addTime: 100, //排序间隙时间
+			leftHeight: 0,
+			rightHeight: 0,
+			leftList: [],
+			rightList: [],
+			tempList: [],
+
+			goodsType: this.detail.style // 商品模板
 		};
 	},
+
 	props: {
 		detail: {
 			type: Object,
-			default: null
+			default: () => {}
 		}
 	},
 	created() {
@@ -98,8 +108,41 @@ export default {
 			this.getGoodsList();
 		}
 	},
-	computed: {},
 	methods: {
+		// 瀑布流相关
+		async splitData() {
+			if (!this.tempList.length) return;
+			let item = this.tempList[0];
+			if (!item) return;
+
+			// 分左右
+			if (this.leftHeight < this.rightHeight) {
+				this.leftHeight += item.activity_discounts_tags?.length ? 350 : 330;
+				this.leftList.push(item);
+			} else if (this.leftHeight > this.rightHeight) {
+				this.rightHeight += item.activity_discounts_tags?.length ? 350 : 330;
+				this.rightList.push(item);
+			} else {
+				this.leftHeight += item.activity_discounts_tags?.length ? 350 : 330;
+				this.leftList.push(item);
+			}
+
+			// 移除临时列表的第一项，如果临时数组还有数据，继续循环
+			this.tempList.splice(0, 1);
+			if (this.tempList.length) {
+				setTimeout(() => {
+					this.splitData();
+				}, this.addTime);
+			}
+		},
+		clear() {
+			this.leftList = [];
+			this.rightList = [];
+			this.leftHeight = 0;
+			this.rightHeight = 0;
+			this.tempList = [];
+		},
+
 		// 商品列表
 		getGoodsList() {
 			let that = this;
@@ -110,6 +153,8 @@ export default {
 					this.perPage = res.data.per_page;
 					this.isRefresh = false;
 					that.goodsList = [...that.goodsList, ...res.data.data];
+					that.tempList = res.data.data;
+					that.goodsList.length && that.splitData();
 				}
 			});
 		},
@@ -127,7 +172,7 @@ export default {
 					this.listParams.page = 1;
 					this.lastPage = 1;
 					this.goodsList = [];
-					this.$refs.uWaterfall.clear();
+					this.clear();
 					this.getGoodsList();
 				}
 			}
@@ -137,6 +182,28 @@ export default {
 </script>
 
 <style lang="scss">
+@mixin vue-flex($direction: row) {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	flex-direction: $direction;
+	/* #endif */
+}
+.u-waterfall {
+	@include vue-flex;
+	flex-direction: row;
+	align-items: flex-start;
+}
+
+.u-column {
+	@include vue-flex;
+	flex: 1;
+	flex-direction: column;
+	height: auto;
+}
+
+.u-image {
+	width: 100%;
+}
 // 为你推荐
 .hot-goods {
 	background: none;

@@ -2,13 +2,14 @@
 <template>
 	<view class="home-wrap u-m-b-20">
 		<!-- 空白页 -->
+		<!-- #ifdef APP-PLUS -->
 		<u-no-network @retry="init"></u-no-network>
+		<!-- #endif -->
 		<shopro-empty v-if="!hasTemplate" :image="$IMG_URL + '/imgs/empty/template_empty.png'" tipText="暂未找到模板，请前往装修~"></shopro-empty>
 
 		<view v-else-if="isConnected && isRefresh" class="content-box">
 			<!-- 导航栏 -->
-			<home-head v-if="headSwiperList && headSwiperList.length" :isScorll="isScorll" borderRadius="0" :navTitle="appName" :list="headSwiperList"></home-head>
-
+			<home-head v-if="headSwiperList && headSwiperList.length" :isScorll="isScorll" borderRadius="0" :navTitle="initShop.name" :list="headSwiperList"></home-head>
 			<!-- 自定义模块 -->
 			<view class="template-box">
 				<block v-for="(item, index) in homeTemplate" :key="item.id">
@@ -40,22 +41,15 @@
 					<sh-groupon v-if="item.type === 'groupon'" :detail="item.content"></sh-groupon>
 					<!-- 富文本 -->
 					<sh-richtext v-if="item.type === 'rich-text'" :richId="item.content.id"></sh-richtext>
-					<!-- 功能列表 -->
-					<sh-cell v-if="item.type === 'nav-list'" :list="item.content.list"></sh-cell>
-					<!-- 九宫格列表 -->
-					<sh-grid v-if="item.type === 'grid-list'" :detail="item.content.list"></sh-grid>
 					<!-- 功能标题 -->
 					<sh-title-card v-if="item.type === 'title-block'" :title="item.content.name" :bgImage="item.content.image" :titleColor="item.content.color"></sh-title-card>
-					<!-- 钱包 -->
-					<sh-wallet v-if="item.type === 'wallet-card'"></sh-wallet>
-					<!-- 订单卡片 -->
-					<sh-order-card v-if="item.type === 'order-card'"></sh-order-card>
 					<!-- 直播 -->
 					<!-- #ifdef MP-WEIXIN -->
 					<sh-live v-if="item.type === 'live' && HAS_LIVE" :detail="item.content"></sh-live>
 					<!-- #endif -->
 				</block>
 			</view>
+
 			<!-- 分类选项卡 -->
 			<sh-category-tabs
 				v-if="categoryTabsData && categoryTabsData.category_arr && categoryTabsData.category_arr.length"
@@ -71,12 +65,13 @@
 			<shopro-notice-modal v-if="!showPrivacy && isLogin"></shopro-notice-modal>
 			<!-- 隐私协议 -->
 			<!-- #ifdef APP-PLUS -->
-			<privacy-modal v-if="shopInfo && shopInfo.name" v-model="showPrivacy"></privacy-modal>
+			<privacy-modal v-if="initShop && initShop.name" v-model="showPrivacy"></privacy-modal>
 			<!-- #endif -->
 			<!-- #ifdef H5 -->
 			<view class="tabbar-hack" style="height: 120rpx; width:100%;"></view>
 			<!-- #endif -->
 		</view>
+		<!-- <shopro-tabbar></shopro-tabbar> -->
 	</view>
 </template>
 
@@ -89,14 +84,9 @@ import shCoupon from './components/sh-coupon.vue';
 import shSeckill from './components/sh-seckill.vue';
 import shGroupon from './components/sh-groupon.vue';
 import shRichtext from './components/sh-richtext.vue';
-import shCell from './components/sh-cell.vue';
-import shGrid from './components/sh-grid.vue';
 import shTitleCard from './components/sh-title-card.vue';
-import shOrderCard from './components/sh-order-card.vue';
-import shWallet from './components/sh-wallet.vue';
 import shSearch from './components/sh-search.vue';
 import shCategoryTabs from './components/sh-category-tabs.vue';
-import { mapMutations, mapActions, mapState } from 'vuex';
 
 import privacyModal from './index/privacy-modal.vue';
 import homeHead from './index/home-head.vue';
@@ -106,13 +96,7 @@ import { HAS_LIVE } from '@/env';
 import shLive from './components/sh-live.vue';
 // #endif
 
-// #ifdef H5
-let listenMove = document.body; //禁止手机h5下拉刷新带动整个页面。
-let handle = function(e) {
-	e.preventDefault();
-};
-// #endif
-
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {
 		shBanner,
@@ -123,11 +107,7 @@ export default {
 		shCoupon,
 		shSeckill,
 		shRichtext,
-		shCell,
-		shGrid,
 		shTitleCard,
-		shWallet,
-		shOrderCard,
 		shSearch,
 		shCategoryTabs,
 
@@ -144,6 +124,7 @@ export default {
 			HAS_LIVE: HAS_LIVE,
 			// #endif
 			isRefresh: true,
+
 			enable: false, //是否开启吸顶。
 			isConnected: true, //是否有网
 			showPrivacy: false, //协议
@@ -151,26 +132,14 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			config: ({ shopro }) => shopro.config,
-			shopInfo: ({ shopro }) => shopro.config?.shop,
-			isLogin: ({ user }) => user.isLogin,
-			homeTemplate: ({ shopro }) => shopro.template?.home,
-			hasTemplate: ({ shopro }) => shopro.hasTemplate
-		}),
-		// 项目标题
-		appName() {
-			if (this.config?.shop) {
-				return this.config?.shop?.name;
-			}
-		},
+		...mapGetters(['initShop', 'homeTemplate', 'hasTemplate', 'isLogin']),
 		// 头部模块数据
 		headSwiperList() {
 			if (this.homeTemplate?.length) {
 				return this.homeTemplate[0]?.content?.list;
 			}
 		},
-		//分类选项卡数据
+		// 分类选项卡数据
 		categoryTabsData() {
 			if (this.homeTemplate?.length) {
 				return this.homeTemplate[this.homeTemplate.length - 1]?.content;
@@ -187,17 +156,11 @@ export default {
 		let that = this;
 		this.enable = true;
 		this.isLogin && this.getCartList();
-		// #ifdef APP-VUE
 		// 网络变化检测
 		uni.onNetworkStatusChange(res => {
 			this.isConnected = res.isConnected;
+			res.isConnected && this.init();
 		});
-		uni.getNetworkType({
-			success: res => {
-				res.networkType == 'none' ? (this.isConnected = false) : (this.isConnected = true);
-			}
-		});
-		// #endif
 	},
 	onHide() {
 		this.enable = false;
@@ -213,9 +176,6 @@ export default {
 	},
 	methods: {
 		...mapActions(['appInit', 'getTemplate', 'getCartList']),
-		jweixin() {
-			this.$wxsdk.openLocation();
-		},
 		// 初始化
 		init() {
 			this.isRefresh = false;

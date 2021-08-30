@@ -6,18 +6,18 @@
 			<view class="card-box">
 				<view class="card-head u-flex u-col-center">
 					<view class="card-title u-m-r-10">可提现金额（元）</view>
-					<u-icon @click="showMoney = !showMoney" :name="showMoney ? 'eye-fill' : 'eye-off'" size="46" color="#fff"></u-icon>
+					<view class="u-iconfont" :class="showMoney ? 'uicon-eye' : 'uicon-eye-off'" style="color: #fff;font-size: 50rpx;"></view>
 				</view>
-				<view class="money-num u-p-t-50">{{ showMoney ? userinfo.money || '0.00' : '***' }}</view>
+				<view class="money-num u-p-t-50">{{ showMoney ? userInfo.money || '0.00' : '***' }}</view>
 				<button class="u-reset-button withdraw-btn" @tap="$Router.push('/pages/user/wallet/withdraw')">提现</button>
 			</view>
 		</view>
 		<!-- 筛选 -->
 		<u-sticky offset-top="0" :enable="true">
 			<view class="filter-box u-flex u-row-between">
-				<button class="u-reset-button date-btn" @tap="showCalendar = true">
+				<button class="u-reset-button date-btn u-flex" @tap="showCalendar = true">
 					{{ selDateText }}
-					<u-icon class="u-m-l-20" name="arrow-down-fill" size="28" color="#e5e5e5"></u-icon>
+					<text class="u-iconfont uicon-arrow-down-fill u-m-l-20" style="color: #e5e5e5"></text>
 				</button>
 				<view class="total-box">收入￥{{ incomeMoney || '0.00' }} 支出￥{{ expendMoney || '0.00' }}</view>
 			</view>
@@ -45,7 +45,7 @@
 			</view>
 		</view>
 		<!-- 空置页 -->
-		<shopro-empty v-show="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据~"></shopro-empty>
+		<shopro-empty v-if="isEmpty" marginTop="200rpx" :image="$IMG_URL + '/imgs/empty/no_data.png'" tipText="暂无数据~"></shopro-empty>
 		<!-- 更多 -->
 		<u-loadmore v-if="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 		<!-- 日期选择 -->
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
@@ -102,10 +102,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			userinfo: ({ user }) => user.userInfo,
-			isLogin: ({ user }) => user.isLogin
-		})
+		...mapGetters(['isLogin', 'userInfo'])
 	},
 	onShow() {
 		this.isLogin && this.getUserInfo();

@@ -1,9 +1,9 @@
 {
-	"name": "Shopro开源商城",
-	"appid": "__UNI__*****",
-	"description": "Shopro开源商城",
-	"versionName": "1.3.2",
-	"versionCode": "100",
+	"name": "Shopro商城",
+	"appid": "__UNI_*****06",
+	"description": "Shopro商城",
+	"versionName": "1.3.6",
+	"versionCode": 137,
 	"transformPx": false,
 	"app-plus": {
 		// APP-VUE分包，可提APP升启动速度，2.7.12开始支持，兼容微信小程序分包方案，默认关闭
@@ -11,7 +11,8 @@
 			"subPackages": true
 		},
 		"runmode": "liberate", // 开启分包优化后，必须配置资源释放模式
-		"safearea": { //APP底部安全区域
+		"safearea": {
+			//APP底部安全区域
 			"background": "#fff",
 			"bottom": {
 				"offset": "auto"
@@ -29,12 +30,10 @@
 		"modules": {
 			"Geolocation": {},
 			"Maps": {},
-			"Webview-x5": {},
 			"OAuth": {},
 			"Payment": {},
 			"Share": {},
-			"VideoPlayer": {},
-			"UIWebview": {}
+			"VideoPlayer": {}
 		},
 		"distribute": {
 			"android": {
@@ -70,17 +69,17 @@
 			"ios": {
 				"capabilities": {
 					"entitlements": {
-						"com.apple.developer.associated-domains": ["applinks:*****top"]
+						"com.apple.developer.associated-domains": ["applinks:m.*****.top"]
 					}
 				},
 				"privacyDescription": {
-					"NSLocalNetworkUsageDescription": "",
 					"NSLocationAlwaysAndWhenInUseUsageDescription": "需要同意获取您的位置信息才能展示附近信息",
 					"NSLocationAlwaysUsageDescription": "需要同意获取您的位置信息才能展示附近信息",
 					"NSLocationWhenInUseUsageDescription": "需要同意获取您的位置信息才能展示附近信息",
 					"NSPhotoLibraryAddUsageDescription": "需要同意访问您的相册才能保存图片",
 					"NSPhotoLibraryUsageDescription": "需要同意访问您的相册才能选取图片",
-					"NSCameraUsageDescription": "需要同意访问您的摄像头才能拍摄照片"
+					"NSCameraUsageDescription": "需要同意访问您的摄像头才能拍摄照片",
+					"NSUserTrackingUsageDescription": "请放心,开启权限不会获取您在其他站点的隐私信息,该权限仅用于标识设备并保障服务安全与提升浏览体验"
 				}
 			},
 			"sdkConfigs": {
@@ -91,77 +90,79 @@
 					},
 					"weixin": {
 						"__platform__": ["ios", "android"],
-						"appid": "wx522*****319ae",
-						"UniversalLinks": "https://*****/uni-universallinks/__UNI__EB95F06"
+						"appid": "wx522b*****ae",
+						"UniversalLinks": "https://m.*****.top/uni-universallinks/__U*****"
 					}
 				},
 				"geolocation": {
 					"amap": {
-						"__platform__": ["ios", "android"],
-						"appkey_ios": "949f86b55*****8632de010206494",
-						"appkey_android": "0d51d7add*****2bcbe264dac409"
+						"__platform__": ["android"],
+						"appkey_ios": "949f86b55f*****de010206494",
+						"appkey_android": "0d51d7*****ebf2bcbe264dac409"
 					}
 				},
 				"maps": {
 					"amap": {
-						"appkey_ios": "949f86b55f78c*****de010206494",
-						"appkey_android": "0d51d7add8*****bcbe264dac409"
+						"appkey_ios": "949f86b55f*****de010206494",
+						"appkey_android": "0d51d7a*****f2bcbe264dac409"
 					}
 				},
 				"oauth": {
 					"weixin": {
-						"appid": "wx522bf*****319ae",
-						"appsecret": "531b39d*****2bf5f6e83c7238fb4dc",
-						"UniversalLinks": "https://*****/uni-universallinks/__UNI__EB95F06"
-					}
+						"appid": "wx522b*****319ae",
+						"appsecret": "531b39d953f9*****e83c7238fb4dc",
+						"UniversalLinks": "https://m.*****.top/uni-universallinks/*****"
+					},
+					"apple": {}
 				},
 				"share": {
 					"weixin": {
-						"appid": "wx522bf*****19ae",
-						"UniversalLinks": "https://*****/uni-universallinks/__UNI__EB95F06"
+						"appid": "wx522*****319ae",
+						"UniversalLinks": "https://m.*****.top/uni-universallinks/__*****"
 					}
-				}
+				},
+				"push": {}
 			},
 			"icons": {
 				"android": {
-					"hdpi": "",
-					"xhdpi": "",
-					"xxhdpi": "",
-					"xxxhdpi": ""
+					"hdpi": "unpackage/res/icons/72x72.png",
+					"xhdpi": "unpackage/res/icons/96x96.png",
+					"xxhdpi": "unpackage/res/icons/144x144.png",
+					"xxxhdpi": "unpackage/res/icons/192x192.png"
 				},
 				"ios": {
-					"appstore": "",
+					"appstore": "unpackage/res/icons/1024x1024.png",
 					"ipad": {
-						"app": "",
-						"app@2x": "",
-						"notification": "",
-						"notification@2x": "",
-						"proapp@2x": "",
-						"settings": "",
-						"settings@2x": "",
-						"spotlight": "",
-						"spotlight@2x": ""
+						"app": "unpackage/res/icons/76x76.png",
+						"app@2x": "unpackage/res/icons/152x152.png",
+						"notification": "unpackage/res/icons/20x20.png",
+						"notification@2x": "unpackage/res/icons/40x40.png",
+						"proapp@2x": "unpackage/res/icons/167x167.png",
+						"settings": "unpackage/res/icons/29x29.png",
+						"settings@2x": "unpackage/res/icons/58x58.png",
+						"spotlight": "unpackage/res/icons/40x40.png",
+						"spotlight@2x": "unpackage/res/icons/80x80.png"
 					},
 					"iphone": {
-						"app@2x": "",
-						"app@3x": "",
-						"notification@2x": "",
-						"notification@3x": "",
-						"settings@2x": "",
-						"settings@3x": "",
-						"spotlight@2x": "",
-						"spotlight@3x": ""
+						"app@2x": "unpackage/res/icons/120x120.png",
+						"app@3x": "unpackage/res/icons/180x180.png",
+						"notification@2x": "unpackage/res/icons/40x40.png",
+						"notification@3x": "unpackage/res/icons/60x60.png",
+						"settings@2x": "unpackage/res/icons/58x58.png",
+						"settings@3x": "unpackage/res/icons/87x87.png",
+						"spotlight@2x": "unpackage/res/icons/80x80.png",
+						"spotlight@3x": "unpackage/res/icons/120x120.png"
 					}
 				}
 			}
 		},
-		"uniStatistics": {
-			"enable": true
+		"kernel": {
+			"ios": "WKWebview" //或者 "WKWebview"  
 		}
 	},
 	"quickapp": {},
 	"mp-weixin": {
-		"appid": "wx39cd*****dd0",
+		"appid": "wx3*****67dd0",
 		"setting": {
 			"urlCheck": false,
 			"es6": true, //消除大多数样式警告
@@ -175,55 +176,38 @@
 		"plugins": {
 			//这段代码，需要放到plugins中。
 			//只有后台开通小程序直播功能权限，才可以打开，不然报错，程序无法运行。
-			// "live-player-plugin" : {
-			//     "version" : "1.3.0", // 注意填写该直播组件最新版本号，微信开发者工具调试时可获取最新版本号
-			//     "provider" : "wx2b03c6e691cd7370" // 必须填该直播组件appid，该示例值即为直播组件appid
+			// "live-player-plugin": {
+			// 	"version": "1.3.2", // 注意填写该直播组件最新版本号，微信开发者工具调试时可获取最新版本号
+			// 	"provider": "wx2b03c6e691cd7370" // 必须填该直播组件appid，该示例值即为直播组件appid
 			// }
 		},
+
 		"usingComponents": true,
 		"permission": {
 			"scope.userLocation": {
 				"desc": "计算附近商家位置"
 			}
-		},
-		"uniStatistics": {
-			"enable": true
 		}
 	},
 	"mp-alipay": {
 		"usingComponents": true,
-		"component2": true,
-		"uniStatistics": {
-			"enable": false
-		}
+		"component2": true
 	},
 	"mp-qq": {
-		"optimization": {
-			"subPackages": true
-		},
-		"appid": "",
-		"uniStatistics": {
-			"enable": false
-		}
+		"appid": ""
 	},
 	"mp-baidu": {
 		"usingComponents": true,
-		"appid": "",
-		"uniStatistics": {
-			"enable": false
-		}
+		"appid": ""
 	},
 	"mp-toutiao": {
 		"usingComponents": true,
-		"appid": "",
-		"uniStatistics": {
-			"enable": false
-		}
+		"appid": ""
 	},
 	"h5": {
 		"template": "template.h5.html",
 		"router": {
-			"mode": "hash",
+			"mode": "history",
 			"base": ""
 		},
 		"optimization": {
@@ -231,9 +215,9 @@
 				"enable": true
 			}
 		},
-		"title": "Shopro开源商城",
+		"title": "Shopro商城",
 		"devServer": {
-			"https": true,
+			"https": false,
 			"port": ""
 		},
 		"sdkConfigs": {
@@ -243,13 +227,7 @@
 				}
 			}
 		},
-		"domain": "*****.com",
-		"uniStatistics": {
-			"enable": true
-		}
+		"domain": "*****.com"
 	},
-	"_spaceID": "f0536ae9*****a7c3e11334",
-	"uniStatistics": {
-		"enable": false
-	}
+	"_spaceID": "f0536a*****8350-2aa7c3e11334"
 }

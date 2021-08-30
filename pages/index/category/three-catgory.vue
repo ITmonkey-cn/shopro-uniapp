@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="u-flex u-col-center wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view class="left u-flex-col u-col-center" enable-back-to-top scroll-y>
+				<scroll-view class="left u-flex-col u-col-center" enable-flex enable-back-to-top scroll-y>
 					<view class="type-list u-ellipsis-1" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
 						<view class="line" :class="[{ 'line-active': listId == index }]"></view>
 						{{ item.name }}
@@ -18,9 +18,9 @@
 						<view class="item-list" v-for="(list, index1) in categoryData[listId].children" :key="index1">
 							<view class="type-box u-flex u-row-between u-col-center">
 								<text class="type-title">{{ list.name }}</text>
-								<view class="more" @tap="jump('/pages/goods/list', { id: list.id })">
+								<view class="more u-flex u-col-center" @tap="jump('/pages/goods/list', { id: list.id })">
 									<text>查看更多</text>
-									<u-icon name="arrow-right" size="28" color="#999"></u-icon>
+									<view class="u-iconfont uicon-arrow-right" style="color: #999;font-size: 28rpx;"></view>
 								</view>
 							</view>
 							<view class="item-box u-flex">
@@ -191,7 +191,7 @@ export default {
 				.item-img {
 					width: 150rpx;
 					height: 150rpx;
-					// background: #ccc;
+					background: #f5f5f5;
 					border-radius: 6rpx;
 				}
 

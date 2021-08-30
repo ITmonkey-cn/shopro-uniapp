@@ -29,7 +29,7 @@
 				</u-checkbox-group>
 				<!-- 缺省页 -->
 				<shopro-empty
-					v-show="isEmpty"
+					v-if="isEmpty"
 					:image="$IMG_URL + '/imgs/empty/empty_goods.png'"
 					tipText="暂无收藏"
 					btnText="去首页逛逛"
@@ -45,8 +45,6 @@
 				<button class="u-reset-button close-btn" @tap="cancelFavorite">取消收藏</button>
 			</view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 

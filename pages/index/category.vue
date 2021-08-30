@@ -11,6 +11,7 @@
 		<takeout-catgory :categoryStyleId="categoryStyleId" v-if="categoryType === 1"></takeout-catgory>
 		<!-- 登录提示 -->
 		<shopro-auth-modal v-if="authType"></shopro-auth-modal>
+		<!-- <shopro-tabbar></shopro-tabbar> -->
 	</view>
 </template>
 
@@ -34,9 +35,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapState({
-			authType: ({ user }) => user.authType
-		})
+		...mapGetters(['authType'])
 	},
 	onLoad() {
 		this.getCategory();

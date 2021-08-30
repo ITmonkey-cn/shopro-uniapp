@@ -1,63 +1,64 @@
 <template>
 	<!-- 规格 -->
-	<u-popup v-model="showModal" :closeable="true" mode="bottom" close-icon-pos="top-right" border-radius="30" v-if="goodsInfo.sku_price">
-		<view class="shop-modal page_box" :style="goodsInfo.is_sku == 0 ? 'height:700rpx' : ''">
-			<!-- 商品卡片-->
-			<view class="top u-flex modal-head__box">
-				<image class="shop-img" :src="currentSkuPrice.image ? currentSkuPrice.image : goodsInfo.image" mode="aspectFill"></image>
-				<view class=" goods-box u-flex-col u-row-between">
-					<view class="goods-title u-ellipsis-2">{{ goodsInfo.title }}</view>
-					<view class="u-flex u-row-between goods-bottom">
-						<view class="price-box u-flex">
-							<view v-if="goodsType === 'score'">{{ currentSkuPrice.price_text || goodsInfo.price }}</view>
-							<view v-else-if="grouponBuyType === 'groupon'">
-								￥{{ currentSkuPrice.groupon_price || (goodsInfo.activity_type === 'groupon' ? goodsInfo.groupon_price : goodsInfo.price) }}
+	<view class="cu-modal bottom-modal" @touchmove.stop.prevent="" :class="{ show: showModal }" @tap.stop="showModal = false" v-if="goodsInfo.sku_price">
+		<view class="cu-dialog" @tap.stop style="border-radius: 30rpx 30rpx 0 0;">
+			<view class="shop-modal page_box" :style="goodsInfo.is_sku == 0 ? 'height:700rpx' : ''">
+				<text class="u-iconfont uicon-close-circle-fill close-icon" @tap.stop="showModal = false"></text>
+				<!-- 商品卡片-->
+				<view class="top u-flex modal-head__box">
+					<image class="shop-img" :src="currentSkuPrice.image ? currentSkuPrice.image : goodsInfo.image" mode="aspectFill"></image>
+					<view class=" goods-box u-flex-col u-row-between">
+						<view class="goods-title u-ellipsis-2">{{ goodsInfo.title }}</view>
+						<view class="u-flex u-row-between goods-bottom">
+							<view class="price-box u-flex">
+								<view v-if="goodsType === 'score'">{{ currentSkuPrice.price_text || goodsInfo.price }}</view>
+								<view v-else-if="grouponBuyType === 'groupon'">
+									￥{{ currentSkuPrice.groupon_price || (goodsInfo.activity_type === 'groupon' ? goodsInfo.groupon_price : goodsInfo.price) }}
+								</view>
+								<view v-else>￥{{ currentSkuPrice.price || goodsInfo.price }}</view>
 							</view>
-							<view v-else>￥{{ currentSkuPrice.price || goodsInfo.price }}</view>
+							<text class="stock">库存{{ currentSkuPrice.stock || goodsInfo.stock }}件</text>
 						</view>
-						<text class="stock">库存{{ currentSkuPrice.stock || goodsInfo.stock }}件</text>
-					</view>
-				</view>
-			</view>
-
-			<!-- 规格选项 -->
-			<scroll-view scroll-y class="content_box">
-				<view class="select-box u-felx-col u-row-left" v-for="(s, x) in skuList" :key="s.id">
-					<view class="type-title">{{ s.name }}</view>
-					<view class="tag-box u-flex u-flex-wrap">
-						<button
-							class="tag u-reset-button"
-							v-for="(sc, y) in s.content"
-							:key="sc.id"
-							:class="{ 'tag-active': currentSkuArray[sc.pid] == sc.id, 'tag-disabled': sc.disabled == true }"
-							:disabled="sc.disabled == true"
-							@tap="chooseSku(sc.pid, sc.id)"
-						>
-							{{ sc.name }}
-						</button>
 					</view>
 				</view>
 
-				<!-- 计步器 -->
-				<view class="buy-num-box u-flex u-row-between">
-					<view class="num-title">购买数量</view>
-					<u-number-box v-model="goodsNum" :min="1" :step="1" :max="maxStep" disabled-input @plus="plus" @change="changeNum"></u-number-box>
-				</view>
-			</scroll-view>
+				<!-- 规格选项 -->
+				<scroll-view scroll-y class="content_box">
+					<view class="select-box u-flex-col u-row-left" v-for="(s, x) in skuList" :key="s.id">
+						<view class="type-title u-flex">{{ s.name }}</view>
+						<view class="tag-box u-flex u-flex-wrap">
+							<button
+								class="tag u-reset-button"
+								v-for="(sc, y) in s.content"
+								:key="sc.id"
+								:class="{ 'tag-active': currentSkuArray[sc.pid] == sc.id, 'tag-disabled': sc.disabled == true }"
+								:disabled="sc.disabled == true"
+								@tap="chooseSku(sc.pid, sc.id)"
+							>
+								{{ sc.name }}
+							</button>
+						</view>
+					</view>
 
-			<!-- 功能按钮 -->
-			<view class="btn-box foot_box u-flex u-row-between" v-if="buyType === 'cart' || buyType === 'buy'">
-				<button class="u-reset-button cu-btn save-btn" v-if="(activityRules && activityRules.status === 'ing') || !goodsInfo.activity_type" @tap="confirm">确认</button>
-				<button class="u-reset-button cu-btn cancel-btn" v-if="activityRules && activityRules.status !== 'ing' && goodsInfo.activity_type" @tap="showModal = false">
-					确定
-				</button>
-			</view>
-			<view class="btn-box foot_box u-flex u-row-between" v-else>
-				<button class="u-reset-button cu-btn  cart-btn" @tap="confirmCart">加入购物车</button>
-				<button class="u-reset-button cu-btn  buy-btn" @tap="confirmBuy">立即购买</button>
+					<!-- 计步器 -->
+					<view class="buy-num-box u-flex u-row-between">
+						<view class="num-title">购买数量</view>
+						<u-number-box v-model="goodsNum" :min="1" :step="1" :max="maxStep" disabled-input @plus="plus" @change="changeNum"></u-number-box>
+					</view>
+				</scroll-view>
+
+				<!-- 功能按钮 -->
+				<view class="btn-box foot_box u-flex u-row-between" v-if="buyType === 'cart' || buyType === 'buy'">
+					<button class="u-reset-button cu-btn save-btn" v-if="(activityRules && activityRules.status === 'ing') || !goodsInfo.activity_type" @tap="confirm">确认</button>
+					<button class="u-reset-button cu-btn cancel-btn" v-if="activityRules && activityRules.status !== 'ing' && goodsInfo.activity_type" @tap="confirm">确定</button>
+				</view>
+				<view class="btn-box foot_box u-flex u-row-between" v-else>
+					<button class="u-reset-button cu-btn  cart-btn" @tap="confirmCart">加入购物车</button>
+					<button class="u-reset-button cu-btn  buy-btn" @tap="confirmBuy">立即购买</button>
+				</view>
 			</view>
 		</view>
-	</u-popup>
+	</view>
 </template>
 
 <script>
@@ -134,6 +135,7 @@ export default {
 			set(val) {
 				val ? uni.hideTabBar() : uni.showTabBar();
 				this.$emit('input', val);
+				return val;
 			}
 		},
 		currentSkuText() {
@@ -364,15 +366,16 @@ export default {
 		},
 		// 确定
 		confirm() {
-			this.confirmSku();
-			switch (this.buyType) {
-				case 'cart':
-					this.confirmCart();
-					break;
-				case 'buy':
-					this.confirmBuy();
-					break;
-				default:
+			if (this.confirmSku()) {
+				switch (this.buyType) {
+					case 'cart':
+						this.confirmCart();
+						break;
+					case 'buy':
+						this.confirmBuy();
+						break;
+					default:
+				}
 			}
 		},
 		// 确定规格
@@ -415,11 +418,6 @@ export default {
 		color: #999;
 		margin-right: 20rpx;
 	}
-
-	.cuIcon-right {
-		color: #bfbfbf;
-		font-size: 36rpx;
-	}
 }
 
 // 规格
@@ -428,6 +426,14 @@ export default {
 	height: 950rpx;
 	background: rgba(255, 255, 255, 1);
 	padding: 20rpx 20rpx 30rpx;
+	position: relative;
+	.close-icon {
+		font-size: 34rpx;
+		color: #e0e0e0;
+		position: absolute;
+		top: 20rpx;
+		right: 20rpx;
+	}
 	// 商品卡片
 	.top {
 		margin: 30rpx 0;

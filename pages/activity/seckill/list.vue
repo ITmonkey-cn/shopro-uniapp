@@ -14,26 +14,18 @@
 			<scroll-view scroll-y="true" enable-back-to-top @scrolltolower="loadMore" class="scroll-box">
 				<view class="goods-item u-m-b-16" v-for="item in goodsList" :key="item.id" @tap="toSeckillDetail(item.id)">
 					<view class="big-goods  u-flex u-p-20 u-col-top ">
-						<u-image ref="uImage" :width="220" :height="220" border-radius="10" :src="item.image" mode="aspectFill"></u-image>
+						<image class="goods-img"  lazy-load fade-show :src="item.image" mode="aspectFill"></image>
 						<view class=" card-right u-m-l-20 u-flex-col u-row-between">
 							<view class="">
 								<view class="goods-title u-ellipsis-1 u-m-t-10 u-m-b-10">
-									<u-tag class="title-tag u-m-r-10" text="秒杀" size="mini" bg-color="#FF2621" border-color="#FF2621" color="#fff" />
+									<view class="title-tag cu-tag bg-red sm radius u-m-r-10">秒杀</view>
 									{{ item.title }}
 								</view>
 								<view v-show="item.subtitle" class="subtitle-text u-m-b-10 u-ellipsis-1">{{ item.subtitle }}</view>
 							</view>
 
 							<view class="u-flex u-m-y-20">
-								<u-line-progress
-									style="width:210rpx;"
-									height="18"
-									:show-percent="false"
-									:percent="Number(item.percent)"
-									inactive-color=" #e7e7e7"
-									active-color="#ffbbbb "
-								></u-line-progress>
-
+								<view class="cu-progress round sm" style="width:210rpx;"><view :style="[{ width: item.percent + '%',backgroundColor:'#ffbbbb' }]"></view></view>
 								<view class="progress-text">已售出{{ item.sales }}件</view>
 							</view>
 
@@ -53,8 +45,6 @@
 				<u-loadmore v-if="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 			</scroll-view>
 		</view>
-		<!-- 登录提示 -->
-		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
@@ -180,6 +170,11 @@ export default {
 		background: #ffffff;
 		box-shadow: 0px 7rpx 8rpx 1rpx rgba(254, 76, 29, 0.05);
 		border-radius: 20rpx;
+		.goods-img {
+			width: 220rpx;
+			height: 220rpx;
+			border-radius: 6rpx;
+		}
 		.card-right {
 			width: 430rpx;
 			height: 220rpx;
@@ -189,9 +184,6 @@ export default {
 			font-weight: 600;
 			width: 400rpx;
 			color: #000000;
-			.title-tag {
-				transform: scale(0.9);
-			}
 		}
 		.subtitle-text {
 			font-size: 22rpx;
