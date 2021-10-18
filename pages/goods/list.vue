@@ -1,57 +1,73 @@
-<<<<<<< HEAD
 <!-- 商品列表 -->
 <template>
 	<view class="list-box">
-		<view class="head_box">
-			<view class="" style="position:relative;z-index: 10; background: #fff;">
-				<cu-custom :isBack="true">
-					<block slot="backText">
-						<view class="search-box flex align-center" @tap.stop>
-							<input @confirm="onSearch" @input="onInput" confirm-type="搜索" class="search flex-sub" type="text" v-model="searchVal" placeholder="商品搜索" />
-							<text v-show="searchVal" @tap="clearSearch" class="cuIcon-roundclosefill"></text>
-						</view>
-					</block>
-				</cu-custom>
-			</view>
-			<view class="filter-item"><sh-filter @change="onFilter"></sh-filter></view>
+		<view class="head-box">
+			<!-- 标题栏 -->
+			<shopro-navbar>
+				<view class="u-flex-1 u-flex u-col-center u-m-x-20" slot="content">
+					<u-search placeholder="请输入关键字" @change="onSearch" @search="onSearch" @clear="clearSearch" v-model="searchVal" :showAction="false" height="60"></u-search>
+				</view>
+			</shopro-navbar>
+			<!-- 筛选栏 -->
+			<sh-filter @change="onFilter"></sh-filter>
 		</view>
-		<view class="content-box">
-			<view class="goods-list x-f">
-				<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
-			</view>
-			<!-- 空白页 -->
-			<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
-			<!-- 加载更多 -->
-			<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 
-			<!-- load -->
-			<shopro-load v-model="isLoading"></shopro-load>
+		<view class="u-waterfall u-p-16" v-if="!isEmpty">
+			<view id="u-left-column" class="u-column">
+				<view class="goods-item u-m-b-16 u-flex u-row-center u-col-center" v-for="leftGoods in leftList" :key="leftGoods.id">
+					<shopro-goods-card
+						:detail="leftGoods"
+						:type="leftGoods.activity_type"
+						:image="leftGoods.image"
+						:title="leftGoods.title"
+						:subtitle="leftGoods.subtitle"
+						:price="leftGoods.price"
+						:originPrice="leftGoods.original_price"
+						:sales="leftGoods.sales"
+						:tagTextList="leftGoods.activity_discounts_tags"
+						@click="$Router.push({ path: '/pages/goods/detail', query: { id: leftGoods.id } })"
+					></shopro-goods-card>
+				</view>
+			</view>
+			<view id="u-right-column" class="u-column">
+				<view class="goods-item u-m-b-16 u-flex u-row-center u-col-center" v-for="rightGoods in rightList" :key="rightGoods.id">
+					<shopro-goods-card
+						:detail="rightGoods"
+						:type="rightGoods.activity_type"
+						:image="rightGoods.image"
+						:title="rightGoods.title"
+						:subtitle="rightGoods.subtitle"
+						:price="rightGoods.price"
+						:originPrice="rightGoods.original_price"
+						:sales="rightGoods.sales"
+						:tagTextList="rightGoods.activity_discounts_tags"
+						@click="$Router.push({ path: '/pages/goods/detail', query: { id: rightGoods.id } })"
+					></shopro-goods-card>
+				</view>
+			</view>
 		</view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+
+		<!-- 缺省页 -->
+		<shopro-empty v-if="isEmpty" :image="$IMG_URL + '/imgs/empty/empty_goods.png'" tipText="暂无该商品，还有更多好货等着你噢~"></shopro-empty>
+		<!-- 加载更多 -->
+		<u-loadmore v-show="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
+		<!-- 登录弹窗 -->
+		<shopro-auth-modal></shopro-auth-modal>
 	</view>
 </template>
 
 <script>
-import shFilter from './children/sh-filter.vue';
+import shFilter from './components/sh-filter.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
-let timer = null;
+let systemInfo = uni.getSystemInfoSync();
+let historyTag = uni.getStorageSync('searchHistoryArr') ? JSON.parse(uni.getStorageSync('searchHistoryArr')) : [];
 export default {
 	components: {
 		shFilter
 	},
 	data() {
 		return {
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
-				tip: '暂无该商品，还有更多好货等着你噢~'
-			},
+			isEmpty: false,
 			goodsList: [],
 			searchVal: '',
 			listParams: {
@@ -59,12 +75,18 @@ export default {
 				keywords: '',
 				page: 1
 			},
-			isLoading: true, //loading和空白页。
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
-			lastPage: 1
+			lastPage: 1,
+
+			// 瀑布流 350-330
+			addTime: 100, //排序间隙时间
+			leftHeight: 0,
+			rightHeight: 0,
+			leftList: [],
+			rightList: [],
+			tempList: []
 		};
 	},
-	computed: {},
 	// 触底加载更多
 	onReachBottom() {
 		if (this.listParams.page < this.lastPage) {
@@ -75,68 +97,97 @@ export default {
 	onLoad() {
 		if (this.$Route.query.id) {
 			this.listParams.category_id = this.$Route.query.id;
-		}
-		if (this.$Route.query.keywords) {
+			this.getGoodsList();
+		} else if (this.$Route.query.hasOwnProperty('keywords')) {
 			this.listParams.keywords = this.$Route.query.keywords;
 			this.searchVal = this.$Route.query.keywords;
+			!this.$Route.query.keywords && this.getGoodsList();
+		} else {
+			this.getGoodsList();
 		}
-		this.getGoodsList();
 	},
 	methods: {
+		// 瀑布流相关
+		async splitData() {
+			if (!this.tempList.length) return;
+			let item = this.tempList[0];
+			if (!item) return;
+
+			// 分左右
+			if (this.leftHeight < this.rightHeight) {
+				this.leftHeight += item.activity_discounts_tags.length ? 350 : 330;
+				this.leftList.push(item);
+			} else if (this.leftHeight > this.rightHeight) {
+				this.rightHeight += item.activity_discounts_tags.length ? 350 : 330;
+				this.rightList.push(item);
+			} else {
+				this.leftHeight += item.activity_discounts_tags.length ? 350 : 330;
+				this.leftList.push(item);
+			}
+
+			// 移除临时列表的第一项，如果临时数组还有数据，继续循环
+			this.tempList.splice(0, 1);
+			if (this.tempList.length) {
+				setTimeout(() => {
+					this.splitData();
+				}, this.addTime);
+			}
+		},
+		clear() {
+			this.leftList = [];
+			this.rightList = [];
+			this.leftHeight = 0;
+			this.rightHeight = 0;
+			this.tempList = [];
+		},
+
 		onFilter(e) {
 			this.listParams.order = e;
 			this.goodsList = [];
 			this.listParams.page = 1;
+			this.lastPage = 1;
+			this.clear();
 			this.$u.debounce(this.getGoodsList);
 		},
-		// 键盘搜索
+		// 键盘搜索,输入搜索
 		onSearch() {
-			let that = this;
-			that.listParams.keywords = that.searchVal;
-			that.goodsList = [];
+			this.goodsList = [];
 			this.listParams.page = 1;
-			that.getGoodsList();
+			this.lastPage = 1;
+			this.listParams.keywords = this.searchVal;
+			this.clear();
+			this.$u.debounce(this.getGoodsList);
 		},
-		// 输入防抖搜索
-		onInput() {
-			let that = this;
-			that.listParams.category_id = 0;
-			// 输入不及时
-			setTimeout(() => {
-				that.listParams.keywords = that.searchVal;
-			}, 0);
-			// 防抖
-			if (timer !== null) {
-				clearTimeout(timer);
-			}
-			timer = setTimeout(() => {
-				that.goodsList = [];
-				this.listParams.page = 1;
-				that.getGoodsList();
-			}, 1000);
+
+		// 队列
+		getArr(list, item) {
+			let arr = list;
+			let length = 10; //队列长度
+			arr.length < length ? arr.unshift(item) : arr.pop();
+			return arr;
 		},
+
 		// 清除搜索框
 		clearSearch() {
 			this.searchVal = '';
-			this.listParams.keywords = '';
-			this.listParams.page = 1;
-			this.getGoodsList();
+			this.clear();
 		},
 		// 商品列表
 		getGoodsList() {
 			let that = this;
-			that.isLoading = true;
 			that.loadStatus = 'loading';
-			that.$api('goods.lists', that.listParams).then(res => {
-				that.isLoading = false;
+			that.$http('goods.lists', that.listParams, '加载中...').then(res => {
+				if (this.searchVal && !historyTag.includes(this.searchVal)) {
+					let searchHistoryArr = JSON.stringify(this.getArr(historyTag, this.searchVal));
+					uni.setStorageSync('searchHistoryArr', searchHistoryArr);
+				}
 				if (res.code === 1) {
 					that.goodsList = [...that.goodsList, ...res.data.data];
+					that.isEmpty = !that.goodsList.length;
 					that.lastPage = res.data.last_page;
-					if (that.listParams.page < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.listParams.page < res.data.last_page ? 'loadmore' : 'nomore';
+					that.tempList = res.data.data;
+					that.splitData();
 				}
 			});
 		}
@@ -145,258 +196,29 @@ export default {
 </script>
 
 <style lang="scss">
-.head_box {
+@mixin vue-flex($direction: row) {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	flex-direction: $direction;
+	/* #endif */
+}
+.u-waterfall {
+	@include vue-flex;
+	flex-direction: row;
+	align-items: flex-start;
+}
+
+.u-column {
+	@include vue-flex;
+	flex: 1;
+	flex-direction: column;
+	height: auto;
+}
+.head-box {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
 	z-index: 998;
 	background: #fff;
 }
-
-.search-box {
-	width: 661rpx;
-	height: 60rpx;
-	background: rgba(245, 245, 245, 1);
-	border-radius: 30rpx;
-	padding: 0 30rpx;
-	// #ifdef MP
-	width: 450rpx;
-
-	// #endif
-	.search {
-		text-align: center;
-		font-size: 28rpx;
-	}
-
-	.cuIcon-roundclosefill {
-		color: #d5a65a;
-		padding: 0 10rpx;
-	}
-}
-.list-box {
-	&:-webkit-scrollbar {
-		width: 0;
-		height: 0;
-		color: transparent;
-		display: none;
-	}
-}
-.content-box {
-	padding: 20rpx;
-	width: 750rpx;
-}
-
-.goods-list {
-	flex-wrap: wrap;
-
-	.goods-item {
-		margin-right: 20rpx;
-		margin-bottom: 20rpx;
-
-		&:nth-child(2n) {
-			margin-right: 0;
-		}
-	}
-}
-=======
-<!-- 商品列表 -->
-<template>
-	<view class="list-box">
-		<view class="head_box">
-			<view class="" style="position:relative;z-index: 10; background: #fff;">
-				<cu-custom :isBack="true">
-					<block slot="backText">
-						<view class="search-box flex align-center" @tap.stop>
-							<input @confirm="onSearch" @input="onInput" confirm-type="搜索" class="search flex-sub" type="text" v-model="searchVal" placeholder="商品搜索" />
-							<text v-show="searchVal" @tap="clearSearch" class="cuIcon-roundclosefill"></text>
-						</view>
-					</block>
-				</cu-custom>
-			</view>
-			<view class="filter-item"><sh-filter @change="onFilter"></sh-filter></view>
-		</view>
-		<view class="content-box">
-			<view class="goods-list x-f">
-				<view class="goods-item" v-for="goods in goodsList" :key="goods.id"><shopro-goods-card :detail="goods" :isTag="true"></shopro-goods-card></view>
-			</view>
-			<!-- 空白页 -->
-			<shopro-empty v-if="!goodsList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
-			<!-- 加载更多 -->
-			<u-loadmore v-if="goodsList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-
-			<!-- load -->
-			<shopro-load v-model="isLoading"></shopro-load>
-		</view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
-	</view>
-</template>
-
-<script>
-import shFilter from './children/sh-filter.vue';
-import { mapMutations, mapActions, mapState } from 'vuex';
-let timer = null;
-export default {
-	components: {
-		shFilter
-	},
-	data() {
-		return {
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
-				tip: '暂无该商品，还有更多好货等着你噢~'
-			},
-			goodsList: [],
-			searchVal: '',
-			listParams: {
-				category_id: 0,
-				keywords: '',
-				page: 1
-			},
-			isLoading: true, //loading和空白页。
-			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
-			lastPage: 1
-		};
-	},
-	computed: {},
-	// 触底加载更多
-	onReachBottom() {
-		if (this.listParams.page < this.lastPage) {
-			this.listParams.page += 1;
-			this.getGoodsList();
-		}
-	},
-	onLoad() {
-		if (this.$Route.query.id) {
-			this.listParams.category_id = this.$Route.query.id;
-		}
-		if (this.$Route.query.keywords) {
-			this.listParams.keywords = this.$Route.query.keywords;
-			this.searchVal = this.$Route.query.keywords;
-		}
-		this.getGoodsList();
-	},
-	methods: {
-		onFilter(e) {
-			this.listParams.order = e;
-			this.goodsList = [];
-			this.listParams.page = 1;
-			this.$u.debounce(this.getGoodsList);
-		},
-		// 键盘搜索
-		onSearch() {
-			let that = this;
-			that.listParams.keywords = that.searchVal;
-			that.goodsList = [];
-			this.listParams.page = 1;
-			that.getGoodsList();
-		},
-		// 输入防抖搜索
-		onInput() {
-			let that = this;
-			that.listParams.category_id = 0;
-			// 输入不及时
-			setTimeout(() => {
-				that.listParams.keywords = that.searchVal;
-			}, 0);
-			// 防抖
-			if (timer !== null) {
-				clearTimeout(timer);
-			}
-			timer = setTimeout(() => {
-				that.goodsList = [];
-				this.listParams.page = 1;
-				that.getGoodsList();
-			}, 1000);
-		},
-		// 清除搜索框
-		clearSearch() {
-			this.searchVal = '';
-			this.listParams.keywords = '';
-			this.listParams.page = 1;
-			this.getGoodsList();
-		},
-		// 商品列表
-		getGoodsList() {
-			let that = this;
-			that.isLoading = true;
-			that.loadStatus = 'loading';
-			that.$api('goods.lists', that.listParams).then(res => {
-				if (res.code === 1) {
-					that.isLoading = false;
-					that.goodsList = [...that.goodsList, ...res.data.data];
-					that.lastPage = res.data.last_page;
-					if (that.listParams.page < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
-				}
-			});
-		}
-	}
-};
-</script>
-
-<style lang="scss">
-.head_box {
-	position: -webkit-sticky;
-	position: sticky;
-	top: 0;
-	z-index: 998;
-	background: #fff;
-}
-
-.search-box {
-	width: 661rpx;
-	height: 60rpx;
-	background: rgba(245, 245, 245, 1);
-	border-radius: 30rpx;
-	padding: 0 30rpx;
-	// #ifdef MP
-	width: 450rpx;
-
-	// #endif
-	.search {
-		text-align: center;
-		font-size: 28rpx;
-	}
-
-	.cuIcon-roundclosefill {
-		color: #d5a65a;
-		padding: 0 10rpx;
-	}
-}
-.list-box {
-	&:-webkit-scrollbar {
-		width: 0;
-		height: 0;
-		color: transparent;
-		display: none;
-	}
-}
-.content-box {
-	padding: 20rpx;
-	width: 750rpx;
-}
-
-.goods-list {
-	flex-wrap: wrap;
-
-	.goods-item {
-		margin-right: 20rpx;
-		margin-bottom: 20rpx;
-
-		&:nth-child(2n) {
-			margin-right: 0;
-		}
-	}
-}
->>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7
 </style>

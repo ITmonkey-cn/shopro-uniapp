@@ -1,82 +1,74 @@
-<<<<<<< HEAD
+<!-- 积分商品列表 -->
 <template>
-	<view class="page_box">
-		<view class="head_box"></view>
-		<view class="content_box">
-			<scroll-view scroll-y="true" class="scroll-box" @scrolltolower="loadMore" enable-back-to-top scroll-with-animation>
-				<view class="goods-box">
-					<view class="goods-list" v-if="goods" v-for="goods in scoreList" :key="goods.id"><sh-score-goods :scoreData="goods"></sh-score-goods></view>
-				</view>
-
-				<!-- 空白页 -->
-				<shopro-empty v-if="!scoreList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
-				<!-- 加载更多 -->
-				<u-loadmore v-if="scoreList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-				<!-- load -->
-				<shopro-load v-model="isLoading"></shopro-load>
-			</scroll-view>
+	<view class="score-wrap">
+		<view class="goods-wrap u-p-20 u-flex u-flex-wrap">
+			<view class="goods-item u-m-b-20" v-for="leftGoods in scoreList" :key="leftGoods.id">
+				<shopro-goods-card
+					:image="leftGoods.image"
+					:title="leftGoods.title"
+					@click="$Router.push({ path: '/pages/goods/detail', query: { id: leftGoods.id, type: 'score' } })"
+				>
+					<template #cardBottom>
+						<view class="price-box u-flex u-row-between u-flex-wrap">
+							<view class="beans-box u-flex u-m-10">
+								<image class="bean-img u-m-r-10" :src="$IMG_URL + '/imgs/score/score.png'" mode=""></image>
+								{{ leftGoods.price }}
+							</view>
+							<view class="sales-box u-m-10">已兑换{{ leftGoods.sales }}件</view>
+						</view>
+					</template>
+				</shopro-goods-card>
+			</view>
 		</view>
-		<view class="foot_box"></view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
+		<!-- 缺省页 -->
+		<shopro-empty
+			v-if="isEmpty"
+			@click="$Router.pushTab('/pages/index/index')"
+			:image="$IMG_URL + '/imgs/empty/empty_goods.png'"
+			tipText="暂无积分商品"
+			btnText="去首页逛逛"
+		></shopro-empty>
+		<!-- 加载更多 -->
+		<u-loadmore v-if="!isEmpty" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
 	</view>
 </template>
 
 <script>
-import shScoreGoods from '../children/sh-score-goods.vue';
 export default {
-	components: {
-		shScoreGoods
-	},
+	components: {},
 	data() {
 		return {
 			scoreList: [],
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
-				tip: '暂无积分商品',
-				path: '/pages/index/index',
-				pathText: '去首页逛逛'
-			},
+			isEmpty: false, //无数据
 			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 			currentPage: 1,
-			lastPage: 1,
-			isLoading: true
+			lastPage: 1
 		};
 	},
 	onLoad() {
 		this.getScoreShopsList();
-	},
-	computed: {},
-	methods: {
-		// 加载更多
-		loadMore() {
+		// 触底监听
+		uni.$on('uOnReachBottom', () => {
 			if (this.currentPage < this.lastPage) {
 				this.currentPage += 1;
 				this.getScoreShopsList();
 			}
-		},
+		});
+	},
+	computed: {},
+	methods: {
 		//积分商品列表
 		getScoreShopsList() {
 			let that = this;
 			that.loadStatus = 'loading';
-			that.$api('score.list', {
+			that.$http('goods.scoreList', {
 				page: that.currentPage
 			}).then(res => {
-				that.isLoading = false;
 				if (res.code == 1) {
 					that.scoreList = [...that.scoreList, ...res.data.data];
+					that.isEmpty = !that.scoreList.length;
 					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
+					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}
 			});
 		}
@@ -85,130 +77,29 @@ export default {
 </script>
 
 <style lang="scss">
-.page_box {
-	background: #fff;
-}
-.goods-box {
-	display: flex;
-	flex-wrap: wrap;
-	padding: 20rpx;
-	background-color: #fff;
-	.goods-list {
-		margin-right: 20rpx;
-		margin-bottom: 20rpx;
-		box-shadow: 0px 0px 20rpx 4rpx rgba(199, 199, 199, 0.22);
-		border-radius: 20rpx;
-		overflow: hidden;
-		&:nth-child(2n) {
-			margin-right: 0;
-		}
+.goods-item {
+	margin-right: 20rpx;
+	margin-bottom: 20rpx;
+
+	&:nth-child(2n) {
+		margin-right: 0;
 	}
-}
-=======
-<template>
-	<view class="page_box">
-		<view class="head_box"></view>
-		<view class="content_box">
-			<scroll-view scroll-y="true" class="scroll-box" @scrolltolower="loadMore" enable-back-to-top scroll-with-animation>
-				<view class="goods-box">
-					<view class="goods-list" v-if="goods" v-for="goods in scoreList" :key="goods.id"><sh-score-goods :scoreData="goods"></sh-score-goods></view>
-				</view>
+	.price-box {
+		.beans-box {
+			font-size: 32upx;
+			font-weight: bold;
+			color: rgba(228, 141, 4, 1);
 
-				<!-- 空白页 -->
-				<shopro-empty v-if="!scoreList.length && !isLoading" :emptyData="emptyData"></shopro-empty>
-				<!-- 加载更多 -->
-				<u-loadmore v-if="scoreList.length" height="80rpx" :status="loadStatus" icon-type="flower" color="#ccc" />
-				<!-- load -->
-				<shopro-load v-model="isLoading"></shopro-load>
-			</scroll-view>
-		</view>
-		<view class="foot_box"></view>
-		<!-- 自定义底部导航 -->
-		<shopro-tabbar></shopro-tabbar>
-		<!-- 关注弹窗 -->
-		<shopro-float-btn></shopro-float-btn>
-		<!-- 连续弹窗提醒 -->
-		<shopro-notice-modal></shopro-notice-modal>
-		<!-- 登录提示 -->
-		<shopro-login-modal></shopro-login-modal>
-	</view>
-</template>
-
-<script>
-import shScoreGoods from '../children/sh-score-goods.vue';
-export default {
-	components: {
-		shScoreGoods
-	},
-	data() {
-		return {
-			scoreList: [],
-			emptyData: {
-				img: this.$IMG_URL + '/imgs/empty/empty_goods.png',
-				tip: '暂无积分商品',
-				path: '/pages/index/index',
-				pathText: '去首页逛逛'
-			},
-			loadStatus: 'loadmore', //loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
-			currentPage: 1,
-			lastPage: 1,
-			isLoading: true
-		};
-	},
-	onLoad() {
-		this.getScoreShopsList();
-	},
-	computed: {},
-	methods: {
-		// 加载更多
-		loadMore() {
-			if (this.currentPage < this.lastPage) {
-				this.currentPage += 1;
-				this.getScoreShopsList();
+			.bean-img {
+				width: 36upx;
+				height: 36upx;
 			}
-		},
-		//积分商品列表
-		getScoreShopsList() {
-			let that = this;
-			that.loadStatus = 'loading';
-			that.$api('score.list', {
-				page: that.currentPage
-			}).then(res => {
-				if (res.code == 1) {
-					that.isLoading = false;
-					that.scoreList = [...that.scoreList, ...res.data.data];
-					that.lastPage = res.data.last_page;
-					if (that.currentPage < res.data.last_page) {
-						that.loadStatus = 'loadmore';
-					} else {
-						that.loadStatus = 'nomore';
-					}
-				}
-			});
 		}
-	}
-};
-</script>
-
-<style lang="scss">
-.page_box {
-	background: #fff;
-}
-.goods-box {
-	display: flex;
-	flex-wrap: wrap;
-	padding: 20rpx;
-	background-color: #fff;
-	.goods-list {
-		margin-right: 20rpx;
-		margin-bottom: 20rpx;
-		box-shadow: 0px 0px 20rpx 4rpx rgba(199, 199, 199, 0.22);
-		border-radius: 20rpx;
-		overflow: hidden;
-		&:nth-child(2n) {
-			margin-right: 0;
+		.sales-box {
+			font-size: 22rpx;
+			font-weight: 500;
+			color: rgba(153, 153, 153, 1);
 		}
 	}
 }
->>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7
 </style>

@@ -1,54 +1,255 @@
-<<<<<<< HEAD
 <template>
-	<view class="goods-box" v-if="detail" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
-		<view class="img-box">
-			<image v-if="isTag && detail.activity" class="tag-img" :src="tagPath[detail.activity.type]" mode=""></image>
-			<image class="img" :src="detail.image" lazy-load mode="aspectFill"></image>
-		</view>
-		<view class="tip one-t">{{ detail.subtitle }}</view>
-		<view class="title more-t">{{ detail.title }}</view>
-		<view class="price-box">
-			<view class="flex x-bc align-end">
-				<view class="current">{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</view>
-				<view class="sales">销量{{ detail.sales }}件</view>
+	<!-- m -->
+	<view class="goods-box" @tap="click">
+		<view class="img-box"><image class="goods-img" lazy-load fade-show :src="image" mode="aspectFill"></image></view>
+		<view class="goods-bottom u-p-14" :style="type ? 'background-image: url(' + $IMG_URL + typeMap[type].goodsBg + ')' : ''">
+			<view class="title u-ellipsis-2 u-m-b-10">
+				<view class=" sm cu-tag radius title-tag u-m-r-10" :style="{ backgroundColor: typeMap[type].tagBg, color: '#fff' }" v-if="type">{{ typeMap[type].text }}</view>
+				{{ title }}
 			</view>
+			<view class="sub-title u-ellipsis-1 u-m-b-10" v-show="subtitle">{{ subtitle }}</view>
+			<view class="u-m-b-20">
+				<view class="cu-tag line-red sm radius" v-for="(item, index) in tagTextList" :key="index">{{ item }}</view>
+			</view>
+
+			<slot name="cardBottom">
+				<view class="u-flex u-col-center u-row-between">
+					<view class="price-box">
+						<view class="price u-m-b-10">{{ price }}</view>
+						<view class="origin-price">￥{{ originPrice }}</view>
+					</view>
+					<!-- 加入购物车 -->
+					<view class="cart-box">
+						<!-- 单规格 -->
+						<view class="" v-if="!detail.is_sku">
+							<button class="u-reset-button cart-btn u-flex u-col-center u-row-center" v-if="!isCart(detail.id)" @tap.stop="addCart(detail.sku_price[0])">
+								<view class="u-iconfont uicon-shopping-cart-fill" style="color: #fff;"></view>
+							</button>
+							<view class="num-step" v-else>
+								<u-number-box
+									:value="checkCart[detail.id].num"
+									:min="0"
+									:step="1"
+									:max="detail.sku_price[0].stock"
+									disabled-input
+									@min="onMin"
+									@plus="plus($event, detail.sku_price[0])"
+									@change="onChangeNum($event, detail.sku_price[0])"
+								></u-number-box>
+							</view>
+						</view>
+						<!-- 多规格 -->
+						<button class="u-reset-button item-btn cart-btn  u-flex u-col-center u-row-center" @tap.stop="selSku(detail)" v-else>
+							<view class="u-iconfont uicon-shopping-cart-fill" style="color: #fff;"></view>
+						</button>
+					</view>
+				</view>
+			</slot>
 		</view>
+		<!-- 规格弹窗 -->
+		<shopro-sku v-if="showSku && goodsInfo.id" v-model="showSku" :goodsInfo="goodsInfo" buyType="cart"></shopro-sku>
 	</view>
 </template>
 
 <script>
 /**
- * 商品列表卡片
- * @property {Boolean} isTag - 是否显示商品标签，显示类别根据商品活动属性
- * @property {Object} detail - 商品详情数据
+ *shoproGoodsCard - 商品列表卡片
+ * @property {Object} detail - 商品详情
+ * @property {String} type - 商品类型
+ * @property {String} image - 商品图片
+ * @property {String} title - 商品标题
+ * @property {String} subtitle - 商品副标题
+ * @property {String | Number} price - 商品价格
+ * @property {String | Number} originPrice - 商品原价
+ * @property {String | Number} sales - 商品销量
+ * @property {Array} tagTextList - 活动标签
+ * @event {Function} click 商品被点击
  */
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 export default {
 	components: {},
 	data() {
 		return {
-			tagPath: {
-				groupon: this.$IMG_URL + '/imgs/groupon_tag.png',
-				seckill: this.$IMG_URL + '/imgs/seckill_tag.png'
+			maxStep: 999999,
+			showSku: false,
+			goodsInfo: {}, //商品详情
+			typeMap: {
+				seckill: {
+					text: '秒杀',
+					tagBg: '#FF5854',
+					goodsBg: '/imgs/tag/seckill_y_bg.png'
+				},
+				groupon: {
+					text: '拼团',
+					tagBg: '#FE832A',
+					goodsBg: '/imgs/tag/groupon_y_bg.png'
+				}
 			}
 		};
 	},
+	computed: {
+		...mapGetters(['cartList', 'checkCart'])
+	},
 	props: {
-		isTag: {
-			type: [Boolean, String],
-			default: false
-		},
 		detail: {
 			type: Object,
-			default: null
+			default: () => {
+				return {};
+			}
+		},
+		type: {
+			type: [String,null],
+			default: ''
+		},
+		image: {
+			type: String,
+			default: ''
+		},
+		title: {
+			type: String,
+			default: ''
+		},
+		subtitle: {
+			type: String,
+			default: ''
+		},
+		price: {
+			type: [String, Number],
+			default: ''
+		},
+		originPrice: {
+			type: [String, Number],
+			default: ''
+		},
+		sales: {
+			type: [String, Number],
+			default: ''
+		},
+		tagTextList: {
+			type: Array,
+			default: () => []
 		}
 	},
-	computed: {},
 	methods: {
-		// 路由跳转
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
+		...mapActions(['getCartList', 'changeCartList', 'addCartGoods']),
+		//点击商品
+		click() {
+			this.$emit('click');
+		},
+
+		// 检测是否为购物车商品
+		isCart(id) {
+			return Object.keys(this.checkCart).includes(id + '');
+		},
+
+		// 检测商品在购物车中的下标
+		checkGoodsIndex(id) {
+			let cIndex = 0;
+			this.cartList.forEach((item, index) => {
+				if (id == item.goods_id) {
+					cIndex = index;
+				}
+			});
+			return cIndex;
+		},
+
+		// 更改商品数
+		async onChangeNum(e, sku) {
+			this.maxStep = sku.stock;
+			let gIndex = this.checkGoodsIndex(sku.goods_id);
+			if (e.value != this.checkCart[sku.goods_id].num) {
+				uni.showLoading({
+					mask: true
+				});
+				this.$set(this.cartList[gIndex], 'goods_num', +e.value);
+				await this.changeCartList({
+					ids: [this.checkCart[sku.goods_id].cartOrderId],
+					goodsNum: +e.value,
+					art: 'change'
+				});
+
+				await uni.hideLoading();
+			}
+		},
+
+		// 到达最小值
+		onMin() {
+			const that = this;
+			let cartGoodId = 0;
+			cartGoodId = this.cartList.filter(item => item.goods_id === that.detail.id)[0].id;
+			uni.showModal({
+				title: '删除提示',
+				confirmColor: '#f0c785',
+				content: `是否确认从购物车中删除此商品?`,
+				success: res => {
+					res.confirm && this.changeCartList({ ids: [cartGoodId], art: 'delete' });
+				}
+			});
+		},
+
+		// 增加
+		plus(e, sku) {
+			if (e.value >= sku.stock) {
+				this.$u.toast('库存不足');
+				return;
+			}
+			if (this.detail.activity_type === 'seckill' || this.detail.activity_type === 'groupon') {
+				let rules = this.detail.activity.rules;
+				if (rules.limit_buy != 0 && e.value >= rules.limit_buy) {
+					this.$u.toast('本次活动最多购买' + rules.limit_buy + '件');
+					return;
+				}
+			}
+		},
+
+		// 添加购物车,多规格
+		async selSku(info) {
+			if (this.detail.activity_type) {
+				this.$Router.push({ path: '/pages/goods/detail', query: { id: this.detail.id } });
+				return;
+			}
+			this.goodsInfo = {};
+			this.getGoodsDetail(info.id);
+			this.showSku = true;
+		},
+
+		// 商品详情
+		getGoodsDetail(id) {
+			let that = this;
+			that.$http('goods.detail', {
+				id: id
+			}).then(res => {
+				if (res.code === 1) {
+					that.goodsInfo = res.data;
+				}
+			});
+		},
+
+		// 加入购物车
+		addCart(sku) {
+			if (sku.stock <= 0) {
+				this.$u.toast('库存不足');
+				return;
+			}
+			if (this.detail.activity_type) {
+				this.$Router.push({ path: '/pages/goods/detail', query: { id: this.detail.id } });
+				return;
+			}
+			let confirmGoodsList = {
+				list: [
+					{
+						goods_id: sku.goods_id,
+						goods_num: 1,
+						sku_price_id: sku.id,
+						goods_price: sku.price
+					}
+				],
+				from: 'goods'
+			};
+			this.addCartGoods(confirmGoodsList).then(res => {
+				if (res.code === 1) {
+					this.$u.toast(res.msg);
+				}
 			});
 		}
 	}
@@ -59,263 +260,81 @@ export default {
 .goods-box {
 	width: 345rpx;
 	background: #fff;
-	padding-bottom: 20rpx;
 	border-radius: 20rpx;
 	overflow: hidden;
-
+	.goods-bottom {
+		background-size: 100% 100%;
+		background-position: bottom center;
+		background-repeat: no-repeat;
+	}
 	.img-box {
 		width: 345rpx;
 		height: 345rpx;
 		overflow: hidden;
 		position: relative;
-
-		.tag-img {
-			position: absolute;
-			left: 0;
-			top: 0;
-			z-index: 2;
-			width: 80rpx;
-			height: 40rpx;
-		}
-
-		.img {
+		background-color: #fff;
+		border-radius: 6rpx;
+		.goods-img {
 			width: 345rpx;
 			height: 345rpx;
 			background-color: #ccc;
 		}
 	}
 
-	.tip {
-		width: 346rpx;
-		line-height: 56rpx;
-		background: rgba(246, 242, 234, 1);
-		font-size: 22rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
-		color: rgba(168, 112, 13, 1);
-		padding: 0 20rpx;
-	}
-
 	.title {
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		line-height: 36rpx;
-		height: 72rpx;
-		margin: 20rpx 20rpx 10rpx;
+		width: 330rpx;
+		vertical-align: center;
+		font-size: 28rpx;
+		font-weight: bold;
+		line-height: 40rpx;
+		color: #333333;
+		padding-top: 6rpx;
+
+		.title-tag {
+			position: relative;
+			top: -6rpx;
+		}
 	}
 
+	.sub-title {
+		font-size: 24rpx;
+		font-weight: 400;
+		width: 330rpx;
+		color: #999999;
+	}
 	.price-box {
-		padding: 10rpx 20rpx 0;
-		width: 344rpx;
-		.sales {
-			font-size: 20rpx;
-			font-family: PingFang SC;
-			font-weight: 400;
-			color: rgba(153, 153, 153, 1);
-			line-height: 20rpx;
-			margin-bottom: 20rpx;
-		}
-		.current {
+		.price {
 			font-size: 30rpx;
-			font-weight: 500;
-			color: rgba(225, 33, 43, 1);
-			line-height: 30rpx;
-			margin-bottom: 20rpx;
-			&:before {
+			color: #ff3000;
+			font-weight: 600;
+			&::before {
 				content: '￥';
-				font-size: 26rpx;
+				font-size: 24rpx;
 			}
 		}
-
-		.original {
-			font-size: 22rpx;
+		.origin-price {
+			font-size: 26rpx;
 			font-weight: 400;
 			text-decoration: line-through;
-			color: rgba(153, 153, 153, 1);
-			margin-left: 14rpx;
-			line-height: 22rpx;
-			margin-bottom: 10rpx;
-			&:before {
-				content: '￥';
-				font-size: 20rpx;
-			}
+			color: #c4c4c4;
 		}
+		.sales-box {
+			font-size: 18rpx;
 
-		.tag-box {
-			.discount {
-				line-height: 28rpx;
-				border: 1rpx solid rgba(225, 33, 43, 1);
-				border-radius: 8rpx;
-				font-size: 18rpx;
-				font-family: PingFang SC;
-				font-weight: 500;
-				color: rgba(225, 33, 43, 1);
-				padding: 0 8rpx;
-				margin-right: 10rpx;
-			}
+			font-weight: 400;
+			color: #c4c4c4;
+			line-height: 20rpx;
+		}
+	}
+	// 购物车
+	.cart-box {
+		.cart-btn {
+			width: 54rpx;
+			height: 54rpx;
+			border-radius: 50%;
+			padding: 0;
+			background: linear-gradient(90deg, #e9b461, #eecc89);
 		}
 	}
 }
 </style>
-=======
-<template>
-	<view class="goods-box" v-if="detail" @tap="jump('/pages/goods/detail/index', { id: detail.id })">
-		<view class="img-box">
-			<image v-if="isTag && detail.activity" class="tag-img" :src="tagPath[detail.activity.type]" mode=""></image>
-			<image class="img" :src="detail.image" lazy-load mode="aspectFill"></image>
-		</view>
-		<view class="tip one-t">{{ detail.subtitle }}</view>
-		<view class="title more-t">{{ detail.title }}</view>
-		<view class="price-box">
-			<view class="flex x-bc align-end">
-				<view class="current">{{ detail.activity_type === 'groupon' ? detail.groupon_price : detail.price }}</view>
-				<view class="sales">销量{{ detail.sales }}件</view>
-			</view>
-		</view>
-	</view>
-</template>
-
-<script>
-/**
- * 商品列表卡片
- * @property {Boolean} isTag - 是否显示商品标签，显示类别根据商品活动属性
- * @property {Object} detail - 商品详情数据
- */
-export default {
-	components: {},
-	data() {
-		return {
-			tagPath: {
-				groupon: this.$IMG_URL + '/imgs/groupon_tag.png',
-				seckill: this.$IMG_URL + '/imgs/seckill_tag.png'
-			}
-		};
-	},
-	props: {
-		isTag: {
-			type: [Boolean, String],
-			default: false
-		},
-		detail: {
-			type: Object,
-			default: null
-		}
-	},
-	computed: {},
-	methods: {
-		// 路由跳转
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
-		}
-	}
-};
-</script>
-
-<style lang="scss">
-.goods-box {
-	width: 345rpx;
-	background: #fff;
-	padding-bottom: 20rpx;
-	border-radius: 20rpx;
-	overflow: hidden;
-
-	.img-box {
-		width: 345rpx;
-		height: 345rpx;
-		overflow: hidden;
-		position: relative;
-
-		.tag-img {
-			position: absolute;
-			left: 0;
-			top: 0;
-			z-index: 2;
-			width: 80rpx;
-			height: 40rpx;
-		}
-
-		.img {
-			width: 345rpx;
-			height: 345rpx;
-			background-color: #ccc;
-		}
-	}
-
-	.tip {
-		width: 346rpx;
-		line-height: 56rpx;
-		background: rgba(246, 242, 234, 1);
-		font-size: 22rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
-		color: rgba(168, 112, 13, 1);
-		padding: 0 20rpx;
-	}
-
-	.title {
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		line-height: 36rpx;
-		height: 72rpx;
-		margin: 20rpx 20rpx 10rpx;
-	}
-
-	.price-box {
-		padding: 10rpx 20rpx 0;
-		width: 344rpx;
-		.sales {
-			font-size: 20rpx;
-			font-family: PingFang SC;
-			font-weight: 400;
-			color: rgba(153, 153, 153, 1);
-			line-height: 20rpx;
-			margin-bottom: 20rpx;
-		}
-		.current {
-			font-size: 30rpx;
-			font-weight: 500;
-			color: rgba(225, 33, 43, 1);
-			line-height: 30rpx;
-			margin-bottom: 20rpx;
-			&:before {
-				content: '￥';
-				font-size: 26rpx;
-			}
-		}
-
-		.original {
-			font-size: 22rpx;
-			font-weight: 400;
-			text-decoration: line-through;
-			color: rgba(153, 153, 153, 1);
-			margin-left: 14rpx;
-			line-height: 22rpx;
-			margin-bottom: 10rpx;
-			&:before {
-				content: '￥';
-				font-size: 20rpx;
-			}
-		}
-
-		.tag-box {
-			.discount {
-				line-height: 28rpx;
-				border: 1rpx solid rgba(225, 33, 43, 1);
-				border-radius: 8rpx;
-				font-size: 18rpx;
-				font-family: PingFang SC;
-				font-weight: 500;
-				color: rgba(225, 33, 43, 1);
-				padding: 0 8rpx;
-				margin-right: 10rpx;
-			}
-		}
-	}
-}
-</style>
->>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7

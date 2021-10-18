@@ -1,0 +1,30 @@
+@import 'uview-ui/index.scss';
+@import 'static/style/colorui.css';
+@import 'static/font/shopro-icon.css';
+@import 'uview-ui/iconfont.css';
+
+/* 字体文件 */
+@font-face {
+	font-family: OPPOSANS;
+	src: url('~@/static/font/OPPOSANS-M-subfont.ttf');
+}
+.font-OPPOSANS {
+	font-family: OPPOSANS;
+}
+page {
+	-webkit-overflow-scrolling: touch; // ios滑动不流畅
+	height: 100%;
+	background: #f6f6f6;
+	width: 100%;
+	font-size: 30rpx;
+	font-family: OPPOSANS;
+	word-break: break-all; //英文文本不换行
+	white-space: normal;
+	color: $u-main-color;
+}
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	color: transparent;
+	display: none;
+}

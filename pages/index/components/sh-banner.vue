@@ -1,119 +1,69 @@
 <template>
 	<!-- 轮播 -->
-	<view class="banner-swiper-box mb10" v-if="detail.list">
-		<swiper class="banner-carousel shopro-selector-rect" circular @change="swiperChange" :autoplay="true">
-			<swiper-item v-for="(item, index) in detail.list" :key="index" class="carousel-item " @tap="routerTo(item.path)">
-				<image class="swiper-image " :src="item.image" mode="widthFix" lazy-load></image>
+	<view class="banner-swiper-wrap u-m-b-10" :style="{ padding: `${Py}rpx ${Px}rpx` }">
+		<swiper
+			:style="{ minHeight: height + 'rpx', height: height + 'rpx' }"
+			class="screen-swiper square-dot"
+			:indicator-dots="true"
+			:circular="true"
+			:autoplay="true"
+			interval="5000"
+			duration="500"
+		>
+			<swiper-item :style="{ borderRadius: borderRadius + 'rpx' }" v-for="(item, index) in list" :key="index" @tap="onSwiper(index)">
+				<image :src="item.image" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
-		<view class="banner-swiper-dots">
-			<text :class="swiperCurrent === index ? 'banner-dot-active' : 'banner-dot'" v-for="(dot, index) in detail.list.length" :key="index"></text>
-		</view>
 	</view>
 </template>
 
 <script>
 /**
- * 自定义之轮播卡片
- * @property {Object} detail - 轮播信息
+ * shBanner-轮播卡片
+ * @property {Array} list 轮播图数据，
+ * @property {String Number} height 轮播图组件高度，单位rpx（默认250）
+ * @property {String} borderRadius 圆角值
+ * @event {Function} click 点击轮播图时触发
  */
 export default {
 	components: {},
 	data() {
-		return {
-			swiperCurrent: 0, //轮播下标
-			webviewId: 0,
-			routerTo: this.$tools.routerTo
-		};
+		return {};
 	},
 	props: {
-		detail: {
-			type: Object,
-			default: null
+		Px: {
+			type: [Number, String],
+			default: 0
+		},
+		Py: {
+			type: [Number, String],
+			default: 0
+		},
+		// 轮播图的数据,格式如：[{image: 'xxxx', title: 'xxxx'}，{image: 'yyyy', title: 'yyyy'}]，其中title字段可选
+		list: {
+			type: Array,
+			default() {
+				return [];
+			}
+		},
+		// 圆角值
+		borderRadius: {
+			type: [Number, String],
+			default: 0
+		},
+		// list的高度，单位rpx
+		height: {
+			type: [Number, String],
+			default: 250
 		}
 	},
 	computed: {},
-	created() {
-		this.initBgColor();
-	},
 	methods: {
-		// 轮播切换
-		swiperChange(e) {
-			this.swiperCurrent = e.detail.current;
-			this.initBgColor();
-		},
-		// 初始化背景颜色，轮播图没滚动前
-		initBgColor() {
-			let bgcolor = this.detail.list[this.swiperCurrent].bgcolor;
-			this.$emit('getbgcolor', bgcolor);
-		},
-		// 路由跳转
-		jump(path, parmas) {
-			this.$Router.push({
-				path: path,
-				query: parmas
-			});
+		onSwiper(e) {
+			this.$tools.routerTo(this.list[e].path);
 		}
 	}
 };
 </script>
 
-<style lang="scss">
-.hide-canvas {
-	position: fixed !important;
-	top: -99999upx;
-	left: -99999upx;
-	z-index: -99999;
-}
-
-// 轮播
-.banner-swiper-box {
-	background: #fff;
-}
-
-.banner-swiper-box,
-.banner-carousel {
-	width: 750rpx;
-	height: 350rpx;
-	position: relative;
-
-	.carousel-item {
-		width: 100%;
-		height: 100%;
-		// padding: 0 28upx;
-		overflow: hidden;
-	}
-
-	.swiper-image {
-		width: 100%;
-		height: 100%;
-		// border-radius: 10upx;
-		// background: #ccc;
-	}
-}
-
-.banner-swiper-dots {
-	display: flex;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 20rpx;
-	z-index: 66;
-
-	.banner-dot {
-		width: 14rpx;
-		height: 14rpx;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 50%;
-		margin-right: 10rpx;
-	}
-
-	.banner-dot-active {
-		width: 14rpx;
-		height: 14rpx;
-		background: #a8700d;
-		border-radius: 50%;
-		margin-right: 10rpx;
-	}
-}
-</style>
+<style lang="scss" scoped></style>

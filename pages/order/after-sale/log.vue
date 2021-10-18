@@ -1,19 +1,21 @@
-<<<<<<< HEAD
 <!-- 售后进行 -->
 <template>
-	<view class="log-box">
-		<view class="cu-timeline">
-			<view class="cu-item " v-for="(log, index) in aftersaleLog" :key="log.id" :class="index == 0 ? 'text-green' : 'text-gray'">
-				<view class="item-list">
-					<view class="item-title">{{ log.reason }}</view>
-					<view class="item-content"><rich-text :nodes="log.content"></rich-text></view>
-					<view class="item-img-box" v-if="log.images.length">
-						<block v-for="img in log.images" :key="img"><image :src="img" class="log-img" mode="aspectFill"></image></block>
+	<view class="log-box wrap">
+		<u-time-line>
+			<u-time-line-item v-for="(log, index) in aftersaleLog" :key="log.id" nodeTop="4">
+				<template v-slot:node>
+					<view class="u-node" :style="index === 0 ? 'background: #19be6b;' : ''"><text class="u-iconfont uicon-bell-fill" style="color: #fff;font-size: 26rpx;"></text></view>
+				</template>
+				<template v-slot:content>
+					<view class="u-order-title unacive u-m-b-20">{{ log.reason }}</view>
+					<view class="u-order-desc  u-m-b-10" v-show="log.content"><u-parse :html="log.content"></u-parse></view>
+					<view class="item-img-box u-flex u-flex-wrap" v-show="log.images.length">
+						<block v-for="(img, index) in log.images" :key="index"><image :src="img" class="log-img" mode="aspectFill"></image></block>
 					</view>
-					<view class="item-time">{{ formatTime(log.createtime) }}</view>
-				</view>
-			</view>
-		</view>
+					<view class="u-order-time">{{ $u.timeFormat(log.createtime, 'yyyy-mm-dd hh:MM') }}</view>
+				</template>
+			</u-time-line-item>
+		</u-time-line>
 	</view>
 </template>
 
@@ -33,151 +35,62 @@ export default {
 		// 服务单详情
 		getAftersaleDetail() {
 			let that = this;
-			that.$api('order.aftersaleDetail', {
+			that.$http('order.aftersaleDetail', {
 				id: that.$Route.query.aftersaleId
 			}).then(res => {
 				if (res.code === 1) {
 					that.aftersaleLog = res.data.logs;
 				}
 			});
-		},
-		//格式时间
-		formatTime(time) {
-			let createdate = new Date(time * 1000);
-			let newTime = this.$tools.dateFormat('YYYY-mm-dd HH:MM', createdate);
-			return newTime;
 		}
 	}
 };
 </script>
 
-<style lang="scss">
-page {
+<style lang="scss" scoped>
+.wrap {
+	padding: 24rpx 24rpx 24rpx 40rpx;
 	background-color: #fff;
 }
-.item-list {
-	color: #333;
-	padding: 20rpx;
-	.item-title {
-		font-size: 28rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(51, 51, 51, 1);
-		padding-bottom: 20rpx;
+
+.u-node {
+	width: 44rpx;
+	height: 44rpx;
+	border-radius: 100rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #d0d0d0;
+}
+
+.u-order-title {
+	color: #333333;
+	font-weight: bold;
+	font-size: 32rpx;
+}
+
+.u-order-title.unacive {
+	color: rgb(150, 150, 150);
+}
+
+.u-order-desc {
+	color: rgb(150, 150, 150);
+	font-size: 28rpx;
+	margin-bottom: 6rpx;
+}
+.item-img-box {
+	.log-img {
+		display: block;
+		width: 140rpx;
+		height: 140rpx;
+		background-color: #ccc;
+		margin-right: 20rpx;
+		margin-bottom: 20rpx;
+		border-radius: 6rpx;
 	}
-	.item-content {
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(153, 153, 153, 1);
-		line-height: 40rpx;
-		padding-bottom: 20rpx;
-	}
-	.item-img-box {
-		.log-img {
-			width: 120rpx;
-			height: 120rpx;
-			background-color: #ccc;
-			margin-right: 10rpx;
-		}
-	}
-	.item-time {
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
-		color: rgba(153, 153, 153, 1);
-	}
+}
+.u-order-time {
+	color: rgb(200, 200, 200);
+	font-size: 26rpx;
 }
 </style>
-=======
-<!-- 售后进行 -->
-<template>
-	<view class="log-box">
-		<view class="cu-timeline">
-			<view class="cu-item " v-for="(log, index) in aftersaleLog" :key="log.id" :class="index == 0 ? 'text-green' : 'text-gray'">
-				<view class="item-list">
-					<view class="item-title">{{ log.reason }}</view>
-					<view class="item-content"><rich-text :nodes="log.content"></rich-text></view>
-					<view class="item-img-box" v-if="log.images.length">
-						<block v-for="img in log.images" :key="img"><image :src="img" class="log-img" mode="aspectFill"></image></block>
-					</view>
-					<view class="item-time">{{ formatTime(log.createtime) }}</view>
-				</view>
-			</view>
-		</view>
-	</view>
-</template>
-
-<script>
-export default {
-	components: {},
-	data() {
-		return {
-			aftersaleLog: []
-		};
-	},
-	computed: {},
-	onLoad() {
-		this.getAftersaleDetail();
-	},
-	methods: {
-		// 服务单详情
-		getAftersaleDetail() {
-			let that = this;
-			that.$api('order.aftersaleDetail', {
-				id: that.$Route.query.aftersaleId
-			}).then(res => {
-				if (res.code === 1) {
-					that.aftersaleLog = res.data.logs;
-				}
-			});
-		},
-		//格式时间
-		formatTime(time) {
-			let createdate = new Date(time * 1000);
-			let newTime = this.$tools.dateFormat('YYYY-mm-dd HH:MM', createdate);
-			return newTime;
-		}
-	}
-};
-</script>
-
-<style lang="scss">
-page {
-	background-color: #fff;
-}
-.item-list {
-	color: #333;
-	padding: 20rpx;
-	.item-title {
-		font-size: 28rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(51, 51, 51, 1);
-		padding-bottom: 20rpx;
-	}
-	.item-content {
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 500;
-		color: rgba(153, 153, 153, 1);
-		line-height: 40rpx;
-		padding-bottom: 20rpx;
-	}
-	.item-img-box {
-		.log-img {
-			width: 120rpx;
-			height: 120rpx;
-			background-color: #ccc;
-			margin-right: 10rpx;
-		}
-	}
-	.item-time {
-		font-size: 24rpx;
-		font-family: PingFang SC;
-		font-weight: 400;
-		color: rgba(153, 153, 153, 1);
-	}
-}
-</style>
->>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7

@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 <template>
-	<view class="popup-box" v-if="!screenShot && !showLoginTip">
-		<view v-for="(p, index) in newPopupList" :key="index">
-			<view class="cu-modal" :class="{ show: showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
-				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
-					<view class="img-box">
-						<image class="modal-img" :src="p.image" mode="widthFix"></image>
-						<text class="cuIcon-roundclose" @tap.stop="hideModal(p)"></text>
-					</view>
+	<view class="popup-box" v-show="newPopupList && newPopupList.length">
+		<view class="" v-for="(p, index) in newPopupList" :key="index">
+			<view class="cu-modal" :class="{ show: showModal }" @tap="hideModal(p, index)" v-if="popupCurrent === index && p.image">
+				<view class="cu-dialog" style="width: 610rpx;background: none;">
+					<view class="img-box" @tap.stop="onPopup(p.path)"><image class="modal-img" :src="p.image" mode="aspectFit"></image></view>
 				</view>
 			</view>
 		</view>
@@ -19,7 +15,7 @@
  * 广告模态框。连续弹窗和只弹一次。
  * @property {Object} newPopupList  - vuex 初始化传过来的数据
  */
-import { mapMutations, mapActions, mapState } from 'vuex';
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex';
 let timer = null;
 export default {
 	name: 'shoproNoticeModal',
@@ -27,183 +23,49 @@ export default {
 	data() {
 		return {
 			popupCurrent: 0,
-			showModal: true,
-			screenShot: uni.getStorageSync('screenShot')
+			showModal: true
 		};
 	},
 	props: {},
 	computed: {
-		...mapState({
-			templateData: state => state.init.templateData.popup,
-			showLoginTip: state => state.user.showLoginTip
-		}),
-		popupData() {
-			if (this.templateData) {
-				return this.templateData[0].content;
-			}
-		},
-		currentPath() {
-			let pages = getCurrentPages();
-			let currPage = null;
-			if (pages.length) {
-				currPage = pages[pages.length - 1].route;
-			}
-			return '/' + currPage;
-		},
+		...mapGetters(['popupData', 'isLogin']),
 		newPopupList() {
 			if (this.popupData) {
-				let arr = this.popupData.list.filter(item => {
-					return item.page.includes(this.currentPath);
-				});
-				return arr;
+				return this.popupData.list;
 			}
 		}
 	},
-	created() {},
+	beforeDestroy() {
+		clearTimeout(timer);
+		timer = null;
+	},
 	methods: {
-		hideModal(p) {
+		hideModal(p, index) {
 			clearTimeout(timer);
 			this.showModal = false;
 			if (p.style == 1) {
-				this.$store.commit('delPopup', this.currentPath);
+				this.$store.commit('delPopup', index);
 			}
 			timer = setTimeout(() => {
 				this.popupCurrent += 1;
 				this.showModal = true;
 			}, 500);
 		},
-		changePopup(path) {
-			this.$tools.routerTo(path, null);
+		onPopup(path) {
+			this.$tools.routerTo(path);
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-.modal-img {
-	width: 610rpx;
-}
-
-.cu-modal {
-	z-index: 10000;
-}
-
 .img-box {
 	position: relative;
-
-	.cuIcon-roundclose {
-		position: absolute;
-		left: 50%;
-		transform: translate(-50%);
-		bottom: -80rpx;
-		color: #fff;
-		font-size: 60rpx;
-		z-index: 99;
+	width: 610rpx;
+	.modal-img {
+		width: 100%;
+		will-change: transform;
+		height: 830rpx;
 	}
 }
 </style>
-=======
-<template>
-	<view class="popup-box" v-if="!screenShot && !showLoginTip">
-		<view v-for="(p, index) in newPopupList" :key="index">
-			<view class="cu-modal" :class="{ show: showModal && popupCurrent === index }" cathctouchmove @tap="hideModal(p)">
-				<view class="cu-dialog" @tap.stop="changePopup(p.path)" style="background: none;overflow: visible;">
-					<view class="img-box">
-						<image class="modal-img" :src="p.image" mode="widthFix"></image>
-						<text class="cuIcon-roundclose" @tap.stop="hideModal(p)"></text>
-					</view>
-				</view>
-			</view>
-		</view>
-	</view>
-</template>
-
-<script>
-/**
- * 广告模态框。连续弹窗和只弹一次。
- * @property {Object} newPopupList  - vuex 初始化传过来的数据
- */
-import { mapMutations, mapActions, mapState } from 'vuex';
-let timer = null;
-export default {
-	name: 'shoproNoticeModal',
-	components: {},
-	data() {
-		return {
-			popupCurrent: 0,
-			showModal: true,
-			screenShot: uni.getStorageSync('screenShot')
-		};
-	},
-	props: {},
-	computed: {
-		...mapState({
-			templateData: state => state.init.templateData.popup,
-			showLoginTip: state => state.user.showLoginTip
-		}),
-		popupData() {
-			if (this.templateData) {
-				return this.templateData[0].content;
-			}
-		},
-		currentPath() {
-			let pages = getCurrentPages();
-			let currPage = null;
-			if (pages.length) {
-				currPage = pages[pages.length - 1].route;
-			}
-			return '/' + currPage;
-		},
-		newPopupList() {
-			if (this.popupData) {
-				let arr = this.popupData.list.filter(item => {
-					return item.page.includes(this.currentPath);
-				});
-				return arr;
-			}
-		}
-	},
-	created() {},
-	methods: {
-		hideModal(p) {
-			clearTimeout(timer);
-			this.showModal = false;
-			if (p.style == 1) {
-				this.$store.commit('delPopup', this.currentPath);
-			}
-			timer = setTimeout(() => {
-				this.popupCurrent += 1;
-				this.showModal = true;
-			}, 500);
-		},
-		changePopup(path) {
-			this.$tools.routerTo(path, null);
-		}
-	}
-};
-</script>
-
-<style lang="scss">
-.modal-img {
-	width: 610rpx;
-}
-
-.cu-modal {
-	z-index: 10000;
-}
-
-.img-box {
-	position: relative;
-
-	.cuIcon-roundclose {
-		position: absolute;
-		left: 50%;
-		transform: translate(-50%);
-		bottom: -80rpx;
-		color: #fff;
-		font-size: 60rpx;
-		z-index: 99;
-	}
-}
-</style>
->>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7

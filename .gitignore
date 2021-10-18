@@ -1,10 +1,4 @@
-<<<<<<< HEAD
 /node_modules/*
 /unpackage/*
 !/unpackage/res/*
-=======
-/node_modules/*
-/unpackage/*
-!/unpackage/res/*
->>>>>>> 249bc3588ce88ed9a3079aee7eeff9b82ac50fe7
 /.idea/*
