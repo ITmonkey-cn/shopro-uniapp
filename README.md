@@ -28,9 +28,9 @@
 
 # Shopro演示站
 
-| ![微信小程序码](https://shopro-1253949872.cos.ap-beijing.myqcloud.com/dcloud/wx_code.jpg "微信小程序码") | ![H5](https://shopro-1253949872.cos.ap-beijing.myqcloud.com/dcloud/h5new.png "H5.png") | ![apk](https://www.fastadmin.net/addons/qrcode/index/build?text=https://www.fastadmin.net/app/shopro.html&logo=android "apk_code.png") |
+| ![微信小程序码](https://shopro-1253949872.cos.ap-beijing.myqcloud.com/dcloud/wx_code.jpg "微信小程序码") | ![H5](https://shopro-1253949872.cos.ap-beijing.myqcloud.com/dcloud/h5new.png "H5.png") | ![apk](https://shopro-1253949872.cos.ap-beijing.myqcloud.com/dcloud/apk_code.png "apk_code.png") |
 |------------------------------------------------- | ---------------------------------------- | ---------------------------------- |
-| 微信小程序                                        | H5二维码                                 |  安卓apk (暂未更新)                                  |
+| 微信小程序                                        | H5二维码                                 |  安卓apk (普通浏览器扫描)                                  |
 
 
 
