@@ -25,12 +25,12 @@ export default {
 		}
 		// #endif
 		if (options?.page) {
-			router.push({
+			router.replace({
 				path: decodeURIComponent(options.page)
 			})
 		}
 		if (options?.custom_id) {
-			router.push({
+			router.replace({
 				path: '/pages/index/view',
 				query: {
 					id: options.custom_id
@@ -60,7 +60,7 @@ export default {
 				}
 			}
 			if (page.path) {
-				router.push(page);
+				router.replace(page);
 			}
 		}
 	},

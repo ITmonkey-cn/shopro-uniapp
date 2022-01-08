@@ -4,7 +4,7 @@
 		<!-- 标题栏 -->
 		<view class="title-box u-flex u-row-between u-p-y-20 groupon-title">
 			<view class="u-flex u-col-center">
-				<view class="title-text u-m-r-20 u-ellipsis-1">{{ detail.title }}</view>
+				<view class="title-text u-m-r-20 u-ellipsis-1">{{ detail.name }}</view>
 			</view>
 			<view class="more-box u-flex" @tap="$Router.push('/pages/activity/groupon/list')">
 				<text class="more-text u-m-r-10">更多拼团</text>

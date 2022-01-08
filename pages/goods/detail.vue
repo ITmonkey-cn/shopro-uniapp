@@ -107,7 +107,7 @@
 
 			<!-- 商品foot -->
 			<view class="tabbar-foot safe-area-inset-bottom" v-if="goodsInfo.id">
-				<view class="detail-foot_box safe-area-inset-bottom  u-flex">
+				<view class="detail-foot_box safe-area-inset-bottom  u-flex u-col-ceter u-row-around">
 					<!-- foot左侧 -->
 					<view class="left u-flex">
 						<!-- 积分foot -->
@@ -302,7 +302,7 @@ export default {
 				uni.navigateBack();
 				// #endif
 			} else {
-				this.$Router.pushTab('/pages/index/index');
+				this.$Router.replaceAll('/pages/index/index');
 			}
 		},
 
@@ -332,7 +332,7 @@ export default {
 		},
 		// 回到首页
 		goHome() {
-			this.$Router.pushTab('/pages/index/index');
+			this.$Router.replaceAll('/pages/index/index');
 		},
 
 		// 选项卡
@@ -649,7 +649,7 @@ export default {
 	width: 100%;
 }
 .detail-foot_box {
-	min-height: 100rpx;
+	min-height: calc(100rpx + env(safe-area-inset-bottom)) ;
 	border-top: 1rpx solid rgba(238, 238, 238, 1);
 	background-color: #fff;
 	width: 100%;

@@ -485,7 +485,7 @@
 						"navigationBarTitleText": "支付结果"
 					},
 					"meta": {
-						"auth": true,
+						"auth": false,
 						"async": false,
 						"title": "支付结果",
 						"group": "订单"
@@ -788,6 +788,33 @@
 						"auth": true,
 						"async": true,
 						"title": "提现记录",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "wallet/top-up",
+					"style": {
+						"navigationBarTitleText": "充值",
+						"navigationStyle": "custom"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "充值",
+						"group": "用户"
+					}
+				},
+				{
+					"path": "wallet/top-up-log",
+					"style": {
+						"navigationBarTitleText": "充值记录"
+
+					},
+					"meta": {
+						"auth": true,
+						"async": true,
+						"title": "充值记录",
 						"group": "用户"
 					}
 				},

@@ -56,6 +56,9 @@ router.beforeEach((to, from, next) => {
 	if (to.meta && to.meta.auth && !store.getters.isLogin) {
 		store.dispatch('showAuthModal');
 		next(false);
+	} else if (store.getters.initRecharge.enable !== '1' && to.path === '/pages/user/wallet/top-up') {
+		// 充值入口控制
+		next(false);
 	} else {
 		next()
 	}

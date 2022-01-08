@@ -195,7 +195,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(['userInfo'])
+		...mapGetters(['userInfo','initRecharge'])
 	},
 	async onLoad() {
 		this.getWithdrawRules();

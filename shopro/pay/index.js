@@ -9,6 +9,13 @@ import {
 import store from '@/shopro/store';
 import $platform from '@/shopro/platform';
 
+/**
+ * 支付
+ * 
+ * @param {String} payment = ['wechat','alipay','wallet']  	- 支付方式
+ * @param {Object} order = {}  								- 订单详情
+ * @param {String} orderType = ['goods','recharge'] 		- 订单类型
+ */
 
 export default class ShoproPay {
 
@@ -19,9 +26,10 @@ export default class ShoproPay {
 	// 			wallet			v							v					v						v
 
 
-	constructor(payment, order) {
+	constructor(payment, order, orderType) {
 		this.payment = payment;
 		this.order = order;
+		this.orderType = orderType;
 		this.platform = $platform.get();
 		let payMehod = this.getPayMethod();
 		payMehod();
@@ -130,9 +138,10 @@ export default class ShoproPay {
 			var url = result.data.pay_data.match(/url\=\'(\S*)\'/);
 			let reg = new RegExp('&amp;', 'g') //g代表全部
 			let newUrl = url[1].replace(reg, '&');
-			let domain =store.getters.initShop.domain; //域名需要https
+			let domain = store.getters.initShop.domain; //域名需要https
 			let params = encodeURIComponent(
-				`${domain}pages/order/payment/result?orderId=${that.order.id}&type=${that.payment}`)
+				`${domain}pages/order/payment/result?orderId=${that.order.id}&type=${that.payment}&orderType=${that.orderType}`
+			)
 			window.location.href = newUrl + '&redirect_url=' + params;
 		}
 	}
@@ -241,7 +250,8 @@ export default class ShoproPay {
 			query: {
 				orderId: that.order.id,
 				type: that.payment, //重新支付的时候使用
-				payState: resultType
+				payState: resultType,
+				orderType: that.orderType
 			}
 		});
 	}

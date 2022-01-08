@@ -14,7 +14,6 @@
 				<image
 					v-for="(img, index) in comment.images"
 					:key="index"
-					@tap="imgSelect(index)"
 					@tap.stop="tools.previewImage(comment.images, index)"
 					class="comment-img"
 					:src="img"

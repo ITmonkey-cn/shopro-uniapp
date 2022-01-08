@@ -10,6 +10,7 @@ const state = {
 	chat: uni.getStorageSync("chat") || {}, // 客服配置
 	store: {}, // 商城信息
 	tabbarData: [], //自定义底部导航数据
+	recharge: uni.getStorageSync("recharge") || {}, //充值配置
 
 	homeTemplate: [], // 首页模板数据
 	userTemplate: [], // 个人中心模板数据
@@ -26,6 +27,7 @@ const getters = {
 	initAddons: state => state.addons,
 	initChat: state => state.chat,
 	initWechat: state => state.wechat,
+	initRecharge: state => state.recharge,
 
 	hasTemplate: state => state.hasTemplate,
 	homeTemplate: state => state.homeTemplate,
@@ -105,6 +107,9 @@ const mutations = {
 			state[k] = payload[k];
 			if (k === 'chat') {
 				uni.setStorageSync("chat", payload[k]);
+			}
+			if (k === 'recharge') {
+				uni.setStorageSync("recharge", payload[k])
 			}
 		})
 	},

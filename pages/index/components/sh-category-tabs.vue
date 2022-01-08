@@ -5,7 +5,7 @@
 		<view class="u-sticky-wrap" :class="[elClass]" :style="{ height: fixed ? height + 'px' : 'auto', backgroundColor: isSticky ? '#fff' : '#f6f6f6' }">
 			<view
 				class="u-sticky"
-				:style="{ position: fixed ? 'fixed' : 'static', top: stickyTop + 'px', left: left + 'px', width: width == 'auto' ? 'auto' : width + 'px', zIndex: 9999999999 }"
+				:style="{ position: fixed ? 'fixed' : 'static', top: stickyTop + 'px', left: left + 'px', width: width == 'auto' ? 'auto' : width + 'px', zIndex: 1109 }"
 			>
 				<view class="tabs-wrap u-p-y-20" :style="isSticky ? 'border-bottom:1px solid #eee;background-color:#fff' : ''">
 					<scroll-view scroll-x class="tabs-content" enable-flex scroll-with-animation :scroll-left="scrollLeft">

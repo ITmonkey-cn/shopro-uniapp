@@ -192,7 +192,7 @@ export default {
 			border-radius: 4rpx;
 		}
 		.cancel-btn {
-			color: #6666;
+			color: #666666;
 		}
 		.save-btn {
 			color: #e9b461;

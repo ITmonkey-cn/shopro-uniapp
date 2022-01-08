@@ -43,7 +43,7 @@ export default {
 		},
 		wxJssdk: {
 			url: "wechat/jssdk",
-			auth: false, 
+			auth: false,
 			method: "POST",
 			// desc: '微信Jssdk',
 		},
@@ -644,6 +644,24 @@ export default {
 			auth: true,
 			method: "GET",
 			// desc: '提现记录',end
+		},
+		recharge: {
+			url: "trade_order/recharge",
+			auth: true,
+			method: "POST",
+			// desc: '充值'
+		},
+		rechargeLog: {
+			url: "trade_order/index", 
+			auth: true,
+			method: "GET",
+			// desc: '充值记录'
+		},
+		rechargeDetail: {
+			url: "trade_order/detail",
+			auth: true,
+			method: "GET",
+			// desc: '充值订单详情'
 		}
 	},
 

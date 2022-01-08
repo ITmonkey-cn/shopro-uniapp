@@ -48,7 +48,7 @@ export default {
 		// 选中
 		useAddress(addressData) {
 			uni.$emit('SELECT_ADDRESS', { addressData: JSON.stringify(addressData) });
-			this.$Router.back();
+			uni.navigateBack()
 		},
 		// 路由跳转
 		jump(path, parmas) {

@@ -166,6 +166,7 @@ export default {
 		background: linear-gradient(90deg, #f8dca5, #efc480);
 		border-radius: 10rpx;
 		mask: url($IMG_URL+'/imgs/coupon_mini_bg.png');
+		-webkit-mask-box-image: url($IMG_URL+'/imgs/coupon_mini_bg.png');
 		mask-size: 100% 100%;
 		.card-left {
 			height: 100%;
@@ -203,6 +204,7 @@ export default {
 // 未领取，已领取
 .coupon-wrap {
 	mask: url($IMG_URL+'/imgs/coupon_bg1.png');
+	-webkit-mask-box-image: url($IMG_URL+'/imgs/coupon_bg1.png');
 	mask-size: 100% 100%;
 	position: relative;
 	border-radius: 10rpx;
