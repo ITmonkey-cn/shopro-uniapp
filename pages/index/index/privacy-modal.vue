@@ -41,7 +41,13 @@ export default {
 			// #ifdef APP-VUE
 			plus.runtime.agreePrivacy();
 			// #endif
-		}
+		},
+        jump(path, parmas) {
+			this.$Router.push({
+				path: path,
+				query: parmas
+			});
+		},
 	}
 };
 </script>
