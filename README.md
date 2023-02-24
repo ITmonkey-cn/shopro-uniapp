@@ -1,14 +1,18 @@
 
 
-
+vue3版本正式发布，持续更新中！[官网： https://www.shopro.top](https://www.shopro.top)
 
 ###  :sparkles: 开源不易，给个star吧~  问题反馈交流：648050824
 
  
 
-[官方地址： http://shopro.top](http://shopro.top)
+[官方地址： https://www.shopro.top](https://www.shopro.top)
 
-[码云仓库： https://gitee.com/itmonkey-cn/shopro.git](https://gitee.com/itmonkey-cn/shopro.git)
+[插件地址: https://ext.dcloud.net.cn/plugin?id=10180](https://ext.dcloud.net.cn/plugin?id=10180)
+
+[vue2码云仓库： https://gitee.com/itmonkey-cn/shopro.git](https://gitee.com/itmonkey-cn/shopro.git)
+
+[vue3码云仓库： https://gitee.com/sheepjs/shopro-uniapp](https://gitee.com/sheepjs/shopro-uniapp)
 
 [github仓库：https://github.com/ITmonkey-cn/shopro.git](https://github.com/ITmonkey-cn/shopro.git)
 
@@ -36,8 +40,20 @@
 
 
 # 更新日志
+## 更新vue3版本
+vue3版本正式上线！将持续更新+开源，欢迎下载使用，望点赞+收藏~
 
-## V1.4.0(2022-02-24)
+[官方地址： https://www.shopro.top](https://www.shopro.top)
+
+[插件地址: https://ext.dcloud.net.cn/plugin?id=10180](https://ext.dcloud.net.cn/plugin?id=10180)
+
+[vue2码云仓库： https://gitee.com/itmonkey-cn/shopro.git](https://gitee.com/itmonkey-cn/shopro.git)
+
+[vue3码云仓库： https://gitee.com/sheepjs/shopro-uniapp](https://gitee.com/sheepjs/shopro-uniapp)
+
+[github仓库：https://github.com/ITmonkey-cn/shopro.git](https://github.com/ITmonkey-cn/shopro.git)
+
+## V1.4.0(2023-02-24)
 1. 修复积分记录上拉加载更多
 2. 修复小程序分类左侧数据过多，滚动问题
 3. 修复门店申请，选择地区，没有区级单位
