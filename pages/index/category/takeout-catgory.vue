@@ -2,7 +2,7 @@
 	<view class="catgory-wrap">
 		<view class="u-flex wrapper-box">
 			<!-- 左侧分类列表 -->
-			<scroll-view enable-flex scroll-y scroll-with-animation class="u-tab-view menu-scroll-view"
+			<scroll-view scroll-y scroll-with-animation class="u-tab-view menu-scroll-view"
 				:scroll-top="scrollLeftTop">
 				<view v-for="(item, index) in tabbarList" :key="index" class="u-tab-item u-ellipsis-1"
 					:class="[currentTab == index ? 'u-tab-item-active' : '']" :data-current="index"

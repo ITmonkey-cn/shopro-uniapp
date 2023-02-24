@@ -2,17 +2,15 @@
     "name" : "Shopro商城",
     "appid" : "__UNI_*****06",
     "description" : "Shopro商城",
-    "versionName" : "1.3.8",
-    "versionCode" : 137,
+    "versionName" : "1.4.0",
+    "versionCode" : 140,
     "transformPx" : false,
     "app-plus" : {
-        // APP-VUE分包，可提APP升启动速度，2.7.12开始支持，兼容微信小程序分包方案，默认关闭
         "optimization" : {
             "subPackages" : true
         },
-        "runmode" : "liberate", // 开启分包优化后，必须配置资源释放模式
+        "runmode" : "liberate",
         "safearea" : {
-            //APP底部安全区域
             "background" : "#fff",
             "bottom" : {
                 "offset" : "auto"
@@ -111,14 +109,14 @@
                     "weixin" : {
                         "appid" : "wx522b*****319ae",
                         "appsecret" : "531b39d953f9*****e83c7238fb4dc",
-                        "UniversalLinks" : "https://m.*****.top/uni-universallinks/*****"
+                        "UniversalLinks" : "https://m.*****.top/uni-universallinks/__UNI__EB95F06"
                     },
                     "apple" : {}
                 },
                 "share" : {
                     "weixin" : {
                         "appid" : "wx522*****319ae",
-                        "UniversalLinks" : "https://m.*****.top/uni-universallinks/__*****"
+                        "UniversalLinks" : "https://m.*****.top/uni-universallinks/__UNI__EB95F06"
                     }
                 },
                 "push" : {}
@@ -154,10 +152,13 @@
                         "spotlight@3x" : ""
                     }
                 }
+            },
+            "splashscreen" : {
+                "useOriginalMsgbox" : false
             }
         },
         "kernel" : {
-            "ios" : "WKWebview" //或者 "WKWebview"  
+            "ios" : "WKWebview"
         }
     },
     "quickapp" : {},
@@ -185,7 +186,8 @@
             "scope.userLocation" : {
                 "desc" : "计算附近商家位置"
             }
-        }
+        },
+        "requiredPrivateInfos" : [ "getLocation", "chooseLocation", "chooseAddress" ]
     },
     "mp-alipay" : {
         "usingComponents" : true,
@@ -225,7 +227,7 @@
                 }
             }
         },
-        "domain" : "*****.com"
+        "domain" : "*****"
     },
     "_spaceID" : "f0536a*****8350-2aa7c3e11334"
 }

@@ -60,7 +60,8 @@
 						:showProgress="false"
 						@on-uploaded="uploadSuccess"
 						@on-remove="uploadRemove"
-						:action="`${$API_URL}index/upload`"
+						:action="`${$BASE_URL}/api/common/upload`"
+						:header="{token: token}"
 						width="140"
 						height="140"
 						maxCount="9"
@@ -149,7 +150,8 @@ export default {
 						val: '质量问题'
 					}
 				]
-			}
+			},
+			token: uni.getStorageSync('token')
 		};
 	},
 	computed: {},

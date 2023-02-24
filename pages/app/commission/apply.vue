@@ -44,7 +44,8 @@
 							@on-uploaded="uploadSuccess($event, `value${index}`)"
 							@on-remove="uploadRemove($event, `value${index}`)"
 							:file-list="model[`valueList${index}`]"
-							:action="`${$API_URL}/index/upload`"
+							:action="`${$BASE_URL}/api/common/upload`"
+							:header="{token: token}"
 							width="148"
 							height="148"
 							maxCount="1"
@@ -97,7 +98,8 @@ export default {
 					trigger: ['change', 'blur']
 				}
 			],
-			rules: {}
+			rules: {},
+			token: uni.getStorageSync('token')
 		};
 	},
 	computed: {},

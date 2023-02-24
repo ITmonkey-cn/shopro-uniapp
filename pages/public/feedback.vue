@@ -26,7 +26,8 @@
 								:showProgress="false"
 								@on-uploaded="uploadSuccess"
 								@on-remove="uploadRemove"
-								:action="`${$API_URL}index/upload`"
+								:action="`${$BASE_URL}/api/common/upload`"
+								:header="{token: token}"
 								width="140"
 								height="140"
 								maxCount="9"
@@ -70,7 +71,8 @@ export default {
 				color: '#333'
 			},
 			imgList: [], //图片
-			typeList: [] //类型列表
+			typeList: [] ,//类型列表
+			token: uni.getStorageSync('token')
 		};
 	},
 	computed: {},

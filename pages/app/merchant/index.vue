@@ -116,6 +116,7 @@
 			btnType="success"
 			@change="selDate"
 		></u-calendar>
+
 		<!-- 输码弹窗 -->
 		<u-popup v-model="showInputModal" mode="center" :closeable="true" close-icon-pos="top-left" border-radius="20">
 			<view class="modal-box u-flex-col u-col-center">
@@ -176,7 +177,7 @@ export default {
 			orderInfo: {}, //订单统计信息
 			storeDetail: {}, //门店信息
 			cancelType: '', //核销分类
-			scanCodes: [], //扫码内容。
+			scanCodes: '', //扫码内容。
 			showInputModal: false, //输码核销
 			qrcode: '', //输码
 			showCalendar: false, //日期选择
@@ -273,7 +274,7 @@ export default {
 				this.$u.toast('普通浏览器不支持扫码功能，请使用小程序或微信内浏览器');
 			} else {
 				this.$wxsdk.scanQRCode(res => {
-					this.scanCodes = res.resultStr.split(',');
+					this.scanCodes = res.resultStr;
 					this.postOrderConfirm();
 				});
 			}
@@ -283,7 +284,7 @@ export default {
 			authState &&
 				uni.scanCode({
 					success: res => {
-						this.scanCodes = res.result.split(',');
+						this.scanCodes = res.result;
 						this.postOrderConfirm();
 					},
 					fail: err => {
@@ -296,8 +297,7 @@ export default {
 		// 输码
 		onConfirm() {
 			this.showInputModal = false;
-			this.scanCodes = [];
-			this.scanCodes.push(this.qrcode);
+			this.scanCodes = this.qrcode;
 			this.postOrderConfirm();
 		},
 		// 核销
@@ -318,7 +318,7 @@ export default {
 				});
 				if (res.code === 1) {
 					that.$u.toast(res.msg);
-					that.scanCodes = [];
+					that.scanCodes = '';
 					that.storeOrderList = [];
 					that.qrcode = '';
 					that.getStoreOrder();
@@ -476,6 +476,7 @@ export default {
 	margin: 10rpx 0 0;
 	position: relative;
 	z-index: 22;
+	padding: 0 20rpx;
 }
 
 // 销量

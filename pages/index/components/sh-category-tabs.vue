@@ -8,7 +8,7 @@
 				:style="{ position: fixed ? 'fixed' : 'static', top: stickyTop + 'px', left: left + 'px', width: width == 'auto' ? 'auto' : width + 'px', zIndex: 1109 }"
 			>
 				<view class="tabs-wrap u-p-y-20" :style="isSticky ? 'border-bottom:1px solid #eee;background-color:#fff' : ''">
-					<scroll-view scroll-x class="tabs-content" enable-flex scroll-with-animation :scroll-left="scrollLeft">
+					<scroll-view scroll-x class="tabs-content" scroll-with-animation :scroll-left="scrollLeft">
 						<view class="u-flex u-row-cetner u-flex-1 u-col-center">
 							<view class="tab-item u-flex-col u-col-center u-row-center" v-for="(item, index) in tabsList" :key="index" @tap="tabChange(index)">
 								<view class="tab-title u-m-y-6" :class="{ 'title-active': tabCur == index }">{{ item.name }}</view>

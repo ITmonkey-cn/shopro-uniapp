@@ -7,6 +7,7 @@ module.exports = {
 	data() {
 		return {
 			//解决小程序端template中无法使用vue挂载变量
+			$BASE_URL: BASE_URL,
 			$IMG_URL: IMG_URL, //图片地址
 			$API_URL: API_URL, //api地址
 			$tools: this.$tools, // 工具函数

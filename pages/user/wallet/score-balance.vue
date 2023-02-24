@@ -79,7 +79,7 @@ export default {
 			}).then(res => {
 				if (res.code === 1) {
 					that.scoreLog = [...that.scoreLog, ...res.data.wallet_logs.data];
-					that.lastPage = res.data.last_page;
+					that.lastPage = res.data.wallet_logs.last_page;
 					that.isEmpty = !that.scoreLog.length;
 					that.loadStatus = that.currentPage < res.data.last_page ? 'loadmore' : 'nomore';
 				}

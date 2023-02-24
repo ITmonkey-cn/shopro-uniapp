@@ -1,19 +1,16 @@
 <template>
 	<view>
 		<view class="sh-userinfo-box">
-			<view class="head-wrap" :style="{ background: detail.image ? `url(${detail.image}) no-repeat center / 100% 100%` : detail.color }">
+			<view class="head-wrap"
+				:style="{ background: detail.image ? `url(${detail.image}) no-repeat center / 100% 100%` : detail.color }">
 				<!-- 标题栏 -->
-				<shopro-navbar
-					backIconName=""
-					backText="我的"
-					:backTextStyle="{
-						color: '#fff',
-						fontSize: '40rpx',
-						fontWeight: '500'
-					}"
-					:background="navBackground"
-				>
-					<view slot="right" class="u-flex u-row-center u-col-center u-m-r-20" v-if="userOtherData.is_store" @tap="goStore">
+				<shopro-navbar backIconName="" backText="我的" :backTextStyle="{
+					color: '#fff',
+					fontSize: '40rpx',
+					fontWeight: '500'
+				}" :background="navBackground">
+					<view slot="right" class="u-flex u-row-center u-col-center u-m-r-20" v-if="userOtherData.is_store"
+						@tap="goStore">
 						<button class="u-reset-button merchant-btn">切换商家版</button>
 					</view>
 				</shopro-navbar>
@@ -24,11 +21,14 @@
 						<view class="info-box">
 							<view class="u-flex" @tap="$Router.push('/pages/user/info')">
 								<view class="head-img-wrap">
-									<image class="head-img" :src="userInfo.avatar || $IMG_URL + '/imgs/base_avatar.png'" mode="aspectFill"></image>
+									<image class="head-img" :src="userInfo.avatar || $IMG_URL + '/imgs/base_avatar.png'"
+										mode="aspectFill"></image>
 									<!-- 同步信息 -->
 									<block v-if="showRefresh">
-										<button @tap.stop="showModal = true" class="u-reset-button u-flex u-row-center u-col-center refresh-btn">
-											<view class="u-iconfont uicon-reload" style="color: #fff;font-size: 24rpx;"></view>
+										<button @tap.stop="showModal = true"
+											class="u-reset-button u-flex u-row-center u-col-center refresh-btn">
+											<view class="u-iconfont uicon-reload" style="color: #fff;font-size: 24rpx;">
+											</view>
 										</button>
 									</block>
 								</view>
@@ -37,18 +37,21 @@
 						</view>
 						<!-- 等级 -->
 						<view v-if="userInfo.group" class="grade-tag tag-box u-flex">
-							<image v-if="userInfo.group.image" class="tag-img" :src="userInfo.group.image" mode=""></image>
+							<image v-if="userInfo.group.image" class="tag-img" :src="userInfo.group.image" mode="">
+							</image>
 							<text class="tag-title">{{ userInfo.group.name }}</text>
 						</view>
 					</view>
 					<view class="u-flex" v-if="userInfo.nickname">
-						<button class=" u-reset-button code-btn" @tap="onShare"><text class="iconfont icon-qrcode"></text></button>
+						<button class=" u-reset-button code-btn" @tap="onShare"><text
+								class="iconfont icon-qrcode"></text></button>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- 绑定手机 -->
-		<view class="notice-box u-flex u-row-between u-p-30" v-if="userInfo.verification && !userInfo.verification.mobile" @tap="bindMobile">
+		<view class="notice-box u-flex u-row-between u-p-30"
+			v-if="userInfo.verification && !userInfo.verification.mobile" @tap="bindMobile">
 			<view class="notice-detail">点击绑定手机号，确保账户安全</view>
 			<button class="u-reset-button bindPhone">去绑定</button>
 		</view>
@@ -59,8 +62,10 @@
 					<view class="modal-head">提示</view>
 					<view class="modal-content">更新微信信息？</view>
 					<view class="modal-bottom u-flex u-col-center">
-						<button class="u-reset-button modal-btn cancel-btn" :hover-stay-time="100" hover-class="btn-hover" @tap="showModal = false">取消</button>
-						<button class="u-reset-button  modal-btn save-btn" :hover-stay-time="100" hover-class="btn-hover" @tap="refreshWechatUser">确定</button>
+						<button class="u-reset-button modal-btn cancel-btn" :hover-stay-time="100"
+							hover-class="btn-hover" @tap="showModal = false">取消</button>
+						<button class="u-reset-button  modal-btn save-btn" :hover-stay-time="100"
+							hover-class="btn-hover" @tap="refreshWechatUser">确定</button>
 					</view>
 				</view>
 			</view>
@@ -87,7 +92,7 @@ export default {
 			}
 		};
 	},
-	mounted() {},
+	mounted() { },
 	props: {
 		detail: {},
 		scrollTop: {
@@ -109,9 +114,9 @@ export default {
 				if (this.platform === 'wxOfficialAccount') {
 					return this.userInfo.verification?.wxOfficialAccount;
 				}
-				if (this.platform === 'wxMiniProgram') {
-					return this.userInfo.verification.wxMiniProgram;
-				}
+				// if (this.platform === 'wxMiniProgram') {
+				// 	return this.userInfo.verification.wxMiniProgram;
+				// }
 				if (this.platform === 'App') {
 					return this.userInfo.verification.wxOpenPlatform;
 				}
@@ -165,21 +170,25 @@ export default {
 // 更新信息
 .modal-box {
 	width: 600rpx;
+
 	.btn-hover {
 		background-color: rgb(230, 230, 230);
 	}
+
 	.modal-head {
 		padding-top: 48rpx;
 		font-weight: 500;
 		text-align: center;
 		color: $u-main-color;
 	}
+
 	.modal-content {
 		padding: 48rpx;
 		font-size: 30rpx;
 		text-align: center;
 		color: $u-content-color;
 	}
+
 	.modal-bottom {
 		.modal-btn {
 			flex: 1;
@@ -191,20 +200,25 @@ export default {
 			text-align: center;
 			border-radius: 4rpx;
 		}
+
 		.cancel-btn {
 			color: #666666;
 		}
+
 		.save-btn {
 			color: #e9b461;
 		}
 	}
 }
+
 .sh-userinfo-box {
 	position: relative;
 	height: calc(var(--status-bar-height) + 300rpx);
+
 	.head-wrap {
 		powidth: 100%;
 		height: 100%;
+
 		.merchant-btn {
 			width: 178rpx;
 			height: 64rpx;
@@ -220,10 +234,13 @@ export default {
 	.user-head {
 		width: 100%;
 		padding-top: 30rpx;
+
 		.info-box {
 			padding-left: 30rpx;
+
 			.head-img-wrap {
 				position: relative;
+
 				.refresh-btn {
 					position: absolute;
 					padding: 0;
@@ -236,6 +253,7 @@ export default {
 					right: 10rpx;
 				}
 			}
+
 			.head-img {
 				width: 94rpx;
 				height: 94rpx;
@@ -253,16 +271,19 @@ export default {
 				width: 180rpx;
 			}
 		}
+
 		.tag-box {
 			background: rgba(0, 0, 0, 0.2);
 			border-radius: 22rpx;
 			margin-left: 10rpx;
+
 			.tag-img {
 				width: 40rpx;
 				height: 40rpx;
 				display: inline-block;
 				border-radius: 50%;
 			}
+
 			.tag-title {
 				font-size: 20rpx;
 				font-weight: 500;
@@ -271,22 +292,27 @@ export default {
 				padding: 0 10rpx;
 			}
 		}
+
 		.code-btn {
 			padding: 30rpx;
+
 			.icon-qrcode {
 				font-size: 50rpx;
 				color: #fff;
 			}
 		}
 	}
+
 	.wallet {
 		font-size: 20rpx;
 		padding-left: 140rpx;
+
 		.money {
 			margin-right: 40rpx;
 		}
 	}
 }
+
 // 绑定微信公众号
 .notice-box {
 	width: 750rpx;

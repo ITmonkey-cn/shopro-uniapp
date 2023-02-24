@@ -9,7 +9,7 @@ export default {
 			url: "index/init",
 			auth: false,
 			method: "GET",
-			// desc: '初始化数据',end
+			// desc: '初始化数据'
 		},
 		chat: {
 			url: "chat.index/init",
@@ -27,7 +27,7 @@ export default {
 			url: "index/template",
 			auth: false,
 			method: "GET",
-			// desc: '模板信息',end
+			// desc: '模板信息'
 		},
 		custom: {
 			url: "index/custom",
@@ -51,7 +51,7 @@ export default {
 			url: "index/asyncPages",
 			auth: false,
 			method: "POST",
-			// desc: '路由表 DEV开发模式下有效',end
+			// desc: '路由表 DEV开发模式下有效'
 		},
 		debug: {
 			url: "index/debugLog",
@@ -292,20 +292,26 @@ export default {
 			url: "user",
 			auth: true,
 			method: "GET",
-			// desc: '用户信息',end
+			// desc: '用户信息'
 		},
 
 		profile: {
 			url: "user/profile",
 			auth: true,
 			method: "POST",
-			// desc: '修改用户信息',end
+			// desc: '修改用户信息'
 		},
 		logout: {
 			url: "user/logout",
 			auth: true,
 			method: "POST",
-			// desc: '退出登录',end
+			// desc: '退出登录'
+		},
+		delete: {
+			url: "user/delete",
+			auth: true,
+			method: "POST",
+			// desc: '注销账号'
 		},
 
 		getWxMiniProgramSessionKey: {
@@ -370,13 +376,13 @@ export default {
 			url: "goods/viewList",
 			auth: true,
 			method: "GET",
-			// desc: '足迹列表',end
+			// desc: '足迹列表'
 		},
 		viewDelete: {
 			url: "goods/viewDelete",
 			auth: true,
 			method: "POST",
-			// desc: '删除足迹',end
+			// desc: '删除足迹'
 		},
 		userData: {
 			url: "user/userData",
@@ -613,37 +619,37 @@ export default {
 			url: "user_wallet_apply/apply",
 			auth: true,
 			method: "POST",
-			// desc: '申请提现',end
+			// desc: '申请提现'
 		},
 		walletRule: {
 			url: "user_wallet_apply/rule",
 			auth: true,
 			method: "GET",
-			// desc: '提现规则',end
+			// desc: '提现规则'
 		},
 		walletLog: {
 			url: "user_wallet_log",
 			auth: true,
 			method: "GET",
-			// desc: '钱包,积分明细',end
+			// desc: '钱包,积分明细'
 		},
 		bankInfo: {
 			url: "user_bank/info",
 			auth: true,
 			method: "GET",
-			// desc: '银行卡信息',end
+			// desc: '银行卡信息'
 		},
 		bankEdit: {
 			url: "user_bank/edit",
 			auth: true,
 			method: "POST",
-			// desc: '编辑银行卡信息',end
+			// desc: '编辑银行卡信息'
 		},
 		withdrawLog: {
 			url: "user_wallet_apply/index",
 			auth: true,
 			method: "GET",
-			// desc: '提现记录',end
+			// desc: '提现记录'
 		},
 		recharge: {
 			url: "trade_order/recharge",

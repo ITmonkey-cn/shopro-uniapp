@@ -1,5 +1,6 @@
 // 挂载变量
 import {
+	BASE_URL,
 	API_URL,
 	IMG_URL
 } from '../env.js';
@@ -19,6 +20,7 @@ import '@/shopro/utils/sdk-h5.js'
 import wechat from '@/shopro/wechat/wechat';
 
 const install = Vue => {
+	Vue.prototype.$BASE_URL = BASE_URL;
 	Vue.prototype.$API_URL = API_URL;
 	Vue.prototype.$IMG_URL = IMG_URL;
 	// 挂载请求

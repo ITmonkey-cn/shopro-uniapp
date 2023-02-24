@@ -31,7 +31,8 @@
 						:showProgress="false"
 						@on-uploaded="uploadSuccess"
 						@on-remove="uploadRemove"
-						:action="`${$API_URL}index/upload`"
+						:action="`${$BASE_URL}/api/common/upload`"
+						:header="{token: token}"
 						width="138"
 						height="138"
 						maxCount="9"
@@ -51,7 +52,8 @@ export default {
 			imgList: [],
 			star: 5,
 			message: '',
-			goodsDetail: {}
+			goodsDetail: {},
+			token: uni.getStorageSync('token')
 		};
 	},
 	computed: {

@@ -152,7 +152,7 @@ export default {
 				if (res.code === 1) {
 					that.aftersaleDetail = res.data;
 					that.setSteps(res.data.aftersale_status);
-					that.aftersaleLog = res.data.log;
+					that.aftersaleLog = res.data.logs;
 					that.aftersaleDetail.createtime = that.$u.timeFormat(res.data.createtime, 'yyyy-mm-dd hh:MM');
 					that.aftersaleDetail.updatetime = that.$u.timeFormat(res.data.updatetime, 'yyyy-mm-dd hh:MM');
 				}

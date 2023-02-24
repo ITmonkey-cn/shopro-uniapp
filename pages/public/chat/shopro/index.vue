@@ -132,7 +132,8 @@
 					:showUploadList="false"
 					@on-uploaded="uploadSuccess"
 					@on-change="uploadChange"
-					:action="`${HTTP_API_URL}/index/upload`"
+					:action="`${EMOJI_BASE_URL}/api/common/upload`"
+					:header="{token: token}"
 					maxCount="9"
 					:customBtn="true"
 					:show-tips="false"
@@ -297,7 +298,8 @@ export default {
 			orderCurrentPage: 1,
 			viewCurrentPage: 1,
 			orderTotalPage: 1,
-			viewTotalPage: 1
+			viewTotalPage: 1,
+			token: uni.getStorageSync('token')
 		};
 	},
 	computed: {

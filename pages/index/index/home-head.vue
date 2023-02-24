@@ -3,19 +3,37 @@
 	<view class="banner-swiper-wrap u-m-b-10">
 		<!-- 标题栏 -->
 		<view class="u-navbar u-navbar-fixed" :style="[navbarStyle]">
+			<view class="nav-bg" :style="[navBg]"></view>
 			<view class="u-status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
 			<view class="u-navbar-inner" :style="[navbarInnerStyle]">
 				<view class="u-back-wrap">
-					<view class="u-icon-wrap u-back-text u-line-1" :style="[navTitleStyle]">{{ navTitle || '' }}</view>
+					<view class="u-icon-wrap u-back-text u-line-1" :style="[navTitleStyle, navTitleColor]">
+						{{ navTitle || '' }}
+					</view>
 				</view>
-				<view hover-class="hover-search" class="search-box u-flex u-row-center u-col-center u-m-r-30" @tap="$Router.push('/pages/public/search')">
-					<view class="u-iconfont uicon-search" style="color: #fff"></view>
+				<view
+					hover-class="hover-search"
+					class="search-box u-flex u-row-center u-col-center u-m-r-30"
+					@tap="$Router.push('/pages/public/search')"
+				>
+					<view class="u-iconfont uicon-search" :style="[navTitleColor]"></view>
 				</view>
 			</view>
 		</view>
 		<!-- 轮播组件 -->
-		<swiper class="screen-swiper square-dot" @change="onChange" style="height: 520rpx" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000" duration="500">
-			<swiper-item v-for="(item, index) in list" :key="index" @tap="onSwiper(index)"><image :src="item.image" mode="aspectFill"></image></swiper-item>
+		<swiper
+			class="screen-swiper square-dot"
+			@change="onChange"
+			style="height: 520rpx"
+			:indicator-dots="true"
+			:circular="true"
+			:autoplay="true"
+			interval="5000"
+			duration="500"
+		>
+			<swiper-item v-for="(item, index) in list" :key="index" @tap="onSwiper(index)">
+				<image :src="item.image" mode="aspectFill"></image>
+			</swiper-item>
 		</swiper>
 	</view>
 </template>
@@ -40,13 +58,17 @@ export default {
 			navBgImage: '',
 			changeNavBackground: false,
 			swiperCur: 0,
-			statusBarHeight: systemInfo.statusBarHeight
+			statusBarHeight: systemInfo.statusBarHeight,
+			navBg: { opacity: 0 },
+			navTitleColor: {
+				color: '#fff'
+			}
 		};
 	},
 	props: {
-		isScorll: {
-			type: Boolean,
-			default: false
+		scrollTop: {
+			type: [String, Number],
+			default: 0
 		},
 		// 轮播图的数据,格式如：[{image: 'xxxx', title: 'xxxx'}，{image: 'yyyy', title: 'yyyy'}]，其中title字段可选
 		list: {
@@ -70,9 +92,15 @@ export default {
 		}
 	},
 	watch: {
-		isScorll(newValue, oldValue) {
-			this.changeNavBackground = newValue;
-			this.navBgImage = this.list[this.swiperCur].image;
+		scrollTop(newValue, oldValue) {
+			let top = newValue;
+			this.navBg = {
+				opacity: top > this.navbarHeight ? 1 : top * 0.01
+			};
+			this.navTitleColor = {
+				color: top > this.navbarHeight ? '#000' : '#fff'
+			};
+			this.setStatusStyle(top > this.navbarHeight ? 'dark' : 'light');
 		}
 	},
 	computed: {
@@ -90,7 +118,7 @@ export default {
 		navbarStyle() {
 			let style = {};
 			style.zIndex = this.$u.zIndex.navbar;
-			style.background = this.changeNavBackground ? `url(${this.navBgImage}) no-repeat top / 100% auto` : 'none';
+			style.background = 'none';
 			Object.assign(style, this.background);
 			return style;
 		},
@@ -112,6 +140,37 @@ export default {
 		},
 		onChange(e) {
 			this.swiperCur = e.detail.current;
+		},
+		setStatusStyle(status) {
+			// #ifdef H5
+			return false;
+			// #endif
+			if (status == 'light') {
+				uni.setNavigationBarColor({
+					frontColor: '#ffffff',
+					backgroundColor: '#000000',
+					animation: {
+						duration: 200,
+						timingFunc: 'easeIn'
+					}
+				});
+				// #ifdef APP-PLUS
+				plus.navigator.setStatusBarStyle('light');
+				// #endif
+			} else {
+				uni.setNavigationBarColor({
+					frontColor: '#000000',
+					backgroundColor: '#ffffff',
+					animation: {
+						duration: 200,
+						timingFunc: 'easeIn'
+					}
+				});
+
+				// #ifdef APP-PLUS
+				plus.navigator.setStatusBarStyle('dark');
+				// #endif
+			}
 		}
 	}
 };
@@ -150,6 +209,16 @@ export default {
 	right: 0;
 	top: 0;
 	z-index: 991;
+	.nav-bg {
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 980;
+		width: 100%;
+		height: 100%;
+		background-color: #fff;
+		box-shadow: 0px 4px 6px rgba(140, 140, 140, 0.32);
+	}
 }
 
 .u-status-bar {
@@ -161,6 +230,8 @@ export default {
 	justify-content: space-between;
 	position: relative;
 	align-items: center;
+	position: relative;
+	z-index: 990;
 }
 
 .u-back-wrap {

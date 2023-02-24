@@ -2,7 +2,7 @@
 	<view class="content_box">
 		<view class="u-flex u-col-center wrapper-box">
 			<view class="scroll-box" style="background-color: #F6F6F6;">
-				<scroll-view class="left u-flex-col u-col-center" enable-flex enable-back-to-top scroll-y>
+				<scroll-view class="left u-flex-col u-col-center" enable-back-to-top scroll-y>
 					<view class="type-list u-ellipsis-1" :class="[{ 'list-active': listId == index }]" v-for="(item, index) in categoryData" :key="index" @tap="onType(index)">
 						<view class="line" :class="[{ 'line-active': listId == index }]"></view>
 						{{ item.name }}
@@ -11,7 +11,7 @@
 				</scroll-view>
 			</view>
 			<view style="height: 100%;width: 100%;">
-				<scroll-view scroll-y class="scroll-box" enable-flex enable-back-to-top scroll-with-animation>
+				<scroll-view scroll-y class="scroll-box" enable-back-to-top scroll-with-animation>
 					<view class="right" v-if="categoryData.length">
 						<image class="type-img" v-if="categoryData[listId].image" :src="categoryData[listId].image" mode="aspectFill"></image>
 

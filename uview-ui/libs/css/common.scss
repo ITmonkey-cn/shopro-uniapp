@@ -169,7 +169,7 @@ text {
 }
 
 // 定义字体(rpx)单位，大于或等于20的都为rpx单位字体
-@for $i from 20 through 40 {
+@for $i from 20 through 50 {
 	.u-font-#{$i} {
 		font-size: $i + rpx;
 	}

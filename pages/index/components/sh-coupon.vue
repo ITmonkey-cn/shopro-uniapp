@@ -8,7 +8,7 @@
 				<text class="iconfont icon-youjiantou-tianchong more-icon"></text>
 			</view>
 		</view>
-		<scroll-view class="groupon-scroll" enable-flex scroll-anchoring scroll-x scroll-with-animation>
+		<scroll-view class="groupon-scroll" scroll-anchoring scroll-x scroll-with-animation>
 			<view class="groupon-card-wrap u-flex ">
 				<view :class="{ 'gray-wrap': item.status_code === 'cannot_get' }" v-for="(item, index) in couponList" :key="item.id">
 					<!-- mini -->

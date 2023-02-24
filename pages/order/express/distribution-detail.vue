@@ -185,11 +185,7 @@ export default {
 						that.autosendList = JSON.parse(res.data.ext_arr.autosend_content);
 					}
 					if (that.expressType == 'selfetch') {
-						let _arr = [];
-						that.qrcodeList.forEach(code => {
-							_arr.push(code.code);
-						});
-						that.qrcode = _arr.join(',');
+						that.qrcode = encodeURIComponent('all:' + that.$Route.query.orderId + '-' + that.$Route.query.orderItemId)
 						if (that.qrcodeList.length) {
 							that.shareFc();
 						}

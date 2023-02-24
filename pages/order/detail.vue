@@ -260,19 +260,28 @@ export default {
 
 		// 确认收货
 		onConfirm(id, itemId) {
-			let that = this;
-			that.$http(
-				'order.confirm',
-				{
-					id: id,
-					order_item_id: itemId
-				},
-				'确认中...'
-			).then(res => {
-				if (res.code === 1) {
-					that.getOrderDetail();
-				}
-			});
+      let that = this;
+      uni.showModal({
+      	title: '提示',
+      	confirmColor: '#f0c785',
+      	content: '确定收到货了吗？',
+      	success: res => {
+      		if (res.confirm) {
+      			that.$http(
+      				'order.confirm',
+      				{
+      					id: id,
+      					order_item_id: itemId
+      				},
+      				'确认中...'
+      			).then(res => {
+      				if (res.code === 1) {
+      					that.getOrderDetail();
+      				}
+      			});
+      		}
+      	}
+      });
 		},
 
 		// 申请售后

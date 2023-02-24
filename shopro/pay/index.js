@@ -93,9 +93,14 @@ export default class ShoproPay {
 		let that = this;
 		return new Promise((resolve, reject) => {
 			let that = this;
+
+			let domain = store.getters.initShop.domain;
+			let return_url = `${domain}pages/order/payment/result?orderId=***&type=${that.payment}&payState=success&orderType=${that.orderType}`
+			console.log(return_url, 'return_url');
 			let params = {
 				order_sn: that.order.order_sn,
-				payment: that.payment
+				payment: that.payment,
+				return_url: return_url
 			}
 			if (uni.getStorageSync('openid')) {
 				params.openid = uni.getStorageSync('openid');
@@ -125,9 +130,12 @@ export default class ShoproPay {
 		let that = this;
 		let result = await this.prepay();
 		wxsdk.wxpay(result.data.pay_data, (res) => {
-			res.errMsg == "chooseWXPay:ok" ? that.payResult('success') : that.payResult('fail')
+      if (res.err_msg == "get_brand_wcpay_request:ok") {
+        that.payResult('success')
+      } else {
+        that.payResult('fail')
+      }
 		});
-
 	}
 
 	//浏览器微信支付
@@ -135,9 +143,17 @@ export default class ShoproPay {
 		let that = this;
 		let result = await this.prepay();
 		if (result.code === 1) {
-			var url = result.data.pay_data.match(/url\=\'(\S*)\'/);
-			let reg = new RegExp('&amp;', 'g') //g代表全部
-			let newUrl = url[1].replace(reg, '&');
+			let newUrl = '';
+			if (result.data.pay_data && result.data.pay_data.h5_url != undefined) {
+				console.log('v3');
+				newUrl = result.data.pay_data.h5_url;
+			} else {
+				console.log('v2');
+				var url = result.data.pay_data.match(/url\=\'(\S*)\'/);
+				let reg = new RegExp('&amp;', 'g') //g代表全部
+				newUrl = url[1].replace(reg, '&');
+			}
+			
 			let domain = store.getters.initShop.domain; //域名需要https
 			let params = encodeURIComponent(
 				`${domain}pages/order/payment/result?orderId=${that.order.id}&type=${that.payment}&orderType=${that.orderType}`

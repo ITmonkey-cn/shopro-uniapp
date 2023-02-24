@@ -1,19 +1,22 @@
 <template>
-	<view
-		class="u-load-more-wrap"
-		:style="{
-			backgroundColor: bgColor,
-			marginBottom: marginBottom + 'rpx',
-			marginTop: marginTop + 'rpx',
-			height: $u.addUnit(height)
-		}"
-	>
+	<view class="u-load-more-wrap" :style="{
+		backgroundColor: bgColor,
+		marginBottom: marginBottom + 'rpx',
+		marginTop: marginTop + 'rpx',
+		height: $u.addUnit(height)
+	}">
 		<view class="u-line"></view>
 		<!-- 加载中和没有更多的状态才显示两边的横线 -->
 		<view :class="status == 'loadmore' || status == 'nomore' ? 'u-more' : ''" class="u-load-more-inner">
-			<view class="u-loadmore-icon-wrap"><view v-if="status == 'loading' && icon" class=" u-loadmore-iconu-loading u-loading-circle" :style="[cricleStyle]"></view></view>
+			<view class="u-loadmore-icon-wrap">
+				<view v-if="status == 'loading' && icon" class=" u-loadmore-iconu-loading u-loading-circle"
+					:style="[cricleStyle]"></view>
+			</view>
 			<!-- 如果没有更多的状态下，显示内容为dot（粗点），加载特定样式 -->
-			<view class="u-line-1" :style="[loadTextStyle]" :class="[status == 'nomore' && isDot == true ? 'u-dot-text' : 'u-more-text']" @tap="loadMore">{{ showText }}</view>
+			<view class="u-line-1" :style="[loadTextStyle]"
+				:class="[status == 'nomore' && isDot == true ? 'u-dot-text' : 'u-more-text']" @tap="loadMore">{{
+		showText
+				}}</view>
 		</view>
 		<view class="u-line"></view>
 	</view>
@@ -62,7 +65,7 @@ export default {
 		},
 		// 组件状态，loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
 		status: {
-			type: String,
+			type: [String, Object],
 			default: 'loadmore'
 		},
 		// 加载中状态的图标，flower-花朵状图标，circle-圆圈状图标
@@ -166,6 +169,7 @@ export default {
 	border-bottom: 1px solid rgb(204, 204, 204);
 	transform: scaleY(0.5);
 }
+
 .u-load-more-wrap {
 	@include vue-flex;
 	justify-content: center;
@@ -198,6 +202,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 }
+
 .u-loading-circle {
 	/* #ifndef APP-NVUE */
 	display: inline-flex;

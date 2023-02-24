@@ -255,7 +255,6 @@ export default {
 
 <style scoped lang="scss">
 @import '../../libs/css/style.components.scss';
-
 .u-dropdown {
 	flex: 1;
 	width: 100%;

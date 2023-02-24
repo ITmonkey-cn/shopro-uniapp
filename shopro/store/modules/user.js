@@ -36,28 +36,28 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			token && uni.setStorageSync('token', token);
 			http('user.info').then(res => {
-					if (res.code === 1) {
-						let lastLoginStatus = getters.isLogin;
-						commit('userInfo', res.data);
-						commit('isLogin', true);
-						dispatch('showAuthModal', '');
-						!lastLoginStatus && share.setShareInfo();
-						// 存在分享信息 添加分享记录
-						let spm = uni.getStorageSync('spm');
-						if (spm) {
-							http('common.shareAdd', {
-								spm: spm
-							});
-							uni.removeStorageSync('spm');
-						}
-						resolve(res.data)
+				if (res.code === 1) {
+					let lastLoginStatus = getters.isLogin;
+					commit('userInfo', res.data);
+					commit('isLogin', true);
+					dispatch('showAuthModal', '');
+					!lastLoginStatus && share.setShareInfo();
+					// 存在分享信息 添加分享记录
+					let spm = uni.getStorageSync('spm');
+					if (spm) {
+						http('common.shareAdd', {
+							spm: spm
+						});
+						uni.removeStorageSync('spm');
 					}
+					resolve(res.data)
+				}
 
-				}).then(() => {
-					// 只有在登录的时候请求购物车信息，订单信息，获取登录信息之后。
-					token && dispatch('getCartList');
-					token && dispatch('getUserData');
-				})
+			}).then(() => {
+				// 只有在登录的时候请求购物车信息，订单信息，获取登录信息之后。
+				token && dispatch('getCartList');
+				token && dispatch('getUserData');
+			})
 				.catch(e => {
 					reject(e)
 				})
@@ -101,12 +101,15 @@ const actions = {
 	}) {
 		if (getters.initWechat?.autologin && !getters.isLogin) { // 微信开启自动登录 并且当前未登录，进入自动登录流程
 			let token = '';
+
 			// #ifdef H5
 			wechat.login();
 			// #endif
+
 			// #ifdef MP-WEIXIN
-			token = await wechat.getWxMiniProgramSessionKey(true);
+			token = await wechat.getWxMiniProgramSessionKey(true)
 			// #endif
+
 			token && await dispatch('getUserInfo', token);
 		} else if (getters.isLogin) { // 已经登录，直接获取用户信息
 			await dispatch('getUserInfo');
@@ -208,7 +211,7 @@ const mutations = {
 	formatMessage(state, messageIdsObj) {
 		// 各场景下用到的订阅模板
 		let typeMap = {
-			'result': ['order_sended'], //支付成功
+			'result': ['order_sended', 'wallet_change'], //支付成功
 			'grouponResult': ['groupon_success', 'groupon_fail', 'order_sended'], //拼团支付成功后
 			'aftersale': ['refund_agree', 'aftersale_change', 'wallet_change'], //点击售后
 			'wallet': ['score_change', 'wallet_apply', 'wallet_change'], //提现提醒
